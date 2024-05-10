@@ -4,6 +4,8 @@ Run AI on your laptop or PC - free, private, awesome.
 
 Download for Windows, MacOS or Linux: https://singulatron.com/home
 
+This repo will serve as the public issue tracker for the app.
+
 ## Run GPTs for free
 
 Your chats never leave your computer.
@@ -25,4 +27,4 @@ We aim to bring every available AI model to you.
 ## Is it Open Source?
 
 Not yet. If there is interest in the project we will consider open sourcing it.
-Please star the repo if interested, thanks.
+Please star the repo or just message us in an issue to show interest. Thanks!
