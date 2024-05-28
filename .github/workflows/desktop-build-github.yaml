@@ -81,6 +81,33 @@ jobs:
           CERT_PFX_BASE64: ${{ secrets.CERT_PFX_BASE64 }}
           SIGNING_PASS: ${{ secrets.SIGNING_PASS }}
 
+      - name: Cache npm cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.npm
+          key: ${{ runner.os }}-npm-cache-${{ hashFiles('desktop/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-cache-
+
+      - name: Install dependencies
+        if: false
+        run: npm install
+        working-directory: ./desktop
+
+      - name: Build and Package for Windows
+        if: false
+        run: npm run make
+        working-directory: ./desktop
+        env:
+          SIGNING_PASS: ${{ secrets.SIGNING_PASS }}
+
+      - name: Convert to APPX
+        if: false
+        run: |
+          npm run make-appx
+        working-directory: ./worker
+
       - name: Extract tag or branch name
         if: always()
         run: |
@@ -118,7 +145,7 @@ jobs:
 
           Write-Host "Create a version-specific folder on the server using the GIT_TAG"
           $versionPath = "${env:REMOTE_PATH}/${env:GIT_TAG}/windows"
-          ssh -o StrictHostKeyChecking=no -i $idRsaAutomationPath -v "${env:REMOTE_USER}@${env:REMOTE_HOST}" "mkdir -p $versionPath"
+          ssh -o StrictHostKeyChecking=no -i $idRsaAutomationPath "${env:REMOTE_USER}@${env:REMOTE_HOST}" "mkdir -p $versionPath"
 
           Write-Host "Recursively copy the entire out directory to the server into the version-specific folder"
           scp -o StrictHostKeyChecking=no -i $idRsaAutomationPath -r "${env:LOCAL_PATH}" "${env:REMOTE_USER}@${env:REMOTE_HOST}:$versionPath"
@@ -133,33 +160,6 @@ jobs:
         working-directory: ./desktop
         # for some reason this fails even though stuff gets copied successfully
         continue-on-error: true
-
-      - name: Cache npm cache
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.npm
-          key: ${{ runner.os }}-npm-cache-${{ hashFiles('desktop/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-npm-cache-
-
-      - name: Install dependencies
-        if: false
-        run: npm install
-        working-directory: ./desktop
-
-      - name: Build and Package for Windows
-        if: false
-        run: npm run make
-        working-directory: ./desktop
-        env:
-          SIGNING_PASS: ${{ secrets.SIGNING_PASS }}
-
-      - name: Convert to APPX
-        if: false
-        run: |
-          npm run make-appx
-        working-directory: ./worker
 
       - name: Run tests
         run: |
@@ -195,7 +195,7 @@ jobs:
           $versionPath = "${env:REMOTE_PATH}/${env:GIT_TAG}/windows"
 
           Write-Host "Create version path on remote"
-          ssh -o StrictHostKeyChecking=no -i $idRsaAutomationPath -v "${env:REMOTE_USER}@${env:REMOTE_HOST}" "mkdir -p $versionPath"
+          ssh -o StrictHostKeyChecking=no -i $idRsaAutomationPath "${env:REMOTE_USER}@${env:REMOTE_HOST}" "mkdir -p $versionPath"
 
           Write-Host "Recursively copy the entire out directory to the server into the version-specific folder"
           scp -o StrictHostKeyChecking=no -i $idRsaAutomationPath -r "${env:LOCAL_PATH}" "${env:REMOTE_USER}@${env:REMOTE_HOST}:$versionPath"
