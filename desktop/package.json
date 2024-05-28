@@ -52,7 +52,7 @@
 		"@types/jasmine": "^5.1.4",
 		"@types/lodash": "^4.17.4",
 		"@types/node": "^20.12.12",
-		"@vercel/webpack-asset-relocator-loader": "^1.7.4",
+		"@vercel/webpack-asset-relocator-loader": "^1.7.3",
 		"@wdio/allure-reporter": "^8.38.0",
 		"@wdio/cli": "^8.38.1",
 		"@wdio/jasmine-framework": "^8.38.0",
