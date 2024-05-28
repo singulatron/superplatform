@@ -126,29 +126,29 @@ jobs:
           REMOTE_PATH: /var/www/singulatron
           LOCAL_PATH: ./out
         run: |
-          # Create a local directory for the SSH key within the working directory
+          Write-Host "Create a local directory for the SSH key within the working directory"
           $localSshDir = New-Item -ItemType Directory -Force -Path "./.ssh_automation_deploy"
 
-          # Define the path for the SSH key within the local directory
+          Write-Host "Define the path for the SSH key within the local directory"
           $idRsaAutomationPath = Join-Path -Path $localSshDir -ChildPath "id_rsa_automation"
 
-          # Save the SSH_PRIVATE_KEY to a file
+          Write-Host "Save the SSH_PRIVATE_KEY to a file"
           Set-Content -Path $idRsaAutomationPath -Value $env:SSH_PRIVATE_KEY
 
-          # Adjust permissions for the key file (if necessary)
+          Write-Host "Adjust permissions for the key file"
           icacls.exe $idRsaAutomationPath /inheritance:r /grant "${env:USERNAME}:R"
 
-          # Add server to known hosts to prevent interactive prompt
+          Write-Host "Add server to known hosts to prevent interactive prompt"
           ssh-keyscan $env:REMOTE_HOST | Out-File -Append -FilePath "$localSshDir\known_hosts"
 
-          # Create a version-specific folder on the server using the GIT_TAG
+          Write-Host "Create a version-specific folder on the server using the GIT_TAG"
           $versionPath = "${env:REMOTE_PATH}/${env:GIT_TAG}/windows"
           ssh -i $idRsaAutomationPath "${env:REMOTE_USER}@${env:REMOTE_HOST}" "mkdir -p $versionPath"
 
-          # Recursively copy the entire out directory to the server into the version-specific folder
+          Write-Host "Recursively copy the entire out directory to the server into the version-specific folder"
           scp -i $idRsaAutomationPath -r "${env:LOCAL_PATH}" "${env:REMOTE_USER}@${env:REMOTE_HOST}:$versionPath"
 
-          # Clean up: Remove the local SSH directory and its contents after use
+          Write-Host "Clean up: Remove the local SSH directory and its contents after use"
           Try {
             Remove-Item -Path "$idRsaAutomationPath" -Force
             Remove-Item -Path "$localSshDir" -Force -Recurse
@@ -174,29 +174,29 @@ jobs:
           REMOTE_PATH: /var/www/singulatron
           LOCAL_PATH: ./playwright-traces
         run: |
-          # Create a local directory for the SSH key within the working directory
+          Write-Host "Create a local directory for the SSH key within the working directory"
           $localSshDir = New-Item -ItemType Directory -Force -Path "./.ssh_automation_artifacts"
 
-          # Define the path for the SSH key within the local directory
+          Write-Host "Define the path for the SSH key within the local directory"
           $idRsaAutomationPath = Join-Path -Path $localSshDir -ChildPath "id_rsa_automation"
 
-          # Save the SSH_PRIVATE_KEY to a file
+          Write-Host "Save the SSH_PRIVATE_KEY to a file"
           Set-Content -Path $idRsaAutomationPath -Value $env:SSH_PRIVATE_KEY
 
-          # Adjust permissions for the key file (if necessary)
+          Write-Host "Adjust permissions for the key file"
           icacls.exe $idRsaAutomationPath /inheritance:r /grant "${env:USERNAME}:R"
 
-          # Add server to known hosts to prevent interactive prompt
+          Write-Host "Add server to known hosts to prevent interactive prompt"
           ssh-keyscan $env:REMOTE_HOST | Out-File -Append -FilePath "$localSshDir\known_hosts"
 
-          # Create a version-specific folder on the server using the GIT_TAG
+          Write-Host "Create a version-specific folder on the server using the GIT_TAG"
           $versionPath = "${env:REMOTE_PATH}/${env:GIT_TAG}/windows"
           ssh -i $idRsaAutomationPath "${env:REMOTE_USER}@${env:REMOTE_HOST}" "mkdir -p $versionPath"
 
-          # Recursively copy the entire out directory to the server into the version-specific folder
+          Write-Host "Recursively copy the entire out directory to the server into the version-specific folder"
           scp -i $idRsaAutomationPath -r "${env:LOCAL_PATH}" "${env:REMOTE_USER}@${env:REMOTE_HOST}:$versionPath"
 
-          # Clean up: Remove the local SSH directory and its contents after use
+          Write-Host "Clean up: Remove the local SSH directory and its contents after use"
           Try {
             Remove-Item -Path "$idRsaAutomationPath" -Force
             Remove-Item -Path "$localSshDir" -Force -Recurse
@@ -376,17 +376,22 @@ jobs:
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
+
           # Add server to known hosts to avoid interactive prompts
           ssh-keyscan $REMOTE_HOST >> ~/.ssh/known_hosts
+
           # Define the path for the Debian package, incorporating the GIT_TAG
           cp ./out/make/deb/x64/*.deb ./out/make/deb/x64/singulatron_${GIT_TAG}_amd64.deb
           ls -alh ./out/make/deb/x64/
           DEB_PACKAGE_PATH="./out/make/deb/x64/singulatron_${GIT_TAG}_amd64.deb"
           REMOTE_DEB_PATH="${REMOTE_PATH}/${GIT_TAG}/linux/singulatron_${GIT_TAG}_amd64.deb"
+
           # Ensure remote directory exists
           ssh ${REMOTE_USER}@${REMOTE_HOST} "mkdir -p ${REMOTE_PATH}/${GIT_TAG}/linux"
+
           # Upload the Debian package to the server using SCP
           scp $DEB_PACKAGE_PATH ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DEB_PATH}
+
           # Clean up the SSH key
           rm -rf ~/.ssh/id_rsa
         shell: bash
