@@ -101,9 +101,10 @@ jobs:
           SIGNING_PASS: ${{ secrets.SIGNING_PASS }}
 
       - name: Convert to APPX
+        if: false
         run: |
           npm run make-appx
-        working-directory: ./worker
+        working-directory: ./desktop
 
       - name: Extract tag or branch name
         if: always()
@@ -332,8 +333,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CGO_ENABLED: 0
-    if: false
-    # if: ${{ !contains(github.event.head_commit.message, 'NOBUILD') }}
+    if: ${{ !contains(github.event.head_commit.message, 'NOBUILD') }}
     steps:
       - uses: actions/checkout@v4
 
