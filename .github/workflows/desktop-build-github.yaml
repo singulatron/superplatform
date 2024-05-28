@@ -191,7 +191,9 @@ jobs:
 
           Write-Host "Create a version-specific folder on the server using the GIT_TAG"
           $versionPath = "${env:REMOTE_PATH}/${env:GIT_TAG}/windows"
-          ssh -i $idRsaAutomationPath "${env:REMOTE_USER}@${env:REMOTE_HOST}" "mkdir -p $versionPath"
+
+          Write-Host "Create version path on remote"
+          ssh -i -v $idRsaAutomationPath "${env:REMOTE_USER}@${env:REMOTE_HOST}" "mkdir -p $versionPath"
 
           Write-Host "Recursively copy the entire out directory to the server into the version-specific folder"
           scp -i $idRsaAutomationPath -r "${env:LOCAL_PATH}" "${env:REMOTE_USER}@${env:REMOTE_HOST}:$versionPath"
