@@ -101,9 +101,11 @@ export class LocaltronService {
 					selectedExists: rsp?.status?.selectedExists,
 				});
 			} catch (error) {
-				console.error('Error in pollModelStatus', error);
+				console.error('Error in pollModelStatus', {
+					error: JSON.stringify(error),
+				});
 			}
-			setTimeout(pollModelStatus, 1000); // Call again after 1 second
+			setTimeout(pollModelStatus, 1000);
 		};
 
 		const pollDockerInfo = async () => {
@@ -114,9 +116,11 @@ export class LocaltronService {
 					hasDocker: rsp?.info?.hasDocker,
 				});
 			} catch (error) {
-				console.error('Error in pollDockerInfo', error);
+				console.error('Error in pollDockerInfo', {
+					error: JSON.stringify(error),
+				});
 			}
-			setTimeout(pollDockerInfo, 1000); // Call again after 1 second
+			setTimeout(pollDockerInfo, 1000);
 		};
 
 		const pollPromptList = async () => {
@@ -125,9 +129,11 @@ export class LocaltronService {
 
 				this.onPromptListUpdateSubject.next(rsp.prompts);
 			} catch (error) {
-				console.error('Error in pollPromptList', error);
+				console.error('Error in pollPromptList', {
+					error: JSON.stringify(error),
+				});
 			}
-			setTimeout(pollPromptList, 1000); // Call again after 1 second
+			setTimeout(pollPromptList, 1000);
 		};
 
 		const pollConfig = async () => {
@@ -136,9 +142,11 @@ export class LocaltronService {
 				this.lapi.lastConfig = rsp?.config;
 				this.lapi.onConfigUpdateSubject.next(rsp?.config as Config);
 			} catch (error) {
-				console.error('Error in pollConfig', error);
+				console.error('Error in pollConfig', {
+					error: JSON.stringify(error),
+				});
 			}
-			setTimeout(pollConfig, 1000); // Call again after 1 second
+			setTimeout(pollConfig, 1000);
 		};
 
 		const pollFileDownloadStatus = async () => {
@@ -148,12 +156,13 @@ export class LocaltronService {
 					allDownloads: rsp?.downloads as DownloadDetails[],
 				});
 			} catch (error) {
-				console.error('Error in pollFileDownloadStatus', error);
+				console.error('Error in pollFileDownloadStatus', {
+					error: JSON.stringify(error),
+				});
 			}
-			setTimeout(pollFileDownloadStatus, 1000); // Call again after 1 second
+			setTimeout(pollFileDownloadStatus, 1000);
 		};
 
-		// Start the polling loops
 		pollModelStatus();
 		pollDockerInfo();
 		pollPromptList();
@@ -597,7 +606,7 @@ export interface DeleteChatThreadRequest {
 }
 
 export interface DeleteChatMessageRequest {
-	messageId: string; // Corrected field name from "threadId" to "messageId"
+	messageId: string;
 }
 
 export interface GetChatThreadRequest {

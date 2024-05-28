@@ -18,7 +18,6 @@ import (
 	"log/slog"
 	"sync"
 
-	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/image"
 	"github.com/docker/docker/client"
 	"github.com/pkg/errors"
@@ -86,7 +85,7 @@ type PullStatus struct {
 }
 
 func pullImageWithProgress(d *client.Client, imageName string) error {
-	rc, err := d.ImagePull(context.Background(), imageName, types.ImagePullOptions{})
+	rc, err := d.ImagePull(context.Background(), imageName, image.PullOptions{})
 	if err != nil {
 		return errors.Wrap(err, "failed to pull image")
 	}
