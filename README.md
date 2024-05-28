@@ -1,16 +1,16 @@
 <p align="center">
   <img width="150px" src="https://singulatron.com/assets/s3d.png" />
-  <div style="text-align: center">
-    <span style="font-size: 3rem;">
-      Singulatron
+  <div align="center">
+    <span>
+      <h1>Singulatron</h1>
     </span>
-    <div style="color: #888">
+    <div>
       Run AI anywhere
     </div>
-    <h1>&nbsp;</h1>
   </div>
 <p>
-
+<br />
+<br />
 Singulatron is an app that lets you run AI anywhere!
 It is private, works offline, and can run on your laptop, PC, or even on your company computers or servers.
 
