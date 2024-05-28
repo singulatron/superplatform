@@ -161,6 +161,7 @@ func getWslIpAddress() (string, error) {
 	}
 
 	cmd := exec.Command("wsl", "ip", "addr", "show", "eth0")
+	cmd.Env = append(cmd.Env, "WSL_UTF8=1")
 	var out bytes.Buffer
 	cmd.Stdout = &out
 	err := cmd.Run()
