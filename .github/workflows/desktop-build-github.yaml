@@ -81,31 +81,6 @@ jobs:
           CERT_PFX_BASE64: ${{ secrets.CERT_PFX_BASE64 }}
           SIGNING_PASS: ${{ secrets.SIGNING_PASS }}
 
-      - name: Cache npm cache
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.npm
-          key: ${{ runner.os }}-npm-cache-${{ hashFiles('desktop/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-npm-cache-
-
-      - name: Install dependencies
-        run: npm install
-        working-directory: ./desktop
-
-      - name: Build and Package for Windows
-        run: npm run make
-        working-directory: ./desktop
-        env:
-          SIGNING_PASS: ${{ secrets.SIGNING_PASS }}
-
-      - name: Convert to APPX
-        if: false
-        run: |
-          npm run make-appx
-        working-directory: ./worker
-
       - name: Extract tag or branch name
         if: always()
         run: |
@@ -143,7 +118,7 @@ jobs:
 
           Write-Host "Create a version-specific folder on the server using the GIT_TAG"
           $versionPath = "${env:REMOTE_PATH}/${env:GIT_TAG}/windows"
-          ssh -i $idRsaAutomationPath "${env:REMOTE_USER}@${env:REMOTE_HOST}" "mkdir -p $versionPath"
+          ssh -i $idRsaAutomationPath -v "${env:REMOTE_USER}@${env:REMOTE_HOST}" "mkdir -p $versionPath"
 
           Write-Host "Recursively copy the entire out directory to the server into the version-specific folder"
           scp -i $idRsaAutomationPath -r "${env:LOCAL_PATH}" "${env:REMOTE_USER}@${env:REMOTE_HOST}:$versionPath"
@@ -158,6 +133,33 @@ jobs:
         working-directory: ./desktop
         # for some reason this fails even though stuff gets copied successfully
         continue-on-error: true
+
+      - name: Cache npm cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.npm
+          key: ${{ runner.os }}-npm-cache-${{ hashFiles('desktop/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-cache-
+
+      - name: Install dependencies
+        if: false
+        run: npm install
+        working-directory: ./desktop
+
+      - name: Build and Package for Windows
+        if: false
+        run: npm run make
+        working-directory: ./desktop
+        env:
+          SIGNING_PASS: ${{ secrets.SIGNING_PASS }}
+
+      - name: Convert to APPX
+        if: false
+        run: |
+          npm run make-appx
+        working-directory: ./worker
 
       - name: Run tests
         run: |
@@ -333,7 +335,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CGO_ENABLED: 0
-    if: ${{ !contains(github.event.head_commit.message, 'NOBUILD') }}
+    if: false
+    # if: ${{ !contains(github.event.head_commit.message, 'NOBUILD') }}
     steps:
       - uses: actions/checkout@v4
 
@@ -384,7 +387,6 @@ jobs:
 
           # Define the path for the Debian package, incorporating the GIT_TAG
           cp ./out/make/deb/x64/*.deb ./out/make/deb/x64/singulatron_${GIT_TAG}_amd64.deb
-          ls -alh ./out/make/deb/x64/
           DEB_PACKAGE_PATH="./out/make/deb/x64/singulatron_${GIT_TAG}_amd64.deb"
           REMOTE_DEB_PATH="${REMOTE_PATH}/${GIT_TAG}/linux/singulatron_${GIT_TAG}_amd64.deb"
 
