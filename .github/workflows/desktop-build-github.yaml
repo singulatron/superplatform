@@ -101,6 +101,7 @@ jobs:
           SIGNING_PASS: ${{ secrets.SIGNING_PASS }}
 
       - name: Convert to APPX
+        if: false
         run: |
           npm run make-appx
         working-directory: ./worker
@@ -157,27 +158,6 @@ jobs:
         working-directory: ./desktop
         # for some reason this fails even though stuff gets copied successfully
         continue-on-error: true
-
-      - name: Deploy to Server
-        env:
-          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
-          REMOTE_USER: ${{ secrets.REMOTE_USER }}
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        run: |
-          # Setup SSH directory and private key using Git Bash
-          mkdir -p /c/Users/runneradmin/.ssh
-          echo "$SSH_PRIVATE_KEY" > /c/Users/runneradmin/.ssh/id_rsa
-          chmod 600 /c/Users/runneradmin/.ssh/id_rsa
-
-          # Add your server to known hosts to avoid prompts
-          ssh-keyscan ${env:REMOTE_HOST} >> /c/Users/runneradmin/.ssh/known_hosts
-
-          # Now use scp or rsync to upload files to your server
-          scp ./out/make/squirrel.windows/x64/singulatron_${GIT_TAG}_amd64.exe ${env:REMOTE_USER}@${env:REMOTE_HOST}:/var/www/singulatron/singulatron_${GIT_TAG}_amd64.exe
-
-          # Clean up
-          rm -rf /c/Users/runneradmin/.ssh/id_rsa
-        working-directory: ./desktop
 
       - name: Run tests
         run: |
