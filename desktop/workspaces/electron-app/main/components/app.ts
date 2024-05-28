@@ -8,7 +8,7 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-import { app, BrowserWindow, shell } from 'electron';
+import { app, BrowserWindow, shell, globalShortcut } from 'electron';
 import { Window } from './window';
 import { ipcMain, clipboard } from 'electron';
 import { WindowApiConst } from 'shared-lib';
@@ -18,8 +18,13 @@ import { getWebpackPath, setupSession } from './util';
 import { Machine } from '../the-machine/the-machine';
 import { enableLogging, disableLogging } from './logger';
 import { Log } from '../../../angular-app/shared/backend-api/app';
+import { registerShortcuts } from './shortcuts/shortcuts';
 
 declare const global: Global;
+
+app.on('will-quit', () => {
+	globalShortcut.unregisterAll();
+});
 
 export class App {
 	private static _wrapper: Window;
@@ -38,6 +43,11 @@ export class App {
 			// THIS IS WHERE IT ALL STARTS.
 
 			setupSession();
+
+			registerShortcuts(
+				App._wrapper.electronWindow as BrowserWindow,
+				globalShortcut
+			);
 
 			ipcMain.on(WindowApiConst.FRONTEND_READY_REQUEST, (event, args) => {
 				console.log('Frontend ready');
