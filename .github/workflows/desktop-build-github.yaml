@@ -91,19 +91,16 @@ jobs:
             ${{ runner.os }}-npm-cache-
 
       - name: Install dependencies
-        if: false
         run: npm install
         working-directory: ./desktop
 
       - name: Build and Package for Windows
-        if: false
         run: npm run make
         working-directory: ./desktop
         env:
           SIGNING_PASS: ${{ secrets.SIGNING_PASS }}
 
       - name: Convert to APPX
-        if: false
         run: |
           npm run make-appx
         working-directory: ./worker
