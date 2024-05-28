@@ -8,7 +8,7 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-import { app, BrowserWindow, shell } from 'electron';
+import { app, BrowserWindow, shell, globalShortcut } from 'electron';
 import { Window } from './window';
 import { ipcMain, clipboard } from 'electron';
 import { WindowApiConst } from 'shared-lib';
@@ -20,6 +20,10 @@ import { enableLogging, disableLogging } from './logger';
 import { Log } from '../../../angular-app/shared/backend-api/app';
 
 declare const global: Global;
+
+app.on('will-quit', () => {
+	globalShortcut.unregisterAll();
+});
 
 export class App {
 	private static _wrapper: Window;
@@ -38,6 +42,30 @@ export class App {
 			// THIS IS WHERE IT ALL STARTS.
 
 			setupSession();
+
+			globalShortcut.register('CommandOrControl+Plus', () => {
+				const currentZoom = (
+					App._wrapper.electronWindow as BrowserWindow
+				).webContents.getZoomFactor();
+				(
+					App._wrapper.electronWindow as BrowserWindow
+				).webContents.setZoomFactor(currentZoom + 0.1);
+			});
+
+			globalShortcut.register('CommandOrControl+-', () => {
+				const currentZoom = (
+					App._wrapper.electronWindow as BrowserWindow
+				).webContents.getZoomFactor();
+				(
+					App._wrapper.electronWindow as BrowserWindow
+				).webContents.setZoomFactor(currentZoom - 0.1);
+			});
+
+			globalShortcut.register('CommandOrControl+0', () => {
+				(
+					App._wrapper.electronWindow as BrowserWindow
+				).webContents.setZoomFactor(1.0);
+			});
 
 			ipcMain.on(WindowApiConst.FRONTEND_READY_REQUEST, (event, args) => {
 				console.log('Frontend ready');
