@@ -18,6 +18,7 @@ import { getWebpackPath, setupSession } from './util';
 import { Machine } from '../the-machine/the-machine';
 import { enableLogging, disableLogging } from './logger';
 import { Log } from '../../../angular-app/shared/backend-api/app';
+import { registerShortcuts } from './shortcuts/shortcuts';
 
 declare const global: Global;
 
@@ -43,29 +44,10 @@ export class App {
 
 			setupSession();
 
-			globalShortcut.register('CommandOrControl+Plus', () => {
-				const currentZoom = (
-					App._wrapper.electronWindow as BrowserWindow
-				).webContents.getZoomFactor();
-				(
-					App._wrapper.electronWindow as BrowserWindow
-				).webContents.setZoomFactor(currentZoom + 0.1);
-			});
-
-			globalShortcut.register('CommandOrControl+-', () => {
-				const currentZoom = (
-					App._wrapper.electronWindow as BrowserWindow
-				).webContents.getZoomFactor();
-				(
-					App._wrapper.electronWindow as BrowserWindow
-				).webContents.setZoomFactor(currentZoom - 0.1);
-			});
-
-			globalShortcut.register('CommandOrControl+0', () => {
-				(
-					App._wrapper.electronWindow as BrowserWindow
-				).webContents.setZoomFactor(1.0);
-			});
+			registerShortcuts(
+				App._wrapper.electronWindow as BrowserWindow,
+				globalShortcut
+			);
 
 			ipcMain.on(WindowApiConst.FRONTEND_READY_REQUEST, (event, args) => {
 				console.log('Frontend ready');
