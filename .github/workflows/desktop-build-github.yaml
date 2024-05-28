@@ -123,8 +123,8 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
-          REMOTE_PATH: /var/www/singulatron
-          LOCAL_PATH: ./out
+          REMOTE_PATH: /var/www/singulatron/
+          LOCAL_PATH: ./out/make/squirrel.windows/x64/
         run: |
           Write-Host "Create a local directory for the SSH key within the working directory"
           $localSshDir = New-Item -ItemType Directory -Force -Path "./.ssh_automation_deploy"
@@ -142,7 +142,7 @@ jobs:
           ssh-keyscan $env:REMOTE_HOST | Out-File -Append -FilePath "$localSshDir\known_hosts"
 
           Write-Host "Create a version-specific folder on the server using the GIT_TAG"
-          $versionPath = "${env:REMOTE_PATH}/${env:GIT_TAG}/windows"
+          $versionPath = "${env:REMOTE_PATH}/${env:GIT_TAG}/windows/out/make/squirrel.windows/x64"
           ssh -o StrictHostKeyChecking=no -i $idRsaAutomationPath "${env:REMOTE_USER}@${env:REMOTE_HOST}" "mkdir -p $versionPath"
 
           Write-Host "Recursively copy the entire out directory to the server into the version-specific folder"
