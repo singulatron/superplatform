@@ -456,7 +456,7 @@ export class LocaltronService {
 			uri = this.config.env.backendAddress + promptEndpoint;
 		}
 
-		const token = this.cs.get('the_token'); // Assuming cs is a service for getting the token
+		const token = this.cs.get('the_token');
 
 		// Prepare headers
 		const headers = {
@@ -563,7 +563,7 @@ export interface ChatMessage {
 	id?: string;
 	threadId: string;
 	messageContent: string;
-	isUserMessage: boolean; // Assuming this should be a boolean in TypeScript
+	isUserMessage: boolean;
 	time?: string;
 }
 

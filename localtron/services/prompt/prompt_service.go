@@ -167,7 +167,6 @@ func llmResponseToText(responses []*llm.CompletionResponse) string {
 		}
 		choice := v.Choices[0]
 
-		// Assuming choice.Text needs to be handled for special formatting or escaping
 		var textToAdd string
 		if strings.Contains(result.String(), "```") {
 			// Handling for inline code formatting if the resulting string is already within a code block
@@ -188,9 +187,7 @@ func llmResponseToText(responses []*llm.CompletionResponse) string {
 
 		result.WriteString(textToAdd)
 
-		// If a finish reason is 'stop', we could handle additional logic here if needed.
 		if choice.FinishReason == "stop" {
-			// Logic to handle stopping conditions could be added here.
 			break
 		}
 	}
@@ -199,7 +196,6 @@ func llmResponseToText(responses []*llm.CompletionResponse) string {
 }
 
 func escapeHtml(input string) string {
-	// Replace special HTML characters with HTML entities to prevent HTML injection
 	replacer := strings.NewReplacer(
 		"&", "&amp;",
 		"<", "&lt;",

@@ -13,7 +13,6 @@ import * as path from 'path';
 import { exec } from 'child_process';
 import { promisify } from 'util';
 
-// Assuming you have these interfaces defined for clarity and type checking
 interface ProgramOptions {
 	outputDirectory: string;
 	inputDirectory: string;
@@ -87,21 +86,17 @@ async function packageApp(options: ProgramOptions) {
 	const manifestPath = path.join(preAppx, 'AppXManifest.xml');
 	const assetsPath = path.join(preAppx, 'assets');
 
-	// Setup directories
 	await fs.emptyDir(preAppx);
 	await fs.ensureDir(app);
 	await fs.ensureDir(assetsPath);
 
-	// Copy app files
 	await fs.copy(options.inputDirectory, app);
 	await fs.copy(assetsTemplatePath, assetsPath);
 
-	// Prepare and write the manifest
 	const manifestTemplate = await fs.readFile(manifestTemplatePath, 'utf8');
 	const manifestContent = replaceManifestVariables(manifestTemplate, options);
 	await fs.writeFile(manifestPath, manifestContent, 'utf8');
 
-	// Package the app with makeappx
 	const makeappx = path.join(options.windowsKit, 'makeappx.exe');
 	const destination = path.join(
 		options.outputDirectory,
@@ -112,14 +107,13 @@ async function packageApp(options: ProgramOptions) {
 	);
 
 	if (options.assets) {
-		params.push('/l'); // Assuming assets might contain variable resources
+		params.push('/l');
 	}
 
 	const cmd = `"${makeappx}" ${params.join(' ')}`;
 	await execAsync(cmd);
 }
 
-// Assuming your package.json is in the same directory as this script
 const packageJson = require('../package.json');
 const packageNodeVersion = process.env.PACKAGE_VERSION || packageJson.version;
 const packageWinVersion = packageNodeVersion + '.0';
@@ -131,7 +125,7 @@ const programOptions: ProgramOptions = {
 	packageName: process.env.PACKAGE_NAME || packageJson.name || 'Singulatron',
 	packageExecutable:
 		process.env.PACKAGE_EXECUTABLE ||
-		`app\\Singulatron-${packageNodeVersion} Setup.exe`, // Optional, no default
+		`app\\Singulatron-${packageNodeVersion} Setup.exe`,
 	publisher: process.env.PUBLISHER || 'CN=A2452F69-42C3-494B-A516-500954C5BE4E',
 	publisherDisplayName:
 		process.env.PUBLISHER_DISPLAY_NAME || packageJson.author || 'Singulatron',
