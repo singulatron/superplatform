@@ -63,7 +63,7 @@ func (d *DockerService) pullImage(imageName string) error {
 		return nil
 	}
 
-	lib.Logger.Info("Pulling! image", slog.String("image", imageName))
+	lib.Logger.Info("Starting to pull image", slog.String("image", imageName))
 
 	err = pullImageWithProgress(d.client, imageName)
 	if err != nil {
@@ -105,6 +105,10 @@ func pullImageWithProgress(d *client.Client, imageName string) error {
 		if err := decoder.Decode(&status); err == io.EOF {
 			break
 		} else if err != nil {
+			lib.Logger.Error("Error pulling image",
+				slog.String("error", err.Error()),
+				slog.String("image", imageName),
+			)
 			return errors.Wrap(err, "Failed to decode image pull output")
 		}
 		logPullProgress(status)

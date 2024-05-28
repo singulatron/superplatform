@@ -142,7 +142,7 @@ jobs:
           ssh-keyscan $env:REMOTE_HOST | Out-File -Append -FilePath "$localSshDir\known_hosts"
 
           Write-Host "Create a version-specific folder on the server using the GIT_TAG"
-          $versionPath = "${env:REMOTE_PATH}/${env:GIT_TAG}/windows/out/make/squirrel.windows/x64"
+          $versionPath = "${env:REMOTE_PATH}/${env:GIT_TAG}/windows/out/make/squirrel.windows"
           ssh -o StrictHostKeyChecking=no -i $idRsaAutomationPath "${env:REMOTE_USER}@${env:REMOTE_HOST}" "mkdir -p $versionPath"
 
           Write-Host "Recursively copy the entire out directory to the server into the version-specific folder"
