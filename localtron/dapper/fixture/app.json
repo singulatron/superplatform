@@ -1,0 +1,9 @@
+{
+  "name": "localtron",
+  "features": [
+    {
+      "featureId": "docker-daemon-running",
+      "args": ["{{.username}}", "{{.assetfolder}}"]
+    }
+  ]
+}

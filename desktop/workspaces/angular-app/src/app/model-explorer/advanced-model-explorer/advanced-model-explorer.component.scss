@@ -1,0 +1,93 @@
+/*
+ * @license
+ * Copyright (c) The Authors (see the AUTHORS file)
+ *
+ * This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3) for personal, non-commercial use.
+ * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
+ *
+ * For commercial use, a separate license must be obtained by purchasing from The Authors.
+ * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
+ */
+.stat {
+	margin-top: 1rem;
+	margin-bottom: 1rem;
+
+	.stat-title {
+		margin-bottom: 5px;
+		font-weight: bold;
+
+		display: flex;
+		justify-content: space-between;
+	}
+
+	.stat-val {
+		font-weight: normal;
+		color: #888;
+	}
+
+	.stat-bar {
+		height: 4px;
+		background-color: #3880ff;
+		/* Ionic primary color */
+		width: var(--width, 50%);
+		/* Default width if not specified */
+	}
+}
+
+ion-checkbox {
+	--size: 18px;
+	--checkbox-background-checked: #6815ec;
+	margin-left: 15px;
+}
+
+ion-checkbox::part(container) {
+	border-radius: 4px;
+	border: 1px solid #6815ec;
+}
+
+.list-view {
+	font-family: Arial, sans-serif;
+	color: #333;
+
+	ion-col {
+		border: 1px solid #ddd;
+		padding: 8px;
+		text-align: center;
+
+		&[data-tooltip]:hover::after {
+			content: attr(data-tooltip);
+			position: absolute;
+			padding: 4px 8px;
+			border: 1px solid #ccc;
+			background-color: white;
+			color: black;
+			min-width: 150px;
+			white-space: nowrap;
+			left: 50%;
+			transform: translateX(-50%);
+			box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+			z-index: 1000;
+		}
+	}
+
+	ion-row {
+		&:first-child {
+			ion-col {
+				background-color: #f4f4f8;
+				font-weight: bold;
+				text-transform: uppercase;
+			}
+		}
+
+		&:hover {
+			background-color: #e9ecef;
+		}
+	}
+
+	@media screen and (max-width: 600px) {
+		ion-col {
+			display: block;
+			width: 100%;
+		}
+	}
+}

@@ -1,0 +1,93 @@
+<div class="container-for-ion-card">
+	<ion-card class="flat-card">
+		<ion-card-content class="main-card">
+			<ng-container
+				*ngFor="let message of messages; let i = index; let isLast = last"
+			>
+				<div class="message-block">
+					<div
+						class="message-header sng-test-message-header"
+						[ngClass]="{ 'mt-20': i > 0 }"
+					>
+						<ion-icon
+							class="chat-user-icon"
+							*ngIf="message?.isUserMessage"
+							name="person-circle-outline"
+						></ion-icon>
+						<img
+							*ngIf="!message?.isUserMessage"
+							class="chat-user-icon"
+							src="/assets/s3d-min.png"
+							alt="Logo"
+						/>
+						<ion-label style="margin-left: 0.6rem">{{
+							message?.isUserMessage ? 'You' : 'Singulatron'
+						}}</ion-label>
+						<div class="message-action-buttons">
+							<ion-icon
+								title="Copy to clipboard"
+								class="copy-icon"
+								name="copy-outline"
+								(click)="propagateCopyToClipboard(message?.messageContent)"
+							></ion-icon>
+							<ion-icon
+								title="Delete message"
+								class="copy-icon"
+								name="trash-outline"
+								(click)="deleteMessage(message?.id)"
+							></ion-icon>
+							<ion-icon
+								*ngIf="!message?.isUserMessage && isLast && canSend"
+								title="Regenerate answer"
+								class="copy-icon"
+								name="reload-outline"
+								(click)="regenerateAnswer(message)"
+							></ion-icon>
+						</div>
+					</div>
+					<markdown class="markdown-body" [data]="message?.messageContent">
+					</markdown>
+				</div>
+			</ng-container>
+
+			<ng-container *ngIf="messageCurrentlyStreamed?.length">
+				<div class="message-block">
+					<div
+						class="message-header sng-test-message-header"
+						[ngClass]="{ 'mt-20': i > 0 }"
+					>
+						<img class="chat-user-icon" src="/assets/s3d-min.png" alt="Logo" />
+						<ion-label style="margin-left: 0.6rem">{{
+							'Singulatron'
+						}}</ion-label>
+						<div class="message-action-buttons"></div>
+					</div>
+					<markdown class="markdown-body" [data]="messageCurrentlyStreamed">
+					</markdown>
+				</div>
+			</ng-container>
+		</ion-card-content>
+
+		<ion-item lines="full" style="margin-top: 10px">
+			<ion-textarea
+				class="sng-test-chat-textarea"
+				(keyup.enter)="send()"
+				placeholder="{{ 'Type your message' | translate }}"
+				autoGrow="true"
+				[(ngModel)]="message"
+			></ion-textarea>
+			<ion-fab-button
+				(click)="send()"
+				slot="end"
+				size="small"
+				color="primary"
+				class="sng-test-chat-send-button"
+				><span style="color: white"
+					><ion-icon
+						style="font-size: 1.5rem"
+						name="arrow-up-outline"
+					></ion-icon></span
+			></ion-fab-button>
+		</ion-item>
+	</ion-card>
+</div>

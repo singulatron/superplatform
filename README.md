@@ -1,10 +1,12 @@
-# Singulatron Desktop
+<p align="center">
+  <img width="200px" src="https://singulatron.com/assets/s3d.png" />
+<p>
 
-Run AI on your laptop or PC - free, private, awesome.
+# Singulatron
+
+Run AI privately on your laptop, PC or your company servers.
 
 Download for Windows, MacOS or Linux: https://singulatron.com/home
-
-This repo will serve as the public issue tracker for the app.
 
 ## Run GPTs for free
 
@@ -16,15 +18,20 @@ Your chats never leave your computer.
 
 One of the main goals of the projects is to get it working on as many systems as possible - to truly democratize the AI age.
 
-![Setup](https://singulatron.com/assets/startup.png)
-
 ## Browse models
 
 We aim to bring every available AI model to you.
 
-![Browse](https://singulatron.com/assets/model-explorer.png)
+## License
 
-## Is it Open Source?
+Singulatron is dual-licensed under the AGPL-3.0-or-later and a commercial license.
 
-Not yet. If there is interest in the project we will consider open sourcing it.
-Please star the repo or just message us in an issue to show interest. Thanks!
+### AGPL-3.0-or-later (Personal Use)
+
+For personal, non-commercial use, this project is licensed under the AGPL-3.0-or-later. See the [LICENSE-PERSONAL-USE](LICENSE-PERSONAL-USE) file for details.
+
+### Commercial License
+
+For commercial use, you must purchase a commercial license. Please refer to the [LICENSE-COMMERCIAL-USE](LICENSE-COMMERCIAL-USE) file for details, or contact us at dobronszki@gmail.com.
+
+For more information, visit https://singulatron.com/home.

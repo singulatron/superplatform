@@ -1,0 +1,24 @@
+<b-sidebar-page>
+	<!-- <ion-header>
+		<ion-toolbar>
+			<ion-segment [(ngModel)]="selectedPage">
+				<ion-segment-button value="default">
+					<ion-label>Default</ion-label>
+				</ion-segment-button>
+				<ion-segment-button value="advanced">
+					<ion-label>Advanced</ion-label>
+				</ion-segment-button>
+			</ion-segment>
+		</ion-toolbar>
+	</ion-header>
+	<div class="content">
+		<div *ngIf="selectedPage === 'default'">
+			<app-default-model-explorer></app-default-model-explorer>
+		</div>
+		<div *ngIf="selectedPage === 'advanced'">
+			<app-advanced-model-explorer></app-advanced-model-explorer>
+		</div>
+	</div>
+-->
+	<app-advanced-model-explorer></app-advanced-model-explorer>
+</b-sidebar-page>

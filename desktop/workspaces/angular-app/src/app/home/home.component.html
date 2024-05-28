@@ -1,0 +1,67 @@
+<!--
+ * @license
+ * Copyright (c) The Authors (see the AUTHORS file)
+ *
+ * This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3) for personal, non-commercial use.
+ * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
+ *
+ * For commercial use, a separate license must be obtained by purchasing from The Authors.
+ * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
+ -->
+<b-sidebar-page>
+	<app-centered headerHeight="0vh" vertical="true">
+		<div style="margin: 0 auto; margin-bottom: 2em; height: 6em; width: 6em">
+			<img src="/assets/s3d-min.png" />
+		</div>
+		<div style="text-align: center">
+			<h1>{{ 'Welcome to' | translate }} Singulatron</h1>
+		</div>
+		<div style="text-align: center; color: #888">
+			<h3 style="margin-top: 0em">
+				{{ 'A free, private, offline-enabled AI platform' | translate }}.
+			</h3>
+		</div>
+		<ion-card style="margin-top: 3em">
+			<ion-card-content>
+				<div style="display: flex; align-items: center">
+					<ion-icon
+						class="log-icon"
+						[ngClass]="{
+							active: loggingEnabled
+						}"
+						style="font-size: 2em; cursor: pointer"
+						(click)="toggleLogging()"
+						name="cloud-upload-outline"
+					></ion-icon>
+					<div *ngIf="loggingEnabled" style="margin-left: 20px">
+						{{
+							'Diagnostic logs are being uploaded to our server for analysis'
+								| translate
+						}}.<br />
+						{{ 'Turn this off for extra privacy and safety' | translate }}
+						{{ 'This will also turn off local logging entirely' | translate }}.
+					</div>
+
+					<div *ngIf="!loggingEnabled" style="margin-left: 20px">
+						{{
+							'Diagnostic logs are turned off for extra privacy and security'
+								| translate
+						}}.<br />
+						{{
+							'If you are not working with sensitive data, please turn this on to improve this application'
+								| translate
+						}}.
+					</div>
+				</div>
+			</ion-card-content>
+		</ion-card>
+		<div style="text-align: center; margin-top: 3em" class="buttons">
+			<ion-button
+				class="menu-buttons sng-test-launch-ai"
+				routerLink="/startup"
+				fill="outline"
+				>{{ 'Launch AI' | translate }}</ion-button
+			>
+		</div>
+	</app-centered>
+</b-sidebar-page>
