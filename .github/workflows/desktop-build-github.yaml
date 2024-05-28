@@ -146,7 +146,7 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i $idRsaAutomationPath "${env:REMOTE_USER}@${env:REMOTE_HOST}" "mkdir -p $versionPath"
 
           Write-Host "Recursively copy the entire out directory to the server into the version-specific folder"
-          scp -o StrictHostKeyChecking=no -i $idRsaAutomationPath -r "${env:LOCAL_PATH}" "${env:REMOTE_USER}@${env:REMOTE_HOST}:$versionPath"
+          scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i $idRsaAutomationPath -r "${env:LOCAL_PATH}" "${env:REMOTE_USER}@${env:REMOTE_HOST}:$versionPath"
 
           Write-Host "Clean up: Remove the local SSH directory and its contents after use"
           Try {
@@ -196,7 +196,7 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i $idRsaAutomationPath "${env:REMOTE_USER}@${env:REMOTE_HOST}" "mkdir -p $versionPath"
 
           Write-Host "Recursively copy the entire out directory to the server into the version-specific folder"
-          scp -o StrictHostKeyChecking=no -i $idRsaAutomationPath -r "${env:LOCAL_PATH}" "${env:REMOTE_USER}@${env:REMOTE_HOST}:$versionPath"
+          scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i $idRsaAutomationPath -r "${env:LOCAL_PATH}" "${env:REMOTE_USER}@${env:REMOTE_HOST}:$versionPath"
 
           Write-Host "Clean up: Remove the local SSH directory and its contents after use"
           Try {
