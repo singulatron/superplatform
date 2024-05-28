@@ -32,8 +32,10 @@ func (d *DockerService) Info() (*ts.OnDockerInfo, error) {
 	d.mutex.Lock()
 	defer d.mutex.Unlock()
 
-	_, err := d.client.Ping(context.Background())
-	if err == nil {
+	inf, err := d.client.Info(context.Background())
+	// even on windows, we want a docker daemon that can run linux containers
+	// as our containers are linux ones
+	if err == nil && inf.OSType == "linux" {
 		ret := &ts.OnDockerInfo{
 			HasDocker: true,
 		}
@@ -87,9 +89,12 @@ func (d *DockerService) tryFixDockerAddress() (ip string, port int, err error) {
 				return "", 0, errors.Wrap(err, "error creating new Docker client")
 			}
 
-			_, err = newDockerClient.Ping(context.Background())
+			inf, err := newDockerClient.Info(context.Background())
 			if err != nil {
 				return "", 0, errors.Wrap(err, "error pinging Docker with new address")
+			}
+			if inf.OSType != "linux" {
+				return "", 0, errors.Wrap(err, fmt.Sprintf("docker os type is not linux but '%v'", inf.OSType))
 			}
 
 			d.client = newDockerClient

@@ -30,11 +30,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-npm-cache-
 
-      - name: Uninstall docker
-        run: |
-          Stop-Service -Name Docker
-          Get-WmiObject -Class Win32_Product | Where-Object { $_.Name -match "Docker" } | ForEach-Object { $_.Uninstall() }
-
       - name: Prepare environment variables
         run: |
           # Define the target executable and the symlink path
