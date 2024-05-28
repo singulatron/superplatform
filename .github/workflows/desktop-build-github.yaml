@@ -187,14 +187,6 @@ jobs:
 
           # Recursively copy the entire out directory to the server into the version-specific folder
           scp -i $idRsaAutomationPath -r "${env:LOCAL_PATH}" "${env:REMOTE_USER}@${env:REMOTE_HOST}:$versionPath"
-
-          # Clean up: Remove the local SSH directory and its contents after use
-          Try {
-            Remove-Item -Path "$idRsaAutomationPath" -Force
-            Remove-Item -Path "$localSshDir" -Force -Recurse
-          } Catch {
-            Write-Warning "Warning: Failed to clean up SSH key or directory. Manual cleanup may be required."
-          }
         working-directory: ./desktop
 
   build-macos:
