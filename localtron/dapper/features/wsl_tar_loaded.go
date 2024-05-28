@@ -1,0 +1,61 @@
+/**
+ * @license
+ * Copyright (c) The Authors (see the AUTHORS file)
+ *
+ * This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3) for personal, non-commercial use.
+ * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
+ *
+ * For commercial use, a separate license must be obtained by purchasing from The Authors.
+ * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
+ */
+package features
+
+import dt "github.com/singulatron/singulatron/localtron/dapper/types"
+
+var WSLTarLoaded = dt.Feature{
+	ID:   "wsl-tar-loaded",
+	Name: "WSL Tar Loaded",
+	Arguments: []dt.Argument{
+		{
+			Name:    "tarpath",
+			Type:    dt.String,
+			Default: "",
+		},
+		{
+			Name:    "distroname",
+			Type:    dt.String,
+			Default: "",
+		},
+	},
+	PlatformScripts: map[dt.Platform]*dt.Scripts{
+		dt.Windows: {
+			Execute: &dt.Script{
+				Source: `
+Write-Host "Importing {{.distroname}}."
+wsl --import dind C:\\WSL\\{{.distroname}} {{.tarpath}} --version 2
+
+# Set as default, see https://github.com/microsoft/WSL/issues/5923
+wsl -s {{.distroname}}
+`,
+				Runtime: dt.Powershell,
+				Sudo:    false,
+			},
+			Check: &dt.Script{
+				Source: `
+$distroname = "{{.distroname}}"
+$loadedDistros = wsl -l -q
+if ($loadedDistros.Contains($distroname)) {
+    Write-Host "$distroname is already loaded."
+    exit 0
+} else {
+    Write-Host "$distroname is not loaded."
+    exit 1
+}
+`,
+				Runtime: dt.Powershell,
+				Sudo:    false,
+			},
+		},
+	},
+	PlatformFeatures: map[dt.Platform][]any{},
+}

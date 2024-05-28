@@ -1,0 +1,123 @@
+/*
+ * @license
+ * Copyright (c) The Authors (see the AUTHORS file)
+ *
+ * This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3) for personal, non-commercial use.
+ * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
+ *
+ * For commercial use, a separate license must be obtained by purchasing from The Authors.
+ * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
+ */
+.flex-container {
+	display: flex;
+	height: 100vh;
+}
+
+.left-column {
+	width: 300px;
+	overflow-y: auto;
+	height: 100vh;
+	box-sizing: border-box;
+}
+
+.right-column {
+	height: 100vh;
+	width: 100%;
+	overflow-y: auto;
+}
+
+.left-column {
+	> div {
+		padding: 10px;
+		padding-left: 1rem;
+		margin-bottom: 5px;
+		border-radius: 4px;
+		cursor: pointer;
+		transition: background-color 0.2s;
+		display: flex;
+		align-items: center;
+		font-size: 14px;
+
+		&:hover {
+			background-color: #e0e0e0;
+		}
+
+		// Logo Singulatron +
+		&:first-child {
+			font-size: 16px;
+			margin-top: 5px;
+
+			color: #007bff;
+			font-weight: bold;
+			.logo {
+				height: 24px;
+				width: auto;
+				margin-right: 10px;
+			}
+
+			.brand-name {
+				flex-grow: 1;
+			}
+
+			ion-icon {
+				font-size: 24px;
+			}
+		}
+	}
+
+	.thread-item {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+
+		& > div {
+			flex-grow: 1;
+			margin-right: 10px;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		&:hover {
+			.icon-delete {
+				visibility: visible;
+			}
+		}
+
+		&.selected-thread {
+			background-color: #d1e8ff;
+			color: #0056b3;
+
+			&:hover {
+				background-color: #b8daff;
+			}
+		}
+	}
+
+	.icon-delete {
+		visibility: hidden;
+		color: #ff6347;
+		flex-shrink: 0;
+		width: 18px;
+		height: 18px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+}
+
+.flashing {
+	animation: flash 1s infinite;
+}
+
+@keyframes flash {
+	0% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}

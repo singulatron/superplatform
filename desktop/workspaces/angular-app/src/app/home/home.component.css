@@ -1,0 +1,75 @@
+/*
+ * @license
+ * Copyright (c) The Authors (see the AUTHORS file)
+ *
+ * This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3) for personal, non-commercial use.
+ * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
+ *
+ * For commercial use, a separate license must be obtained by purchasing from The Authors.
+ * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
+ */
+.log-icon:hover {
+	color: rgb(67, 231, 67);
+}
+
+.log-icon.active:hover {
+	color: rgb(67, 231, 67); /* Active and hover state */
+}
+
+.log-icon.active {
+	color: rgb(0, 204, 0);
+}
+
+.log-icon {
+	color: grey;
+}
+
+/* copied from website dashboard home */
+
+.menu-buttons {
+	color: #444;
+	font-size: large;
+	white-space: normal;
+	width: 12em;
+	height: 10em;
+	margin-bottom: 1em;
+	margin-right: 1em;
+}
+.header {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	margin-top: 1em;
+	margin-bottom: 2em;
+	gap: 2em;
+}
+.global-shade {
+	height: 2em;
+}
+.global-shade-phone {
+	display: none;
+}
+
+@media only screen and (max-width: 767px) {
+	.buttons {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
+	.menu-buttons {
+		width: 11em;
+		height: 8em;
+		margin-right: 0;
+	}
+	h1 {
+		font-size: larger;
+	}
+	.global-shade {
+		display: none;
+	}
+	.global-shade-phone {
+		display: initial;
+		margin: 1em;
+	}
+}

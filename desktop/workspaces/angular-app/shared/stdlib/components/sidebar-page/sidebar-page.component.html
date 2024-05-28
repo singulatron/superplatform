@@ -1,0 +1,52 @@
+<div class="flex-container">
+	<div class="left-column">
+		<div
+			class="menu-entry"
+			title="Startup information and system overview"
+			routerLink="/"
+		>
+			<ion-icon
+				[ngStyle]="{
+					color: currentPath === '' ? 'gold' : ''
+				}"
+				name="home-outline"
+			></ion-icon>
+		</div>
+
+		<div
+			class="menu-entry"
+			title="Startup information and system overview"
+			routerLink="/startup"
+		>
+			<ion-icon
+				[ngStyle]="{
+					color: currentPath === 'startup' ? 'gold' : ''
+				}"
+				name="arrow-up-circle-outline"
+			></ion-icon>
+		</div>
+
+		<div class="menu-entry" title="Chat with your model" routerLink="/chat">
+			<ion-icon
+				[ngStyle]="{
+					color: currentPath === 'chat' ? 'gold' : ''
+				}"
+				name="chatbox-ellipses-outline"
+			></ion-icon>
+		</div>
+
+		<div class="menu-entry" title="Model Explorer" routerLink="/model-explorer">
+			<ion-icon
+				[ngStyle]="{
+					color: currentPath === 'model-explorer' ? 'gold' : ''
+				}"
+				name="list-outline"
+			></ion-icon>
+		</div>
+	</div>
+	<div class="right-column">
+		<ion-content id="{{ id }}">
+			<ng-content></ng-content>
+		</ion-content>
+	</div>
+</div>
