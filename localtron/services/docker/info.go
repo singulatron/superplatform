@@ -174,8 +174,9 @@ func getWslIpAddress() (string, error) {
 	output := out.Bytes()
 	var decodedOutput string
 
-	if isUtf16(output) {
-		decodedOutput, err = utf16ToUtf8(output)
+	isUtf16, littleEndian := detectUtf16(output)
+	if isUtf16 {
+		decodedOutput, err = utf16ToUtf8(output, littleEndian)
 		if err != nil {
 			return "", fmt.Errorf("error decoding UTF-16 output: %v", err)
 		}
@@ -191,14 +192,47 @@ func getWslIpAddress() (string, error) {
 	return "", fmt.Errorf("IP address not found in output")
 }
 
-func utf16ToUtf8(b []byte) (string, error) {
+func detectUtf16(b []byte) (bool, bool) {
+	if len(b) < 2 {
+		return false, false
+	}
+
+	// Check for BOM
+	if b[0] == 0xFE && b[1] == 0xFF {
+		return true, false // UTF-16 BE
+	}
+	if b[0] == 0xFF && b[1] == 0xFE {
+		return true, true // UTF-16 LE
+	}
+
+	// Heuristic: check for alternating null bytes in even positions
+	nullCount := 0
+	for i := 1; i < len(b); i += 2 {
+		if b[i] == 0 {
+			nullCount++
+		}
+	}
+	if nullCount > len(b)/4 { // More than 25% of the bytes in odd positions are nulls
+		return true, true // Assuming little-endian if no BOM but pattern matches
+	}
+
+	return false, false
+}
+
+func utf16ToUtf8(b []byte, littleEndian bool) (string, error) {
 	if len(b)%2 != 0 {
 		return "", fmt.Errorf("input byte slice has odd length")
 	}
 
 	u16s := make([]uint16, len(b)/2)
-	for i := range u16s {
-		u16s[i] = binary.LittleEndian.Uint16(b[2*i:])
+	if littleEndian {
+		for i := range u16s {
+			u16s[i] = binary.LittleEndian.Uint16(b[2*i:])
+		}
+	} else {
+		for i := range u16s {
+			u16s[i] = binary.BigEndian.Uint16(b[2*i:])
+		}
 	}
 	u8s := make([]byte, 0, len(u16s)*2)
 	for _, r := range utf16.Decode(u16s) {
@@ -208,31 +242,4 @@ func utf16ToUtf8(b []byte) (string, error) {
 	}
 
 	return string(u8s), nil
-}
-
-func isUtf16(b []byte) bool {
-	if len(b) < 2 {
-		return false
-	}
-
-	// Check for BOM
-	if b[0] == 0xFE && b[1] == 0xFF {
-		return true // UTF-16 BE
-	}
-	if b[0] == 0xFF && b[1] == 0xFE {
-		return true // UTF-16 LE
-	}
-
-	// check for alternating null bytes in even positions
-	nullCount := 0
-	for i := 0; i < len(b); i += 2 {
-		if b[i] == 0 {
-			nullCount++
-		}
-	}
-	if nullCount > len(b)/4 { // More than 25% of the bytes are nulls
-		return true
-	}
-
-	return false
 }
