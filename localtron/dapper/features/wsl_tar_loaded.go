@@ -31,6 +31,9 @@ var WSLTarLoaded = dt.Feature{
 		dt.Windows: {
 			Execute: &dt.Script{
 				Source: `
+$env:WSL_UTF8=1
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+
 Write-Host "Importing {{.distroname}}."
 wsl --import dind C:\\WSL\\{{.distroname}} {{.tarpath}} --version 2
 
