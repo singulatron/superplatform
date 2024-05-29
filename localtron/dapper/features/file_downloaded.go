@@ -41,26 +41,47 @@ $filename = "{{.filename}}"
 $fullPath = Join-Path -Path $assetfolder -ChildPath $filename
 $backupPath = "$fullPath.bak"
 
-# Get the length of the remote file
-$response = Invoke-WebRequest -Uri "{{.url}}" -Method Head
-$remoteFileSize = $response.Headers["Content-Length"]
-
 # Function to download file with progress
 function Download-FileWithProgress {
     param (
         [string]$url,
         [string]$destination
     )
-    Start-BitsTransfer -Source $url -Destination $destination -DisplayName "Downloading $filename"
+    Write-Host "Starting file download, url: $url, destination: $destination"
+    $webClient = New-Object System.Net.WebClient
+    $webClient.DownloadFileAsync([Uri]$url, $destination)
+
+    # Loop to track the download progress
+    do {
+        if (Test-Path $destination) {
+            $size = (Get-Item $destination).length
+
+            if ($webClient.ResponseHeaders -and $webClient.ResponseHeaders["Content-Length"]) {
+                $response = $webClient.ResponseHeaders["Content-Length"]
+                $totalSize = [int]$response
+                $progress = [math]::Round(($size / $totalSize) * 100, 2)
+                Write-Output "Downloading: $progress% Complete"
+            } else {
+                Write-Output "Downloading: Size unknown"
+            }
+        }
+        Start-Sleep -Milliseconds 500 # Adjust the delay as needed
+    } until ($webClient.IsBusy -eq $false)
+
+    Write-Output "Download complete."
 }
 
 # Check if the file already exists
 if (Test-Path -Path $fullPath) {
     # Get the length of the local file
     $localFileSize = (Get-Item $fullPath).length
+
+    Write-Host "Get the length of the remote file"
+    $response = Invoke-WebRequest -Uri "{{.url}}" -Method Head
+    $remoteFileSize = $response.Headers["Content-Length"]
     
     if ($localFileSize -ne $remoteFileSize) {
-        # Backup and delete the local file if sizes don't match
+        Write-Host "Backing up and deleting the local file because size doesn't match remote size"
         Copy-Item -Path $fullPath -Destination $backupPath
         Remove-Item -Path $fullPath
         Download-FileWithProgress -url "{{.url}}" -destination $fullPath
