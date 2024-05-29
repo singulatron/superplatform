@@ -315,7 +315,7 @@ func executeScript(subs map[string]string, script *dt.Script) (bool, string, str
 	case "cmd":
 		cmd = exec.Command("cmd", "/C", source)
 	case "powershell":
-		cmd = exec.Command("powershell", "-Command", `$env:WSL_UTF8=1\n`+source)
+		cmd = exec.Command("powershell", "-Command", `$env:WSL_UTF8=1;`+source)
 	case "bash":
 		cmd = exec.Command("bash", "-c", source)
 	default:
@@ -345,7 +345,7 @@ func executeScriptStreamed(subs map[string]string, script *dt.Script, indentStri
 	case "cmd":
 		cmd = exec.Command("cmd", "/C", source)
 	case "powershell":
-		cmd = exec.Command("powershell", "-Command", `$env:WSL_UTF8=1\n`+source)
+		cmd = exec.Command("powershell", "-Command", `$env:WSL_UTF8=1;`+source)
 	case "bash":
 		cmd = exec.Command("bash", "-c", source)
 	default:
