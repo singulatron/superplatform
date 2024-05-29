@@ -35,8 +35,7 @@ var FileDownloaded = dt.Feature{
 	PlatformScripts: map[dt.Platform]*dt.Scripts{
 		dt.Windows: {
 			Execute: &dt.Script{
-				Source: `
-# Define asset folder and filename
+				Source: `# Define asset folder and filename
 $assetfolder = "{{.assetfolder}}"
 $filename = "{{.filename}}"
 $fullPath = Join-Path -Path $assetfolder -ChildPath $filename
@@ -45,6 +44,15 @@ $backupPath = "$fullPath.bak"
 # Get the length of the remote file
 $response = Invoke-WebRequest -Uri "{{.url}}" -Method Head
 $remoteFileSize = $response.Headers["Content-Length"]
+
+# Function to download file with progress
+function Download-FileWithProgress {
+    param (
+        [string]$url,
+        [string]$destination
+    )
+    Start-BitsTransfer -Source $url -Destination $destination -DisplayName "Downloading $filename"
+}
 
 # Check if the file already exists
 if (Test-Path -Path $fullPath) {
@@ -55,17 +63,16 @@ if (Test-Path -Path $fullPath) {
         # Backup and delete the local file if sizes don't match
         Copy-Item -Path $fullPath -Destination $backupPath
         Remove-Item -Path $fullPath
-        Invoke-WebRequest -Uri "{{.url}}" -OutFile $fullPath
+        Download-FileWithProgress -url "{{.url}}" -destination $fullPath
         Write-Host "File $filename was outdated and has been replaced in $assetfolder"
     } else {
         Write-Host "File $filename is up to date in $assetfolder"
     }
 } else {
     # Download file if not present
-    Invoke-WebRequest -Uri "{{.url}}" -OutFile $fullPath
+    Download-FileWithProgress -url "{{.url}}" -destination $fullPath
     Write-Host "File $filename downloaded to $assetfolder"
-}
-`,
+}`,
 				Runtime: dt.Powershell,
 				Sudo:    false,
 			},
