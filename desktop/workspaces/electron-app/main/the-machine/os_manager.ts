@@ -66,7 +66,7 @@ export class OSManager {
 		let exePath = join(this.assetFolder, 'dapper.exe');
 
 		// chcp 65001 sets the code page to UTF-8 in the Command Prompt.
-		const command = `"chcp 65001 && ${exePath}" --var-username=${username} --var-assetfolder=${this.assetFolder} run "${join(this.assetFolder, 'app.json')}" > "${this.logFilePath}" 2>&1`;
+		const command = `chcp 65001 && "${exePath}" --var-username=${username} --var-assetfolder=${this.assetFolder} run "${join(this.assetFolder, 'app.json')}" > "${this.logFilePath}" 2>&1`;
 		if (isAdminWindows()) {
 			console.info('Already admin - running command normally');
 			await this.executeCommand(command);
