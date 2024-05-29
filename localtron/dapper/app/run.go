@@ -11,6 +11,7 @@
 package dapper
 
 import (
+	"bufio"
 	"bytes"
 	"errors"
 	"fmt"
@@ -89,8 +90,8 @@ func (cm *ConfigurationManager) recurse(feature *dt.Feature, featureInvocation *
 	}
 	universe.FeaturesProcessed = append(universe.FeaturesProcessed, cfp)
 
-	indent := strings.Repeat("  ", universe.Level)
-	indentPlusTwo := strings.Repeat("  ", universe.Level+2)
+	indent := strings.Repeat("   ", universe.Level)
+	indentPlusTwo := strings.Repeat("   ", universe.Level+2)
 
 	substitutionMap := map[string]string{}
 	subLogStrs := []string{}
@@ -105,12 +106,12 @@ func (cm *ConfigurationManager) recurse(feature *dt.Feature, featureInvocation *
 	if !universe.Anon && len(subLogStrs) > 0 {
 		subLog = fmt.Sprintf(" (%v)", strings.Join(subLogStrs, " "))
 	}
-	cm.Printf("%s- Checking \"%s\"%v: ", indent, userFacingFeatureName, subLog)
+	cm.Printf("%s-> \"%s\" is being checked%v: \n", indent, userFacingFeatureName, subLog)
 
 	if cm.PreCheckCallback != nil {
 		cm.PreCheckCallback(feature, universe)
 	}
-	result, err := cm.checkFeature(*feature, *featureInvocation)
+	result, err := cm.checkFeature(*feature, *featureInvocation, cm.stream, indentPlusTwo)
 	if err != nil && strings.Contains(err.Error(), "no check script") {
 		return err
 	}
@@ -125,7 +126,7 @@ func (cm *ConfigurationManager) recurse(feature *dt.Feature, featureInvocation *
 	}()
 
 	if err != nil || !result.Success {
-		cm.Printf("FAILED. Fixing...\n")
+		cm.Printf("%s- \"%v\" FAILED. Fixing...\n", indent, feature.Name)
 
 		for _, featureInv := range append(feature.Features, feature.PlatformFeatures[cm.CurrentPlatform]...) {
 
@@ -182,38 +183,38 @@ func (cm *ConfigurationManager) recurse(feature *dt.Feature, featureInvocation *
 			cm.Printf(" RESTART REQUIRED ")
 			universe.RebootRequired = true
 		}
-		execResult, err := cm.executeFeature(*feature, *featureInvocation)
+		execResult, err := cm.executeFeature(*feature, *featureInvocation, cm.stream, indentPlusTwo)
 		cfp.ExecutionResult = &execResult
 		cfp.ExecutionError = err
 		if cm.PostExecutionCallback != nil {
 			cm.PostExecutionCallback(feature, universe)
 		}
 		if err != nil {
-			cm.Printf("%s- Error fixing \"%s\" (EXITING): '%v'.\n", indent, userFacingFeatureName, indentEachLine(indentPlusTwo, execResult.Stdout+execResult.Stdout+err.Error()))
+			cm.Printf("%s<- Error fixing \"%s\" (EXITING): '%v'.\n", indent, userFacingFeatureName, indentEachLine(indentPlusTwo, execResult.Stdout+execResult.Stdout+err.Error()))
 			return err
 		}
 
 		if !execResult.Success {
-			cm.Printf("%s- Error fixing \"%s\" (EXITING): '%v'.\n", indent, userFacingFeatureName, indentEachLine(indentPlusTwo, execResult.Stdout+execResult.Stderr))
+			cm.Printf("%s<- Error fixing \"%s\" (EXITING): '%v'.\n", indent, userFacingFeatureName, indentEachLine(indentPlusTwo, execResult.Stdout+execResult.Stderr))
 			return errors.New("failed to recover")
 		}
 
-		againCheckResult, err := cm.checkFeature(*feature, *featureInvocation)
+		againCheckResult, err := cm.checkFeature(*feature, *featureInvocation, cm.stream, indentPlusTwo)
 
 		if err != nil {
-			cm.Printf("%s- Error checking \"%s\" after fixing (EXITING): '%v'.\n", indent, userFacingFeatureName, indentEachLine(indentPlusTwo, againCheckResult.Stdout+againCheckResult.Stdout+err.Error()))
+			cm.Printf("%s<- Error checking \"%s\" after fixing (EXITING): '%v'.\n", indent, userFacingFeatureName, indentEachLine(indentPlusTwo, againCheckResult.Stdout+againCheckResult.Stdout+err.Error()))
 			return err
 		}
 		if !againCheckResult.Success {
-			cm.Printf("%s- Error checking \"%s\" after fixing (EXITING): '%v'.\n", indent, userFacingFeatureName, indentEachLine(indentPlusTwo, againCheckResult.Stdout+againCheckResult.Stderr))
+			cm.Printf("%s<- Error checking \"%s\" after fixing (EXITING): '%v'.\n", indent, userFacingFeatureName, indentEachLine(indentPlusTwo, againCheckResult.Stdout+againCheckResult.Stderr))
 			return errors.New("failed to recover")
 		}
 
-		cm.Printf("%s- Fixed \"%s\". OK.\n", indent, userFacingFeatureName)
+		cm.Printf("%s<- Fixed \"%s\". OK.\n", indent, userFacingFeatureName)
 		return nil
 	}
 
-	cm.Printf("OK.\n")
+	cm.Printf(`%s<- "%v" is OK.\n`, indent, feature.Name)
 
 	return nil
 }
@@ -236,7 +237,7 @@ func applySubs(subs map[string]string, script string) string {
 }
 
 // CheckFeature runs the check script for a feature and returns the result.
-func (cm ConfigurationManager) checkFeature(feature dt.Feature, featureInvocation dt.FeatureInvocation) (dt.FeatureCheckResult, error) {
+func (cm ConfigurationManager) checkFeature(feature dt.Feature, featureInvocation dt.FeatureInvocation, stream bool, indent string) (dt.FeatureCheckResult, error) {
 	if feature.PlatformScripts[cm.CurrentPlatform] == nil ||
 		feature.PlatformScripts[cm.CurrentPlatform].Check == nil {
 		return dt.FeatureCheckResult{
@@ -246,7 +247,18 @@ func (cm ConfigurationManager) checkFeature(feature dt.Feature, featureInvocatio
 		}, fmt.Errorf("Feature '%v' has no check script for platform '%v'", feature.Name, cm.CurrentPlatform)
 	}
 	subs := cm.substitutions(feature, featureInvocation)
-	success, stdout, stderr, dur, err := executeScript(subs, feature.PlatformScripts[cm.CurrentPlatform].Check)
+	var (
+		success bool
+		stdout  string
+		stderr  string
+		dur     time.Duration
+		err     error
+	)
+	if stream {
+		success, stdout, stderr, dur, err = executeScriptStreamed(subs, feature.PlatformScripts[cm.CurrentPlatform].Check, indent)
+	} else {
+		success, stdout, stderr, dur, err = executeScript(subs, feature.PlatformScripts[cm.CurrentPlatform].Check)
+	}
 	return dt.FeatureCheckResult{
 		ID:        feature.ID,
 		CheckedAt: time.Now(),
@@ -259,7 +271,7 @@ func (cm ConfigurationManager) checkFeature(feature dt.Feature, featureInvocatio
 }
 
 // ExecuteFeature runs the execution script for a feature and returns the result.
-func (cm ConfigurationManager) executeFeature(feature dt.Feature, featureInvocation dt.FeatureInvocation) (dt.FeatureExecuteResult, error) {
+func (cm ConfigurationManager) executeFeature(feature dt.Feature, featureInvocation dt.FeatureInvocation, stream bool, indent string) (dt.FeatureExecuteResult, error) {
 	if feature.PlatformScripts[cm.CurrentPlatform] == nil ||
 		feature.PlatformScripts[cm.CurrentPlatform].Execute == nil {
 		return dt.FeatureExecuteResult{
@@ -269,7 +281,18 @@ func (cm ConfigurationManager) executeFeature(feature dt.Feature, featureInvocat
 		}, fmt.Errorf("Feature '%v' has no execute script for platform '%v'", feature.Name, cm.CurrentPlatform)
 	}
 	subs := cm.substitutions(feature, featureInvocation)
-	success, stdout, stderr, dur, err := executeScript(subs, feature.PlatformScripts[cm.CurrentPlatform].Execute)
+	var (
+		success bool
+		stdout  string
+		stderr  string
+		dur     time.Duration
+		err     error
+	)
+	if stream {
+		success, stdout, stderr, dur, err = executeScriptStreamed(subs, feature.PlatformScripts[cm.CurrentPlatform].Execute, indent)
+	} else {
+		success, stdout, stderr, dur, err = executeScript(subs, feature.PlatformScripts[cm.CurrentPlatform].Execute)
+	}
 	return dt.FeatureExecuteResult{
 		ID:         feature.ID,
 		ExecutedAt: time.Now(),
@@ -311,4 +334,82 @@ func executeScript(subs map[string]string, script *dt.Script) (bool, string, str
 	err := cmd.Run()
 	success := err == nil
 	return success, stdout.String(), stderr.String(), time.Since(start), err
+}
+
+func executeScriptStreamed(subs map[string]string, script *dt.Script, indentString string) (bool, string, string, time.Duration, error) {
+	source := applySubs(subs, script.Source)
+
+	start := time.Now()
+	var cmd *exec.Cmd
+	switch script.Runtime {
+	case "cmd":
+		cmd = exec.Command("cmd", "/C", source)
+	case "powershell":
+		cmd = exec.Command("powershell", "-Command", `$env:WSL_UTF8=1\n`+source)
+	case "bash":
+		cmd = exec.Command("bash", "-c", source)
+	default:
+		return false, "", "", 0, fmt.Errorf("unsupported runtime: '%s'", script.Runtime)
+	}
+
+	if script.Detach {
+		cmd.Start()
+		return true, "", "", 0, nil
+	}
+
+	stdoutPipe, err := cmd.StdoutPipe()
+	if err != nil {
+		return false, "", "", 0, err
+	}
+
+	stderrPipe, err := cmd.StderrPipe()
+	if err != nil {
+		return false, "", "", 0, err
+	}
+
+	if err := cmd.Start(); err != nil {
+		return false, "", "", 0, err
+	}
+
+	var stdoutBuf, stderrBuf bytes.Buffer
+	stdoutScanner := bufio.NewScanner(stdoutPipe)
+	stderrScanner := bufio.NewScanner(stderrPipe)
+
+	// Channel to signal completion
+	done := make(chan error, 1)
+
+	go func() {
+		for stdoutScanner.Scan() {
+			line := stdoutScanner.Text()
+			stdoutBuf.WriteString(line + "\n")
+			if stdoutBuf.Len() == 0 {
+				fmt.Println(line)
+			} else {
+				fmt.Println(indentString + line)
+			}
+		}
+		done <- nil
+	}()
+
+	go func() {
+		for stderrScanner.Scan() {
+			line := stderrScanner.Text()
+			stderrBuf.WriteString(line + "\n")
+			if stderrBuf.Len() == 0 {
+				fmt.Println(line)
+			} else {
+				fmt.Println(indentString + line)
+			}
+		}
+		done <- nil
+	}()
+
+	// Wait for both stdout and stderr to finish
+	err = cmd.Wait()
+	<-done
+	<-done
+
+	success := err == nil
+
+	return success, stdoutBuf.String(), stderrBuf.String(), time.Since(start), err
 }

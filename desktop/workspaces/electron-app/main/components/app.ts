@@ -49,7 +49,6 @@ export class App {
 
 				registerShortcuts(App.electronWindow as BrowserWindow, globalShortcut);
 
-
 				try {
 					const systemLanguage: string = app.getLocale().split('-')[0];
 					App.electronWindow?.webContents.send(

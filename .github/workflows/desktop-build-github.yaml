@@ -9,7 +9,7 @@ on:
 
 jobs:
   build-windows:
-    timeout-minutes: 15
+    timeout-minutes: 20
     runs-on: windows-latest
     env:
       CGO_ENABLED: 0
@@ -209,7 +209,7 @@ jobs:
         working-directory: ./desktop
 
   build-macos:
-    timeout-minutes: 15
+    timeout-minutes: 10
     runs-on: macos-latest
     env:
       CGO_ENABLED: 0
