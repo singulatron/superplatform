@@ -31,9 +31,9 @@ func (cm *ConfigurationManager) LoadAppConfiguration(filePath string) (*dt.App, 
 	}
 
 	if app.Name != "" {
-		cm.Printf("Processing app '%s' (%s). Cache folder: '%v'.\n", app.Name, filePath, cm.CacheFolder)
+		cm.Printf("Processing app '%s' (%s).\n", app.Name, filePath)
 	} else {
-		cm.Printf("Processing unnamed app (%s). Cache folder: '%v'.\n", filePath, cm.CacheFolder)
+		cm.Printf("Processing unnamed app (%s).\n", filePath)
 	}
 
 	return &app, nil

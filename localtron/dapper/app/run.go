@@ -214,7 +214,7 @@ func (cm *ConfigurationManager) recurse(feature *dt.Feature, featureInvocation *
 		return nil
 	}
 
-	cm.Printf(`%s<- "%v" is OK.\n`, indent, feature.Name)
+	cm.Printf("%s<- \"%v\" is OK.\n", indent, feature.Name)
 
 	return nil
 }
@@ -345,7 +345,7 @@ func executeScriptStreamed(subs map[string]string, script *dt.Script, indentStri
 	case "cmd":
 		cmd = exec.Command("cmd", "/C", source)
 	case "powershell":
-		cmd = exec.Command("powershell", "-Command", `$env:WSL_UTF8=1;`+source)
+		cmd = exec.Command("powershell", "-Command", `$env:WSL_UTF8=1; [Console]::OutputEncoding = [System.Text.Encoding]::UTF8; `+source)
 	case "bash":
 		cmd = exec.Command("bash", "-c", source)
 	default:
