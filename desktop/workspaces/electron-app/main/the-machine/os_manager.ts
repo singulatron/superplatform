@@ -27,20 +27,21 @@ export class OSManager {
 		private eventService: EventService
 	) {
 		this.eventService.installRuntimeRequest$.subscribe(() => {
+			console.info('Install runtime initiated');
 			this.initializeEnvironment();
 		});
 
 		// @todo fix path, config service is now in localtron
 		this.logFilePath = path.join(os.homedir(), 'singulatron_install.log');
 
-		this.init();
+		this.initLogFile();
 
 		new FileWatcher(this.logFilePath, (log) => {
 			this.eventService.onRuntimeInstallLogSubject.next(log);
 		});
 	}
 
-	async init() {
+	async initLogFile() {
 		try {
 			let fd = await fs.open(this.logFilePath, 'w');
 			fd.close();
