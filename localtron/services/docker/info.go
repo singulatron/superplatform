@@ -162,12 +162,12 @@ func getWslIpAddress() (string, error) {
 	if runtime.GOOS != "windows" {
 		return "", fmt.Errorf("not a Windows system")
 	}
-	source := `wsl ip addr show eth0`
 
-	cmd := exec.Command("powershell", "-Command", "$env:WSL_UTF8=1; "+source)
+	cmd := exec.Command("wsl", "ip", "addr", "show", "eth0")
 
 	// this doesn't seem to work to fix the UTF8 issue but I'll still leave it here
 	cmd.Env = append(cmd.Env, "WSL_UTF8=1")
+
 	var out bytes.Buffer
 	cmd.Stdout = &out
 	err := cmd.Run()
