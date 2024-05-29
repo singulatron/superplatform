@@ -44,13 +44,10 @@ export class App {
 
 			setupSession();
 
-			registerShortcuts(
-				App._wrapper.electronWindow as BrowserWindow,
-				globalShortcut
-			);
-
 			ipcMain.on(WindowApiConst.FRONTEND_READY_REQUEST, (event, args) => {
 				console.log('Frontend ready');
+
+				registerShortcuts(App.electronWindow as BrowserWindow, globalShortcut);
 
 				try {
 					const systemLanguage: string = app.getLocale().split('-')[0];

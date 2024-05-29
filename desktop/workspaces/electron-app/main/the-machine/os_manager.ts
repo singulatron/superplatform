@@ -14,6 +14,7 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import os from 'os';
 import { join } from 'path';
+import { execSync, exec } from 'child_process';
 
 const username = os.userInfo().username;
 
@@ -26,20 +27,21 @@ export class OSManager {
 		private eventService: EventService
 	) {
 		this.eventService.installRuntimeRequest$.subscribe(() => {
+			console.info('Install runtime initiated');
 			this.initializeEnvironment();
 		});
 
 		// @todo fix path, config service is now in localtron
 		this.logFilePath = path.join(os.homedir(), 'singulatron_install.log');
 
-		this.init();
+		this.initLogFile();
 
 		new FileWatcher(this.logFilePath, (log) => {
 			this.eventService.onRuntimeInstallLogSubject.next(log);
 		});
 	}
 
-	async init() {
+	async initLogFile() {
 		try {
 			let fd = await fs.open(this.logFilePath, 'w');
 			fd.close();
@@ -64,24 +66,40 @@ export class OSManager {
 		let exePath = join(this.assetFolder, 'dapper.exe');
 
 		const command = `"${exePath}" --var-username=${username} --var-assetfolder=${this.assetFolder} run "${join(this.assetFolder, 'app.json')}" > "${this.logFilePath}" 2>&1`;
-		await this.executeCommand(command);
+		if (isAdminWindows()) {
+			console.info('Already admin - running command normally');
+			await this.executeCommand(command);
+		} else {
+			console.info('Not an admin - running command with sudo prompt');
+			await this.executeCommandSudoPrompt(command);
+		}
 	}
 
 	async setupLinux(): Promise<void> {
 		let exePath = join(this.assetFolder, 'dapper');
 
 		const command = `"${exePath}" --var-username=${username} --var-assetfolder=${this.assetFolder} run "${join(this.assetFolder, 'app.json')}" > "${this.logFilePath}" 2>&1`;
-		await this.executeCommand(command);
+		await this.executeCommandSudoPrompt(command);
 	}
 
 	private async executeCommand(command: string): Promise<void> {
+		return new Promise((resolve, reject) => {
+			exec(command, (error, stdout, stderr) => {
+				if (error) {
+					reject(error);
+				} else {
+					resolve();
+				}
+			});
+		});
+	}
+
+	private async executeCommandSudoPrompt(command: string): Promise<void> {
 		return new Promise((resolve, reject) => {
 			sudo.exec(
 				command,
 				{
 					name: 'Singulatron Environment Setup',
-					// @todo fix icon
-					// icns: '/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/AlertStopIcon.icns'
 					icns: getIconPath(this.assetFolder),
 				},
 				(error, stdout, stderr) => {
@@ -141,5 +159,16 @@ class FileWatcher {
 
 	watchFile() {
 		setInterval(() => this.readFile(), 500);
+	}
+}
+
+function isAdminWindows(): boolean {
+	try {
+		// Attempt to execute a command that requires administrative privileges.
+		execSync('net session', { stdio: 'ignore' });
+		return true;
+	} catch (error) {
+		// If the command fails, assume the user does not have administrative privileges.
+		return false;
 	}
 }

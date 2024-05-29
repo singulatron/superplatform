@@ -13,6 +13,7 @@ package dockerservice
 import (
 	"bytes"
 	"context"
+	"encoding/binary"
 	"fmt"
 	"log/slog"
 	"os/exec"
@@ -20,6 +21,8 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
+	"unicode/utf16"
+	"unicode/utf8"
 
 	"github.com/docker/docker/client"
 	"github.com/pkg/errors"
@@ -32,8 +35,10 @@ func (d *DockerService) Info() (*ts.OnDockerInfo, error) {
 	d.mutex.Lock()
 	defer d.mutex.Unlock()
 
-	_, err := d.client.Ping(context.Background())
-	if err == nil {
+	inf, err := d.client.Info(context.Background())
+	// even on windows, we want a docker daemon that can run linux containers
+	// as our containers are linux ones
+	if err == nil && inf.OSType == "linux" {
 		ret := &ts.OnDockerInfo{
 			HasDocker: true,
 		}
@@ -87,9 +92,12 @@ func (d *DockerService) tryFixDockerAddress() (ip string, port int, err error) {
 				return "", 0, errors.Wrap(err, "error creating new Docker client")
 			}
 
-			_, err = newDockerClient.Ping(context.Background())
+			inf, err := newDockerClient.Info(context.Background())
 			if err != nil {
 				return "", 0, errors.Wrap(err, "error pinging Docker with new address")
+			}
+			if inf.OSType != "linux" {
+				return "", 0, errors.Wrap(err, fmt.Sprintf("docker os type is not linux but '%v'", inf.OSType))
 			}
 
 			d.client = newDockerClient
@@ -156,18 +164,85 @@ func getWslIpAddress() (string, error) {
 	}
 
 	cmd := exec.Command("wsl", "ip", "addr", "show", "eth0")
+
+	// this doesn't seem to work to fix the UTF8 issue but I'll still leave it here
+	cmd.Env = append(cmd.Env, "WSL_UTF8=1")
+
 	var out bytes.Buffer
 	cmd.Stdout = &out
 	err := cmd.Run()
 	if err != nil {
 		return "", errors.Wrap(err, fmt.Sprintf("wsl output: '%v'", out.String()))
 	}
-	output := out.String()
+	output := out.Bytes()
+	var decodedOutput string
+
+	isUtf16, littleEndian := detectUtf16(output)
+	if isUtf16 {
+		decodedOutput, err = utf16ToUtf8(output, littleEndian)
+		if err != nil {
+			return "", fmt.Errorf("error decoding UTF-16 output: %v", err)
+		}
+	} else {
+		decodedOutput = string(output)
+	}
 
 	re := regexp.MustCompile(`inet\s+(\d+\.\d+\.\d+\.\d+)/`)
-	ipAddressMatch := re.FindStringSubmatch(output)
+	ipAddressMatch := re.FindStringSubmatch(decodedOutput)
 	if len(ipAddressMatch) > 1 {
 		return ipAddressMatch[1], nil
 	}
 	return "", fmt.Errorf("IP address not found in output")
+}
+
+func detectUtf16(b []byte) (bool, bool) {
+	if len(b) < 2 {
+		return false, false
+	}
+
+	// Check for BOM
+	if b[0] == 0xFE && b[1] == 0xFF {
+		return true, false // UTF-16 BE
+	}
+	if b[0] == 0xFF && b[1] == 0xFE {
+		return true, true // UTF-16 LE
+	}
+
+	// Heuristic: check for alternating null bytes in even positions
+	nullCount := 0
+	for i := 1; i < len(b); i += 2 {
+		if b[i] == 0 {
+			nullCount++
+		}
+	}
+	if nullCount > len(b)/4 { // More than 25% of the bytes in odd positions are nulls
+		return true, true // Assuming little-endian if no BOM but pattern matches
+	}
+
+	return false, false
+}
+
+func utf16ToUtf8(b []byte, littleEndian bool) (string, error) {
+	if len(b)%2 != 0 {
+		return "", fmt.Errorf("input byte slice has odd length")
+	}
+
+	u16s := make([]uint16, len(b)/2)
+	if littleEndian {
+		for i := range u16s {
+			u16s[i] = binary.LittleEndian.Uint16(b[2*i:])
+		}
+	} else {
+		for i := range u16s {
+			u16s[i] = binary.BigEndian.Uint16(b[2*i:])
+		}
+	}
+	u8s := make([]byte, 0, len(u16s)*2)
+	for _, r := range utf16.Decode(u16s) {
+		buf := make([]byte, 4)
+		n := utf8.EncodeRune(buf, r)
+		u8s = append(u8s, buf[:n]...)
+	}
+
+	return string(u8s), nil
 }

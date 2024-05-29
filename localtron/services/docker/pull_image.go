@@ -18,7 +18,6 @@ import (
 	"log/slog"
 	"sync"
 
-	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/image"
 	"github.com/docker/docker/client"
 	"github.com/pkg/errors"
@@ -63,7 +62,7 @@ func (d *DockerService) pullImage(imageName string) error {
 		return nil
 	}
 
-	lib.Logger.Info("Pulling! image", slog.String("image", imageName))
+	lib.Logger.Info("Starting to pull image", slog.String("image", imageName))
 
 	err = pullImageWithProgress(d.client, imageName)
 	if err != nil {
@@ -86,7 +85,7 @@ type PullStatus struct {
 }
 
 func pullImageWithProgress(d *client.Client, imageName string) error {
-	rc, err := d.ImagePull(context.Background(), imageName, types.ImagePullOptions{})
+	rc, err := d.ImagePull(context.Background(), imageName, image.PullOptions{})
 	if err != nil {
 		return errors.Wrap(err, "failed to pull image")
 	}
@@ -105,6 +104,10 @@ func pullImageWithProgress(d *client.Client, imageName string) error {
 		if err := decoder.Decode(&status); err == io.EOF {
 			break
 		} else if err != nil {
+			lib.Logger.Error("Error pulling image",
+				slog.String("error", err.Error()),
+				slog.String("image", imageName),
+			)
 			return errors.Wrap(err, "Failed to decode image pull output")
 		}
 		logPullProgress(status)

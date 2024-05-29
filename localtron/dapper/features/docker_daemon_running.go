@@ -36,7 +36,7 @@ var DockerDaemonRunning = dt.Feature{
 # Function to check if the Docker daemon is running in WSL
 function Check-DockerDaemon {
 	$dockerStatus = wsl -d ` + nameOfDistro + ` -e /bin/ash -c "ps aux | grep dockerd | grep -v grep"
-	if ($dockerStatus.Contains("dockerd")) {
+	if ($null -ne $dockerStatus -and $dockerStatus.Contains("dockerd")) {
 		return $true
 	} else {
 		return $false

@@ -22,6 +22,7 @@ import (
 
 // ConfigurationManager manages configurations and feature dependencies.
 type ConfigurationManager struct {
+	stream                 bool
 	Features               map[string]dt.Feature
 	CurrentPlatform        dt.Platform
 	CacheFolder            string
@@ -48,6 +49,7 @@ func NewConfigurationManager(fs map[string]dt.Feature) *ConfigurationManager {
 	cm := &ConfigurationManager{
 		Features: fs,
 		Printf:   fmt.Printf,
+		stream:   true,
 	}
 
 	// check os

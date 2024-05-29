@@ -9,7 +9,6 @@
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
 import * as fs from 'fs';
-import * as util from 'util';
 import { homedir } from 'os';
 import { join } from 'path';
 import { sendLogToLocalServer } from '../ipc-handlers/log-request';

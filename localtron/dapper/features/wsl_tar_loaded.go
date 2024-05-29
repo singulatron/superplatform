@@ -44,11 +44,12 @@ wsl -s {{.distroname}}
 				Source: `
 $distroname = "{{.distroname}}"
 $loadedDistros = wsl -l -q
-if ($loadedDistros.Contains($distroname)) {
+if ($null -ne $loadedDistros -and $loadedDistros.Contains($distroname)) {
     Write-Host "$distroname is already loaded."
     exit 0
 } else {
     Write-Host "$distroname is not loaded."
+	Write-Host "wsl -l -q output: $loadedDistros"
     exit 1
 }
 `,
