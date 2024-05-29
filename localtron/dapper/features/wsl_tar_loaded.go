@@ -45,6 +45,9 @@ wsl -s {{.distroname}}
 			},
 			Check: &dt.Script{
 				Source: `
+$env:WSL_UTF8=1
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+
 $distroname = "{{.distroname}}"
 $loadedDistros = wsl -l -q
 if ($null -ne $loadedDistros -and $loadedDistros.Contains($distroname)) {
