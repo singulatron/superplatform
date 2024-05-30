@@ -178,6 +178,26 @@ export class ChatBoxComponent implements OnChanges {
 		this.prompt(msg);
 	}
 
+	// Handle keydown event to differentiate between Enter and Shift+Enter
+	handleKeydown(event: KeyboardEvent): void {
+		if (event.key === 'Enter' && !event.shiftKey) {
+			event.preventDefault();
+			if (this.hasNonWhiteSpace(this.message)) {
+				this.send();
+			}
+		} else if (event.key === 'Enter' && event.shiftKey) {
+			event.preventDefault();
+			this.message += '\n';
+		}
+	}
+
+	public hasNonWhiteSpace(value: string): boolean {
+		if (!value) {
+			return false;
+		}
+		return /\S/.test(value);
+	}
+
 	async prompt(msg: string): Promise<void> {
 		let userMessages = this.messages?.filter((m) => m.isUserMessage) || [];
 		let modelMessages = this.messages?.filter((m) => !m.isUserMessage) || [];
