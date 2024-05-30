@@ -24,13 +24,13 @@ var WslInstalled = dt.Feature{
 			Check: &dt.Script{
 				Source: `
 # Attempt to list WSL distributions quietly and check the status
-wsl -l -q 2>$null
-if ($?) {
+$listOutput = wsl -l
+if ($listOutput.Contains("--install")) {
 	# The command executed successfully, WSL is operational
-	Write-Output "WSL is installed and operational."
-	exit 0
-} else {
+	Write-Output "WSL is not installed"
 	exit 1
+} else {
+	exit 0	
 }`,
 				// Unfortunately without reboot the check, or any WSL command will throw this:
 				// 		This application requires the Windows Subsystem for Linux Optional Component.

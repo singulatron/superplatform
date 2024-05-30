@@ -34,7 +34,7 @@ wsl --update
 			Check: &dt.Script{
 				Source: `
 $wslVersion = wsl --status
-if ($wslVersion.Contains("Default version {{.wslVersion}}")) {
+if ($wslVersion.Contains("Default Version: {{.wslVersion}}")) {
     exit 0
 } else {
     exit 1
