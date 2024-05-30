@@ -15,6 +15,7 @@ import (
 	"log"
 	"os"
 	"strings"
+	"time"
 
 	dapper "github.com/singulatron/singulatron/localtron/dapper/app"
 	"github.com/spf13/cobra"
@@ -23,10 +24,14 @@ import (
 func main() {
 	var rootCmd = &cobra.Command{Use: "dapper"}
 	var folder string
-	var anon bool
 
+	// Extract CLI parameters
 	params, remainingArgs := extractParams(os.Args)
 	os.Args = remainingArgs
+
+	var anon bool
+	var retry int
+	var retrySleepDuration string
 
 	var runCmd = &cobra.Command{
 		Use:   "run [config file]",
@@ -34,13 +39,16 @@ func main() {
 		Args:  cobra.ExactArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			appFilePath := args[0]
-			run(appFilePath, params, anon)
+			run(appFilePath, params, anon, retry, retrySleepDuration)
 		},
 	}
 
+	// Global flag across all subcommands
 	rootCmd.PersistentFlags().StringVarP(&folder, "folder", "f", ".", "directory containing configuration files")
 
 	runCmd.Flags().BoolVar(&anon, "anon", false, "Run in anonymous mode")
+	runCmd.Flags().IntVar(&retry, "retry", 0, "How many times to retry in case of failure")
+	runCmd.Flags().StringVar(&retrySleepDuration, "retry-delay", "1s", "Delay between retries")
 
 	rootCmd.AddCommand(runCmd)
 	if err := rootCmd.Execute(); err != nil {
@@ -66,7 +74,7 @@ func extractParams(args []string) (map[string]string, []string) {
 	return params, newArgs
 }
 
-func run(appFilePath string, params map[string]string, anon bool) {
+func run(appFilePath string, params map[string]string, anon bool, retry int, retrySleep string) {
 	cm := dapper.NewConfigurationManagerFromSource()
 	app, err := cm.LoadAppConfiguration(appFilePath)
 	if err != nil {
@@ -81,13 +89,26 @@ func run(appFilePath string, params map[string]string, anon bool) {
 		fmt.Printf("   %v=%v\n", key, value)
 	}
 
+	var retryDelay time.Duration
+
+	retryDelay, err = time.ParseDuration(retrySleep)
+	if err != nil {
+		fmt.Printf("Retry delay cannot be parsed, going with 1s")
+		retryDelay = time.Second
+	}
+
+	i := 0
 	cont, err := cm.Run(app, params, anon)
 	if err != nil {
 		fmt.Printf("Failed to resolve feature dependencies: %v\n", err)
 		if cont != nil && cont.RebootRequired {
 			fmt.Printf("A restart is required to fix this!")
 		}
-		os.Exit(1)
+		if i >= retry {
+			os.Exit(1)
+		} else {
+			time.Sleep(retryDelay)
+		}
 	}
 
 }
