@@ -71,7 +71,7 @@
 		<ion-item lines="full" style="margin-top: 10px">
 			<ion-textarea
 				class="sng-test-chat-textarea"
-				(keyup.enter)="send()"
+				(keydown)="handleKeydown($event)"
 				placeholder="{{ 'Type your message' | translate }}"
 				autoGrow="true"
 				[(ngModel)]="message"
@@ -81,6 +81,7 @@
 				slot="end"
 				size="small"
 				color="primary"
+				[disabled]="!hasNonWhiteSpace(message)"
 				class="sng-test-chat-send-button"
 				><span style="color: white"
 					><ion-icon
