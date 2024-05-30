@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - "desktop/**"
+      - "dapper/**"
       - "localtron/**"
       - ".github/workflows/desktop-build-github.yaml"
 
