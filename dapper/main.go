@@ -48,7 +48,7 @@ func main() {
 
 	runCmd.Flags().BoolVar(&anon, "anon", false, "Run in anonymous mode")
 	runCmd.Flags().IntVar(&retry, "retry", 0, "How many times to retry in case of failure")
-	runCmd.Flags().StringVar(&retrySleepDuration, "retry-delay", "1s", "Delay between retries")
+	runCmd.Flags().StringVar(&retrySleepDuration, "retry-delay", "3s", "Delay between retries")
 
 	rootCmd.AddCommand(runCmd)
 	if err := rootCmd.Execute(); err != nil {
@@ -89,7 +89,12 @@ func run(appFilePath string, params map[string]string, anon bool, retry int, ret
 		retryDelay = time.Second
 	}
 
-	fmt.Printf("Retries: %v, Retry Delay: %v Parameters:\n", retry, retryDelay)
+	retryLog := fmt.Sprintf("Retries: %v", retry)
+	if retry > 0 {
+		retryLog += fmt.Sprintf(", Retry Delay: %v", retryDelay)
+	}
+
+	fmt.Printf("%v, Parameters:\n", retryLog)
 	if len(params) == 0 {
 		fmt.Println("   None")
 	}
@@ -98,18 +103,20 @@ func run(appFilePath string, params map[string]string, anon bool, retry int, ret
 	}
 
 	i := 0
-	cont, err := cm.Run(app, params, anon)
-	if err != nil {
-		fmt.Printf("Failed to resolve feature dependencies: %v\n", err)
-		if cont != nil && cont.RebootRequired {
-			fmt.Printf("A restart is required to fix this!\n")
-		}
-		if i >= retry {
-			os.Exit(1)
-		} else {
-			fmt.Printf("Retrying in %v", retryDelay)
-			time.Sleep(retryDelay)
+
+	for {
+		cont, err := cm.Run(app, params, anon)
+		if err != nil {
+			fmt.Printf("Failed to resolve feature dependencies: %v\n", err)
+			if cont != nil && cont.RebootRequired {
+				fmt.Printf("A restart is required to fix this!\n")
+			}
+			if i >= retry {
+				os.Exit(1)
+			} else {
+				fmt.Printf("Retrying in %v", retryDelay)
+				time.Sleep(retryDelay)
+			}
 		}
 	}
-
 }

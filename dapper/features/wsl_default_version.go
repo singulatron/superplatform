@@ -10,7 +10,7 @@
  */
 package features
 
-import dt "github.com/singulatron/singulatron/localtron/dapper/types"
+import dt "github.com/singulatron/singulatron/dapper/types"
 
 var WslSetDefaultVersion = dt.Feature{
 	ID:   "wsl-set-default-version",
