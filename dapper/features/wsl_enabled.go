@@ -10,40 +10,32 @@
  */
 package features
 
-import dt "github.com/singulatron/singulatron/localtron/dapper/types"
+import (
+	dt "github.com/singulatron/singulatron/dapper/types"
+)
 
-var WslUpdated = dt.Feature{
-	ID:   "wsl-updated",
-	Name: "WSL Updated",
-	Arguments: []dt.Argument{
-		{
-			Name:    "wslVersion",
-			Type:    dt.Int,
-			Default: 2,
-		},
-	},
+var WslEnabled = dt.Feature{
+	ID:   "wsl-enabled",
+	Name: "WSL Enabled",
 	PlatformScripts: map[dt.Platform]*dt.Scripts{
 		dt.Windows: {
 			Execute: &dt.Script{
-				Source: `
-Write-Host "Updating WSL kernel"
-wsl --update
-`,
+				Source:  `dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart`,
 				Runtime: "powershell",
 			},
 			Check: &dt.Script{
 				Source: `
-$wslVersion = wsl --status
-if ($wslVersion.Contains("Default Version: {{.wslVersion}}")) {
-    exit 0
+$wslFeature = dism.exe /online /get-featureinfo /featurename:Microsoft-Windows-Subsystem-Linux
+if ($wslFeature.Contains("State : Enabled")) {
+    return $true
 } else {
-    exit 1
+    return $false
 }`,
 				Runtime: "powershell",
 			},
 		},
 	},
 	PlatformFeatures: map[dt.Platform][]any{
-		dt.Windows: {WslInstalled.ID},
+		dt.Windows: {VirtualMachinePlatformFeature.ID},
 	},
 }

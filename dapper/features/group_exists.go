@@ -10,7 +10,7 @@
  */
 package features
 
-import dt "github.com/singulatron/singulatron/localtron/dapper/types"
+import dt "github.com/singulatron/singulatron/dapper/types"
 
 var GroupExists = dt.Feature{
 	ID:   "group-exists",
