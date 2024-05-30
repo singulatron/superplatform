@@ -36,16 +36,23 @@ wsl --set-default-version {{.wslVersion}}
 $wslDefaultVersionCheck = wsl --list --verbose | Select-String "Default"
 if ($wslDefaultVersionCheck -match "v{{.wslVersion}}") {
     # Default version is already set to {{.wslVersion}}
-    exit 0
+    Write-Host "yes"
 } else {
     # Default version is not set to {{.wslVersion}}
-    exit 1
+    Write-Host "no"
 }`,
 				Runtime: "powershell",
 			},
 		},
 	},
 	PlatformFeatures: map[dt.Platform][]any{
-		dt.Windows: {WslUpdated.ID},
+		dt.Windows: {
+			map[string]any{
+				"featureId": WslUpdated.ID,
+				"args": []any{
+					"2",
+				},
+			},
+		},
 	},
 }

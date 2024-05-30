@@ -49,7 +49,6 @@ if ($null -ne $loadedDistros -and $loadedDistros.Contains($distroname)) {
     exit 0
 } else {
     Write-Host "$distroname is not loaded."
-	Write-Host "wsl -l -q output: $loadedDistros"
     exit 1
 }
 `,
@@ -58,5 +57,14 @@ if ($null -ne $loadedDistros -and $loadedDistros.Contains($distroname)) {
 			},
 		},
 	},
-	PlatformFeatures: map[dt.Platform][]any{},
+	PlatformFeatures: map[dt.Platform][]any{
+		dt.Windows: {
+			map[string]any{
+				"featureId": WslUpdated.ID,
+				"args": []any{
+					"2",
+				},
+			},
+		},
+	},
 }

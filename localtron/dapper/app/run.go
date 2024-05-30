@@ -129,7 +129,6 @@ func (cm *ConfigurationManager) recurse(feature *dt.Feature, featureInvocation *
 		cm.Printf("%s- \"%v\" FAILED. Fixing...\n", indent, feature.Name)
 
 		for _, featureInv := range append(feature.Features, feature.PlatformFeatures[cm.CurrentPlatform]...) {
-
 			if featureID, ok := featureInv.(string); ok {
 				nextFeature, exists := cm.Features[featureID]
 				if !exists {
@@ -140,8 +139,8 @@ func (cm *ConfigurationManager) recurse(feature *dt.Feature, featureInvocation *
 					FeatureID: featureID,
 					Args:      []any{},
 				}
-				if err = cm.recurse(&nextFeature, nextFeatureInvocation, universe); err == nil {
-					continue
+				if err = cm.recurse(&nextFeature, nextFeatureInvocation, universe); err != nil {
+					return err
 				}
 			} else if nextFeatureInvocationMap, ok := featureInv.(map[string]any); ok {
 				featureID := nextFeatureInvocationMap["featureId"].(string)
@@ -166,8 +165,8 @@ func (cm *ConfigurationManager) recurse(feature *dt.Feature, featureInvocation *
 
 				}
 
-				if err = cm.recurse(&nextFeature, nextFeatureInvocation, universe); err == nil {
-					continue
+				if err = cm.recurse(&nextFeature, nextFeatureInvocation, universe); err != nil {
+					return err
 				}
 			} else {
 				log.Fatal("Unkown feature invocation type ", feature)

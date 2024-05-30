@@ -107,7 +107,12 @@ fi
 	},
 	PlatformFeatures: map[dt.Platform][]any{
 		dt.Windows: {
-			WslSetDefaultVersion.ID,
+			map[string]any{
+				"featureId": WslSetDefaultVersion.ID,
+				"args": []any{
+					"2",
+				},
+			},
 			map[string]any{
 				"featureId": FileDownloaded.ID,
 				"args": []any{
