@@ -89,7 +89,12 @@ func run(appFilePath string, params map[string]string, anon bool, retry int, ret
 		retryDelay = time.Second
 	}
 
-	fmt.Printf("Retries: %v, Retry Delay: %v Parameters:\n", retry, retryDelay)
+	retryLog := fmt.Sprintf("Retries: %v", retry)
+	if retry > 0 {
+		retryLog += fmt.Sprintf(", Retry Delay: %v", retryDelay)
+	}
+
+	fmt.Printf("%v, Parameters:\n", retryLog)
 	if len(params) == 0 {
 		fmt.Println("   None")
 	}
