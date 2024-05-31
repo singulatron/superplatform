@@ -10,22 +10,8 @@
  */
 package appservice
 
-import "fmt"
-
 func (a *AppService) DeleteChatMessage(id string) error {
-	position := -1
-	for i, chatMessage := range a.chatFile.Messages {
-		if chatMessage.Id == id {
-			position = i
-		}
-	}
-	if position < 0 {
-		return fmt.Errorf("cannot find chat message with id '%v'", id)
-	}
-
-	a.Mutex.Lock()
-	a.chatFile.Messages = append(a.chatFile.Messages[:position], a.chatFile.Messages[position+1:]...)
-	a.Mutex.Unlock()
+	a.chatFile.DeleteMessageById(id)
 
 	return a.saveChatFile()
 }

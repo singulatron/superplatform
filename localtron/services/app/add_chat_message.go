@@ -36,28 +36,26 @@ func (a *AppService) AddChatMessage(chatMessage *apptypes.ChatMessage) error {
 	}
 	if thread == nil {
 		// threads are created when a message is sent
-		func() {
-			a.Mutex.Lock()
-			defer a.Mutex.Unlock()
-			a.chatFile.Threads = append(a.chatFile.Threads, &apptypes.ChatThread{
-				Id:   chatMessage.ThreadId,
-				Time: time.Now().Format(time.RFC3339),
-			})
-		}()
+
+		a.chatFile.AddThread(&apptypes.ChatThread{
+			Id:   chatMessage.ThreadId,
+			Time: time.Now().Format(time.RFC3339),
+		})
 	}
 
 	alreadySaved := false
-	a.Mutex.Lock()
-	for _, v := range a.chatFile.Messages {
+
+	a.chatFile.MessagesForeach(func(i int, v *apptypes.ChatMessage) {
 		if v.Id == chatMessage.Id {
 			alreadySaved = true
 		}
-	}
-	a.Mutex.Unlock()
+	})
 
 	if alreadySaved {
 		return nil
 	}
-	a.chatFile.Messages = append(a.chatFile.Messages, chatMessage)
+
+	a.chatFile.AddMessage(chatMessage)
+
 	return a.saveChatFile()
 }

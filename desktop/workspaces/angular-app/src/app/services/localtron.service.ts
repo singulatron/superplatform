@@ -10,7 +10,6 @@
  */
 import { Injectable, Inject, InjectionToken } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import * as crypto from 'crypto-js';
 import { firstValueFrom, map, throwError } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 import { catchError, switchMap } from 'rxjs/operators';

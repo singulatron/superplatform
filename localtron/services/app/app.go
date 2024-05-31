@@ -26,14 +26,14 @@ import (
 
 type AppService struct {
 	LogBuffer     []apptypes.Log
-	Mutex         sync.Mutex
 	TriggerSend   chan bool
 	Timer         *time.Timer
 	configService *configservice.ConfigService
 	clientId      string
-	chatMutex     sync.Mutex
+	chatFileMutex sync.Mutex
 	ChatFilePath  string
-	chatFile      apptypes.ChatFile
+	chatFile      *apptypes.ChatFile
+	logMutex      sync.Mutex
 }
 
 func NewAppService(cs *configservice.ConfigService) (*AppService, error) {
@@ -69,8 +69,8 @@ func (a *AppService) setupSignalHandler() {
 }
 
 func (a *AppService) loadChatFile() error {
-	a.chatMutex.Lock()
-	defer a.chatMutex.Unlock()
+	a.chatFileMutex.Lock()
+	defer a.chatFileMutex.Unlock()
 
 	_, err := os.Stat(a.ChatFilePath)
 	if os.IsNotExist(err) {
@@ -94,8 +94,8 @@ func (a *AppService) loadChatFile() error {
 }
 
 func (a *AppService) saveChatFile() error {
-	a.chatMutex.Lock()
-	defer a.chatMutex.Unlock()
+	a.chatFileMutex.Lock()
+	defer a.chatFileMutex.Unlock()
 
 	bs, err := json.Marshal(a.chatFile)
 	if err != nil {

@@ -12,6 +12,7 @@ package apptypes
 
 import (
 	"log/slog"
+	"sync"
 	"time"
 
 	"github.com/singulatron/singulatron/localtron/lib"
@@ -127,8 +128,64 @@ func (a ByTime) Less(i, j int) bool {
 }
 
 type ChatFile struct {
-	Threads  []*ChatThread  `json:"threads"`
-	Messages []*ChatMessage `json:"messages"`
+	Threads       []*ChatThread  `json:"threads"`
+	Messages      []*ChatMessage `json:"messages"`
+	threadsMutex  sync.Mutex
+	messagesMutex sync.Mutex
+}
+
+func (cf *ChatFile) AddMessage(message *ChatMessage) {
+	cf.messagesMutex.Lock()
+	defer cf.messagesMutex.Unlock()
+
+	cf.Messages = append(cf.Messages, message)
+}
+
+func (cf *ChatFile) MessagesForeach(f func(i int, message *ChatMessage)) {
+	cf.messagesMutex.Lock()
+	defer cf.messagesMutex.Unlock()
+
+	for i, v := range cf.Messages {
+		f(i, v)
+	}
+}
+
+func (cf *ChatFile) GetThreadsCopy() []*ChatThread {
+	ret := []*ChatThread{}
+	cf.threadsMutex.Lock()
+	for _, v := range cf.Threads {
+		ret = append(ret, &ChatThread{
+			Id:      v.Id,
+			TopicId: v.TopicId,
+			Name:    v.Name,
+			Time:    v.Time,
+		})
+	}
+	return ret
+}
+
+func (cf *ChatFile) DeleteMessageById(id string) {
+	position := -1
+	for i, chatMessage := range cf.Messages {
+		if chatMessage.Id == id {
+			position = i
+		}
+	}
+	if position < 0 {
+		return
+	}
+
+	cf.messagesMutex.Lock()
+	defer cf.messagesMutex.Unlock()
+
+	cf.Messages = append(cf.Messages[:position], cf.Messages[position+1:]...)
+}
+
+func (cf *ChatFile) AddThread(thread *ChatThread) {
+	cf.threadsMutex.Lock()
+	defer cf.threadsMutex.Unlock()
+
+	cf.Threads = append(cf.Threads, thread)
 }
 
 type AddChatMessageRequest struct {

@@ -17,10 +17,8 @@ import (
 )
 
 func (a *AppService) GetChatThreads() ([]*apptypes.ChatThread, error) {
-	a.Mutex.Lock()
-	defer a.Mutex.Unlock()
+	threads := a.chatFile.GetThreadsCopy()
+	sort.Sort(apptypes.ThreadByTime(threads))
 
-	sort.Sort(apptypes.ThreadByTime(a.chatFile.Threads))
-
-	return a.chatFile.Threads, nil
+	return threads, nil
 }

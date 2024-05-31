@@ -111,6 +111,7 @@ func (p *PromptService) processPromptWrapper() error {
 }
 
 func (p *PromptService) processPrompt() error {
+	// @todo make this idempotent
 	err := p.appService.AddChatMessage(&apptypes.ChatMessage{
 		Id:             uuid.New().String(),
 		ThreadId:       p.currentPrompt.ThreadId,
