@@ -9,7 +9,7 @@
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  -->
 <b-sidebar-page>
-	<app-centered headerHeight="0vh" vertical="true">
+	<app-centered headerHeight="0vh" [vertical]="true">
 		<div style="padding: 0rem 2rem">
 			<h2 *ngIf="!allIsWell" style="margin-bottom: 2rem">
 				{{ 'Preparing to start your AI' | translate }}
@@ -98,10 +98,10 @@
 						<ion-label>{{ 'Downloading your model' | translate }}</ion-label>
 					</ion-item>
 					<ion-list class="dropdown" *ngIf="showSections.model">
-						<ion-item *ngIf="(lapi?.modelCheck$ | async)?.selectedExists">
+						<ion-item *ngIf="(lapi?.onModelCheck$ | async).selectedExists">
 							{{ 'You successfully downloaded the model.' | translate }}
 						</ion-item>
-						<ion-item *ngIf="!(lapi?.modelCheck$ | async)?.selectedExists">
+						<ion-item *ngIf="!(lapi?.onModelCheck$ | async).selectedExists">
 							<ion-label>
 								<ng-container *ngIf="!isDownloading && !downloaded">
 									<p>

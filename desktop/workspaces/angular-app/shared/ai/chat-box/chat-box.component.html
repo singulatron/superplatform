@@ -37,7 +37,7 @@
 								(click)="deleteMessage(message?.id)"
 							></ion-icon>
 							<ion-icon
-								*ngIf="!message?.isUserMessage && isLast && canSend"
+								*ngIf="!message?.isUserMessage && isLast"
 								title="Regenerate answer"
 								class="copy-icon"
 								name="reload-outline"
@@ -54,7 +54,7 @@
 				<div class="message-block">
 					<div
 						class="message-header sng-test-message-header"
-						[ngClass]="{ 'mt-20': i > 0 }"
+					
 					>
 						<img class="chat-user-icon" src="/assets/s3d-min.png" alt="Logo" />
 						<ion-label style="margin-left: 0.6rem">{{
@@ -69,7 +69,12 @@
 
 			<ng-container *ngIf="promptQueue?.length">
 				<div
-					style="max-width: inherit; color: #666; white-space: nowrap; text-overflow: ellipsis"
+					style="
+						max-width: inherit;
+						color: #666;
+						white-space: nowrap;
+						text-overflow: ellipsis;
+					"
 					*ngFor="let prompt of promptQueue"
 				>
 					<ng-container *ngIf="!prompt.isBeingProcessed">{{

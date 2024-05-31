@@ -179,7 +179,7 @@
 						>
 							<ion-button
 								*ngIf="
-									(lapi.onConfigUpdate$ | async).currentModelId !== model.id
+									(lapi.onConfigUpdate$ | async)?.model?.currentModelId !== model.id
 								"
 								color="tertiary"
 								(click)="activateModel(model.id)"
@@ -190,10 +190,11 @@
 							</ion-button>
 							<ion-button
 								*ngIf="
-									(lapi.onConfigUpdate$ | async).currentModelId === model.id
+									(lapi.onConfigUpdate$ | async)?.model?.currentModelId ===
+									model.id
 								"
 								color="tertiary"
-								(click)="activate(model.id)"
+								(click)="activateModel(model.id)"
 								fill="outline"
 								disabled="true"
 							>
@@ -270,7 +271,9 @@
 				name="cloud-download-outline"
 			></ion-icon>
 			<ion-icon
-				*ngIf="(lapi.onConfigUpdate$ | async).currentModelId === model.id"
+				*ngIf="
+					(lapi.onConfigUpdate$ | async)?.model?.currentModelId === model.id
+				"
 				name="play-outline"
 			></ion-icon>
 			<ion-icon name="pause-circle-outline"></ion-icon>
