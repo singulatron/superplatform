@@ -12,9 +12,11 @@ package appservice
 
 import (
 	"errors"
+	"log/slog"
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/singulatron/singulatron/localtron/lib"
 	apptypes "github.com/singulatron/singulatron/localtron/services/app/types"
 )
 
@@ -28,13 +30,16 @@ func (a *AppService) AddChatMessage(chatMessage *apptypes.ChatMessage) error {
 	if chatMessage.Time == "" {
 		chatMessage.Time = time.Now().Format(time.RFC3339)
 	}
-	var thread *apptypes.ChatThread
-	for _, t := range a.chatFile.Threads {
+
+	var threadId string
+
+	a.chatFile.ThreadsForeach(func(i int, t *apptypes.ChatThread) {
 		if t.Id == chatMessage.ThreadId {
-			thread = t
+			threadId = t.Id
 		}
-	}
-	if thread == nil {
+	})
+
+	if threadId == "" {
 		// threads are created when a message is sent
 
 		a.chatFile.AddThread(&apptypes.ChatThread{
@@ -56,6 +61,8 @@ func (a *AppService) AddChatMessage(chatMessage *apptypes.ChatMessage) error {
 	}
 
 	a.chatFile.AddMessage(chatMessage)
-
+	lib.Logger.Info("Saving chat message",
+		slog.String("messageId", chatMessage.Id),
+	)
 	return a.saveChatFile()
 }

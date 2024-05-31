@@ -136,7 +136,6 @@ func (p *PromptService) processPrompt() error {
 	if !strings.HasPrefix(stat.ModelAddress, "http") {
 		stat.ModelAddress = "http://" + stat.ModelAddress
 	}
-
 	llmClient := llm.Client{
 		LLMAddress: stat.ModelAddress,
 	}

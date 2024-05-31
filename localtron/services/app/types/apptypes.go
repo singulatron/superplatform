@@ -150,9 +150,20 @@ func (cf *ChatFile) MessagesForeach(f func(i int, message *ChatMessage)) {
 	}
 }
 
+func (cf *ChatFile) ThreadsForeach(f func(i int, thread *ChatThread)) {
+	cf.threadsMutex.Lock()
+	defer cf.threadsMutex.Unlock()
+
+	for i, v := range cf.Threads {
+		f(i, v)
+	}
+}
+
 func (cf *ChatFile) GetThreadsCopy() []*ChatThread {
 	ret := []*ChatThread{}
 	cf.threadsMutex.Lock()
+	defer cf.threadsMutex.Unlock()
+
 	for _, v := range cf.Threads {
 		ret = append(ret, &ChatThread{
 			Id:      v.Id,
