@@ -40,12 +40,12 @@ func (a *AppService) manageLogs() {
 }
 
 func (a *AppService) sendLogs() {
-	a.Mutex.Lock()
+	a.logMutex.Lock()
 	logsToSend := make([]apptypes.Log, len(a.LogBuffer))
 	copy(logsToSend, a.LogBuffer)
 	a.LogBuffer = nil
 	a.Timer.Reset(10 * time.Second)
-	a.Mutex.Unlock()
+	a.logMutex.Unlock()
 
 	if len(logsToSend) > 0 {
 		err := a.sendToServer(logsToSend)
@@ -84,8 +84,8 @@ func (a *AppService) sendToServer(logs []apptypes.Log) error {
 }
 
 func (a *AppService) Log(logs []apptypes.Log) error {
-	a.Mutex.Lock()
-	defer a.Mutex.Unlock()
+	a.logMutex.Lock()
+	defer a.logMutex.Unlock()
 
 	if a.clientId == "" {
 		return errors.New("app service: no client id")

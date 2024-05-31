@@ -12,9 +12,11 @@ package appservice
 
 import (
 	"errors"
+	"log/slog"
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/singulatron/singulatron/localtron/lib"
 	apptypes "github.com/singulatron/singulatron/localtron/services/app/types"
 )
 
@@ -28,36 +30,39 @@ func (a *AppService) AddChatMessage(chatMessage *apptypes.ChatMessage) error {
 	if chatMessage.Time == "" {
 		chatMessage.Time = time.Now().Format(time.RFC3339)
 	}
-	var thread *apptypes.ChatThread
-	for _, t := range a.chatFile.Threads {
+
+	var threadId string
+
+	a.chatFile.ThreadsForeach(func(i int, t *apptypes.ChatThread) {
 		if t.Id == chatMessage.ThreadId {
-			thread = t
+			threadId = t.Id
 		}
-	}
-	if thread == nil {
+	})
+
+	if threadId == "" {
 		// threads are created when a message is sent
-		func() {
-			a.Mutex.Lock()
-			defer a.Mutex.Unlock()
-			a.chatFile.Threads = append(a.chatFile.Threads, &apptypes.ChatThread{
-				Id:   chatMessage.ThreadId,
-				Time: time.Now().Format(time.RFC3339),
-			})
-		}()
+
+		a.chatFile.AddThread(&apptypes.ChatThread{
+			Id:   chatMessage.ThreadId,
+			Time: time.Now().Format(time.RFC3339),
+		})
 	}
 
 	alreadySaved := false
-	a.Mutex.Lock()
-	for _, v := range a.chatFile.Messages {
+
+	a.chatFile.MessagesForeach(func(i int, v *apptypes.ChatMessage) {
 		if v.Id == chatMessage.Id {
 			alreadySaved = true
 		}
-	}
-	a.Mutex.Unlock()
+	})
 
 	if alreadySaved {
 		return nil
 	}
-	a.chatFile.Messages = append(a.chatFile.Messages, chatMessage)
+
+	a.chatFile.AddMessage(chatMessage)
+	lib.Logger.Info("Saving chat message",
+		slog.String("messageId", chatMessage.Id),
+	)
 	return a.saveChatFile()
 }

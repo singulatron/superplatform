@@ -11,6 +11,8 @@
 package promptservice
 
 import (
+	"time"
+
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
 )
 
@@ -18,6 +20,9 @@ func (p *PromptService) AddPrompt(prompt *prompttypes.Prompt) error {
 	p.mutex.Lock()
 	defer p.mutex.Unlock()
 
+	if prompt.Time == "" {
+		prompt.Time = time.Now().Format(time.RFC3339)
+	}
 	p.promptsToProcess = append(p.promptsToProcess, prompt)
 	p.TriggerPromptProcessing()
 	return nil

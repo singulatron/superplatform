@@ -66,6 +66,7 @@ func (p *PromptService) processPrompts() {
 		p.mutex.Lock()
 		if p.currentPrompt == nil && len(p.promptsToProcess) > 0 {
 			p.currentPrompt = p.promptsToProcess[0]
+			p.currentPrompt.IsBeingProcessed = true
 			p.promptsToProcess = p.promptsToProcess[1:]
 			lib.Logger.Info("Picking up prompt from queue", slog.String("promptId", p.currentPrompt.Id))
 
@@ -99,7 +100,9 @@ func (p *PromptService) processPromptWrapper() error {
 		lib.Logger.Error("Prompt process errored, putting prompt back to queue",
 			slog.String("error", err.Error()),
 		)
+		// put the prompt back to the queue
 		p.mutex.Lock()
+		p.currentPrompt.IsBeingProcessed = false
 		p.promptsToProcess = append([]*prompttypes.Prompt{p.currentPrompt}, p.promptsToProcess...)
 		p.currentPrompt = nil
 		p.mutex.Unlock()
@@ -111,6 +114,19 @@ func (p *PromptService) processPromptWrapper() error {
 }
 
 func (p *PromptService) processPrompt() error {
+	// @todo make this idempotent - on failures and retries
+	// a bunch of messages will be generated...
+	err := p.appService.AddChatMessage(&apptypes.ChatMessage{
+		Id:             uuid.New().String(),
+		ThreadId:       p.currentPrompt.ThreadId,
+		IsUserMessage:  true,
+		MessageContent: p.currentPrompt.Message,
+		Time:           time.Now().Format(time.RFC3339),
+	})
+	if err != nil {
+		return err
+	}
+
 	stat, err := p.modelService.Status(p.currentPrompt.ModelId)
 	if err != nil {
 		return errors.Wrap(err, "error getting model status")
@@ -124,7 +140,6 @@ func (p *PromptService) processPrompt() error {
 	if !strings.HasPrefix(stat.ModelAddress, "http") {
 		stat.ModelAddress = "http://" + stat.ModelAddress
 	}
-
 	llmClient := llm.Client{
 		LLMAddress: stat.ModelAddress,
 	}

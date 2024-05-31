@@ -28,6 +28,7 @@ import {
 	ChatMessage,
 	LocaltronService,
 	Model,
+	Prompt,
 } from '../../../src/app/services/localtron.service';
 
 import { LapiService } from '../../../src/app/services/lapi.service';
@@ -64,6 +65,7 @@ export class ChatBoxComponent implements OnChanges {
 
 	private model: Model | undefined;
 	private models: Model[] = [];
+	public promptQueue: Prompt[] = [];
 
 	public message: string = '';
 	public messages: ChatMessage[] = [];
@@ -90,6 +92,7 @@ export class ChatBoxComponent implements OnChanges {
 	}
 
 	streamSubscription: Subscription;
+	promptSubscription: Subscription;
 
 	ngOnDestroy() {
 		this.streamSubscription.unsubscribe();
@@ -100,8 +103,12 @@ export class ChatBoxComponent implements OnChanges {
 
 	async ngOnChanges(changes: SimpleChanges): Promise<void> {
 		if (changes.thread) {
+			// @todo investigate this if only the ID changed
 			if (this.streamSubscription) {
 				this.streamSubscription.unsubscribe();
+			}
+			if (this.promptSubscription) {
+				this.promptSubscription.unsubscribe();
 			}
 
 			let threadId;
@@ -117,9 +124,26 @@ export class ChatBoxComponent implements OnChanges {
 				this.messages = rsp.messages;
 			}
 
+			this.promptSubscription = this.localtron.onPromptListUpdate$.subscribe(
+				(promptList) => {
+					let promptQueue = promptList?.filter((p) => {
+						return p.threadId == threadId;
+					});
+					if (promptQueue?.length != this.promptQueue?.length) {
+						this.localtron.chatMessages(threadId).then((rsp) => {
+							this.messages = rsp.messages;
+						});
+					}
+					this.promptQueue = promptQueue;
+				}
+			);
+
 			this.messageCurrentlyStreamed = '';
 			let first = true;
 
+			// We are always subscribed to this, even if streaming is not happening
+			// right now. There is always one streaming that is subscribed to
+			// - the current thread on screen.
 			this.streamSubscription = this.localtron
 				.promptSubscribe(threadId)
 				.subscribe(async (response) => {
@@ -141,7 +165,7 @@ export class ChatBoxComponent implements OnChanges {
 						}
 						this.messageCurrentlyStreamed += addVal;
 					}
-					// finish_reason: "stop" might be model specific
+
 					if (
 						response?.choices?.length > 0 &&
 						response?.choices[0]?.finish_reason === 'stop'
@@ -169,36 +193,10 @@ export class ChatBoxComponent implements OnChanges {
 		let msg = this.message;
 		this.message = '';
 
-		await this.localtron.chatMessageAdd({
-			threadId: this.thread.id as string,
-			messageContent: msg,
-			isUserMessage: true,
-		});
-
-		this.prompt(msg);
+		this.sendMessage(msg);
 	}
 
-	// Handle keydown event to differentiate between Enter and Shift+Enter
-	handleKeydown(event: KeyboardEvent): void {
-		if (event.key === 'Enter' && !event.shiftKey) {
-			event.preventDefault();
-			if (this.hasNonWhiteSpace(this.message)) {
-				this.send();
-			}
-		} else if (event.key === 'Enter' && event.shiftKey) {
-			event.preventDefault();
-			this.message += '\n';
-		}
-	}
-
-	public hasNonWhiteSpace(value: string): boolean {
-		if (!value) {
-			return false;
-		}
-		return /\S/.test(value);
-	}
-
-	async prompt(msg: string): Promise<void> {
+	async sendMessage(msg: string) {
 		let userMessages = this.messages?.filter((m) => m.isUserMessage) || [];
 		let modelMessages = this.messages?.filter((m) => !m.isUserMessage) || [];
 		let exchange = zigzagArrays(
@@ -225,22 +223,38 @@ export class ChatBoxComponent implements OnChanges {
 			userMessages?.length > 0
 				? this.latestMessageTemplate.replace('{message}', msg)
 				: msg;
+
 		let fullPrompt = this.promptTemplate
 			? this.promptTemplate.replace('{prompt}', fullContext)
 			: fullContext;
 
-		this.messages.push({
-			threadId: this.thread.id as string,
-			id: this.localtron.uuid(),
-			messageContent: msg,
-			isUserMessage: true,
-		});
-
 		await this.localtron.promptAdd({
+			id: this.localtron.uuid(),
 			prompt: fullPrompt,
+			message: msg,
 			threadId: this.thread.id as string,
 			modelId: this.model?.id as string,
 		});
+	}
+
+	// Handle keydown event to differentiate between Enter and Shift+Enter
+	handleKeydown(event: KeyboardEvent): void {
+		if (event.key === 'Enter' && !event.shiftKey) {
+			event.preventDefault();
+			if (this.hasNonWhiteSpace(this.message)) {
+				this.send();
+			}
+		} else if (event.key === 'Enter' && event.shiftKey) {
+			event.preventDefault();
+			this.message += '\n';
+		}
+	}
+
+	public hasNonWhiteSpace(value: string): boolean {
+		if (!value) {
+			return false;
+		}
+		return /\S/.test(value);
 	}
 
 	setThreadName(msg: string) {
@@ -296,7 +310,7 @@ export class ChatBoxComponent implements OnChanges {
 		this.deleteMessage(message.id as string);
 		let lastUserMessage = this.getLastUserMessage();
 		if (lastUserMessage) {
-			this.prompt(lastUserMessage.messageContent);
+			this.sendMessage(lastUserMessage.messageContent);
 		}
 	}
 }
