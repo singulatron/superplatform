@@ -18,6 +18,10 @@ It's not just an app but also a platform that enables building other AI applicat
 
 Download for Windows, MacOS or Linux: https://singulatron.com/home
 
+## Stack
+
+It is an Electron application, with Angular on the frontend and Go on the backend. It becomes a simple web app without electron when hosted over the network.
+
 ## Run GPTs for free
 
 Your chats never leave your computer.
@@ -42,6 +46,6 @@ For personal, non-commercial use, this project is licensed under the AGPL-3.0-or
 
 ### Commercial License
 
-For commercial use, you must purchase a commercial license. Please refer to the [LICENSE-COMMERCIAL-USE](LICENSE-COMMERCIAL-USE) file for details, or contact us at dobronszki@gmail.com.
+For commercial use, you must purchase a commercial license. Please refer to the [LICENSE-COMMERCIAL-USE](LICENSE-COMMERCIAL-USE) and [AUTHORS](AUTHORS) file for details.
 
 For more information, visit https://singulatron.com/home.
