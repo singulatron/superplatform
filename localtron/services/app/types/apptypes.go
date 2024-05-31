@@ -84,7 +84,10 @@ type ChatMessage struct {
 	ThreadId       string `json:"threadId"`
 	MessageContent string `json:"messageContent"`
 	IsUserMessage  bool   `json:"isUserMessage"`
-	Time           string `json:"time"`
+	// UserId is saved when the user is logged in to an account
+	// @todo not used yet
+	UserId string `json:"userId"`
+	Time   string `json:"time"`
 }
 
 type ByTime []*ChatMessage

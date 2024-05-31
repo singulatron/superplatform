@@ -654,6 +654,7 @@ export interface Prompt {
 	id?: string;
 	threadId: string;
 	prompt: string;
+	message: string;
 	modelId: string;
 }
 

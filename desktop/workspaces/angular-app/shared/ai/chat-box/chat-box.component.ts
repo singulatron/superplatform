@@ -141,7 +141,7 @@ export class ChatBoxComponent implements OnChanges {
 						}
 						this.messageCurrentlyStreamed += addVal;
 					}
-					// finish_reason: "stop" might be model specific
+
 					if (
 						response?.choices?.length > 0 &&
 						response?.choices[0]?.finish_reason === 'stop'
@@ -169,36 +169,10 @@ export class ChatBoxComponent implements OnChanges {
 		let msg = this.message;
 		this.message = '';
 
-		await this.localtron.chatMessageAdd({
-			threadId: this.thread.id as string,
-			messageContent: msg,
-			isUserMessage: true,
-		});
-
-		this.prompt(msg);
+		this.sendMessage(msg);
 	}
 
-	// Handle keydown event to differentiate between Enter and Shift+Enter
-	handleKeydown(event: KeyboardEvent): void {
-		if (event.key === 'Enter' && !event.shiftKey) {
-			event.preventDefault();
-			if (this.hasNonWhiteSpace(this.message)) {
-				this.send();
-			}
-		} else if (event.key === 'Enter' && event.shiftKey) {
-			event.preventDefault();
-			this.message += '\n';
-		}
-	}
-
-	public hasNonWhiteSpace(value: string): boolean {
-		if (!value) {
-			return false;
-		}
-		return /\S/.test(value);
-	}
-
-	async prompt(msg: string): Promise<void> {
+	async sendMessage(msg: string) {
 		let userMessages = this.messages?.filter((m) => m.isUserMessage) || [];
 		let modelMessages = this.messages?.filter((m) => !m.isUserMessage) || [];
 		let exchange = zigzagArrays(
@@ -225,22 +199,38 @@ export class ChatBoxComponent implements OnChanges {
 			userMessages?.length > 0
 				? this.latestMessageTemplate.replace('{message}', msg)
 				: msg;
+
 		let fullPrompt = this.promptTemplate
 			? this.promptTemplate.replace('{prompt}', fullContext)
 			: fullContext;
 
-		this.messages.push({
-			threadId: this.thread.id as string,
-			id: this.localtron.uuid(),
-			messageContent: msg,
-			isUserMessage: true,
-		});
-
 		await this.localtron.promptAdd({
+			id: this.localtron.uuid(),
 			prompt: fullPrompt,
+			message: msg,
 			threadId: this.thread.id as string,
 			modelId: this.model?.id as string,
 		});
+	}
+
+	// Handle keydown event to differentiate between Enter and Shift+Enter
+	handleKeydown(event: KeyboardEvent): void {
+		if (event.key === 'Enter' && !event.shiftKey) {
+			event.preventDefault();
+			if (this.hasNonWhiteSpace(this.message)) {
+				this.send();
+			}
+		} else if (event.key === 'Enter' && event.shiftKey) {
+			event.preventDefault();
+			this.message += '\n';
+		}
+	}
+
+	public hasNonWhiteSpace(value: string): boolean {
+		if (!value) {
+			return false;
+		}
+		return /\S/.test(value);
 	}
 
 	setThreadName(msg: string) {
@@ -296,7 +286,7 @@ export class ChatBoxComponent implements OnChanges {
 		this.deleteMessage(message.id as string);
 		let lastUserMessage = this.getLastUserMessage();
 		if (lastUserMessage) {
-			this.prompt(lastUserMessage.messageContent);
+			this.sendMessage(lastUserMessage.messageContent);
 		}
 	}
 }

@@ -10,11 +10,20 @@
  */
 package prompttypes
 
+// Prompt
+// @todo:
+// - message and prompt have a lot of overlap, rethink
 type Prompt struct {
 	Id       string `json:"id"`
 	ThreadId string `json:"threadId"`
-	Prompt   string `json:"prompt"`
-	ModelId  string `json:"modelId"`
+	// Prompt is the full prompt including template as in
+	//    [INST]What's a banana?[/INST]
+	Prompt string `json:"prompt"`
+	// Message is the prompt without the template wrapper as in
+	//    What's a banana?
+	Message string `json:"message"`
+	ModelId string `json:"modelId"`
+	Time    string `json:"time"`
 }
 
 type AddPromptRequest struct {

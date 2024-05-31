@@ -111,6 +111,17 @@ func (p *PromptService) processPromptWrapper() error {
 }
 
 func (p *PromptService) processPrompt() error {
+	err := p.appService.AddChatMessage(&apptypes.ChatMessage{
+		Id:             uuid.New().String(),
+		ThreadId:       p.currentPrompt.ThreadId,
+		IsUserMessage:  true,
+		MessageContent: p.currentPrompt.Message,
+		Time:           p.currentPrompt.Time,
+	})
+	if err != nil {
+		return err
+	}
+
 	stat, err := p.modelService.Status(p.currentPrompt.ModelId)
 	if err != nil {
 		return errors.Wrap(err, "error getting model status")
