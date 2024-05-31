@@ -10,7 +10,6 @@
  */
 import { Injectable, Inject, InjectionToken } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import * as crypto from 'crypto-js';
 import { firstValueFrom, map, throwError } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 import { catchError, switchMap } from 'rxjs/operators';
@@ -256,10 +255,10 @@ export class LocaltronService {
 		return this.call('/download/list', {});
 	}
 
-	async chatMessageAdd(message: ChatMessage): Promise<void> {
-		let req: AddChatMessageRequest = { message: message };
-		return this.call('/chat/message/add', req);
-	}
+	// async chatMessageAdd(message: ChatMessage): Promise<void> {
+	// 	let req: AddChatMessageRequest = { message: message };
+	// 	return this.call('/chat/message/add', req);
+	// }
 
 	async chatMessageDelete(messageId: string): Promise<GetChatThreadResponse> {
 		let req: DeleteChatMessageRequest = { messageId: messageId };
@@ -654,7 +653,9 @@ export interface Prompt {
 	id?: string;
 	threadId: string;
 	prompt: string;
+	message: string;
 	modelId: string;
+	isBeingProcessed?: boolean;
 }
 
 export interface AddPromptRequest {

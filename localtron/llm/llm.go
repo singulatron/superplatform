@@ -150,11 +150,15 @@ func (c *Client) PostCompletionsStreamed(prompt PostCompletionsRequest, callback
 		if len(line) > 5 && line[:5] == "data:" {
 			// Parse the JSON content that follows "data:"
 			var completionResp CompletionResponse
-			err = json.Unmarshal([]byte(line[6:]), &completionResp)
+			dat := line[6:]
+			if string(dat) == "[DONE]" {
+				continue
+			}
+			err = json.Unmarshal([]byte(dat), &completionResp)
 			if err != nil {
 				lib.Logger.Error("Failed to unmarshal streamed response",
 					slog.String("error", err.Error()),
-					slog.String("marshalledText", string([]byte(line[6:]))),
+					slog.String("marshalledText", string(dat)),
 				)
 				continue
 			}

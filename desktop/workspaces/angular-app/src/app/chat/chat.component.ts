@@ -21,6 +21,7 @@ import { LapiService } from '../services/lapi.service';
 import { ElectronIpcService } from '../services/electron-ipc.service';
 import { WindowApiConst } from 'shared-lib';
 import { Subscription } from 'rxjs';
+import { ApiService } from '../../../shared/stdlib/api.service';
 
 @Component({
 	selector: 'app-chat',
@@ -33,12 +34,14 @@ export class ChatComponent implements OnInit {
 	public messages: ChatMessage[];
 
 	public model: Model;
+	private models: Model[];
 
 	private subscriptions: Subscription[] = [];
 
 	constructor(
 		private localtron: LocaltronService,
 		public lapi: LapiService,
+		private api: ApiService,
 		private ipcService: ElectronIpcService
 	) {}
 
@@ -59,6 +62,15 @@ export class ChatComponent implements OnInit {
 				id: this.localtron.uuid(),
 			};
 		}
+
+		this.models = await this.api.getModels();
+		this.subscriptions.push(
+			this.lapi.onConfigUpdate$.subscribe((conf) => {
+				this.model = this.models?.find(
+					(m) => m.id == conf?.model.currentModelId
+				);
+			})
+		);
 	}
 
 	ngOnDestroy() {
