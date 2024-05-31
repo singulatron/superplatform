@@ -28,6 +28,7 @@ import {
 	ChatMessage,
 	LocaltronService,
 	Model,
+	Prompt,
 } from '../../../src/app/services/localtron.service';
 
 import { LapiService } from '../../../src/app/services/lapi.service';
@@ -64,6 +65,7 @@ export class ChatBoxComponent implements OnChanges {
 
 	private model: Model | undefined;
 	private models: Model[] = [];
+	public promptQueue: Prompt[] = [];
 
 	public message: string = '';
 	public messages: ChatMessage[] = [];
@@ -90,6 +92,7 @@ export class ChatBoxComponent implements OnChanges {
 	}
 
 	streamSubscription: Subscription;
+	promptSubscription: Subscription;
 
 	ngOnDestroy() {
 		this.streamSubscription.unsubscribe();
@@ -100,8 +103,12 @@ export class ChatBoxComponent implements OnChanges {
 
 	async ngOnChanges(changes: SimpleChanges): Promise<void> {
 		if (changes.thread) {
+			// @todo investigate this if only the ID changed
 			if (this.streamSubscription) {
 				this.streamSubscription.unsubscribe();
+			}
+			if (this.promptSubscription) {
+				this.promptSubscription.unsubscribe();
 			}
 
 			let threadId;
@@ -116,6 +123,14 @@ export class ChatBoxComponent implements OnChanges {
 				let rsp = await this.localtron.chatMessages(threadId);
 				this.messages = rsp.messages;
 			}
+
+			this.promptSubscription = this.localtron.onPromptListUpdate$.subscribe(
+				(promptList) => {
+					this.promptQueue = promptList?.filter((p) => {
+						return p.threadId == threadId;
+					});
+				}
+			);
 
 			this.messageCurrentlyStreamed = '';
 			let first = true;

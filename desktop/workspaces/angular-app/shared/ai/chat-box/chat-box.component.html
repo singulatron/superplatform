@@ -66,6 +66,12 @@
 					</markdown>
 				</div>
 			</ng-container>
+
+			<ng-container *ngIf="promptQueue?.length">
+				<div style="color: #666" *ngFor="let prompt of promptQueue">
+					{{ prompt.message }}
+				</div>
+			</ng-container>
 		</ion-card-content>
 
 		<ion-item lines="full" style="margin-top: 10px">
