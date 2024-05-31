@@ -39,7 +39,7 @@ export class ChatComponent implements OnInit {
 	private subscriptions: Subscription[] = [];
 
 	constructor(
-		private localtron: LocaltronService,
+		public localtron: LocaltronService,
 		public lapi: LapiService,
 		private api: ApiService,
 		private ipcService: ElectronIpcService

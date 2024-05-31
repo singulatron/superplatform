@@ -23,7 +23,6 @@ import {
 	API_SERVICE_CONFIG,
 	ApiServiceConfig,
 } from './api.service';
-import { PageComponent } from './components/page/page.component';
 
 import { CookieService } from 'ngx-cookie-service';
 import { TranslatePipe, TRANSLATE_OBJECT } from './translate.pipe';
@@ -37,17 +36,11 @@ export interface StdlibModuleConfig {
 }
 
 @NgModule({
-	declarations: [
-		PageComponent,
-		TranslatePipe,
-		CenteredComponent,
-		SidebarPageComponent,
-	],
+	declarations: [TranslatePipe, CenteredComponent, SidebarPageComponent],
 	exports: [
 		IonicModule,
 		FormsModule,
 		ReactiveFormsModule,
-		PageComponent,
 		TranslatePipe,
 		CenteredComponent,
 		CommonModule,
