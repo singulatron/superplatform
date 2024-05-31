@@ -126,15 +126,24 @@ export class ChatBoxComponent implements OnChanges {
 
 			this.promptSubscription = this.localtron.onPromptListUpdate$.subscribe(
 				(promptList) => {
-					this.promptQueue = promptList?.filter((p) => {
+					let promptQueue = promptList?.filter((p) => {
 						return p.threadId == threadId;
 					});
+					if (promptQueue?.length != this.promptQueue?.length) {
+						this.localtron.chatMessages(threadId).then((rsp) => {
+							this.messages = rsp.messages;
+						});
+					}
+					this.promptQueue = promptQueue;
 				}
 			);
 
 			this.messageCurrentlyStreamed = '';
 			let first = true;
 
+			// We are always subscribed to this, even if streaming is not happening
+			// right now. There is always one streaming that is subscribed to
+			// - the current thread on screen.
 			this.streamSubscription = this.localtron
 				.promptSubscribe(threadId)
 				.subscribe(async (response) => {

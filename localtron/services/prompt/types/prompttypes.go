@@ -21,9 +21,10 @@ type Prompt struct {
 	Prompt string `json:"prompt"`
 	// Message is the prompt without the template wrapper as in
 	//    What's a banana?
-	Message string `json:"message"`
-	ModelId string `json:"modelId"`
-	Time    string `json:"time"`
+	Message          string `json:"message"`
+	ModelId          string `json:"modelId"`
+	Time             string `json:"time"`
+	IsBeingProcessed bool   `json:"isBeingProcessed"`
 }
 
 type AddPromptRequest struct {

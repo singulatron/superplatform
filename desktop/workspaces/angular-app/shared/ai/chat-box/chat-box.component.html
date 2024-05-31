@@ -68,8 +68,13 @@
 			</ng-container>
 
 			<ng-container *ngIf="promptQueue?.length">
-				<div style="color: #666" *ngFor="let prompt of promptQueue">
-					{{ prompt.message }}
+				<div
+					style="max-width: inherit; color: #666; white-space: nowrap; text-overflow: ellipsis"
+					*ngFor="let prompt of promptQueue"
+				>
+					<ng-container *ngIf="!prompt.isBeingProcessed">{{
+						prompt.message
+					}}</ng-container>
 				</div>
 			</ng-container>
 		</ion-card-content>
