@@ -65,7 +65,7 @@ class SingulatronAfterEmitPlugin {
 				} catch (error) {
 					console.error('Code signing error:', {
 						error: JSON.stringify(error),
-					})
+					});
 				}
 			}
 		);

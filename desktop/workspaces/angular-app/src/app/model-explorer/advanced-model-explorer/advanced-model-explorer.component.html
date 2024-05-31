@@ -179,7 +179,8 @@
 						>
 							<ion-button
 								*ngIf="
-									(lapi.onConfigUpdate$ | async)?.model?.currentModelId !== model.id
+									(lapi.onConfigUpdate$ | async)?.model?.currentModelId !==
+									model.id
 								"
 								color="tertiary"
 								(click)="activateModel(model.id)"
