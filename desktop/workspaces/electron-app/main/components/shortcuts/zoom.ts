@@ -8,26 +8,43 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-import {
-	BrowserWindow,
-	GlobalShortcut,
-} from 'electron';
+import { BrowserWindow, GlobalShortcut } from 'electron';
 
 export function registerZoomShortcuts(
 	window: BrowserWindow,
 	globalShortcut: GlobalShortcut
 ) {
-	globalShortcut.register('CommandOrControl+Plus', () => {
-		const currentZoom = window.webContents.getZoomFactor();
-		window.webContents.setZoomFactor(currentZoom + 0.1);
-	});
+	if (!window) {
+		console.error('Cannot register zoom shortcuts: window is null');
+		return;
+	}
 
-	globalShortcut.register('CommandOrControl+-', () => {
-		const currentZoom = window.webContents.getZoomFactor();
-		window.webContents.setZoomFactor(currentZoom - 0.1);
-	});
+	const { webContents } = window;
 
-	globalShortcut.register('CommandOrControl+0', () => {
-		window.webContents.setZoomFactor(1.0);
-	});
+	function zoomIn() {
+		const currentZoom = webContents.getZoomFactor();
+		webContents.setZoomFactor(currentZoom + 0.1);
+	}
+
+	function zoomOut() {
+		const currentZoom = webContents.getZoomFactor();
+		webContents.setZoomFactor(currentZoom - 0.1);
+	}
+
+	function resetZoom() {
+		webContents.setZoomFactor(1.0);
+	}
+
+	// @todo is there a way to generalize this?
+	globalShortcut.register('CommandOrControl+Plus', zoomIn); // Most standard layouts
+	globalShortcut.register('CommandOrControl+Shift+=', zoomIn); // Alternative: + on some keyboards
+	globalShortcut.register('Shift+CommandOrControl+=', zoomIn); // Some English layouts
+	globalShortcut.register('CommandOrControl+Shift+3', zoomIn); // Layouts where + is Shift+3
+	globalShortcut.register('CommandOrControl+Shift+1', zoomIn); // German and Swiss layouts
+	// globalShortcut.register('CommandOrControl+Shift+´', zoomIn); // Swedish, Finnish, Norwegian layouts
+	// globalShortcut.register('CommandOrControl+Shift+`', zoomIn); // Alternative for some layouts
+
+	globalShortcut.register('CommandOrControl+-', zoomOut);
+
+	globalShortcut.register('CommandOrControl+0', resetZoom);
 }
