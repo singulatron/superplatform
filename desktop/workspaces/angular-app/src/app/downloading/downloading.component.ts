@@ -9,7 +9,7 @@
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { LapiService } from '../services/lapi.service';
+import { ElectronAppService } from '../services/electron-app.service';
 import { Subscription, throttleTime } from 'rxjs';
 import { DownloadDetails } from 'shared-lib/models/event-request-response';
 import { LocaltronService } from '../services/localtron.service';
@@ -26,7 +26,7 @@ export class DownloadingComponent {
 	details!: DownloadDetails;
 
 	constructor(
-		private lapi: LapiService,
+		private lapi: ElectronAppService,
 		private localtron: LocaltronService
 	) {}
 

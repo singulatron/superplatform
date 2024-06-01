@@ -10,7 +10,7 @@
  */
 import { Injectable } from '@angular/core';
 import { ElectronIpcService } from './electron-ipc.service';
-import { ReplaySubject} from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 import { combineLatest } from 'rxjs';
 
 import { Config } from 'shared-lib/models/types';
@@ -32,8 +32,12 @@ import { ApiService } from '../../../shared/stdlib/api.service';
 @Injectable({
 	providedIn: 'root',
 })
-export class LapiService {
+export class ElectronAppService {
 	lastConfig!: Config;
+
+
+	// @TODO most of these should move out to other services except
+	// the ones actually getting info from the electron backend
 
 	onDockerInfoSubject = new ReplaySubject<OnDockerInfo>(1);
 	onDockerInfo$ = this.onDockerInfoSubject.asObservable();

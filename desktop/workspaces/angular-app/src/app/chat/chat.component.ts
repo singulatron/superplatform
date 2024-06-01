@@ -17,7 +17,7 @@ import {
 	Prompt,
 } from '../services/localtron.service';
 
-import { LapiService } from '../services/lapi.service';
+import { ElectronAppService } from '../services/electron-app.service';
 import { ElectronIpcService } from '../services/electron-ipc.service';
 import { WindowApiConst } from 'shared-lib';
 import { Subscription } from 'rxjs';
@@ -41,7 +41,7 @@ export class ChatComponent implements OnInit {
 
 	constructor(
 		public localtron: LocaltronService,
-		public lapi: LapiService,
+		public lapi: ElectronAppService,
 		private api: ApiService,
 		private ipcService: ElectronIpcService
 	) {}

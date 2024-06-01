@@ -199,6 +199,23 @@ func (cf *ChatFile) AddThread(thread *ChatThread) {
 	cf.Threads = append(cf.Threads, thread)
 }
 
+func (cf *ChatFile) DeleteThreadById(id string) {
+	position := -1
+	for i, chatThread := range cf.Threads {
+		if chatThread.Id == id {
+			position = i
+		}
+	}
+	if position < 0 {
+		return
+	}
+
+	cf.threadsMutex.Lock()
+	defer cf.threadsMutex.Unlock()
+
+	cf.Threads = append(cf.Threads[:position], cf.Threads[position+1:]...)
+}
+
 type AddChatMessageRequest struct {
 	Message *ChatMessage `json:"message"`
 }
@@ -243,4 +260,18 @@ type GetChatMessagesRequest struct {
 
 type GetChatMessagesResponse struct {
 	Messages []*ChatMessage `json:"messages"`
+}
+
+//
+// Events
+//
+
+const EventChatMessageAddedName = "chatMessageAdded"
+
+type EventChatMessageAdded struct {
+	ThreadId string `json:"threadId"`
+}
+
+func (e EventChatMessageAdded) Name() string {
+	return EventChatMessageAddedName
 }

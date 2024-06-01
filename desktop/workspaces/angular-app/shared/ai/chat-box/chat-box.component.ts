@@ -31,7 +31,7 @@ import {
 	Prompt,
 } from '../../../src/app/services/localtron.service';
 
-import { LapiService } from '../../../src/app/services/lapi.service';
+import { ElectronAppService } from '../../../src/app/services/electron-app.service';
 
 const defaultThreadName = 'New chat';
 
@@ -74,7 +74,7 @@ export class ChatBoxComponent implements OnChanges {
 	constructor(
 		private api: ApiService,
 		private localtron: LocaltronService,
-		public lapi: LapiService,
+		public lapi: ElectronAppService,
 		private cd: ChangeDetectorRef
 	) {}
 
@@ -129,11 +129,6 @@ export class ChatBoxComponent implements OnChanges {
 					let promptQueue = promptList?.filter((p) => {
 						return p.threadId == threadId;
 					});
-					if (promptQueue?.length != this.promptQueue?.length) {
-						this.localtron.chatMessages(threadId).then((rsp) => {
-							this.messages = rsp.messages;
-						});
-					}
 					this.promptQueue = promptQueue;
 				}
 			);
@@ -288,7 +283,7 @@ export class ChatBoxComponent implements OnChanges {
 
 	propagateCopyToClipboard(text: string | undefined) {
 		if (text === undefined) {
-			return
+			return;
 		}
 		this.onCopyToClipboard.emit(text);
 	}

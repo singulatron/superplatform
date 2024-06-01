@@ -11,7 +11,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ElectronIpcService } from '../services/electron-ipc.service';
 import { WindowApiConst } from 'shared-lib';
-import { LapiService } from '../services/lapi.service';
+import { ElectronAppService } from '../services/electron-app.service';
 import { combineLatest, Subscription } from 'rxjs';
 import { ApiService } from '../../../shared/stdlib/api.service';
 import { DownloadDetails } from 'shared-lib/models/event-request-response';
@@ -56,7 +56,7 @@ export class StartupComponent implements OnInit {
 
 	constructor(
 		private ipcService: ElectronIpcService,
-		public lapi: LapiService,
+		public lapi: ElectronAppService,
 		private localtron: LocaltronService,
 		private apiService: ApiService
 	) {}

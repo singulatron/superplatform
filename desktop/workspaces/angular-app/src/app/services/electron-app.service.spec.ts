@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { LapiService } from './lapi.service';
+import { ElectronAppService } from './electron-app.service';
 
-describe('LapiService', () => {
-	let service: LapiService;
+describe('ElectronAppServiceService', () => {
+	let service: ElectronAppService;
 
 	beforeEach(() => {
 		TestBed.configureTestingModule({});
-		service = TestBed.inject(LapiService);
+		service = TestBed.inject(ElectronAppService);
 	});
 
 	it('should be created', () => {

@@ -9,7 +9,7 @@
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
 import { Component } from '@angular/core';
-import { LapiService } from '../../services/lapi.service';
+import { ElectronAppService } from '../../services/electron-app.service';
 import { OnFileDownloadStatus } from 'shared-lib/models/event-request-response';
 import { ApiService, Model } from '../../../../shared/stdlib/api.service';
 import { LocaltronService } from '../../services/localtron.service';
@@ -117,7 +117,7 @@ export class AdvancedModelExplorerComponent {
 	}
 
 	constructor(
-		public lapi: LapiService,
+		public lapi: ElectronAppService,
 		private api: ApiService,
 		private localtron: LocaltronService
 	) {}
@@ -131,7 +131,7 @@ export class AdvancedModelExplorerComponent {
 
 	isDownloading(id: string, status: OnFileDownloadStatus | null): boolean {
 		if (status === null) {
-			return false
+			return false;
 		}
 		let c = status?.allDownloads?.find((v) => v.id === id);
 		if (c?.status === 'inProgress' || c?.status === 'paused') {

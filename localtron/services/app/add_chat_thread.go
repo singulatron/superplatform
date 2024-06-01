@@ -27,6 +27,12 @@ func (a *AppService) AddChatThread(chatThread *apptypes.ChatThread) (*apptypes.C
 	if chatThread.Time == "" {
 		chatThread.Time = time.Now().Format(time.RFC3339)
 	}
-	a.chatFile.Threads = append(a.chatFile.Threads, chatThread)
+
+	a.chatFile.AddThread(chatThread)
+
+	a.firehoseService.Publish(apptypes.EventChatMessageAdded{
+		ThreadId: chatThread.Id,
+	})
+
 	return chatThread, a.saveChatFile()
 }
