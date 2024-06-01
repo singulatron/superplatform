@@ -36,3 +36,38 @@ type ListPromptsRequest struct{}
 type ListPromptsResponse struct {
 	Prompts []*Prompt `json:"prompts"`
 }
+
+//
+// Events
+//
+
+const EventPromptAddedName = "promptAdded"
+
+type EventPromptAdded struct {
+	Prompt Prompt `json:"prompt"`
+}
+
+func (e EventPromptAdded) Name() string {
+	return EventPromptAddedName
+}
+
+const EventPromptProcessingStartedName = "promptProcessingStarted"
+
+type EventPromptProcessingStarted struct {
+	Prompt Prompt `json:"prompt"`
+}
+
+func (e EventPromptProcessingStarted) Name() string {
+	return EventPromptProcessingStartedName
+}
+
+const EventPromptProcessingFinishedName = "promptProcessingStarted"
+
+type EventPromptProcessingFinished struct {
+	Prompt Prompt `json:"prompt"`
+	Error  string `json:"error"`
+}
+
+func (e EventPromptProcessingFinished) Name() string {
+	return EventPromptProcessingFinishedName
+}

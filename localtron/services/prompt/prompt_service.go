@@ -23,13 +23,15 @@ import (
 	"github.com/singulatron/singulatron/localtron/llm"
 	appservice "github.com/singulatron/singulatron/localtron/services/app"
 	apptypes "github.com/singulatron/singulatron/localtron/services/app/types"
+	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
 	modelservice "github.com/singulatron/singulatron/localtron/services/model"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
 )
 
 type PromptService struct {
-	modelService *modelservice.ModelService
-	appService   *appservice.AppService
+	modelService    *modelservice.ModelService
+	appService      *appservice.AppService
+	firehoseService *firehoseservice.FirehoseService
 
 	StreamManager *StreamManager
 
@@ -39,10 +41,15 @@ type PromptService struct {
 	trigger          chan bool
 }
 
-func NewPromptService(modelService *modelservice.ModelService, appService *appservice.AppService) *PromptService {
+func NewPromptService(
+	modelService *modelservice.ModelService,
+	appService *appservice.AppService,
+	firehoseService *firehoseservice.FirehoseService,
+) *PromptService {
 	service := &PromptService{
-		modelService: modelService,
-		appService:   appService,
+		modelService:    modelService,
+		appService:      appService,
+		firehoseService: firehoseService,
 
 		StreamManager: NewStreamManager(),
 
@@ -64,22 +71,24 @@ func (p *PromptService) processPrompts() {
 		}
 
 		p.mutex.Lock()
-		if p.currentPrompt == nil && len(p.promptsToProcess) > 0 {
-			p.currentPrompt = p.promptsToProcess[0]
-			p.currentPrompt.IsBeingProcessed = true
-			p.promptsToProcess = p.promptsToProcess[1:]
-			lib.Logger.Info("Picking up prompt from queue", slog.String("promptId", p.currentPrompt.Id))
+		for {
+			if p.currentPrompt == nil && len(p.promptsToProcess) > 0 {
+				p.currentPrompt = p.promptsToProcess[0]
+				p.currentPrompt.IsBeingProcessed = true
+				p.firehoseService.Publish(prompttypes.EventPromptProcessingStarted{
+					Prompt: *p.currentPrompt,
+				})
+				p.promptsToProcess = p.promptsToProcess[1:]
+				lib.Logger.Info("Picking up prompt from queue", slog.String("promptId", p.currentPrompt.Id))
 
-			go func() {
-				if r := recover(); r != nil {
-					lib.Logger.Error("Recovered from prompt process")
-				}
 				err := p.processPromptWrapper()
 				if err != nil {
 					lib.Logger.Error("Prompt process errored", slog.String("error", err.Error()))
+					break
 				}
-			}()
-
+			} else {
+				break
+			}
 		}
 		p.mutex.Unlock()
 	}
@@ -95,21 +104,33 @@ func (p *PromptService) TriggerPromptProcessing() {
 }
 
 func (p *PromptService) processPromptWrapper() error {
-	err := p.processPrompt()
+	var err error
+	defer func() {
+		if r := recover(); r != nil {
+			err = fmt.Errorf("error when prompting: %v", r)
+			return
+		}
+	}()
+
+	err = p.processPrompt()
 	if err != nil {
+		p.firehoseService.Publish(prompttypes.EventPromptProcessingFinished{
+			Prompt: *p.currentPrompt,
+			Error:  err.Error(),
+		})
+
 		lib.Logger.Error("Prompt process errored, putting prompt back to queue",
 			slog.String("error", err.Error()),
 		)
+
 		// put the prompt back to the queue
-		p.mutex.Lock()
 		p.currentPrompt.IsBeingProcessed = false
 		p.promptsToProcess = append([]*prompttypes.Prompt{p.currentPrompt}, p.promptsToProcess...)
 		p.currentPrompt = nil
-		p.mutex.Unlock()
+
 	}
-	p.mutex.Lock()
+
 	p.currentPrompt = nil
-	p.mutex.Unlock()
 	return nil
 }
 

@@ -8,22 +8,15 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-package promptservice
+package firehosetypes
 
-import (
-	"time"
+// Event is an interface that all events must implement
+type Event interface {
+	Name() string
+}
 
-	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
-)
-
-func (p *PromptService) AddPrompt(prompt *prompttypes.Prompt) error {
-	p.mutex.Lock()
-	defer p.mutex.Unlock()
-
-	if prompt.Time == "" {
-		prompt.Time = time.Now().Format(time.RFC3339)
-	}
-	p.promptsToProcess = append(p.promptsToProcess, prompt)
-	go p.TriggerPromptProcessing()
-	return nil
+// This is the event that is streamed to the frontend
+type FrontendEvent struct {
+	Name string `json:"name"`
+	Data any    `json:"data"`
 }
