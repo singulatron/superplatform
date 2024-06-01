@@ -13,8 +13,8 @@ package promptservice
 import prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
 
 func (p *PromptService) ListPrompts() ([]*prompttypes.Prompt, error) {
-	p.mutex.Lock()
-	defer p.mutex.Unlock()
+	p.promptsToProcessMutex.Lock()
+	defer p.promptsToProcessMutex.Unlock()
 
 	if p.currentPrompt == nil {
 		return p.promptsToProcess, nil
