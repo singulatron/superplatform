@@ -9,7 +9,6 @@
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { ApiService } from '../../../shared/stdlib/api.service';
 import { LapiService } from '../services/lapi.service';
 import { Subscription, throttleTime } from 'rxjs';
 import { DownloadDetails } from 'shared-lib/models/event-request-response';
@@ -21,13 +20,12 @@ import { LocaltronService } from '../services/localtron.service';
 	styleUrl: './downloading.component.scss',
 })
 export class DownloadingComponent {
-	@Input() url: string;
+	@Input() url!: string;
 	@Output() downloadStatusChange = new EventEmitter<DownloadDetails>();
 
-	details: DownloadDetails;
+	details!: DownloadDetails;
 
 	constructor(
-		private api: ApiService,
 		private lapi: LapiService,
 		private localtron: LocaltronService
 	) {}

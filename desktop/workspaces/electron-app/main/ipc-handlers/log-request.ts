@@ -9,13 +9,7 @@
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
 import { sendLogToLocaltron } from '../../../angular-app/shared/backend-api/app_backend';
-import * as os from 'os';
 import { Log } from '../../../angular-app/shared/backend-api/app';
-
-let platform = '';
-try {
-	platform = os.type();
-} catch (err) {}
 
 export function sendLogToLocalServer(log: Log) {
 	try {

@@ -57,7 +57,7 @@
 					[thread]="activeThread"
 					[messages]="messages"
 					[modelId]="model?.id"
-					[promptTemplate]="model?.promptTemplate"
+					[promptTemplate]="model?.promptTemplate || defaultPrompt"
 					(onThreadUpdate)="onThreadUpdate($event)"
 					(onCopyToClipboard)="onCopyToClipboard($event)"
 				></app-chat-box>

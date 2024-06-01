@@ -12,7 +12,7 @@ import { Injectable, Inject, InjectionToken } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { firstValueFrom, map, throwError } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
-import { catchError, switchMap } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { LapiService } from './lapi.service';
 import { Config } from 'shared-lib/models/types';
 import { ReplaySubject, Observable } from 'rxjs';
@@ -47,8 +47,8 @@ export const LOCALTRON_SERVICE_CONFIG =
 	providedIn: 'root',
 })
 export class LocaltronService {
-	public activeThreadId: string;
-	public llmAddressOverride: string;
+	public activeThreadId: string = '';
+	public llmAddressOverride: string = '';
 
 	private headers: HttpHeaders;
 	private config: LocaltronServiceConfig;
@@ -169,9 +169,6 @@ export class LocaltronService {
 		pollFileDownloadStatus();
 	}
 
-	private c(): string {
-		return this.config.env.encryptKey;
-	}
 
 	call(path: string, request: any): Promise<any> {
 		if (!this.config.env.localtronAddress) {
@@ -304,13 +301,13 @@ export class LocaltronService {
 	getActiveThreadId(): string {
 		const activeThreadId = localStorage.getItem(this.activeThreadId);
 		if (!activeThreadId) {
-			return null;
+			return '';
 		}
 		return activeThreadId;
 	}
 
 	uuid() {
-		function generateSegment(length) {
+		function generateSegment(length: number) {
 			return Array.from({ length: length }, () =>
 				Math.floor(Math.random() * 16).toString(16)
 			).join('');
@@ -363,6 +360,10 @@ export class LocaltronService {
 				signal: signal,
 			})
 				.then((response) => {
+					if (!response || !response.body) {
+						observer.error(`Response is empty`);
+						return;
+					}
 					if (!response.ok) {
 						observer.error(`HTTP error! status: ${response.status}`);
 						return;
@@ -452,7 +453,7 @@ export class LocaltronService {
 	}
 
 	prompt(request: PromptRequest): Observable<CompletionResponse> {
-		let uri;
+		let uri: string;
 		if (this.llmAddressOverride) {
 			uri = this.llmAddressOverride + '/v1/completions';
 		} else if (this.config.env.localPromptAddress) {

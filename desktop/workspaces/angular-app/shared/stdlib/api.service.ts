@@ -14,11 +14,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { firstValueFrom, map } from 'rxjs';
 
 import { CookieService } from 'ngx-cookie-service';
-import { catchError, switchMap } from 'rxjs/operators';
-import { throwError, from } from 'rxjs';
-import { BehaviorSubject, Observable } from 'rxjs';
-
-import { DOCUMENT } from '@angular/common';
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 export interface Event {
 	type: string;
@@ -74,7 +72,6 @@ export class ApiService {
 	constructor(
 		private http: HttpClient,
 		private cs: CookieService,
-		@Inject(DOCUMENT) private document: Document,
 		@Inject(API_SERVICE_CONFIG) config: ApiServiceConfig
 	) {
 		this.headers = new HttpHeaders();

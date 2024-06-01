@@ -57,7 +57,7 @@ export class ChatBoxComponent implements OnChanges {
 	@Input() threadNameSummaryTemplate =
 		'Summarize, shorten this question in 3-5 words, keep it as a question: {message}';
 
-	@Input() thread: ChatThread;
+	@Input() thread!: ChatThread;
 
 	@Output() onThreadUpdate = new EventEmitter<ChatThread>();
 	@Output() onFirstMessageSend = new EventEmitter<ChatThread>();
@@ -91,8 +91,8 @@ export class ChatBoxComponent implements OnChanges {
 		);
 	}
 
-	streamSubscription: Subscription;
-	promptSubscription: Subscription;
+	streamSubscription!: Subscription;
+	promptSubscription!: Subscription;
 
 	ngOnDestroy() {
 		this.streamSubscription.unsubscribe();
@@ -111,13 +111,13 @@ export class ChatBoxComponent implements OnChanges {
 				this.promptSubscription.unsubscribe();
 			}
 
-			let threadId;
+			let threadId: string;
 
 			if (!this.thread) {
 				this.thread = {
 					id: this.localtron.uuid(),
 				};
-				threadId = this.thread.id;
+				threadId = this.thread.id as string;
 			} else {
 				threadId = changes.thread.currentValue.id;
 				let rsp = await this.localtron.chatMessages(threadId);
@@ -160,7 +160,7 @@ export class ChatBoxComponent implements OnChanges {
 							: escapeHtml(response?.choices[0].text);
 
 						if (first) {
-							addVal = addVal.trimLeft();
+							addVal = addVal.trimStart();
 							first = false;
 						}
 						this.messageCurrentlyStreamed += addVal;
@@ -286,11 +286,17 @@ export class ChatBoxComponent implements OnChanges {
 			});
 	}
 
-	propagateCopyToClipboard(text: string) {
+	propagateCopyToClipboard(text: string | undefined) {
+		if (text === undefined) {
+			return
+		}
 		this.onCopyToClipboard.emit(text);
 	}
 
-	deleteMessage(messageId: string) {
+	deleteMessage(messageId: string | undefined) {
+		if (messageId === undefined) {
+			return;
+		}
 		this.localtron.chatMessageDelete(messageId);
 		this.messages = this.messages.filter((m) => m.id !== messageId);
 	}
@@ -315,7 +321,7 @@ export class ChatBoxComponent implements OnChanges {
 	}
 }
 
-function escapeHtml(unsafe) {
+function escapeHtml(unsafe: string) {
 	return unsafe
 		.replace(/&/g, '&amp;')
 		.replace(/</g, '&lt;')

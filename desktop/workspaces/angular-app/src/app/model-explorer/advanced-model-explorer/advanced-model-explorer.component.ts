@@ -11,7 +11,6 @@
 import { Component } from '@angular/core';
 import { LapiService } from '../../services/lapi.service';
 import { OnFileDownloadStatus } from 'shared-lib/models/event-request-response';
-import { ElectronIpcService } from '../../services/electron-ipc.service';
 import { ApiService, Model } from '../../../../shared/stdlib/api.service';
 import { LocaltronService } from '../../services/localtron.service';
 
@@ -56,8 +55,8 @@ export class AdvancedModelExplorerComponent {
 			const subject =
 				JSON.stringify(m) +
 				(model.uncensored ? ' uncensored ' : '') +
-				` ${Math.floor(model.maxRam)} gb` +
-				` ${Math.floor(model.maxRam)}gb` +
+				` ${Math.floor(model.maxRam || 0)} gb` +
+				` ${Math.floor(model.maxRam || 0)}gb` +
 				' gb'.toLowerCase();
 
 			return subject.includes(this.searchQuery.toLowerCase());
@@ -100,6 +99,7 @@ export class AdvancedModelExplorerComponent {
 							default:
 								break;
 						}
+						return '';
 					});
 					return found;
 				});
@@ -119,7 +119,6 @@ export class AdvancedModelExplorerComponent {
 	constructor(
 		public lapi: LapiService,
 		private api: ApiService,
-		private ipcService: ElectronIpcService,
 		private localtron: LocaltronService
 	) {}
 
@@ -130,7 +129,10 @@ export class AdvancedModelExplorerComponent {
 		this.loadPage(this.currentPage);
 	}
 
-	isDownloading(id: string, status: OnFileDownloadStatus): boolean {
+	isDownloading(id: string, status: OnFileDownloadStatus | null): boolean {
+		if (status === null) {
+			return false
+		}
 		let c = status?.allDownloads?.find((v) => v.id === id);
 		if (c?.status === 'inProgress' || c?.status === 'paused') {
 			return true;
@@ -154,12 +156,16 @@ export class AdvancedModelExplorerComponent {
 		return `Flavour ${flavour}`;
 	}
 
-	downloaded(id: string, status: OnFileDownloadStatus): boolean {
+	downloaded(id: string, status: OnFileDownloadStatus | null): boolean {
+		if (status === null) {
+			return false;
+		}
 		if (
 			status?.allDownloads?.find((v) => v.id === id)?.status === 'completed'
 		) {
 			return true;
 		}
+		return false;
 	}
 
 	progress(id: string, status: OnFileDownloadStatus): number {
@@ -172,24 +178,25 @@ export class AdvancedModelExplorerComponent {
 
 	toggleItem(id: string) {
 		const currentState = this.expandedStates.get(id);
-		this.expandedStates.set(id, !currentState); // Toggle the state
+		this.expandedStates.set(id, !currentState);
 	}
 
-	// Method to decide which description to show (full or preview)
-	getDescription(item) {
+	getDescription(item: Model): string {
+		if (!item.description) {
+			return '';
+		}
 		const maxLength = 0;
 		if (this.expandedStates.get(item.id)) {
-			return item.description; // Item is expanded, show full description
+			return item.description || '';
 		} else {
-			// Item is not expanded, show preview (if necessary)
 			return item.description.length > maxLength
 				? item.description.substring(0, maxLength)
 				: item.description;
 		}
 	}
 
-	getStatValue(model, statType) {
-		let value;
+	getStatValue(model: Model, statType: string) {
+		let value: number = 0;
 		const minSizeGB = 1; // Minimum model size in GB for "speed"
 		const maxSizeGB = 30; // Maximum model size in GB for "quality"
 
@@ -211,8 +218,8 @@ export class AdvancedModelExplorerComponent {
 		return Math.round(value / 10);
 	}
 
-	getStatStyle(model, statType) {
-		let value;
+	getStatStyle(model: Model, statType: string) {
+		let value: number = 0;
 		const minSizeGB = 1; // Minimum model size in GB for "speed"
 		const maxSizeGB = 30; // Maximum model size in GB for "quality"
 

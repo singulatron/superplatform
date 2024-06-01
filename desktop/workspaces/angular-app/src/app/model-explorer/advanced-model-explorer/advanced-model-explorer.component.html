@@ -267,7 +267,7 @@
 			<ion-icon
 				*ngIf="
 					!isDownloading(model.id, lapi.onFileDownloadStatus$ | async) &&
-					!downloaded(model.id, lapi.onFileDownloadStatus$ | async)
+					!downloaded(model.id, (lapi.onFileDownloadStatus$ | async))
 				"
 				name="cloud-download-outline"
 			></ion-icon>
