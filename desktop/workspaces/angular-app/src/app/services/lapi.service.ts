@@ -10,20 +10,15 @@
  */
 import { Injectable } from '@angular/core';
 import { ElectronIpcService } from './electron-ipc.service';
-import { ReplaySubject, Observable, lastValueFrom } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { ReplaySubject} from 'rxjs';
 import { combineLatest } from 'rxjs';
 
 import { Config } from 'shared-lib/models/types';
 import {
 	OnDockerInfo,
-	FileDownloadRequest,
 	OnFileDownloadStatus,
-	SelectFolderRequest,
 	OnFolderSelect,
-	GraphicsInfoRequest,
 	OnGraphicsInfo,
-	ModelLaunchRequest,
 	OnModelLaunch,
 	OnModelCheck,
 	OnOSInfo,
@@ -38,7 +33,7 @@ import { ApiService } from '../../../shared/stdlib/api.service';
 	providedIn: 'root',
 })
 export class LapiService {
-	lastConfig: Config;
+	lastConfig!: Config;
 
 	onDockerInfoSubject = new ReplaySubject<OnDockerInfo>(1);
 	onDockerInfo$ = this.onDockerInfoSubject.asObservable();

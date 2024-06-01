@@ -29,12 +29,13 @@ import { ApiService } from '../../../shared/stdlib/api.service';
 	styleUrl: './chat.component.scss',
 })
 export class ChatComponent implements OnInit {
+	public defaultPrompt = '[INST] {prompt} [/INST]';
 	public chatThreads: Array<ChatThread> = [];
-	public activeThread: ChatThread;
-	public messages: ChatMessage[];
+	public activeThread!: ChatThread;
+	public messages!: ChatMessage[];
 
-	public model: Model;
-	private models: Model[];
+	public model!: Model;
+	private models!: Model[];
 
 	private subscriptions: Subscription[] = [];
 
@@ -50,9 +51,10 @@ export class ChatComponent implements OnInit {
 
 		let activeThreadId = this.localtron.getActiveThreadId();
 		if (activeThreadId) {
-			this.activeThread = this.chatThreads?.find(
-				(v) => v.id === activeThreadId
-			);
+			let activeThread = this.chatThreads?.find((v) => v.id === activeThreadId);
+			if (activeThread) {
+				this.activeThread = activeThread;
+			}
 		}
 		if (!this.activeThread && this.chatThreads?.length) {
 			this.activeThread = this.chatThreads[0];
@@ -66,9 +68,12 @@ export class ChatComponent implements OnInit {
 		this.models = await this.api.getModels();
 		this.subscriptions.push(
 			this.lapi.onConfigUpdate$.subscribe((conf) => {
-				this.model = this.models?.find(
-					(m) => m.id == conf?.model.currentModelId
+				let model = this.models?.find(
+					(m) => m.id == conf?.model?.currentModelId
 				);
+				if (model) {
+					this.model = model;
+				}
 			})
 		);
 	}
@@ -82,12 +87,24 @@ export class ChatComponent implements OnInit {
 		console.debug('Loading thread', {
 			threadId: thread.id,
 		});
+		if (!thread.id) {
+			return;
+		}
 		let rsp = await this.localtron.chatMessages(thread.id);
 		this.messages = rsp.messages;
 		this.localtron.setActiveThreadId(thread.id);
 	}
 
-	public num(threadId: string, promptList: Prompt[]): number {
+	public num(
+		threadId: string | undefined,
+		promptList: Prompt[] | null
+	): number {
+		if (!promptList) {
+			return -1;
+		}
+		if (!threadId) {
+			return -1;
+		}
 		let ind = -1;
 		promptList?.forEach((p, index) => {
 			if (p.threadId == threadId) {
@@ -108,6 +125,9 @@ export class ChatComponent implements OnInit {
 	}
 
 	public removeChatThread(thread: ChatThread) {
+		if (!thread.id) {
+			return;
+		}
 		this.localtron.chatThreadDelete(thread.id);
 		this.refreshThreadList();
 	}

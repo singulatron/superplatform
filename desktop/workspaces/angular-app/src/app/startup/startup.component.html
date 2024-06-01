@@ -98,17 +98,17 @@
 						<ion-label>{{ 'Downloading your model' | translate }}</ion-label>
 					</ion-item>
 					<ion-list class="dropdown" *ngIf="showSections.model">
-						<ion-item *ngIf="(lapi?.onModelCheck$ | async).selectedExists">
+						<ion-item *ngIf="(lapi?.onModelCheck$ | async)?.selectedExists">
 							{{ 'You successfully downloaded the model.' | translate }}
 						</ion-item>
-						<ion-item *ngIf="!(lapi?.onModelCheck$ | async).selectedExists">
+						<ion-item *ngIf="!(lapi?.onModelCheck$ | async)?.selectedExists">
 							<ion-label>
 								<ng-container *ngIf="!isDownloading && !downloaded">
 									<p>
 										{{ 'Your selected model is' | translate }}:
 										<strong
 											>{{
-												selectedModelName(lapi.onConfigUpdate$ | async)
+												selectedModelName((lapi.onConfigUpdate$ | async) || {})
 											}}.</strong
 										>
 									</p>
@@ -123,7 +123,8 @@
 										{{ 'This operation will consume' | translate }}
 										<strong
 											>{{
-												selectedModel(lapi.onConfigUpdate$ | async)?.size
+												selectedModel((lapi.onConfigUpdate$ | async) || {})
+													?.size
 											}}
 											GB</strong
 										>
@@ -172,7 +173,8 @@
 								<h2>
 									<app-downloading
 										[url]="
-											(lapi?.onConfigUpdate$ | async)?.model?.currentModelId
+											(lapi?.onConfigUpdate$ | async)?.model?.currentModelId ||
+											''
 										"
 										(downloadStatusChange)="handleDownloadStatus($event)"
 									></app-downloading>

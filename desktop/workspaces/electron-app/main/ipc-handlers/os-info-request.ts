@@ -8,24 +8,23 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-import { IpcMainEvent, ipcMain } from 'electron';
-import { WindowApiConst } from 'shared-lib';
+import { IpcMainEvent  } from 'electron';
 import * as si from 'systeminformation';
 
-import { OnOSInfo } from 'shared-lib/models/event-request-response';
+// import { OnOSInfo } from 'shared-lib/models/event-request-response';
 
 export function requestOsInfo(event: IpcMainEvent) {
 	console.log('Received request for OS info');
 
 	si.osInfo()
 		.then((data) => {
-			let ev: OnOSInfo = {
-				platform: data.platform,
-				distro: data.distro,
-				release: data.release,
-				arch: data.arch,
-				hostname: data.hostname,
-			};
+			// let ev: OnOSInfo = {
+			// 	platform: data.platform,
+			// 	distro: data.distro,
+			// 	release: data.release,
+			// 	arch: data.arch,
+			// 	hostname: data.hostname,
+			// };
 			// event.sender.send(WindowApiConst.ON_OS_INFO, ev);
 		})
 		.catch((error) => {

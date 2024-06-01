@@ -29,7 +29,7 @@ const options: zlib.ZlibOptions = {
 	level: zlib.constants.Z_BEST_COMPRESSION,
 };
 
-const { compress, decompress } = brotliCompress({
+const { compress } = brotliCompress({
 	compressOptions: {
 		chunkSize: 64 * 1024,
 		// these get passed down when compressing in place
@@ -171,18 +171,25 @@ export async function post<T>(
 		});
 
 		// Attempt to parse the response as JSON
-		let clonedResponse;
+		let clonedResponse: Response | undefined;
 		try {
 			// Clone the response before parsing it
 			clonedResponse = response.clone();
 			const jsonData = await response.json(); // Attempt to parse the original response
 			return jsonData; // Return the parsed JSON data if successful
 		} catch (e) {
+			if (clonedResponse == undefined) {
+				throw new Error(`Response was not cloned successfully`);
+			}
 			// If parsing fails, use the cloned response to read the raw text
 			const rawResponse = await clonedResponse.text();
-			throw new Error(`Invalid JSON: ${rawResponse}, error: ${e.message}`);
+			throw new Error(
+				`Invalid JSON: ${rawResponse}, error: ${(e as any)?.message}`
+			);
 		}
 	} catch (error) {
-		throw new Error(typeof error === 'string' ? error : error.message);
+		throw new Error(
+			typeof error === 'string' ? error : (error as any)?.message
+		);
 	}
 }

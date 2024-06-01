@@ -12,13 +12,9 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ElectronIpcService } from '../services/electron-ipc.service';
 import { WindowApiConst } from 'shared-lib';
 import { LapiService } from '../services/lapi.service';
-import { combineLatest, Subscription, throttleTime } from 'rxjs';
+import { combineLatest, Subscription } from 'rxjs';
 import { ApiService } from '../../../shared/stdlib/api.service';
-import { NavController, AlertController } from '@ionic/angular';
-import {
-	DownloadDetails,
-	FileDownloadRequest,
-} from 'shared-lib/models/event-request-response';
+import { DownloadDetails } from 'shared-lib/models/event-request-response';
 import { models } from '../../../shared/stdlib/api.service';
 import { Config } from 'shared-lib/models/types';
 import { LocaltronService } from '../services/localtron.service';
@@ -29,7 +25,7 @@ import { LocaltronService } from '../services/localtron.service';
 	styleUrl: './startup.component.scss',
 })
 export class StartupComponent implements OnInit {
-	@ViewChild('logContainer') private logContainer: ElementRef;
+	@ViewChild('logContainer') private logContainer!: ElementRef;
 	log = 'Installation logs will be streamed here. Please wait...\n';
 	scrollToBottom(): void {
 		try {
@@ -40,7 +36,6 @@ export class StartupComponent implements OnInit {
 
 	models = models;
 	allIsWell = false;
-	theSelectedModel;
 	isDownloading = false;
 	downloaded = false;
 	restartIsRequired = false;
@@ -54,15 +49,16 @@ export class StartupComponent implements OnInit {
 	};
 
 	toggleSection(section: string) {
-		this.showSections[section] = !this.showSections[section];
+		type ShowSectionsKeys = keyof typeof this.showSections;
+		this.showSections[section as ShowSectionsKeys] =
+			!this.showSections[section as ShowSectionsKeys];
 	}
 
 	constructor(
 		private ipcService: ElectronIpcService,
 		public lapi: LapiService,
 		private localtron: LocaltronService,
-		private apiService: ApiService,
-		private navCtrl: NavController
+		private apiService: ApiService
 	) {}
 
 	handleDownloadStatus(data: DownloadDetails) {
@@ -126,6 +122,9 @@ export class StartupComponent implements OnInit {
 		let selectedExists = false;
 		this.subscriptions.push(
 			this.lapi.onModelCheck$.subscribe((data) => {
+				if (data.selectedExists === undefined) {
+					return;
+				}
 				if (data.selectedExists !== selectedExists) {
 					selectedExists = data.selectedExists;
 				}

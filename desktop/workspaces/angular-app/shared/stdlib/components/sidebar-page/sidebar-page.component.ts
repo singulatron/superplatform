@@ -8,15 +8,9 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-import {
-	Input,
-	Component,
-	ViewContainerRef,
-	ViewChild,
-	ChangeDetectorRef,
-} from '@angular/core';
+import { Input, Component, ViewChild } from '@angular/core';
 import { NavController } from '@ionic/angular';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs/operators';
 
 @Component({
@@ -28,20 +22,18 @@ export class SidebarPageComponent {
 	id = Math.random().toString(36).substring(7);
 	currentPath = '';
 
-	@ViewChild('template', { static: true }) template;
+	@ViewChild('template', { static: true }) template: any;
 
-	@Input() title: string;
-	@Input() icon: string;
+	@Input() title: string = '';
+	@Input() icon: string = '';
 	@Input() noModal: boolean = false;
 	@Input() appsModal: boolean = false;
 	@Input() noBackButton: boolean = false;
 	@Input() themeKey: string = '';
 
 	constructor(
-		private viewContainerRef: ViewContainerRef,
+		// private viewContainerRef: ViewContainerRef,
 		public navCtrl: NavController,
-		private router: Router,
-		private cdr: ChangeDetectorRef,
 		private activatedRoute: ActivatedRoute
 	) {}
 

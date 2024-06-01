@@ -207,10 +207,11 @@ function installWindows() {
 		executeSquirrelCommand(['--createShortcut', target], done);
 	}
 
-	function uninstall(done: () => void) {
-		var target = process.execPath;
-		executeSquirrelCommand(['--removeShortcut', target], done);
-	}
+	// @todo fix this
+	// function uninstall(done: () => void) {
+	// 	var target = process.execPath;
+	// 	executeSquirrelCommand(['--removeShortcut', target], done);
+	// }
 
 	install(() => {
 		console.log('Shortcut created.');

@@ -20,7 +20,6 @@ const username = os.userInfo().username;
 
 export class OSManager {
 	logFilePath: string;
-	tempScriptPath: string;
 
 	constructor(
 		private assetFolder: string,

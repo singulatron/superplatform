@@ -8,14 +8,10 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-import { IpcMainEvent, dialog } from 'electron';
-import { WindowApiConst } from 'shared-lib';
+import { IpcMainEvent } from 'electron';
 import * as si from 'systeminformation';
 
-import {
-	GraphicsInfoRequest,
-	OnGraphicsInfo,
-} from 'shared-lib/models/event-request-response';
+import { GraphicsInfoRequest } from 'shared-lib/models/event-request-response';
 
 export function graphicsInfoRequest(
 	event: IpcMainEvent,
@@ -27,9 +23,9 @@ export function graphicsInfoRequest(
 		.then((data) => {
 			// The 'controllers' property contains information about the video cards
 			if (data.controllers && data.controllers.length > 0) {
-				let ev: OnGraphicsInfo = {
-					controllers: data.controllers as any,
-				};
+				// let ev: OnGraphicsInfo = {
+				// 	controllers: data.controllers as any,
+				// };
 				// event.sender.send(WindowApiConst.ON_GRAPHICS_INFO, ev);
 			}
 		})

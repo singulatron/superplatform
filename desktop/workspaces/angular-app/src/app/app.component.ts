@@ -8,7 +8,7 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ElectronIpcService } from './services/electron-ipc.service';
 import { WindowApiConst } from 'shared-lib';
 import { Log } from '../../shared/backend-api/app';
@@ -33,12 +33,14 @@ const originalConsole = {
 };
 
 function overrideConsole(ipcService: ElectronIpcService) {
-	['log', 'error', 'warn', 'info', 'debug', 'trace'].forEach((methodName) => {
-		console[methodName] = (...args) => {
+	['log', 'error', 'warn', 'info', 'debug', 'trace'].forEach((mn) => {
+		const methodName: keyof Console = mn as any;
+
+		console[methodName] = ((...args: any[]) => {
 			if (!loggingEnabled) {
 				return;
 			}
-			originalConsole[methodName](...args);
+			(originalConsole as any)[methodName](...args);
 			try {
 				let req: Log = {
 					level: methodName,
@@ -50,7 +52,7 @@ function overrideConsole(ipcService: ElectronIpcService) {
 			} catch (err) {
 				originalConsole.error('Cannot send log to IPC', err);
 			}
-		};
+		}) as any;
 	});
 }
 
@@ -63,7 +65,7 @@ export class AppComponent {
 	title = 'singulatron-angular-app';
 
 	constructor(private ipcService: ElectronIpcService) {
-		overrideConsole(ipcService);
+		overrideConsole(this.ipcService);
 	}
 
 	ngOnInit(): void {}
