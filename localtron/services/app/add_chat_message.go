@@ -64,5 +64,10 @@ func (a *AppService) AddChatMessage(chatMessage *apptypes.ChatMessage) error {
 	lib.Logger.Info("Saving chat message",
 		slog.String("messageId", chatMessage.Id),
 	)
+
+	a.firehoseService.Publish(apptypes.EventChatMessageAdded{
+		ThreadId: threadId,
+	})
+
 	return a.saveChatFile()
 }

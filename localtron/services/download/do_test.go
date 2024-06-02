@@ -21,6 +21,7 @@ import (
 	"time"
 
 	types "github.com/singulatron/singulatron/localtron/services/download/types"
+	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -45,7 +46,8 @@ func TestDownloadFile(t *testing.T) {
 	}
 	// defer os.RemoveAll(dir)
 
-	dm, _ := NewDownloadService()
+	fs, _ := firehoseservice.NewFirehoseService()
+	dm, _ := NewDownloadService(fs)
 	dm.StateFilePath = path.Join(dir, "downloadFile.json")
 	dm.Do(server.URL, dir)
 
@@ -93,7 +95,8 @@ func TestDownloadFileWithPartFile(t *testing.T) {
 		t.Fatalf("Failed to create part file: %s", err)
 	}
 
-	dm, _ := NewDownloadService()
+	fs, _ := firehoseservice.NewFirehoseService()
+	dm, _ := NewDownloadService(fs)
 	dm.StateFilePath = path.Join(dir, "downloadFilePartial.json")
 
 	assert.NoError(t, dm.Do(downloadURL, dir))
@@ -135,7 +138,8 @@ func TestDownloadFileWithFullFile(t *testing.T) {
 		t.Fatalf("Failed to create part file: %s", err)
 	}
 
-	dm, _ := NewDownloadService()
+	fs, _ := firehoseservice.NewFirehoseService()
+	dm, _ := NewDownloadService(fs)
 	dm.StateFilePath = path.Join(dir, "downloadFileFull.json")
 	dm.Do(downloadURL, dir)
 

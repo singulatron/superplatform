@@ -56,42 +56,6 @@ export interface OnGraphicsInfo {
 	}>;
 }
 
-export interface FileDownloadRequest {
-	url: string;
-	folderPath?: string;
-	fileName?: string;
-}
-
-// TODO: should move to frontend
-export interface DownloadDetails {
-	id: string;
-	url: string;
-	fileName: string;
-	dir?: string;
-	progress?: number;
-	downloadedBytes: number;
-	fullFileSize?: number;
-	status: 'inProgress' | 'completed' | 'paused' | 'cancelled' | 'failed';
-	filePath?: string;
-	paused?: boolean;
-	cancelled?: boolean;
-	error?: string;
-}
-
-export interface OnFileDownloadStatus {
-	allDownloads: DownloadDetails[];
-}
 export interface OnSystemLanguage {
 	systemLanguage: string;
-}
-
-export interface DockerImagePullStatus {
-	status: 'pulling' | 'done' | 'error';
-	progressPercent?: number;
-	imageName?: string;
-	error?: any;
-}
-
-export interface LogRequest {
-	args: any[];
 }

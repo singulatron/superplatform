@@ -37,6 +37,9 @@ import (
 	promptservice "github.com/singulatron/singulatron/localtron/services/prompt"
 	promptendpoints "github.com/singulatron/singulatron/localtron/services/prompt/endpoints"
 
+	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
+	firehoseendpoints "github.com/singulatron/singulatron/localtron/services/firehose/endpoints"
+
 	"github.com/singulatron/singulatron/localtron/lib"
 )
 
@@ -74,7 +77,12 @@ func main() {
 		log.Fatal(err)
 	}
 
-	downloadService, err := downloadservice.NewDownloadService()
+	firehoseService, err := firehoseservice.NewFirehoseService()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	downloadService, err := downloadservice.NewDownloadService(firehoseService)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -95,6 +103,10 @@ func main() {
 	appl := applicator(mws)
 
 	router := http.NewServeMux()
+
+	router.HandleFunc("/firehose/subscribe", appl(func(w http.ResponseWriter, r *http.Request) {
+		firehoseendpoints.Subscribe(w, r, firehoseService)
+	}))
 
 	router.HandleFunc("/download/do", appl(func(w http.ResponseWriter, r *http.Request) {
 		downloadendpoints.Do(w, r, downloadService)
@@ -133,7 +145,7 @@ func main() {
 		configendpoints.Get(w, r, configService)
 	}))
 
-	appService, err := appservice.NewAppService(configService)
+	appService, err := appservice.NewAppService(configService, firehoseService)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -186,7 +198,7 @@ func main() {
 		appendpoints.UpdateChatThread(w, r, appService)
 	}))
 
-	promptService := promptservice.NewPromptService(modelService, appService)
+	promptService := promptservice.NewPromptService(modelService, appService, firehoseService)
 
 	router.HandleFunc("/prompt/add", appl(func(w http.ResponseWriter, r *http.Request) {
 		promptendpoints.Add(w, r, promptService)

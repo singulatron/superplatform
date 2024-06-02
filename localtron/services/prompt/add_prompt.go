@@ -11,19 +11,26 @@
 package promptservice
 
 import (
-	"time"
-
+	"github.com/singulatron/singulatron/localtron/lib"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
 )
 
 func (p *PromptService) AddPrompt(prompt *prompttypes.Prompt) error {
-	p.mutex.Lock()
-	defer p.mutex.Unlock()
-
-	if prompt.Time == "" {
-		prompt.Time = time.Now().Format(time.RFC3339)
-	}
+	p.promptsToProcessMutex.Lock()
 	p.promptsToProcess = append(p.promptsToProcess, prompt)
-	p.TriggerPromptProcessing()
+	p.promptsToProcessMutex.Unlock()
+
+	p.firehoseService.Publish(prompttypes.EventPromptAdded{})
+
+	go p.triggerPromptProcessing()
 	return nil
+}
+
+func (p *PromptService) triggerPromptProcessing() {
+	select {
+	case p.trigger <- true:
+		lib.Logger.Debug("Prompt trigger signal sent")
+	default:
+		lib.Logger.Debug("Prompt trigger signal skipped, already pending")
+	}
 }

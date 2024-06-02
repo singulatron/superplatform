@@ -20,9 +20,12 @@ import (
 
 	"github.com/singulatron/singulatron/localtron/lib"
 	types "github.com/singulatron/singulatron/localtron/services/download/types"
+	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
 )
 
 type DownloadService struct {
+	firehoseService *firehoseservice.FirehoseService
+
 	downloads     map[string]*types.Download
 	lock          sync.Mutex
 	StateFilePath string
@@ -30,9 +33,11 @@ type DownloadService struct {
 	hasChanged    bool
 }
 
-func NewDownloadService() (*DownloadService, error) {
+func NewDownloadService(firehoseService *firehoseservice.FirehoseService) (*DownloadService, error) {
 	home, _ := os.UserHomeDir()
 	ret := &DownloadService{
+		firehoseService: firehoseService,
+
 		StateFilePath: path.Join(home, "singulatron_downloads.json"),
 		downloads:     make(map[string]*types.Download),
 	}
@@ -104,6 +109,8 @@ func (ds *DownloadService) saveState() error {
 	}
 	ds.hasChanged = false
 	ds.lock.Unlock()
+
+	ds.firehoseService.Publish(types.EventDownloadStatusChange{})
 
 	err = os.WriteFile(ds.StateFilePath, data, 0666)
 	if err != nil {

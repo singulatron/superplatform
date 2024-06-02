@@ -22,31 +22,42 @@ import (
 	"github.com/pkg/errors"
 	apptypes "github.com/singulatron/singulatron/localtron/services/app/types"
 	configservice "github.com/singulatron/singulatron/localtron/services/config"
+	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
 )
 
 type AppService struct {
-	LogBuffer     []apptypes.Log
-	TriggerSend   chan bool
-	Timer         *time.Timer
-	configService *configservice.ConfigService
-	clientId      string
+	configService   *configservice.ConfigService
+	firehoseService *firehoseservice.FirehoseService
+
+	LogBuffer   []apptypes.Log
+	TriggerSend chan bool
+	Timer       *time.Timer
+
+	clientId     string
+	ChatFilePath string
+	chatFile     *apptypes.ChatFile
+
 	chatFileMutex sync.Mutex
-	ChatFilePath  string
-	chatFile      *apptypes.ChatFile
 	logMutex      sync.Mutex
 }
 
-func NewAppService(cs *configservice.ConfigService) (*AppService, error) {
+func NewAppService(
+	cs *configservice.ConfigService,
+	fs *firehoseservice.FirehoseService,
+) (*AppService, error) {
 	ci, err := cs.GetClientId()
 	if err != nil {
 		return nil, errors.Wrap(err, "app service canno get client id")
 	}
 	service := &AppService{
-		LogBuffer:     make([]apptypes.Log, 0),
-		TriggerSend:   make(chan bool, 1),
-		Timer:         time.NewTimer(10 * time.Second),
-		configService: cs,
-		clientId:      ci,
+		configService:   cs,
+		firehoseService: fs,
+
+		LogBuffer:   make([]apptypes.Log, 0),
+		TriggerSend: make(chan bool, 1),
+		Timer:       time.NewTimer(10 * time.Second),
+
+		clientId: ci,
 	}
 	service.ChatFilePath = path.Join(cs.ConfigDirectory, "chats.json")
 	err = service.loadChatFile()

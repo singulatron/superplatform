@@ -20,18 +20,22 @@ import {
 import { Subscription } from 'rxjs';
 
 import { ChangeDetectorRef } from '@angular/core';
-import { finalize } from 'rxjs';
 import { ApiService } from '../../stdlib/api.service';
 
+import { LocaltronService } from '../../../src/app/services/localtron.service';
 import {
+	ChatService,
 	ChatThread,
 	ChatMessage,
-	LocaltronService,
-	Model,
+} from '../../../src/app/services/chat.service';
+import {
 	Prompt,
-} from '../../../src/app/services/localtron.service';
+	PromptService,
+} from '../../../src/app/services/prompt.service';
+import { Model } from '../../../src/app/services/model.service';
 
-import { LapiService } from '../../../src/app/services/lapi.service';
+import { ElectronAppService } from '../../../src/app/services/electron-app.service';
+import { ConfigService } from '../../../src/app/services/config.service';
 
 const defaultThreadName = 'New chat';
 
@@ -74,8 +78,11 @@ export class ChatBoxComponent implements OnChanges {
 	constructor(
 		private api: ApiService,
 		private localtron: LocaltronService,
-		public lapi: LapiService,
-		private cd: ChangeDetectorRef
+		public lapi: ElectronAppService,
+		private cd: ChangeDetectorRef,
+		private configService: ConfigService,
+		private promptService: PromptService,
+		private chatService: ChatService
 	) {}
 
 	private subscriptions: Subscription[] = [];
@@ -83,10 +90,18 @@ export class ChatBoxComponent implements OnChanges {
 	async ngOnInit() {
 		this.models = await this.api.getModels();
 		this.subscriptions.push(
-			this.lapi.onConfigUpdate$.subscribe(async (config) => {
+			this.configService.onConfigUpdate$.subscribe(async (config) => {
 				this.model = this.models?.find(
 					(m) => m.id == config?.model?.currentModelId
 				);
+			})
+		);
+		this.subscriptions.push(
+			this.chatService.onChatMessageAdded$.subscribe(async (event) => {
+				if (this.thread?.id && this.thread.id == event.threadId) {
+					let rsp = await this.chatService.chatMessages(this.thread?.id);
+					this.messages = rsp.messages;
+				}
 			})
 		);
 	}
@@ -120,23 +135,17 @@ export class ChatBoxComponent implements OnChanges {
 				threadId = this.thread.id as string;
 			} else {
 				threadId = changes.thread.currentValue.id;
-				let rsp = await this.localtron.chatMessages(threadId);
+				let rsp = await this.chatService.chatMessages(threadId);
 				this.messages = rsp.messages;
 			}
 
-			this.promptSubscription = this.localtron.onPromptListUpdate$.subscribe(
-				(promptList) => {
+			this.promptSubscription =
+				this.promptService.onPromptListUpdate$.subscribe((promptList) => {
 					let promptQueue = promptList?.filter((p) => {
 						return p.threadId == threadId;
 					});
-					if (promptQueue?.length != this.promptQueue?.length) {
-						this.localtron.chatMessages(threadId).then((rsp) => {
-							this.messages = rsp.messages;
-						});
-					}
 					this.promptQueue = promptQueue;
-				}
-			);
+				});
 
 			this.messageCurrentlyStreamed = '';
 			let first = true;
@@ -144,7 +153,7 @@ export class ChatBoxComponent implements OnChanges {
 			// We are always subscribed to this, even if streaming is not happening
 			// right now. There is always one streaming that is subscribed to
 			// - the current thread on screen.
-			this.streamSubscription = this.localtron
+			this.streamSubscription = this.promptService
 				.promptSubscribe(threadId)
 				.subscribe(async (response) => {
 					if (
@@ -175,7 +184,9 @@ export class ChatBoxComponent implements OnChanges {
 						if (this.messages?.length == 1) {
 							this.setThreadName(this.messages[0].messageContent);
 						}
-						let rsp = await this.localtron.chatMessages(threadId);
+						// @todo might not be needed now we have the `chatMessageAdded`
+						// event coming from the firehose
+						let rsp = await this.chatService.chatMessages(threadId);
 						this.messages = rsp.messages;
 						this.messageCurrentlyStreamed = '';
 					}
@@ -228,7 +239,7 @@ export class ChatBoxComponent implements OnChanges {
 			? this.promptTemplate.replace('{prompt}', fullContext)
 			: fullContext;
 
-		await this.localtron.promptAdd({
+		await this.promptService.promptAdd({
 			id: this.localtron.uuid(),
 			prompt: fullPrompt,
 			message: msg,
@@ -258,37 +269,44 @@ export class ChatBoxComponent implements OnChanges {
 	}
 
 	setThreadName(msg: string) {
+		if (!msg) {
+			return;
+		}
 		if (this.thread?.name !== defaultThreadName) {
 			return;
 		}
 
-		let prompt = this.promptTemplate
-			? this.promptTemplate.replace(
-					'{prompt}',
-					this.threadNameSummaryTemplate.replace('{message}', msg)
-				)
-			: msg;
-		let newThreadName = '';
-		this.localtron
-			.prompt({
-				prompt: prompt,
-				stream: true,
-			})
-			.pipe(finalize(() => {}))
-			.subscribe((response) => {
-				if (response?.choices?.length > 0 && response?.choices[0]?.text) {
-					newThreadName += response?.choices[0].text;
-					this.thread.name = newThreadName;
-					this.localtron.chatThreadUpdate(this.thread);
+		// @todo this we dont talk to LLM locally anymore
+		// add syncron prompt to prompt service that talks to localtron
 
-					this.cd.detectChanges();
-				}
-			});
+		// let prompt = this.promptTemplate
+		// 	? this.promptTemplate.replace(
+		// 			'{prompt}',
+		// 			this.threadNameSummaryTemplate.replace('{message}', msg)
+		// 		)
+		// 	: msg;
+		// let newThreadName = '';
+
+		//this.promptService
+		//	.prompt({
+		//		prompt: prompt,
+		//		stream: true,
+		//	})
+		//	.pipe(finalize(() => {}))
+		//	.subscribe((response) => {
+		//		if (response?.choices?.length > 0 && response?.choices[0]?.text) {
+		//			newThreadName += response?.choices[0].text;
+		//			this.thread.name = newThreadName;
+		//			this.localtron.chatThreadUpdate(this.thread);
+		//
+		//			this.cd.detectChanges();
+		//		}
+		//	});
 	}
 
 	propagateCopyToClipboard(text: string | undefined) {
 		if (text === undefined) {
-			return
+			return;
 		}
 		this.onCopyToClipboard.emit(text);
 	}
@@ -297,7 +315,7 @@ export class ChatBoxComponent implements OnChanges {
 		if (messageId === undefined) {
 			return;
 		}
-		this.localtron.chatMessageDelete(messageId);
+		this.chatService.chatMessageDelete(messageId);
 		this.messages = this.messages.filter((m) => m.id !== messageId);
 	}
 

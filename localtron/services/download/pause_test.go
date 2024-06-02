@@ -21,6 +21,7 @@ import (
 	"time"
 
 	types "github.com/singulatron/singulatron/localtron/services/download/types"
+	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -49,7 +50,8 @@ func TestDownloadPauseAndResume(t *testing.T) {
 
 	downloadURL := server.URL + "/file"
 
-	dm, _ := NewDownloadService()
+	fs, _ := firehoseservice.NewFirehoseService()
+	dm, _ := NewDownloadService(fs)
 	dm.StateFilePath = path.Join(dir, "downloadPauseResume.json")
 
 	assert.NoError(t, dm.Do(downloadURL, dir))
