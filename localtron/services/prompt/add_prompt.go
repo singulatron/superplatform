@@ -20,6 +20,8 @@ func (p *PromptService) AddPrompt(prompt *prompttypes.Prompt) error {
 	p.promptsToProcess = append(p.promptsToProcess, prompt)
 	p.promptsToProcessMutex.Unlock()
 
+	p.firehoseService.Publish(prompttypes.EventPromptAdded{})
+
 	go p.triggerPromptProcessing()
 	return nil
 }

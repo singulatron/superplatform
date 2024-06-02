@@ -82,7 +82,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	downloadService, err := downloadservice.NewDownloadService()
+	downloadService, err := downloadservice.NewDownloadService(firehoseService)
 	if err != nil {
 		log.Fatal(err)
 	}

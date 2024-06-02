@@ -44,7 +44,7 @@ type ListPromptsResponse struct {
 const EventPromptAddedName = "promptAdded"
 
 type EventPromptAdded struct {
-	Prompt Prompt `json:"prompt"`
+	PromptId string `json:"promptId"`
 }
 
 func (e EventPromptAdded) Name() string {
@@ -61,7 +61,7 @@ func (e EventPromptProcessingStarted) Name() string {
 	return EventPromptProcessingStartedName
 }
 
-const EventPromptProcessingFinishedName = "promptProcessingStarted"
+const EventPromptProcessingFinishedName = "promptProcessingFinished"
 
 type EventPromptProcessingFinished struct {
 	PromptId string `json:"promptId"`
@@ -70,13 +70,4 @@ type EventPromptProcessingFinished struct {
 
 func (e EventPromptProcessingFinished) Name() string {
 	return EventPromptProcessingFinishedName
-}
-
-const EventPromptListChangedName = "promptListChanged"
-
-type EventPromptListChanged struct {
-}
-
-func (e EventPromptListChanged) Name() string {
-	return EventPromptListChangedName
 }

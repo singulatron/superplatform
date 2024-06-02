@@ -96,6 +96,14 @@ export class ChatBoxComponent implements OnChanges {
 				);
 			})
 		);
+		this.subscriptions.push(
+			this.chatService.onChatMessageAdded$.subscribe(async (event) => {
+				if (this.thread?.id && this.thread.id == event.threadId) {
+					let rsp = await this.chatService.chatMessages(this.thread?.id);
+					this.messages = rsp.messages;
+				}
+			})
+		);
 	}
 
 	streamSubscription!: Subscription;
@@ -176,6 +184,8 @@ export class ChatBoxComponent implements OnChanges {
 						if (this.messages?.length == 1) {
 							this.setThreadName(this.messages[0].messageContent);
 						}
+						// @todo might not be needed now we have the `chatMessageAdded`
+						// event coming from the firehose
 						let rsp = await this.chatService.chatMessages(threadId);
 						this.messages = rsp.messages;
 						this.messageCurrentlyStreamed = '';

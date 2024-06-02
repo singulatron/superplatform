@@ -69,7 +69,6 @@ type DownloadsResponse struct {
 const EventDownloadStatusChangeName = "downloadStatusChange"
 
 type EventDownloadStatusChange struct {
-	AllDownloads []DownloadDetails
 }
 
 func (e EventDownloadStatusChange) Name() string {
