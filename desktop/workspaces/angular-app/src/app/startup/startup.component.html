@@ -22,7 +22,7 @@
 				<ion-item button detail (click)="toggleSection('dependencies')">
 					<ion-icon
 						[ngStyle]="
-							(dockerService?.onDockerInfo$ | async)?.hasDocker
+							(dockerService.onDockerInfo$ | async)?.hasDocker
 								? { color: '#53DD6C' }
 								: {}
 						"
@@ -32,10 +32,10 @@
 					<ion-label>{{ 'Dependencies' | translate }}</ion-label>
 				</ion-item>
 				<ion-list class="dropdown" *ngIf="showSections.dependencies">
-					<ion-item *ngIf="(dockerService?.onDockerInfo$ | async)?.hasDocker">
+					<ion-item *ngIf="(dockerService.onDockerInfo$ | async)?.hasDocker">
 						{{ 'You have all the required dependecies. Yay!' | translate }}
 					</ion-item>
-					<ion-item *ngIf="!(dockerService?.onDockerInfo$ | async)?.hasDocker">
+					<ion-item *ngIf="!(dockerService.onDockerInfo$ | async)?.hasDocker">
 						<ion-label>
 							<ng-container *ngIf="!isRuntimeInstalling">
 								<div>
@@ -90,11 +90,11 @@
 					</ion-item>
 				</ion-list>
 
-				<ng-container *ngIf="(dockerService?.onDockerInfo$ | async)?.hasDocker">
+				<ng-container *ngIf="(dockerService.onDockerInfo$ | async)?.hasDocker">
 					<ion-item button detail (click)="toggleSection('model')">
 						<ion-icon
 							[ngStyle]="
-								(modelService?.onModelCheck$ | async)?.selectedExists
+								(modelService.onModelCheck$ | async)?.selectedExists
 									? { color: '#53DD6C' }
 									: {}
 							"
@@ -168,7 +168,7 @@
 										>
 											{{ 'Download folder' | translate }}:&nbsp;
 											<span style="color: #666">{{
-												(configService?.onConfigUpdate$ | async)?.download
+												(configService.onConfigUpdate$ | async)?.download
 													?.downloadFolder
 											}}</span>
 										</div>
@@ -186,7 +186,7 @@
 								<h2>
 									<app-downloading
 										[url]="
-											(configService?.onConfigUpdate$ | async)?.model
+											(configService.onConfigUpdate$ | async)?.model
 												?.currentModelId || ''
 										"
 										(downloadStatusChange)="handleDownloadStatus($event)"

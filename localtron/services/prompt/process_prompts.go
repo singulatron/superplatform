@@ -55,10 +55,11 @@ func (p *PromptService) processNextPrompt() {
 		p.promptsToProcessMutex.Unlock()
 
 		p.currentPrompt.IsBeingProcessed = true
+		lib.Logger.Info("Picking up prompt from queue", slog.String("promptId", p.currentPrompt.Id))
+
 		p.firehoseService.Publish(prompttypes.EventPromptProcessingStarted{
 			PromptId: p.currentPrompt.Id,
 		})
-		lib.Logger.Info("Picking up prompt from queue", slog.String("promptId", p.currentPrompt.Id))
 
 		err := p.processPromptWrapper()
 		if err != nil {
@@ -83,12 +84,9 @@ func (p *PromptService) processPromptWrapper() error {
 	}()
 
 	err = p.processPrompt()
+	var errStr string
 	if err != nil {
-		p.firehoseService.Publish(prompttypes.EventPromptProcessingFinished{
-			PromptId: p.currentPrompt.Id,
-			Error:    err.Error(),
-		})
-
+		errStr = err.Error()
 		lib.Logger.Error("Prompt process errored, putting prompt back to queue",
 			slog.String("error", err.Error()),
 		)
@@ -98,10 +96,15 @@ func (p *PromptService) processPromptWrapper() error {
 		p.promptsToProcessMutex.Lock()
 		p.promptsToProcess = append([]*prompttypes.Prompt{p.currentPrompt}, p.promptsToProcess...)
 		p.promptsToProcessMutex.Unlock()
-		p.currentPrompt = nil
 	}
 
+	p.firehoseService.Publish(prompttypes.EventPromptProcessingFinished{
+		PromptId: p.currentPrompt.Id,
+		Error:    errStr,
+	})
+
 	p.currentPrompt = nil
+
 	return nil
 }
 

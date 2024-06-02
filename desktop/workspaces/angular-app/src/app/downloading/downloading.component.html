@@ -18,7 +18,7 @@
 		<span *ngIf="details?.status == 'paused'">{{
 			'Download paused at' | translate
 		}}</span
-		>&nbsp;{{ details?.progress | number: '1.2-2' }}%.
+		>&nbsp;{{ details.progress | number: '1.2-2' }}%.
 		<ion-spinner
 			*ngIf="details?.status == 'inProgress'"
 			style="margin-left: 1rem"
