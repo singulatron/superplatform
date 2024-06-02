@@ -1,7 +1,7 @@
 import { _electron as electron } from 'playwright';
 import { Page } from '@playwright/test';
 import { test, expect } from '@playwright/test';
-import { findLatestBuild, parseElectronAppService } from 'electron-playwright-helpers';
+import { findLatestBuild, parseElectronApp } from 'electron-playwright-helpers';
 import { join } from 'path';
 
 export async function tryInteract(
@@ -102,7 +102,7 @@ export async function testRun(
 		testInfo.setTimeout(options?.timeout || 300000);
 
 		const latestBuild = findLatestBuild();
-		const appInfo = parseElectronAppService(latestBuild);
+		const appInfo = parseElectronApp(latestBuild);
 
 		let app = await electron.launch({
 			args: [appInfo.main], // main file from package.json
