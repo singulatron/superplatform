@@ -8,7 +8,7 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-import { IpcMainEvent  } from 'electron';
+import { IpcMainEvent } from 'electron';
 import * as si from 'systeminformation';
 
 // import { OnOSInfo } from 'shared-lib/models/event-request-response';

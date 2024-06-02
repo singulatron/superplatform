@@ -10,10 +10,8 @@
  */
 import { ReplaySubject } from 'rxjs';
 import {
-
 	OnGraphicsInfo,
 	OnOSInfo,
-
 } from 'shared-lib/models/event-request-response';
 
 export class EventService {

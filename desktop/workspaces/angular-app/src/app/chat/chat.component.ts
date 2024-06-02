@@ -28,11 +28,11 @@ import { ConfigService } from '../services/config.service';
 export class ChatComponent implements OnInit {
 	public defaultPrompt = '[INST] {prompt} [/INST]';
 	public chatThreads: Array<ChatThread> = [];
-	public activeThread!: ChatThread;
-	public messages!: ChatMessage[];
+	public activeThread: ChatThread | null = null;
+	public messages: ChatMessage[] = [];
 
-	public model!: Model;
-	private models!: Model[];
+	public model: Model | null = null;
+	private models: Model[] = [];
 
 	private subscriptions: Subscription[] = [];
 

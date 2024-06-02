@@ -287,7 +287,8 @@
 			></ion-icon>
 			<ion-icon
 				*ngIf="
-					(configService.onConfigUpdate$ | async)?.model?.currentModelId === model.id
+					(configService.onConfigUpdate$ | async)?.model?.currentModelId ===
+					model.id
 				"
 				name="play-outline"
 			></ion-icon>

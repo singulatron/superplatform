@@ -65,7 +65,7 @@ const EventPromptProcessingFinishedName = "promptProcessingFinished"
 
 type EventPromptProcessingFinished struct {
 	PromptId string `json:"promptId"`
-	Error    string `json:"error"`
+	Error    string `json:"error,omitempty"`
 }
 
 func (e EventPromptProcessingFinished) Name() string {
