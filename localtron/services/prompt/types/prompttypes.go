@@ -54,7 +54,7 @@ func (e EventPromptAdded) Name() string {
 const EventPromptProcessingStartedName = "promptProcessingStarted"
 
 type EventPromptProcessingStarted struct {
-	Prompt Prompt `json:"prompt"`
+	PromptId string `json:"promptId"`
 }
 
 func (e EventPromptProcessingStarted) Name() string {
@@ -64,8 +64,8 @@ func (e EventPromptProcessingStarted) Name() string {
 const EventPromptProcessingFinishedName = "promptProcessingStarted"
 
 type EventPromptProcessingFinished struct {
-	Prompt Prompt `json:"prompt"`
-	Error  string `json:"error"`
+	PromptId string `json:"promptId"`
+	Error    string `json:"error"`
 }
 
 func (e EventPromptProcessingFinished) Name() string {

@@ -11,6 +11,7 @@
 import { Injectable } from '@angular/core';
 import { LocaltronService } from './localtron.service';
 import { ReplaySubject, Observable } from 'rxjs';
+import { FirehoseService } from './firehose.service';
 
 @Injectable({
 	providedIn: 'root',
@@ -19,11 +20,23 @@ export class PromptService {
 	onPromptListUpdateSubject = new ReplaySubject<Prompt[]>(1);
 	onPromptListUpdate$ = this.onPromptListUpdateSubject.asObservable();
 
-	constructor(private localtron: LocaltronService) {
+	constructor(
+		private localtron: LocaltronService,
+		private firehoseService: FirehoseService
+	) {
 		this.init();
 	}
 
 	async init() {
+		this.firehoseService.firehoseEvent$.subscribe(async (event) => {
+			switch (event.name) {
+				case 'promptListChanged':
+					let rsp = await this.promptList();
+					this.onPromptListUpdateSubject.next(rsp.prompts);
+					break;
+			}
+		});
+
 		try {
 			let rsp = await this.promptList();
 

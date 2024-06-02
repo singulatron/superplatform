@@ -56,7 +56,7 @@ func (p *PromptService) processNextPrompt() {
 
 		p.currentPrompt.IsBeingProcessed = true
 		p.firehoseService.Publish(prompttypes.EventPromptProcessingStarted{
-			Prompt: *p.currentPrompt,
+			PromptId: p.currentPrompt.Id,
 		})
 		lib.Logger.Info("Picking up prompt from queue", slog.String("promptId", p.currentPrompt.Id))
 
@@ -85,8 +85,8 @@ func (p *PromptService) processPromptWrapper() error {
 	err = p.processPrompt()
 	if err != nil {
 		p.firehoseService.Publish(prompttypes.EventPromptProcessingFinished{
-			Prompt: *p.currentPrompt,
-			Error:  err.Error(),
+			PromptId: p.currentPrompt.Id,
+			Error:    err.Error(),
 		})
 
 		lib.Logger.Error("Prompt process errored, putting prompt back to queue",

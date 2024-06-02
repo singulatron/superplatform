@@ -10,6 +10,7 @@
  */
 import { Injectable } from '@angular/core';
 import { LocaltronService } from './localtron.service';
+import { FirehoseService } from './firehose.service';
 import { ReplaySubject } from 'rxjs';
 
 @Injectable({
@@ -19,11 +20,25 @@ export class DownloadService {
 	onFileDownloadStatusSubject = new ReplaySubject<DownloadStatusChangeEvent>(1);
 	onFileDownloadStatus$ = this.onFileDownloadStatusSubject.asObservable();
 
-	constructor(private localtron: LocaltronService) {
+	constructor(
+		private localtron: LocaltronService,
+		private firehoseService: FirehoseService
+	) {
 		this.init();
 	}
 
 	async init() {
+		this.firehoseService.firehoseEvent$.subscribe(async (event) => {
+			switch (event.name) {
+				case 'downloadStatusChange':
+					let rsp = await this.downloadList();
+					this.onFileDownloadStatusSubject.next({
+						allDownloads: rsp.downloads,
+					});
+					break;
+			}
+		});
+
 		try {
 			let rsp = await this.downloadList();
 			this.onFileDownloadStatusSubject.next({

@@ -135,3 +135,16 @@ func (dm *DownloadService) GetDownload(url string) (*types.Download, bool) {
 	v, ok := dm.downloads[url]
 	return v, ok
 }
+
+//
+// Event
+//
+
+const EventDownloadStatusChangeName = "downloadStatusChange"
+
+type EventDownloadStatusChange struct {
+}
+
+func (e EventDownloadStatusChange) Name() string {
+	return EventDownloadStatusChangeName
+}

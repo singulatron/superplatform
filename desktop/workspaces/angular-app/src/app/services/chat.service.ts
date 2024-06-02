@@ -11,6 +11,7 @@
 import { Injectable } from '@angular/core';
 import { LocaltronService } from './localtron.service';
 import { ReplaySubject } from 'rxjs';
+import { FirehoseService } from './firehose.service';
 
 @Injectable({
 	providedIn: 'root',
@@ -21,7 +22,22 @@ export class ChatService {
 	onChatMessageAddedSubject = new ReplaySubject<ChatMessageAddedEvent>(1);
 	onChatMessageAdded$ = this.onChatMessageAddedSubject.asObservable();
 
-	constructor(private localtron: LocaltronService) {}
+	constructor(
+		private localtron: LocaltronService,
+		private firehoseService: FirehoseService
+	) {
+		this.init();
+	}
+
+	async init() {
+		this.firehoseService.firehoseEvent$.subscribe(async (event) => {
+			switch (event.name) {
+				case 'chatMessageAdded':
+					this.onChatMessageAddedSubject.next(event.data);
+					break;
+			}
+		});
+	}
 
 	async chatMessageDelete(messageId: string): Promise<GetChatThreadResponse> {
 		let req: DeleteChatMessageRequest = { messageId: messageId };

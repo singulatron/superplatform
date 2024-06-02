@@ -10,27 +10,23 @@
  */
 import { Injectable } from '@angular/core';
 import { LocaltronService } from './localtron.service';
-import { DownloadService } from './download.service';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class FirehoseService {
-	constructor(
-		private localtron: LocaltronService,
-		private downloadService: DownloadService
-	) {
+	private firehoseEventSubject = new Subject<FirehoseEvent>();
+	public firehoseEvent$ = this.firehoseEventSubject.asObservable();
+
+	constructor(private localtron: LocaltronService) {
 		this.firehoseSubscribe().subscribe((event) => {
-			switch (event.name) {
-				case 'downloadStatusChange':
-					this.downloadService.onFileDownloadStatusSubject.next(event.data);
-			}
+			this.firehoseEventSubject.next(event);
 		});
 	}
 
 	// @todo a lot of this is duplication from promptSubscribe
-	firehoseSubscribe(): Observable<FirehoseEvent> {
+	private firehoseSubscribe(): Observable<FirehoseEvent> {
 		console.info('Subscribing to the firehose');
 
 		let uri =
