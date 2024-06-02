@@ -9,10 +9,10 @@
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
 import { Component } from '@angular/core';
-import { LocaltronService } from '../services/localtron.service';
 import { ElectronIpcService } from '../services/electron-ipc.service';
 import { WindowApiConst } from 'shared-lib';
 import { enableLogging, disableLogging } from '../app.component';
+import { LogService } from '../services/log.service';
 
 @Component({
 	selector: 'app-home',
@@ -23,12 +23,12 @@ export class HomeComponent {
 	loggingEnabled = true;
 
 	constructor(
-		private localtron: LocaltronService,
+		private logService: LogService,
 		private ipcService: ElectronIpcService
 	) {}
 
 	async ngOnInit() {
-		let logStatus = await this.localtron.appLogStatus();
+		let logStatus = await this.logService.logStatus();
 		this.loggingEnabled = logStatus.enabled;
 		if (!this.loggingEnabled) {
 			console.log('Logging is disabled');
@@ -46,8 +46,8 @@ export class HomeComponent {
 
 	async enableLog() {
 		this.loggingEnabled = true;
-		await this.localtron.appLogEnable();
-		let rsp = await this.localtron.appLogStatus();
+		await this.logService.logEnable();
+		let rsp = await this.logService.logStatus();
 		this.ipcService.send(WindowApiConst.ENABLE_LOGGING_REQUEST, null);
 		this.loggingEnabled = rsp.enabled;
 		enableLogging();
@@ -58,8 +58,8 @@ export class HomeComponent {
 		console.log('Disabled logging');
 		disableLogging();
 		this.loggingEnabled = false;
-		await this.localtron.appLogDisable();
-		let rsp = await this.localtron.appLogStatus();
+		await this.logService.logDisable();
+		let rsp = await this.logService.logStatus();
 		this.ipcService.send(WindowApiConst.DISABLE_LOGGING_REQUEST, null);
 		this.loggingEnabled = rsp.enabled;
 	}

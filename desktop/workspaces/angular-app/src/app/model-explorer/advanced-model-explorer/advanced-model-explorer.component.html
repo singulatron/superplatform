@@ -164,8 +164,14 @@
 						<ion-button
 							(click)="download(model.id)"
 							*ngIf="
-								!isDownloading(model.id, lapi.onFileDownloadStatus$ | async) &&
-								!downloaded(model.id, lapi.onFileDownloadStatus$ | async)
+								!isDownloading(
+									model.id,
+									downloadService.onFileDownloadStatus$ | async
+								) &&
+								!downloaded(
+									model.id,
+									downloadService.onFileDownloadStatus$ | async
+								)
 							"
 							fill="outline"
 							href="{{ model.id }}"
@@ -175,12 +181,17 @@
 						</ion-button>
 
 						<span
-							*ngIf="downloaded(model.id, lapi.onFileDownloadStatus$ | async)"
+							*ngIf="
+								downloaded(
+									model.id,
+									downloadService.onFileDownloadStatus$ | async
+								)
+							"
 						>
 							<ion-button
 								*ngIf="
-									(lapi.onConfigUpdate$ | async)?.model?.currentModelId !==
-									model.id
+									(configService.onConfigUpdate$ | async)?.model
+										?.currentModelId !== model.id
 								"
 								color="tertiary"
 								(click)="activateModel(model.id)"
@@ -191,8 +202,8 @@
 							</ion-button>
 							<ion-button
 								*ngIf="
-									(lapi.onConfigUpdate$ | async)?.model?.currentModelId ===
-									model.id
+									(configService.onConfigUpdate$ | async)?.model
+										?.currentModelId === model.id
 								"
 								color="tertiary"
 								(click)="activateModel(model.id)"
@@ -266,14 +277,17 @@
 		<ion-col>
 			<ion-icon
 				*ngIf="
-					!isDownloading(model.id, lapi.onFileDownloadStatus$ | async) &&
-					!downloaded(model.id, (lapi.onFileDownloadStatus$ | async))
+					!isDownloading(
+						model.id,
+						downloadService.onFileDownloadStatus$ | async
+					) &&
+					!downloaded(model.id, downloadService.onFileDownloadStatus$ | async)
 				"
 				name="cloud-download-outline"
 			></ion-icon>
 			<ion-icon
 				*ngIf="
-					(lapi.onConfigUpdate$ | async)?.model?.currentModelId === model.id
+					(configService.onConfigUpdate$ | async)?.model?.currentModelId === model.id
 				"
 				name="play-outline"
 			></ion-icon>

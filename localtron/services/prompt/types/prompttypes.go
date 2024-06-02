@@ -71,3 +71,12 @@ type EventPromptProcessingFinished struct {
 func (e EventPromptProcessingFinished) Name() string {
 	return EventPromptProcessingFinishedName
 }
+
+const EventPromptListChangedName = "promptListChanged"
+
+type EventPromptListChanged struct {
+}
+
+func (e EventPromptListChanged) Name() string {
+	return EventPromptListChangedName
+}

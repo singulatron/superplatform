@@ -9,10 +9,8 @@
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { ElectronAppService } from '../services/electron-app.service';
 import { Subscription, throttleTime } from 'rxjs';
-import { DownloadDetails } from 'shared-lib/models/event-request-response';
-import { LocaltronService } from '../services/localtron.service';
+import { DownloadService, DownloadDetails } from '../services/download.service';
 
 @Component({
 	selector: 'app-downloading',
@@ -25,16 +23,13 @@ export class DownloadingComponent {
 
 	details!: DownloadDetails;
 
-	constructor(
-		private lapi: ElectronAppService,
-		private localtron: LocaltronService
-	) {}
+	constructor(private downloadService: DownloadService) {}
 
 	subscriptions: Subscription[] = [];
 
 	ngOnInit() {
 		this.subscriptions.push(
-			this.lapi.onFileDownloadStatus$.subscribe((data) => {
+			this.downloadService.onFileDownloadStatus$.subscribe((data) => {
 				let d = data.allDownloads?.find((d) => {
 					return d.url == this.url;
 				});
@@ -49,7 +44,7 @@ export class DownloadingComponent {
 		);
 
 		this.subscriptions.push(
-			this.lapi.onFileDownloadStatus$
+			this.downloadService.onFileDownloadStatus$
 				.pipe(throttleTime(10 * 1000))
 				.subscribe((data) => {
 					let d = data.allDownloads?.find((d) => {
@@ -75,10 +70,10 @@ export class DownloadingComponent {
 	}
 
 	pauseDownload() {
-		this.localtron.downloadPause(this.url);
+		this.downloadService.downloadPause(this.url);
 	}
 
 	resumeDownload() {
-		this.localtron.downloadDo(this.url);
+		this.downloadService.downloadDo(this.url);
 	}
 }

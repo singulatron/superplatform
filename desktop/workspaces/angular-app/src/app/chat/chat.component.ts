@@ -9,19 +9,16 @@
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
 import { Component, OnInit } from '@angular/core';
-import {
-	LocaltronService,
-	ChatThread,
-	ChatMessage,
-	Model,
-	Prompt,
-} from '../services/localtron.service';
+import { LocaltronService } from '../services/localtron.service';
 
-import { ElectronAppService } from '../services/electron-app.service';
 import { ElectronIpcService } from '../services/electron-ipc.service';
 import { WindowApiConst } from 'shared-lib';
 import { Subscription } from 'rxjs';
 import { ApiService } from '../../../shared/stdlib/api.service';
+import { ChatService, ChatThread, ChatMessage } from '../services/chat.service';
+import { Prompt, PromptService } from '../services/prompt.service';
+import { Model } from '../services/model.service';
+import { ConfigService } from '../services/config.service';
 
 @Component({
 	selector: 'app-chat',
@@ -40,8 +37,10 @@ export class ChatComponent implements OnInit {
 	private subscriptions: Subscription[] = [];
 
 	constructor(
-		public localtron: LocaltronService,
-		public lapi: ElectronAppService,
+		private localtron: LocaltronService,
+		private chatService: ChatService,
+		private configService: ConfigService,
+		public promptService: PromptService,
 		private api: ApiService,
 		private ipcService: ElectronIpcService
 	) {}
@@ -49,7 +48,7 @@ export class ChatComponent implements OnInit {
 	async ngOnInit() {
 		await this.refreshThreadList();
 
-		let activeThreadId = this.localtron.getActiveThreadId();
+		let activeThreadId = this.chatService.getActiveThreadId();
 		if (activeThreadId) {
 			let activeThread = this.chatThreads?.find((v) => v.id === activeThreadId);
 			if (activeThread) {
@@ -67,7 +66,7 @@ export class ChatComponent implements OnInit {
 
 		this.models = await this.api.getModels();
 		this.subscriptions.push(
-			this.lapi.onConfigUpdate$.subscribe((conf) => {
+			this.configService.onConfigUpdate$.subscribe((conf) => {
 				let model = this.models?.find(
 					(m) => m.id == conf?.model?.currentModelId
 				);
@@ -90,9 +89,9 @@ export class ChatComponent implements OnInit {
 		if (!thread.id) {
 			return;
 		}
-		let rsp = await this.localtron.chatMessages(thread.id);
+		let rsp = await this.chatService.chatMessages(thread.id);
 		this.messages = rsp.messages;
-		this.localtron.setActiveThreadId(thread.id);
+		this.chatService.setActiveThreadId(thread.id);
 	}
 
 	public num(
@@ -128,12 +127,12 @@ export class ChatComponent implements OnInit {
 		if (!thread.id) {
 			return;
 		}
-		this.localtron.chatThreadDelete(thread.id);
+		this.chatService.chatThreadDelete(thread.id);
 		this.refreshThreadList();
 	}
 
 	public async refreshThreadList() {
-		let rsp = await this.localtron.chatThreads();
+		let rsp = await this.chatService.chatThreads();
 		this.chatThreads = rsp.threads;
 		if (!this.chatThreads?.length) {
 			this.chatThreads = [];
@@ -163,7 +162,7 @@ export class ChatComponent implements OnInit {
 			});
 			this.chatThreads.unshift(updatedThread);
 		}
-		this.localtron.chatThreadUpdate(updatedThread);
+		this.chatService.chatThreadUpdate(updatedThread);
 		if (!this.activeThread?.id) {
 			this.setThreadAsActive(updatedThread);
 		}

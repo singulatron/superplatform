@@ -14,10 +14,11 @@ import { WindowApiConst } from 'shared-lib';
 import { ElectronAppService } from '../services/electron-app.service';
 import { combineLatest, Subscription } from 'rxjs';
 import { ApiService } from '../../../shared/stdlib/api.service';
-import { DownloadDetails } from 'shared-lib/models/event-request-response';
+import { DownloadService, DownloadDetails } from '../services/download.service';
+import { ModelService } from '../services/model.service';
+import { DockerService } from '../services/docker.service';
 import { models } from '../../../shared/stdlib/api.service';
-import { Config } from 'shared-lib/models/types';
-import { LocaltronService } from '../services/localtron.service';
+import { ConfigService, Config } from '../services/config.service';
 
 @Component({
 	selector: 'app-startup',
@@ -57,7 +58,10 @@ export class StartupComponent implements OnInit {
 	constructor(
 		private ipcService: ElectronIpcService,
 		public lapi: ElectronAppService,
-		private localtron: LocaltronService,
+		public configService: ConfigService,
+		public downloadService: DownloadService,
+		public dockerService: DockerService,
+		public modelService: ModelService,
 		private apiService: ApiService
 	) {}
 
@@ -121,7 +125,7 @@ export class StartupComponent implements OnInit {
 
 		let selectedExists = false;
 		this.subscriptions.push(
-			this.lapi.onModelCheck$.subscribe((data) => {
+			this.modelService.onModelCheck$.subscribe((data) => {
 				if (data.selectedExists === undefined) {
 					return;
 				}
@@ -131,23 +135,24 @@ export class StartupComponent implements OnInit {
 			})
 		);
 
-		combineLatest([this.lapi.onDockerInfo$, this.lapi.onModelCheck$]).subscribe(
-			([dockerInfo, modelCheck]) => {
-				if (this.allIsWell) {
-					return;
-				}
-				if (!dockerInfo.hasDocker) {
-					this.showSections.dependencies = true;
-				} else if (!modelCheck.selectedExists) {
-					this.showSections.model = true;
-				} else {
-					this.showSections.starting = true;
-				}
+		combineLatest([
+			this.dockerService.onDockerInfo$,
+			this.modelService.onModelCheck$,
+		]).subscribe(([dockerInfo, modelCheck]) => {
+			if (this.allIsWell) {
+				return;
 			}
-		);
+			if (!dockerInfo.hasDocker) {
+				this.showSections.dependencies = true;
+			} else if (!modelCheck.selectedExists) {
+				this.showSections.model = true;
+			} else {
+				this.showSections.starting = true;
+			}
+		});
 
 		this.subscriptions.push(
-			this.lapi.onModelLaunch$.subscribe(async () => {
+			this.modelService.onModelLaunch$.subscribe(async () => {
 				if (this.allIsWell) {
 					return;
 				}
@@ -163,11 +168,11 @@ export class StartupComponent implements OnInit {
 	}
 
 	async download() {
-		const config = this.lapi.lastConfig;
+		const config = this.configService.lastConfig;
 		if (!config?.model?.currentModelId) {
 			throw 'Model id is empty';
 		}
-		this.localtron.downloadDo(config?.model?.currentModelId);
+		this.downloadService.downloadDo(config?.model?.currentModelId);
 	}
 
 	isRuntimeInstalling = false;

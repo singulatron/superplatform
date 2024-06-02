@@ -10,52 +10,35 @@
  */
 import { Injectable } from '@angular/core';
 import { LocaltronService } from './localtron.service';
-import { ReplaySubject, Observable } from 'rxjs';
+import { DownloadService } from './download.service';
+import { Observable } from 'rxjs';
 
 @Injectable({
 	providedIn: 'root',
 })
-export class PromptService {
-	onPromptListUpdateSubject = new ReplaySubject<Prompt[]>(1);
-	onPromptListUpdate$ = this.onPromptListUpdateSubject.asObservable();
-
-	constructor(private localtron: LocaltronService) {
-		this.init();
+export class FirehoseService {
+	constructor(
+		private localtron: LocaltronService,
+		private downloadService: DownloadService
+	) {
+		this.firehoseSubscribe().subscribe((event) => {
+			switch (event.name) {
+				case 'downloadStatusChange':
+					this.downloadService.onFileDownloadStatusSubject.next(event.data);
+			}
+		});
 	}
 
-	async init() {
-		try {
-			let rsp = await this.promptList();
+	// @todo a lot of this is duplication from promptSubscribe
+	firehoseSubscribe(): Observable<FirehoseEvent> {
+		console.info('Subscribing to the firehose');
 
-			this.onPromptListUpdateSubject.next(rsp.prompts);
-		} catch (error) {
-			console.error('Error in pollPromptList', {
-				error: JSON.stringify(error),
-			});
-		}
-	}
-
-	async promptAdd(prompt: Prompt): Promise<void> {
-		if (!prompt.id) {
-			prompt.id = this.localtron.uuid();
-		}
-		let req: AddPromptRequest = { prompt: prompt };
-		return this.localtron.call('/prompt/add', req);
-	}
-
-	async promptList(): Promise<ListPromptsResponse> {
-		return this.localtron.call('/prompt/list', {});
-	}
-
-	promptSubscribe(threadId: string): Observable<CompletionResponse> {
 		let uri =
-			this.localtron.config.env.localtronAddress +
-			'/prompt/subscribe?threadId=' +
-			threadId;
+			this.localtron.config.env.localtronAddress + '/firehose/subscribe';
 
-		const token = ''; // this.cs.get('the_token');
+		//const token = this.cs.get('the_token');
 		const headers = {
-			Authorization: 'Bearer ' + token,
+			Authorization: 'Bearer ', //+ token,
 			'Content-Type': 'application/json',
 		};
 
@@ -85,7 +68,6 @@ export class PromptService {
 									.read()
 									.then(({ done, value }) => {
 										if (done) {
-											console.debug('Prompt stream completed');
 											controller.close();
 											observer.complete();
 											return;
@@ -162,49 +144,7 @@ export class PromptService {
 	}
 }
 
-export interface Prompt {
-	id?: string;
-	threadId: string;
-	prompt: string;
-	message: string;
-	modelId: string;
-	isBeingProcessed?: boolean;
-}
-
-export interface AddPromptRequest {
-	prompt: Prompt;
-}
-
-export interface ListPromptsRequest {}
-
-export interface ListPromptsResponse {
-	prompts: Prompt[];
-}
-
-export interface PromptRequest {
-	prompt: string;
-	stream?: boolean;
-	max_tokens?: number;
-}
-
-export interface CompletionChoice {
-	text: string;
-	index: number;
-	logprobs: any;
-	finish_reason: string;
-}
-
-export interface CompletionUsage {
-	prompt_tokens: number;
-	completion_tokens: number;
-	total_tokens: number;
-}
-
-export interface CompletionResponse {
-	id: string;
-	object: string;
-	created: number;
-	model: string;
-	choices: CompletionChoice[];
-	usage: CompletionUsage;
+export interface FirehoseEvent {
+	name: string;
+	data: any;
 }

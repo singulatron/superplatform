@@ -22,7 +22,7 @@
 				<ion-item button detail (click)="toggleSection('dependencies')">
 					<ion-icon
 						[ngStyle]="
-							(lapi?.onDockerInfo$ | async)?.hasDocker
+							(dockerService?.onDockerInfo$ | async)?.hasDocker
 								? { color: '#53DD6C' }
 								: {}
 						"
@@ -32,10 +32,10 @@
 					<ion-label>{{ 'Dependencies' | translate }}</ion-label>
 				</ion-item>
 				<ion-list class="dropdown" *ngIf="showSections.dependencies">
-					<ion-item *ngIf="(lapi?.onDockerInfo$ | async)?.hasDocker">
+					<ion-item *ngIf="(dockerService?.onDockerInfo$ | async)?.hasDocker">
 						{{ 'You have all the required dependecies. Yay!' | translate }}
 					</ion-item>
-					<ion-item *ngIf="!(lapi?.onDockerInfo$ | async)?.hasDocker">
+					<ion-item *ngIf="!(dockerService?.onDockerInfo$ | async)?.hasDocker">
 						<ion-label>
 							<ng-container *ngIf="!isRuntimeInstalling">
 								<div>
@@ -51,13 +51,19 @@
 									(click)="installRuntime()"
 								>
 									<span
-										*ngIf="!(lapi.onConfigUpdate$ | async)?.isRuntimeInstalled"
+										*ngIf="
+											!(configService.onConfigUpdate$ | async)
+												?.isRuntimeInstalled
+										"
 										style="color: white"
 										class="sng-test-runtime-button"
 										>{{ 'Install Runtime' | translate }}</span
 									>
 									<span
-										*ngIf="(lapi.onConfigUpdate$ | async)?.isRuntimeInstalled"
+										*ngIf="
+											(configService.onConfigUpdate$ | async)
+												?.isRuntimeInstalled
+										"
 										style="color: white"
 										class="sng-test-runtime-button"
 										>{{ 'Start Runtime' | translate }}</span
@@ -84,11 +90,11 @@
 					</ion-item>
 				</ion-list>
 
-				<ng-container *ngIf="(lapi?.onDockerInfo$ | async)?.hasDocker">
+				<ng-container *ngIf="(dockerService?.onDockerInfo$ | async)?.hasDocker">
 					<ion-item button detail (click)="toggleSection('model')">
 						<ion-icon
 							[ngStyle]="
-								(lapi?.onModelCheck$ | async)?.selectedExists
+								(modelService?.onModelCheck$ | async)?.selectedExists
 									? { color: '#53DD6C' }
 									: {}
 							"
@@ -98,17 +104,23 @@
 						<ion-label>{{ 'Downloading your model' | translate }}</ion-label>
 					</ion-item>
 					<ion-list class="dropdown" *ngIf="showSections.model">
-						<ion-item *ngIf="(lapi?.onModelCheck$ | async)?.selectedExists">
+						<ion-item
+							*ngIf="(modelService?.onModelCheck$ | async)?.selectedExists"
+						>
 							{{ 'You successfully downloaded the model.' | translate }}
 						</ion-item>
-						<ion-item *ngIf="!(lapi?.onModelCheck$ | async)?.selectedExists">
+						<ion-item
+							*ngIf="!(modelService?.onModelCheck$ | async)?.selectedExists"
+						>
 							<ion-label>
 								<ng-container *ngIf="!isDownloading && !downloaded">
 									<p>
 										{{ 'Your selected model is' | translate }}:
 										<strong
 											>{{
-												selectedModelName((lapi.onConfigUpdate$ | async) || {})
+												selectedModelName(
+													(configService.onConfigUpdate$ | async) || {}
+												)
 											}}.</strong
 										>
 									</p>
@@ -123,8 +135,9 @@
 										{{ 'This operation will consume' | translate }}
 										<strong
 											>{{
-												selectedModel((lapi.onConfigUpdate$ | async) || {})
-													?.size
+												selectedModel(
+													(configService.onConfigUpdate$ | async) || {}
+												)?.size
 											}}
 											GB</strong
 										>
@@ -155,7 +168,7 @@
 										>
 											{{ 'Download folder' | translate }}:&nbsp;
 											<span style="color: #666">{{
-												(lapi?.onConfigUpdate$ | async)?.download
+												(configService?.onConfigUpdate$ | async)?.download
 													?.downloadFolder
 											}}</span>
 										</div>
@@ -173,8 +186,8 @@
 								<h2>
 									<app-downloading
 										[url]="
-											(lapi?.onConfigUpdate$ | async)?.model?.currentModelId ||
-											''
+											(configService?.onConfigUpdate$ | async)?.model
+												?.currentModelId || ''
 										"
 										(downloadStatusChange)="handleDownloadStatus($event)"
 									></app-downloading>
@@ -186,8 +199,8 @@
 
 				<ng-container
 					*ngIf="
-						(lapi?.onModelCheck$ | async)?.selectedExists &&
-						(lapi?.onDockerInfo$ | async)?.hasDocker
+						(modelService?.onModelCheck$ | async)?.selectedExists &&
+						(dockerService?.onDockerInfo$ | async)?.hasDocker
 					"
 				>
 					<ion-item button detail (click)="toggleSection('starting')">

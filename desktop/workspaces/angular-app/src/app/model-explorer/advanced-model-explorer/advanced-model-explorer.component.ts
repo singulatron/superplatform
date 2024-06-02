@@ -9,10 +9,13 @@
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
 import { Component } from '@angular/core';
-import { ElectronAppService } from '../../services/electron-app.service';
-import { OnFileDownloadStatus } from 'shared-lib/models/event-request-response';
+import { ModelService } from '../../services/model.service';
 import { ApiService, Model } from '../../../../shared/stdlib/api.service';
-import { LocaltronService } from '../../services/localtron.service';
+import {
+	DownloadService,
+	DownloadStatusChangeEvent,
+} from '../../services/download.service';
+import { ConfigService } from '../../services/config.service';
 
 @Component({
 	selector: 'app-advanced-model-explorer',
@@ -38,6 +41,13 @@ export class AdvancedModelExplorerComponent {
 		{ name: 'Chat', value: 'Chat', active: false },
 		{ name: 'Uncensored', value: 'uncensored', active: false },
 	];
+
+	constructor(
+		public downloadService: DownloadService,
+		private modelService: ModelService,
+		public configService: ConfigService,
+		private api: ApiService
+	) {}
 
 	async filterModels() {
 		if (!this.searchQuery) {
@@ -79,7 +89,7 @@ export class AdvancedModelExplorerComponent {
 		);
 		let models = this.allModels;
 		if (this.showOnlyDownloadedModels) {
-			let downloadsResponse = await this.localtron.downloadList();
+			let downloadsResponse = await this.downloadService.downloadList();
 			models = models.filter((model) => {
 				return downloadsResponse.downloads.find(
 					(download) =>
@@ -116,12 +126,6 @@ export class AdvancedModelExplorerComponent {
 		this.models = this.allFilteredModels.slice(startIndex, endIndex);
 	}
 
-	constructor(
-		public lapi: ElectronAppService,
-		private api: ApiService,
-		private localtron: LocaltronService
-	) {}
-
 	async ngOnInit(): Promise<void> {
 		this.allModels = await this.api.getModels();
 		this.allFilteredModels = this.allModels;
@@ -129,7 +133,7 @@ export class AdvancedModelExplorerComponent {
 		this.loadPage(this.currentPage);
 	}
 
-	isDownloading(id: string, status: OnFileDownloadStatus | null): boolean {
+	isDownloading(id: string, status: DownloadStatusChangeEvent | null): boolean {
 		if (status === null) {
 			return false;
 		}
@@ -141,7 +145,7 @@ export class AdvancedModelExplorerComponent {
 	}
 
 	async activateModel(modelId: string) {
-		this.localtron.modelStart(modelId);
+		this.modelService.modelStart(modelId);
 	}
 
 	flavourToolTip(flavour: string): string {
@@ -156,7 +160,7 @@ export class AdvancedModelExplorerComponent {
 		return `Flavour ${flavour}`;
 	}
 
-	downloaded(id: string, status: OnFileDownloadStatus | null): boolean {
+	downloaded(id: string, status: DownloadStatusChangeEvent | null): boolean {
 		if (status === null) {
 			return false;
 		}
@@ -168,12 +172,12 @@ export class AdvancedModelExplorerComponent {
 		return false;
 	}
 
-	progress(id: string, status: OnFileDownloadStatus): number {
+	progress(id: string, status: DownloadStatusChangeEvent): number {
 		return status?.allDownloads?.find((v) => v.id === id)?.progress || 0;
 	}
 
 	async download(id: string) {
-		this.localtron.downloadDo(id);
+		this.downloadService.downloadDo(id);
 	}
 
 	toggleItem(id: string) {

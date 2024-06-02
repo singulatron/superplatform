@@ -61,3 +61,17 @@ type DownloadsRequest struct{}
 type DownloadsResponse struct {
 	Downloads []DownloadDetails `json:"downloads"`
 }
+
+//
+// Events
+//
+
+const EventDownloadStatusChangeName = "downloadStatusChange"
+
+type EventDownloadStatusChange struct {
+	AllDownloads []DownloadDetails
+}
+
+func (e EventDownloadStatusChange) Name() string {
+	return EventDownloadStatusChangeName
+}

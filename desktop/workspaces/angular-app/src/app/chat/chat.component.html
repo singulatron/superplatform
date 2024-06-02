@@ -28,13 +28,13 @@
 				<div>
 					<span
 						style="color: #888"
-						*ngIf="num(thread?.id, localtron.onPromptListUpdate$ | async) > 0"
-						>{{ num(thread?.id, localtron.onPromptListUpdate$ | async) }}</span
+						*ngIf="num(thread?.id, promptService.onPromptListUpdate$ | async) > 0"
+						>{{ num(thread?.id, promptService.onPromptListUpdate$ | async) }}</span
 					>
 					<span
 						class="sng-test-streaming-is-in-progress"
 						style="position: relative; top: 0.125rem; margin-right: 0.125rem"
-						*ngIf="num(thread?.id, localtron.onPromptListUpdate$ | async) == 0"
+						*ngIf="num(thread?.id, promptService.onPromptListUpdate$ | async) == 0"
 					>
 						<ion-icon
 							class="flashing"

@@ -145,7 +145,7 @@ func main() {
 		configendpoints.Get(w, r, configService)
 	}))
 
-	appService, err := appservice.NewAppService(configService)
+	appService, err := appservice.NewAppService(configService, firehoseService)
 	if err != nil {
 		log.Fatal(err)
 	}
