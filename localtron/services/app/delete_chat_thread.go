@@ -11,6 +11,8 @@
 package appservice
 
 func (a *AppService) DeleteChatThread(id string) error {
-	a.chatFile.DeleteThreadById(id)
-	return a.saveChatFile()
+	a.threadsMem.DeleteThreadById(id)
+	a.threadsFile.MarkChanged()
+
+	return nil
 }

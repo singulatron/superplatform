@@ -12,7 +12,6 @@ package apptypes
 
 import (
 	"log/slog"
-	"sync"
 	"time"
 
 	"github.com/singulatron/singulatron/localtron/lib"
@@ -39,7 +38,7 @@ type LoggingStatus struct {
 
 type ChatThread struct {
 	Id      string `json:"id"`
-	TopicId string `json:"topicId"`
+	TopicId string `json:"topicId,omitempty"`
 	Name    string `json:"name"`
 	Time    string `json:"time"`
 }
@@ -84,10 +83,10 @@ type ChatMessage struct {
 	Id             string `json:"id"`
 	ThreadId       string `json:"threadId"`
 	MessageContent string `json:"messageContent"`
-	IsUserMessage  bool   `json:"isUserMessage"`
+	IsUserMessage  bool   `json:"isUserMessage,omitempty"`
 	// UserId is saved when the user is logged in to an account
 	// @todo not used yet
-	UserId string `json:"userId"`
+	UserId string `json:"userId,omitempty"`
 	Time   string `json:"time"`
 }
 
@@ -125,95 +124,6 @@ func (a ByTime) Less(i, j int) bool {
 	}
 
 	return ti.Before(tj)
-}
-
-type ChatFile struct {
-	Threads       []*ChatThread  `json:"threads"`
-	Messages      []*ChatMessage `json:"messages"`
-	threadsMutex  sync.Mutex
-	messagesMutex sync.Mutex
-}
-
-func (cf *ChatFile) AddMessage(message *ChatMessage) {
-	cf.messagesMutex.Lock()
-	defer cf.messagesMutex.Unlock()
-
-	cf.Messages = append(cf.Messages, message)
-}
-
-func (cf *ChatFile) MessagesForeach(f func(i int, message *ChatMessage)) {
-	cf.messagesMutex.Lock()
-	defer cf.messagesMutex.Unlock()
-
-	for i, v := range cf.Messages {
-		f(i, v)
-	}
-}
-
-func (cf *ChatFile) ThreadsForeach(f func(i int, thread *ChatThread)) {
-	cf.threadsMutex.Lock()
-	defer cf.threadsMutex.Unlock()
-
-	for i, v := range cf.Threads {
-		f(i, v)
-	}
-}
-
-func (cf *ChatFile) GetThreadsCopy() []*ChatThread {
-	ret := []*ChatThread{}
-	cf.threadsMutex.Lock()
-	defer cf.threadsMutex.Unlock()
-
-	for _, v := range cf.Threads {
-		ret = append(ret, &ChatThread{
-			Id:      v.Id,
-			TopicId: v.TopicId,
-			Name:    v.Name,
-			Time:    v.Time,
-		})
-	}
-	return ret
-}
-
-func (cf *ChatFile) DeleteMessageById(id string) {
-	position := -1
-	for i, chatMessage := range cf.Messages {
-		if chatMessage.Id == id {
-			position = i
-		}
-	}
-	if position < 0 {
-		return
-	}
-
-	cf.messagesMutex.Lock()
-	defer cf.messagesMutex.Unlock()
-
-	cf.Messages = append(cf.Messages[:position], cf.Messages[position+1:]...)
-}
-
-func (cf *ChatFile) AddThread(thread *ChatThread) {
-	cf.threadsMutex.Lock()
-	defer cf.threadsMutex.Unlock()
-
-	cf.Threads = append(cf.Threads, thread)
-}
-
-func (cf *ChatFile) DeleteThreadById(id string) {
-	position := -1
-	for i, chatThread := range cf.Threads {
-		if chatThread.Id == id {
-			position = i
-		}
-	}
-	if position < 0 {
-		return
-	}
-
-	cf.threadsMutex.Lock()
-	defer cf.threadsMutex.Unlock()
-
-	cf.Threads = append(cf.Threads[:position], cf.Threads[position+1:]...)
 }
 
 type AddChatMessageRequest struct {

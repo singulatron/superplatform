@@ -11,7 +11,8 @@
 package appservice
 
 func (a *AppService) DeleteChatMessage(id string) error {
-	a.chatFile.DeleteMessageById(id)
+	a.messagesMem.DeleteMessageById(id)
+	a.messagesFile.MarkChanged()
 
-	return a.saveChatFile()
+	return nil
 }

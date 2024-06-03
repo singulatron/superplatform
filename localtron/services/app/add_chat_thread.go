@@ -28,11 +28,12 @@ func (a *AppService) AddChatThread(chatThread *apptypes.ChatThread) (*apptypes.C
 		chatThread.Time = time.Now().Format(time.RFC3339)
 	}
 
-	a.chatFile.AddThread(chatThread)
+	a.threadsMem.AddThread(chatThread)
 
 	a.firehoseService.Publish(apptypes.EventChatMessageAdded{
 		ThreadId: chatThread.Id,
 	})
+	a.threadsFile.MarkChanged()
 
-	return chatThread, a.saveChatFile()
+	return chatThread, nil
 }

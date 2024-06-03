@@ -33,7 +33,7 @@ func (a *AppService) AddChatMessage(chatMessage *apptypes.ChatMessage) error {
 
 	var threadId string
 
-	a.chatFile.ThreadsForeach(func(i int, t *apptypes.ChatThread) {
+	a.threadsMem.ThreadsForeach(func(i int, t *apptypes.ChatThread) {
 		if t.Id == chatMessage.ThreadId {
 			threadId = t.Id
 		}
@@ -42,15 +42,16 @@ func (a *AppService) AddChatMessage(chatMessage *apptypes.ChatMessage) error {
 	if threadId == "" {
 		// threads are created when a message is sent
 
-		a.chatFile.AddThread(&apptypes.ChatThread{
+		a.threadsMem.AddThread(&apptypes.ChatThread{
 			Id:   chatMessage.ThreadId,
 			Time: time.Now().Format(time.RFC3339),
 		})
+		a.threadsFile.MarkChanged()
 	}
 
 	alreadySaved := false
 
-	a.chatFile.MessagesForeach(func(i int, v *apptypes.ChatMessage) {
+	a.messagesMem.MessagesForeach(func(i int, v *apptypes.ChatMessage) {
 		if v.Id == chatMessage.Id {
 			alreadySaved = true
 		}
@@ -60,7 +61,7 @@ func (a *AppService) AddChatMessage(chatMessage *apptypes.ChatMessage) error {
 		return nil
 	}
 
-	a.chatFile.AddMessage(chatMessage)
+	a.messagesMem.AddMessage(chatMessage)
 	lib.Logger.Info("Saving chat message",
 		slog.String("messageId", chatMessage.Id),
 	)
@@ -69,5 +70,7 @@ func (a *AppService) AddChatMessage(chatMessage *apptypes.ChatMessage) error {
 		ThreadId: threadId,
 	})
 
-	return a.saveChatFile()
+	a.messagesFile.MarkChanged()
+
+	return nil
 }

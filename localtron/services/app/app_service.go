@@ -11,7 +11,6 @@
 package appservice
 
 import (
-	"encoding/json"
 	"os"
 	"os/signal"
 	"path"
@@ -20,6 +19,7 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
+	"github.com/singulatron/singulatron/localtron/lib"
 	apptypes "github.com/singulatron/singulatron/localtron/services/app/types"
 	configservice "github.com/singulatron/singulatron/localtron/services/config"
 	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
@@ -33,12 +33,18 @@ type AppService struct {
 	TriggerSend chan bool
 	Timer       *time.Timer
 
-	clientId     string
-	ChatFilePath string
-	chatFile     *apptypes.ChatFile
+	clientId string
 
-	chatFileMutex sync.Mutex
-	logMutex      sync.Mutex
+	ThreadsFilePath  string
+	MessagesFilePath string
+
+	messagesMem *apptypes.MessagesMem
+	threadsMem  *apptypes.ThreadsMem
+
+	messagesFile *lib.StateManager[*apptypes.MessagesMem]
+	threadsFile  *lib.StateManager[*apptypes.ThreadsMem]
+
+	logMutex sync.Mutex
 }
 
 func NewAppService(
@@ -49,9 +55,22 @@ func NewAppService(
 	if err != nil {
 		return nil, errors.Wrap(err, "app service canno get client id")
 	}
+
+	mm := apptypes.NewMessagesMem()
+	tm := apptypes.NewThreadsMem()
+
+	messagesPath := path.Join(cs.ConfigDirectory, "messages.json")
+	threadsPath := path.Join(cs.ConfigDirectory, "threads.json")
+
 	service := &AppService{
 		configService:   cs,
 		firehoseService: fs,
+
+		messagesMem: mm,
+		threadsMem:  tm,
+
+		messagesFile: lib.NewStateManager(mm, messagesPath),
+		threadsFile:  lib.NewStateManager(tm, threadsPath),
 
 		LogBuffer:   make([]apptypes.Log, 0),
 		TriggerSend: make(chan bool, 1),
@@ -59,12 +78,17 @@ func NewAppService(
 
 		clientId: ci,
 	}
-	service.ChatFilePath = path.Join(cs.ConfigDirectory, "chats.json")
-	err = service.loadChatFile()
+	service.MessagesFilePath = messagesPath
+	service.ThreadsFilePath = threadsPath
+
+	err = service.loadChatFiles()
 	if err != nil {
 		return nil, err
 	}
-	go service.manageLogs()
+
+	go service.messagesFile.PeriodicSaveState(2 * time.Second)
+	go service.threadsFile.PeriodicSaveState(2 * time.Second)
+
 	service.setupSignalHandler()
 	return service, nil
 }
@@ -79,40 +103,10 @@ func (a *AppService) setupSignalHandler() {
 	}()
 }
 
-func (a *AppService) loadChatFile() error {
-	a.chatFileMutex.Lock()
-	defer a.chatFileMutex.Unlock()
-
-	_, err := os.Stat(a.ChatFilePath)
-	if os.IsNotExist(err) {
-		err = os.MkdirAll(path.Dir(a.ChatFilePath), 0755)
-		if err != nil {
-			return err
-		}
-		err = os.WriteFile(a.ChatFilePath, []byte(`{}`), 0755)
-		if err != nil {
-			return err
-		}
-	} else if err != nil {
-		return err
-	}
-
-	data, err := os.ReadFile(a.ChatFilePath)
+func (a *AppService) loadChatFiles() error {
+	err := a.messagesFile.LoadState()
 	if err != nil {
 		return err
 	}
-	return json.Unmarshal(data, &a.chatFile)
-}
-
-func (a *AppService) saveChatFile() error {
-	a.chatFileMutex.Lock()
-	defer a.chatFileMutex.Unlock()
-
-	bs, err := json.Marshal(a.chatFile)
-	if err != nil {
-		return err
-	}
-
-	err = os.WriteFile(a.ChatFilePath, bs, 0755)
-	return err
+	return a.threadsFile.LoadState()
 }
