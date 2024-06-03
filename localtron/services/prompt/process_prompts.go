@@ -145,7 +145,7 @@ func (p *PromptService) processPrompt() error {
 	err = llmClient.PostCompletionsStreamed(llm.PostCompletionsRequest{
 		Prompt:    p.currentPrompt.Prompt,
 		Stream:    true,
-		MaxTokens: 200,
+		MaxTokens: 4096,
 	}, func(resp *llm.CompletionResponse) {
 		p.StreamManager.Broadcast(p.currentPrompt.ThreadId, resp)
 		if len(resp.Choices) > 0 && resp.Choices[0].FinishReason == "stop" {
