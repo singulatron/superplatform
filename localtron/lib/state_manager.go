@@ -14,8 +14,10 @@ import (
 	"encoding/json"
 	"log/slog"
 	"os"
+	"os/signal"
 	"path"
 	"sync"
+	"syscall"
 	"time"
 )
 
@@ -27,10 +29,12 @@ type StateManager[T any] struct {
 }
 
 func NewStateManager[T any](initialState T, filePath string) *StateManager[T] {
-	return &StateManager[T]{
+	sm := &StateManager[T]{
 		state:    initialState,
 		filePath: filePath,
 	}
+	sm.setupSignalHandler()
+	return sm
 }
 
 func (sm *StateManager[T]) LoadState() error {
@@ -86,16 +90,23 @@ func (sm *StateManager[T]) MarkChanged() {
 func (sm *StateManager[T]) PeriodicSaveState(interval time.Duration) {
 	for {
 		time.Sleep(interval)
-		sm.lock.Lock()
-		if sm.hasChanged {
-			sm.lock.Unlock()
-			if err := sm.SaveState(); err != nil {
-				Logger.Error("Error saving file state",
-					slog.String("filePath", sm.filePath),
-				)
-			}
-		} else {
-			sm.lock.Unlock()
+		if !sm.hasChanged {
+			continue
+		}
+		if err := sm.SaveState(); err != nil {
+			Logger.Error("Error saving file state",
+				slog.String("filePath", sm.filePath),
+			)
 		}
 	}
+}
+
+func (sm *StateManager[T]) setupSignalHandler() {
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+
+	go func() {
+		<-c
+		sm.SaveState()
+	}()
 }
