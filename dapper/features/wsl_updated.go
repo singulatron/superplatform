@@ -27,7 +27,8 @@ var WslUpdated = dt.Feature{
 			Execute: &dt.Script{
 				Source: `
 Write-Host "Updating WSL kernel"
-wsl --update
+# https://github.com/microsoft/WSL/issues/9039#issuecomment-1286596985
+wsl --update --web-download
 Write-Host "Setting default WSL version to {{.wslVersion}}"
 wsl --set-default-version {{.wslVersion}}
 `,
