@@ -121,7 +121,7 @@ export class AdvancedModelExplorerComponent {
 							case 'Chat':
 								return option.value === model.flavour;
 							case 'Uncensored':
-								return model.uncensored
+								return model.uncensored;
 							default:
 								break;
 						}

@@ -33,10 +33,11 @@ wsl --update
 			},
 			Check: &dt.Script{
 				Source: `
-$wslVersion = wsl --status
-if ($wslVersion.Contains("Default Version: {{.wslVersion}}")) {
+$wslStatusOutput = wsl --status
+if ($wslStatusOutput.Contains("Default Version: {{.wslVersion}}")) {
     exit 0
 } else {
+	Write-Output "WSL is not updated: $wslStatusOutput"
     exit 1
 }`,
 				Runtime: "powershell",
