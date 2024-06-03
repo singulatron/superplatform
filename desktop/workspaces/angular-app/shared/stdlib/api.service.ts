@@ -186,6 +186,8 @@ export interface Model {
 	description?: string;
 	promptTemplate?: string;
 	quantComment?: string;
+	maxBits?: number;
+	bits?: number;
 }
 
 // HERE BE DRAGONS
