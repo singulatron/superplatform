@@ -6,7 +6,7 @@ There were some design decisions that shaped it:
 
 - No dependencies (single binary)
 - Be quick - never redo an already done job
-- Stream things are they are happening for user feedback
+- Stream things are they as happening for user feedback
 
 You can see it in action when you click on the "Install Runtime" button on the Start screen of Singulatron.
 
@@ -14,11 +14,22 @@ You can see it in action when you click on the "Install Runtime" button on the S
 
 Dapper runs [`Applications`](fixture/app.json) which are basically a collection of `Features`.
 
-`Features` are a bunch of shell/powershell `Script` for different operating systems.
+`Features` are a bunch of shell/powershell `Script`s for different operating systems.
 
-These `Script`s have two main parts: a `Check` and an `Execute` script. An `Execute` script only gets executed if a `Check` fails. If an `Execute` returns with an exit status other than `0` Dapper exits. If the `Execute` succeeds, it gets re`Check`ed. If that succeeds, all is well. If not, Dapper exits.
+These `Script`s have two main parts:
+- a `Check` and
+- an `Execute` script.
 
-An other crucial detail is that after the first `Check` fails for a `Feature`, all dependencies get checked recursively.
+The flow goes like this:
+- A `Check` script runs. If it succeeds, we move on to the next dependency in the list.
+- If it fails, an `Execute` script is ran to fix the problem.
+- If the `Execute` returns with an exit status other than `0` Dapper exits.
+- If the `Execute` script returns with a success, we call the `Check` again to make sure.
+- If the re`Check` fails, Dapper exists.
+- If the re`Check` suceeds, we move on to the next dependency in the list.
+
+The above describes the traversal of a Feature list, but Features also depend on each other recursively, forming a tree structure.
+When a `Check` fails for a `Feature`, all dependencies get checked recursively.
 
 ## Run
 
