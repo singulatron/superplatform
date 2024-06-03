@@ -36,7 +36,9 @@ export class ModelService {
 		private localtron: LocaltronService,
 		private dockerService: DockerService
 	) {
-		this.init();
+		// @todo nothing to trigger model start so we resolve to polling
+		setTimeout(this.init, 2000);
+
 		this.listenToModelReady();
 	}
 

@@ -21,3 +21,18 @@ type OnDockerInfo struct {
 	DockerDaemonAddress *string `json:"dockerDaemonAddress,omitempty"`
 	Error               *string `json:"error,omitempty"`
 }
+
+//
+// Events
+//
+
+// @todo nothing to trigger this yet
+const EventDockerInfoUpdatedName = "dockerInfoUpdated"
+
+type EventDockerInfoUpdated struct {
+	ThreadId string `json:"threadId"`
+}
+
+func (e EventDockerInfoUpdated) Name() string {
+	return EventDockerInfoUpdatedName
+}

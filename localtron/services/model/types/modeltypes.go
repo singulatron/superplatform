@@ -37,3 +37,17 @@ type StatusRequest struct{}
 type StatusResponse struct {
 	Status *Status `json:"status"`
 }
+
+//
+// Events
+//
+
+const EventModelReadyName = "modelReady"
+
+type EventModelReady struct {
+	ThreadId string `json:"threadId"`
+}
+
+func (e EventModelReady) Name() string {
+	return EventModelReadyName
+}

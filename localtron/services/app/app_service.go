@@ -59,8 +59,13 @@ func NewAppService(
 	mm := apptypes.NewMessagesMem()
 	tm := apptypes.NewThreadsMem()
 
-	messagesPath := path.Join(cs.ConfigDirectory, "messages.json")
-	threadsPath := path.Join(cs.ConfigDirectory, "threads.json")
+	err = os.MkdirAll(path.Join(cs.ConfigDirectory, "data"), 0755)
+	if err != nil {
+		return nil, err
+	}
+
+	messagesPath := path.Join(cs.ConfigDirectory, "data", "messages.json")
+	threadsPath := path.Join(cs.ConfigDirectory, "data", "threads.json")
 
 	service := &AppService{
 		configService:   cs,
