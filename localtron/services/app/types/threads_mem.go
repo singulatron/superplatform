@@ -46,7 +46,7 @@ func (cf *ThreadsMem) GetThreadsCopy() []*ChatThread {
 		ret = append(ret, &ChatThread{
 			Id:      v.Id,
 			TopicId: v.TopicId,
-			Name:    v.Name,
+			Title:   v.Title,
 			Time:    v.Time,
 		})
 	}

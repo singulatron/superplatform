@@ -39,7 +39,7 @@ type LoggingStatus struct {
 type ChatThread struct {
 	Id      string `json:"id"`
 	TopicId string `json:"topicId,omitempty"`
-	Name    string `json:"name"`
+	Title   string `json:"title"`
 	Time    string `json:"time"`
 }
 

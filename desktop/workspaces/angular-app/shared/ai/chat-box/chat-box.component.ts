@@ -197,7 +197,7 @@ export class ChatBoxComponent implements OnChanges {
 
 	async send() {
 		if (this.messages?.length == 0) {
-			this.thread.name = this.message.slice(0, 100);
+			this.thread.title = this.message.slice(0, 100);
 			this.onThreadUpdate.emit(this.thread);
 		}
 
@@ -272,7 +272,7 @@ export class ChatBoxComponent implements OnChanges {
 		if (!msg) {
 			return;
 		}
-		if (this.thread?.name !== defaultThreadName) {
+		if (this.thread?.title !== defaultThreadName) {
 			return;
 		}
 
