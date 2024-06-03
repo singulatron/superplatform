@@ -83,11 +83,4 @@ ion-checkbox::part(container) {
 			background-color: #e9ecef;
 		}
 	}
-
-	@media screen and (max-width: 600px) {
-		ion-col {
-			display: block;
-			width: 100%;
-		}
-	}
 }

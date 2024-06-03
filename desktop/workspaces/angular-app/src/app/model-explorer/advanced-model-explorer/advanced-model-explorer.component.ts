@@ -8,7 +8,7 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { ModelService } from '../../services/model.service';
 import { ApiService, Model } from '../../../../shared/stdlib/api.service';
 import {
@@ -16,6 +16,8 @@ import {
 	DownloadStatusChangeEvent,
 } from '../../services/download.service';
 import { ConfigService } from '../../services/config.service';
+
+const veryLargeScreenWidth = 1500;
 
 @Component({
 	selector: 'app-advanced-model-explorer',
@@ -32,6 +34,7 @@ export class AdvancedModelExplorerComponent {
 	itemsPerPage = 9;
 	totalItems = 0;
 	gridView = true;
+	veryLargeScreen = false;
 
 	showOnlyDownloadedModels = false;
 	searchQuery = '';
@@ -47,7 +50,19 @@ export class AdvancedModelExplorerComponent {
 		private modelService: ModelService,
 		public configService: ConfigService,
 		private api: ApiService
-	) {}
+	) {
+		this.detectLargeScreen();
+	}
+
+	@HostListener('window:resize', ['$event'])
+	onResize() {
+		this.detectLargeScreen();
+	}
+
+	detectLargeScreen() {
+		const screenWidth = window.innerWidth;
+		this.veryLargeScreen = screenWidth > veryLargeScreenWidth;
+	}
 
 	async filterModels() {
 		if (!this.searchQuery) {
@@ -199,60 +214,45 @@ export class AdvancedModelExplorerComponent {
 		}
 	}
 
-	getStatValue(model: Model, statType: string) {
-		let value: number = 0;
-		const minSizeGB = 1; // Minimum model size in GB for "speed"
-		const maxSizeGB = 30; // Maximum model size in GB for "quality"
-
-		if (model.maxRam !== undefined) {
-			const clampedRam = Math.max(minSizeGB, Math.min(model.maxRam, maxSizeGB));
-			switch (statType) {
-				case 'speed':
-					value =
-						100 * (1 - (clampedRam - minSizeGB) / (maxSizeGB - minSizeGB));
-					break;
-				case 'quality':
-					value = (100 * (clampedRam - minSizeGB)) / (maxSizeGB - minSizeGB);
-					break;
-			}
-		} else {
-			value = 50; // Default to 50% if maxRam is undefined
-		}
-
-		return Math.round(value / 10);
+	extractValueFromQuality(quality: string): number {
+		const match = quality.match(/Q(\d+)\D*/);
+		return match ? parseInt(match[1], 10) : 0;
 	}
 
-	getStatStyle(model: Model, statType: string) {
-		let value: number = 0;
-		const minSizeGB = 1; // Minimum model size in GB for "speed"
-		const maxSizeGB = 30; // Maximum model size in GB for "quality"
+	getStatValue(model: Model) {
+		let value: number = model.quality
+			? this.extractValueFromQuality(model.quality)
+			: 1;
 
-		if (model.maxRam !== undefined) {
-			const clampedRam = Math.max(minSizeGB, Math.min(model.maxRam, maxSizeGB));
-			switch (statType) {
-				case 'speed':
-					value =
-						100 * (1 - (clampedRam - minSizeGB) / (maxSizeGB - minSizeGB));
-					break;
-				case 'quality':
-					value = (100 * (clampedRam - minSizeGB)) / (maxSizeGB - minSizeGB);
-					break;
-			}
-		} else {
-			value = 50; // Default to 50% if maxRam is undefined
-		}
+		return value;
+	}
 
-		// Ensure value is between 0 and 100
-		value = Math.max(0, Math.min(100, value));
+	getStatStyle(model: Model) {
+		let value: number = model.quality
+			? this.extractValueFromQuality(model.quality)
+			: 1;
 
-		// Map value to hue from 240 (blue) to 120 (green)
-		const hue = 240 - (value * (240 - 120)) / 100;
+		const maxBits = model.maxBits ? model.maxBits : 8;
+
+		let percentageValue = (value / maxBits) * 100;
+
+		let hue = (value / maxBits) * 120;
 
 		const backgroundColor = `hsl(${hue}, 100%, 50%)`; // Adjust the lightness and saturation if needed
 		return {
 			'background-color': backgroundColor,
-			width: `${value}%`,
+			width: `${percentageValue}%`,
 		};
+	}
+
+	getColumnSize(): string {
+		const screenWidth = window.innerWidth;
+
+		if (screenWidth > 1400) {
+			return '4';
+		} else {
+			return '6';
+		}
 	}
 
 	switchGridListView() {

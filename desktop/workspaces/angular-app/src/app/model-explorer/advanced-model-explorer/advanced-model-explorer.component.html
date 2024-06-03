@@ -40,7 +40,7 @@
 					>Show only downloaded models</ion-checkbox
 				>
 			</ion-col>
-			<ion-col size="auto">
+			<ion-col *ngIf="false" size="auto">
 				<ion-icon
 					style="width: 1.3rem; height: 1.3rem; cursor: pointer"
 					name="{{ gridView ? 'grid-outline' : 'list-outline' }}"
@@ -56,10 +56,10 @@
 	<ion-row>
 		<ion-col
 			size-xs="12"
-			size-sm="6"
-			size-md="6"
-			size-lg="6"
-			size-xl="4"
+			size-sm="12"
+			size-md="12"
+			size-lg="12"
+			[attr.size-xl]="veryLargeScreen ? '4' : '6'"
 			*ngFor="let model of models"
 		>
 			<ion-card style="padding-bottom: 0.5rem">
@@ -86,6 +86,13 @@
 							outline
 						>
 							<ion-label>{{ model.version }}</ion-label>
+						</ion-chip>
+						<ion-chip
+							title="Quality {{ model.quality }}"
+							color="tertiary"
+							outline
+						>
+							<ion-label style="color: #666">{{ model.quality }}</ion-label>
 						</ion-chip>
 						<ion-chip
 							*ngIf="model.uncensored"
@@ -127,27 +134,10 @@
 					</button>
 					<div class="stat">
 						<div class="stat-title">
-							Speed
-							<span class="stat-val"
-								>{{ getStatValue(model, 'speed') }} out of 10</span
-							>
+							Bits
+							<span class="stat-val">{{ getStatValue(model) }} out of 8</span>
 						</div>
-						<div
-							class="stat-bar"
-							[ngStyle]="getStatStyle(model, 'speed')"
-						></div>
-					</div>
-					<div class="stat">
-						<div class="stat-title">
-							Quality
-							<span class="stat-val"
-								>{{ getStatValue(model, 'quality') }} out of 10</span
-							>
-						</div>
-						<div
-							class="stat-bar"
-							[ngStyle]="getStatStyle(model, 'quality')"
-						></div>
+						<div class="stat-bar" [ngStyle]="getStatStyle(model)"></div>
 					</div>
 				</ion-card-content>
 				<ion-card-footer>
@@ -243,56 +233,71 @@
 	</ion-row>
 </ion-grid>
 
-<ion-grid *ngIf="!gridView" class="list-view">
-	<ion-row>
-		<ion-col> Name </ion-col>
-		<ion-col data-tooltip="Number of parameters"> Parameters </ion-col>
-		<ion-col> Flavour </ion-col>
-		<ion-col> Version </ion-col>
-		<ion-col data-tooltip="Amount of RAM or GPU VRAM required"> RAM </ion-col>
-		<ion-col data-tooltip="Size on disk"> Size </ion-col>
-		<ion-col> Actions </ion-col>
-	</ion-row>
-	<ion-row *ngFor="let model of models">
-		<ion-col data-tooltip="Model name is {{ model.name }}">
-			{{ model.name }}
-		</ion-col>
-		<ion-col data-tooltip="Number of parameters is {{ model.parameters }}">
-			{{ model.parameters }}
-		</ion-col>
-		<ion-col data-tooltip="Flavour {{ model.flavour }}">
-			{{ model.flavour }}
-		</ion-col>
-		<ion-col>
-			{{ model.version }}
-		</ion-col>
-		<ion-col
-			data-tooltip="Amount of RAM or GPU VRAM required: {{ model.maxRam }} GB"
+<ng-container *ngIf="!gridView">
+	<ion-grid class="list-view">
+		<ion-row>
+			<ion-col> Name </ion-col>
+			<ion-col data-tooltip="Number of parameters"> Parameters </ion-col>
+			<ion-col> Flavour </ion-col>
+			<ion-col> Version </ion-col>
+			<ion-col data-tooltip="Amount of RAM or GPU VRAM required"> RAM </ion-col>
+			<ion-col data-tooltip="Size on disk"> Size </ion-col>
+			<ion-col> Actions </ion-col>
+		</ion-row>
+		<ion-row *ngFor="let model of models">
+			<ion-col data-tooltip="Model name is {{ model.name }}">
+				{{ model.name }}
+			</ion-col>
+			<ion-col data-tooltip="Number of parameters is {{ model.parameters }}">
+				{{ model.parameters }}
+			</ion-col>
+			<ion-col data-tooltip="Flavour {{ model.flavour }}">
+				{{ model.flavour }}
+			</ion-col>
+			<ion-col>
+				{{ model.version }}
+			</ion-col>
+			<ion-col
+				data-tooltip="Amount of RAM or GPU VRAM required: {{ model.maxRam }} GB"
+			>
+				{{ model.maxRam }}
+			</ion-col>
+			<ion-col data-tooltip="Size on disk: {{ model.size }} GB">
+				{{ model.size + 'GB' }}
+			</ion-col>
+			<ion-col>
+				<ion-icon
+					*ngIf="
+						!isDownloading(
+							model.id,
+							downloadService.onFileDownloadStatus$ | async
+						) &&
+						!downloaded(model.id, downloadService.onFileDownloadStatus$ | async)
+					"
+					name="cloud-download-outline"
+				></ion-icon>
+				<ion-icon
+					*ngIf="
+						(configService.onConfigUpdate$ | async)?.model?.currentModelId ===
+						model.id
+					"
+					name="play-outline"
+				></ion-icon>
+				<ion-icon name="pause-circle-outline"></ion-icon>
+			</ion-col>
+		</ion-row>
+	</ion-grid>
+
+	<div class="ion-text-center">
+		<ion-button
+			(click)="loadPage(currentPage - 1)"
+			[disabled]="currentPage <= 1"
+			><span style="color: white">Previous</span></ion-button
 		>
-			{{ model.maxRam }}
-		</ion-col>
-		<ion-col data-tooltip="Size on disk: {{ model.size }} GB">
-			{{ model.size + 'GB' }}
-		</ion-col>
-		<ion-col>
-			<ion-icon
-				*ngIf="
-					!isDownloading(
-						model.id,
-						downloadService.onFileDownloadStatus$ | async
-					) &&
-					!downloaded(model.id, downloadService.onFileDownloadStatus$ | async)
-				"
-				name="cloud-download-outline"
-			></ion-icon>
-			<ion-icon
-				*ngIf="
-					(configService.onConfigUpdate$ | async)?.model?.currentModelId ===
-					model.id
-				"
-				name="play-outline"
-			></ion-icon>
-			<ion-icon name="pause-circle-outline"></ion-icon>
-		</ion-col>
-	</ion-row>
-</ion-grid>
+		<ion-button
+			(click)="loadPage(currentPage + 1)"
+			[disabled]="currentPage * itemsPerPage >= totalItems"
+			><span style="color: white">Next</span></ion-button
+		>
+	</div>
+</ng-container>
