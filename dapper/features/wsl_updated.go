@@ -28,6 +28,8 @@ var WslUpdated = dt.Feature{
 				Source: `
 Write-Host "Updating WSL kernel"
 wsl --update
+Write-Host "Setting default WSL version to {{.wslVersion}}"
+wsl --set-default-version {{.wslVersion}}
 `,
 				Runtime: "powershell",
 			},

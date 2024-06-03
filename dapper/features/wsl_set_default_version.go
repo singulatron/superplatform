@@ -12,6 +12,8 @@ package features
 
 import dt "github.com/singulatron/singulatron/dapper/types"
 
+// @todo this became redundant, WslUpdated is a superset of this
+// nothing uses this anymore, can remove?
 var WslSetDefaultVersion = dt.Feature{
 	ID:   "wsl-set-default-version",
 	Name: "WSL Set Default Version",
@@ -33,13 +35,12 @@ wsl --set-default-version {{.wslVersion}}
 			},
 			Check: &dt.Script{
 				Source: `
-$wslDefaultVersionCheck = wsl --list --verbose | Select-String "Default"
-if ($wslDefaultVersionCheck -match "v{{.wslVersion}}") {
-    # Default version is already set to {{.wslVersion}}
-    Write-Host "yes"
+$wslStatusOutput = wsl --status
+if ($wslStatusOutput.Contains("Default Version: {{.wslVersion}}")) {
+	exit 0
 } else {
-    # Default version is not set to {{.wslVersion}}
-    Write-Host "no"
+	Write-Output "WSL is not updated: $wslStatusOutput"
+	exit 1
 }`,
 				Runtime: "powershell",
 			},
