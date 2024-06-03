@@ -42,7 +42,7 @@ export class AdvancedModelExplorerComponent {
 		{ name: 'Instruct', value: 'Instruct', active: false },
 		{ name: 'Code', value: 'Code', active: false },
 		{ name: 'Chat', value: 'Chat', active: false },
-		{ name: 'Uncensored', value: 'uncensored', active: false },
+		{ name: 'Uncensored', value: 'Uncensored', active: false },
 	];
 
 	constructor(
@@ -75,11 +75,10 @@ export class AdvancedModelExplorerComponent {
 			let m = {
 				...model,
 			};
-			delete m.uncensored;
 
 			const subject =
 				JSON.stringify(m) +
-				(model.uncensored ? ' uncensored ' : '') +
+				(model.uncensored ? ' Uncensored ' : '') +
 				` ${Math.floor(model.maxRam || 0)} gb` +
 				` ${Math.floor(model.maxRam || 0)}gb` +
 				' gb'.toLowerCase();
@@ -121,6 +120,8 @@ export class AdvancedModelExplorerComponent {
 							case 'Code':
 							case 'Chat':
 								return option.value === model.flavour;
+							case 'Uncensored':
+								return model.uncensored
 							default:
 								break;
 						}
