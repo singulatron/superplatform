@@ -23,7 +23,9 @@ export class DockerService {
 	constructor(private localtron: LocaltronService) {
 		// @todo nothing to trigger docker info yet
 		// so we fall back to pollings
-		setTimeout(this.init, 2000);
+		setInterval(() => {
+			this.init();
+		}, 2000);
 	}
 
 	async init() {
