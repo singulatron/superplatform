@@ -21,8 +21,8 @@ func (a *AppService) AddChatThread(chatThread *apptypes.ChatThread) (*apptypes.C
 	if chatThread.Id == "" {
 		chatThread.Id = uuid.New().String()
 	}
-	if chatThread.Name == "" {
-		chatThread.Name = "New chat"
+	if chatThread.Title == "" {
+		chatThread.Title = "New chat"
 	}
 	if chatThread.Time == "" {
 		chatThread.Time = time.Now().Format(time.RFC3339)

@@ -36,7 +36,11 @@ export class ModelService {
 		private localtron: LocaltronService,
 		private dockerService: DockerService
 	) {
-		this.init();
+		// @todo nothing to trigger model start so we resolve to polling
+		setInterval(() => {
+			this.init();
+		  }, 2000);
+
 		this.listenToModelReady();
 	}
 
@@ -69,6 +73,7 @@ export class ModelService {
 				selectedExists: rsp?.status?.selectedExists,
 			});
 		} catch (error) {
+			console.log(error)
 			console.error('Error in pollModelStatus', {
 				error: JSON.stringify(error),
 			});

@@ -21,7 +21,11 @@ export class DockerService {
 	onDockerInfo$ = this.onDockerInfoSubject.asObservable();
 
 	constructor(private localtron: LocaltronService) {
-		this.init();
+		// @todo nothing to trigger docker info yet
+		// so we fall back to pollings
+		setInterval(() => {
+			this.init();
+		}, 2000);
 	}
 
 	async init() {

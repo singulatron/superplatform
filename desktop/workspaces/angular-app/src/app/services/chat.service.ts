@@ -92,7 +92,7 @@ export class ChatService {
 export interface ChatThread {
 	id?: string;
 	topicId?: string;
-	name?: string;
+	title?: string;
 	time?: string;
 }
 
