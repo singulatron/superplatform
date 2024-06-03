@@ -17,7 +17,7 @@ import {
 } from '../../services/download.service';
 import { ConfigService } from '../../services/config.service';
 
-const veryLargeScreenWidth = 1500;
+const veryLargeScreenWidth = 1900;
 
 @Component({
 	selector: 'app-advanced-model-explorer',
