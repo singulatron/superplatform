@@ -11,33 +11,12 @@
 package appservice
 
 import (
-	"errors"
-	"time"
-
 	apptypes "github.com/singulatron/singulatron/localtron/services/app/types"
 )
 
 func (a *AppService) UpdateChatThread(chatThread *apptypes.ChatThread) (*apptypes.ChatThread, error) {
-	if chatThread.Id == "" {
-		return nil, errors.New("no thread id supplied to update")
-	}
-	found := false
-	for i, v := range a.chatFile.Threads {
-		if v.Id == chatThread.Id {
-			old := a.chatFile.Threads[i]
-			if chatThread.Time == "" {
-				chatThread.Time = old.Time
-			}
-			a.chatFile.Threads[i] = chatThread
-			found = true
-		}
-	}
-	if !found {
-		if chatThread.Time == "" {
-			chatThread.Time = time.Now().Format(time.RFC3339)
-		}
-		a.chatFile.Threads = append(a.chatFile.Threads, chatThread)
-	}
+	a.threadsMem.UpdateThread(chatThread)
+	a.threadsFile.MarkChanged()
 
-	return chatThread, a.saveChatFile()
+	return chatThread, nil
 }
