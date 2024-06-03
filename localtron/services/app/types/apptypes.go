@@ -38,7 +38,7 @@ type LoggingStatus struct {
 
 type ChatThread struct {
 	Id      string `json:"id"`
-	TopicId string `json:"topicId"`
+	TopicId string `json:"topicId,omitempty"`
 	Name    string `json:"name"`
 	Time    string `json:"time"`
 }
@@ -83,10 +83,10 @@ type ChatMessage struct {
 	Id             string `json:"id"`
 	ThreadId       string `json:"threadId"`
 	MessageContent string `json:"messageContent"`
-	IsUserMessage  bool   `json:"isUserMessage"`
+	IsUserMessage  bool   `json:"isUserMessage,omitempty"`
 	// UserId is saved when the user is logged in to an account
 	// @todo not used yet
-	UserId string `json:"userId"`
+	UserId string `json:"userId,omitempty"`
 	Time   string `json:"time"`
 }
 
