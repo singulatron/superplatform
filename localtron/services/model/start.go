@@ -132,7 +132,7 @@ func (ms *ModelService) checkIfAnswers(modelId string, port int, state *modeltyp
 }
 
 func (ms *ModelService) printContainerLogs(modelId string) {
-	logs, err := ms.dockerService.GetContainerLogs(modelId, 100)
+	logs, err := ms.dockerService.GetContainerLogsAndStatus(modelId, 100)
 	if err != nil {
 		lib.Logger.Warn("Error getting container logs",
 			slog.String("modelId", modelId),
