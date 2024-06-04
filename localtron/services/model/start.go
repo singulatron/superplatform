@@ -46,7 +46,7 @@ func (ms *ModelService) Start(modelId string) error {
 	if launchInfo.NewContainerStarted {
 		state := ms.get(launchInfo.PortNumber)
 		if !state.HasCheckerRunning {
-			go ms.checkIfAnswers(launchInfo.PortNumber, state)
+			go ms.checkIfAnswers(modelId, launchInfo.PortNumber, state)
 		}
 	}
 
@@ -65,7 +65,7 @@ func (ms *ModelService) get(port int) *modeltypes.ModelState {
 	return ms.modelStateMap[port]
 }
 
-func (ms *ModelService) checkIfAnswers(port int, state *modeltypes.ModelState) {
+func (ms *ModelService) checkIfAnswers(modelId string, port int, state *modeltypes.ModelState) {
 	state.SetHasCheckerRunning(true)
 
 	defer func() {
@@ -80,6 +80,13 @@ func (ms *ModelService) checkIfAnswers(port int, state *modeltypes.ModelState) {
 		first = false
 
 		lib.Logger.Debug("Checking for answer started", slog.Int("port", port))
+		isModelRunning, err := ms.dockerService.ModelIsRunning(modelId)
+		if err != nil {
+			lib.Logger.Warn("Model check error",
+				slog.String("modelId", modelId),
+				slog.String("error", err.Error()),
+			)
+		}
 
 		dockerHost := ms.dockerService.GetDockerHost()
 		if !strings.HasPrefix(dockerHost, "http") {
