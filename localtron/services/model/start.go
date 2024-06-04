@@ -13,6 +13,7 @@ package modelservice
 import (
 	"fmt"
 	"log/slog"
+	"net"
 	"strings"
 	"time"
 
@@ -46,7 +47,7 @@ func (ms *ModelService) Start(modelId string) error {
 	if launchInfo.NewContainerStarted {
 		state := ms.get(launchInfo.PortNumber)
 		if !state.HasCheckerRunning {
-			go ms.checkIfAnswers(launchInfo.PortNumber, state)
+			go ms.checkIfAnswers(stat.CurrentModelId, launchInfo.PortNumber, state)
 		}
 	}
 
@@ -65,7 +66,7 @@ func (ms *ModelService) get(port int) *modeltypes.ModelState {
 	return ms.modelStateMap[port]
 }
 
-func (ms *ModelService) checkIfAnswers(port int, state *modeltypes.ModelState) {
+func (ms *ModelService) checkIfAnswers(modelId string, port int, state *modeltypes.ModelState) {
 	state.SetHasCheckerRunning(true)
 
 	defer func() {
@@ -81,9 +82,36 @@ func (ms *ModelService) checkIfAnswers(port int, state *modeltypes.ModelState) {
 
 		lib.Logger.Debug("Checking for answer started", slog.Int("port", port))
 
+		isModelRunning, err := ms.dockerService.ModelIsRunning(modelId)
+		if err != nil {
+			lib.Logger.Warn("Model check error",
+				slog.String("modelId", modelId),
+				slog.String("error", err.Error()),
+			)
+			continue
+		}
+		if !isModelRunning {
+			ms.printContainerLogs(modelId)
+			continue
+		}
+
 		dockerHost := ms.dockerService.GetDockerHost()
 		if !strings.HasPrefix(dockerHost, "http") {
 			dockerHost = "http://" + dockerHost
+		}
+
+		host := strings.TrimPrefix(dockerHost, "http://")
+
+		err = pingAddress(host, port)
+		if err != nil {
+			lib.Logger.Warn("Ping to LLM address failed",
+				slog.String("address", host),
+				slog.Int("port", port),
+				slog.String("error", err.Error()),
+			)
+			state.SetAnswering(false)
+			ms.printContainerLogs(modelId)
+			continue
 		}
 
 		llmClient := llm.Client{
@@ -95,8 +123,12 @@ func (ms *ModelService) checkIfAnswers(port int, state *modeltypes.ModelState) {
 			Prompt:    "My name is John. Please say hello to me.",
 		})
 		if err != nil {
-			lib.Logger.Debug("Answer failed for port", slog.Int("port", port), slog.String("error", err.Error()))
+			lib.Logger.Debug("Answer failed for port",
+				slog.Int("port", port),
+				slog.String("error", err.Error()),
+			)
 			state.SetAnswering(false)
+			ms.printContainerLogs(modelId)
 			continue
 		}
 
@@ -115,4 +147,28 @@ func (ms *ModelService) checkIfAnswers(port int, state *modeltypes.ModelState) {
 			return
 		}
 	}
+}
+
+func (ms *ModelService) printContainerLogs(modelId string) {
+	logs, err := ms.dockerService.GetContainerLogsAndStatus(modelId, 100)
+	if err != nil {
+		lib.Logger.Warn("Error getting container logs",
+			slog.String("modelId", modelId),
+			slog.String("error", err.Error()),
+		)
+	} else {
+		lib.Logger.Info("Container logs for model that is not running",
+			slog.String("logs", logs),
+		)
+	}
+}
+
+func pingAddress(host string, port int) error {
+	address := fmt.Sprintf("%s:%d", host, port)
+	conn, err := net.DialTimeout("tcp", address, 2*time.Second)
+	if err != nil {
+		return err
+	}
+	defer conn.Close()
+	return nil
 }
