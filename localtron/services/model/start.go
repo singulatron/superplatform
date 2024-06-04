@@ -13,6 +13,7 @@ package modelservice
 import (
 	"fmt"
 	"log/slog"
+	"net"
 	"strings"
 	"time"
 
@@ -99,6 +100,20 @@ func (ms *ModelService) checkIfAnswers(modelId string, port int, state *modeltyp
 			dockerHost = "http://" + dockerHost
 		}
 
+		host := strings.TrimPrefix(dockerHost, "http://")
+
+		err = pingAddress(host, port)
+		if err != nil {
+			lib.Logger.Warn("Ping to LLM address failed",
+				slog.String("address", host),
+				slog.Int("port", port),
+				slog.String("error", err.Error()),
+			)
+			state.SetAnswering(false)
+			ms.printContainerLogs(modelId)
+			continue
+		}
+
 		llmClient := llm.Client{
 			LLMAddress: fmt.Sprintf("%v:%v", dockerHost, port),
 		}
@@ -108,7 +123,10 @@ func (ms *ModelService) checkIfAnswers(modelId string, port int, state *modeltyp
 			Prompt:    "My name is John. Please say hello to me.",
 		})
 		if err != nil {
-			lib.Logger.Debug("Answer failed for port", slog.Int("port", port), slog.String("error", err.Error()))
+			lib.Logger.Debug("Answer failed for port",
+				slog.Int("port", port),
+				slog.String("error", err.Error()),
+			)
 			state.SetAnswering(false)
 			ms.printContainerLogs(modelId)
 			continue
@@ -143,4 +161,14 @@ func (ms *ModelService) printContainerLogs(modelId string) {
 			slog.String("logs", logs),
 		)
 	}
+}
+
+func pingAddress(host string, port int) error {
+	address := fmt.Sprintf("%s:%d", host, port)
+	conn, err := net.DialTimeout("tcp", address, 2*time.Second)
+	if err != nil {
+		return err
+	}
+	defer conn.Close()
+	return nil
 }
