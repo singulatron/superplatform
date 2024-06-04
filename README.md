@@ -31,7 +31,7 @@ Singulatron aims to be both a desktop app for local usage and also work as a web
 - A download manager makes sure your models are well kept
 - Run as a binary (exe, deb etc) locally, or on your servers
 
-![Run](https://singulatron.com/assets/chat.png)
+![Run](https://singulatron.com/assets/chat.png?refresh=1)
 
 ## Stack
 
