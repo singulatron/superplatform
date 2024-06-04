@@ -2,6 +2,7 @@ package dockerservice
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"strings"
 
@@ -9,7 +10,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-func (d *DockerService) GetContainerLogs(modelURL string) (string, error) {
+func (d *DockerService) GetContainerLogs(modelURL string, logCount int) (string, error) {
 	modelHash := generateStringHash(modelURL)
 
 	ctx := context.Background()
@@ -20,7 +21,11 @@ func (d *DockerService) GetContainerLogs(modelURL string) (string, error) {
 
 	for _, modelContainer := range containers {
 		if modelContainer.Labels["singulatron-model-hash"] == modelHash {
-			options := container.LogsOptions{ShowStdout: true, ShowStderr: true}
+			options := container.LogsOptions{
+				ShowStdout: true,
+				ShowStderr: true,
+				Tail:       fmt.Sprintf("%v", logCount),
+			}
 			out, err := d.client.ContainerLogs(ctx, modelContainer.ID, options)
 			if err != nil {
 				return "", errors.Wrap(err, "error getting container logs")
