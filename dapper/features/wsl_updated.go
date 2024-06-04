@@ -27,16 +27,20 @@ var WslUpdated = dt.Feature{
 			Execute: &dt.Script{
 				Source: `
 Write-Host "Updating WSL kernel"
-wsl --update
+# https://github.com/microsoft/WSL/issues/9039#issuecomment-1286596985
+wsl --update --web-download
+Write-Host "Setting default WSL version to {{.wslVersion}}"
+wsl --set-default-version {{.wslVersion}}
 `,
 				Runtime: "powershell",
 			},
 			Check: &dt.Script{
 				Source: `
-$wslVersion = wsl --status
-if ($wslVersion.Contains("Default Version: {{.wslVersion}}")) {
+$wslStatusOutput = wsl --status
+if ($wslStatusOutput.Contains("Default Version: {{.wslVersion}}")) {
     exit 0
 } else {
+	Write-Output "WSL is not updated: $wslStatusOutput"
     exit 1
 }`,
 				Runtime: "powershell",

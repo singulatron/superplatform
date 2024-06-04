@@ -31,11 +31,21 @@ var WSLTarLoaded = dt.Feature{
 		dt.Windows: {
 			Execute: &dt.Script{
 				Source: `
-Write-Host "Importing {{.distroname}}."
-wsl --import dind C:\\WSL\\{{.distroname}} {{.tarpath}} --version 2
+$distroname = "{{.distroname}}"
+$tarpath = "{{.tarpath}}"
+$wslPath = "C:\WSL\$distroname"
 
-# Set as default, see https://github.com/microsoft/WSL/issues/5923
-wsl -s {{.distroname}}
+if (-Not (Test-Path -Path $wslPath)) {
+    Write-Output "Path $wslPath does not exist. Creating it..."
+    New-Item -ItemType Directory -Path $wslPath -Force
+}
+
+Write-Host "Importing $distroname."
+wsl --import $distroname $wslPath $tarpath --version 2
+
+# Set the distribution as default
+# See https://github.com/microsoft/WSL/issues/5923
+wsl -s $distroname
 `,
 				Runtime: dt.Powershell,
 				Sudo:    false,

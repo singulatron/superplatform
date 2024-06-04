@@ -115,8 +115,11 @@ func run(appFilePath string, params map[string]string, anon bool, retry int, ret
 				os.Exit(1)
 			} else {
 				fmt.Printf("Retrying in %v", retryDelay)
+				i++
 				time.Sleep(retryDelay)
 			}
+		} else {
+			os.Exit(0)
 		}
 	}
 }
