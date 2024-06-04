@@ -60,25 +60,20 @@ func (c *Client) PostCompletions(prompt PostCompletionsRequest) (*CompletionResp
 		return nil, errors.New("streamed completions not supported by this method")
 	}
 
-	// Fetch configuration from environment variables
 	address := c.LLMAddress
 
-	// Marshal the request body to JSON
 	jsonBody, err := json.Marshal(prompt)
 	if err != nil {
 		return nil, err
 	}
 
-	// Create the request
 	req, err := http.NewRequest("POST", address+"/v1/completions", bytes.NewBuffer(jsonBody))
 	if err != nil {
 		return nil, err
 	}
 
-	// Set headers
 	req.Header.Set("Content-Type", "application/json")
 
-	// Make the request
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
@@ -86,18 +81,15 @@ func (c *Client) PostCompletions(prompt PostCompletionsRequest) (*CompletionResp
 	}
 	defer resp.Body.Close()
 
-	// Check for non-200 status code
 	if resp.StatusCode != http.StatusOK {
 		return nil, errors.New("API request failed with status code: " + resp.Status)
 	}
 
-	// Read the response body
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}
 
-	// Unmarshal the response body into the CompletionResponse struct
 	var completionResp CompletionResponse
 	err = json.Unmarshal(body, &completionResp)
 	if err != nil {
@@ -112,25 +104,20 @@ type StreamCallback func(*CompletionResponse)
 
 // Must be only used by the prompt service
 func (c *Client) PostCompletionsStreamed(prompt PostCompletionsRequest, callback StreamCallback) error {
-	// Fetch configuration from environment variables
 	address := c.LLMAddress
 
-	// Marshal the request body to JSON
 	jsonBody, err := json.Marshal(prompt)
 	if err != nil {
 		return err
 	}
 
-	// Create the request
 	req, err := http.NewRequest("POST", address+"/v1/completions", bytes.NewBuffer(jsonBody))
 	if err != nil {
 		return err
 	}
 
-	// Set headers
 	req.Header.Set("Content-Type", "application/json")
 
-	// Make the request
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
@@ -138,12 +125,10 @@ func (c *Client) PostCompletionsStreamed(prompt PostCompletionsRequest, callback
 	}
 	defer resp.Body.Close()
 
-	// Check for non-200 status code
 	if resp.StatusCode != http.StatusOK {
 		return errors.New("API request failed with status code: " + resp.Status)
 	}
 
-	// Process the streamed response
 	scanner := bufio.NewScanner(resp.Body)
 	for scanner.Scan() {
 		line := scanner.Text()
