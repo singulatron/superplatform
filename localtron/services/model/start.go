@@ -80,6 +80,7 @@ func (ms *ModelService) checkIfAnswers(modelId string, port int, state *modeltyp
 		first = false
 
 		lib.Logger.Debug("Checking for answer started", slog.Int("port", port))
+
 		isModelRunning, err := ms.dockerService.ModelIsRunning(modelId)
 		if err != nil {
 			lib.Logger.Warn("Model check error",
@@ -89,17 +90,8 @@ func (ms *ModelService) checkIfAnswers(modelId string, port int, state *modeltyp
 			continue
 		}
 		if !isModelRunning {
-			logs, err := ms.dockerService.GetContainerLogs(modelId, 100)
-			if err != nil {
-				lib.Logger.Warn("Error getting container logs",
-					slog.String("modelId", modelId),
-					slog.String("error", err.Error()),
-				)
-			} else {
-				lib.Logger.Info("Container logs for model that is not running",
-					slog.String("logs", logs),
-				)
-			}
+			ms.printContainerLogs(modelId)
+			continue
 		}
 
 		dockerHost := ms.dockerService.GetDockerHost()
@@ -118,6 +110,7 @@ func (ms *ModelService) checkIfAnswers(modelId string, port int, state *modeltyp
 		if err != nil {
 			lib.Logger.Debug("Answer failed for port", slog.Int("port", port), slog.String("error", err.Error()))
 			state.SetAnswering(false)
+			ms.printContainerLogs(modelId)
 			continue
 		}
 
@@ -135,5 +128,19 @@ func (ms *ModelService) checkIfAnswers(modelId string, port int, state *modeltyp
 			state.SetAnswering(true)
 			return
 		}
+	}
+}
+
+func (ms *ModelService) printContainerLogs(modelId string) {
+	logs, err := ms.dockerService.GetContainerLogs(modelId, 100)
+	if err != nil {
+		lib.Logger.Warn("Error getting container logs",
+			slog.String("modelId", modelId),
+			slog.String("error", err.Error()),
+		)
+	} else {
+		lib.Logger.Info("Container logs for model that is not running",
+			slog.String("logs", logs),
+		)
 	}
 }
