@@ -31,6 +31,8 @@ Singulatron aims to be both a desktop app for local usage and also work as a web
 - A download manager makes sure your models are well kept
 - Run as a binary (exe, deb etc) locally, or on your servers
 
+![Run](https://singulatron.com/assets/chat.png)
+
 ## Stack
 
 It is an Electron application, with Angular on the frontend and Go on the backend. It becomes a simple web app without electron when hosted over the network.
