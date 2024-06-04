@@ -44,9 +44,24 @@ func (d *DockerService) GetContainerLogsAndStatus(modelURL string, logCount int)
 			}
 
 			portMappings := []string{}
-			for port, bindings := range containerJSON.NetworkSettings.Ports {
-				for _, binding := range bindings {
-					portMappings = append(portMappings, fmt.Sprintf("%s:%s -> %s", binding.HostIP, binding.HostPort, port))
+			if containerJSON.NetworkSettings != nil {
+				for port, bindings := range containerJSON.NetworkSettings.Ports {
+					for _, binding := range bindings {
+						portMappings = append(portMappings, fmt.Sprintf("%s:%s -> %s", binding.HostIP, binding.HostPort, port))
+					}
+				}
+			} else {
+				portMappings = append(portMappings, "unknown")
+			}
+
+			state := "unknown"
+			healthStatus := "unknown"
+			startedAt := "unkown"
+			if containerJSON.State != nil {
+				state = containerJSON.State.Status
+				startedAt = containerJSON.State.StartedAt
+				if containerJSON.State.Health != nil {
+					healthStatus = containerJSON.State.Health.Status
 				}
 			}
 
@@ -55,10 +70,10 @@ func (d *DockerService) GetContainerLogsAndStatus(modelURL string, logCount int)
 				containerJSON.ID,
 				containerJSON.Name,
 				containerJSON.Image,
-				containerJSON.State.Status,
-				containerJSON.State.Health.Status,
+				state,
+				healthStatus,
 				containerJSON.Created,
-				containerJSON.State.StartedAt,
+				startedAt,
 				strings.Join(portMappings, ", "),
 			)
 
