@@ -37,7 +37,7 @@ wsl --set-default-version {{.wslVersion}}
 			Check: &dt.Script{
 				Source: `
 $wslStatusOutput = wsl --status
-if ($wslStatusOutput.Contains("Default Version: {{.wslVersion}}")) {
+if ($null -ne $wslStatusOutput -and $wslStatusOutput.Contains("Default Version: {{.wslVersion}}")) {
     exit 0
 } else {
 	Write-Output "WSL is not updated: $wslStatusOutput"
