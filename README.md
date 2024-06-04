@@ -18,23 +18,22 @@ It's not just an app but also a platform that enables building other AI applicat
 
 Download for Windows, MacOS or Linux: https://singulatron.com/home
 
+## Why
+
+We bought quite a few beefy GPUs for our servers but realized we need good software to be able to experiment quickly.
+Singulatron aims to be both a desktop app for local usage and also work as a website to drive servers.
+
+## Highlights
+
+- Private: your chats never leave your computer
+- Works without an internet connection
+- The prompt queue system lets you input many prompts at once - even across threads - they will be processed sensibly. You can leave threads and return - streaming won't be interrupted
+- A download manager makes sure your models are well kept
+- Run as a binary (exe, deb etc) locally, or on your servers
+
 ## Stack
 
 It is an Electron application, with Angular on the frontend and Go on the backend. It becomes a simple web app without electron when hosted over the network.
-
-## Run GPTs for free
-
-Your chats never leave your computer.
-
-![Run](https://singulatron.com/assets/chat.png)
-
-## Easy setup
-
-One of the main goals of the projects is to get it working on as many systems as possible - to truly democratize the AI age.
-
-## Browse models
-
-We aim to bring every available AI model to you.
 
 ## License
 
