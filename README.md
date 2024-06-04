@@ -16,7 +16,10 @@ It is private, works offline, and can run on your laptop, PC, or even on your co
 
 It's not just an app but also a platform that enables building other AI applications on top of it.
 
-Download for Windows, MacOS or Linux: https://singulatron.com/home
+## Download
+
+Download for Windows, or Linux from the website: https://singulatron.com/home  
+MacOS support is coming soon.
 
 ## Why
 
