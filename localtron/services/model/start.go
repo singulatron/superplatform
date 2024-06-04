@@ -46,7 +46,7 @@ func (ms *ModelService) Start(modelId string) error {
 	if launchInfo.NewContainerStarted {
 		state := ms.get(launchInfo.PortNumber)
 		if !state.HasCheckerRunning {
-			go ms.checkIfAnswers(modelId, launchInfo.PortNumber, state)
+			go ms.checkIfAnswers(stat.CurrentModelId, launchInfo.PortNumber, state)
 		}
 	}
 
