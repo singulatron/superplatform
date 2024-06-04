@@ -23,13 +23,14 @@ var WslInstalled = dt.Feature{
 			},
 			Check: &dt.Script{
 				Source: `
-# Attempt to list WSL distributions quietly and check the status
-$listOutput = wsl -l
-if ($listOutput.Contains("--install")) {
-	# The command executed successfully, WSL is operational
+# The usage output which includes the "--install" flag we check for actually
+# is actually printed to stderr, so we need to use '2>&1' here
+$listOutput = wsl -l 2>&1
+if ($null -ne $listOutput -and $listOutput.Contains("--install")) {
 	Write-Output "WSL is not installed"
 	exit 1
 } else {
+	Write-Output "WSL is installed"
 	exit 0	
 }`,
 				// Unfortunately without reboot the check, or any WSL command will throw this:
