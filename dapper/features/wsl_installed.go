@@ -23,7 +23,7 @@ var WslInstalled = dt.Feature{
 			},
 			Check: &dt.Script{
 				Source: `
-wsl -l
+wsl --status
 $exitCode = $LASTEXITCODE
 
 if ($exitCode -ne 0) {
