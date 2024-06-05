@@ -85,6 +85,10 @@ export class ModelService {
 	}
 
 	async modelStart(url?: string) {
+		this.localtron.call('/model/start', { url: url });
+	}
+
+	async makeDefault(url?: string) {
 		this.localtron.call('/model/make-default', { url: url });
 	}
 }

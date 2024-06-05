@@ -33,7 +33,7 @@ export class ConfigService {
 	async init() {
 		this.firehoseService.firehoseEvent$.subscribe(async (event) => {
 			switch (event.name) {
-				case 'configUpdated':
+				case 'configUpdate':
 					let rsp1 = await this.configGet();
 					this.onConfigUpdateSubject.next(rsp1.config);
 					break;

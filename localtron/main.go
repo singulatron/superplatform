@@ -140,6 +140,9 @@ func main() {
 	router.HandleFunc("/model/start", appl(func(w http.ResponseWriter, r *http.Request) {
 		modelendpoints.Start(w, r, modelService)
 	}))
+	router.HandleFunc("/model/make-default", appl(func(w http.ResponseWriter, r *http.Request) {
+		modelendpoints.MakeDefault(w, r, modelService)
+	}))
 
 	router.HandleFunc("/config/get", appl(func(w http.ResponseWriter, r *http.Request) {
 		configendpoints.Get(w, r, configService)

@@ -18,12 +18,8 @@ import (
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 )
 
-type StartRequest struct {
-	Url string `json:"url"`
-}
-
 func Start(w http.ResponseWriter, r *http.Request, ms *modelservice.ModelService) {
-	req := StartRequest{}
+	req := modeltypes.StartRequest{}
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `invalid JSON`, http.StatusBadRequest)
@@ -37,6 +33,6 @@ func Start(w http.ResponseWriter, r *http.Request, ms *modelservice.ModelService
 		return
 	}
 
-	jsonData, _ := json.Marshal(modeltypes.StatusResponse{})
+	jsonData, _ := json.Marshal(modeltypes.StartResponse{})
 	w.Write(jsonData)
 }

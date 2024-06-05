@@ -18,8 +18,8 @@ import (
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 )
 
-func Status(w http.ResponseWriter, r *http.Request, ms *modelservice.ModelService) {
-	req := modeltypes.StatusRequest{}
+func MakeDefault(w http.ResponseWriter, r *http.Request, ms *modelservice.ModelService) {
+	req := modeltypes.MakeDefaultRequest{}
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `invalid JSON`, http.StatusBadRequest)
@@ -27,14 +27,12 @@ func Status(w http.ResponseWriter, r *http.Request, ms *modelservice.ModelServic
 	}
 	defer r.Body.Close()
 
-	status, err := ms.Status(req.Url)
+	err = ms.MakeDefault(req.Url)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	jsonData, _ := json.Marshal(modeltypes.StatusResponse{
-		Status: status,
-	})
+	jsonData, _ := json.Marshal(modeltypes.MakeDefaultResponse{})
 	w.Write(jsonData)
 }

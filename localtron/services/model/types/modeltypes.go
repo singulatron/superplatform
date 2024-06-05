@@ -32,10 +32,26 @@ type Status struct {
 	ModelAddress string `json:"modelAddress"`
 }
 
-type StatusRequest struct{}
+type StatusRequest struct {
+	Url string `json:"url"`
+}
 
 type StatusResponse struct {
 	Status *Status `json:"status"`
+}
+
+type StartRequest struct {
+	Url string `json:"url"`
+}
+
+type StartResponse struct {
+}
+
+type MakeDefaultRequest struct {
+	Url string `json:"url"`
+}
+
+type MakeDefaultResponse struct {
 }
 
 //

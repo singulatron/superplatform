@@ -163,7 +163,7 @@ export class AdvancedModelExplorerComponent {
 	// @todo rename this to make model default...
 	// the wording activate makes one think there is only one model can be used at a time
 	async makeModelDefault(modelId: string) {
-		this.modelService.modelStart(modelId);
+		this.modelService.makeDefault(modelId);
 	}
 
 	flavourToolTip(flavour: string): string {

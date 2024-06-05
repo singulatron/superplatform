@@ -24,7 +24,8 @@ func (cs *ConfigService) SaveConfig(config types.Config) error {
 	defer cs.configFileMutex.Unlock()
 
 	cs.config = config
-	data, err := yaml.Marshal(&cs.config)
+
+	data, err := yaml.Marshal(cs.config)
 	if err != nil {
 		return errors.Wrap(err, "error saving config")
 	}
