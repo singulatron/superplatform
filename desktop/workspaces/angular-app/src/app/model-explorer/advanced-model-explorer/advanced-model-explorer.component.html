@@ -184,7 +184,7 @@
 										?.currentModelId !== model.id
 								"
 								color="tertiary"
-								(click)="activateModel(model.id)"
+								(click)="makeModelDefault(model.id)"
 								fill="outline"
 							>
 								<ion-icon slot="start" name="caret-forward-outline"></ion-icon>
@@ -196,7 +196,7 @@
 										?.currentModelId === model.id
 								"
 								color="tertiary"
-								(click)="activateModel(model.id)"
+								(click)="makeModelDefault(model.id)"
 								fill="outline"
 								disabled="true"
 							>

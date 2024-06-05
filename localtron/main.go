@@ -52,7 +52,12 @@ func main() {
 		log.Fatal(err)
 	}
 
-	configService, err := configservice.NewConfigService()
+	firehoseService, err := firehoseservice.NewFirehoseService()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	configService, err := configservice.NewConfigService(firehoseService)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -73,11 +78,6 @@ func main() {
 
 	downloadFolder := path.Join(singulatronFolder, "downloads")
 	err = os.MkdirAll(downloadFolder, 0755)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	firehoseService, err := firehoseservice.NewFirehoseService()
 	if err != nil {
 		log.Fatal(err)
 	}
