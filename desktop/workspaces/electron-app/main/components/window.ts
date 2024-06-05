@@ -29,6 +29,7 @@ declare global {
 }
 
 const PORT = 59517;
+let localtronProcess: cp.ChildProcessWithoutNullStreams;
 
 installWindows();
 launchFrontendServer();
@@ -224,23 +225,6 @@ function installWindows() {
 	});
 }
 
-let localtronProcess: cp.ChildProcessWithoutNullStreams;
-
-app.on('before-quit', (event) => {
-	console.log('Application is quitting - closing Localtron');
-	if (localtronProcess) {
-		localtronProcess.kill();
-		console.log('Localtron closed');
-	}
-});
-
-process.on('SIGINT', () => {
-	console.log('SIGINT signal received: closing Localtron');
-	if (localtronProcess) {
-		localtronProcess.kill();
-	}
-});
-
 process.on('SIGTERM', () => {
 	console.log('SIGTERM signal received: closing Localron');
 	if (localtronProcess) {
@@ -250,6 +234,21 @@ process.on('SIGTERM', () => {
 
 function launchLocaltron() {
 	console.log('Launching Localtron');
+
+	app.on('before-quit', (event) => {
+		console.log('Application is quitting - closing Localtron');
+		if (localtronProcess) {
+			localtronProcess.kill();
+			console.log('Localtron closed');
+		}
+	});
+
+	process.on('SIGINT', () => {
+		console.log('SIGINT signal received: closing Localtron');
+		if (localtronProcess) {
+			localtronProcess.kill();
+		}
+	});
 
 	let exeName = 'localtron';
 	if (process.platform == 'win32') {
