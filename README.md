@@ -16,6 +16,8 @@ It is private, works offline, and can run on your laptop, PC, or even on your co
 
 It's not just an app but also a platform that enables building other AI applications on top of it.
 
+![Run](https://singulatron.com/assets/chat.png?refresh=1)
+
 ## Download
 
 Download for Windows, or Linux from the website: https://singulatron.com/home  
@@ -33,8 +35,6 @@ Singulatron aims to be both a desktop app for local usage and also work as a web
 - The prompt queue system lets you input many prompts at once - even across threads - they will be processed sensibly. You can leave threads and return - streaming won't be interrupted
 - A download manager makes sure your models are well kept
 - Run as a binary (exe, deb etc) locally, or on your servers
-
-![Run](https://singulatron.com/assets/chat.png?refresh=1)
 
 ## Stack
 
