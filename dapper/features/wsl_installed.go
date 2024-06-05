@@ -23,10 +23,8 @@ var WslInstalled = dt.Feature{
 			},
 			Check: &dt.Script{
 				Source: `
-wsl --status
-$exitCode = $LASTEXITCODE
-
-if ($exitCode -ne 0) {
+$listOutput = wsl -l 2>&1
+if ($null -ne $listOutput -and $listOutput.Contains("--install")) {
 	Write-Output "WSL is not installed"
 	exit 1
 } else {
