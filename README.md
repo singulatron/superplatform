@@ -26,7 +26,7 @@ MacOS support is coming soon.
 ## Why
 
 We bought quite a few beefy GPUs for our servers but realized we need good software to be able to experiment quickly.
-Singulatron aims to be both a desktop app for local usage and also work as a website to drive servers.
+Singulatron aims to be both a desktop app for local usage and also to work as a distributed daemon to drive servers, with a frontend client that is the same as the local app.
 
 ## Highlights
 
