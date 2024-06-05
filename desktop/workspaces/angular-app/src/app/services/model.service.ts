@@ -39,7 +39,7 @@ export class ModelService {
 		// @todo nothing to trigger model start so we resolve to polling
 		setInterval(() => {
 			this.init();
-		  }, 2000);
+		}, 2000);
 
 		this.listenToModelReady();
 	}
@@ -73,7 +73,7 @@ export class ModelService {
 				selectedExists: rsp?.status?.selectedExists,
 			});
 		} catch (error) {
-			console.log(error)
+			console.log(error);
 			console.error('Error in pollModelStatus', {
 				error: JSON.stringify(error),
 			});
@@ -85,7 +85,7 @@ export class ModelService {
 	}
 
 	async modelStart(url?: string) {
-		this.localtron.call('/model/start', { url: url });
+		this.localtron.call('/model/make-default', { url: url });
 	}
 }
 

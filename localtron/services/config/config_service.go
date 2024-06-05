@@ -16,15 +16,13 @@ import (
 	"log/slog"
 	"os"
 	"path"
-	"path/filepath"
 	"sync"
 
-	"github.com/fsnotify/fsnotify"
-	"github.com/google/uuid"
 	"github.com/pkg/errors"
 	"gopkg.in/yaml.v2"
 
 	types "github.com/singulatron/singulatron/localtron/services/config/types"
+	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
 
 	"github.com/singulatron/singulatron/localtron/lib"
 )
@@ -32,17 +30,20 @@ import (
 const defaultModelId = `https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q3_K_S.gguf`
 
 type ConfigService struct {
+	firehoseService *firehoseservice.FirehoseService
+
 	ConfigDirectory   string
 	ConfigFileName    string
 	config            types.Config
 	configFileMutex   sync.Mutex
 	clientIdFileMutex sync.Mutex
 	clientId          string
-	watcher           *fsnotify.Watcher
 }
 
-func NewConfigService() (*ConfigService, error) {
+func NewConfigService(firehoseService *firehoseservice.FirehoseService) (*ConfigService, error) {
 	cs := &ConfigService{
+		firehoseService: firehoseService,
+
 		ConfigFileName: "config.yaml",
 	}
 
@@ -58,61 +59,6 @@ func (cs *ConfigService) Start() error {
 		return err
 	}
 	return nil
-}
-
-func (cs *ConfigService) GetClientId() (string, error) {
-	cs.clientIdFileMutex.Lock()
-	defer cs.clientIdFileMutex.Unlock()
-
-	if cs.clientId != "" {
-		return cs.clientId, nil
-	}
-
-	clientIdFilePath := filepath.Join(cs.ConfigDirectory, "clientId.txt")
-
-	if _, err := os.Stat(clientIdFilePath); os.IsNotExist(err) {
-		newUUID, err := uuid.NewRandom()
-		if err != nil {
-			return "", err
-		}
-
-		clientId := newUUID.String()
-
-		err = ioutil.WriteFile(clientIdFilePath, []byte(clientId), 0644)
-		if err != nil {
-			return "", err
-		}
-
-		return clientId, nil
-	}
-
-	clientIdBytes, err := ioutil.ReadFile(clientIdFilePath)
-	if err != nil {
-		return "", err
-	}
-	cs.clientId = string(clientIdBytes)
-
-	return cs.clientId, nil
-}
-
-func (cs *ConfigService) SaveConfig(config types.Config) error {
-	cs.configFileMutex.Lock()
-	defer cs.configFileMutex.Unlock()
-
-	cs.config = config
-	data, err := yaml.Marshal(&cs.config)
-	if err != nil {
-		return errors.Wrap(err, "error saving config")
-	}
-	if err := ioutil.WriteFile(path.Join(cs.ConfigDirectory, cs.ConfigFileName), data, 0644); err != nil {
-		return errors.Wrap(err, "error writing config file")
-	}
-
-	return nil
-}
-
-func (cs *ConfigService) GetConfig() (types.Config, error) {
-	return cs.config, nil
 }
 
 func (cs *ConfigService) loadConfig() error {

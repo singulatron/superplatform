@@ -41,3 +41,16 @@ type ConfigGetRequest struct {
 type ConfigGetResponse struct {
 	Config *Config `json:"config"`
 }
+
+//
+// Event
+//
+
+const EventConfigUpdateName = "configUpdate"
+
+type EventConfigUpdate struct {
+}
+
+func (e EventConfigUpdate) Name() string {
+	return EventConfigUpdateName
+}

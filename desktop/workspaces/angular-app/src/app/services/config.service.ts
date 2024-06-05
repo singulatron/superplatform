@@ -10,6 +10,7 @@
  */
 import { Injectable } from '@angular/core';
 import { LocaltronService } from './localtron.service';
+import { FirehoseService } from './firehose.service';
 import { ReplaySubject } from 'rxjs';
 
 @Injectable({
@@ -22,13 +23,25 @@ export class ConfigService {
 	/** Config emitted whenever it's loaded (on startup) or saved */
 	onConfigUpdate$ = this.onConfigUpdateSubject.asObservable();
 
-	constructor(private localtron: LocaltronService) {
+	constructor(
+		private localtron: LocaltronService,
+		private firehoseService: FirehoseService
+	) {
 		this.init();
 	}
 
 	async init() {
+		this.firehoseService.firehoseEvent$.subscribe(async (event) => {
+			switch (event.name) {
+				case 'configUpdated':
+					let rsp1 = await this.configGet();
+					this.onConfigUpdateSubject.next(rsp1.config);
+					break;
+			}
+		});
+
 		try {
-			let rsp = await this.localtron.call('/config/get', {});
+			let rsp = await this.configGet();
 			this.lastConfig = rsp?.config;
 			this.onConfigUpdateSubject.next(rsp?.config as Config);
 		} catch (error) {
@@ -36,6 +49,10 @@ export class ConfigService {
 				error: JSON.stringify(error),
 			});
 		}
+	}
+
+	async configGet(): Promise<ConfigGetResponse> {
+		return await this.localtron.call('/config/get', {});
 	}
 }
 
@@ -54,4 +71,10 @@ export interface Config {
 	 * we show a START runtime button.
 	 * */
 	isRuntimeInstalled?: boolean;
+}
+
+export interface ConfigGetRequest {}
+
+export interface ConfigGetResponse {
+	config: Config;
 }
