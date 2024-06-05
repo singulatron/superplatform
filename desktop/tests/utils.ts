@@ -4,6 +4,9 @@ import { test, expect } from '@playwright/test';
 import { findLatestBuild, parseElectronApp } from 'electron-playwright-helpers';
 import { join } from 'path';
 
+// this seems to get rid of an ECONNNERR when running tests
+const delayTime = 500;
+
 export async function tryInteract(
 	page: Page,
 	selector: string,
@@ -99,6 +102,8 @@ export async function testRun(
 	options?: TestOptions
 ) {
 	test(name, async ({}, testInfo) => {
+		await new Promise((resolve) => setTimeout(resolve, delayTime));
+
 		testInfo.setTimeout(options?.timeout || 300000);
 
 		const latestBuild = findLatestBuild();
