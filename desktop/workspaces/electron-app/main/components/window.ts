@@ -30,52 +30,9 @@ declare global {
 
 const PORT = 59517;
 
-function launchFrontendServer() {
-	const server = express();
-
-	const angularAssetsParentFolder = getAngularPath();
-
-	server.use(express.static(angularAssetsParentFolder));
-
-	server.get('*', (req, res) => {
-		const requestedPath = path.join(angularAssetsParentFolder, req.path);
-
-		fs.stat(requestedPath, (err, stats) => {
-			if (err || !stats.isFile()) {
-				res.sendFile(path.join(angularAssetsParentFolder, 'index.html'));
-			} else {
-				res.sendFile(requestedPath);
-			}
-		});
-	});
-
-	const s = server.listen(PORT, () =>
-		console.log(`App is serving`, {
-			address: `http://localhost:${PORT}`,
-		})
-	);
-
-	app.on('before-quit', (event) => {
-		console.log('Application is quitting - closing HTTP server');
-		s.close(() => {
-			console.log('HTTP server closed');
-		});
-	});
-
-	process.on('SIGINT', () => {
-		console.log('SIGINT signal received: closing HTTP server');
-		s.close(() => {
-			console.log('HTTP server closed');
-		});
-	});
-
-	process.on('SIGTERM', () => {
-		console.log('SIGTERM signal received: closing HTTP server');
-		s.close(() => {
-			console.log('HTTP server closed');
-		});
-	});
-}
+installWindows();
+launchFrontendServer();
+launchLocaltron();
 
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
 
@@ -156,11 +113,52 @@ export class Window {
 	}
 }
 
-app.on('ready', () => {
-	installWindows();
-	launchFrontendServer();
-	launchLocaltron();
-});
+function launchFrontendServer() {
+	const server = express();
+
+	const angularAssetsParentFolder = getAngularPath();
+
+	server.use(express.static(angularAssetsParentFolder));
+
+	server.get('*', (req, res) => {
+		const requestedPath = path.join(angularAssetsParentFolder, req.path);
+
+		fs.stat(requestedPath, (err, stats) => {
+			if (err || !stats.isFile()) {
+				res.sendFile(path.join(angularAssetsParentFolder, 'index.html'));
+			} else {
+				res.sendFile(requestedPath);
+			}
+		});
+	});
+
+	const s = server.listen(PORT, () =>
+		console.log(`App is serving`, {
+			address: `http://localhost:${PORT}`,
+		})
+	);
+
+	app.on('before-quit', (event) => {
+		console.log('Application is quitting - closing HTTP server');
+		s.close(() => {
+			console.log('HTTP server closed');
+		});
+	});
+
+	process.on('SIGINT', () => {
+		console.log('SIGINT signal received: closing HTTP server');
+		s.close(() => {
+			console.log('HTTP server closed');
+		});
+	});
+
+	process.on('SIGTERM', () => {
+		console.log('SIGTERM signal received: closing HTTP server');
+		s.close(() => {
+			console.log('HTTP server closed');
+		});
+	});
+}
 
 // let's try to install register the app icon into the Start Menu on Windows
 // with squirrel
