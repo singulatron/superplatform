@@ -16,21 +16,28 @@ import (
 	"os"
 	"os/signal"
 	"path"
+	"strings"
 	"sync"
 	"syscall"
 	"time"
 )
 
+type StateFile[T any] struct {
+	Rows []T `json:"rows"`
+}
+
 type StateManager[T any] struct {
-	state      T
+	key        string
+	memStore   *MemoryStore[T]
 	lock       sync.Mutex
 	filePath   string
 	hasChanged bool
 }
 
-func NewStateManager[T any](initialState T, filePath string) *StateManager[T] {
+// key: the key under which the slice will be saved in a JSON object in the file
+func NewStateManager[T any](memStore *MemoryStore[T], filePath string) *StateManager[T] {
 	sm := &StateManager[T]{
-		state:    initialState,
+		memStore: memStore,
 		filePath: filePath,
 	}
 	sm.setupSignalHandler()
@@ -60,12 +67,27 @@ func (sm *StateManager[T]) LoadState() error {
 		return err
 	}
 
-	return json.Unmarshal(data, &sm.state)
+	var stateFile StateFile[T]
+	if strings.TrimSpace(string(data)) == "" {
+		return nil
+	}
+	err = json.Unmarshal(data, &stateFile)
+	if err != nil {
+		return err
+	}
+
+	sm.memStore.Reset(stateFile.Rows)
+
+	return nil
 }
 
 func (sm *StateManager[T]) SaveState() error {
+	shallowCopy := sm.memStore.SliceCopy()
+
 	sm.lock.Lock()
-	data, err := json.MarshalIndent(sm.state, "", "  ")
+	data, err := json.MarshalIndent(&StateFile[T]{
+		Rows: shallowCopy,
+	}, "", "  ")
 	if err != nil {
 		sm.lock.Unlock()
 		return err

@@ -38,11 +38,11 @@ type AppService struct {
 	ThreadsFilePath  string
 	MessagesFilePath string
 
-	messagesMem *apptypes.MessagesMem
-	threadsMem  *apptypes.ThreadsMem
+	messagesMem *lib.MemoryStore[*apptypes.ChatMessage]
+	threadsMem  *lib.MemoryStore[*apptypes.ChatThread]
 
-	messagesFile *lib.StateManager[*apptypes.MessagesMem]
-	threadsFile  *lib.StateManager[*apptypes.ThreadsMem]
+	messagesFile *lib.StateManager[*apptypes.ChatMessage]
+	threadsFile  *lib.StateManager[*apptypes.ChatThread]
 
 	logMutex sync.Mutex
 }
@@ -56,8 +56,8 @@ func NewAppService(
 		return nil, errors.Wrap(err, "app service canno get client id")
 	}
 
-	mm := apptypes.NewMessagesMem()
-	tm := apptypes.NewThreadsMem()
+	mm := lib.NewMemoryStore[*apptypes.ChatMessage]()
+	tm := lib.NewMemoryStore[*apptypes.ChatThread]()
 
 	err = os.MkdirAll(path.Join(cs.ConfigDirectory, "data"), 0755)
 	if err != nil {

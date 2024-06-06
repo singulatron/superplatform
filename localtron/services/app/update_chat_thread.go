@@ -15,7 +15,10 @@ import (
 )
 
 func (a *AppService) UpdateChatThread(chatThread *apptypes.ChatThread) (*apptypes.ChatThread, error) {
-	a.threadsMem.UpdateThread(chatThread)
+	a.threadsMem.UpdateByFunc(func(i *apptypes.ChatThread) bool {
+		return i.Id == chatThread.Id
+	}, chatThread)
+
 	a.threadsFile.MarkChanged()
 
 	return chatThread, nil

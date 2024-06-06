@@ -17,6 +17,10 @@ import (
 	"github.com/singulatron/singulatron/localtron/lib"
 )
 
+type MessagesMem struct {
+	Messages []*ChatMessage `json:"messages"`
+}
+
 type Log struct {
 	Level    string         `json:"level"`
 	Time     string         `json:"time"`
@@ -184,4 +188,14 @@ type EventChatMessageAdded struct {
 
 func (e EventChatMessageAdded) Name() string {
 	return EventChatMessageAddedName
+}
+
+const EventChatThreadAddedName = "chatThreadAdded"
+
+type EventChatThreadAdded struct {
+	ThreadId string `json:"threadId"`
+}
+
+func (e EventChatThreadAdded) Name() string {
+	return EventChatThreadAddedName
 }
