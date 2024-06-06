@@ -184,11 +184,11 @@
 										?.currentModelId !== model.id
 								"
 								color="tertiary"
-								(click)="activateModel(model.id)"
+								(click)="makeModelDefault(model.id)"
 								fill="outline"
 							>
 								<ion-icon slot="start" name="caret-forward-outline"></ion-icon>
-								{{ 'Activate' | translate }}
+								{{ 'Make default' | translate }}
 							</ion-button>
 							<ion-button
 								*ngIf="
@@ -196,11 +196,11 @@
 										?.currentModelId === model.id
 								"
 								color="tertiary"
-								(click)="activateModel(model.id)"
+								(click)="makeModelDefault(model.id)"
 								fill="outline"
 								disabled="true"
 							>
-								{{ 'Active' | translate }}
+								{{ 'Default' | translate }}
 							</ion-button>
 						</span>
 						<span style="padding-left: 0.25rem">
