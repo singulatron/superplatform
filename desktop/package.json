@@ -50,7 +50,7 @@
 		"@types/crypto-js": "^4.2.2",
 		"@types/detect-browser": "^4.0.0",
 		"@types/jasmine": "^5.1.4",
-		"@types/lodash": "^4.17.0",
+		"@types/lodash": "^4.17.4",
 		"@types/node": "^20.14.2",
 		"@vercel/webpack-asset-relocator-loader": "^1.7.3",
 		"allure-commandline": "^2.29.0",
