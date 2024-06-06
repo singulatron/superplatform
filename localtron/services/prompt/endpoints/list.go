@@ -27,7 +27,12 @@ func List(w http.ResponseWriter, r *http.Request, promptService *promptservice.P
 	}
 	defer r.Body.Close()
 
-	prompts, err := promptService.ListPrompts()
+	prompts, err := promptService.ListPrompts(&promptservice.ListPromptOptions{
+		Statuses: []prompttypes.PromptStatus{
+			prompttypes.PromptStatusRunning,
+			prompttypes.PromptStatusScheduled,
+		},
+	})
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

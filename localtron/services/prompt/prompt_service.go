@@ -11,9 +11,13 @@
 package promptservice
 
 import (
+	"path"
 	"sync"
+	"time"
 
+	"github.com/singulatron/singulatron/localtron/lib"
 	appservice "github.com/singulatron/singulatron/localtron/services/app"
+	configservice "github.com/singulatron/singulatron/localtron/services/config"
 	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
 	modelservice "github.com/singulatron/singulatron/localtron/services/model"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
@@ -24,32 +28,43 @@ type PromptService struct {
 	appService      *appservice.AppService
 	firehoseService *firehoseservice.FirehoseService
 
-	StreamManager *StreamManager
+	PromptsFilePath string
+	StreamManager   *StreamManager
 
-	currentPrompt      *prompttypes.Prompt
-	currentPromptMutex sync.Mutex
+	promptsMem *lib.MemoryStore[*prompttypes.Prompt]
 
-	promptsToProcess      []*prompttypes.Prompt
-	promptsToProcessMutex sync.Mutex
+	promptsFile *lib.StateManager[*prompttypes.Prompt]
 
-	trigger chan bool
+	runMutex sync.Mutex
+	trigger  chan bool
 }
 
 func NewPromptService(
+	cs *configservice.ConfigService,
 	modelService *modelservice.ModelService,
 	appService *appservice.AppService,
 	firehoseService *firehoseservice.FirehoseService,
 ) *PromptService {
+	promptsPath := path.Join(cs.ConfigDirectory, "data", "prompts.json")
+
+	pm := lib.NewMemoryStore[*prompttypes.Prompt]()
+
 	service := &PromptService{
 		modelService:    modelService,
 		appService:      appService,
 		firehoseService: firehoseService,
 
-		StreamManager: NewStreamManager(),
+		PromptsFilePath: promptsPath,
+		StreamManager:   NewStreamManager(),
 
-		promptsToProcess: []*prompttypes.Prompt{},
-		trigger:          make(chan bool, 1),
+		promptsMem:  pm,
+		promptsFile: lib.NewStateManager[*prompttypes.Prompt](pm, promptsPath),
+
+		trigger: make(chan bool, 1),
 	}
+
 	go service.processPrompts()
+	go service.promptsFile.PeriodicSaveState(2 * time.Second)
+
 	return service
 }

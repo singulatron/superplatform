@@ -49,6 +49,18 @@ func (ms *MemoryStore[T]) Foreach(f func(i int, item T)) {
 	}
 }
 
+func (ms *MemoryStore[T]) ForeachStop(f func(i int, item T) bool) {
+	ms.mutex.Lock()
+	defer ms.mutex.Unlock()
+
+	for i, v := range ms.items {
+		r := f(i, v)
+		if r {
+			return
+		}
+	}
+}
+
 func (ms *MemoryStore[T]) UpdateByFunc(matchFunc func(T) bool, updateValue T) bool {
 	ms.mutex.Lock()
 	defer ms.mutex.Unlock()
@@ -74,6 +86,20 @@ func (ms *MemoryStore[T]) Filter(f func(item T) bool) []T {
 	}
 
 	return ret
+}
+
+func (ms *MemoryStore[T]) Count(f func(item T) bool) int64 {
+	ms.mutex.Lock()
+	defer ms.mutex.Unlock()
+
+	var count int64
+	for _, v := range ms.items {
+		if f(v) {
+			count++
+		}
+	}
+
+	return count
 }
 
 func (ms *MemoryStore[T]) Find(matchFunc func(T) bool) (T, bool) {

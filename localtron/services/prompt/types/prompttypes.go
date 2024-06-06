@@ -10,6 +10,21 @@
  */
 package prompttypes
 
+import (
+	"sync"
+	"time"
+)
+
+type PromptStatus string
+
+const (
+	PromptStatusScheduled PromptStatus = "scheduled"
+	PromptStatusRunning   PromptStatus = "running"
+	PromptStatusCompleted PromptStatus = "completed"
+	PromptStatusErrored   PromptStatus = "errored"
+	PromptStatusCanceled  PromptStatus = "canceled"
+)
+
 // Prompt
 // @todo:
 // - message and prompt have a lot of overlap, rethink
@@ -21,10 +36,19 @@ type Prompt struct {
 	Prompt string `json:"prompt"`
 	// Message is the prompt without the template wrapper as in
 	//    What's a banana?
-	Message          string `json:"message"`
-	ModelId          string `json:"modelId"`
-	Time             string `json:"time"`
-	IsBeingProcessed bool   `json:"isBeingProcessed"`
+	Message   string       `json:"message"`
+	ModelId   string       `json:"modelId"`
+	CreatedAt time.Time    `json:"createdAt"`
+	Time      string       `json:"time"`
+	Status    PromptStatus `json:"status"`
+	LastRun   time.Time    `json:"lastRun"`
+	// how many times this was ran
+	// (retries are due to errors)
+	RunCount   int    `json:"runCount"`
+	Error      string `json:"error"`
+	MaxRetries int    `json:"maxRetries"`
+
+	mutex sync.Mutex
 }
 
 type AddPromptRequest struct {

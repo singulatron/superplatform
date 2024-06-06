@@ -219,7 +219,7 @@ func main() {
 		appendpoints.UpdateChatThread(w, r, appService)
 	}))
 
-	promptService := promptservice.NewPromptService(modelService, appService, firehoseService)
+	promptService := promptservice.NewPromptService(configService, modelService, appService, firehoseService)
 
 	router.HandleFunc("/prompt/add", appl(func(w http.ResponseWriter, r *http.Request) {
 		promptendpoints.Add(w, r, promptService)
