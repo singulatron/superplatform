@@ -12,8 +12,10 @@ package firehoseservice
 
 import (
 	"log"
+	"log/slog"
 	"sync"
 
+	"github.com/singulatron/singulatron/localtron/lib"
 	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
 )
 
@@ -30,6 +32,11 @@ func NewFirehoseService() (*FirehoseService, error) {
 }
 
 func (fs *FirehoseService) PublishMany(events ...firehosetypes.Event) {
+	for _, event := range events {
+		lib.Logger.Debug("Event published",
+			slog.String("eventName", event.Name()),
+		)
+	}
 	fs.mu.Lock()
 	defer fs.mu.Unlock()
 	for _, subscriber := range fs.subscribers {

@@ -74,8 +74,8 @@ func NewAppService(
 		messagesMem: mm,
 		threadsMem:  tm,
 
-		messagesFile: lib.NewStateManager("messages", mm, messagesPath),
-		threadsFile:  lib.NewStateManager("threads", tm, threadsPath),
+		messagesFile: lib.NewStateManager(mm, messagesPath),
+		threadsFile:  lib.NewStateManager(tm, threadsPath),
 
 		LogBuffer:   make([]apptypes.Log, 0),
 		TriggerSend: make(chan bool, 1),

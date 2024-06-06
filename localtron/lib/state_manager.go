@@ -16,10 +16,15 @@ import (
 	"os"
 	"os/signal"
 	"path"
+	"strings"
 	"sync"
 	"syscall"
 	"time"
 )
+
+type StateFile[T any] struct {
+	Rows []T `json:"rows"`
+}
 
 type StateManager[T any] struct {
 	key        string
@@ -30,9 +35,8 @@ type StateManager[T any] struct {
 }
 
 // key: the key under which the slice will be saved in a JSON object in the file
-func NewStateManager[T any](key string, memStore *MemoryStore[T], filePath string) *StateManager[T] {
+func NewStateManager[T any](memStore *MemoryStore[T], filePath string) *StateManager[T] {
 	sm := &StateManager[T]{
-		key:      key,
 		memStore: memStore,
 		filePath: filePath,
 	}
@@ -63,13 +67,16 @@ func (sm *StateManager[T]) LoadState() error {
 		return err
 	}
 
-	var items []T
-	err = json.Unmarshal(data, &items)
+	var stateFile StateFile[T]
+	if strings.TrimSpace(string(data)) == "" {
+		return nil
+	}
+	err = json.Unmarshal(data, &stateFile)
 	if err != nil {
 		return err
 	}
 
-	sm.memStore.Reset(items)
+	sm.memStore.Reset(stateFile.Rows)
 
 	return nil
 }
@@ -78,7 +85,9 @@ func (sm *StateManager[T]) SaveState() error {
 	shallowCopy := sm.memStore.SliceCopy()
 
 	sm.lock.Lock()
-	data, err := json.MarshalIndent(shallowCopy, "", "  ")
+	data, err := json.MarshalIndent(&StateFile[T]{
+		Rows: shallowCopy,
+	}, "", "  ")
 	if err != nil {
 		sm.lock.Unlock()
 		return err

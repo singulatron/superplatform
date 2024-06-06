@@ -112,10 +112,10 @@ func (p *PromptService) processPrompt() error {
 	p.currentPromptMutex.Lock()
 	defer p.currentPromptMutex.Unlock()
 
-	// @todo make this idempotent - on failures and retries
-	// a bunch of messages will be generated...
 	err := p.appService.AddChatMessage(&apptypes.ChatMessage{
-		Id:             uuid.New().String(),
+		// not a fan of this but at least it makes this idempotent
+		// in case prompts get retried over and over again
+		Id:             p.currentPrompt.Id,
 		ThreadId:       p.currentPrompt.ThreadId,
 		IsUserMessage:  true,
 		MessageContent: p.currentPrompt.Message,

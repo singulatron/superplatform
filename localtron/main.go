@@ -11,7 +11,7 @@
 package main
 
 import (
-	"log"
+	"fmt"
 	"log/slog"
 	"net/http"
 	"os"
@@ -47,19 +47,29 @@ const singulatronFolder = ".singulatron"
 const port = "58231"
 
 func main() {
+	defer func() {
+		if r := recover(); r != nil {
+			lib.Logger.Error("Panic in main", slog.String("trace", fmt.Sprintf("%v", r)))
+			os.Exit(1)
+		}
+	}()
+
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
-		log.Fatal(err)
+		lib.Logger.Error("Homedir creation failed", slog.String("error", err.Error()))
+		os.Exit(1)
 	}
 
 	firehoseService, err := firehoseservice.NewFirehoseService()
 	if err != nil {
-		log.Fatal(err)
+		lib.Logger.Error("Firehose service creation failed", slog.String("error", err.Error()))
+		os.Exit(1)
 	}
 
 	configService, err := configservice.NewConfigService(firehoseService)
 	if err != nil {
-		log.Fatal(err)
+		lib.Logger.Error("Config service creation failed", slog.String("error", err.Error()))
+		os.Exit(1)
 	}
 	configService.ConfigDirectory = path.Join(homeDir, singulatronFolder)
 	if os.Getenv("SINGULATRON_CONFIG_PATH") != "" {
@@ -67,31 +77,36 @@ func main() {
 	}
 	err = configService.Start()
 	if err != nil {
-		log.Fatal(err)
+		lib.Logger.Error("Config service start failed", slog.String("error", err.Error()))
+		os.Exit(1)
 	}
 
 	singulatronFolder := path.Join(homeDir, singulatronFolder)
 	err = os.MkdirAll(singulatronFolder, 0755)
 	if err != nil {
-		log.Fatal(err)
+		lib.Logger.Error("Config folder creation failed", slog.String("error", err.Error()))
+		os.Exit(1)
 	}
 
 	downloadFolder := path.Join(singulatronFolder, "downloads")
 	err = os.MkdirAll(downloadFolder, 0755)
 	if err != nil {
-		log.Fatal(err)
+		lib.Logger.Error("Downloads folder creation failed", slog.String("error", err.Error()))
+		os.Exit(1)
 	}
 
 	downloadService, err := downloadservice.NewDownloadService(firehoseService)
 	if err != nil {
-		log.Fatal(err)
+		lib.Logger.Error("Download service creation failed", slog.String("error", err.Error()))
+		os.Exit(1)
 	}
 
 	downloadService.DefaultFolder = downloadFolder
 	downloadService.StateFilePath = path.Join(singulatronFolder, "downloads.json")
 	err = downloadService.Start()
 	if err != nil {
-		log.Fatal(err)
+		lib.Logger.Error("Download service start failed", slog.String("error", err.Error()))
+		os.Exit(1)
 	}
 
 	mws := []middlewares.Middleware{
@@ -122,7 +137,8 @@ func main() {
 
 	dockerService, err := dockerservice.NewDockerService(downloadService)
 	if err != nil {
-		log.Fatal(err)
+		lib.Logger.Error("Docker service creation failed", slog.String("error", err.Error()))
+		os.Exit(1)
 	}
 
 	router.HandleFunc("/docker/info", appl(func(w http.ResponseWriter, r *http.Request) {
@@ -131,7 +147,8 @@ func main() {
 
 	modelService, err := modelservice.NewModelService(downloadService, configService, dockerService)
 	if err != nil {
-		log.Fatal(err)
+		lib.Logger.Error("Model service creation failed", slog.String("error", err.Error()))
+		os.Exit(1)
 	}
 
 	router.HandleFunc("/model/status", appl(func(w http.ResponseWriter, r *http.Request) {
@@ -150,7 +167,8 @@ func main() {
 
 	appService, err := appservice.NewAppService(configService, firehoseService)
 	if err != nil {
-		log.Fatal(err)
+		lib.Logger.Error("App service creation failed", slog.String("error", err.Error()))
+		os.Exit(1)
 	}
 
 	router.HandleFunc("/app/log", appl(func(w http.ResponseWriter, r *http.Request) {
@@ -216,7 +234,11 @@ func main() {
 	}))
 
 	lib.Logger.Info("Server started", slog.String("port", port))
-	log.Fatal(http.ListenAndServe(":58231", router))
+	err = http.ListenAndServe(":58231", router)
+	if err != nil {
+		lib.Logger.Error("HTTP listen failed", slog.String("error", err.Error()))
+		os.Exit(1)
+	}
 }
 
 func applicator(mws []middlewares.Middleware) func(http.HandlerFunc) http.HandlerFunc {

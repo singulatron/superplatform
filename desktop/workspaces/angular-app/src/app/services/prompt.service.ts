@@ -43,6 +43,7 @@ export class PromptService {
 					this.onPromptListUpdateSubject.next(rsp3.prompts);
 					break;
 			}
+			return null;
 		});
 
 		try {
