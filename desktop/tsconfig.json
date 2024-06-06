@@ -15,7 +15,7 @@
 		"paths": {
 			"*": ["node_modules/*"]
 		},
-		"types": ["node", "expect-webdriverio"],
+		"types": ["node"],
 		"allowSyntheticDefaultImports": true,
 		"noUnusedLocals": true,
 		// "noUnusedParameters": true,
