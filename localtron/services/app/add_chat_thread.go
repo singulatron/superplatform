@@ -28,7 +28,7 @@ func (a *AppService) AddChatThread(chatThread *apptypes.ChatThread) (*apptypes.C
 		chatThread.Time = time.Now().Format(time.RFC3339)
 	}
 
-	a.threadsMem.AddThread(chatThread)
+	a.threadsMem.Add(chatThread)
 
 	a.firehoseService.Publish(apptypes.EventChatMessageAdded{
 		ThreadId: chatThread.Id,

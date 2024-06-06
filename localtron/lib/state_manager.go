@@ -22,15 +22,18 @@ import (
 )
 
 type StateManager[T any] struct {
-	state      T
+	key        string
+	memStore   *MemoryStore[T]
 	lock       sync.Mutex
 	filePath   string
 	hasChanged bool
 }
 
-func NewStateManager[T any](initialState T, filePath string) *StateManager[T] {
+// key: the key under which the slice will be saved in a JSON object in the file
+func NewStateManager[T any](key string, memStore *MemoryStore[T], filePath string) *StateManager[T] {
 	sm := &StateManager[T]{
-		state:    initialState,
+		key:      key,
+		memStore: memStore,
 		filePath: filePath,
 	}
 	sm.setupSignalHandler()
@@ -60,12 +63,22 @@ func (sm *StateManager[T]) LoadState() error {
 		return err
 	}
 
-	return json.Unmarshal(data, &sm.state)
+	var items []T
+	err = json.Unmarshal(data, &items)
+	if err != nil {
+		return err
+	}
+
+	sm.memStore.Reset(items)
+
+	return nil
 }
 
 func (sm *StateManager[T]) SaveState() error {
+	shallowCopy := sm.memStore.SliceCopy()
+
 	sm.lock.Lock()
-	data, err := json.MarshalIndent(sm.state, "", "  ")
+	data, err := json.MarshalIndent(shallowCopy, "", "  ")
 	if err != nil {
 		sm.lock.Unlock()
 		return err

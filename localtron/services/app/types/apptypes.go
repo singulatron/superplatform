@@ -17,6 +17,10 @@ import (
 	"github.com/singulatron/singulatron/localtron/lib"
 )
 
+type MessagesMem struct {
+	Messages []*ChatMessage `json:"messages"`
+}
+
 type Log struct {
 	Level    string         `json:"level"`
 	Time     string         `json:"time"`

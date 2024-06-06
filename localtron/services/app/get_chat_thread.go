@@ -17,7 +17,9 @@ import (
 )
 
 func (a *AppService) GetChatThread(threadId string) (*apptypes.ChatThread, error) {
-	thread, found := a.threadsMem.GetThreadById(threadId)
+	thread, found := a.threadsMem.Find(func(i *apptypes.ChatThread) bool {
+		return i.Id == threadId
+	})
 	if !found {
 		return nil, fmt.Errorf("cannot find thread '%v'", threadId)
 	}

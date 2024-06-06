@@ -11,11 +11,13 @@
 package appservice
 
 import (
+	"sort"
+
 	apptypes "github.com/singulatron/singulatron/localtron/services/app/types"
 )
 
 func (a *AppService) GetChatMessages(threadId string) ([]*apptypes.ChatMessage, error) {
-	ret := a.messagesMem.GetMessagesByThreadId(threadId)
-
+	ret := a.messagesMem.SliceCopy()
+	sort.Sort(apptypes.ByTime(ret))
 	return ret, nil
 }
