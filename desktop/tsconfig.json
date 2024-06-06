@@ -15,12 +15,7 @@
 		"paths": {
 			"*": ["node_modules/*"]
 		},
-		"types": [
-			"node",
-			"@wdio/globals/types",
-			"@wdio/jasmine-framework",
-			"expect-webdriverio"
-		],
+		"types": ["node", "expect-webdriverio"],
 		"allowSyntheticDefaultImports": true,
 		"noUnusedLocals": true,
 		// "noUnusedParameters": true,
