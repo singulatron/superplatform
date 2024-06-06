@@ -30,7 +30,7 @@ func (a *AppService) AddChatThread(chatThread *apptypes.ChatThread) (*apptypes.C
 
 	a.threadsMem.Add(chatThread)
 
-	a.firehoseService.Publish(apptypes.EventChatMessageAdded{
+	a.firehoseService.Publish(apptypes.EventChatThreadAdded{
 		ThreadId: chatThread.Id,
 	})
 	a.threadsFile.MarkChanged()

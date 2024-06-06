@@ -17,7 +17,13 @@ import (
 )
 
 func (a *AppService) GetChatMessages(threadId string) ([]*apptypes.ChatMessage, error) {
-	ret := a.messagesMem.SliceCopy()
+	all := a.messagesMem.SliceCopy()
+	ret := []*apptypes.ChatMessage{}
+	for _, v := range all {
+		if v.ThreadId == threadId {
+			ret = append(ret, v)
+		}
+	}
 	sort.Sort(apptypes.ByTime(ret))
 	return ret, nil
 }
