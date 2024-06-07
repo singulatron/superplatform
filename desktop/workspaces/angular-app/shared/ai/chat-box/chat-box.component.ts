@@ -235,33 +235,7 @@ export class ChatBoxComponent implements OnChanges {
 		if (this.thread?.title !== defaultThreadName) {
 			return;
 		}
-
-		// @todo this we dont talk to LLM locally anymore
-		// add syncron prompt to prompt service that talks to localtron
-
-		// let prompt = this.promptTemplate
-		// 	? this.promptTemplate.replace(
-		// 			'{prompt}',
-		// 			this.threadNameSummaryTemplate.replace('{message}', msg)
-		// 		)
-		// 	: msg;
-		// let newThreadName = '';
-
-		//this.promptService
-		//	.prompt({
-		//		prompt: prompt,
-		//		stream: true,
-		//	})
-		//	.pipe(finalize(() => {}))
-		//	.subscribe((response) => {
-		//		if (response?.choices?.length > 0 && response?.choices[0]?.text) {
-		//			newThreadName += response?.choices[0].text;
-		//			this.thread.name = newThreadName;
-		//			this.localtron.chatThreadUpdate(this.thread);
-		//
-		//			this.cd.detectChanges();
-		//		}
-		//	});
+		// @todo summarize with llm at the end of the streaming
 	}
 
 	propagateCopyToClipboard(text: string | undefined) {

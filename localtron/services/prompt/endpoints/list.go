@@ -29,7 +29,7 @@ func List(w http.ResponseWriter, r *http.Request, promptService *promptservice.P
 
 	prompts, err := promptService.ListPrompts(&promptservice.ListPromptOptions{
 		Statuses: []prompttypes.PromptStatus{
-			// prompttypes.PromptStatusRunning,
+			prompttypes.PromptStatusRunning,
 			prompttypes.PromptStatusScheduled,
 		},
 	})
