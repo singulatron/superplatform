@@ -1,31 +1,27 @@
 * {
-	scrollbar-width: none;
-	-ms-overflow-style: none;
+	overflow-y: auto;
+	scrollbar-width: thin; /* Firefox */
+	-ms-overflow-style: scrollbar; /* Internet Explorer and Edge */
 }
 
 *::-webkit-scrollbar {
-	display: none;
-}
-
-*:hover {
-	scrollbar-width: thin;
-	-ms-overflow-style: auto;
+	display: none; /* Safari and Chrome */
 }
 
 *::-webkit-scrollbar {
-	width: 4px;
+	width: 4px; /* Safari and Chrome */
 }
 
 *::-webkit-scrollbar-track {
-	background: #f1f1f1;
+	background: #f1f1f1; /* Background of the scrollbar track */
 }
 
 *::-webkit-scrollbar-thumb {
-	background-color: rgb(240, 240, 240);
-	border-radius: 10px;
-	border: 2px solid transparent;
+	background-color: rgb(240, 240, 240); /* Color of the scrollbar thumb */
+	border-radius: 10px; /* Rounded corners */
+	border: 2px solid transparent; /* Optional: space around the thumb */
 }
 
 *::-webkit-scrollbar-thumb:hover {
-	background: #555;
+	background: #555; /* Color of the scrollbar thumb on hover */
 }
