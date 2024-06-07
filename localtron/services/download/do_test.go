@@ -40,16 +40,12 @@ func TestDownloadFile(t *testing.T) {
 	defer server.Close()
 
 	dir := path.Join(os.TempDir(), "download_test")
-	err := os.MkdirAll(dir, 0755)
-	if err != nil {
-		t.Fatalf("Failed to create temp dir: %s", err)
-	}
-	// defer os.RemoveAll(dir)
+	assert.NoError(t, os.MkdirAll(dir, 0755))
 
 	fs, _ := firehoseservice.NewFirehoseService()
 	dm, _ := NewDownloadService(fs)
 	dm.StateFilePath = path.Join(dir, "downloadFile.json")
-	dm.Do(server.URL, dir)
+	assert.NoError(t, dm.Do(server.URL, dir))
 
 	for {
 		time.Sleep(5 * time.Millisecond)
@@ -61,12 +57,8 @@ func TestDownloadFile(t *testing.T) {
 
 	expectedFilePath := filepath.Join(dir, encodeURLtoFileName(server.URL))
 	data, err := os.ReadFile(expectedFilePath)
-	if err != nil {
-		t.Fatalf("Failed to read downloaded file: %s", err)
-	}
-	if string(data) != "Hello world" {
-		t.Errorf("Downloaded file content incorrect, got: %s, want: %s", data, "Hello world")
-	}
+	assert.NoError(t, err)
+	assert.Equal(t, "Hello world", string(data))
 }
 
 func TestDownloadFileWithPartFile(t *testing.T) {
@@ -83,11 +75,7 @@ func TestDownloadFileWithPartFile(t *testing.T) {
 	defer server.Close()
 
 	dir := path.Join(os.TempDir(), "download_test")
-	err := os.MkdirAll(dir, 0755)
-	if err != nil {
-		t.Fatalf("Failed to create temp dir: %s", err)
-	}
-	// defer os.RemoveAll(dir)
+	assert.NoError(t, os.MkdirAll(dir, 0755))
 
 	downloadURL := server.URL + "/file"
 	partFilePath := filepath.Join(dir, encodeURLtoFileName(downloadURL)+".part")
@@ -111,40 +99,22 @@ func TestDownloadFileWithPartFile(t *testing.T) {
 
 	expectedFilePath := filepath.Join(dir, encodeURLtoFileName(downloadURL))
 	data, err := os.ReadFile(expectedFilePath)
-	if err != nil {
-		t.Fatalf("Failed to read downloaded file: %s", err)
-	}
-	if string(data) != "Hello world" {
-		t.Errorf("Downloaded file content incorrect, got: %s, want: %s", data, "Hello world")
-	}
-
-	// assert.Equal(t, 1, len(dm.downloads), dm.downloads)
-	// assert.Equal(t, downloadURL, dm.downloads[downloadURL].URL)
-	// assert.Equal(t, int64(11), dm.downloads[downloadURL].DownloadedSize)
-	// assert.Equal(t, int64(11), dm.downloads[downloadURL].TotalSize)
+	assert.NoError(t, err)
+	assert.Equal(t, "Hello world", string(data))
 }
 
 func TestDownloadFileWithFullFile(t *testing.T) {
 	dir := path.Join(os.TempDir(), "download_test")
-	err := os.MkdirAll(dir, 0755)
-	if err != nil {
-		t.Fatalf("Failed to create temp dir: %s", err)
-	}
-	// defer os.RemoveAll(dir)
+	assert.NoError(t, os.MkdirAll(dir, 0755))
 
-	downloadURL := "somethingsomething/file"
-	partFilePath := filepath.Join(dir, encodeURLtoFileName(downloadURL))
-	if err := os.WriteFile(partFilePath, []byte("Hello"), 0644); err != nil {
-		t.Fatalf("Failed to create part file: %s", err)
-	}
+	downloadURL := "full-file"
+	fullFilePath := filepath.Join(dir, encodeURLtoFileName(downloadURL))
+	assert.NoError(t, os.WriteFile(fullFilePath, []byte("Hello world"), 0644))
 
 	fs, _ := firehoseservice.NewFirehoseService()
 	dm, _ := NewDownloadService(fs)
 	dm.StateFilePath = path.Join(dir, "downloadFileFull.json")
-	err = dm.Do(downloadURL, dir)
-	if err != nil {
-		t.Fatal(err)
-	}
+	assert.NoError(t, dm.Do(downloadURL, dir))
 
 	var (
 		d  *types.Download
@@ -158,6 +128,6 @@ func TestDownloadFileWithFullFile(t *testing.T) {
 		}
 	}
 
-	assert.Equal(t, int64(5), d.DownloadedSize)
-	assert.Equal(t, int64(5), d.TotalSize)
+	assert.Equal(t, int64(11), d.DownloadedSize)
+	assert.Equal(t, int64(11), d.TotalSize)
 }
