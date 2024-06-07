@@ -49,18 +49,7 @@ func (p *PromptService) processNextPrompt() error {
 		return nil
 	}
 
-	var currentPrompt *prompttypes.Prompt
-
-	p.promptsMem.ForeachStop(func(i int, prompt *prompttypes.Prompt) bool {
-		if prompt.RunCount == 0 ||
-			time.Since(prompt.LastRun) >= baseDelay*time.Duration(1<<uint(prompt.RunCount-1)) {
-			currentPrompt = prompt
-
-			return true
-		}
-		return false
-	})
-
+	currentPrompt := selectPrompt(p.promptsMem)
 	if currentPrompt == nil {
 		return nil
 	}
@@ -69,13 +58,15 @@ func (p *PromptService) processNextPrompt() error {
 }
 
 func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err error) {
-	lib.Logger.Info("Picking up prompt from queue", slog.String("promptId", currentPrompt.Id))
+	lib.Logger.Info("Picking up prompt from queue",
+		slog.String("promptId", currentPrompt.Id),
+	)
 
 	p.firehoseService.Publish(prompttypes.EventPromptProcessingStarted{
 		PromptId: currentPrompt.Id,
 	})
-	currentPrompt.Error = ""
-	currentPrompt.Status = prompttypes.PromptStatusRunning
+
+	p.promptsFile.MarkChanged()
 
 	defer p.firehoseService.Publish(prompttypes.EventPromptProcessingFinished{
 		PromptId: currentPrompt.Id,
@@ -84,11 +75,15 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 	defer func() {
 		if err != nil {
 			currentPrompt.Error = err.Error()
+			currentPrompt.Status = prompttypes.PromptStatusErrored
 		} else {
 			currentPrompt.Status = prompttypes.PromptStatusCompleted
 		}
+		p.promptsFile.MarkChanged()
 	}()
 
+	currentPrompt.Error = ""
+	currentPrompt.Status = prompttypes.PromptStatusRunning
 	currentPrompt.RunCount++
 
 	err = p.appService.AddChatMessage(&apptypes.ChatMessage{

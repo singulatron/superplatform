@@ -44,7 +44,7 @@ func NewPromptService(
 	modelService *modelservice.ModelService,
 	appService *appservice.AppService,
 	firehoseService *firehoseservice.FirehoseService,
-) *PromptService {
+) (*PromptService, error) {
 	promptsPath := path.Join(cs.ConfigDirectory, "data", "prompts.json")
 
 	pm := lib.NewMemoryStore[*prompttypes.Prompt]()
@@ -63,8 +63,19 @@ func NewPromptService(
 		trigger: make(chan bool, 1),
 	}
 
+	err := service.promptsFile.LoadState()
+	if err != nil {
+		return nil, err
+	}
+	service.promptsMem.Foreach(func(i int, item *prompttypes.Prompt) {
+		if item.Status == prompttypes.PromptStatusRunning {
+			item.Status = prompttypes.PromptStatusScheduled
+		}
+	})
+	service.promptsFile.MarkChanged()
+
 	go service.processPrompts()
 	go service.promptsFile.PeriodicSaveState(2 * time.Second)
 
-	return service
+	return service, nil
 }

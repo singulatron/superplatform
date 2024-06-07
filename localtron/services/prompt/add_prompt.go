@@ -16,7 +16,9 @@ import (
 )
 
 func (p *PromptService) AddPrompt(prompt *prompttypes.Prompt) error {
+	prompt.Status = prompttypes.PromptStatusScheduled
 	p.promptsMem.Add(prompt)
+	p.promptsFile.MarkChanged()
 
 	p.firehoseService.Publish(prompttypes.EventPromptAdded{
 		PromptId: prompt.Id,

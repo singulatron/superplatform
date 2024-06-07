@@ -21,7 +21,9 @@ const (
 	PromptStatusScheduled PromptStatus = "scheduled"
 	PromptStatusRunning   PromptStatus = "running"
 	PromptStatusCompleted PromptStatus = "completed"
+	// Errored means it will be still retried
 	PromptStatusErrored   PromptStatus = "errored"
+	PromptStatusAbandoned PromptStatus = "abandone"
 	PromptStatusCanceled  PromptStatus = "canceled"
 )
 
@@ -37,16 +39,15 @@ type Prompt struct {
 	// Message is the prompt without the template wrapper as in
 	//    What's a banana?
 	Message   string       `json:"message"`
-	ModelId   string       `json:"modelId"`
+	ModelId   string       `json:"modelId,omitempty"`
 	CreatedAt time.Time    `json:"createdAt"`
-	Time      string       `json:"time"`
-	Status    PromptStatus `json:"status"`
-	LastRun   time.Time    `json:"lastRun"`
+	Status    PromptStatus `json:"status,omitempty"`
+	LastRun   time.Time    `json:"lastRun,omitempty"`
 	// how many times this was ran
 	// (retries are due to errors)
-	RunCount   int    `json:"runCount"`
-	Error      string `json:"error"`
-	MaxRetries int    `json:"maxRetries"`
+	RunCount   int    `json:"runCount,omitempty"`
+	Error      string `json:"error,omitempty"`
+	MaxRetries int    `json:"maxRetries,omitempty"`
 
 	mutex sync.Mutex
 }
