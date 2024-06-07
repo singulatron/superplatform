@@ -47,24 +47,13 @@ const defaultThreadName = 'New chat';
 })
 export class ChatBoxComponent implements OnChanges {
 	@Input() promptTemplate: string = '[INST] {prompt} [/INST]';
-	@Input() userMessageTemplate: string = 'User: {message}\n';
-	@Input() modelMessageTemplate: string = 'Model: {message}\n';
-	@Input() latestMessageTemplate: string = "User's latest message: {message}\n";
 
-	@Input() historyEnabled = false;
-	@Input() advancedHistoryEnabled = false;
-	@Input() contextTemplate: string =
-		`These are the previous messages from the User:\n{message} Answer only to the last message.`;
-	@Input() advancedContextTemplate: string =
-		`This is your previous conversation with the User (you are the "Model"):\n{message}`;
-
+	// @todo push this to the backend too
 	@Input() threadNameSummaryTemplate =
 		'Summarize, shorten this question in 3-5 words, keep it as a question: {message}';
 
 	@Input() thread!: ChatThread;
 
-	@Output() onThreadUpdate = new EventEmitter<ChatThread>();
-	@Output() onFirstMessageSend = new EventEmitter<ChatThread>();
 	@Output() onCopyToClipboard = new EventEmitter<string>();
 
 	private model: Model | undefined;
@@ -179,8 +168,6 @@ export class ChatBoxComponent implements OnChanges {
 						response?.choices?.length > 0 &&
 						response?.choices[0]?.finish_reason === 'stop'
 					) {
-						this.onThreadUpdate.emit(changes.thread.currentValue);
-
 						if (this.messages?.length == 1) {
 							this.setThreadName(this.messages[0].messageContent);
 						}
@@ -196,9 +183,9 @@ export class ChatBoxComponent implements OnChanges {
 	}
 
 	async send() {
-		if (this.messages?.length == 0) {
+		if (!this.thread?.title) {
 			this.thread.title = this.message.slice(0, 100);
-			this.onThreadUpdate.emit(this.thread);
+			this.chatService.chatThreadAdd(this.thread);
 		}
 
 		let msg = this.message;
@@ -208,41 +195,10 @@ export class ChatBoxComponent implements OnChanges {
 	}
 
 	async sendMessage(msg: string) {
-		let userMessages = this.messages?.filter((m) => m.isUserMessage) || [];
-		let modelMessages = this.messages?.filter((m) => !m.isUserMessage) || [];
-		let exchange = zigzagArrays(
-			userMessages.map((m) =>
-				this.userMessageTemplate.replace('{message}', m?.messageContent)
-			),
-			this.advancedHistoryEnabled
-				? modelMessages.map((m) =>
-						this.modelMessageTemplate.replace('{message}', m?.messageContent)
-					)
-				: []
-		).join('');
-
-		let fullContext =
-			(this.historyEnabled || this.advancedHistoryEnabled) &&
-			userMessages?.length > 0
-				? this.advancedHistoryEnabled
-					? this.advancedContextTemplate.replace('{message}', exchange)
-					: this.contextTemplate.replace('{message}', exchange)
-				: '';
-
-		fullContext +=
-			(this.historyEnabled || this.advancedHistoryEnabled) &&
-			userMessages?.length > 0
-				? this.latestMessageTemplate.replace('{message}', msg)
-				: msg;
-
-		let fullPrompt = this.promptTemplate
-			? this.promptTemplate.replace('{prompt}', fullContext)
-			: fullContext;
-
 		await this.promptService.promptAdd({
 			id: this.localtron.uuid(),
-			prompt: fullPrompt,
-			message: msg,
+			prompt: msg,
+			template: this.promptTemplate,
 			threadId: this.thread.id as string,
 			modelId: this.model?.id as string,
 		});
@@ -275,33 +231,7 @@ export class ChatBoxComponent implements OnChanges {
 		if (this.thread?.title !== defaultThreadName) {
 			return;
 		}
-
-		// @todo this we dont talk to LLM locally anymore
-		// add syncron prompt to prompt service that talks to localtron
-
-		// let prompt = this.promptTemplate
-		// 	? this.promptTemplate.replace(
-		// 			'{prompt}',
-		// 			this.threadNameSummaryTemplate.replace('{message}', msg)
-		// 		)
-		// 	: msg;
-		// let newThreadName = '';
-
-		//this.promptService
-		//	.prompt({
-		//		prompt: prompt,
-		//		stream: true,
-		//	})
-		//	.pipe(finalize(() => {}))
-		//	.subscribe((response) => {
-		//		if (response?.choices?.length > 0 && response?.choices[0]?.text) {
-		//			newThreadName += response?.choices[0].text;
-		//			this.thread.name = newThreadName;
-		//			this.localtron.chatThreadUpdate(this.thread);
-		//
-		//			this.cd.detectChanges();
-		//		}
-		//	});
+		// @todo summarize with llm at the end of the streaming
 	}
 
 	propagateCopyToClipboard(text: string | undefined) {
@@ -346,20 +276,4 @@ function escapeHtml(unsafe: string) {
 		.replace(/>/g, '&gt;')
 		.replace(/"/g, '&quot;')
 		.replace(/'/g, '&#039;');
-}
-
-function zigzagArrays<T>(array1: T[], array2: T[]): T[] {
-	const result: T[] = [];
-	const maxLength = Math.max(array1.length, array2.length);
-
-	for (let i = 0; i < maxLength; i++) {
-		if (i < array1.length) {
-			result.push(array1[i]);
-		}
-		if (i < array2.length) {
-			result.push(array2[i]);
-		}
-	}
-
-	return result;
 }

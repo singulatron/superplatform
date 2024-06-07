@@ -74,8 +74,8 @@
 					"
 					*ngFor="let prompt of promptQueue"
 				>
-					<ng-container *ngIf="!prompt.isBeingProcessed">{{
-						prompt.message
+					<ng-container *ngIf="prompt.status !== 'running'">{{
+						prompt.prompt
 					}}</ng-container>
 				</div>
 			</ng-container>

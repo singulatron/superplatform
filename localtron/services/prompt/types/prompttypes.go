@@ -10,21 +10,46 @@
  */
 package prompttypes
 
+import (
+	"sync"
+	"time"
+)
+
+type PromptStatus string
+
+const (
+	PromptStatusScheduled PromptStatus = "scheduled"
+	PromptStatusRunning   PromptStatus = "running"
+	PromptStatusCompleted PromptStatus = "completed"
+	// Errored means it will be still retried
+	PromptStatusErrored   PromptStatus = "errored"
+	PromptStatusAbandoned PromptStatus = "abandone"
+	PromptStatusCanceled  PromptStatus = "canceled"
+)
+
 // Prompt
 // @todo:
 // - message and prompt have a lot of overlap, rethink
 type Prompt struct {
 	Id       string `json:"id"`
 	ThreadId string `json:"threadId"`
-	// Prompt is the full prompt including template as in
-	//    [INST]What's a banana?[/INST]
-	Prompt string `json:"prompt"`
-	// Message is the prompt without the template wrapper as in
+	// Prompt is the message itself
 	//    What's a banana?
-	Message          string `json:"message"`
-	ModelId          string `json:"modelId"`
-	Time             string `json:"time"`
-	IsBeingProcessed bool   `json:"isBeingProcessed"`
+	Prompt string `json:"prompt"`
+	// Prompt template. Optional. Might be derived from ModelId
+	//    [INST]{prompt}[/INST]
+	Template  string       `json:"template"`
+	ModelId   string       `json:"modelId,omitempty"`
+	CreatedAt time.Time    `json:"createdAt"`
+	Status    PromptStatus `json:"status,omitempty"`
+	LastRun   time.Time    `json:"lastRun,omitempty"`
+	// how many times this was ran
+	// (retries are due to errors)
+	RunCount   int    `json:"runCount,omitempty"`
+	Error      string `json:"error,omitempty"`
+	MaxRetries int    `json:"maxRetries,omitempty"`
+
+	mutex sync.Mutex
 }
 
 type AddPromptRequest struct {

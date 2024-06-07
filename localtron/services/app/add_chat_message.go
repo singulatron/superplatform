@@ -27,8 +27,8 @@ func (a *AppService) AddChatMessage(chatMessage *apptypes.ChatMessage) error {
 	if chatMessage.Id == "" {
 		chatMessage.Id = uuid.New().String()
 	}
-	if chatMessage.Time == "" {
-		chatMessage.Time = time.Now().Format(time.RFC3339)
+	if chatMessage.CreatedAt == "" {
+		chatMessage.CreatedAt = time.Now().Format(time.RFC3339)
 	}
 
 	var threadId string
@@ -43,8 +43,8 @@ func (a *AppService) AddChatMessage(chatMessage *apptypes.ChatMessage) error {
 		// threads are created when a message is sent
 		threadId = chatMessage.ThreadId
 		a.threadsMem.Add(&apptypes.ChatThread{
-			Id:   threadId,
-			Time: time.Now().Format(time.RFC3339),
+			Id:        threadId,
+			CreatedAt: time.Now().Format(time.RFC3339),
 		})
 		a.threadsFile.MarkChanged()
 	}

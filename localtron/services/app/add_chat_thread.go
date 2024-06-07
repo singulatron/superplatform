@@ -24,8 +24,8 @@ func (a *AppService) AddChatThread(chatThread *apptypes.ChatThread) (*apptypes.C
 	if chatThread.Title == "" {
 		chatThread.Title = "New chat"
 	}
-	if chatThread.Time == "" {
-		chatThread.Time = time.Now().Format(time.RFC3339)
+	if chatThread.CreatedAt == "" {
+		chatThread.CreatedAt = time.Now().Format(time.RFC3339)
 	}
 
 	a.threadsMem.Add(chatThread)

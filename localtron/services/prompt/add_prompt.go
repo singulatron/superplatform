@@ -16,9 +16,9 @@ import (
 )
 
 func (p *PromptService) AddPrompt(prompt *prompttypes.Prompt) error {
-	p.promptsToProcessMutex.Lock()
-	p.promptsToProcess = append(p.promptsToProcess, prompt)
-	p.promptsToProcessMutex.Unlock()
+	prompt.Status = prompttypes.PromptStatusScheduled
+	p.promptsMem.Add(prompt)
+	p.promptsFile.MarkChanged()
 
 	p.firehoseService.Publish(prompttypes.EventPromptAdded{
 		PromptId: prompt.Id,

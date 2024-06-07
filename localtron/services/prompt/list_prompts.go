@@ -10,14 +10,42 @@
  */
 package promptservice
 
-import prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
+import (
+	"time"
 
-func (p *PromptService) ListPrompts() ([]*prompttypes.Prompt, error) {
-	p.promptsToProcessMutex.Lock()
-	defer p.promptsToProcessMutex.Unlock()
+	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
+)
 
-	if p.currentPrompt == nil {
-		return p.promptsToProcess, nil
-	}
-	return append([]*prompttypes.Prompt{p.currentPrompt}, p.promptsToProcess...), nil
+type ListPromptOptions struct {
+	CreatedAfter time.Time
+	// or relationship
+	Statuses     []prompttypes.PromptStatus
+	LastRunAfter time.Time
+}
+
+func (p *PromptService) ListPrompts(options *ListPromptOptions) ([]*prompttypes.Prompt, error) {
+	prompts := p.promptsMem.Filter(func(p *prompttypes.Prompt) bool {
+		passes := true
+		if len(options.Statuses) > 0 {
+			statusMatches := false
+			for _, v := range options.Statuses {
+				if p.Status == v {
+					statusMatches = true
+				}
+			}
+			if !statusMatches {
+				passes = false
+			}
+		}
+		if !options.CreatedAfter.IsZero() && p.CreatedAt.After(options.CreatedAfter) {
+			passes = false
+		}
+		if !options.LastRunAfter.IsZero() && p.LastRun.After(options.CreatedAfter) {
+			passes = false
+		}
+
+		return passes
+	})
+
+	return prompts, nil
 }

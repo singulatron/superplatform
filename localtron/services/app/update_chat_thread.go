@@ -15,11 +15,17 @@ import (
 )
 
 func (a *AppService) UpdateChatThread(chatThread *apptypes.ChatThread) (*apptypes.ChatThread, error) {
-	a.threadsMem.UpdateByFunc(func(i *apptypes.ChatThread) bool {
-		return i.Id == chatThread.Id
-	}, chatThread)
+	a.threadsMem.Foreach(func(index int, i *apptypes.ChatThread) {
+		if i.Id == chatThread.Id {
+			i.Title = chatThread.Title
+		}
+	})
 
 	a.threadsFile.MarkChanged()
+
+	a.firehoseService.Publish(apptypes.EventChatThreadUpdate{
+		ThreadId: chatThread.Id,
+	})
 
 	return chatThread, nil
 }

@@ -65,7 +65,6 @@
 					[messages]="messages"
 					[modelId]="model?.id"
 					[promptTemplate]="model?.promptTemplate || defaultPrompt"
-					(onThreadUpdate)="onThreadUpdate($event)"
 					(onCopyToClipboard)="onCopyToClipboard($event)"
 				></app-chat-box>
 			</app-centered>

@@ -41,10 +41,10 @@ type LoggingStatus struct {
 }
 
 type ChatThread struct {
-	Id      string `json:"id"`
-	TopicId string `json:"topicId,omitempty"`
-	Title   string `json:"title"`
-	Time    string `json:"time"`
+	Id        string `json:"id"`
+	TopicId   string `json:"topicId,omitempty"`
+	Title     string `json:"title"`
+	CreatedAt string `json:"createdAt"`
 }
 
 type ThreadByTime []*ChatThread
@@ -64,7 +64,7 @@ func (a ThreadByTime) Less(i, j int) bool {
 		return parsedTime, err
 	}
 
-	ti, err := parseTime(a[i].Time)
+	ti, err := parseTime(a[i].CreatedAt)
 	if err != nil {
 		lib.Logger.Error("Error parsing thread time",
 			slog.String("threadId", a[i].Id),
@@ -72,7 +72,7 @@ func (a ThreadByTime) Less(i, j int) bool {
 		return false // Could handle error differently if required
 	}
 
-	tj, err := parseTime(a[j].Time)
+	tj, err := parseTime(a[j].CreatedAt)
 	if err != nil {
 		lib.Logger.Error("Error parsing thread time",
 			slog.String("threadId", a[j].Id),
@@ -90,8 +90,8 @@ type ChatMessage struct {
 	IsUserMessage  bool   `json:"isUserMessage,omitempty"`
 	// UserId is saved when the user is logged in to an account
 	// @todo not used yet
-	UserId string `json:"userId,omitempty"`
-	Time   string `json:"time"`
+	UserId    string `json:"userId,omitempty"`
+	CreatedAt string `json:"createdAt"`
 }
 
 type ByTime []*ChatMessage
@@ -111,7 +111,7 @@ func (a ByTime) Less(i, j int) bool {
 		return parsedTime, err
 	}
 
-	ti, err := parseTime(a[i].Time)
+	ti, err := parseTime(a[i].CreatedAt)
 	if err != nil {
 		lib.Logger.Error("Error parsing message time",
 			slog.String("messageId", a[i].Id),
@@ -119,7 +119,7 @@ func (a ByTime) Less(i, j int) bool {
 		return false // Could handle error differently if required
 	}
 
-	tj, err := parseTime(a[j].Time)
+	tj, err := parseTime(a[j].CreatedAt)
 	if err != nil {
 		lib.Logger.Error("Error parsing message time",
 			slog.String("messageId", a[j].Id),
@@ -198,4 +198,14 @@ type EventChatThreadAdded struct {
 
 func (e EventChatThreadAdded) Name() string {
 	return EventChatThreadAddedName
+}
+
+const EventChatThreadUpdateName = "chatThreadUpdate"
+
+type EventChatThreadUpdate struct {
+	ThreadId string `json:"threadId"`
+}
+
+func (e EventChatThreadUpdate) Name() string {
+	return EventChatThreadUpdateName
 }

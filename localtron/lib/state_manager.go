@@ -106,6 +106,7 @@ func (sm *StateManager[T]) SaveState() error {
 func (sm *StateManager[T]) MarkChanged() {
 	sm.lock.Lock()
 	defer sm.lock.Unlock()
+
 	sm.hasChanged = true
 }
 

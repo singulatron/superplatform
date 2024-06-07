@@ -48,6 +48,18 @@ export class ChatComponent implements OnInit {
 	async ngOnInit() {
 		await this.refreshThreadList();
 
+		this.subscriptions.push(
+			this.chatService.onChatThreadUpdate$.subscribe(() => {
+				this.refreshThreadList();
+			})
+		);
+
+		this.subscriptions.push(
+			this.chatService.onChatThreadAdded$.subscribe(() => {
+				this.refreshThreadList();
+			})
+		);
+
 		let activeThreadId = this.chatService.getActiveThreadId();
 		if (activeThreadId) {
 			let activeThread = this.chatThreads?.find((v) => v.id === activeThreadId);
@@ -136,35 +148,6 @@ export class ChatComponent implements OnInit {
 		this.chatThreads = rsp.threads;
 		if (!this.chatThreads?.length) {
 			this.chatThreads = [];
-		}
-	}
-
-	public onThreadUpdate(updatedThread: ChatThread) {
-		if (!updatedThread.id) {
-			throw 'Id for thread is required';
-		}
-		let found = this.chatThreads?.find((thread, index) => {
-			if (thread.id === updatedThread.id) {
-				console.debug('Updating thread', {
-					threadId: thread.id,
-				});
-				this.chatThreads[index] = updatedThread;
-				return true;
-			}
-			return false;
-		});
-		if (!found) {
-			if (this.chatThreads === undefined) {
-				throw 'No threads';
-			}
-			console.debug('Adding new thread', {
-				threadId: updatedThread?.id,
-			});
-			this.chatThreads.unshift(updatedThread);
-		}
-		this.chatService.chatThreadUpdate(updatedThread);
-		if (!this.activeThread?.id) {
-			this.setThreadAsActive(updatedThread);
 		}
 	}
 
