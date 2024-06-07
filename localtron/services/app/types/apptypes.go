@@ -199,3 +199,13 @@ type EventChatThreadAdded struct {
 func (e EventChatThreadAdded) Name() string {
 	return EventChatThreadAddedName
 }
+
+const EventChatThreadUpdateName = "chatThreadUpdate"
+
+type EventChatThreadUpdate struct {
+	ThreadId string `json:"threadId"`
+}
+
+func (e EventChatThreadUpdate) Name() string {
+	return EventChatThreadAddedName
+}

@@ -54,7 +54,6 @@ export class ChatBoxComponent implements OnChanges {
 
 	@Input() thread!: ChatThread;
 
-	@Output() onThreadUpdate = new EventEmitter<ChatThread>();
 	@Output() onFirstMessageSend = new EventEmitter<ChatThread>();
 	@Output() onCopyToClipboard = new EventEmitter<string>();
 
@@ -170,8 +169,6 @@ export class ChatBoxComponent implements OnChanges {
 						response?.choices?.length > 0 &&
 						response?.choices[0]?.finish_reason === 'stop'
 					) {
-						this.onThreadUpdate.emit(changes.thread.currentValue);
-
 						if (this.messages?.length == 1) {
 							this.setThreadName(this.messages[0].messageContent);
 						}
@@ -189,7 +186,7 @@ export class ChatBoxComponent implements OnChanges {
 	async send() {
 		if (this.messages?.length == 0) {
 			this.thread.title = this.message.slice(0, 100);
-			this.onThreadUpdate.emit(this.thread);
+			this.chatService.chatThreadUpdate(this.thread);
 		}
 
 		let msg = this.message;

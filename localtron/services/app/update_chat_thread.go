@@ -21,5 +21,9 @@ func (a *AppService) UpdateChatThread(chatThread *apptypes.ChatThread) (*apptype
 
 	a.threadsFile.MarkChanged()
 
+	a.firehoseService.Publish(apptypes.EventChatThreadUpdate{
+		ThreadId: chatThread.Id,
+	})
+
 	return chatThread, nil
 }

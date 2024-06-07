@@ -22,6 +22,9 @@ export class ChatService {
 	onChatMessageAddedSubject = new ReplaySubject<ChatMessageAddedEvent>(1);
 	onChatMessageAdded$ = this.onChatMessageAddedSubject.asObservable();
 
+	onChatThreadUpdateSubject = new ReplaySubject<ChatMessageAddedEvent>(1);
+	onChatThreadUpdate$ = this.onChatMessageAddedSubject.asObservable();
+
 	constructor(
 		private localtron: LocaltronService,
 		private firehoseService: FirehoseService
@@ -34,6 +37,9 @@ export class ChatService {
 			switch (event.name) {
 				case 'chatMessageAdded':
 					this.onChatMessageAddedSubject.next(event.data);
+					break;
+				case 'chatThreadUpdate':
+					this.onChatThreadUpdateSubject.next(event.data);
 					break;
 			}
 		});
@@ -158,5 +164,9 @@ type GetChatMessagesResponse = {
 };
 
 export interface ChatMessageAddedEvent {
+	threadId: string;
+}
+
+export interface ChatThreadUpdateEvent {
 	threadId: string;
 }
