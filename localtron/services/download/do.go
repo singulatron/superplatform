@@ -69,6 +69,7 @@ func (dm *DownloadService) Do(url, downloadDir string) error {
 				}
 				dm.downloads[url] = download
 			} else if partialFileExists {
+
 				download = &types.Download{
 					URL:            url,
 					FilePath:       safeFullFilePath,
@@ -121,7 +122,11 @@ func (dm *DownloadService) Do(url, downloadDir string) error {
 }
 
 func (dm *DownloadService) downloadFile(d *types.Download) error {
+	if d.Status == types.DownloadStatusCompleted {
+		return nil
+	}
 	if d.Status == types.DownloadStatusPaused {
+		// this should never happen as Do sets this to inProgress
 		return fmt.Errorf("cannot download file with status paused")
 	}
 	out, err := os.OpenFile(d.FilePath+".part", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)

@@ -1,0 +1,101 @@
+package promptservice
+
+import (
+	"testing"
+	"time"
+
+	"github.com/singulatron/singulatron/localtron/lib"
+	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
+	"github.com/stretchr/testify/assert"
+)
+
+func TestSelectPrompt(t *testing.T) {
+	fixedTime := time.Date(2023, 6, 1, 12, 0, 0, 0, time.UTC)
+	timeNow = func() time.Time {
+		return fixedTime
+	}
+
+	tests := []struct {
+		name           string
+		prompts        []*prompttypes.Prompt
+		expectedPrompt *prompttypes.Prompt
+	}{
+		{
+			name:           "No prompts",
+			prompts:        []*prompttypes.Prompt{},
+			expectedPrompt: nil,
+		},
+		{
+			name: "Prompt with RunCount 0",
+			prompts: []*prompttypes.Prompt{
+				{Status: prompttypes.PromptStatusScheduled, RunCount: 0},
+			},
+			expectedPrompt: &prompttypes.Prompt{Status: prompttypes.PromptStatusScheduled, RunCount: 0},
+		},
+		{
+			name: "Prompt not due yet",
+			prompts: []*prompttypes.Prompt{
+				{Status: prompttypes.PromptStatusScheduled, RunCount: 1, LastRun: fixedTime.Add(-baseDelay / 2)},
+			},
+			expectedPrompt: nil,
+		},
+		{
+			name: "Prompt due",
+			prompts: []*prompttypes.Prompt{
+				{Status: prompttypes.PromptStatusScheduled, RunCount: 1, LastRun: fixedTime.Add(-baseDelay)},
+			},
+			expectedPrompt: &prompttypes.Prompt{Status: prompttypes.PromptStatusScheduled, RunCount: 1, LastRun: fixedTime.Add(-baseDelay)},
+		},
+		{
+			name: "Abandoned prompt",
+			prompts: []*prompttypes.Prompt{
+				{Status: prompttypes.PromptStatusAbandoned, RunCount: 0},
+			},
+			expectedPrompt: nil,
+		},
+		{
+			name: "Completed prompt",
+			prompts: []*prompttypes.Prompt{
+				{Status: prompttypes.PromptStatusCompleted, RunCount: 0},
+			},
+			expectedPrompt: nil,
+		},
+		{
+			name: "Canceled prompt",
+			prompts: []*prompttypes.Prompt{
+				{Status: prompttypes.PromptStatusCanceled, RunCount: 0},
+			},
+			expectedPrompt: nil,
+		},
+		{
+			name: "Prompt with RunCount greater than 1, not due yet",
+			prompts: []*prompttypes.Prompt{
+				{Status: prompttypes.PromptStatusScheduled, RunCount: 2, LastRun: fixedTime.Add(-baseDelay)},
+			},
+			expectedPrompt: nil,
+		},
+		{
+			name: "Prompt with RunCount greater than 1, due",
+			prompts: []*prompttypes.Prompt{
+				{Status: prompttypes.PromptStatusScheduled, RunCount: 2, LastRun: fixedTime.Add(-baseDelay * 2)},
+			},
+			expectedPrompt: &prompttypes.Prompt{Status: prompttypes.PromptStatusScheduled, RunCount: 2, LastRun: fixedTime.Add(-baseDelay * 2)},
+		},
+		{
+			name: "Prompt with RunCount greater than 1, off by one",
+			prompts: []*prompttypes.Prompt{
+				{Status: prompttypes.PromptStatusScheduled, RunCount: 2, LastRun: fixedTime.Add(-baseDelay*2 + time.Second)},
+			},
+			expectedPrompt: nil,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			memStore := lib.NewMemoryStore[*prompttypes.Prompt]()
+			memStore.Reset(tt.prompts)
+			actualPrompt := selectPrompt(memStore)
+			assert.Equal(t, tt.expectedPrompt, actualPrompt)
+		})
+	}
+}

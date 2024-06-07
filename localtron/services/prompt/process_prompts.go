@@ -16,7 +16,7 @@ import (
 
 const (
 	maxRetries = 5
-	baseDelay  = time.Second
+	baseDelay  = 1 * time.Second
 )
 
 // a blocking method, call it in a goroutine
