@@ -54,6 +54,12 @@ export class ChatComponent implements OnInit {
 			})
 		);
 
+		this.subscriptions.push(
+			this.chatService.onChatThreadAdded$.subscribe(() => {
+				this.refreshThreadList();
+			})
+		);
+
 		let activeThreadId = this.chatService.getActiveThreadId();
 		if (activeThreadId) {
 			let activeThread = this.chatThreads?.find((v) => v.id === activeThreadId);

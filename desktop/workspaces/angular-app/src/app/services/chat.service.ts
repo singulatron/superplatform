@@ -22,6 +22,9 @@ export class ChatService {
 	onChatMessageAddedSubject = new ReplaySubject<ChatMessageAddedEvent>(1);
 	onChatMessageAdded$ = this.onChatMessageAddedSubject.asObservable();
 
+	onChatThreadAddedSubject = new ReplaySubject<ChatThreadAddedEvent>(1);
+	onChatThreadAdded$ = this.onChatMessageAddedSubject.asObservable();
+
 	onChatThreadUpdateSubject = new ReplaySubject<ChatMessageAddedEvent>(1);
 	onChatThreadUpdate$ = this.onChatMessageAddedSubject.asObservable();
 
@@ -36,6 +39,9 @@ export class ChatService {
 		this.firehoseService.firehoseEvent$.subscribe(async (event) => {
 			switch (event.name) {
 				case 'chatMessageAdded':
+					this.onChatMessageAddedSubject.next(event.data);
+					break;
+				case 'chatThreadAdded':
 					this.onChatMessageAddedSubject.next(event.data);
 					break;
 				case 'chatThreadUpdate':
@@ -164,6 +170,10 @@ type GetChatMessagesResponse = {
 };
 
 export interface ChatMessageAddedEvent {
+	threadId: string;
+}
+
+export interface ChatThreadAddedEvent {
 	threadId: string;
 }
 

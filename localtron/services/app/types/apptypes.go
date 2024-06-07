@@ -207,5 +207,5 @@ type EventChatThreadUpdate struct {
 }
 
 func (e EventChatThreadUpdate) Name() string {
-	return EventChatThreadAddedName
+	return EventChatThreadUpdateName
 }

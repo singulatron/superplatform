@@ -61,19 +61,6 @@ func (ms *MemoryStore[T]) ForeachStop(f func(i int, item T) bool) {
 	}
 }
 
-func (ms *MemoryStore[T]) UpdateByFunc(matchFunc func(T) bool, updateValue T) bool {
-	ms.mutex.Lock()
-	defer ms.mutex.Unlock()
-
-	for i, item := range ms.items {
-		if matchFunc(item) {
-			ms.items[i] = updateValue
-			return true
-		}
-	}
-	return false
-}
-
 func (ms *MemoryStore[T]) Filter(f func(item T) bool) []T {
 	ms.mutex.Lock()
 	defer ms.mutex.Unlock()
