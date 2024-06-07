@@ -33,12 +33,12 @@ const (
 type Prompt struct {
 	Id       string `json:"id"`
 	ThreadId string `json:"threadId"`
-	// Prompt is the full prompt including template as in
-	//    [INST]What's a banana?[/INST]
-	Prompt string `json:"prompt"`
-	// Message is the prompt without the template wrapper as in
+	// Prompt is the message itself
 	//    What's a banana?
-	Message   string       `json:"message"`
+	Prompt string `json:"prompt"`
+	// Prompt template. Optional. Might be derived from ModelId
+	//    [INST]{prompt}[/INST]
+	Template  string       `json:"template"`
 	ModelId   string       `json:"modelId,omitempty"`
 	CreatedAt time.Time    `json:"createdAt"`
 	Status    PromptStatus `json:"status,omitempty"`

@@ -11,10 +11,8 @@
 package promptservice
 
 import (
-	"fmt"
 	"time"
 
-	"github.com/singulatron/singulatron/localtron/lib"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
 )
 
@@ -48,7 +46,6 @@ func (p *PromptService) ListPrompts(options *ListPromptOptions) ([]*prompttypes.
 
 		return passes
 	})
-	lib.Logger.Info(fmt.Sprintf("prompt list %v", len(prompts)))
 
 	return prompts, nil
 }

@@ -18,6 +18,7 @@ import (
 
 func (a *AppService) GetChatThreads() ([]*apptypes.ChatThread, error) {
 	threads := a.threadsMem.SliceCopy()
+
 	sort.Sort(apptypes.ThreadByTime(threads))
 
 	return threads, nil

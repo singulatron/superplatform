@@ -93,7 +93,7 @@ export interface ChatThread {
 	id?: string;
 	topicId?: string;
 	title?: string;
-	time?: string;
+	createdAt?: string;
 }
 
 export interface ChatMessage {
@@ -101,7 +101,7 @@ export interface ChatMessage {
 	threadId: string;
 	messageContent: string;
 	isUserMessage: boolean;
-	time?: string;
+	createdAt?: string;
 }
 
 export interface ChatFile {

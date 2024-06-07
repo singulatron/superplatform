@@ -184,13 +184,33 @@ export class PromptService {
 	}
 }
 
+export type PromptStatus =
+	| 'scheduled'
+	| 'running'
+	| 'completed'
+	| 'errored'
+	| 'abandoned'
+	| 'canceled';
+
 export interface Prompt {
-	id?: string;
+	id: string;
 	threadId: string;
+	/*
+		Prompt without template, eg. `What is a banana`?
+	*/
 	prompt: string;
-	message: string;
-	modelId: string;
-	isBeingProcessed?: boolean;
+	/*
+		Prompt template (eg. `[INST]{prompt}[/INST]`)
+		Optional. Might be derived from/through the modelId
+	*/
+	template: string;
+	modelId?: string;
+	createdAt?: string;
+	status?: PromptStatus;
+	lastRun?: string;
+	runCount?: number; // How many times this was ran (retries are due to errors)
+	error?: string;
+	maxRetries?: number;
 }
 
 export interface AddPromptRequest {

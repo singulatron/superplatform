@@ -92,8 +92,8 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 		Id:             currentPrompt.Id,
 		ThreadId:       currentPrompt.ThreadId,
 		IsUserMessage:  true,
-		MessageContent: currentPrompt.Message,
-		Time:           time.Now().Format(time.RFC3339),
+		MessageContent: currentPrompt.Prompt,
+		CreatedAt:      time.Now().Format(time.RFC3339),
 	})
 	if err != nil {
 		return err
@@ -116,8 +116,13 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 		LLMAddress: stat.ModelAddress,
 	}
 
+	fullPrompt := currentPrompt.Prompt
+	if currentPrompt.Template != "" {
+		fullPrompt = strings.Replace(currentPrompt.Template, "{prompt}", currentPrompt.Prompt, -1)
+	}
+
 	err = llmClient.PostCompletionsStreamed(llm.PostCompletionsRequest{
-		Prompt:    currentPrompt.Prompt,
+		Prompt:    fullPrompt,
 		Stream:    true,
 		MaxTokens: 4096,
 	}, func(resp *llm.CompletionResponse) {
