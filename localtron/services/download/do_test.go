@@ -141,7 +141,10 @@ func TestDownloadFileWithFullFile(t *testing.T) {
 	fs, _ := firehoseservice.NewFirehoseService()
 	dm, _ := NewDownloadService(fs)
 	dm.StateFilePath = path.Join(dir, "downloadFileFull.json")
-	dm.Do(downloadURL, dir)
+	err = dm.Do(downloadURL, dir)
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	var (
 		d  *types.Download
