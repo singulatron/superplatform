@@ -19,8 +19,8 @@ import (
 
 func (s *UserService) UpsertRole(id, name, description string, permissionIds []string) (*usertypes.Role, error) {
 	permissions := s.permissionsMem.FindByIds(permissionIds)
-	if len(permissions) == 0 {
-		return nil, errors.New("cannot create role: no permissions")
+	if len(permissions) < len(permissionIds) {
+		return nil, errors.New("nonexistent permissions")
 	}
 
 	defer s.rolesFile.MarkChanged()

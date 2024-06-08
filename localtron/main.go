@@ -169,10 +169,10 @@ func main() {
 	}))
 
 	router.HandleFunc("/config/get", appl(func(w http.ResponseWriter, r *http.Request) {
-		configendpoints.Get(w, r, configService)
+		configendpoints.Get(w, r, userService, configService)
 	}))
 
-	appService, err := appservice.NewAppService(configService, firehoseService)
+	appService, err := appservice.NewAppService(configService, firehoseService, userService)
 	if err != nil {
 		lib.Logger.Error("App service creation failed", slog.String("error", err.Error()))
 		os.Exit(1)
@@ -195,35 +195,35 @@ func main() {
 	}))
 
 	router.HandleFunc("/chat/message/add", appl(func(w http.ResponseWriter, r *http.Request) {
-		appendpoints.AddChatMessage(w, r, appService)
+		appendpoints.AddChatMessage(w, r, userService, appService)
 	}))
 
 	router.HandleFunc("/chat/message/delete", appl(func(w http.ResponseWriter, r *http.Request) {
-		appendpoints.DeleteChatMessage(w, r, appService)
+		appendpoints.DeleteChatMessage(w, r, userService, appService)
 	}))
 
 	router.HandleFunc("/chat/messages", appl(func(w http.ResponseWriter, r *http.Request) {
-		appendpoints.GetChatMessages(w, r, appService)
+		appendpoints.GetChatMessages(w, r, userService, appService)
 	}))
 
 	router.HandleFunc("/chat/thread/add", appl(func(w http.ResponseWriter, r *http.Request) {
-		appendpoints.AddChatThread(w, r, appService)
+		appendpoints.AddChatThread(w, r, userService, appService)
 	}))
 
 	router.HandleFunc("/chat/thread/delete", appl(func(w http.ResponseWriter, r *http.Request) {
-		appendpoints.DeleteChatThread(w, r, appService)
+		appendpoints.DeleteChatThread(w, r, userService, appService)
 	}))
 
 	router.HandleFunc("/chat/threads", appl(func(w http.ResponseWriter, r *http.Request) {
-		appendpoints.GetChatThreads(w, r, appService)
+		appendpoints.GetChatThreads(w, r, userService, appService)
 	}))
 
 	router.HandleFunc("/chat/thread", appl(func(w http.ResponseWriter, r *http.Request) {
-		appendpoints.GetChatThread(w, r, appService)
+		appendpoints.GetChatThread(w, r, userService, appService)
 	}))
 
 	router.HandleFunc("/chat/thread/update", appl(func(w http.ResponseWriter, r *http.Request) {
-		appendpoints.UpdateChatThread(w, r, appService)
+		appendpoints.UpdateChatThread(w, r, userService, appService)
 	}))
 
 	promptService, err := promptservice.NewPromptService(configService, userService, modelService, appService, firehoseService)
