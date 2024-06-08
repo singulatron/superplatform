@@ -22,14 +22,11 @@ import (
 )
 
 func (s *UserService) Login(email, password string) (*usertypes.AuthToken, error) {
-	s.runMutex.Lock()
-	defer s.runMutex.Unlock()
-
 	var token usertypes.AuthToken
 	s.usersMem.ForeachStop(func(i int, user *usertypes.User) bool {
 		if user.Email == email && checkPasswordHash(password, user.PasswordHash) {
 			token = generateAuthToken(user.Id)
-			user.AuthTokens = append(user.AuthTokens, token)
+			user.AuthTokenIds = append(user.AuthTokenIds, token.Id)
 			s.usersFile.MarkChanged()
 			return true
 		}
@@ -43,7 +40,7 @@ func checkPasswordHash(password, hash string) bool {
 	return err == nil
 }
 
-func generateAuthToken(userID string) usertypes.AuthToken {
+func generateAuthToken(userId string) usertypes.AuthToken {
 	randomBytes := make([]byte, 16)
 	_, err := rand.Read(randomBytes)
 	if err != nil {
@@ -51,8 +48,8 @@ func generateAuthToken(userID string) usertypes.AuthToken {
 	}
 	token := hex.EncodeToString(randomBytes)
 	return usertypes.AuthToken{
-		ID:        uuid.New().String(),
-		UserID:    userID,
+		Id:        uuid.New().String(),
+		UserId:    userId,
 		Token:     token,
 		CreatedAt: time.Now(),
 	}

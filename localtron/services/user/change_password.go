@@ -18,9 +18,6 @@ import (
 )
 
 func (s *UserService) ChangePassword(email, currentPassword, newPassword string) error {
-	s.runMutex.Lock()
-	defer s.runMutex.Unlock()
-
 	var errRet error
 	changed := s.usersMem.ForeachStop(func(i int, user *usertypes.User) bool {
 		if user.Email == email {

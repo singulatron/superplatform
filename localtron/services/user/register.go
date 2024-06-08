@@ -20,9 +20,6 @@ import (
 )
 
 func (s *UserService) Register(email, password, name string, roles []*usertypes.Role) (*usertypes.AuthToken, error) {
-	s.runMutex.Lock()
-	defer s.runMutex.Unlock()
-
 	passwordHash, err := hashPassword(password)
 	if err != nil {
 		return nil, err
@@ -53,7 +50,9 @@ func (s *UserService) Register(email, password, name string, roles []*usertypes.
 	s.usersFile.MarkChanged()
 
 	token := generateAuthToken(user.Id)
-	user.AuthTokens = append(user.AuthTokens, token)
+	user.AuthTokenIds = append(user.AuthTokenIds, token.Id)
+
+	s.authTokensMem.Add(&token)
 	s.usersFile.MarkChanged()
 
 	return &token, nil

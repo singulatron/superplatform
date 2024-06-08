@@ -18,9 +18,22 @@ import (
 	"github.com/singulatron/singulatron/localtron/lib"
 	"github.com/singulatron/singulatron/localtron/llm"
 	promptservice "github.com/singulatron/singulatron/localtron/services/prompt"
+	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
+	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
 
-func Subscribe(w http.ResponseWriter, r *http.Request, promptService *promptservice.PromptService) {
+func Subscribe(
+	w http.ResponseWriter,
+	r *http.Request,
+	userService *userservice.UserService,
+	promptService *promptservice.PromptService,
+) {
+	err := userService.IsAuthorized(prompttypes.PermissionPromptStream.Id, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+
 	threadId := r.URL.Query().Get("threadId")
 
 	if threadId == "" {

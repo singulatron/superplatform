@@ -17,9 +17,6 @@ import (
 )
 
 func (s *UserService) RemoveRole(userID string, roleID string) error {
-	s.runMutex.Lock()
-	defer s.runMutex.Unlock()
-
 	found := s.usersMem.ForeachStop(func(i int, user *usertypes.User) bool {
 		if user.Id == userID {
 			for i, role := range user.Roles {

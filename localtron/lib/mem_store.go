@@ -120,6 +120,26 @@ func (ms *MemoryStore[T]) FindById(id string) (T, bool) {
 	return def, false
 }
 
+func (ms *MemoryStore[T]) FindByIds(ids []string) []T {
+	ms.mutex.Lock()
+	defer ms.mutex.Unlock()
+
+	index := map[string]struct{}{}
+	for _, v := range ids {
+		index[v] = struct{}{}
+	}
+
+	ret := []T{}
+	for _, v := range ms.items {
+		_, exists := index[v.GetId()]
+		if exists {
+			ret = append(ret, v)
+		}
+	}
+
+	return ret
+}
+
 func (ms *MemoryStore[T]) SliceCopy() []T {
 	ms.mutex.Lock()
 	defer ms.mutex.Unlock()

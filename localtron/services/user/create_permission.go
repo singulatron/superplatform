@@ -16,9 +16,6 @@ import (
 )
 
 func (s *UserService) CreatePermission(name, description string) (*usertypes.Permission, error) {
-	s.runMutex.Lock()
-	defer s.runMutex.Unlock()
-
 	permission := &usertypes.Permission{
 		Id:          uuid.New().String(),
 		Name:        name,

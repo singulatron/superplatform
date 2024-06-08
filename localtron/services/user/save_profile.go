@@ -18,9 +18,6 @@ import (
 )
 
 func (s *UserService) SaveProfile(email, newName string) error {
-	s.runMutex.Lock()
-	defer s.runMutex.Unlock()
-
 	found := s.usersMem.ForeachStop(func(i int, user *usertypes.User) bool {
 		if user.Email == email {
 			user.Name = newName

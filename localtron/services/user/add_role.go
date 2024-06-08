@@ -17,9 +17,6 @@ import (
 )
 
 func (s *UserService) AddRole(userID string, role *usertypes.Role) error {
-	s.runMutex.Lock()
-	defer s.runMutex.Unlock()
-
 	s.usersMem.ForeachStop(func(i int, user *usertypes.User) bool {
 		if user.Id == userID {
 			alreadyHas := false
@@ -39,6 +36,5 @@ func (s *UserService) AddRole(userID string, role *usertypes.Role) error {
 	})
 
 	s.usersFile.MarkChanged()
-
 	return nil
 }

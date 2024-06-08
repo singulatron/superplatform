@@ -15,9 +15,6 @@ import (
 )
 
 func (s *UserService) DeletePermission(permissionID string) error {
-	s.runMutex.Lock()
-	defer s.runMutex.Unlock()
-
 	s.permissionsMem.DeleteByFunc(func(p *usertypes.Permission) bool {
 		if p.Id == permissionID {
 			return true

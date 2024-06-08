@@ -12,7 +12,6 @@ package userservice
 
 import (
 	"path"
-	"sync"
 	"time"
 
 	"github.com/singulatron/singulatron/localtron/lib"
@@ -20,28 +19,29 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-// UserService provides methods to manage users
 type UserService struct {
-	configService   *configservice.ConfigService
+	configService *configservice.ConfigService
+
 	usersMem        *lib.MemoryStore[*usertypes.User]
 	usersFile       *lib.StateManager[*usertypes.User]
 	rolesMem        *lib.MemoryStore[*usertypes.Role]
 	rolesFile       *lib.StateManager[*usertypes.Role]
 	permissionsMem  *lib.MemoryStore[*usertypes.Permission]
 	permissionsFile *lib.StateManager[*usertypes.Permission]
-	runMutex        sync.Mutex
-	trigger         chan bool
+	authTokensMem   *lib.MemoryStore[*usertypes.AuthToken]
+	authTokensFile  *lib.StateManager[*usertypes.AuthToken]
 }
 
-// NewUserService creates a new UserService instance
 func NewUserService(cs *configservice.ConfigService) (*UserService, error) {
 	usersPath := path.Join(cs.ConfigDirectory, "data", "users.json")
 	rolesPath := path.Join(cs.ConfigDirectory, "data", "roles.json")
 	permissionsPath := path.Join(cs.ConfigDirectory, "data", "permissions.json")
+	authTokensPath := path.Join(cs.ConfigDirectory, "data", "authTokens.json")
 
 	um := lib.NewMemoryStore[*usertypes.User]()
 	rm := lib.NewMemoryStore[*usertypes.Role]()
 	pm := lib.NewMemoryStore[*usertypes.Permission]()
+	am := lib.NewMemoryStore[*usertypes.AuthToken]()
 
 	service := &UserService{
 		configService:   cs,
@@ -51,7 +51,8 @@ func NewUserService(cs *configservice.ConfigService) (*UserService, error) {
 		rolesFile:       lib.NewStateManager[*usertypes.Role](rm, rolesPath),
 		permissionsMem:  pm,
 		permissionsFile: lib.NewStateManager[*usertypes.Permission](pm, permissionsPath),
-		trigger:         make(chan bool, 1),
+		authTokensMem:   am,
+		authTokensFile:  lib.NewStateManager[*usertypes.AuthToken](am, authTokensPath),
 	}
 
 	err := service.usersFile.LoadState()

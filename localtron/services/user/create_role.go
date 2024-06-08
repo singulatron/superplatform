@@ -11,19 +11,23 @@
 package userservice
 
 import (
+	"errors"
+
 	"github.com/google/uuid"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func (s *UserService) CreateRole(name, description string, permissions []*usertypes.Permission) (*usertypes.Role, error) {
-	s.runMutex.Lock()
-	defer s.runMutex.Unlock()
+func (s *UserService) CreateRole(name, description string, permissionIds []string) (*usertypes.Role, error) {
+	permissions := s.permissionsMem.FindByIds(permissionIds)
+	if len(permissions) == 0 {
+		return nil, errors.New("cannot create role: no permissions")
+	}
 
 	role := &usertypes.Role{
-		Id:          uuid.New().String(),
-		Name:        name,
-		Description: description,
-		Permissions: permissions,
+		Id:            uuid.New().String(),
+		Name:          name,
+		Description:   description,
+		PermissionIds: permissionIds,
 	}
 
 	s.rolesMem.Add(role)

@@ -45,8 +45,8 @@ func NewPromptService(
 	appService *appservice.AppService,
 	firehoseService *firehoseservice.FirehoseService,
 ) (*PromptService, error) {
-	promptsPath := path.Join(cs.ConfigDirectory, "data", "prompts.json")
 
+	promptsPath := path.Join(cs.ConfigDirectory, "data", "prompts.json")
 	pm := lib.NewMemoryStore[*prompttypes.Prompt]()
 
 	service := &PromptService{
@@ -67,11 +67,14 @@ func NewPromptService(
 	if err != nil {
 		return nil, err
 	}
+
 	service.promptsMem.Foreach(func(i int, item *prompttypes.Prompt) {
 		if item.Status == prompttypes.PromptStatusRunning {
 			item.Status = prompttypes.PromptStatusScheduled
 		}
 	})
+
+	service.registerPermissions()
 	service.promptsFile.MarkChanged()
 
 	go service.processPrompts()

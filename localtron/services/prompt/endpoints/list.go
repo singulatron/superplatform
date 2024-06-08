@@ -16,11 +16,23 @@ import (
 
 	promptservice "github.com/singulatron/singulatron/localtron/services/prompt"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
+	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
 
-func List(w http.ResponseWriter, r *http.Request, promptService *promptservice.PromptService) {
+func List(
+	w http.ResponseWriter,
+	r *http.Request,
+	userService *userservice.UserService,
+	promptService *promptservice.PromptService,
+) {
+	err := userService.IsAuthorized(prompttypes.PermissionPromptView.Id, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+
 	req := prompttypes.ListPromptsRequest{}
-	err := json.NewDecoder(r.Body).Decode(&req)
+	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `invalid JSON`, http.StatusBadRequest)
 		return

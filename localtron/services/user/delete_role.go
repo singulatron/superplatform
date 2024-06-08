@@ -15,9 +15,6 @@ import (
 )
 
 func (s *UserService) DeleteRole(roleID string) error {
-	s.runMutex.Lock()
-	defer s.runMutex.Unlock()
-
 	changed := s.rolesMem.DeleteByFunc(func(r *usertypes.Role) bool {
 		if r.Id == roleID {
 			return true
