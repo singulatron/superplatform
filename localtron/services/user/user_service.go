@@ -70,9 +70,38 @@ func NewUserService(cs *configservice.ConfigService) (*UserService, error) {
 		return nil, err
 	}
 
+	err = service.registerRoles()
+	if err != nil {
+		return nil, err
+	}
+
 	go service.usersFile.PeriodicSaveState(2 * time.Second)
 	go service.rolesFile.PeriodicSaveState(2 * time.Second)
 	go service.permissionsFile.PeriodicSaveState(2 * time.Second)
 
 	return service, nil
+}
+
+func (s *UserService) registerRoles() error {
+	_, err := s.UpsertRole(
+		usertypes.RoleAdmin.Id,
+		usertypes.RoleAdmin.Name,
+		"",
+		usertypes.RoleAdmin.PermissionIds,
+	)
+	if err != nil {
+		return err
+	}
+
+	_, err = s.UpsertRole(
+		usertypes.RoleUser.Id,
+		usertypes.RoleUser.Name,
+		"",
+		usertypes.RoleUser.PermissionIds,
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

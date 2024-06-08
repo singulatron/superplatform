@@ -8,21 +8,8 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-package userservice
+package downloadservice
 
-import (
-	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
-)
+func (ds *DownloadService) registerPermissions() {
 
-func (s *UserService) CreatePermission(id, name, description string) (*usertypes.Permission, error) {
-	permission := &usertypes.Permission{
-		Id:          id,
-		Name:        name,
-		Description: description,
-	}
-
-	s.permissionsMem.Add(permission)
-	s.permissionsFile.MarkChanged()
-
-	return permission, nil
 }

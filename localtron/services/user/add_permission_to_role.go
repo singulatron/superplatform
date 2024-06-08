@@ -11,18 +11,32 @@
 package userservice
 
 import (
-	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
+	"fmt"
 )
 
-func (s *UserService) CreatePermission(id, name, description string) (*usertypes.Permission, error) {
-	permission := &usertypes.Permission{
-		Id:          id,
-		Name:        name,
-		Description: description,
+func (s *UserService) AddPermissionToRole(roleId, permissionId string) error {
+	role, found := s.rolesMem.FindById(roleId)
+	if !found {
+		return fmt.Errorf("Cannot find role %v", roleId)
+	}
+	_, found = s.permissionsMem.FindById(permissionId)
+	if !found {
+		return fmt.Errorf("Cannot find permission %v", permissionId)
 	}
 
-	s.permissionsMem.Add(permission)
+	exists := false
+	for _, v := range role.PermissionIds {
+		if v == permissionId {
+			exists = true
+		}
+	}
+
+	if exists {
+		return nil
+	}
+
+	role.PermissionIds = append(role.PermissionIds, permissionId)
 	s.permissionsFile.MarkChanged()
 
-	return permission, nil
+	return nil
 }

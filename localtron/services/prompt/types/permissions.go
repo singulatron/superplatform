@@ -31,8 +31,8 @@ var PermissionPromptEdit = usertypes.Permission{
 }
 
 var PermissionPromptDelete = usertypes.Permission{
-	Id:   "prompt.edit",
-	Name: "Prompt Edit",
+	Id:   "prompt.delete",
+	Name: "Prompt Delete",
 }
 
 var PermissionPromptStream = usertypes.Permission{
@@ -40,10 +40,10 @@ var PermissionPromptStream = usertypes.Permission{
 	Name: "Prompt Stream",
 }
 
-var PromptPermissions = []string{
-	PermissionPromptCreate.Id,
-	PermissionPromptView.Id,
-	PermissionPromptEdit.Id,
-	PermissionPromptDelete.Id,
-	PermissionPromptStream.Id,
+var PromptPermissions = []usertypes.Permission{
+	PermissionPromptCreate,
+	PermissionPromptView,
+	PermissionPromptEdit,
+	PermissionPromptDelete,
+	PermissionPromptStream,
 }

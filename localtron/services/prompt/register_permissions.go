@@ -16,11 +16,26 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func (p *PromptService) registerPermissions() {
-	usertypes.RoleAdmin.PermissionIds = append(usertypes.RoleAdmin.PermissionIds,
-		prompttypes.PromptPermissions...,
-	)
-	usertypes.RoleAdmin.PermissionIds = append(usertypes.RoleAdmin.PermissionIds,
-		prompttypes.PromptPermissions...,
-	)
+func (p *PromptService) registerPermissions() error {
+	for _, permission := range prompttypes.PromptPermissions {
+		_, err := p.userService.UpsertPermission(
+			permission.Id,
+			permission.Name,
+			permission.Description,
+		)
+		if err != nil {
+			return err
+		}
+	}
+
+	for _, role := range []*usertypes.Role{
+		usertypes.RoleAdmin,
+		usertypes.RoleUser,
+	} {
+		for _, permission := range prompttypes.PromptPermissions {
+			p.userService.AddPermissionToRole(role.Id, permission.Id)
+		}
+	}
+
+	return nil
 }

@@ -14,7 +14,14 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func (s *UserService) CreatePermission(id, name, description string) (*usertypes.Permission, error) {
+func (s *UserService) UpsertPermission(id, name, description string) (*usertypes.Permission, error) {
+	perm, found := s.permissionsMem.FindById(id)
+	if found {
+		perm.Name = name
+		perm.Description = description
+		return perm, nil
+	}
+
 	permission := &usertypes.Permission{
 		Id:          id,
 		Name:        name,

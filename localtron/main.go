@@ -21,6 +21,7 @@ import (
 
 	dockerservice "github.com/singulatron/singulatron/localtron/services/docker"
 	dockerendpoints "github.com/singulatron/singulatron/localtron/services/docker/endpoints"
+	userservice "github.com/singulatron/singulatron/localtron/services/user"
 
 	modelservice "github.com/singulatron/singulatron/localtron/services/model"
 	modelendpoints "github.com/singulatron/singulatron/localtron/services/model/endpoints"
@@ -81,6 +82,12 @@ func main() {
 		os.Exit(1)
 	}
 
+	userService, err := userservice.NewUserService(configService)
+	if err != nil {
+		lib.Logger.Error("User service start failed", slog.String("error", err.Error()))
+		os.Exit(1)
+	}
+
 	singulatronFolder := path.Join(homeDir, singulatronFolder)
 	err = os.MkdirAll(singulatronFolder, 0755)
 	if err != nil {
@@ -124,7 +131,7 @@ func main() {
 	}))
 
 	router.HandleFunc("/download/do", appl(func(w http.ResponseWriter, r *http.Request) {
-		downloadendpoints.Do(w, r, downloadService)
+		downloadendpoints.Do(w, r, userService, downloadService)
 	}))
 
 	router.HandleFunc("/download/pause", appl(func(w http.ResponseWriter, r *http.Request) {
@@ -219,22 +226,22 @@ func main() {
 		appendpoints.UpdateChatThread(w, r, appService)
 	}))
 
-	promptService, err := promptservice.NewPromptService(configService, modelService, appService, firehoseService)
+	promptService, err := promptservice.NewPromptService(configService, userService, modelService, appService, firehoseService)
 	if err != nil {
 		lib.Logger.Error("Prompt service creation failed", slog.String("error", err.Error()))
 		os.Exit(1)
 	}
 
 	router.HandleFunc("/prompt/add", appl(func(w http.ResponseWriter, r *http.Request) {
-		promptendpoints.Add(w, r, promptService)
+		promptendpoints.Add(w, r, userService, promptService)
 	}))
 
 	router.HandleFunc("/prompt/subscribe", appl(func(w http.ResponseWriter, r *http.Request) {
-		promptendpoints.Subscribe(w, r, promptService)
+		promptendpoints.Subscribe(w, r, userService, promptService)
 	}))
 
 	router.HandleFunc("/prompt/list", appl(func(w http.ResponseWriter, r *http.Request) {
-		promptendpoints.List(w, r, promptService)
+		promptendpoints.List(w, r, userService, promptService)
 	}))
 
 	lib.Logger.Info("Server started", slog.String("port", port))
