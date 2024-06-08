@@ -15,12 +15,17 @@ import (
 	"sync"
 )
 
-type MemoryStore[T any] struct {
+type Row interface {
+	GetId() string
+	GetUpdatedAt() string
+}
+
+type MemoryStore[T Row] struct {
 	items []T
 	mutex sync.Mutex
 }
 
-func NewMemoryStore[T any]() *MemoryStore[T] {
+func NewMemoryStore[T Row]() *MemoryStore[T] {
 	return &MemoryStore[T]{
 		items: []T{},
 	}
@@ -49,16 +54,18 @@ func (ms *MemoryStore[T]) Foreach(f func(i int, item T)) {
 	}
 }
 
-func (ms *MemoryStore[T]) ForeachStop(f func(i int, item T) bool) {
+func (ms *MemoryStore[T]) ForeachStop(f func(i int, item T) bool) bool {
 	ms.mutex.Lock()
 	defer ms.mutex.Unlock()
 
 	for i, v := range ms.items {
 		r := f(i, v)
 		if r {
-			return
+			return true
 		}
 	}
+
+	return false
 }
 
 func (ms *MemoryStore[T]) Filter(f func(item T) bool) []T {
@@ -99,6 +106,20 @@ func (ms *MemoryStore[T]) Find(matchFunc func(T) bool) (T, bool) {
 	return def, false
 }
 
+func (ms *MemoryStore[T]) FindById(id string) (T, bool) {
+	ms.mutex.Lock()
+	defer ms.mutex.Unlock()
+
+	for _, v := range ms.items {
+		if v.GetId() == id {
+			return v, true
+		}
+	}
+
+	var def T
+	return def, false
+}
+
 func (ms *MemoryStore[T]) SliceCopy() []T {
 	ms.mutex.Lock()
 	defer ms.mutex.Unlock()
@@ -118,7 +139,7 @@ func (ms *MemoryStore[T]) DeepCopy() ([]T, error) {
 	return ret, json.Unmarshal(bytes, &ret)
 }
 
-func (ms *MemoryStore[T]) DeleteByFunc(matchFunc func(T) bool) {
+func (ms *MemoryStore[T]) DeleteByFunc(matchFunc func(T) bool) bool {
 	ms.mutex.Lock()
 	defer ms.mutex.Unlock()
 
@@ -131,5 +152,26 @@ func (ms *MemoryStore[T]) DeleteByFunc(matchFunc func(T) bool) {
 	}
 	if position >= 0 {
 		ms.items = append(ms.items[:position], ms.items[position+1:]...)
+		return true
 	}
+
+	return false
+}
+
+func (ms *MemoryStore[T]) DeleteById(id string) bool {
+	ms.mutex.Lock()
+	defer ms.mutex.Unlock()
+
+	position := -1
+	for i, item := range ms.items {
+		if item.GetId() == id {
+			position = i
+		}
+	}
+	if position >= 0 {
+		ms.items = append(ms.items[:position], ms.items[position+1:]...)
+		return true
+	}
+
+	return false
 }

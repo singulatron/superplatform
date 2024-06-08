@@ -22,11 +22,11 @@ import (
 	"time"
 )
 
-type StateFile[T any] struct {
+type StateFile[T Row] struct {
 	Rows []T `json:"rows"`
 }
 
-type StateManager[T any] struct {
+type StateManager[T Row] struct {
 	key        string
 	memStore   *MemoryStore[T]
 	lock       sync.Mutex
@@ -35,7 +35,7 @@ type StateManager[T any] struct {
 }
 
 // key: the key under which the slice will be saved in a JSON object in the file
-func NewStateManager[T any](memStore *MemoryStore[T], filePath string) *StateManager[T] {
+func NewStateManager[T Row](memStore *MemoryStore[T], filePath string) *StateManager[T] {
 	sm := &StateManager[T]{
 		memStore: memStore,
 		filePath: filePath,
