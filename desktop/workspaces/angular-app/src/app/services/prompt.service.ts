@@ -14,6 +14,7 @@ import { ReplaySubject, Observable } from 'rxjs';
 import { FirehoseService } from './firehose.service';
 import { first } from 'rxjs';
 import { UserService } from './user.service';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
 	providedIn: 'root',
@@ -25,6 +26,7 @@ export class PromptService {
 	constructor(
 		private localtron: LocaltronService,
 		private userService: UserService,
+		private cs: CookieService,
 		private firehoseService: FirehoseService
 	) {
 		this.userService.user$.pipe(first()).subscribe(() => {
@@ -80,9 +82,8 @@ export class PromptService {
 			'/prompt/subscribe?threadId=' +
 			threadId;
 
-		const token = ''; // this.cs.get('the_token');
 		const headers = {
-			Authorization: 'Bearer ' + token,
+			Authorization: 'Bearer ' + this.cs.get('the_token'),
 			'Content-Type': 'application/json',
 		};
 

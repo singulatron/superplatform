@@ -29,10 +29,16 @@ type FirehoseService struct {
 }
 
 func NewFirehoseService(userService *userservice.UserService) (*FirehoseService, error) {
-	return &FirehoseService{
+	service := &FirehoseService{
 		userService: userService,
 		subscribers: make(map[int]func(events []firehosetypes.Event)),
-	}, nil
+	}
+	err := service.registerPermissions()
+	if err != nil {
+		return nil, err
+	}
+
+	return service, nil
 }
 
 func (fs *FirehoseService) PublishMany(events ...firehosetypes.Event) {
