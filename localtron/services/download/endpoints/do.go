@@ -15,6 +15,7 @@ import (
 	"net/http"
 
 	downloadservice "github.com/singulatron/singulatron/localtron/services/download"
+	downloadtypes "github.com/singulatron/singulatron/localtron/services/download/types"
 	types "github.com/singulatron/singulatron/localtron/services/download/types"
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
@@ -25,8 +26,14 @@ func Do(
 	userService *userservice.UserService,
 	ds *downloadservice.DownloadService,
 ) {
+	err := userService.IsAuthorized(downloadtypes.PermissionDownloadCreate.Id, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+
 	req := types.DownloadRequest{}
-	err := json.NewDecoder(r.Body).Decode(&req)
+	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `invalid JSON`, http.StatusBadRequest)
 		return

@@ -135,21 +135,21 @@ func main() {
 	}))
 
 	router.HandleFunc("/download/pause", appl(func(w http.ResponseWriter, r *http.Request) {
-		downloadendpoints.Pause(w, r, downloadService)
+		downloadendpoints.Pause(w, r, userService, downloadService)
 	}))
 
 	router.HandleFunc("/download/list", appl(func(w http.ResponseWriter, r *http.Request) {
-		downloadendpoints.List(w, r, downloadService)
+		downloadendpoints.List(w, r, userService, downloadService)
 	}))
 
-	dockerService, err := dockerservice.NewDockerService(downloadService)
+	dockerService, err := dockerservice.NewDockerService(downloadService, userService)
 	if err != nil {
 		lib.Logger.Error("Docker service creation failed", slog.String("error", err.Error()))
 		os.Exit(1)
 	}
 
 	router.HandleFunc("/docker/info", appl(func(w http.ResponseWriter, r *http.Request) {
-		dockerendpoints.Info(w, r, dockerService)
+		dockerendpoints.Info(w, r, userService, dockerService)
 	}))
 
 	modelService, err := modelservice.NewModelService(downloadService, configService, dockerService)

@@ -15,9 +15,22 @@ import (
 	"net/http"
 
 	dockerservice "github.com/singulatron/singulatron/localtron/services/docker"
+	dockertypes "github.com/singulatron/singulatron/localtron/services/docker/types"
+	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
 
-func Info(w http.ResponseWriter, req *http.Request, dm *dockerservice.DockerService) {
+func Info(
+	w http.ResponseWriter,
+	req *http.Request,
+	userService *userservice.UserService,
+	dm *dockerservice.DockerService,
+) {
+	err := userService.IsAuthorized(dockertypes.PermissionDockerView.Id, req)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+
 	di, err := dm.Info()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
