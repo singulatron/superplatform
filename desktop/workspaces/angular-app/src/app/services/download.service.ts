@@ -13,7 +13,6 @@ import { LocaltronService } from './localtron.service';
 import { FirehoseService } from './firehose.service';
 import { ReplaySubject } from 'rxjs';
 
-
 @Injectable({
 	providedIn: 'root',
 })

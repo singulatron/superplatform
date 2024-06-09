@@ -14,6 +14,7 @@ import (
 	"errors"
 	"log/slog"
 	"net/http"
+	"strings"
 
 	"github.com/singulatron/singulatron/localtron/lib"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
@@ -24,6 +25,7 @@ func (s *UserService) IsAuthorized(permissionId string, request *http.Request) e
 	if authHeader == "" {
 		return errors.New("unauthorized")
 	}
+	authHeader = strings.Replace(authHeader, "Bearer ", "", 1)
 
 	// @todo this is very inefficient
 	var token *usertypes.AuthToken

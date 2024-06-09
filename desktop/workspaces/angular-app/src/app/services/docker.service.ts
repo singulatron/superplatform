@@ -13,7 +13,6 @@ import { ReplaySubject } from 'rxjs';
 import { OnDockerInfo } from 'shared-lib/models/event-request-response';
 import { LocaltronService } from './localtron.service';
 
-
 @Injectable({
 	providedIn: 'root',
 })
@@ -21,9 +20,7 @@ export class DockerService {
 	onDockerInfoSubject = new ReplaySubject<OnDockerInfo>(1);
 	onDockerInfo$ = this.onDockerInfoSubject.asObservable();
 
-	constructor(
-		private localtron: LocaltronService
-	) {
+	constructor(private localtron: LocaltronService) {
 		// @todo nothing to trigger docker info yet
 		// so we fall back to pollings
 		setInterval(() => {

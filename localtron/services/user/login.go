@@ -13,7 +13,6 @@ package userservice
 import (
 	"crypto/rand"
 	"encoding/hex"
-	"errors"
 	"time"
 
 	"github.com/google/uuid"
@@ -40,7 +39,7 @@ func (s *UserService) Login(email, password string) (*usertypes.AuthToken, error
 		return false
 	})
 
-	return token, errors.New("invalid email or password")
+	return token, nil
 }
 
 func checkPasswordHash(password, hash string) bool {

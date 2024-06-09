@@ -36,5 +36,12 @@ func (s *UserService) ReadUserByToken(token string) (*usertypes.User, error) {
 		return nil, errors.New("user not found")
 	}
 
-	return user, nil
+	ret := &usertypes.User{
+		Id:        user.Id,
+		Name:      user.Name,
+		Email:     user.Email,
+		CreatedAt: user.CreatedAt,
+		UpdatedAt: user.UpdatedAt,
+	}
+	return ret, nil
 }
