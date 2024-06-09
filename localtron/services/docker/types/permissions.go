@@ -16,17 +16,17 @@ import (
 )
 
 var PermissionDockerCreate = usertypes.Permission{
-	Id:   "Docker.create",
+	Id:   "docker.create",
 	Name: "Docker Create",
 }
 
 var PermissionDockerView = usertypes.Permission{
-	Id:   "Docker.view",
+	Id:   "docker.view",
 	Name: "Docker View",
 }
 
 var PermissionDockerEdit = usertypes.Permission{
-	Id:   "Docker.edit",
+	Id:   "docker.edit",
 	Name: "Docker Edit",
 }
 

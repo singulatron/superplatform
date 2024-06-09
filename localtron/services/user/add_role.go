@@ -20,15 +20,15 @@ func (s *UserService) AddRole(userID string, role *usertypes.Role) error {
 	s.usersMem.ForeachStop(func(i int, user *usertypes.User) bool {
 		if user.Id == userID {
 			alreadyHas := false
-			for _, v := range user.Roles {
-				if v.Id == role.Id {
+			for _, v := range user.RoleIds {
+				if v == role.Id {
 					alreadyHas = true
 				}
 			}
 			if alreadyHas {
 				return true
 			}
-			user.Roles = append(user.Roles, role)
+			user.RoleIds = append(user.RoleIds, role.Id)
 			user.UpdatedAt = time.Now()
 			return true
 		}

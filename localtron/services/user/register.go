@@ -36,6 +36,10 @@ func (s *UserService) Register(email, password, name string, roles []*usertypes.
 		return nil, errors.New("email already exists")
 	}
 
+	roleIds := []string{}
+	for _, v := range roles {
+		roleIds = append(roleIds, v.Id)
+	}
 	user := &usertypes.User{
 		Id:           uuid.New().String(),
 		CreatedAt:    time.Now(),
@@ -43,7 +47,7 @@ func (s *UserService) Register(email, password, name string, roles []*usertypes.
 		Name:         name,
 		Email:        email,
 		PasswordHash: passwordHash,
-		Roles:        roles,
+		RoleIds:      roleIds,
 	}
 
 	s.usersMem.Add(user)
@@ -52,10 +56,10 @@ func (s *UserService) Register(email, password, name string, roles []*usertypes.
 	token := generateAuthToken(user.Id)
 	user.AuthTokenIds = append(user.AuthTokenIds, token.Id)
 
-	s.authTokensMem.Add(&token)
+	s.authTokensMem.Add(token)
 	s.usersFile.MarkChanged()
 
-	return &token, nil
+	return token, nil
 }
 
 func hashPassword(password string) (string, error) {

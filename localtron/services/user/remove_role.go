@@ -16,12 +16,12 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func (s *UserService) RemoveRole(userID string, roleID string) error {
+func (s *UserService) RemoveRole(userID string, roleId string) error {
 	found := s.usersMem.ForeachStop(func(i int, user *usertypes.User) bool {
 		if user.Id == userID {
-			for i, role := range user.Roles {
-				if role.Id == roleID {
-					user.Roles = append(user.Roles[:i], user.Roles[i+1:]...)
+			for i, existingRoleId := range user.RoleIds {
+				if existingRoleId == roleId {
+					user.RoleIds = append(user.RoleIds[:i], user.RoleIds[i+1:]...)
 					user.UpdatedAt = time.Now()
 					return true
 				}

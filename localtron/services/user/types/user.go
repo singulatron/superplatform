@@ -20,13 +20,10 @@ type User struct {
 	DeletedAt    *time.Time `json:"deletedAt,omitempty"`
 	Name         string     `json:"name,omitempty"`
 	Email        string     `json:"email,omitempty"`
-	PasswordHash string     `json:"-"`
+	PasswordHash string     `json:"passwordHash,omitempty"`
 
-	RoleIds []string `json:"roleIds,omitempty"`
-	Roles   []*Role  `json:"roles,omitempty"`
-
-	AuthTokenIds []string    `json:"authTokenIds,omitempty"`
-	AuthTokens   []AuthToken `json:"authTokens,omitempty"`
+	RoleIds      []string `json:"roleIds,omitempty"`
+	AuthTokenIds []string `json:"authTokenIds,omitempty"`
 }
 
 func (c *User) GetId() string {

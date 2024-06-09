@@ -22,9 +22,16 @@ import (
 )
 
 func (s *UserService) Login(email, password string) (*usertypes.AuthToken, error) {
-	var token usertypes.AuthToken
+	var token *usertypes.AuthToken
 	s.usersMem.ForeachStop(func(i int, user *usertypes.User) bool {
 		if user.Email == email && checkPasswordHash(password, user.PasswordHash) {
+			if len(user.AuthTokenIds) > 0 {
+				var found bool
+				token, found = s.authTokensMem.FindById(user.AuthTokenIds[0])
+				if found {
+					return true
+				}
+			}
 			token = generateAuthToken(user.Id)
 			user.AuthTokenIds = append(user.AuthTokenIds, token.Id)
 			s.usersFile.MarkChanged()
@@ -32,7 +39,8 @@ func (s *UserService) Login(email, password string) (*usertypes.AuthToken, error
 		}
 		return false
 	})
-	return nil, errors.New("invalid email or password")
+
+	return token, errors.New("invalid email or password")
 }
 
 func checkPasswordHash(password, hash string) bool {
@@ -40,14 +48,14 @@ func checkPasswordHash(password, hash string) bool {
 	return err == nil
 }
 
-func generateAuthToken(userId string) usertypes.AuthToken {
+func generateAuthToken(userId string) *usertypes.AuthToken {
 	randomBytes := make([]byte, 16)
 	_, err := rand.Read(randomBytes)
 	if err != nil {
 		panic(err)
 	}
 	token := hex.EncodeToString(randomBytes)
-	return usertypes.AuthToken{
+	return &usertypes.AuthToken{
 		Id:        uuid.New().String(),
 		UserId:    userId,
 		Token:     token,

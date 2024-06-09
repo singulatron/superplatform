@@ -19,8 +19,8 @@ type Permission struct {
 	UpdatedAt time.Time `json:"updatedAt,omitempty"`
 
 	// eg. "Prompt Viewer"
-	Name        string `json:"name"`
-	Description string `json:"description"`
+	Name        string `json:"name,omitempty"`
+	Description string `json:"description,omitempty"`
 }
 
 func (c *Permission) GetId() string {

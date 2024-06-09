@@ -256,8 +256,8 @@ func main() {
 	router.HandleFunc("/user/login", appl(func(w http.ResponseWriter, r *http.Request) {
 		userendpoints.Login(w, r, userService)
 	}))
-	router.HandleFunc("/user/login", appl(func(w http.ResponseWriter, r *http.Request) {
-		userendpoints.Login(w, r, userService)
+	router.HandleFunc("/user/read-user-by-token", appl(func(w http.ResponseWriter, r *http.Request) {
+		userendpoints.ReadUserByToken(w, r, userService)
 	}))
 
 	lib.Logger.Info("Server started", slog.String("port", port))
