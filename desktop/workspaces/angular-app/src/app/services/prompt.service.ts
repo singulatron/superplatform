@@ -12,6 +12,8 @@ import { Injectable } from '@angular/core';
 import { LocaltronService } from './localtron.service';
 import { ReplaySubject, Observable } from 'rxjs';
 import { FirehoseService } from './firehose.service';
+import { first } from 'rxjs';
+import { UserService } from './user.service';
 
 @Injectable({
 	providedIn: 'root',
@@ -22,9 +24,12 @@ export class PromptService {
 
 	constructor(
 		private localtron: LocaltronService,
+		private userService: UserService,
 		private firehoseService: FirehoseService
 	) {
-		this.init();
+		this.userService.user$.pipe(first()).subscribe(() => {
+			this.init();
+		});
 	}
 
 	async init() {

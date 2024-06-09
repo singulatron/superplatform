@@ -37,6 +37,14 @@ func (c *User) GetUpdatedAt() string {
 	return c.Id
 }
 
+type ReadUserByTokenRequest struct {
+	Token string `json:"token,omitempty"`
+}
+
+type ReadUserByTokenResponse struct {
+	User *User `json:"user,omitempty"`
+}
+
 type RegisterRequest struct {
 	Name  string `json:"name,omitempty"`
 	Email string `json:"email,omitempty"`
@@ -46,16 +54,17 @@ type RegisterResponse struct {
 }
 
 type LoginRequest struct {
-	Name  string `json:"name,omitempty"`
-	Email string `json:"email,omitempty"`
+	Email    string `json:"email,omitempty"`
+	Password string `json:"password,omitempty"`
 }
 
 type LoginResponse struct {
+	Token *AuthToken `json:"token,omitempty"`
 }
 
 type SaveProfileRequest struct {
-	Name  string `json:"name,omitempty"`
 	Email string `json:"email,omitempty"`
+	Name  string `json:"name,omitempty"`
 }
 
 type SaveProfileResponse struct {

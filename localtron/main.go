@@ -21,7 +21,9 @@ import (
 
 	dockerservice "github.com/singulatron/singulatron/localtron/services/docker"
 	dockerendpoints "github.com/singulatron/singulatron/localtron/services/docker/endpoints"
+
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
+	userendpoints "github.com/singulatron/singulatron/localtron/services/user/endpoints"
 
 	modelservice "github.com/singulatron/singulatron/localtron/services/model"
 	modelendpoints "github.com/singulatron/singulatron/localtron/services/model/endpoints"
@@ -249,6 +251,13 @@ func main() {
 
 	router.HandleFunc("/prompt/list", appl(func(w http.ResponseWriter, r *http.Request) {
 		promptendpoints.List(w, r, userService, promptService)
+	}))
+
+	router.HandleFunc("/user/login", appl(func(w http.ResponseWriter, r *http.Request) {
+		userendpoints.Login(w, r, userService)
+	}))
+	router.HandleFunc("/user/login", appl(func(w http.ResponseWriter, r *http.Request) {
+		userendpoints.Login(w, r, userService)
 	}))
 
 	lib.Logger.Info("Server started", slog.String("port", port))

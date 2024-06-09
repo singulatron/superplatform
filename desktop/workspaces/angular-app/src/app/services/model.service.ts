@@ -21,16 +21,16 @@ import {
 	providedIn: 'root',
 })
 export class ModelService {
-	onModelCheckSubject = new ReplaySubject<OnModelCheck>(1);
+	private onModelCheckSubject = new ReplaySubject<OnModelCheck>(1);
 	/** Emitted any time when the currently selected model is checked */
-	onModelCheck$ = this.onModelCheckSubject.asObservable();
+	public onModelCheck$ = this.onModelCheckSubject.asObservable();
 
-	onModelLaunchSubject = new ReplaySubject<OnModelLaunch>(1);
+	private onModelLaunchSubject = new ReplaySubject<OnModelLaunch>(1);
 	/** Emitted when the model is launched and available shortly */
-	onModelLaunch$ = this.onModelLaunchSubject.asObservable();
+	public onModelLaunch$ = this.onModelLaunchSubject.asObservable();
 
-	onModelReadySubject = new ReplaySubject<OnModelReady>(1);
-	onModelReady$ = this.onModelReadySubject.asObservable();
+	private onModelReadySubject = new ReplaySubject<OnModelReady>(1);
+	public onModelReady$ = this.onModelReadySubject.asObservable();
 
 	constructor(
 		private localtron: LocaltronService,

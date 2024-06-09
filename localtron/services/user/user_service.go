@@ -80,12 +80,28 @@ func NewUserService(cs *configservice.ConfigService) (*UserService, error) {
 		return nil, err
 	}
 
+	err = service.bootstrap()
+	if err != nil {
+		return nil, err
+	}
+
 	go service.usersFile.PeriodicSaveState(2 * time.Second)
 	go service.rolesFile.PeriodicSaveState(2 * time.Second)
 	go service.permissionsFile.PeriodicSaveState(2 * time.Second)
 	go service.authTokensFile.PeriodicSaveState(2 * time.Second)
 
 	return service, nil
+}
+
+func (s *UserService) bootstrap() error {
+	if s.usersMem.Count() == 0 {
+		lib.Logger.Info("Bootstrapping users")
+		_, err := s.Register("singulatron", "changeme", "Admin", []*usertypes.Role{
+			usertypes.RoleAdmin,
+		})
+		return err
+	}
+	return nil
 }
 
 func (s *UserService) registerRoles() error {

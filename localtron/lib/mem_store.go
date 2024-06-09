@@ -82,7 +82,7 @@ func (ms *MemoryStore[T]) Filter(f func(item T) bool) []T {
 	return ret
 }
 
-func (ms *MemoryStore[T]) Count(f func(item T) bool) int64 {
+func (ms *MemoryStore[T]) CountByFunc(f func(item T) bool) int64 {
 	ms.mutex.Lock()
 	defer ms.mutex.Unlock()
 
@@ -91,6 +91,18 @@ func (ms *MemoryStore[T]) Count(f func(item T) bool) int64 {
 		if f(v) {
 			count++
 		}
+	}
+
+	return count
+}
+
+func (ms *MemoryStore[T]) Count() int64 {
+	ms.mutex.Lock()
+	defer ms.mutex.Unlock()
+
+	var count int64
+	for range ms.items {
+		count++
 	}
 
 	return count

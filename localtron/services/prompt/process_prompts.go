@@ -53,7 +53,7 @@ func (p *PromptService) processNextPrompt() error {
 	p.runMutex.Lock()
 	defer p.runMutex.Unlock()
 
-	if p.promptsMem.Count(func(v *prompttypes.Prompt) bool {
+	if p.promptsMem.CountByFunc(func(v *prompttypes.Prompt) bool {
 		return v.Status == prompttypes.PromptStatusRunning
 	}) > 0 {
 		return nil
