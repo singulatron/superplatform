@@ -27,8 +27,7 @@ export class FirehoseService {
 		private cs: CookieService,
 		private userService: UserService
 	) {
-		this.userService.user$.pipe(first()).subscribe((usr) => {
-			console.log('first user', usr);
+		this.userService.user$.pipe(first()).subscribe(() => {
 			this.init();
 		});
 	}

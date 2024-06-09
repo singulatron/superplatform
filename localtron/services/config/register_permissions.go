@@ -8,16 +8,18 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-package downloadservice
+
+package configservice
 
 import (
-	downloadtypes "github.com/singulatron/singulatron/localtron/services/download/types"
+	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func (ds *DownloadService) registerPermissions() error {
-	for _, permission := range downloadtypes.DownloadPermissions {
-		_, err := ds.userService.UpsertPermission(
+// this is called in the Start not in constructor to avoid import cycles
+func (p *ConfigService) registerPermissions() error {
+	for _, permission := range configtypes.ConfigPermissions {
+		_, err := p.UpsertPermission(
 			permission.Id,
 			permission.Name,
 			permission.Description,
@@ -31,8 +33,8 @@ func (ds *DownloadService) registerPermissions() error {
 		usertypes.RoleAdmin,
 		usertypes.RoleUser,
 	} {
-		for _, permission := range downloadtypes.DownloadPermissions {
-			ds.userService.AddPermissionToRole(role.Id, permission.Id)
+		for _, permission := range configtypes.ConfigPermissions {
+			p.AddPermissionToRole(role.Id, permission.Id)
 		}
 	}
 

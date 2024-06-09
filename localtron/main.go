@@ -64,29 +64,33 @@ func main() {
 		os.Exit(1)
 	}
 
-	eventCallback := func(event firehosetypes.Event) {
-		lib.Logger.Debug("Received event from config before firehose is set up",
-			slog.String("eventName", event.Name()),
-		)
-	}
-	configService, err := configservice.NewConfigService(eventCallback)
+	configService, err := configservice.NewConfigService()
 	if err != nil {
 		lib.Logger.Error("Config service creation failed", slog.String("error", err.Error()))
 		os.Exit(1)
+	}
+	configService.EventCallback = func(event firehosetypes.Event) {
+		lib.Logger.Debug("Received event from config before firehose is set up",
+			slog.String("eventName", event.Name()),
+		)
 	}
 	configService.ConfigDirectory = path.Join(homeDir, singulatronFolder)
 	if os.Getenv("SINGULATRON_CONFIG_PATH") != "" {
 		configService.ConfigDirectory = os.Getenv("SINGULATRON_CONFIG_PATH")
 	}
-	err = configService.Start()
-	if err != nil {
-		lib.Logger.Error("Config service start failed", slog.String("error", err.Error()))
-		os.Exit(1)
-	}
 
 	userService, err := userservice.NewUserService(configService)
 	if err != nil {
 		lib.Logger.Error("User service start failed", slog.String("error", err.Error()))
+		os.Exit(1)
+	}
+	// hacks to avoid import cycles
+	configService.UpsertPermission = userService.UpsertPermission
+	configService.AddPermissionToRole = userService.AddPermissionToRole
+
+	err = configService.Start()
+	if err != nil {
+		lib.Logger.Error("Config service start failed", slog.String("error", err.Error()))
 		os.Exit(1)
 	}
 
@@ -95,7 +99,7 @@ func main() {
 		lib.Logger.Error("Firehose service creation failed", slog.String("error", err.Error()))
 		os.Exit(1)
 	}
-	configService.SetEventCallback(firehoseService.Publish)
+	configService.EventCallback = firehoseService.Publish
 
 	singulatronFolder := path.Join(homeDir, singulatronFolder)
 	err = os.MkdirAll(singulatronFolder, 0755)
@@ -111,7 +115,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	downloadService, err := downloadservice.NewDownloadService(firehoseService)
+	downloadService, err := downloadservice.NewDownloadService(firehoseService, userService)
 	if err != nil {
 		lib.Logger.Error("Download service creation failed", slog.String("error", err.Error()))
 		os.Exit(1)

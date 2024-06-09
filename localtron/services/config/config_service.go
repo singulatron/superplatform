@@ -23,6 +23,7 @@ import (
 
 	types "github.com/singulatron/singulatron/localtron/services/config/types"
 	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 
 	"github.com/singulatron/singulatron/localtron/lib"
 )
@@ -32,7 +33,11 @@ const defaultModelId = `https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2
 type ConfigService struct {
 	// import cycle doesn't alllow use to have
 	// the firehose service here
-	eventCallback func(firehosetypes.Event)
+	EventCallback func(firehosetypes.Event)
+	// defined like this to avoid passing in the user service
+	UpsertPermission func(id, name, description string) (*usertypes.Permission, error)
+	// defined like this to avoid passing in the user service
+	AddPermissionToRole func(roleId, permissionId string) error
 
 	ConfigDirectory   string
 	ConfigFileName    string
@@ -42,25 +47,24 @@ type ConfigService struct {
 	clientId          string
 }
 
-func NewConfigService(ec func(firehosetypes.Event)) (*ConfigService, error) {
+func NewConfigService() (*ConfigService, error) {
 	cs := &ConfigService{
-		eventCallback: ec,
-
 		ConfigFileName: "config.yaml",
 	}
 
 	return cs, nil
 }
 
-func (cs *ConfigService) SetEventCallback(ec func(firehosetypes.Event)) {
-	cs.eventCallback = ec
-}
-
 func (cs *ConfigService) Start() error {
 	if cs.ConfigDirectory == "" {
 		return fmt.Errorf("config service is missing a config directory option")
 	}
-	err := cs.loadConfig()
+	err := cs.registerPermissions()
+	if err != nil {
+		return err
+	}
+
+	err = cs.loadConfig()
 	if err != nil {
 		return err
 	}
