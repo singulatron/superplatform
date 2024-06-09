@@ -21,10 +21,12 @@ import (
 	"github.com/singulatron/singulatron/localtron/lib"
 	types "github.com/singulatron/singulatron/localtron/services/download/types"
 	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
+	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
 
 type DownloadService struct {
 	firehoseService *firehoseservice.FirehoseService
+	userService     *userservice.UserService
 
 	downloads     map[string]*types.Download
 	lock          sync.Mutex
@@ -33,13 +35,21 @@ type DownloadService struct {
 	hasChanged    bool
 }
 
-func NewDownloadService(firehoseService *firehoseservice.FirehoseService) (*DownloadService, error) {
+func NewDownloadService(
+	firehoseService *firehoseservice.FirehoseService,
+	userService *userservice.UserService,
+) (*DownloadService, error) {
 	home, _ := os.UserHomeDir()
 	ret := &DownloadService{
 		firehoseService: firehoseService,
+		userService:     userService,
 
-		StateFilePath: path.Join(home, "singulatron_downloads.json"),
+		StateFilePath: path.Join(home, "downloads.json"),
 		downloads:     make(map[string]*types.Download),
+	}
+	err := ret.registerPermissions()
+	if err != nil {
+		return nil, err
 	}
 
 	return ret, nil

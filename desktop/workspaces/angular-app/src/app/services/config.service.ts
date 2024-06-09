@@ -12,6 +12,8 @@ import { Injectable } from '@angular/core';
 import { LocaltronService } from './localtron.service';
 import { FirehoseService } from './firehose.service';
 import { ReplaySubject } from 'rxjs';
+import { UserService } from './user.service';
+import { first } from 'rxjs';
 
 @Injectable({
 	providedIn: 'root',
@@ -25,9 +27,14 @@ export class ConfigService {
 
 	constructor(
 		private localtron: LocaltronService,
+		private userService: UserService,
 		private firehoseService: FirehoseService
 	) {
 		this.init();
+		this.userService.user$.pipe(first()).subscribe((usr) => {
+			console.log("user", usr)
+			this.loggedInInit();
+		});
 	}
 
 	async init() {
@@ -39,7 +46,9 @@ export class ConfigService {
 					break;
 			}
 		});
+	}
 
+	async loggedInInit() {
 		try {
 			let rsp = await this.configGet();
 			this.lastConfig = rsp?.config;

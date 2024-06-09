@@ -35,15 +35,9 @@ var PermissionDownloadDelete = usertypes.Permission{
 	Name: "Download Delete",
 }
 
-var PermissionDownloadStream = usertypes.Permission{
-	Id:   "download.stream",
-	Name: "Download Stream",
-}
-
-var DownloadPermissions = []string{
-	PermissionDownloadCreate.Id,
-	PermissionDownloadView.Id,
-	PermissionDownloadEdit.Id,
-	PermissionDownloadDelete.Id,
-	PermissionDownloadStream.Id,
+var DownloadPermissions = []usertypes.Permission{
+	PermissionDownloadCreate,
+	PermissionDownloadView,
+	PermissionDownloadEdit,
+	PermissionDownloadDelete,
 }
