@@ -44,10 +44,10 @@ func TestDownloadFile(t *testing.T) {
 	dir := path.Join(os.TempDir(), "download_test")
 	assert.NoError(t, os.MkdirAll(dir, 0755))
 
-	cs, _ := configservice.NewConfigService(nil)
+	cs, _ := configservice.NewConfigService()
 	us, _ := userservice.NewUserService(cs)
 	fs, _ := firehoseservice.NewFirehoseService(us)
-	dm, _ := NewDownloadService(fs)
+	dm, _ := NewDownloadService(fs, us)
 	dm.StateFilePath = path.Join(dir, "downloadFile.json")
 	assert.NoError(t, dm.Do(server.URL, dir))
 
@@ -87,10 +87,10 @@ func TestDownloadFileWithPartFile(t *testing.T) {
 		t.Fatalf("Failed to create part file: %s", err)
 	}
 
-	cs, _ := configservice.NewConfigService(nil)
+	cs, _ := configservice.NewConfigService()
 	us, _ := userservice.NewUserService(cs)
 	fs, _ := firehoseservice.NewFirehoseService(us)
-	dm, _ := NewDownloadService(fs)
+	dm, _ := NewDownloadService(fs, us)
 	dm.StateFilePath = path.Join(dir, "downloadFilePartial.json")
 
 	assert.NoError(t, dm.Do(downloadURL, dir))
@@ -117,10 +117,10 @@ func TestDownloadFileWithFullFile(t *testing.T) {
 	fullFilePath := filepath.Join(dir, encodeURLtoFileName(downloadURL))
 	assert.NoError(t, os.WriteFile(fullFilePath, []byte("Hello world"), 0644))
 
-	cs, _ := configservice.NewConfigService(nil)
+	cs, _ := configservice.NewConfigService()
 	us, _ := userservice.NewUserService(cs)
 	fs, _ := firehoseservice.NewFirehoseService(us)
-	dm, _ := NewDownloadService(fs)
+	dm, _ := NewDownloadService(fs, us)
 	dm.StateFilePath = path.Join(dir, "downloadFileFull.json")
 	assert.NoError(t, dm.Do(downloadURL, dir))
 
