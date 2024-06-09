@@ -20,8 +20,10 @@ import (
 	"testing"
 	"time"
 
+	configservice "github.com/singulatron/singulatron/localtron/services/config"
 	types "github.com/singulatron/singulatron/localtron/services/download/types"
 	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
+	userservice "github.com/singulatron/singulatron/localtron/services/user"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -42,7 +44,9 @@ func TestDownloadFile(t *testing.T) {
 	dir := path.Join(os.TempDir(), "download_test")
 	assert.NoError(t, os.MkdirAll(dir, 0755))
 
-	fs, _ := firehoseservice.NewFirehoseService()
+	cs, _ := configservice.NewConfigService(nil)
+	us, _ := userservice.NewUserService(cs)
+	fs, _ := firehoseservice.NewFirehoseService(us)
 	dm, _ := NewDownloadService(fs)
 	dm.StateFilePath = path.Join(dir, "downloadFile.json")
 	assert.NoError(t, dm.Do(server.URL, dir))
@@ -83,7 +87,9 @@ func TestDownloadFileWithPartFile(t *testing.T) {
 		t.Fatalf("Failed to create part file: %s", err)
 	}
 
-	fs, _ := firehoseservice.NewFirehoseService()
+	cs, _ := configservice.NewConfigService(nil)
+	us, _ := userservice.NewUserService(cs)
+	fs, _ := firehoseservice.NewFirehoseService(us)
 	dm, _ := NewDownloadService(fs)
 	dm.StateFilePath = path.Join(dir, "downloadFilePartial.json")
 
@@ -111,7 +117,9 @@ func TestDownloadFileWithFullFile(t *testing.T) {
 	fullFilePath := filepath.Join(dir, encodeURLtoFileName(downloadURL))
 	assert.NoError(t, os.WriteFile(fullFilePath, []byte("Hello world"), 0644))
 
-	fs, _ := firehoseservice.NewFirehoseService()
+	cs, _ := configservice.NewConfigService(nil)
+	us, _ := userservice.NewUserService(cs)
+	fs, _ := firehoseservice.NewFirehoseService(us)
 	dm, _ := NewDownloadService(fs)
 	dm.StateFilePath = path.Join(dir, "downloadFileFull.json")
 	assert.NoError(t, dm.Do(downloadURL, dir))

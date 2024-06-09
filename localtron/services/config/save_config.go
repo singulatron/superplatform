@@ -33,7 +33,7 @@ func (cs *ConfigService) SaveConfig(config types.Config) error {
 		return errors.Wrap(err, "error writing config file")
 	}
 
-	cs.firehoseService.Publish(types.EventConfigUpdate{})
+	cs.eventCallback(types.EventConfigUpdate{})
 
 	return nil
 }

@@ -16,11 +16,23 @@ import (
 
 	appservice "github.com/singulatron/singulatron/localtron/services/app"
 	types "github.com/singulatron/singulatron/localtron/services/app/types"
+	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
 
-func GetChatThreads(w http.ResponseWriter, r *http.Request, ds *appservice.AppService) {
+func GetChatThreads(
+	w http.ResponseWriter,
+	r *http.Request,
+	userService *userservice.UserService,
+	ds *appservice.AppService,
+) {
+	err := userService.IsAuthorized(types.PermissionThreadView.Id, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+
 	req := types.GetChatThreadsRequest{}
-	err := json.NewDecoder(r.Body).Decode(&req)
+	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `invalid JSON`, http.StatusBadRequest)
 		return

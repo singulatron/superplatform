@@ -16,9 +16,22 @@ import (
 
 	configservice "github.com/singulatron/singulatron/localtron/services/config"
 	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
+
+	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
 
-func Get(w http.ResponseWriter, req *http.Request, cs *configservice.ConfigService) {
+func Get(
+	w http.ResponseWriter,
+	r *http.Request,
+	userService *userservice.UserService,
+	cs *configservice.ConfigService,
+) {
+	err := userService.IsAuthorized(configtypes.PermissionConfigView.Id, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+
 	conf, err := cs.GetConfig()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

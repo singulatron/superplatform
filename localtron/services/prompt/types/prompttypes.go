@@ -31,18 +31,20 @@ const (
 // @todo:
 // - message and prompt have a lot of overlap, rethink
 type Prompt struct {
-	Id       string `json:"id"`
+	Id        string    `json:"id"`
+	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `json:"updatedAt"`
+
 	ThreadId string `json:"threadId"`
 	// Prompt is the message itself
 	//    What's a banana?
 	Prompt string `json:"prompt"`
 	// Prompt template. Optional. Might be derived from ModelId
 	//    [INST]{prompt}[/INST]
-	Template  string       `json:"template"`
-	ModelId   string       `json:"modelId,omitempty"`
-	CreatedAt time.Time    `json:"createdAt"`
-	Status    PromptStatus `json:"status,omitempty"`
-	LastRun   time.Time    `json:"lastRun,omitempty"`
+	Template string       `json:"template"`
+	ModelId  string       `json:"modelId,omitempty"`
+	Status   PromptStatus `json:"status,omitempty"`
+	LastRun  time.Time    `json:"lastRun,omitempty"`
 	// how many times this was ran
 	// (retries are due to errors)
 	RunCount   int    `json:"runCount,omitempty"`
@@ -50,6 +52,14 @@ type Prompt struct {
 	MaxRetries int    `json:"maxRetries,omitempty"`
 
 	mutex sync.Mutex
+}
+
+func (c *Prompt) GetId() string {
+	return c.Id
+}
+
+func (c *Prompt) GetUpdatedAt() string {
+	return c.Id
 }
 
 type AddPromptRequest struct {

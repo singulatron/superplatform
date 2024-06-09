@@ -15,10 +15,23 @@ import (
 	"net/http"
 
 	downloadservice "github.com/singulatron/singulatron/localtron/services/download"
+	downloadtypes "github.com/singulatron/singulatron/localtron/services/download/types"
 	types "github.com/singulatron/singulatron/localtron/services/download/types"
+	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
 
-func List(w http.ResponseWriter, r *http.Request, ds *downloadservice.DownloadService) {
+func List(
+	w http.ResponseWriter,
+	r *http.Request,
+	userService *userservice.UserService,
+	ds *downloadservice.DownloadService,
+) {
+	err := userService.IsAuthorized(downloadtypes.PermissionDownloadView.Id, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+
 	details, err := ds.List()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

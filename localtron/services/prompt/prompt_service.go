@@ -21,9 +21,11 @@ import (
 	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
 	modelservice "github.com/singulatron/singulatron/localtron/services/model"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
+	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
 
 type PromptService struct {
+	userService     *userservice.UserService
 	modelService    *modelservice.ModelService
 	appService      *appservice.AppService
 	firehoseService *firehoseservice.FirehoseService
@@ -31,8 +33,7 @@ type PromptService struct {
 	PromptsFilePath string
 	StreamManager   *StreamManager
 
-	promptsMem *lib.MemoryStore[*prompttypes.Prompt]
-
+	promptsMem  *lib.MemoryStore[*prompttypes.Prompt]
 	promptsFile *lib.StateManager[*prompttypes.Prompt]
 
 	runMutex sync.Mutex
@@ -41,15 +42,17 @@ type PromptService struct {
 
 func NewPromptService(
 	cs *configservice.ConfigService,
+	userService *userservice.UserService,
 	modelService *modelservice.ModelService,
 	appService *appservice.AppService,
 	firehoseService *firehoseservice.FirehoseService,
 ) (*PromptService, error) {
-	promptsPath := path.Join(cs.ConfigDirectory, "data", "prompts.json")
 
+	promptsPath := path.Join(cs.ConfigDirectory, "data", "prompts.json")
 	pm := lib.NewMemoryStore[*prompttypes.Prompt]()
 
 	service := &PromptService{
+		userService:     userService,
 		modelService:    modelService,
 		appService:      appService,
 		firehoseService: firehoseService,
@@ -67,11 +70,14 @@ func NewPromptService(
 	if err != nil {
 		return nil, err
 	}
+
 	service.promptsMem.Foreach(func(i int, item *prompttypes.Prompt) {
 		if item.Status == prompttypes.PromptStatusRunning {
 			item.Status = prompttypes.PromptStatusScheduled
 		}
 	})
+
+	service.registerPermissions()
 	service.promptsFile.MarkChanged()
 
 	go service.processPrompts()

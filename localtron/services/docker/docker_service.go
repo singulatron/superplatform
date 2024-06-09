@@ -15,10 +15,11 @@ import (
 
 	"github.com/docker/docker/client"
 	downloadservice "github.com/singulatron/singulatron/localtron/services/download"
+	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
 
-// DockerService manages Docker interactions
 type DockerService struct {
+	userService          *userservice.UserService
 	imagesCache          map[string]bool
 	imagePullMutexes     map[string]*sync.Mutex
 	imagePullGlobalMutex sync.Mutex
@@ -30,18 +31,28 @@ type DockerService struct {
 	ds                   *downloadservice.DownloadService
 }
 
-// NewDockerService acts as a constructor for DockerService
-func NewDockerService(downloadService *downloadservice.DownloadService) (*DockerService, error) {
+func NewDockerService(
+	downloadService *downloadservice.DownloadService,
+	userService *userservice.UserService,
+) (*DockerService, error) {
 	c, err := client.NewClientWithOpts(client.FromEnv, client.WithAPIVersionNegotiation())
 	if err != nil {
 		return nil, err
 	}
-	return &DockerService{
+	service := &DockerService{
+		userService: userService,
+
 		client:           c,
 		imagePullMutexes: make(map[string]*sync.Mutex),
 		imagesCache:      make(map[string]bool),
 		ds:               downloadService,
-	}, nil
+	}
+	err = service.registerPermissions()
+	if err != nil {
+		return nil, err
+	}
+
+	return service, nil
 }
 
 func (ds *DockerService) GetDockerHost() string {

@@ -22,6 +22,9 @@ import (
 	dockerservice "github.com/singulatron/singulatron/localtron/services/docker"
 	dockerendpoints "github.com/singulatron/singulatron/localtron/services/docker/endpoints"
 
+	userservice "github.com/singulatron/singulatron/localtron/services/user"
+	userendpoints "github.com/singulatron/singulatron/localtron/services/user/endpoints"
+
 	modelservice "github.com/singulatron/singulatron/localtron/services/model"
 	modelendpoints "github.com/singulatron/singulatron/localtron/services/model/endpoints"
 
@@ -39,6 +42,7 @@ import (
 
 	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
 	firehoseendpoints "github.com/singulatron/singulatron/localtron/services/firehose/endpoints"
+	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
 
 	"github.com/singulatron/singulatron/localtron/lib"
 )
@@ -60,13 +64,12 @@ func main() {
 		os.Exit(1)
 	}
 
-	firehoseService, err := firehoseservice.NewFirehoseService()
-	if err != nil {
-		lib.Logger.Error("Firehose service creation failed", slog.String("error", err.Error()))
-		os.Exit(1)
+	eventCallback := func(event firehosetypes.Event) {
+		lib.Logger.Debug("Received event from config before firehose is set up",
+			slog.String("eventName", event.Name()),
+		)
 	}
-
-	configService, err := configservice.NewConfigService(firehoseService)
+	configService, err := configservice.NewConfigService(eventCallback)
 	if err != nil {
 		lib.Logger.Error("Config service creation failed", slog.String("error", err.Error()))
 		os.Exit(1)
@@ -80,6 +83,19 @@ func main() {
 		lib.Logger.Error("Config service start failed", slog.String("error", err.Error()))
 		os.Exit(1)
 	}
+
+	userService, err := userservice.NewUserService(configService)
+	if err != nil {
+		lib.Logger.Error("User service start failed", slog.String("error", err.Error()))
+		os.Exit(1)
+	}
+
+	firehoseService, err := firehoseservice.NewFirehoseService(userService)
+	if err != nil {
+		lib.Logger.Error("Firehose service creation failed", slog.String("error", err.Error()))
+		os.Exit(1)
+	}
+	configService.SetEventCallback(firehoseService.Publish)
 
 	singulatronFolder := path.Join(homeDir, singulatronFolder)
 	err = os.MkdirAll(singulatronFolder, 0755)
@@ -120,52 +136,52 @@ func main() {
 	router := http.NewServeMux()
 
 	router.HandleFunc("/firehose/subscribe", appl(func(w http.ResponseWriter, r *http.Request) {
-		firehoseendpoints.Subscribe(w, r, firehoseService)
+		firehoseendpoints.Subscribe(w, r, userService, firehoseService)
 	}))
 
 	router.HandleFunc("/download/do", appl(func(w http.ResponseWriter, r *http.Request) {
-		downloadendpoints.Do(w, r, downloadService)
+		downloadendpoints.Do(w, r, userService, downloadService)
 	}))
 
 	router.HandleFunc("/download/pause", appl(func(w http.ResponseWriter, r *http.Request) {
-		downloadendpoints.Pause(w, r, downloadService)
+		downloadendpoints.Pause(w, r, userService, downloadService)
 	}))
 
 	router.HandleFunc("/download/list", appl(func(w http.ResponseWriter, r *http.Request) {
-		downloadendpoints.List(w, r, downloadService)
+		downloadendpoints.List(w, r, userService, downloadService)
 	}))
 
-	dockerService, err := dockerservice.NewDockerService(downloadService)
+	dockerService, err := dockerservice.NewDockerService(downloadService, userService)
 	if err != nil {
 		lib.Logger.Error("Docker service creation failed", slog.String("error", err.Error()))
 		os.Exit(1)
 	}
 
 	router.HandleFunc("/docker/info", appl(func(w http.ResponseWriter, r *http.Request) {
-		dockerendpoints.Info(w, r, dockerService)
+		dockerendpoints.Info(w, r, userService, dockerService)
 	}))
 
-	modelService, err := modelservice.NewModelService(downloadService, configService, dockerService)
+	modelService, err := modelservice.NewModelService(downloadService, userService, configService, dockerService)
 	if err != nil {
 		lib.Logger.Error("Model service creation failed", slog.String("error", err.Error()))
 		os.Exit(1)
 	}
 
 	router.HandleFunc("/model/status", appl(func(w http.ResponseWriter, r *http.Request) {
-		modelendpoints.Status(w, r, modelService)
+		modelendpoints.Status(w, r, userService, modelService)
 	}))
 	router.HandleFunc("/model/start", appl(func(w http.ResponseWriter, r *http.Request) {
-		modelendpoints.Start(w, r, modelService)
+		modelendpoints.Start(w, r, userService, modelService)
 	}))
 	router.HandleFunc("/model/make-default", appl(func(w http.ResponseWriter, r *http.Request) {
-		modelendpoints.MakeDefault(w, r, modelService)
+		modelendpoints.MakeDefault(w, r, userService, modelService)
 	}))
 
 	router.HandleFunc("/config/get", appl(func(w http.ResponseWriter, r *http.Request) {
-		configendpoints.Get(w, r, configService)
+		configendpoints.Get(w, r, userService, configService)
 	}))
 
-	appService, err := appservice.NewAppService(configService, firehoseService)
+	appService, err := appservice.NewAppService(configService, firehoseService, userService)
 	if err != nil {
 		lib.Logger.Error("App service creation failed", slog.String("error", err.Error()))
 		os.Exit(1)
@@ -188,53 +204,60 @@ func main() {
 	}))
 
 	router.HandleFunc("/chat/message/add", appl(func(w http.ResponseWriter, r *http.Request) {
-		appendpoints.AddChatMessage(w, r, appService)
+		appendpoints.AddChatMessage(w, r, userService, appService)
 	}))
 
 	router.HandleFunc("/chat/message/delete", appl(func(w http.ResponseWriter, r *http.Request) {
-		appendpoints.DeleteChatMessage(w, r, appService)
+		appendpoints.DeleteChatMessage(w, r, userService, appService)
 	}))
 
 	router.HandleFunc("/chat/messages", appl(func(w http.ResponseWriter, r *http.Request) {
-		appendpoints.GetChatMessages(w, r, appService)
+		appendpoints.GetChatMessages(w, r, userService, appService)
 	}))
 
 	router.HandleFunc("/chat/thread/add", appl(func(w http.ResponseWriter, r *http.Request) {
-		appendpoints.AddChatThread(w, r, appService)
+		appendpoints.AddChatThread(w, r, userService, appService)
 	}))
 
 	router.HandleFunc("/chat/thread/delete", appl(func(w http.ResponseWriter, r *http.Request) {
-		appendpoints.DeleteChatThread(w, r, appService)
+		appendpoints.DeleteChatThread(w, r, userService, appService)
 	}))
 
 	router.HandleFunc("/chat/threads", appl(func(w http.ResponseWriter, r *http.Request) {
-		appendpoints.GetChatThreads(w, r, appService)
+		appendpoints.GetChatThreads(w, r, userService, appService)
 	}))
 
 	router.HandleFunc("/chat/thread", appl(func(w http.ResponseWriter, r *http.Request) {
-		appendpoints.GetChatThread(w, r, appService)
+		appendpoints.GetChatThread(w, r, userService, appService)
 	}))
 
 	router.HandleFunc("/chat/thread/update", appl(func(w http.ResponseWriter, r *http.Request) {
-		appendpoints.UpdateChatThread(w, r, appService)
+		appendpoints.UpdateChatThread(w, r, userService, appService)
 	}))
 
-	promptService, err := promptservice.NewPromptService(configService, modelService, appService, firehoseService)
+	promptService, err := promptservice.NewPromptService(configService, userService, modelService, appService, firehoseService)
 	if err != nil {
 		lib.Logger.Error("Prompt service creation failed", slog.String("error", err.Error()))
 		os.Exit(1)
 	}
 
 	router.HandleFunc("/prompt/add", appl(func(w http.ResponseWriter, r *http.Request) {
-		promptendpoints.Add(w, r, promptService)
+		promptendpoints.Add(w, r, userService, promptService)
 	}))
 
 	router.HandleFunc("/prompt/subscribe", appl(func(w http.ResponseWriter, r *http.Request) {
-		promptendpoints.Subscribe(w, r, promptService)
+		promptendpoints.Subscribe(w, r, userService, promptService)
 	}))
 
 	router.HandleFunc("/prompt/list", appl(func(w http.ResponseWriter, r *http.Request) {
-		promptendpoints.List(w, r, promptService)
+		promptendpoints.List(w, r, userService, promptService)
+	}))
+
+	router.HandleFunc("/user/login", appl(func(w http.ResponseWriter, r *http.Request) {
+		userendpoints.Login(w, r, userService)
+	}))
+	router.HandleFunc("/user/read-user-by-token", appl(func(w http.ResponseWriter, r *http.Request) {
+		userendpoints.ReadUserByToken(w, r, userService)
 	}))
 
 	lib.Logger.Info("Server started", slog.String("port", port))

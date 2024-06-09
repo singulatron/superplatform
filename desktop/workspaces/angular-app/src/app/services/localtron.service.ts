@@ -54,13 +54,10 @@ export class LocaltronService {
 		}
 
 		let uri = this.config.env.localtronAddress + path;
-		// console.log("calling", uri);
 
-		// Encrypt the request if env.encrypt is true
-		let body = // this.config.env.encrypt
-			//? this.encrypt(request)
-			JSON.stringify(request);
+		let body = JSON.stringify(request);
 
+		// @todo get this from the user service
 		let headers = this.headers.set(
 			'Authorization',
 			'Bearer ' + this.cs.get('the_token')
@@ -74,8 +71,6 @@ export class LocaltronService {
 				})
 				.pipe(
 					map((response) => {
-						// this.config.env.encrypt
-						// ? this.decrypt(response)
 						return JSON.parse(response);
 					}),
 					catchError((error) => {

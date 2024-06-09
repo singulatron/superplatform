@@ -11,6 +11,9 @@
 import { Injectable } from '@angular/core';
 import { LocaltronService } from './localtron.service';
 import { Observable, Subject } from 'rxjs';
+import { UserService } from './user.service';
+import { first } from 'rxjs';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
 	providedIn: 'root',
@@ -19,7 +22,18 @@ export class FirehoseService {
 	private firehoseEventSubject = new Subject<FirehoseEvent>();
 	public firehoseEvent$ = this.firehoseEventSubject.asObservable();
 
-	constructor(private localtron: LocaltronService) {
+	constructor(
+		private localtron: LocaltronService,
+		private cs: CookieService,
+		private userService: UserService
+	) {
+		this.userService.user$.pipe(first()).subscribe((usr) => {
+			console.log('first user', usr);
+			this.init();
+		});
+	}
+
+	async init() {
 		this.firehoseSubscribe().subscribe((event) => {
 			this.firehoseEventSubject.next(event);
 		});
@@ -32,9 +46,8 @@ export class FirehoseService {
 		let uri =
 			this.localtron.config.env.localtronAddress + '/firehose/subscribe';
 
-		//const token = this.cs.get('the_token');
 		const headers = {
-			Authorization: 'Bearer ', //+ token,
+			Authorization: 'Bearer ' + this.cs.get('the_token'),
 			'Content-Type': 'application/json',
 		};
 

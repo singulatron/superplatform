@@ -22,7 +22,7 @@ import (
 	"gopkg.in/yaml.v2"
 
 	types "github.com/singulatron/singulatron/localtron/services/config/types"
-	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
+	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
 
 	"github.com/singulatron/singulatron/localtron/lib"
 )
@@ -30,7 +30,9 @@ import (
 const defaultModelId = `https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q3_K_S.gguf`
 
 type ConfigService struct {
-	firehoseService *firehoseservice.FirehoseService
+	// import cycle doesn't alllow use to have
+	// the firehose service here
+	eventCallback func(firehosetypes.Event)
 
 	ConfigDirectory   string
 	ConfigFileName    string
@@ -40,14 +42,18 @@ type ConfigService struct {
 	clientId          string
 }
 
-func NewConfigService(firehoseService *firehoseservice.FirehoseService) (*ConfigService, error) {
+func NewConfigService(ec func(firehosetypes.Event)) (*ConfigService, error) {
 	cs := &ConfigService{
-		firehoseService: firehoseService,
+		eventCallback: ec,
 
 		ConfigFileName: "config.yaml",
 	}
 
 	return cs, nil
+}
+
+func (cs *ConfigService) SetEventCallback(ec func(firehosetypes.Event)) {
+	cs.eventCallback = ec
 }
 
 func (cs *ConfigService) Start() error {

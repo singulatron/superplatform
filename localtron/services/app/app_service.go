@@ -23,10 +23,12 @@ import (
 	apptypes "github.com/singulatron/singulatron/localtron/services/app/types"
 	configservice "github.com/singulatron/singulatron/localtron/services/config"
 	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
+	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
 
 type AppService struct {
 	configService   *configservice.ConfigService
+	userService     *userservice.UserService
 	firehoseService *firehoseservice.FirehoseService
 
 	LogBuffer   []apptypes.Log
@@ -50,6 +52,7 @@ type AppService struct {
 func NewAppService(
 	cs *configservice.ConfigService,
 	fs *firehoseservice.FirehoseService,
+	userService *userservice.UserService,
 ) (*AppService, error) {
 	ci, err := cs.GetClientId()
 	if err != nil {
@@ -70,6 +73,7 @@ func NewAppService(
 	service := &AppService{
 		configService:   cs,
 		firehoseService: fs,
+		userService:     userService,
 
 		messagesMem: mm,
 		threadsMem:  tm,
@@ -87,6 +91,11 @@ func NewAppService(
 	service.ThreadsFilePath = threadsPath
 
 	err = service.loadChatFiles()
+	if err != nil {
+		return nil, err
+	}
+
+	err = service.registerPermissions()
 	if err != nil {
 		return nil, err
 	}
