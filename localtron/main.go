@@ -40,6 +40,7 @@ import (
 
 	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
 	firehoseendpoints "github.com/singulatron/singulatron/localtron/services/firehose/endpoints"
+	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
 
 	"github.com/singulatron/singulatron/localtron/lib"
 )
@@ -61,13 +62,12 @@ func main() {
 		os.Exit(1)
 	}
 
-	firehoseService, err := firehoseservice.NewFirehoseService()
-	if err != nil {
-		lib.Logger.Error("Firehose service creation failed", slog.String("error", err.Error()))
-		os.Exit(1)
+	eventCallback := func(event firehosetypes.Event) {
+		lib.Logger.Debug("Received event from config before firehose is set up",
+			slog.String("eventName", event.Name()),
+		)
 	}
-
-	configService, err := configservice.NewConfigService(firehoseService)
+	configService, err := configservice.NewConfigService(eventCallback)
 	if err != nil {
 		lib.Logger.Error("Config service creation failed", slog.String("error", err.Error()))
 		os.Exit(1)
@@ -87,6 +87,13 @@ func main() {
 		lib.Logger.Error("User service start failed", slog.String("error", err.Error()))
 		os.Exit(1)
 	}
+
+	firehoseService, err := firehoseservice.NewFirehoseService(userService)
+	if err != nil {
+		lib.Logger.Error("Firehose service creation failed", slog.String("error", err.Error()))
+		os.Exit(1)
+	}
+	configService.SetEventCallback(firehoseService.Publish)
 
 	singulatronFolder := path.Join(homeDir, singulatronFolder)
 	err = os.MkdirAll(singulatronFolder, 0755)
@@ -127,7 +134,7 @@ func main() {
 	router := http.NewServeMux()
 
 	router.HandleFunc("/firehose/subscribe", appl(func(w http.ResponseWriter, r *http.Request) {
-		firehoseendpoints.Subscribe(w, r, firehoseService)
+		firehoseendpoints.Subscribe(w, r, userService, firehoseService)
 	}))
 
 	router.HandleFunc("/download/do", appl(func(w http.ResponseWriter, r *http.Request) {
@@ -152,20 +159,20 @@ func main() {
 		dockerendpoints.Info(w, r, userService, dockerService)
 	}))
 
-	modelService, err := modelservice.NewModelService(downloadService, configService, dockerService)
+	modelService, err := modelservice.NewModelService(downloadService, userService, configService, dockerService)
 	if err != nil {
 		lib.Logger.Error("Model service creation failed", slog.String("error", err.Error()))
 		os.Exit(1)
 	}
 
 	router.HandleFunc("/model/status", appl(func(w http.ResponseWriter, r *http.Request) {
-		modelendpoints.Status(w, r, modelService)
+		modelendpoints.Status(w, r, userService, modelService)
 	}))
 	router.HandleFunc("/model/start", appl(func(w http.ResponseWriter, r *http.Request) {
-		modelendpoints.Start(w, r, modelService)
+		modelendpoints.Start(w, r, userService, modelService)
 	}))
 	router.HandleFunc("/model/make-default", appl(func(w http.ResponseWriter, r *http.Request) {
-		modelendpoints.MakeDefault(w, r, modelService)
+		modelendpoints.MakeDefault(w, r, userService, modelService)
 	}))
 
 	router.HandleFunc("/config/get", appl(func(w http.ResponseWriter, r *http.Request) {

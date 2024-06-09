@@ -70,6 +70,11 @@ func NewUserService(cs *configservice.ConfigService) (*UserService, error) {
 		return nil, err
 	}
 
+	err = service.authTokensFile.LoadState()
+	if err != nil {
+		return nil, err
+	}
+
 	err = service.registerRoles()
 	if err != nil {
 		return nil, err
@@ -78,6 +83,7 @@ func NewUserService(cs *configservice.ConfigService) (*UserService, error) {
 	go service.usersFile.PeriodicSaveState(2 * time.Second)
 	go service.rolesFile.PeriodicSaveState(2 * time.Second)
 	go service.permissionsFile.PeriodicSaveState(2 * time.Second)
+	go service.authTokensFile.PeriodicSaveState(2 * time.Second)
 
 	return service, nil
 }

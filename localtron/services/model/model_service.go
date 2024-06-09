@@ -16,6 +16,7 @@ import (
 	configservice "github.com/singulatron/singulatron/localtron/services/config"
 	dockerservice "github.com/singulatron/singulatron/localtron/services/docker"
 	downloadservice "github.com/singulatron/singulatron/localtron/services/download"
+	userservice "github.com/singulatron/singulatron/localtron/services/user"
 
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 )
@@ -24,6 +25,7 @@ type ModelService struct {
 	modelStateMutex sync.Mutex
 	modelStateMap   map[int]*modeltypes.ModelState
 
+	userService     *userservice.UserService
 	downloadService *downloadservice.DownloadService
 	confiService    *configservice.ConfigService
 	dockerService   *dockerservice.DockerService
@@ -31,13 +33,20 @@ type ModelService struct {
 
 func NewModelService(
 	ds *downloadservice.DownloadService,
+	userService *userservice.UserService,
 	cs *configservice.ConfigService,
 	dockerService *dockerservice.DockerService) (*ModelService, error) {
 	srv := &ModelService{
-		modelStateMap:   map[int]*modeltypes.ModelState{},
+		userService:     userService,
 		downloadService: ds,
 		confiService:    cs,
 		dockerService:   dockerService,
+
+		modelStateMap: map[int]*modeltypes.ModelState{},
+	}
+	err := srv.registerPermissions()
+	if err != nil {
+		return nil, err
 	}
 
 	return srv, nil

@@ -16,11 +16,23 @@ import (
 
 	modelservice "github.com/singulatron/singulatron/localtron/services/model"
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
+	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
 
-func Status(w http.ResponseWriter, r *http.Request, ms *modelservice.ModelService) {
+func Status(
+	w http.ResponseWriter,
+	r *http.Request,
+	userService *userservice.UserService,
+	ms *modelservice.ModelService,
+) {
+	err := userService.IsAuthorized(modeltypes.PermissionModelView.Id, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+
 	req := modeltypes.StatusRequest{}
-	err := json.NewDecoder(r.Body).Decode(&req)
+	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `invalid JSON`, http.StatusBadRequest)
 		return

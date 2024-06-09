@@ -17,9 +17,22 @@ import (
 
 	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
 	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
+
+	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
 
-func Subscribe(w http.ResponseWriter, r *http.Request, fs *firehoseservice.FirehoseService) {
+func Subscribe(
+	w http.ResponseWriter,
+	r *http.Request,
+	userService *userservice.UserService,
+	fs *firehoseservice.FirehoseService,
+) {
+	err := userService.IsAuthorized(firehosetypes.PermissionFirehoseView.Id, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+
 	w.Header().Set("Content-Type", "text/event-stream")
 	w.Header().Set("Cache-Control", "no-cache")
 	w.Header().Set("Connection", "keep-alive")
