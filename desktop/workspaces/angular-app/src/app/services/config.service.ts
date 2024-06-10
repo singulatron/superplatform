@@ -31,8 +31,7 @@ export class ConfigService {
 		private firehoseService: FirehoseService
 	) {
 		this.init();
-		this.userService.user$.pipe(first()).subscribe((usr) => {
-			console.log("user", usr)
+		this.userService.user$.pipe(first()).subscribe(() => {
 			this.loggedInInit();
 		});
 	}
