@@ -48,7 +48,7 @@ func NewPromptService(
 	firehoseService *firehoseservice.FirehoseService,
 ) (*PromptService, error) {
 
-	promptsPath := path.Join(cs.ConfigDirectory, "data", "prompts.json")
+	promptsPath := path.Join(cs.ConfigDirectory, "data", "prompts")
 	pm := lib.NewMemoryStore[*prompttypes.Prompt]()
 
 	service := &PromptService{

@@ -33,10 +33,10 @@ type UserService struct {
 }
 
 func NewUserService(cs *configservice.ConfigService) (*UserService, error) {
-	usersPath := path.Join(cs.ConfigDirectory, "data", "users.json")
-	rolesPath := path.Join(cs.ConfigDirectory, "data", "roles.json")
-	permissionsPath := path.Join(cs.ConfigDirectory, "data", "permissions.json")
-	authTokensPath := path.Join(cs.ConfigDirectory, "data", "authTokens.json")
+	usersPath := path.Join(cs.ConfigDirectory, "data", "users")
+	rolesPath := path.Join(cs.ConfigDirectory, "data", "roles")
+	permissionsPath := path.Join(cs.ConfigDirectory, "data", "permissions")
+	authTokensPath := path.Join(cs.ConfigDirectory, "data", "authTokens")
 
 	um := lib.NewMemoryStore[*usertypes.User]()
 	rm := lib.NewMemoryStore[*usertypes.Role]()

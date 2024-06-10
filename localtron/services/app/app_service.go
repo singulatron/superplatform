@@ -67,8 +67,8 @@ func NewAppService(
 		return nil, err
 	}
 
-	messagesPath := path.Join(cs.ConfigDirectory, "data", "messages.json")
-	threadsPath := path.Join(cs.ConfigDirectory, "data", "threads.json")
+	messagesPath := path.Join(cs.ConfigDirectory, "data", "messages")
+	threadsPath := path.Join(cs.ConfigDirectory, "data", "threads")
 
 	service := &AppService{
 		configService:   cs,
