@@ -14,6 +14,7 @@ import (
 	"archive/zip"
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log/slog"
 	"os"
@@ -56,7 +57,7 @@ func (sm *StateManager[T]) LoadState() error {
 			return err
 		}
 		emptyData := []byte("{}")
-		zippedEmptyData, err := zipData(emptyData)
+		zippedEmptyData, err := zipData(sm.filePath, emptyData)
 		if err != nil {
 			return err
 		}
@@ -107,7 +108,7 @@ func (sm *StateManager[T]) SaveState() error {
 		return err
 	}
 
-	zippedData, err := zipData(data)
+	zippedData, err := zipData(sm.filePath, data)
 	if err != nil {
 		return err
 	}
@@ -171,10 +172,12 @@ func (sm *StateManager[T]) setupSignalHandler() {
 	}()
 }
 
-func zipData(data []byte) ([]byte, error) {
+func zipData(filePath string, data []byte) ([]byte, error) {
 	var buf bytes.Buffer
 	zipWriter := zip.NewWriter(&buf)
-	writer, err := zipWriter.Create("state.json")
+	writer, err := zipWriter.Create(
+		fmt.Sprintf("%v.json", path.Base(filePath)),
+	)
 	if err != nil {
 		return nil, err
 	}
