@@ -12,6 +12,7 @@ package lib
 
 import (
 	"encoding/json"
+	"io/ioutil"
 	"log/slog"
 	"os"
 	"os/signal"
@@ -34,7 +35,6 @@ type StateManager[T Row] struct {
 	hasChanged bool
 }
 
-// key: the key under which the slice will be saved in a JSON object in the file
 func NewStateManager[T Row](memStore *MemoryStore[T], filePath string) *StateManager[T] {
 	sm := &StateManager[T]{
 		memStore: memStore,
@@ -54,7 +54,7 @@ func (sm *StateManager[T]) LoadState() error {
 		if err != nil {
 			return err
 		}
-		err = os.WriteFile(sm.filePath, []byte("{}"), 0755)
+		err = ioutil.WriteFile(sm.filePath, []byte("{}"), 0644)
 		if err != nil {
 			return err
 		}
@@ -62,7 +62,7 @@ func (sm *StateManager[T]) LoadState() error {
 		return err
 	}
 
-	data, err := os.ReadFile(sm.filePath)
+	data, err := ioutil.ReadFile(sm.filePath)
 	if err != nil {
 		return err
 	}
@@ -85,17 +85,25 @@ func (sm *StateManager[T]) SaveState() error {
 	shallowCopy := sm.memStore.SliceCopy()
 
 	sm.lock.Lock()
-	data, err := json.MarshalIndent(&StateFile[T]{
+	defer sm.lock.Unlock()
+
+	sm.memStore.Lock()
+	data, err := json.Marshal(&StateFile[T]{
 		Rows: shallowCopy,
-	}, "", "  ")
+	})
+	sm.memStore.Unlock()
 	if err != nil {
-		sm.lock.Unlock()
 		return err
 	}
 	sm.hasChanged = false
-	sm.lock.Unlock()
 
-	err = os.WriteFile(sm.filePath, data, 0666)
+	tempFilePath := sm.filePath + ".tmp"
+	err = ioutil.WriteFile(tempFilePath, data, 0644)
+	if err != nil {
+		return err
+	}
+
+	err = os.Rename(tempFilePath, sm.filePath)
 	if err != nil {
 		return err
 	}
@@ -111,15 +119,20 @@ func (sm *StateManager[T]) MarkChanged() {
 }
 
 func (sm *StateManager[T]) PeriodicSaveState(interval time.Duration) {
+	ticker := time.NewTicker(interval)
+	defer ticker.Stop()
+
 	for {
-		time.Sleep(interval)
-		if !sm.hasChanged {
-			continue
-		}
-		if err := sm.SaveState(); err != nil {
-			Logger.Error("Error saving file state",
-				slog.String("filePath", sm.filePath),
-			)
+		select {
+		case <-ticker.C:
+			if sm.hasChanged {
+				if err := sm.SaveState(); err != nil {
+					Logger.Error("Error saving file state",
+						slog.String("filePath", sm.filePath),
+						slog.String("error", err.Error()),
+					)
+				}
+			}
 		}
 	}
 }
@@ -130,6 +143,13 @@ func (sm *StateManager[T]) setupSignalHandler() {
 
 	go func() {
 		<-c
-		sm.SaveState()
+		err := sm.SaveState()
+		if err != nil {
+			Logger.Error("Error saving file state on shutdown",
+				slog.String("filePath", sm.filePath),
+				slog.String("error", err.Error()),
+			)
+		}
+		os.Exit(0)
 	}()
 }
