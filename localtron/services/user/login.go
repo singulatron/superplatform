@@ -13,6 +13,7 @@ package userservice
 import (
 	"crypto/rand"
 	"encoding/hex"
+	"errors"
 	"time"
 
 	"github.com/google/uuid"
@@ -22,7 +23,9 @@ import (
 
 func (s *UserService) Login(email, password string) (*usertypes.AuthToken, error) {
 	var token *usertypes.AuthToken
-	s.usersMem.ForeachStop(func(i int, user *usertypes.User) bool {
+	var newTokenCreated bool
+
+	found := s.usersMem.ForeachStop(func(i int, user *usertypes.User) bool {
 		if user.Email == email && checkPasswordHash(password, user.PasswordHash) {
 			if len(user.AuthTokenIds) > 0 {
 				var found bool
@@ -31,13 +34,26 @@ func (s *UserService) Login(email, password string) (*usertypes.AuthToken, error
 					return true
 				}
 			}
+			newTokenCreated = true
 			token = generateAuthToken(user.Id)
 			user.AuthTokenIds = append(user.AuthTokenIds, token.Id)
-			s.usersFile.MarkChanged()
+
 			return true
 		}
 		return false
 	})
+
+	if !found {
+		return nil, errors.New("unauthorized")
+	}
+	if !newTokenCreated {
+		return token, nil
+	}
+
+	s.authTokensMem.Add(token)
+
+	s.usersFile.MarkChanged()
+	s.authTokensFile.MarkChanged()
 
 	return token, nil
 }

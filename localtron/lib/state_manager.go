@@ -11,7 +11,10 @@
 package lib
 
 import (
+	"archive/zip"
+	"bytes"
 	"encoding/json"
+	"io/ioutil"
 	"log/slog"
 	"os"
 	"os/signal"
@@ -27,18 +30,16 @@ type StateFile[T Row] struct {
 }
 
 type StateManager[T Row] struct {
-	key        string
 	memStore   *MemoryStore[T]
 	lock       sync.Mutex
 	filePath   string
 	hasChanged bool
 }
 
-// key: the key under which the slice will be saved in a JSON object in the file
 func NewStateManager[T Row](memStore *MemoryStore[T], filePath string) *StateManager[T] {
 	sm := &StateManager[T]{
 		memStore: memStore,
-		filePath: filePath,
+		filePath: filePath + ".zip",
 	}
 	sm.setupSignalHandler()
 	return sm
@@ -54,7 +55,12 @@ func (sm *StateManager[T]) LoadState() error {
 		if err != nil {
 			return err
 		}
-		err = os.WriteFile(sm.filePath, []byte("{}"), 0755)
+		emptyData := []byte("{}")
+		zippedEmptyData, err := zipData(emptyData)
+		if err != nil {
+			return err
+		}
+		err = ioutil.WriteFile(sm.filePath, zippedEmptyData, 0644)
 		if err != nil {
 			return err
 		}
@@ -62,19 +68,26 @@ func (sm *StateManager[T]) LoadState() error {
 		return err
 	}
 
-	data, err := os.ReadFile(sm.filePath)
+	data, err := ioutil.ReadFile(sm.filePath)
+	if err != nil {
+		return err
+	}
+
+	unzippedData, err := unzipData(data)
 	if err != nil {
 		return err
 	}
 
 	var stateFile StateFile[T]
-	if strings.TrimSpace(string(data)) == "" {
+	if strings.TrimSpace(string(unzippedData)) == "" {
 		return nil
 	}
-	err = json.Unmarshal(data, &stateFile)
+	err = json.Unmarshal(unzippedData, &stateFile)
 	if err != nil {
 		return err
 	}
+
+	// Logger.Info("Statefile loaded", slog.String("fileName", sm.filePath), slog.Int("row", len(stateFile.Rows)))
 
 	sm.memStore.Reset(stateFile.Rows)
 
@@ -82,24 +95,36 @@ func (sm *StateManager[T]) LoadState() error {
 }
 
 func (sm *StateManager[T]) SaveState() error {
+	sm.lock.Lock()
+	defer sm.lock.Unlock()
+
 	shallowCopy := sm.memStore.SliceCopy()
 
-	sm.lock.Lock()
-	data, err := json.MarshalIndent(&StateFile[T]{
+	data, err := json.Marshal(&StateFile[T]{
 		Rows: shallowCopy,
-	}, "", "  ")
+	})
 	if err != nil {
-		sm.lock.Unlock()
 		return err
 	}
+
+	zippedData, err := zipData(data)
+	if err != nil {
+		return err
+	}
+
+	tempFilePath := sm.filePath + ".tmp"
+	err = ioutil.WriteFile(tempFilePath, zippedData, 0644)
+	if err != nil {
+		return err
+	}
+
+	finalFilePath := sm.filePath
+	err = os.Rename(tempFilePath, finalFilePath)
+	if err != nil {
+		return err
+	}
+
 	sm.hasChanged = false
-	sm.lock.Unlock()
-
-	err = os.WriteFile(sm.filePath, data, 0666)
-	if err != nil {
-		return err
-	}
-
 	return nil
 }
 
@@ -111,15 +136,20 @@ func (sm *StateManager[T]) MarkChanged() {
 }
 
 func (sm *StateManager[T]) PeriodicSaveState(interval time.Duration) {
+	ticker := time.NewTicker(interval)
+	defer ticker.Stop()
+
 	for {
-		time.Sleep(interval)
-		if !sm.hasChanged {
-			continue
-		}
-		if err := sm.SaveState(); err != nil {
-			Logger.Error("Error saving file state",
-				slog.String("filePath", sm.filePath),
-			)
+		select {
+		case <-ticker.C:
+			if sm.hasChanged {
+				if err := sm.SaveState(); err != nil {
+					Logger.Error("Error saving file state",
+						slog.String("filePath", sm.filePath),
+						slog.String("error", err.Error()),
+					)
+				}
+			}
 		}
 	}
 }
@@ -130,6 +160,53 @@ func (sm *StateManager[T]) setupSignalHandler() {
 
 	go func() {
 		<-c
-		sm.SaveState()
+		err := sm.SaveState()
+		if err != nil {
+			Logger.Error("Error saving file state on shutdown",
+				slog.String("filePath", sm.filePath),
+				slog.String("error", err.Error()),
+			)
+		}
+		os.Exit(0)
 	}()
+}
+
+func zipData(data []byte) ([]byte, error) {
+	var buf bytes.Buffer
+	zipWriter := zip.NewWriter(&buf)
+	writer, err := zipWriter.Create("state.json")
+	if err != nil {
+		return nil, err
+	}
+	_, err = writer.Write(data)
+	if err != nil {
+		return nil, err
+	}
+	err = zipWriter.Close()
+	if err != nil {
+		return nil, err
+	}
+	return buf.Bytes(), nil
+}
+
+func unzipData(data []byte) ([]byte, error) {
+	reader, err := zip.NewReader(bytes.NewReader(data), int64(len(data)))
+	if err != nil {
+		return nil, err
+	}
+	if len(reader.File) != 1 {
+		return nil, os.ErrInvalid
+	}
+	file := reader.File[0]
+	rc, err := file.Open()
+	if err != nil {
+		return nil, err
+	}
+	defer rc.Close()
+
+	unzippedData, err := ioutil.ReadAll(rc)
+	if err != nil {
+		return nil, err
+	}
+	return unzippedData, nil
 }

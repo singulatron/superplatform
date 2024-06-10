@@ -31,6 +31,14 @@ func NewMemoryStore[T Row]() *MemoryStore[T] {
 	}
 }
 
+func (ms *MemoryStore[T]) Lock() {
+	ms.mutex.Lock()
+}
+
+func (ms *MemoryStore[T]) Unlock() {
+	ms.mutex.Unlock()
+}
+
 func (ms *MemoryStore[T]) Add(item T) {
 	ms.mutex.Lock()
 	defer ms.mutex.Unlock()

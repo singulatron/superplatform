@@ -11,7 +11,8 @@
 import { Injectable } from '@angular/core';
 import { LocaltronService } from './localtron.service';
 import { FirehoseService } from './firehose.service';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, first } from 'rxjs';
+import { UserService } from './user.service';
 
 @Injectable({
 	providedIn: 'root',
@@ -22,9 +23,13 @@ export class DownloadService {
 
 	constructor(
 		private localtron: LocaltronService,
-		private firehoseService: FirehoseService
+		private firehoseService: FirehoseService,
+		private userService: UserService
 	) {
 		this.init();
+		this.userService.user$.pipe(first()).subscribe(() => {
+			this.loggedInInit();
+		});
 	}
 
 	async init() {
@@ -38,7 +43,9 @@ export class DownloadService {
 					break;
 			}
 		});
+	}
 
+	async loggedInInit() {
 		try {
 			let rsp = await this.downloadList();
 			this.onFileDownloadStatusSubject.next({
