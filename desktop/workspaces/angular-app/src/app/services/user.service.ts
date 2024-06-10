@@ -40,7 +40,7 @@ export class UserService {
 			this.token = rsp.token.token as string;
 			this.cookieService.set('the_token', this.token, 3650, '/', '', true);
 			if (!this.cookieService.get('the_token')) {
-				throw "Something is wrong with the setting of cookies"
+				throw 'Something is wrong with the setting of cookies';
 			}
 		}
 		let rsp = await this.readUserByToken(this.token);
