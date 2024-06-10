@@ -37,6 +37,7 @@ import {
 	LocaltronService,
 } from './services/localtron.service';
 import { HomeComponent } from './home/home.component';
+import { LoginComponent } from './login/login.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -53,6 +54,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
 		DefaultModelExplorerComponent,
 		DownloadingComponent,
 		HomeComponent,
+		LoginComponent,
 	],
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 	bootstrap: [AppComponent],

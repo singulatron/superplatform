@@ -14,6 +14,7 @@ import { StartupComponent } from './startup/startup.component';
 import { ChatComponent } from './chat/chat.component';
 import { ModelExplorerComponent } from './model-explorer/model-explorer.component';
 import { HomeComponent } from './home/home.component';
+import { LoginComponent } from './login/login.component';
 
 const routes: Routes = [
 	{
@@ -31,6 +32,10 @@ const routes: Routes = [
 	{
 		path: 'model-explorer',
 		component: ModelExplorerComponent,
+	},
+	{
+		path: 'login',
+		component: LoginComponent,
 	},
 ];
 

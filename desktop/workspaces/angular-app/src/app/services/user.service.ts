@@ -12,6 +12,7 @@ import { Injectable } from '@angular/core';
 import { LocaltronService } from './localtron.service';
 import { CookieService } from 'ngx-cookie-service';
 import { ReplaySubject } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable({
 	providedIn: 'root',
@@ -19,32 +20,54 @@ import { ReplaySubject } from 'rxjs';
 export class UserService {
 	private token: string = '';
 
-	public getToken(): string {
-		return this.token;
-	}
-
 	private userSubject = new ReplaySubject<User>(1);
 	public user$ = this.userSubject.asObservable();
 
 	constructor(
 		private localtron: LocaltronService,
-		private cookieService: CookieService
+		private cookieService: CookieService,
+		private router: Router
 	) {
 		this.init();
 	}
 
 	async init() {
-		this.token = this.cookieService.get('the_token');
-		if (!this.token) {
+		this.getToken();
+		if (!this.hasToken()) {
 			let rsp = await this.login('singulatron', 'changeme');
-			this.token = rsp.token.token as string;
-			this.cookieService.set('the_token', this.token, 3650, '/', '', true);
-			if (!this.cookieService.get('the_token')) {
-				throw 'Something is wrong with the setting of cookies';
+			this.setToken(rsp.token.token as string);
+			if (!this.hasToken()) {
+				console.error('Something is wrong with the setting of cookies');
+				this.router.navigateByUrl('/login');
+				return;
 			}
 		}
-		let rsp = await this.readUserByToken(this.token);
-		this.userSubject.next(rsp.user);
+
+		try {
+			let rsp = await this.readUserByToken(this.token);
+			this.userSubject.next(rsp.user);
+		} catch {
+			console.error('Cannot read user even with a token');
+			this.router.navigateByUrl('/login');
+		}
+	}
+
+	getToken(): string {
+		if (this.token) {
+			return this.token;
+		}
+		this.token = this.cookieService.get('the_token');
+		return this.token;
+	}
+
+	setToken(token: string) {
+		this.token = token;
+		this.cookieService.set('the_token', this.token, 3650, '/', '', true);
+	}
+
+	hasToken(): boolean {
+		let t = this.cookieService.get('the_token');
+		return !!t;
 	}
 
 	login(email: string, password: string): Promise<LoginResponse> {
