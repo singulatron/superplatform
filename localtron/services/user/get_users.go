@@ -11,28 +11,11 @@
 package userservice
 
 import (
-	"errors"
-	"time"
-
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func (s *UserService) SaveProfile(email, newName string) error {
-	found := s.usersMem.ForeachStop(func(i int, user *usertypes.User) bool {
-		if user.Email == email {
-			user.Name = newName
-			user.UpdatedAt = time.Now()
+func (s *UserService) GetUsers() ([]*usertypes.User, error) {
+	users, err := s.usersMem.DeepCopy()
 
-			return true
-		}
-		return false
-	})
-
-	if !found {
-		return errors.New("user not found")
-	}
-
-	s.usersFile.MarkChanged()
-
-	return nil
+	return users, err
 }

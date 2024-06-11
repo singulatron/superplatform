@@ -1,0 +1,100 @@
+<b-sidebar-page title="Login/Register">
+	<app-centered [vertical]="true">
+		<ion-card style="margin: 0 auto; padding: 1em">
+			<!--
+                <ion-segment [(ngModel)]="selectedSegment" value="Login">
+				<ion-segment-button value="login">
+					<ion-label>Login</ion-label>
+				</ion-segment-button>
+				<ion-segment-button value="register">
+					<ion-label>Register</ion-label>
+				</ion-segment-button>
+			</ion-segment>
+        -->
+
+			<ng-container *ngIf="true">
+				<ion-card-content style="padding-top: 2em; padding-bottom: 0">
+					<ion-item>
+						<ion-input
+							label="Email"
+							labelPlacement="floating"
+							type="text"
+							[(ngModel)]="email"
+							required
+						></ion-input>
+					</ion-item>
+
+					<ion-item>
+						<ion-input
+							label="Password"
+							labelPlacement="floating"
+							type="password"
+							[(ngModel)]="password"
+							required
+						></ion-input>
+					</ion-item>
+
+					<ion-row style="margin-top: 1em">
+						<ion-col size.lg="6" size.md="12" size.sm="12" size.xs="12">
+							<ion-button expand="block" style="color: white" (click)="login()"
+								>Login</ion-button
+							>
+						</ion-col>
+					</ion-row>
+				</ion-card-content>
+			</ng-container>
+
+			<ng-container *ngIf="false">
+				<ion-card-content style="padding-top: 2em; padding-bottom: 0">
+					<ion-item>
+						<ion-input
+							label="Email"
+							labelPlacement="floating"
+							type="text"
+							[(ngModel)]="email"
+							required
+						></ion-input>
+					</ion-item>
+
+					<ion-item>
+						<ion-input
+							label="Name"
+							labelPlacement="floating"
+							type="text"
+							[(ngModel)]="name"
+							required
+						></ion-input>
+					</ion-item>
+
+					<ion-item>
+						<ion-input
+							label="Password"
+							labelPlacement="floating"
+							type="password"
+							[(ngModel)]="password"
+							required
+						></ion-input>
+					</ion-item>
+
+					<ion-item>
+						<ion-input
+							label="Password Confirmation"
+							labelPlacement="floating"
+							type="password"
+							[(ngModel)]="passwordConfirmation"
+							required
+						></ion-input>
+					</ion-item>
+
+					<ion-row style="margin-top: 1em">
+						<ion-col size.lg="6" size.md="12" size.sm="12" size.xs="12">
+							<ion-button expand="block" style="color: white"
+								>Register</ion-button
+							>
+						</ion-col>
+					</ion-row>
+				</ion-card-content>
+			</ng-container>
+		</ion-card>
+	</app-centered>
+</b-sidebar-page>

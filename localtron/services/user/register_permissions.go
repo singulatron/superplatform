@@ -11,28 +11,29 @@
 package userservice
 
 import (
-	"errors"
-	"time"
-
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func (s *UserService) SaveProfile(email, newName string) error {
-	found := s.usersMem.ForeachStop(func(i int, user *usertypes.User) bool {
-		if user.Email == email {
-			user.Name = newName
-			user.UpdatedAt = time.Now()
-
-			return true
+func (us *UserService) registerPermissions() error {
+	for _, permission := range usertypes.UserPermissions {
+		_, err := us.UpsertPermission(
+			permission.Id,
+			permission.Name,
+			permission.Description,
+		)
+		if err != nil {
+			return err
 		}
-		return false
-	})
-
-	if !found {
-		return errors.New("user not found")
 	}
 
-	s.usersFile.MarkChanged()
+	for _, role := range []*usertypes.Role{
+		usertypes.RoleAdmin,
+		// usertypes.RoleUser,
+	} {
+		for _, permission := range usertypes.UserPermissions {
+			us.AddPermissionToRole(role.Id, permission.Id)
+		}
+	}
 
 	return nil
 }

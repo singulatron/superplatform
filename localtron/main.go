@@ -263,6 +263,15 @@ func main() {
 	router.HandleFunc("/user/read-user-by-token", appl(func(w http.ResponseWriter, r *http.Request) {
 		userendpoints.ReadUserByToken(w, r, userService)
 	}))
+	router.HandleFunc("/user/get-users", appl(func(w http.ResponseWriter, r *http.Request) {
+		userendpoints.GetUsers(w, r, userService)
+	}))
+	router.HandleFunc("/user/save-profile", appl(func(w http.ResponseWriter, r *http.Request) {
+		userendpoints.SaveProfile(w, r, userService)
+	}))
+	router.HandleFunc("/user/change-password", appl(func(w http.ResponseWriter, r *http.Request) {
+		userendpoints.ChangePassword(w, r, userService)
+	}))
 
 	lib.Logger.Info("Server started", slog.String("port", port))
 	err = http.ListenAndServe(":58231", router)

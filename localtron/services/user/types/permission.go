@@ -13,12 +13,12 @@ package usertypes
 import "time"
 
 type Permission struct {
-	// eg. "prompt.viewer"
+	// eg. "user.viewer"
 	Id        string    `json:"id,omitempty"`
 	CreatedAt time.Time `json:"createdAt,omitempty"`
 	UpdatedAt time.Time `json:"updatedAt,omitempty"`
 
-	// eg. "Prompt Viewer"
+	// eg. "User Viewer"
 	Name        string `json:"name,omitempty"`
 	Description string `json:"description,omitempty"`
 }
@@ -37,4 +37,37 @@ type CreatePermissionRequest struct {
 }
 
 type CreatePermissionResponse struct {
+}
+
+var PermissionUserCreate = Permission{
+	Id:   "user.create",
+	Name: "User Create",
+}
+
+var PermissionUserView = Permission{
+	Id:   "user.view",
+	Name: "User View",
+}
+
+var PermissionUserEdit = Permission{
+	Id:   "user.edit",
+	Name: "User Edit",
+}
+
+var PermissionUserDelete = Permission{
+	Id:   "user.delete",
+	Name: "User Delete",
+}
+
+var PermissionUserPasswordChange = Permission{
+	Id:   "user.passwordChange",
+	Name: "User Password Change",
+}
+
+var UserPermissions = []Permission{
+	PermissionUserCreate,
+	PermissionUserView,
+	PermissionUserEdit,
+	PermissionUserDelete,
+	PermissionUserPasswordChange,
 }

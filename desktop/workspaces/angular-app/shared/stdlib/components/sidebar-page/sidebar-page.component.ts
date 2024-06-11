@@ -13,6 +13,8 @@ import { NavController } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs/operators';
 
+type appGroup = 'ai' | 'user-management' | '';
+
 @Component({
 	selector: 'b-sidebar-page',
 	templateUrl: './sidebar-page.component.html',
@@ -32,7 +34,6 @@ export class SidebarPageComponent {
 	@Input() themeKey: string = '';
 
 	constructor(
-		// private viewContainerRef: ViewContainerRef,
 		public navCtrl: NavController,
 		private activatedRoute: ActivatedRoute
 	) {}
@@ -43,7 +44,22 @@ export class SidebarPageComponent {
 			.subscribe((path) => {
 				this.currentPath = path;
 			});
-		// this.viewContainerRef.createEmbeddedView(this.template);
+	}
+
+	group(): appGroup {
+		if (
+			this.currentPath === 'startup' ||
+			this.currentPath === 'chat' ||
+			this.currentPath === 'model-explorer'
+		) {
+			return 'ai';
+		}
+
+		if (this.currentPath === 'users') {
+			return 'user-management';
+		}
+
+		return '';
 	}
 
 	rout = {

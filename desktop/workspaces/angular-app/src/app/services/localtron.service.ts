@@ -57,7 +57,7 @@ export class LocaltronService {
 
 		let body = JSON.stringify(request);
 
-		// @todo get this from the user service
+		// @todo get this from the user service - import cycle currently
 		let headers = this.headers.set(
 			'Authorization',
 			'Bearer ' + this.cs.get('the_token')
