@@ -87,7 +87,7 @@ export class UserService {
 		return this.localtron.call('/user/get-users', {});
 	}
 
-	saveProfile(email: string, name: string): Promise< {
+	saveProfile(email: string, name: string): Promise<SaveProfileResponse> {
 		let req: SaveProfileRequest = {
 			email: email,
 			name: name,
@@ -95,7 +95,16 @@ export class UserService {
 		return this.localtron.call('/user/save-profile', req);
 	}
 
-	changePassword(email: string, oldPassword: string, newPassword: string): Promise<ChangePasswordResponse> {
+	changePassword(
+		email: string,
+		currentPassword: string,
+		newPassword: string
+	): Promise<ChangePasswordResponse> {
+		let req: ChangePasswordRequest = {
+			email: email,
+			currentPassword: currentPassword,
+			newPassword: newPassword,
+		};
 		return this.localtron.call('/user/change-password', req);
 	}
 }

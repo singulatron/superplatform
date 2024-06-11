@@ -28,9 +28,11 @@ func (s *UserService) SaveProfile(email, newName string) error {
 		return false
 	})
 
-	if found {
-		s.usersFile.MarkChanged()
+	if !found {
+		return errors.New("user not found")
 	}
 
-	return errors.New("user not found")
+	s.usersFile.MarkChanged()
+
+	return nil
 }
