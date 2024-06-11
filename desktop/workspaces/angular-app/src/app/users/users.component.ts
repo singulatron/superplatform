@@ -14,6 +14,7 @@ interface UserVisible extends User {
 })
 export class UsersComponent {
 	users: UserVisible[] = [];
+
 	password = '';
 
 	constructor(
@@ -31,26 +32,29 @@ export class UsersComponent {
 	}
 
 	async saveUser(user: User) {
+		let toastMsg = 'Profile saved';
+
 		await this.userService.saveProfile(
 			user.email as string,
 			user.name as string
 		);
-		let toast = await this.toast.create({
-			message: 'Profile saved',
-			duration: 5000,
-			position: 'middle',
-		});
-		toast.present();
-		if (!this.password) {
-			return;
+
+		if (this.password) {
+			toastMsg += ' and password changed';
+			await this.userService.changePassword(
+				user.email as string,
+				'',
+				this.password
+			);
 		}
-		await this.userService.changePassword(user.email as string, '', this.password);
-		toast = await this.toast.create({
-			message: 'Password changed',
+
+		let toast = await this.toast.create({
+			message: toastMsg,
 			duration: 5000,
 			position: 'middle',
 		});
 		toast.present();
+
 		return;
 	}
 }
