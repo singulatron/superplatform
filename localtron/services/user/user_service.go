@@ -80,6 +80,11 @@ func NewUserService(cs *configservice.ConfigService) (*UserService, error) {
 		return nil, err
 	}
 
+	err = service.registerPermissions()
+	if err != nil {
+		return nil, err
+	}
+
 	err = service.bootstrap()
 	if err != nil {
 		return nil, err

@@ -82,6 +82,10 @@ export class UserService {
 			token: token,
 		});
 	}
+
+	getUsers(): Promise<GetUsersResponse> {
+		return this.localtron.call('/user/get-users', {});
+	}
 }
 
 export interface User {
@@ -199,4 +203,10 @@ export interface AuthToken {
 
 export interface ReadUserByTokenResponse {
 	user: User;
+}
+
+export interface GetUsersRequest {}
+
+export interface GetUsersResponse {
+	users: User[];
 }

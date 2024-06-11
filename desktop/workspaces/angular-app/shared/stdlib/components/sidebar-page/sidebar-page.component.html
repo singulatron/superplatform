@@ -14,6 +14,7 @@
 		</div>
 
 		<div
+			*ngIf="group() === 'ai'"
 			class="menu-entry"
 			title="Startup information and system overview"
 			routerLink="/startup"
@@ -26,7 +27,12 @@
 			></ion-icon>
 		</div>
 
-		<div class="menu-entry" title="Chat with your model" routerLink="/chat">
+		<div
+			*ngIf="group() === 'ai'"
+			class="menu-entry"
+			title="Chat with your model"
+			routerLink="/chat"
+		>
 			<ion-icon
 				[ngStyle]="{
 					color: currentPath === 'chat' ? 'gold' : '',
@@ -35,12 +41,31 @@
 			></ion-icon>
 		</div>
 
-		<div class="menu-entry" title="Model Explorer" routerLink="/model-explorer">
+		<div
+			*ngIf="group() === 'ai'"
+			class="menu-entry"
+			title="Model Explorer"
+			routerLink="/model-explorer"
+		>
 			<ion-icon
 				[ngStyle]="{
 					color: currentPath === 'model-explorer' ? 'gold' : '',
 				}"
 				name="list-outline"
+			></ion-icon>
+		</div>
+
+		<div
+			*ngIf="group() === 'user-management'"
+			class="menu-entry"
+			title="Users"
+			routerLink="/users"
+		>
+			<ion-icon
+				[ngStyle]="{
+					color: currentPath === 'users' ? 'gold' : '',
+				}"
+				name="people-outline"
 			></ion-icon>
 		</div>
 	</div>

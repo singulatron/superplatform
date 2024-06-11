@@ -74,3 +74,9 @@ type ChangePasswordRequest struct {
 }
 
 type ChangePasswordResponse struct{}
+
+type GetUsersRequest struct{}
+
+type GetUsersResponse struct {
+	Users []*User `json:"users,omitempty"`
+}
