@@ -11,15 +11,71 @@
 <b-sidebar-page>
 	<app-centered headerHeight="0vh" [vertical]="true">
 		<div style="padding: 0rem 2rem">
-			<h2 style="margin-bottom: 2rem">
-				{{ 'Users' | translate }}
-			</h2>
+			<h2 style="margin-bottom: 2rem">{{ 'Users' | translate }}</h2>
 
 			<ion-list>
-				<ion-item *ngFor="let user of users" button detail>
-					<ion-label>{{ user.name }}</ion-label>
+				<!-- Loop through the users and display each user as an ion-item -->
+				<ion-item
+					*ngFor="let user of users"
+					detail
+					lines="full"
+					(click)="user.visible = !user.visible"
+					button
+				>
+					<ion-label
+						>{{ user.name }}
+						<span style="color: #666"
+							>(registered {{ user.createdAt | date }})</span
+						></ion-label
+					>
 				</ion-item>
 			</ion-list>
+
+			<ng-container *ngFor="let user of users">
+				<ion-card-content
+					*ngIf="user.visible"
+					style="padding-top: 2em; padding-bottom: 0"
+				>
+					<ion-item>
+						<ion-input
+							label="Name"
+							labelPlacement="floating"
+							type="text"
+							[(ngModel)]="user.name"
+							required
+						></ion-input>
+					</ion-item>
+
+					<ion-item>
+						<ion-input
+							label="Email"
+							labelPlacement="floating"
+							type="text"
+							[(ngModel)]="user.email"
+							required
+						></ion-input>
+					</ion-item>
+
+					<ion-item>
+						<ion-input
+							label="New Password"
+							labelPlacement="floating"
+							type="password"
+							required
+						></ion-input>
+					</ion-item>
+
+					<ion-row style="margin-top: 1em">
+						<ion-col size-lg="6" size-md="12" size-sm="12" size-xs="12">
+							<ion-button
+								style="margin-left: 0.75rem; color: white"
+								(click)="saveUser(user)"
+								>Save</ion-button
+							>
+						</ion-col>
+					</ion-row>
+				</ion-card-content>
+			</ng-container>
 		</div>
 	</app-centered>
 </b-sidebar-page>

@@ -43,3 +43,25 @@ func (s *UserService) ChangePassword(email, currentPassword, newPassword string)
 
 	return errRet
 }
+
+func (s *UserService) ChangePasswordAdmin(email, newPassword string) error {
+	var errRet error
+	changed := s.usersMem.ForeachStop(func(i int, user *usertypes.User) bool {
+		if user.Email == email {
+			newPasswordHash, err := hashPassword(newPassword)
+			errRet = err
+
+			user.PasswordHash = newPasswordHash
+			user.UpdatedAt = time.Now()
+
+			return true
+		}
+		return false
+	})
+
+	if changed {
+		s.usersFile.MarkChanged()
+	}
+
+	return errRet
+}

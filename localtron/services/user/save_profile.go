@@ -22,11 +22,12 @@ func (s *UserService) SaveProfile(email, newName string) error {
 		if user.Email == email {
 			user.Name = newName
 			user.UpdatedAt = time.Now()
-			s.usersFile.MarkChanged()
+
 			return true
 		}
 		return false
 	})
+
 	if found {
 		s.usersFile.MarkChanged()
 	}

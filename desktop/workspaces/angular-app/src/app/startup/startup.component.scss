@@ -8,52 +8,6 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-#logo {
-	font-family: 'Rajdhani';
-	font-size: 4em;
-	display: block;
-	color: #00c2ff;
-	text-shadow:
-		1px 1px 1px rgba(0, 0, 0, 0.1),
-		0px 0px 1px rgba(255, 255, 255, 0.15);
-}
-
-#logo-prefix {
-	color: #444;
-}
-
-#page {
-	text-align: center;
-	margin: 0 auto;
-	display: flex;
-	align-items: center;
-	flex-direction: column;
-	justify-content: space-between;
-	height: 90vh;
-}
-
-#worker-text {
-	color: #444;
-	font-family: 'Rajdhani';
-	font-size: 3em;
-}
-
-ion-range {
-	width: 60%;
-	--bar-background-active: #00c2ff;
-	--bar-height: 0.25em;
-	--knob-size: 3em;
-	--knob-box-shadow: 0 4px 5px rgba(0, 0, 0, 0.3);
-}
-
-#intensity-text {
-	font-size: 1.5em;
-	margin-top: 5em;
-	margin-bottom: 0.5em;
-	font-family: 'Roboto', sans-serif;
-	color: #444;
-}
-
 ion-label {
 	font-size: 1.5em;
 	font-family: 'Roboto', sans-serif;

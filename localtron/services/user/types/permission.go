@@ -59,9 +59,9 @@ var PermissionUserDelete = Permission{
 	Name: "User Delete",
 }
 
-var PermissionUserStream = Permission{
-	Id:   "user.stream",
-	Name: "User Stream",
+var PermissionUserPasswordChange = Permission{
+	Id:   "user.passwordChange",
+	Name: "User Password Change",
 }
 
 var UserPermissions = []Permission{
@@ -69,5 +69,5 @@ var UserPermissions = []Permission{
 	PermissionUserView,
 	PermissionUserEdit,
 	PermissionUserDelete,
-	PermissionUserStream,
+	PermissionUserPasswordChange,
 }

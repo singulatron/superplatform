@@ -86,6 +86,18 @@ export class UserService {
 	getUsers(): Promise<GetUsersResponse> {
 		return this.localtron.call('/user/get-users', {});
 	}
+
+	saveProfile(email: string, name: string): Promise< {
+		let req: SaveProfileRequest = {
+			email: email,
+			name: name,
+		};
+		return this.localtron.call('/user/save-profile', req);
+	}
+
+	changePassword(email: string, oldPassword: string, newPassword: string): Promise<ChangePasswordResponse> {
+		return this.localtron.call('/user/change-password', req);
+	}
 }
 
 export interface User {
@@ -95,7 +107,7 @@ export interface User {
 	deletedAt?: Date | null;
 	name?: string;
 	email?: string;
-	passwordHash?: string; // Note: This field is usually excluded in responses for security reasons
+	passwordHash?: string;
 	roleIds?: string[];
 	roles?: Role[];
 	authTokenIds?: string[];
