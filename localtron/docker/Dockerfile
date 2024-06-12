@@ -9,7 +9,7 @@ COPY . .
 
 RUN go build -o main .
 
-FROM alpine:latest
+FROM ubuntu:latest
 WORKDIR /app
 COPY --from=build /app/main .
 
