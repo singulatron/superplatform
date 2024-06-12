@@ -14,6 +14,7 @@ import (
 	"fmt"
 	"log/slog"
 	"net"
+	"os"
 	"strings"
 	"time"
 
@@ -96,6 +97,13 @@ func (ms *ModelService) checkIfAnswers(modelId string, port int, state *modeltyp
 		}
 
 		dockerHost := ms.dockerService.GetDockerHost()
+
+		// @todo document this
+		singulatronLLMHost := os.Getenv("SINGULATRON_LLM_HOST")
+		if singulatronLLMHost != "" {
+			dockerHost = singulatronLLMHost
+		}
+
 		if !strings.HasPrefix(dockerHost, "http") {
 			dockerHost = "http://" + dockerHost
 		}
