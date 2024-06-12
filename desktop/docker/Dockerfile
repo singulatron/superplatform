@@ -6,11 +6,18 @@ COPY . .
 RUN npm i && npm run package:angular-app
 
 FROM nginx:alpine
+
 COPY --from=build /app/workspaces/angular-app/.dist/angular-app /usr/share/nginx/html
-COPY --from=build /app/docker/entrypoint.sh /entrypoint.sh
+
+COPY ./docker/entrypoint.sh /entrypoint.sh
+
+RUN if [ ! -f /entrypoint.sh ]; then \
+    echo "ERROR: entrypoint.sh not found"; \
+    exit 1; \
+    fi
 
 RUN chmod +x /entrypoint.sh
 
 EXPOSE 80
 
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/bin/sh", "/entrypoint.sh"]
