@@ -32,3 +32,4 @@ jobs:
         run: |
           DOCKER_BUILDKIT=1 docker build -f ./localtron/docker/Dockerfile -t ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest .
           docker push ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
+        working-directory: ./localtron
