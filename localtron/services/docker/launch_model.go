@@ -16,6 +16,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"os"
 	"regexp"
 	"strings"
 
@@ -52,6 +53,13 @@ func (d *DockerService) LaunchModel(containerName string, hostPort int, image, m
 
 	modelPath := download.FilePath
 	modelPath = transformModelDir(modelPath)
+
+	// @todo this is a hack
+	configFolderPath := d.configService.ConfigDirectory
+	sfolder := os.Getenv("SINGULATRON_HOST_FOLDER")
+	if sfolder != "" {
+		modelPath = strings.Replace(modelPath, configFolderPath, sfolder, 1)
+	}
 
 	urlParts := strings.Split(download.URL, "/")
 	filenameFromUrl := urlParts[len(urlParts)-1]

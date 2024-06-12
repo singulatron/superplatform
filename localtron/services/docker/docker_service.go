@@ -14,12 +14,14 @@ import (
 	"sync"
 
 	"github.com/docker/docker/client"
+	configservice "github.com/singulatron/singulatron/localtron/services/config"
 	downloadservice "github.com/singulatron/singulatron/localtron/services/download"
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
 
 type DockerService struct {
 	userService          *userservice.UserService
+	configService        *configservice.ConfigService
 	imagesCache          map[string]bool
 	imagePullMutexes     map[string]*sync.Mutex
 	imagePullGlobalMutex sync.Mutex
@@ -34,18 +36,20 @@ type DockerService struct {
 func NewDockerService(
 	downloadService *downloadservice.DownloadService,
 	userService *userservice.UserService,
+	configService *configservice.ConfigService,
 ) (*DockerService, error) {
 	c, err := client.NewClientWithOpts(client.FromEnv, client.WithAPIVersionNegotiation())
 	if err != nil {
 		return nil, err
 	}
 	service := &DockerService{
-		userService: userService,
+		userService:   userService,
+		configService: configService,
+		ds:            downloadService,
 
 		client:           c,
 		imagePullMutexes: make(map[string]*sync.Mutex),
 		imagesCache:      make(map[string]bool),
-		ds:               downloadService,
 	}
 	err = service.registerPermissions()
 	if err != nil {

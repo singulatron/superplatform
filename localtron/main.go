@@ -155,7 +155,7 @@ func main() {
 		downloadendpoints.List(w, r, userService, downloadService)
 	}))
 
-	dockerService, err := dockerservice.NewDockerService(downloadService, userService)
+	dockerService, err := dockerservice.NewDockerService(downloadService, userService, configService)
 	if err != nil {
 		lib.Logger.Error("Docker service creation failed", slog.String("error", err.Error()))
 		os.Exit(1)
