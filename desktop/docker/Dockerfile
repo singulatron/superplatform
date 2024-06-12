@@ -8,7 +8,7 @@ RUN npm i && npm run package:angular-app
 FROM nginx:alpine
 COPY --from=build /app/workspaces/angular-app/.dist/angular-app /usr/share/nginx/html
 
-COPY entrypoint.sh /entrypoint.sh
+COPY docker/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 EXPOSE 80
