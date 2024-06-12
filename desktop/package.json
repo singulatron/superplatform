@@ -32,7 +32,6 @@
 		"start:angular-e2e": "wait-on http://localhost:4200 && cd workspaces/angular-app && npm run cypress:run",
 		"clean": "shx rm -rf .webpack out allure-results package-lock.json node_modules workspaces/shared-lib/.dist workspaces/angular-app/node_modules workspaces/angular-app/.angular workspaces/angular-app/.dist",
 		"prepare": "cd ..",
-		"postinstall": "cd .. && shx rm -rf .git/hooks && cd desktop",
 		"pretty": "prettier --write \"./**/*.{ts,json,html,css,sass,scss}\""
 	},
 	"devDependencies": {
