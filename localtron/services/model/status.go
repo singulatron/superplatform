@@ -12,6 +12,7 @@ package modelservice
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/pkg/errors"
 	downloadtypes "github.com/singulatron/singulatron/localtron/services/download/types"
@@ -32,6 +33,11 @@ func (ms *ModelService) Status(modelId string) (*modeltypes.Status, error) {
 	}
 
 	dockerHost := ms.dockerService.GetDockerHost()
+	singulatronLLMHost := os.Getenv("SINGULATRON_LLM_HOST")
+	if singulatronLLMHost != "" {
+		dockerHost = singulatronLLMHost
+	}
+
 	modelAddress := fmt.Sprintf("%v:%v", dockerHost, portNum)
 
 	downl, exists := ms.downloadService.GetDownload(modelId)
