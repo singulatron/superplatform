@@ -18,10 +18,16 @@ It's not just an app but also a platform that enables building other AI applicat
 
 ![Run](https://singulatron.com/assets/chat.png?refresh=1)
 
-## Download
+## Download Binaries
 
-Download for Windows, or Linux from the website: https://singulatron.com/home  
+Download as a binary for your laptop or PC for Windows or Linux from the website: https://singulatron.com/home  
 MacOS support is coming soon.
+
+Note/Troubleshooting: currently the focus is on server setups. If the app doesn't want to work on your machine, just make sure Docker is running on your system, as the Docker/VM installation is not entirely reliable on every machine yet.
+
+## Run On Your Servers
+
+See [this document](./docs/server.md) to help you get started.
 
 ## Why
 
