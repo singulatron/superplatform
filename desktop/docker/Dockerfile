@@ -10,6 +10,7 @@ FROM nginx:alpine
 COPY --from=build /app/workspaces/angular-app/.dist/angular-app /usr/share/nginx/html
 
 COPY ./docker/entrypoint.sh /entrypoint.sh
+COPY ./docker/nginx.conf /etc/nginx/nginx.conf
 
 RUN if [ ! -f /entrypoint.sh ]; then \
     echo "ERROR: entrypoint.sh not found"; \

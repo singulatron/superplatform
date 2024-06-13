@@ -4,3 +4,10 @@
 **/.gitignore
 .DS_Store
 **/*.md
+**/.dist
+**/playwright_traces
+**/.webpack
+**/.webpack-shared
+**/out
+docker-latest.tar
+.cache
