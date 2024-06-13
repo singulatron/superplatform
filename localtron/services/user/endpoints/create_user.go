@@ -18,18 +18,17 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func GetUsers(
+func CreateUser(
 	w http.ResponseWriter,
 	r *http.Request,
-	userService *userservice.UserService,
-) {
-	err := userService.IsAuthorized(usertypes.PermissionUserView.Id, r)
+	userService *userservice.UserService) {
+	err := userService.IsAuthorized(usertypes.PermissionUserCreate.Id, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 
-	req := usertypes.GetUsersRequest{}
+	req := usertypes.CreateUserRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `invalid JSON`, http.StatusBadRequest)
@@ -37,14 +36,12 @@ func GetUsers(
 	}
 	defer r.Body.Close()
 
-	users, err := userService.GetUsers()
+	err = userService.CreateUser(req.User, req.Password, req.RoleIds)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	bs, _ := json.Marshal(usertypes.GetUsersResponse{
-		Users: users,
-	})
+	bs, _ := json.Marshal(usertypes.CreateUserResponse{})
 	w.Write(bs)
 }

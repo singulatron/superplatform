@@ -68,6 +68,20 @@
 				name="people-outline"
 			></ion-icon>
 		</div>
+
+		<div
+			*ngIf="group() === 'user-management'"
+			class="menu-entry"
+			title="Add user"
+			routerLink="/add-user"
+		>
+			<ion-icon
+				[ngStyle]="{
+					color: currentPath === 'add-user' ? 'gold' : '',
+				}"
+				name="person-add-outline"
+			></ion-icon>
+		</div>
 	</div>
 	<div class="right-column">
 		<ion-content id="{{ id }}">

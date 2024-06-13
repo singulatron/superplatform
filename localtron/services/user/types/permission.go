@@ -64,10 +64,34 @@ var PermissionUserPasswordChange = Permission{
 	Name: "User Password Change",
 }
 
+var PermissionRoleCreate = Permission{
+	Id:   "role.create",
+	Name: "Role Create",
+}
+
+var PermissionRoleView = Permission{
+	Id:   "role.view",
+	Name: "Role View",
+}
+
+var PermissionRoleEdit = Permission{
+	Id:   "role.edit",
+	Name: "Role Edit",
+}
+
+var PermissionRoleDelete = Permission{
+	Id:   "role.delete",
+	Name: "Role Delete",
+}
+
 var UserPermissions = []Permission{
 	PermissionUserCreate,
 	PermissionUserView,
 	PermissionUserEdit,
 	PermissionUserDelete,
 	PermissionUserPasswordChange,
+	PermissionRoleCreate,
+	PermissionRoleEdit,
+	PermissionRoleView,
+	PermissionRoleDelete,
 }

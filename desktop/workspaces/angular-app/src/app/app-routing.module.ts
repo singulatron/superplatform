@@ -16,6 +16,7 @@ import { ModelExplorerComponent } from './model-explorer/model-explorer.componen
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { UsersComponent } from './users/users.component';
+import { AddUserComponent } from './users/add-user/add-user.component';
 
 const routes: Routes = [
 	{
@@ -37,6 +38,10 @@ const routes: Routes = [
 	{
 		path: 'users',
 		component: UsersComponent,
+	},
+	{
+		path: 'add-user',
+		component: AddUserComponent,
 	},
 	{
 		path: 'login',

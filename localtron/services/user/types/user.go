@@ -80,3 +80,12 @@ type GetUsersRequest struct{}
 type GetUsersResponse struct {
 	Users []*User `json:"users,omitempty"`
 }
+
+type CreateUserRequest struct {
+	User     *User    `json:"user,omitempty"`
+	Password string   `json:"password,omitempty"`
+	RoleIds  []string `json:"roleIds,omitempty"`
+}
+
+type CreateUserResponse struct {
+}
