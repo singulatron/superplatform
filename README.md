@@ -18,10 +18,14 @@ It's not just an app but also a platform that enables building other AI applicat
 
 ![Run](https://singulatron.com/assets/chat.png?refresh=1)
 
-## Download
+## Download Binaries
 
-Download for Windows, or Linux from the website: https://singulatron.com/home  
+Download as a binary for your laptop or PC for Windows or Linux from the website: https://singulatron.com/home  
 MacOS support is coming soon.
+
+## Run On Your Servers
+
+See [this document](./docs/server.md) to help you get started.
 
 ## Why
 
