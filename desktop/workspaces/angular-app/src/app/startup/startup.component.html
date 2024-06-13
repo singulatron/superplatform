@@ -19,7 +19,7 @@
 			</h2>
 
 			<ion-list>
-				<ion-item button detail (click)="toggleSection('dependencies')">
+				<ion-item button detail="false" (click)="toggleSection('dependencies')">
 					<ion-icon
 						[ngStyle]="
 							(dockerService.onDockerInfo$ | async)?.hasDocker
@@ -30,6 +30,13 @@
 						name="laptop-outline"
 					></ion-icon>
 					<ion-label>{{ 'Dependencies' | translate }}</ion-label>
+					<ion-icon
+						slot="end"
+						style="color: #bdbdbd; font-size: 1.25rem"
+						[name]="
+							showSections.dependencies ? 'chevron-down' : 'chevron-forward'
+						"
+					></ion-icon>
 				</ion-item>
 				<ion-list class="dropdown" *ngIf="showSections.dependencies">
 					<ion-item *ngIf="(dockerService.onDockerInfo$ | async)?.hasDocker">
@@ -91,7 +98,7 @@
 				</ion-list>
 
 				<ng-container *ngIf="(dockerService.onDockerInfo$ | async)?.hasDocker">
-					<ion-item button detail (click)="toggleSection('model')">
+					<ion-item button detail="false" (click)="toggleSection('model')">
 						<ion-icon
 							[ngStyle]="
 								(modelService.onModelCheck$ | async)?.selectedExists
@@ -102,6 +109,11 @@
 							name="cube-outline"
 						></ion-icon>
 						<ion-label>{{ 'Downloading your model' | translate }}</ion-label>
+						<ion-icon
+							slot="end"
+							style="color: #bdbdbd; font-size: 1.25rem"
+							[name]="showSections.model ? 'chevron-down' : 'chevron-forward'"
+						></ion-icon>
 					</ion-item>
 					<ion-list class="dropdown" *ngIf="showSections.model">
 						<ion-item
@@ -203,13 +215,20 @@
 						(dockerService?.onDockerInfo$ | async)?.hasDocker
 					"
 				>
-					<ion-item button detail (click)="toggleSection('starting')">
+					<ion-item button detail="false" (click)="toggleSection('starting')">
 						<ion-icon
 							[ngStyle]="allIsWell ? { color: '#53DD6C' } : {}"
 							slot="start"
 							name="hardware-chip-outline"
 						></ion-icon>
 						<ion-label>{{ 'Starting up AI' | translate }}</ion-label>
+						<ion-icon
+							style="color: #bdbdbd; font-size: 1.25rem"
+							slot="end"
+							[name]="
+								showSections.starting ? 'chevron-down' : 'chevron-forward'
+							"
+						></ion-icon>
 					</ion-item>
 					<ion-list class="dropdown" *ngIf="showSections.starting">
 						<ion-item>

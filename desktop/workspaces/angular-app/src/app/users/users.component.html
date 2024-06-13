@@ -16,17 +16,20 @@
 			<ion-list>
 				<ng-container *ngFor="let user of users">
 					<ion-item
-						detail
+						detail="false"
 						lines="full"
 						(click)="user.visible = !user.visible"
 						button
 					>
 						<ion-label
 							>{{ user.name }}
-							<span style="color: #666"
-								>(registered {{ user.createdAt | date }})</span
-							></ion-label
+							<span style="color: #666">({{ user.email }})</span></ion-label
 						>
+						<ion-icon
+							slot="end"
+							style="color: #bdbdbd; font-size: 1.25rem"
+							[name]="user.visible ? 'chevron-down' : 'chevron-forward'"
+						></ion-icon>
 					</ion-item>
 
 					<ion-card-content
@@ -59,7 +62,36 @@
 								labelPlacement="floating"
 								type="password"
 								[(ngModel)]="password"
-								required
+								placeholder="If you leave this blank, the password won't be changed"
+							></ion-input>
+						</ion-item>
+
+						<ion-item *ngIf="password">
+							<ion-input
+								label="Password Confirmation"
+								labelPlacement="floating"
+								type="password"
+								[(ngModel)]="passwordConfirmation"
+
+							></ion-input>
+						</ion-item>
+
+						<ion-item>
+							<ion-input
+								label="Created At"
+								labelPlacement="floating"
+								type="text"
+								disabled
+								value="{{ user.createdAt | date }}"
+							></ion-input>
+						</ion-item>
+						<ion-item>
+							<ion-input
+								label="Updated At"
+								labelPlacement="floating"
+								type="text"
+								disabled
+								value="{{ user.updatedAt | date }}"
 							></ion-input>
 						</ion-item>
 
