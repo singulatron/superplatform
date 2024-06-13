@@ -38,6 +38,7 @@ export class AddUserComponent {
 			const toast = await this.toast.create({
 				message: 'User saved',
 				duration: 5000,
+				color: 'secondary',
 				position: 'middle',
 			});
 			toast.present();
@@ -49,6 +50,7 @@ export class AddUserComponent {
 			} catch {}
 
 			const toast = await this.toast.create({
+				color: 'danger',
 				message: errorMessage,
 				duration: 5000,
 				position: 'middle',

@@ -16,6 +16,7 @@ export class UsersComponent {
 	users: UserVisible[] = [];
 
 	password = '';
+	passwordConfirmation = '';
 
 	constructor(
 		private userService: UserService,
@@ -32,28 +33,44 @@ export class UsersComponent {
 	}
 
 	async saveUser(user: User) {
-		let toastMsg = 'Profile saved';
+		try {
+			let toastMsg = 'Profile saved';
 
-		await this.userService.saveProfile(
-			user.email as string,
-			user.name as string
-		);
-
-		if (this.password) {
-			toastMsg += ' and password changed';
-			await this.userService.changePassword(
+			await this.userService.saveProfile(
 				user.email as string,
-				'',
-				this.password
+				user.name as string
 			);
-		}
 
-		let toast = await this.toast.create({
-			message: toastMsg,
-			duration: 5000,
-			position: 'middle',
-		});
-		toast.present();
+			if (this.password) {
+				toastMsg += ' and password changed';
+				await this.userService.changePassword(
+					user.email as string,
+					'',
+					this.password
+				);
+			}
+
+			let toast = await this.toast.create({
+				color: 'secondary',
+				message: toastMsg,
+				duration: 5000,
+				position: 'middle',
+			});
+			toast.present();
+		} catch (err) {
+			let errorMessage = 'An unexpected error occurred';
+			try {
+				errorMessage = (JSON.parse(err as any) as any)?.error;
+			} catch {}
+
+			const toast = await this.toast.create({
+				color: 'danger',
+				message: errorMessage,
+				duration: 5000,
+				position: 'middle',
+			});
+			toast.present();
+		}
 
 		return;
 	}
