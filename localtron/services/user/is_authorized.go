@@ -68,3 +68,36 @@ func (s *UserService) IsAuthorized(permissionId string, request *http.Request) e
 
 	return errors.New("unauthorized")
 }
+
+func (s *UserService) GetUserFromRequest(request *http.Request) (*usertypes.User, bool) {
+	authHeader := request.Header.Get("Authorization")
+	if authHeader == "" {
+		return nil, false
+	}
+	authHeader = strings.Replace(authHeader, "Bearer ", "", 1)
+
+	// @todo this is very inefficient
+	var token *usertypes.AuthToken
+	found := s.authTokensMem.ForeachStop(func(i int, tk *usertypes.AuthToken) bool {
+		if tk.Token == authHeader {
+			token = tk
+			return true
+		}
+		return false
+	})
+
+	if !found {
+		return nil, false
+	}
+
+	user, found := s.usersMem.FindById(token.UserId)
+	if !found {
+		lib.Logger.Error("Token refers to nonexistent user",
+			slog.String("userId", token.UserId),
+			slog.String("tokenId", token.Id),
+		)
+		return nil, false
+	}
+
+	return user, true
+}

@@ -19,10 +19,13 @@ import (
 
 type ChatThread struct {
 	Id        string `json:"id"`
-	TopicId   string `json:"topicId,omitempty"`
-	Title     string `json:"title"`
 	CreatedAt string `json:"createdAt"`
 	UpdatedAt string `json:"updatedAt"`
+
+	TopicIds []string `json:"topicIds,omitempty"`
+	UserIds  []string `json:"userIds,omitempty"`
+
+	Title string `json:"title"`
 }
 
 func (c *ChatThread) GetId() string {

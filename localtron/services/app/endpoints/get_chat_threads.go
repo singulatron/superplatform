@@ -31,6 +31,12 @@ func GetChatThreads(
 		return
 	}
 
+	user, found := userService.GetUserFromRequest(r)
+	if !found {
+		http.Error(w, "unauthorized", http.StatusUnauthorized)
+		return
+	}
+
 	req := types.GetChatThreadsRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
@@ -39,7 +45,7 @@ func GetChatThreads(
 	}
 	defer r.Body.Close()
 
-	threads, err := ds.GetChatThreads()
+	threads, err := ds.GetChatThreads(user.Id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

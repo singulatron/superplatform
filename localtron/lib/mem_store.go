@@ -56,6 +56,24 @@ func (ms *MemoryStore[T]) Add(item T) {
 	ms.items = append(ms.items, item)
 }
 
+func (ms *MemoryStore[T]) UpsertById(item T) {
+	ms.mutex.Lock()
+	defer ms.mutex.Unlock()
+
+	exists := false
+	for i, v := range ms.items {
+		if v.GetId() == item.GetId() {
+			ms.items[i] = v
+			exists = true
+		}
+	}
+	if exists {
+		return
+	}
+
+	ms.items = append(ms.items, item)
+}
+
 func (ms *MemoryStore[T]) Reset(items []T) {
 	ms.mutex.Lock()
 	defer ms.mutex.Unlock()
