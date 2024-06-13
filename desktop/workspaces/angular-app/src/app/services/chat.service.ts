@@ -103,17 +103,24 @@ export class ChatService {
 
 export interface ChatThread {
 	id?: string;
-	topicId?: string;
-	title?: string;
 	createdAt?: string;
+	updatedAt?: string;
+
+	topicIds?: string;
+	userIds?: string[];
+
+	title?: string;
 }
 
 export interface ChatMessage {
 	id?: string;
+	createdAt?: string;
+	updatedAt?: string;
+
 	threadId: string;
+
 	messageContent: string;
 	isUserMessage: boolean;
-	createdAt?: string;
 }
 
 export interface ChatFile {

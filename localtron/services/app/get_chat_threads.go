@@ -16,10 +16,23 @@ import (
 	apptypes "github.com/singulatron/singulatron/localtron/services/app/types"
 )
 
-func (a *AppService) GetChatThreads() ([]*apptypes.ChatThread, error) {
+func (a *AppService) GetChatThreads(userId string) ([]*apptypes.ChatThread, error) {
 	threads := a.threadsMem.SliceCopy()
+	ownThreads := []*apptypes.ChatThread{}
+	for _, v := range threads {
+		own := false
+		for _, uid := range v.UserIds {
+			if uid == userId {
+				own = true
+			}
+		}
+		if !own {
+			continue
+		}
+		ownThreads = append(ownThreads, v)
+	}
 
-	sort.Sort(apptypes.ThreadByTime(threads))
+	sort.Sort(apptypes.ThreadByTime(ownThreads))
 
-	return threads, nil
+	return ownThreads, nil
 }

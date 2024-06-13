@@ -32,6 +32,12 @@ func AddChatThread(
 		return
 	}
 
+	user, found := userService.GetUserFromRequest(r)
+	if !found {
+		http.Error(w, "unauthorized", http.StatusUnauthorized)
+		return
+	}
+
 	req := types.AddChatThreadRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
@@ -39,6 +45,8 @@ func AddChatThread(
 		return
 	}
 	defer r.Body.Close()
+
+	req.Thread.UserIds = append(req.Thread.UserIds, user.Id)
 
 	thread, err := ds.AddChatThread(req.Thread)
 	if err != nil {
