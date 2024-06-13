@@ -19,8 +19,14 @@ import (
 )
 
 func CreateRole(w http.ResponseWriter, r *http.Request, userService *userservice.UserService) {
+	err := userService.IsAuthorized(usertypes.PermissionRoleCreate.Id, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+
 	req := usertypes.CreateRoleRequest{}
-	err := json.NewDecoder(r.Body).Decode(&req)
+	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `invalid JSON`, http.StatusBadRequest)
 		return

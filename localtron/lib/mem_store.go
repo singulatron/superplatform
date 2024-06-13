@@ -90,6 +90,8 @@ func (ms *MemoryStore[T]) Foreach(f func(i int, item T)) {
 	}
 }
 
+// ForeachStop is the stoppable version of `Foreach`
+// If the callback funtion returns true, it stops iteration.
 func (ms *MemoryStore[T]) ForeachStop(f func(i int, item T) bool) bool {
 	ms.mutex.Lock()
 	defer ms.mutex.Unlock()

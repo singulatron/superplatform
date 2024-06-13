@@ -8,7 +8,7 @@ import { User } from '../../services/user.service';
 })
 export class AddUserComponent {
 	password = '';
-	passwordConfirmation = ''
+	passwordConfirmation = '';
 	user: User = {};
 
 	saveUser() {}
