@@ -275,6 +275,9 @@ func main() {
 	router.HandleFunc("/user/create-user", appl(func(w http.ResponseWriter, r *http.Request) {
 		userendpoints.CreateUser(w, r, userService)
 	}))
+	router.HandleFunc("/user/get-roles", appl(func(w http.ResponseWriter, r *http.Request) {
+		userendpoints.GetRoles(w, r, userService)
+	}))
 
 	lib.Logger.Info("Server started", slog.String("port", port))
 	err = http.ListenAndServe(":58231", router)

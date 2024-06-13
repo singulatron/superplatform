@@ -34,6 +34,19 @@
 				</ion-item>
 
 				<ion-item>
+					<ion-select
+						label="Roles"
+						labelPlacement="floating"
+						multiple="true"
+						[(ngModel)]="user.roleIds"
+					>
+						<ion-select-option *ngFor="let role of roles" [value]="role.id">{{
+							role.name
+						}}</ion-select-option>
+					</ion-select>
+				</ion-item>
+
+				<ion-item>
 					<ion-input
 						label="Password"
 						labelPlacement="floating"
@@ -57,8 +70,8 @@
 					<ion-col size-lg="6" size-md="12" size-sm="12" size-xs="12">
 						<ion-button
 							style="margin-left: 0.75rem; color: white"
-							(click)="saveUser()"
-							>Save</ion-button
+							(click)="createUser()"
+							>Create</ion-button
 						>
 					</ion-col>
 				</ion-row>

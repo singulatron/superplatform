@@ -111,7 +111,7 @@ export class UserService {
 
 	/** Create a user - alternative to registration
 	 */
-	createUser(
+	 createUser(
 		user: User,
 		password: string,
 		roleIds: string[]
@@ -121,7 +121,11 @@ export class UserService {
 			password: password,
 			roleIds: roleIds,
 		};
-		return this.localtron.call('/user/save-profile', req);
+		return this.localtron.call('/user/create-user', req);
+	}
+
+	getRoles(): Promise<GetRolesResposne> {
+		return this.localtron.call('/user/get-roles', {});
 	}
 }
 
@@ -134,9 +138,7 @@ export interface User {
 	email?: string;
 	passwordHash?: string;
 	roleIds?: string[];
-	roles?: Role[];
 	authTokenIds?: string[];
-	authTokens?: AuthToken[];
 }
 
 export interface RegisterRequest {
@@ -255,3 +257,9 @@ export interface CreateUserRequest {
 }
 
 export interface CreateUserResponse {}
+
+export interface GetRolesRequest {}
+
+export interface GetRolesResposne {
+	roles: Role[];
+}

@@ -64,3 +64,10 @@ type RemoveRoleRequest struct {
 }
 
 type RemoveRoleResponse struct{}
+
+type GetRolesRequest struct {
+}
+
+type GetRolesResponse struct {
+	Roles []*Role `json:"roles,omitempty"`
+}

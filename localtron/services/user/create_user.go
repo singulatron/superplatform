@@ -19,6 +19,16 @@ import (
 )
 
 func (s *UserService) CreateUser(user *usertypes.User, password string, roleIds []string) error {
+	if user.Name == "" {
+		return errors.New("Username missing")
+	}
+	if user.Email == "" {
+		return errors.New("Email missing")
+	}
+	if password == "" {
+		return errors.New("Password missing")
+	}
+
 	emailExists := s.usersMem.ForeachStop(func(i int, u *usertypes.User) bool {
 		return u.Email == user.Email
 	})
