@@ -55,7 +55,7 @@ export class SidebarPageComponent {
 			return 'ai';
 		}
 
-		if (this.currentPath === 'users') {
+		if (this.currentPath === 'users' || this.currentPath === 'add-user') {
 			return 'user-management';
 		}
 
