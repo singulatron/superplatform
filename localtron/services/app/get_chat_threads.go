@@ -34,5 +34,5 @@ func (a *AppService) GetChatThreads(userId string) ([]*apptypes.ChatThread, erro
 
 	sort.Sort(apptypes.ThreadByTime(ownThreads))
 
-	return threads, nil
+	return ownThreads, nil
 }

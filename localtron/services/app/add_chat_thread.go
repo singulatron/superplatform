@@ -11,6 +11,7 @@
 package appservice
 
 import (
+	"errors"
 	"time"
 
 	"github.com/google/uuid"
@@ -26,6 +27,9 @@ func (a *AppService) AddChatThread(chatThread *apptypes.ChatThread) (*apptypes.C
 	}
 	if chatThread.CreatedAt == "" {
 		chatThread.CreatedAt = time.Now().Format(time.RFC3339)
+	}
+	if len(chatThread.UserIds) == 0 {
+		return nil, errors.New("no user ids")
 	}
 
 	a.threadsMem.Add(chatThread)
