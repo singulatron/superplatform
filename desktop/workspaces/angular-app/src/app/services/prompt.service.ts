@@ -201,7 +201,10 @@ export class PromptService {
 			};
 		}).pipe(
 			catchError((error, caught) => {
-				console.error('Subscription error', error);
+				console.error('Subscription error', {
+					error: JSON.stringify(error),
+				});
+
 				// Restart the subscription on error
 				return caught.pipe(switchMap(() => this.promptSubscribe(threadId)));
 			})

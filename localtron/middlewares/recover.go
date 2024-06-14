@@ -11,9 +11,11 @@
 package middlewares
 
 import (
-	"log"
+	"log/slog"
 	"net/http"
 	"runtime/debug"
+
+	"github.com/singulatron/singulatron/localtron/lib"
 )
 
 // Panic Recovery Middleware
@@ -21,13 +23,13 @@ func Recover(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		defer func() {
 			if err := recover(); err != nil {
-				// Capture the stack trace
 				stackTrace := debug.Stack()
 
-				// Log the error and the stack trace
-				log.Printf("Recovered from panic: %v\n%s", err, stackTrace)
+				lib.Logger.Error("Recovered from panic",
+					slog.Any("error", err),
+					slog.String("stackTrace", string(stackTrace)),
+				)
 
-				// Respond with an internal server error
 				http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 			}
 		}()
