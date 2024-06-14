@@ -36,6 +36,7 @@ type Prompt struct {
 	UpdatedAt time.Time `json:"updatedAt"`
 
 	ThreadId string `json:"threadId"`
+	UserId   string `json:"userId"`
 	// Prompt is the message itself
 	//    What's a banana?
 	Prompt string `json:"prompt"`

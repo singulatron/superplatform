@@ -31,6 +31,12 @@ func Add(
 		return
 	}
 
+	user, found := userService.GetUserFromRequest(r)
+	if !found {
+		http.Error(w, "unauthorized", http.StatusUnauthorized)
+		return
+	}
+
 	req := prompttypes.AddPromptRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
@@ -38,6 +44,8 @@ func Add(
 		return
 	}
 	defer r.Body.Close()
+
+	req.Prompt.UserId = user.Id
 
 	err = promptService.AddPrompt(&req.Prompt)
 	if err != nil {

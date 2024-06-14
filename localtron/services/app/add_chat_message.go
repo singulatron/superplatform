@@ -44,6 +44,7 @@ func (a *AppService) AddChatMessage(chatMessage *apptypes.ChatMessage) error {
 		threadId = chatMessage.ThreadId
 		a.threadsMem.Add(&apptypes.ChatThread{
 			Id:        threadId,
+			UserIds:   []string{chatMessage.UserId},
 			CreatedAt: time.Now().Format(time.RFC3339),
 		})
 		a.threadsFile.MarkChanged()

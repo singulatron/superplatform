@@ -199,6 +199,7 @@ export type PromptStatus =
 export interface Prompt {
 	id: string;
 	threadId: string;
+	userId?: string;
 	/*
 		Prompt without template, eg. `What is a banana`?
 	*/
