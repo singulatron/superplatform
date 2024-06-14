@@ -97,14 +97,13 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 	currentPrompt.RunCount++
 
 	err = p.appService.AddChatMessage(&apptypes.ChatMessage{
-		// not a fan of this but at least it makes this idempotent
+		// not a fan of taking the prompt id but at least it makes this idempotent
 		// in case prompts get retried over and over again
-		Id:             currentPrompt.Id,
-		ThreadId:       currentPrompt.ThreadId,
-		UserId:         currentPrompt.UserId,
-		IsUserMessage:  true,
-		MessageContent: currentPrompt.Prompt,
-		CreatedAt:      time.Now().Format(time.RFC3339),
+		Id:        currentPrompt.Id,
+		ThreadId:  currentPrompt.ThreadId,
+		UserId:    currentPrompt.UserId,
+		Content:   currentPrompt.Prompt,
+		CreatedAt: time.Now().Format(time.RFC3339),
 	})
 	if err != nil {
 		return err
@@ -140,9 +139,9 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 		p.StreamManager.Broadcast(currentPrompt.ThreadId, resp)
 		if len(resp.Choices) > 0 && resp.Choices[0].FinishReason == "stop" {
 			err := p.appService.AddChatMessage(&apptypes.ChatMessage{
-				Id:             uuid.New().String(),
-				ThreadId:       currentPrompt.ThreadId,
-				MessageContent: llmResponseToText(p.StreamManager.history[currentPrompt.ThreadId]),
+				Id:       uuid.New().String(),
+				ThreadId: currentPrompt.ThreadId,
+				Content:  llmResponseToText(p.StreamManager.history[currentPrompt.ThreadId]),
 			})
 			if err != nil {
 				lib.Logger.Error("Error when saving chat message after broadcast",

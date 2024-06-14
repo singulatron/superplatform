@@ -31,23 +31,12 @@ func (a *AppService) AddChatMessage(chatMessage *apptypes.ChatMessage) error {
 		chatMessage.CreatedAt = time.Now().Format(time.RFC3339)
 	}
 
-	var threadId string
-
-	a.threadsMem.Foreach(func(i int, t *apptypes.ChatThread) {
-		if t.Id == chatMessage.ThreadId {
-			threadId = t.Id
-		}
+	threadExists := a.threadsMem.ForeachStop(func(i int, t *apptypes.ChatThread) bool {
+		return t.Id == chatMessage.ThreadId
 	})
 
-	if threadId == "" {
-		// threads are created when a message is sent
-		threadId = chatMessage.ThreadId
-		a.threadsMem.Add(&apptypes.ChatThread{
-			Id:        threadId,
-			UserIds:   []string{chatMessage.UserId},
-			CreatedAt: time.Now().Format(time.RFC3339),
-		})
-		a.threadsFile.MarkChanged()
+	if !threadExists {
+		return errors.New("thread does not exist")
 	}
 
 	alreadySaved := false
@@ -68,7 +57,7 @@ func (a *AppService) AddChatMessage(chatMessage *apptypes.ChatMessage) error {
 	)
 
 	a.firehoseService.Publish(apptypes.EventChatMessageAdded{
-		ThreadId: threadId,
+		ThreadId: chatMessage.ThreadId,
 	})
 
 	a.messagesFile.MarkChanged()

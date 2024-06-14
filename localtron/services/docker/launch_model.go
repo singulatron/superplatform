@@ -89,15 +89,18 @@ func (d *DockerService) LaunchModel(containerName string, hostPort int, image, m
 			},
 		},
 		Resources: container.Resources{
-			DeviceRequests: []container.DeviceRequest{
-				{
-					Capabilities: [][]string{
-						{"gpu"},
-					},
-					Count: -1,
-				},
-			},
+			DeviceRequests: []container.DeviceRequest{},
 		},
+	}
+
+	gpuEnabled := os.Getenv("SINGULATRON_GPU_ENABLED")
+	if gpuEnabled == "true" {
+		hostConfig.Resources.DeviceRequests = append(hostConfig.Resources.DeviceRequests, container.DeviceRequest{
+			Capabilities: [][]string{
+				{"gpu"},
+			},
+			Count: -1,
+		})
 	}
 
 	ctx := context.Background()

@@ -39,7 +39,7 @@ func GetChatThread(
 	}
 	defer r.Body.Close()
 
-	thread, err := ds.GetChatThread(req.ThreadId)
+	thread, _, err := ds.GetChatThread(req.ThreadId)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
