@@ -25,8 +25,9 @@ import (
 )
 
 const (
-	maxRetries = 5
-	baseDelay  = 1 * time.Second
+	maxRetries    = 5
+	baseDelay     = 1 * time.Second
+	promptTimeout = 10 * time.Minute
 )
 
 // a blocking method, call it in a goroutine
@@ -53,10 +54,15 @@ func (p *PromptService) processNextPrompt() error {
 	p.runMutex.Lock()
 	defer p.runMutex.Unlock()
 
-	if p.promptsMem.CountByFunc(func(v *prompttypes.Prompt) bool {
+	runningPrompts := p.promptsMem.Filter(func(v *prompttypes.Prompt) bool {
 		return v.Status == prompttypes.PromptStatusRunning
-	}) > 0 {
-		return nil
+	})
+	if len(runningPrompts) > 0 {
+		if runningPrompts[0].LastRun.Before(time.Now().Add(-promptTimeout)) {
+			runningPrompts[0].Status = prompttypes.PromptStatusErrored
+			runningPrompts[0].Error = "timed out"
+			return nil
+		}
 	}
 
 	currentPrompt := selectPrompt(p.promptsMem)
@@ -68,6 +74,22 @@ func (p *PromptService) processNextPrompt() error {
 }
 
 func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err error) {
+	defer func() {
+		if r := recover(); r != nil {
+			currentPrompt.Error = fmt.Sprintf("%v", r)
+			currentPrompt.Status = prompttypes.PromptStatusErrored
+			return
+		}
+
+		if err != nil {
+			currentPrompt.Error = err.Error()
+			currentPrompt.Status = prompttypes.PromptStatusErrored
+		} else {
+			currentPrompt.Status = prompttypes.PromptStatusCompleted
+		}
+		p.promptsFile.MarkChanged()
+	}()
+
 	lib.Logger.Info("Picking up prompt from queue",
 		slog.String("promptId", currentPrompt.Id),
 	)
@@ -82,15 +104,6 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 		PromptId: currentPrompt.Id,
 		Error:    errToString(err),
 	})
-	defer func() {
-		if err != nil {
-			currentPrompt.Error = err.Error()
-			currentPrompt.Status = prompttypes.PromptStatusErrored
-		} else {
-			currentPrompt.Status = prompttypes.PromptStatusCompleted
-		}
-		p.promptsFile.MarkChanged()
-	}()
 
 	currentPrompt.LastRun = time.Now()
 	currentPrompt.Error = ""
