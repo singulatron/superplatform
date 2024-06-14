@@ -92,6 +92,7 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 		p.promptsFile.MarkChanged()
 	}()
 
+	currentPrompt.LastRun = time.Now()
 	currentPrompt.Error = ""
 	currentPrompt.Status = prompttypes.PromptStatusRunning
 	currentPrompt.RunCount++

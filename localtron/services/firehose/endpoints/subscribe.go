@@ -44,34 +44,48 @@ func Subscribe(
 	defer fs.Unsubscribe(subscriberID)
 
 	ctx := r.Context()
+
 	go func() {
+		defer func() {
+			recover()
+		}()
 		<-ctx.Done()
 		fs.Unsubscribe(subscriberID)
 		close(eventsChannel)
 	}()
 
-	for events := range eventsChannel {
-		for _, event := range events {
-			toFrontend := firehosetypes.FrontendEvent{
-				Name: event.Name(),
-				Data: event,
-			}
-
-			jsonResp, err := json.Marshal(toFrontend)
-			if err != nil {
-				log.Printf("Failed to marshal event: %v", err)
-				continue
-			}
-
-			if _, err := w.Write([]byte("data: " + string(jsonResp) + "\n\n")); err != nil {
-				log.Printf("Failed to write event to client: %v", err)
+	for {
+		select {
+		// case <-time.After(time.Second * 15):
+		// 	panic("timeout test")
+		case events, ok := <-eventsChannel:
+			if !ok {
+				log.Println("Events channel closed unexpectedly")
 				return
 			}
 
-			if flusher, ok := w.(http.Flusher); ok {
-				flusher.Flush()
-			} else {
-				log.Println("Warning: ResponseWriter does not support flushing, streaming might be delayed")
+			for _, event := range events {
+				toFrontend := firehosetypes.FrontendEvent{
+					Name: event.Name(),
+					Data: event,
+				}
+
+				jsonResp, err := json.Marshal(toFrontend)
+				if err != nil {
+					log.Printf("Failed to marshal event: %v", err)
+					continue
+				}
+
+				if _, err := w.Write([]byte("data: " + string(jsonResp) + "\n\n")); err != nil {
+					log.Printf("Failed to write event to client: %v", err)
+					return
+				}
+
+				if flusher, ok := w.(http.Flusher); ok {
+					flusher.Flush()
+				} else {
+					log.Println("Warning: ResponseWriter does not support flushing, streaming might be delayed")
+				}
 			}
 		}
 	}

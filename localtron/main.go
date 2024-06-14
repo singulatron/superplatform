@@ -279,8 +279,12 @@ func main() {
 		userendpoints.GetRoles(w, r, userService)
 	}))
 
+	srv := &http.Server{
+		Handler: router,
+	}
+
 	lib.Logger.Info("Server started", slog.String("port", port))
-	err = http.ListenAndServe(":58231", router)
+	err = http.ListenAndServe(":58231", srv.Handler)
 	if err != nil {
 		lib.Logger.Error("HTTP listen failed", slog.String("error", err.Error()))
 		os.Exit(1)
