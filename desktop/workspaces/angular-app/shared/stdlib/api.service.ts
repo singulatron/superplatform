@@ -52,8 +52,8 @@ export const defaultThreadName = 'New chat';
 
 export interface ChatMessage {
 	id: string;
-	messageContent?: string;
-	isUserMessage?: boolean;
+	content?: string;
+	userId?: string;
 }
 
 @Injectable({

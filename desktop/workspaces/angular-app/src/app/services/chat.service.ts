@@ -118,9 +118,8 @@ export interface ChatMessage {
 	updatedAt?: string;
 
 	threadId: string;
-
-	messageContent: string;
-	isUserMessage: boolean;
+	userId?: string;
+	content: string;
 }
 
 export interface ChatFile {

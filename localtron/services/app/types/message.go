@@ -18,10 +18,9 @@ import (
 )
 
 type ChatMessage struct {
-	Id             string `json:"id"`
-	ThreadId       string `json:"threadId"`
-	MessageContent string `json:"messageContent"`
-	IsUserMessage  bool   `json:"isUserMessage,omitempty"`
+	Id       string `json:"id"`
+	ThreadId string `json:"threadId"`
+	Content  string `json:"content"`
 	// UserId is saved when the user is logged in to an account
 	// @todo not used yet
 	UserId    string `json:"userId,omitempty"`

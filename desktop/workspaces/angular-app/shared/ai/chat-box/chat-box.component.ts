@@ -169,7 +169,7 @@ export class ChatBoxComponent implements OnChanges {
 						response?.choices[0]?.finish_reason === 'stop'
 					) {
 						if (this.messages?.length == 1) {
-							this.setThreadName(this.messages[0].messageContent);
+							this.setThreadName(this.messages[0].content);
 						}
 						// @todo might not be needed now we have the `chatMessageAdded`
 						// event coming from the firehose
@@ -185,7 +185,6 @@ export class ChatBoxComponent implements OnChanges {
 	async send() {
 		if (!this.thread?.title) {
 			this.thread.title = this.message.slice(0, 100);
-			this.chatService.chatThreadAdd(this.thread);
 		}
 
 		let msg = this.message;
@@ -251,20 +250,20 @@ export class ChatBoxComponent implements OnChanges {
 
 	getLastUserMessage(): ChatMessage | undefined {
 		let userMessages = this.messages?.filter((message) => {
-			return message.isUserMessage;
+			return !!message.userId;
 		});
 		let length = userMessages?.length;
 		return length ? userMessages[length - 1] : undefined;
 	}
 
 	regenerateAnswer(message: ChatMessage) {
-		if (message.isUserMessage) {
+		if (message.userId) {
 			return;
 		}
 		this.deleteMessage(message.id as string);
 		let lastUserMessage = this.getLastUserMessage();
 		if (lastUserMessage) {
-			this.sendMessage(lastUserMessage.messageContent);
+			this.sendMessage(lastUserMessage.content);
 		}
 	}
 }

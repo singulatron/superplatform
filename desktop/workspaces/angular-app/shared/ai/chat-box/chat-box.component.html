@@ -11,24 +11,24 @@
 					>
 						<ion-icon
 							class="chat-user-icon"
-							*ngIf="message?.isUserMessage"
+							*ngIf="message?.userId"
 							name="person-circle-outline"
 						></ion-icon>
 						<img
-							*ngIf="!message?.isUserMessage"
+							*ngIf="!message?.userId"
 							class="chat-user-icon"
 							src="/assets/s3d-min.png"
 							alt="Logo"
 						/>
 						<ion-label style="margin-left: 0.6rem">{{
-							message?.isUserMessage ? 'You' : 'Singulatron'
+							message?.userId ? 'You' : 'Singulatron'
 						}}</ion-label>
 						<div class="message-action-buttons">
 							<ion-icon
 								title="Copy to clipboard"
 								class="copy-icon"
 								name="copy-outline"
-								(click)="propagateCopyToClipboard(message?.messageContent)"
+								(click)="propagateCopyToClipboard(message?.content)"
 							></ion-icon>
 							<ion-icon
 								title="Delete message"
@@ -37,7 +37,7 @@
 								(click)="deleteMessage(message?.id)"
 							></ion-icon>
 							<ion-icon
-								*ngIf="!message?.isUserMessage && isLast"
+								*ngIf="!message?.userId && isLast"
 								title="Regenerate answer"
 								class="copy-icon"
 								name="reload-outline"
@@ -45,8 +45,7 @@
 							></ion-icon>
 						</div>
 					</div>
-					<markdown class="markdown-body" [data]="message?.messageContent">
-					</markdown>
+					<markdown class="markdown-body" [data]="message?.content"> </markdown>
 				</div>
 			</ng-container>
 

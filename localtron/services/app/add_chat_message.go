@@ -41,12 +41,21 @@ func (a *AppService) AddChatMessage(chatMessage *apptypes.ChatMessage) error {
 
 	if threadId == "" {
 		// threads are created when a message is sent
-		threadId = chatMessage.ThreadId
-		a.threadsMem.Add(&apptypes.ChatThread{
+		thread := &apptypes.ChatThread{
 			Id:        threadId,
 			UserIds:   []string{chatMessage.UserId},
 			CreatedAt: time.Now().Format(time.RFC3339),
-		})
+		}
+
+		threadId = chatMessage.ThreadId
+		if thread.Title == "" {
+			if len(chatMessage.Content) > 100 {
+				thread.Title = chatMessage.Content[:100]
+			} else {
+				thread.Title = chatMessage.Content
+			}
+		}
+		a.threadsMem.Add(thread)
 		a.threadsFile.MarkChanged()
 	}
 
