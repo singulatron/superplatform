@@ -12,7 +12,7 @@ import { Injectable } from '@angular/core';
 import { LocaltronService } from './localtron.service';
 import { Observable, Subject, first } from 'rxjs';
 import { UserService } from './user.service';
-import { catchError, switchMap } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 
 @Injectable({
 	providedIn: 'root',
@@ -102,7 +102,7 @@ export class FirehoseService {
 													observer.next(json);
 												} catch (error) {
 													console.error(
-														'Error parsing prompt response chunk JSON',
+														'Error parsing firehose response chunk JSON',
 														{
 															error: error,
 															promptResponseChunk: cleanedText,
@@ -150,13 +150,11 @@ export class FirehoseService {
 				controller.abort(); // This ensures fetch is aborted when unsubscribing
 			};
 		}).pipe(
-			catchError((error, caught) => {
-				console.error('Subscription error', {
+			catchError((error) => {
+				console.error('Firehose subscription error', {
 					error: JSON.stringify(error),
 				});
-
-				// Restart the subscription on error
-				return caught.pipe(switchMap(() => this.firehoseSubscribe()));
+				return this.firehoseSubscribe();
 			})
 		);
 	}

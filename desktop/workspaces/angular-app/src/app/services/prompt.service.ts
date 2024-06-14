@@ -10,7 +10,7 @@
  */
 import { Injectable } from '@angular/core';
 import { LocaltronService } from './localtron.service';
-import { ReplaySubject, Observable, catchError, switchMap } from 'rxjs';
+import { ReplaySubject, Observable, catchError } from 'rxjs';
 import { FirehoseService } from './firehose.service';
 import { first } from 'rxjs';
 import { UserService } from './user.service';
@@ -200,13 +200,11 @@ export class PromptService {
 				controller.abort(); // This ensures fetch is aborted when unsubscribing
 			};
 		}).pipe(
-			catchError((error, caught) => {
-				console.error('Subscription error', {
+			catchError((error) => {
+				console.error('Prompt subscription error', {
 					error: JSON.stringify(error),
 				});
-
-				// Restart the subscription on error
-				return caught.pipe(switchMap(() => this.promptSubscribe(threadId)));
+				return this.promptSubscribe(threadId);
 			})
 		);
 	}
