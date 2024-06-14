@@ -10,7 +10,7 @@
  */
 import { Injectable } from '@angular/core';
 import { LocaltronService } from './localtron.service';
-import { ReplaySubject, Observable } from 'rxjs';
+import { ReplaySubject, Observable, catchError, switchMap } from 'rxjs';
 import { FirehoseService } from './firehose.service';
 import { first } from 'rxjs';
 import { UserService } from './user.service';
@@ -74,117 +74,138 @@ export class PromptService {
 		return this.localtron.call('/prompt/list', {});
 	}
 
+	//promptUnsubscribe(threadId: string): {};
+
 	promptSubscribe(threadId: string): Observable<CompletionResponse> {
-		let uri =
-			this.localtron.config.env.localtronAddress +
-			'/prompt/subscribe?threadId=' +
-			threadId;
+		if (!threadId) {
+			console.log('No thread id');
+			throw 'no thread id';
+		}
 
-		const headers = {
-			Authorization: 'Bearer ' + this.userService.getToken(),
-			'Content-Type': 'application/json',
-		};
-
-		return new Observable((observer) => {
+		return new Observable<CompletionResponse>((observer) => {
 			const controller = new AbortController();
 			const { signal } = controller;
 
-			fetch(uri, {
-				method: 'GET',
-				headers: headers,
-				signal: signal,
-			})
-				.then((response) => {
-					if (!response || !response.body) {
-						observer.error(`Response is empty`);
-						return;
-					}
-					if (!response.ok) {
-						observer.error(`HTTP error! status: ${response.status}`);
-						return;
-					}
-					const reader = response.body.getReader();
-					return new ReadableStream({
-						start(controller) {
-							function push() {
-								reader
-									.read()
-									.then(({ done, value }) => {
-										if (done) {
-											console.debug('Prompt stream completed');
-											controller.close();
-											observer.complete();
-											return;
-										}
-										// Convert the Uint8Array to string
-										const text = new TextDecoder().decode(value);
-										let lines = text.split('\n');
-										lines.forEach((line) => {
-											const trimmedLine = line.trim();
+			const subscribe = () => {
+				console.log('Subscribing to thread', {
+					threadId: threadId,
+				});
 
-											if (
-												trimmedLine === '' ||
-												trimmedLine === 'data: ' ||
-												trimmedLine === 'data: [DONE]'
-											) {
-												// Skip empty lines, lines containing only 'data: ', or "[DONE]" markers
+				let uri =
+					this.localtron.config.env.localtronAddress +
+					'/prompt/subscribe?threadId=' +
+					threadId;
+
+				const headers = {
+					Authorization: 'Bearer ' + this.userService.getToken(),
+					'Content-Type': 'application/json',
+				};
+
+				fetch(uri, {
+					method: 'GET',
+					headers: headers,
+					signal: signal,
+				})
+					.then((response) => {
+						if (!response || !response.body) {
+							observer.error(`Response is empty`);
+							return;
+						}
+						if (!response.ok) {
+							observer.error(`HTTP error! status: ${response.status}`);
+							return;
+						}
+						const reader = response.body.getReader();
+						return new ReadableStream({
+							start(controller) {
+								function push() {
+									reader
+										.read()
+										.then(({ done, value }) => {
+											if (done) {
+												console.debug('Prompt stream completed');
+												controller.close();
+												observer.complete();
 												return;
 											}
+											// Convert the Uint8Array to string
+											const text = new TextDecoder().decode(value);
+											let lines = text.split('\n');
+											lines.forEach((line) => {
+												const trimmedLine = line.trim();
 
-											const cleanedText = trimmedLine
-												.replace(/^data: /gm, '')
-												.trim();
+												if (
+													trimmedLine === '' ||
+													trimmedLine === 'data: ' ||
+													trimmedLine === 'data: [DONE]'
+												) {
+													// Skip empty lines, lines containing only 'data: ', or "[DONE]" markers
+													return;
+												}
 
-											try {
-												const json = JSON.parse(cleanedText);
-												observer.next(json);
-											} catch (error) {
-												console.error(
-													'Error parsing prompt response chunk JSON',
-													{
-														error: error,
-														promptResponseChunk: cleanedText,
-													}
-												);
-												// Decide how you want to handle parsing errors.
-												// For continuous streaming, you might not want to call observer.error() here
-												// unless it's a critical error that requires stopping the stream.
-											}
-										});
+												const cleanedText = trimmedLine
+													.replace(/^data: /gm, '')
+													.trim();
 
-										// Call push again outside the loop to continue reading
-										push();
-									})
-									.catch((err) => {
-										if (
-											err instanceof Error &&
-											err.message.includes('BodyStreamBuffer was aborted')
-										) {
-											// we ignore this because this is normal
-										} else {
-											console.error('Error reading from stream', {
-												error: JSON.stringify(err),
+												try {
+													const json = JSON.parse(cleanedText);
+													observer.next(json);
+												} catch (error) {
+													console.error(
+														'Error parsing prompt response chunk JSON',
+														{
+															error: error,
+															promptResponseChunk: cleanedText,
+														}
+													);
+													// Decide how we want to handle parsing errors.
+													// For continuous streaming, we might not want to call observer.error() here
+													// unless it's a critical error that requires stopping the stream.
+												}
 											});
 
+											// Call push again outside the loop to continue reading
+											push();
+										})
+										.catch((err) => {
+											if (
+												err instanceof Error &&
+												err.message.includes('BodyStreamBuffer was aborted')
+											) {
+												// we ignore this because this is normal
+											} else {
+												console.error('Error reading from stream', {
+													error: JSON.stringify(err),
+												});
+
+												observer.error(err);
+												controller.error(err);
+											}
 											observer.error(err);
 											controller.error(err);
-										}
-										observer.error(err);
-										controller.error(err);
-									});
-							}
-							push();
-						},
+										});
+								}
+								push();
+							},
+						});
+					})
+					.catch((err) => {
+						observer.error(err);
 					});
-				})
-				.catch((err) => {
-					observer.error(err);
-				});
+			};
+
+			subscribe();
 
 			return () => {
 				controller.abort(); // This ensures fetch is aborted when unsubscribing
 			};
-		});
+		}).pipe(
+			catchError((error, caught) => {
+				console.error('Subscription error', error);
+				// Restart the subscription on error
+				return caught.pipe(switchMap(() => this.promptSubscribe(threadId)));
+			})
+		);
 	}
 }
 

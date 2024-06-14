@@ -11,6 +11,7 @@
 package promptservice
 
 import (
+	"math"
 	"time"
 
 	"github.com/singulatron/singulatron/localtron/lib"
@@ -29,8 +30,16 @@ func selectPrompt(promptsMem *lib.MemoryStore[*prompttypes.Prompt]) *prompttypes
 			return false
 		}
 
+		runCount := prompt.RunCount
+		if prompt.RunCount == 0 {
+			// otherwise backoff is 0s
+			runCount = 1
+		}
+		cappedRunCount := math.Min(float64(runCount), 10)
+		backoff := baseDelay * time.Duration(math.Pow(2, cappedRunCount-1))
+
 		if prompt.RunCount == 0 ||
-			timeNow().Sub(prompt.LastRun) >= baseDelay*time.Duration(1<<uint(prompt.RunCount-1)) {
+			timeNow().Sub(prompt.LastRun) >= backoff {
 			currentPrompt = prompt
 
 			return true

@@ -111,7 +111,7 @@ export class UserService {
 
 	/** Create a user - alternative to registration
 	 */
-	 createUser(
+	createUser(
 		user: User,
 		password: string,
 		roleIds: string[]
