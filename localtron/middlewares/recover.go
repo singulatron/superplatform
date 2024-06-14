@@ -15,7 +15,7 @@ import (
 	"net/http"
 	"runtime/debug"
 
-	"github.com/singulatron/singulatron/localtron/lib"
+	"github.com/singulatron/singulatron/localtron/logger"
 )
 
 // Panic Recovery Middleware
@@ -25,7 +25,7 @@ func Recover(next http.HandlerFunc) http.HandlerFunc {
 			if err := recover(); err != nil {
 				stackTrace := debug.Stack()
 
-				lib.Logger.Error("Recovered from panic",
+				logger.Logger.Error("Recovered from panic",
 					slog.Any("error", err),
 					slog.String("stackTrace", string(stackTrace)),
 				)

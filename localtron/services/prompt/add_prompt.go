@@ -15,7 +15,8 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
-	"github.com/singulatron/singulatron/localtron/lib"
+	"github.com/singulatron/singulatron/localtron/logger"
+
 	apptypes "github.com/singulatron/singulatron/localtron/services/app/types"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
 )
@@ -37,7 +38,7 @@ func (p *PromptService) AddPrompt(prompt *prompttypes.Prompt) error {
 	if !threadExists {
 		threadId := prompt.Id
 
-		lib.Logger.Info("Creating thread", slog.String("threadId", threadId))
+		logger.Info("Creating thread", slog.String("threadId", threadId))
 
 		// threads can be created when a message is sent
 		now := time.Now().Format(time.RFC3339)
@@ -74,8 +75,8 @@ func (p *PromptService) AddPrompt(prompt *prompttypes.Prompt) error {
 func (p *PromptService) triggerPromptProcessing() {
 	select {
 	case p.trigger <- true:
-		lib.Logger.Debug("Prompt trigger signal sent")
+		logger.Debug("Prompt trigger signal sent")
 	default:
-		lib.Logger.Debug("Prompt trigger signal skipped, already pending")
+		logger.Debug("Prompt trigger signal skipped, already pending")
 	}
 }

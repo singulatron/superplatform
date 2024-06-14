@@ -14,7 +14,10 @@ import (
 	"path"
 	"time"
 
-	"github.com/singulatron/singulatron/localtron/lib"
+	"github.com/singulatron/singulatron/localtron/logger"
+	"github.com/singulatron/singulatron/localtron/memorystore"
+	"github.com/singulatron/singulatron/localtron/statemanager"
+
 	configservice "github.com/singulatron/singulatron/localtron/services/config"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
@@ -22,14 +25,14 @@ import (
 type UserService struct {
 	configService *configservice.ConfigService
 
-	usersMem        *lib.MemoryStore[*usertypes.User]
-	usersFile       *lib.StateManager[*usertypes.User]
-	rolesMem        *lib.MemoryStore[*usertypes.Role]
-	rolesFile       *lib.StateManager[*usertypes.Role]
-	permissionsMem  *lib.MemoryStore[*usertypes.Permission]
-	permissionsFile *lib.StateManager[*usertypes.Permission]
-	authTokensMem   *lib.MemoryStore[*usertypes.AuthToken]
-	authTokensFile  *lib.StateManager[*usertypes.AuthToken]
+	usersMem        *memorystore.MemoryStore[*usertypes.User]
+	usersFile       *statemanager.StateManager[*usertypes.User]
+	rolesMem        *memorystore.MemoryStore[*usertypes.Role]
+	rolesFile       *statemanager.StateManager[*usertypes.Role]
+	permissionsMem  *memorystore.MemoryStore[*usertypes.Permission]
+	permissionsFile *statemanager.StateManager[*usertypes.Permission]
+	authTokensMem   *memorystore.MemoryStore[*usertypes.AuthToken]
+	authTokensFile  *statemanager.StateManager[*usertypes.AuthToken]
 }
 
 func NewUserService(cs *configservice.ConfigService) (*UserService, error) {
@@ -38,21 +41,21 @@ func NewUserService(cs *configservice.ConfigService) (*UserService, error) {
 	permissionsPath := path.Join(cs.ConfigDirectory, "data", "permissions")
 	authTokensPath := path.Join(cs.ConfigDirectory, "data", "authTokens")
 
-	um := lib.NewMemoryStore[*usertypes.User]()
-	rm := lib.NewMemoryStore[*usertypes.Role]()
-	pm := lib.NewMemoryStore[*usertypes.Permission]()
-	am := lib.NewMemoryStore[*usertypes.AuthToken]()
+	um := memorystore.New[*usertypes.User]()
+	rm := memorystore.New[*usertypes.Role]()
+	pm := memorystore.New[*usertypes.Permission]()
+	am := memorystore.New[*usertypes.AuthToken]()
 
 	service := &UserService{
 		configService:   cs,
 		usersMem:        um,
-		usersFile:       lib.NewStateManager[*usertypes.User](um, usersPath),
+		usersFile:       statemanager.New[*usertypes.User](um, usersPath),
 		rolesMem:        rm,
-		rolesFile:       lib.NewStateManager[*usertypes.Role](rm, rolesPath),
+		rolesFile:       statemanager.New[*usertypes.Role](rm, rolesPath),
 		permissionsMem:  pm,
-		permissionsFile: lib.NewStateManager[*usertypes.Permission](pm, permissionsPath),
+		permissionsFile: statemanager.New[*usertypes.Permission](pm, permissionsPath),
 		authTokensMem:   am,
-		authTokensFile:  lib.NewStateManager[*usertypes.AuthToken](am, authTokensPath),
+		authTokensFile:  statemanager.New[*usertypes.AuthToken](am, authTokensPath),
 	}
 
 	err := service.usersFile.LoadState()
@@ -100,7 +103,7 @@ func NewUserService(cs *configservice.ConfigService) (*UserService, error) {
 
 func (s *UserService) bootstrap() error {
 	if s.usersMem.Count() == 0 {
-		lib.Logger.Info("Bootstrapping users")
+		logger.Info("Bootstrapping users")
 		_, err := s.Register("singulatron", "changeme", "Admin", []*usertypes.Role{
 			usertypes.RoleAdmin,
 		})

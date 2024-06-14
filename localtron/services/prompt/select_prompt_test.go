@@ -14,7 +14,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/singulatron/singulatron/localtron/lib"
+	"github.com/singulatron/singulatron/localtron/memorystore"
+
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
 	"github.com/stretchr/testify/assert"
 )
@@ -102,7 +103,7 @@ func TestSelectPrompt(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			memStore := lib.NewMemoryStore[*prompttypes.Prompt]()
+			memStore := memorystore.New[*prompttypes.Prompt]()
 			memStore.Reset(tt.prompts)
 			actualPrompt := selectPrompt(memStore)
 			assert.Equal(t, tt.expectedPrompt, actualPrompt)

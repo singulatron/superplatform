@@ -15,8 +15,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/singulatron/singulatron/localtron/lib"
 	"github.com/singulatron/singulatron/localtron/llm"
+	"github.com/singulatron/singulatron/localtron/logger"
+
 	promptservice "github.com/singulatron/singulatron/localtron/services/prompt"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
@@ -70,7 +71,7 @@ func Subscribe(
 		if flusher, ok := w.(http.Flusher); ok {
 			flusher.Flush()
 		} else {
-			lib.Logger.Warn("Warning: ResponseWriter does not support flushing, streaming might be delayed")
+			logger.Warn("Warning: ResponseWriter does not support flushing, streaming might be delayed")
 		}
 	}
 }

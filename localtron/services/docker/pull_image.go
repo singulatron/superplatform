@@ -21,7 +21,7 @@ import (
 	"github.com/docker/docker/api/types/image"
 	"github.com/docker/docker/client"
 	"github.com/pkg/errors"
-	"github.com/singulatron/singulatron/localtron/lib"
+	"github.com/singulatron/singulatron/localtron/logger"
 )
 
 func (d *DockerService) pullImage(imageName string) error {
@@ -62,18 +62,18 @@ func (d *DockerService) pullImage(imageName string) error {
 		return nil
 	}
 
-	lib.Logger.Info("Starting to pull image", slog.String("image", imageName))
+	logger.Info("Starting to pull image", slog.String("image", imageName))
 
 	err = pullImageWithProgress(d.client, imageName)
 	if err != nil {
-		lib.Logger.Error("Failed to pull image",
+		logger.Error("Failed to pull image",
 			slog.String("image", imageName),
 			slog.String("error", err.Error()),
 		)
 		return err
 	}
 
-	lib.Logger.Debug("Pulling image is done", slog.String("image", imageName))
+	logger.Debug("Pulling image is done", slog.String("image", imageName))
 
 	return nil
 }
@@ -91,7 +91,7 @@ func pullImageWithProgress(d *client.Client, imageName string) error {
 	}
 	defer func() {
 		if err := rc.Close(); err != nil {
-			lib.Logger.Error("Failed to close image pull response",
+			logger.Error("Failed to close image pull response",
 				slog.String("image", imageName),
 				slog.String("error", err.Error()),
 			)
@@ -104,7 +104,7 @@ func pullImageWithProgress(d *client.Client, imageName string) error {
 		if err := decoder.Decode(&status); err == io.EOF {
 			break
 		} else if err != nil {
-			lib.Logger.Error("Error pulling image",
+			logger.Error("Error pulling image",
 				slog.String("error", err.Error()),
 				slog.String("image", imageName),
 			)
@@ -118,13 +118,13 @@ func pullImageWithProgress(d *client.Client, imageName string) error {
 
 func logPullProgress(status PullStatus) {
 	if status.Progress != "" {
-		lib.Logger.Info("Pulling image progress",
+		logger.Info("Pulling image progress",
 			slog.String("pullImageStatus", status.Status),
 			slog.String("pullImageProgress", status.Progress),
 			slog.String("imageId", status.ID),
 		)
 	} else {
-		lib.Logger.Info("Pulling image",
+		logger.Info("Pulling image",
 			slog.String("pullImageStatus", status.Status),
 			slog.String("id", status.ID),
 		)

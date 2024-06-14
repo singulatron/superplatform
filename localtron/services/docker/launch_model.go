@@ -25,7 +25,7 @@ import (
 	"github.com/docker/go-connections/nat"
 	"github.com/pkg/errors"
 
-	"github.com/singulatron/singulatron/localtron/lib"
+	"github.com/singulatron/singulatron/localtron/logger"
 )
 
 type LaunchInfo struct {
@@ -135,7 +135,7 @@ func (d *DockerService) LaunchModel(containerName string, hostPort int, image, m
 
 	if existingContainer != nil {
 		if existingContainer.State != "running" || existingContainer.Labels["singulatron-hash"] != hash {
-			lib.Logger.Debug("Container state is not running or hash is mismatched, removing...")
+			logger.Debug("Container state is not running or hash is mismatched, removing...")
 			if err := d.client.ContainerRemove(ctx, existingContainer.ID, container.RemoveOptions{Force: true}); err != nil {
 				return nil, errors.Wrap(err, "error removing Docker container")
 			}

@@ -8,7 +8,7 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-package lib
+package statemanager
 
 import (
 	"archive/zip"
@@ -24,20 +24,23 @@ import (
 	"sync"
 	"syscall"
 	"time"
+
+	"github.com/singulatron/singulatron/localtron/logger"
+	memstore "github.com/singulatron/singulatron/localtron/memorystore"
 )
 
-type StateFile[T Row] struct {
+type StateFile[T memstore.Row] struct {
 	Rows []T `json:"rows"`
 }
 
-type StateManager[T Row] struct {
-	memStore   *MemoryStore[T]
+type StateManager[T memstore.Row] struct {
+	memStore   *memstore.MemoryStore[T]
 	lock       sync.Mutex
 	filePath   string
 	hasChanged bool
 }
 
-func NewStateManager[T Row](memStore *MemoryStore[T], filePath string) *StateManager[T] {
+func New[T memstore.Row](memStore *memstore.MemoryStore[T], filePath string) *StateManager[T] {
 	sm := &StateManager[T]{
 		memStore: memStore,
 		filePath: filePath + ".zip",
@@ -87,8 +90,6 @@ func (sm *StateManager[T]) LoadState() error {
 	if err != nil {
 		return err
 	}
-
-	// Logger.Info("Statefile loaded", slog.String("fileName", sm.filePath), slog.Int("row", len(stateFile.Rows)))
 
 	sm.memStore.Reset(stateFile.Rows)
 
@@ -145,7 +146,7 @@ func (sm *StateManager[T]) PeriodicSaveState(interval time.Duration) {
 		case <-ticker.C:
 			if sm.hasChanged {
 				if err := sm.SaveState(); err != nil {
-					Logger.Error("Error saving file state",
+					logger.Logger.Error("Error saving file state",
 						slog.String("filePath", sm.filePath),
 						slog.String("error", err.Error()),
 					)
@@ -163,7 +164,7 @@ func (sm *StateManager[T]) setupSignalHandler() {
 		<-c
 		err := sm.SaveState()
 		if err != nil {
-			Logger.Error("Error saving file state on shutdown",
+			logger.Logger.Error("Error saving file state on shutdown",
 				slog.String("filePath", sm.filePath),
 				slog.String("error", err.Error()),
 			)

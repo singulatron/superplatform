@@ -21,9 +21,9 @@ import (
 	"github.com/pkg/errors"
 
 	"github.com/singulatron/singulatron/localtron/llm"
-	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
+	"github.com/singulatron/singulatron/localtron/logger"
 
-	"github.com/singulatron/singulatron/localtron/lib"
+	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 )
 
 const portNum = 8001
@@ -88,11 +88,11 @@ func (ms *ModelService) checkIfAnswers(modelId string, port int, state *modeltyp
 		}
 		first = false
 
-		lib.Logger.Debug("Checking for answer started", slog.Int("port", port))
+		logger.Debug("Checking for answer started", slog.Int("port", port))
 
 		isModelRunning, err := ms.dockerService.ModelIsRunning(modelId)
 		if err != nil {
-			lib.Logger.Warn("Model check error",
+			logger.Warn("Model check error",
 				slog.String("modelId", modelId),
 				slog.String("error", err.Error()),
 			)
@@ -119,7 +119,7 @@ func (ms *ModelService) checkIfAnswers(modelId string, port int, state *modeltyp
 
 		err = pingAddress(host, port)
 		if err != nil {
-			lib.Logger.Warn("Ping to LLM address failed",
+			logger.Warn("Ping to LLM address failed",
 				slog.String("address", host),
 				slog.Int("port", port),
 				slog.String("error", err.Error()),
@@ -138,7 +138,7 @@ func (ms *ModelService) checkIfAnswers(modelId string, port int, state *modeltyp
 			Prompt:    "My name is John. Please say hello to me.",
 		})
 		if err != nil {
-			lib.Logger.Debug("Answer failed for port",
+			logger.Debug("Answer failed for port",
 				slog.Int("port", port),
 				slog.String("error", err.Error()),
 			)
@@ -153,11 +153,11 @@ func (ms *ModelService) checkIfAnswers(modelId string, port int, state *modeltyp
 		}
 
 		if !strings.Contains(answer, "John") {
-			lib.Logger.Debug("Answer failed to contain test sequence", slog.Int("port", port), slog.String("answer", answer))
+			logger.Debug("Answer failed to contain test sequence", slog.Int("port", port), slog.String("answer", answer))
 			state.SetAnswering(false)
 			continue
 		} else {
-			lib.Logger.Debug("LLM answered correctly", slog.Int("port", port))
+			logger.Debug("LLM answered correctly", slog.Int("port", port))
 			state.SetAnswering(true)
 			return
 		}
@@ -167,12 +167,12 @@ func (ms *ModelService) checkIfAnswers(modelId string, port int, state *modeltyp
 func (ms *ModelService) printContainerLogs(modelId string) {
 	logs, err := ms.dockerService.GetContainerLogsAndStatus(modelId, 100)
 	if err != nil {
-		lib.Logger.Warn("Error getting container logs",
+		logger.Warn("Error getting container logs",
 			slog.String("modelId", modelId),
 			slog.String("error", err.Error()),
 		)
 	} else {
-		lib.Logger.Info("Container logs for model that is not running",
+		logger.Info("Container logs for model that is not running",
 			slog.String("logs", logs),
 		)
 	}

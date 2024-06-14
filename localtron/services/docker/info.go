@@ -28,7 +28,7 @@ import (
 	"github.com/pkg/errors"
 	ts "github.com/singulatron/singulatron/localtron/services/docker/types"
 
-	"github.com/singulatron/singulatron/localtron/lib"
+	"github.com/singulatron/singulatron/localtron/logger"
 )
 
 func (d *DockerService) Info() (*ts.OnDockerInfo, error) {
@@ -54,12 +54,12 @@ func (d *DockerService) Info() (*ts.OnDockerInfo, error) {
 
 	ip, port, err := d.tryFixDockerAddress()
 	if err != nil {
-		lib.Logger.Warn("Cannot find Docker address", slog.String("error", err.Error()))
+		logger.Warn("Cannot find Docker address", slog.String("error", err.Error()))
 		return &ts.OnDockerInfo{
 			HasDocker: false,
 		}, nil
 	}
-	lib.Logger.Info("Found Docker address", slog.String("ip", ip), slog.Int("port", port))
+	logger.Info("Found Docker address", slog.String("ip", ip), slog.Int("port", port))
 
 	d.dockerHost = ip
 	d.dockerPort = port

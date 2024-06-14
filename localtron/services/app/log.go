@@ -19,7 +19,7 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/singulatron/singulatron/localtron/lib"
+	"github.com/singulatron/singulatron/localtron/logger"
 	apptypes "github.com/singulatron/singulatron/localtron/services/app/types"
 )
 
@@ -50,7 +50,7 @@ func (a *AppService) sendLogs() {
 	if len(logsToSend) > 0 {
 		err := a.sendToServer(logsToSend)
 		if err != nil {
-			lib.Logger.Info("Failed to send logs")
+			logger.Info("Failed to send logs")
 		}
 	}
 }

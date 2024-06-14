@@ -16,7 +16,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/singulatron/singulatron/localtron/lib"
+	"github.com/singulatron/singulatron/localtron/logger"
 	apptypes "github.com/singulatron/singulatron/localtron/services/app/types"
 )
 
@@ -52,7 +52,7 @@ func (a *AppService) AddChatMessage(chatMessage *apptypes.ChatMessage) error {
 	}
 
 	a.messagesMem.Add(chatMessage)
-	lib.Logger.Info("Saving chat message",
+	logger.Info("Saving chat message",
 		slog.String("messageId", chatMessage.Id),
 	)
 

@@ -1,6 +1,8 @@
 # Server Setup
 
-## Docker Compose Example
+## Starting Up
+
+### Docker Compose Example
 
 This snippet will give you a quick idea about how to deploy the the frontend and backend containers so they play nicely together:
 
@@ -40,3 +42,12 @@ There are a few things that can go wrong here:
 
 - You might be on a network that's different from the docker default so `172.17.0.1` might not be the correct one. Try `172.18.0.1` etc. or use `docker network inspect` to find out the IP range of the network you use.
 - The `BACKEND_ADDRESS` in a publicly accessible setup should be something like `https://singulatron-api.yourdomain.com`. The point is that it must be accessible from the outside.
+
+## Using Your Server
+
+Unless you configured otherwise, you can log in with the following default credentials:
+
+```sh
+username: singulatron
+password: changeme
+```

@@ -15,7 +15,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/singulatron/singulatron/localtron/lib"
+	"github.com/singulatron/singulatron/localtron/memorystore"
+	"github.com/singulatron/singulatron/localtron/statemanager"
+
 	appservice "github.com/singulatron/singulatron/localtron/services/app"
 	configservice "github.com/singulatron/singulatron/localtron/services/config"
 	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
@@ -33,8 +35,8 @@ type PromptService struct {
 	PromptsFilePath string
 	StreamManager   *StreamManager
 
-	promptsMem  *lib.MemoryStore[*prompttypes.Prompt]
-	promptsFile *lib.StateManager[*prompttypes.Prompt]
+	promptsMem  *memorystore.MemoryStore[*prompttypes.Prompt]
+	promptsFile *statemanager.StateManager[*prompttypes.Prompt]
 
 	runMutex sync.Mutex
 	trigger  chan bool
@@ -49,7 +51,7 @@ func NewPromptService(
 ) (*PromptService, error) {
 
 	promptsPath := path.Join(cs.ConfigDirectory, "data", "prompts")
-	pm := lib.NewMemoryStore[*prompttypes.Prompt]()
+	pm := memorystore.New[*prompttypes.Prompt]()
 
 	service := &PromptService{
 		userService:     userService,
@@ -61,7 +63,7 @@ func NewPromptService(
 		StreamManager:   NewStreamManager(),
 
 		promptsMem:  pm,
-		promptsFile: lib.NewStateManager[*prompttypes.Prompt](pm, promptsPath),
+		promptsFile: statemanager.New[*prompttypes.Prompt](pm, promptsPath),
 
 		trigger: make(chan bool, 1),
 	}

@@ -16,7 +16,8 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/singulatron/singulatron/localtron/lib"
+	"github.com/singulatron/singulatron/localtron/logger"
+
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
@@ -43,7 +44,7 @@ func (s *UserService) IsAuthorized(permissionId string, request *http.Request) e
 
 	user, found := s.usersMem.FindById(token.UserId)
 	if !found {
-		lib.Logger.Error("Token refers to nonexistent user",
+		logger.Error("Token refers to nonexistent user",
 			slog.String("userId", token.UserId),
 			slog.String("tokenId", token.Id),
 		)
@@ -53,7 +54,7 @@ func (s *UserService) IsAuthorized(permissionId string, request *http.Request) e
 	for _, roleId := range user.RoleIds {
 		role, found := s.rolesMem.FindById(roleId)
 		if !found {
-			lib.Logger.Error("User refers to a nonexistent role",
+			logger.Error("User refers to a nonexistent role",
 				slog.String("userId", token.UserId),
 				slog.String("roleId", roleId),
 			)
@@ -92,7 +93,7 @@ func (s *UserService) GetUserFromRequest(request *http.Request) (*usertypes.User
 
 	user, found := s.usersMem.FindById(token.UserId)
 	if !found {
-		lib.Logger.Error("Token refers to nonexistent user",
+		logger.Error("Token refers to nonexistent user",
 			slog.String("userId", token.UserId),
 			slog.String("tokenId", token.Id),
 		)

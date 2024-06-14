@@ -8,7 +8,7 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-package lib
+package memorystore
 
 import (
 	"encoding/json"
@@ -25,7 +25,7 @@ type MemoryStore[T Row] struct {
 	mutex sync.Mutex
 }
 
-func NewMemoryStore[T Row]() *MemoryStore[T] {
+func New[T Row]() *MemoryStore[T] {
 	return &MemoryStore[T]{
 		items: []T{},
 	}

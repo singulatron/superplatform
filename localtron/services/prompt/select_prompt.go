@@ -14,13 +14,14 @@ import (
 	"math"
 	"time"
 
-	"github.com/singulatron/singulatron/localtron/lib"
+	"github.com/singulatron/singulatron/localtron/memorystore"
+
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
 )
 
 var timeNow = time.Now
 
-func selectPrompt(promptsMem *lib.MemoryStore[*prompttypes.Prompt]) *prompttypes.Prompt {
+func selectPrompt(promptsMem *memorystore.MemoryStore[*prompttypes.Prompt]) *prompttypes.Prompt {
 	var currentPrompt *prompttypes.Prompt
 
 	promptsMem.ForeachStop(func(i int, prompt *prompttypes.Prompt) bool {

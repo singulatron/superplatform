@@ -14,7 +14,7 @@ import (
 	"log/slog"
 	"time"
 
-	"github.com/singulatron/singulatron/localtron/lib"
+	"github.com/singulatron/singulatron/localtron/logger"
 )
 
 type ChatMessage struct {
@@ -55,7 +55,7 @@ func (a ByTime) Less(i, j int) bool {
 
 	ti, err := parseTime(a[i].CreatedAt)
 	if err != nil {
-		lib.Logger.Error("Error parsing message time",
+		logger.Error("Error parsing message time",
 			slog.String("messageId", a[i].Id),
 			slog.String("error", err.Error()))
 		return false // Could handle error differently if required
@@ -63,7 +63,7 @@ func (a ByTime) Less(i, j int) bool {
 
 	tj, err := parseTime(a[j].CreatedAt)
 	if err != nil {
-		lib.Logger.Error("Error parsing message time",
+		logger.Error("Error parsing message time",
 			slog.String("messageId", a[j].Id),
 			slog.String("error", err.Error()))
 		return false // Could handle error differently if required

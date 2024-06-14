@@ -19,7 +19,10 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
-	"github.com/singulatron/singulatron/localtron/lib"
+
+	"github.com/singulatron/singulatron/localtron/memorystore"
+	"github.com/singulatron/singulatron/localtron/statemanager"
+
 	apptypes "github.com/singulatron/singulatron/localtron/services/app/types"
 	configservice "github.com/singulatron/singulatron/localtron/services/config"
 	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
@@ -40,11 +43,11 @@ type AppService struct {
 	ThreadsFilePath  string
 	MessagesFilePath string
 
-	messagesMem *lib.MemoryStore[*apptypes.ChatMessage]
-	threadsMem  *lib.MemoryStore[*apptypes.ChatThread]
+	messagesMem *memorystore.MemoryStore[*apptypes.ChatMessage]
+	threadsMem  *memorystore.MemoryStore[*apptypes.ChatThread]
 
-	messagesFile *lib.StateManager[*apptypes.ChatMessage]
-	threadsFile  *lib.StateManager[*apptypes.ChatThread]
+	messagesFile *statemanager.StateManager[*apptypes.ChatMessage]
+	threadsFile  *statemanager.StateManager[*apptypes.ChatThread]
 
 	logMutex sync.Mutex
 }
@@ -59,8 +62,8 @@ func NewAppService(
 		return nil, errors.Wrap(err, "app service canno get client id")
 	}
 
-	mm := lib.NewMemoryStore[*apptypes.ChatMessage]()
-	tm := lib.NewMemoryStore[*apptypes.ChatThread]()
+	mm := memorystore.New[*apptypes.ChatMessage]()
+	tm := memorystore.New[*apptypes.ChatThread]()
 
 	err = os.MkdirAll(path.Join(cs.ConfigDirectory, "data"), 0755)
 	if err != nil {
@@ -78,8 +81,8 @@ func NewAppService(
 		messagesMem: mm,
 		threadsMem:  tm,
 
-		messagesFile: lib.NewStateManager(mm, messagesPath),
-		threadsFile:  lib.NewStateManager(tm, threadsPath),
+		messagesFile: statemanager.New(mm, messagesPath),
+		threadsFile:  statemanager.New(tm, threadsPath),
 
 		LogBuffer:   make([]apptypes.Log, 0),
 		TriggerSend: make(chan bool, 1),

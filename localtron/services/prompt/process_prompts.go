@@ -18,8 +18,10 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
-	"github.com/singulatron/singulatron/localtron/lib"
+
 	"github.com/singulatron/singulatron/localtron/llm"
+	"github.com/singulatron/singulatron/localtron/logger"
+
 	apptypes "github.com/singulatron/singulatron/localtron/services/app/types"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
 )
@@ -43,7 +45,7 @@ func (p *PromptService) processPrompts() {
 
 		err := p.processNextPrompt()
 		if err != nil {
-			lib.Logger.Error("Error processing prompt",
+			logger.Error("Error processing prompt",
 				slog.String("error", err.Error()),
 			)
 		}
@@ -61,7 +63,7 @@ func (p *PromptService) processNextPrompt() error {
 	hasTimedout := false
 	for _, runningPrompt := range runningPrompts {
 		if runningPrompt.LastRun.Before(time.Now().Add(-promptTimeout)) {
-			lib.Logger.Info("Setting prompt as timed out",
+			logger.Info("Setting prompt as timed out",
 				slog.String("promptId", runningPrompt.Id),
 			)
 			runningPrompt.Status = prompttypes.PromptStatusErrored
@@ -101,7 +103,7 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 			currentPrompt.Status = prompttypes.PromptStatusCompleted
 		}
 
-		lib.Logger.Info("Prompt finished",
+		logger.Info("Prompt finished",
 			slog.String("promptId", currentPrompt.Id),
 			slog.String("status", string(currentPrompt.Status)),
 		)
@@ -109,7 +111,7 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 		p.promptsFile.MarkChanged()
 	}()
 
-	lib.Logger.Info("Picking up prompt from queue",
+	logger.Info("Picking up prompt from queue",
 		slog.String("promptId", currentPrompt.Id),
 	)
 
@@ -177,7 +179,7 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 				Content:  llmResponseToText(p.StreamManager.history[currentPrompt.ThreadId]),
 			})
 			if err != nil {
-				lib.Logger.Error("Error when saving chat message after broadcast",
+				logger.Error("Error when saving chat message after broadcast",
 					slog.String("error", err.Error()))
 				return
 			}
