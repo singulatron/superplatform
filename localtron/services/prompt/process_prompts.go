@@ -97,7 +97,7 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 	currentPrompt.RunCount++
 
 	err = p.appService.AddChatMessage(&apptypes.ChatMessage{
-		// not a fan of this but at least it makes this idempotent
+		// not a fan of taking the prompt id but at least it makes this idempotent
 		// in case prompts get retried over and over again
 		Id:        currentPrompt.Id,
 		ThreadId:  currentPrompt.ThreadId,

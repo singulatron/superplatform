@@ -64,7 +64,7 @@ func (c *Prompt) GetUpdatedAt() string {
 }
 
 type AddPromptRequest struct {
-	Prompt Prompt `json:"prompt"`
+	Prompt *Prompt `json:"prompt"`
 }
 
 type ListPromptsRequest struct{}

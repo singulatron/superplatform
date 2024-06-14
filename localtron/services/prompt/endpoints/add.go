@@ -37,8 +37,8 @@ func Add(
 		return
 	}
 
-	req := prompttypes.AddPromptRequest{}
-	err = json.NewDecoder(r.Body).Decode(&req)
+	req := &prompttypes.AddPromptRequest{}
+	err = json.NewDecoder(r.Body).Decode(req)
 	if err != nil {
 		http.Error(w, `invalid JSON`, http.StatusBadRequest)
 		return
@@ -47,7 +47,7 @@ func Add(
 
 	req.Prompt.UserId = user.Id
 
-	err = promptService.AddPrompt(&req.Prompt)
+	err = promptService.AddPrompt(req.Prompt)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

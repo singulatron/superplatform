@@ -11,17 +11,15 @@
 package appservice
 
 import (
-	"fmt"
-
 	apptypes "github.com/singulatron/singulatron/localtron/services/app/types"
 )
 
-func (a *AppService) GetChatThread(threadId string) (*apptypes.ChatThread, error) {
+func (a *AppService) GetChatThread(threadId string) (*apptypes.ChatThread, bool, error) {
 	thread, found := a.threadsMem.Find(func(i *apptypes.ChatThread) bool {
 		return i.Id == threadId
 	})
 	if !found {
-		return nil, fmt.Errorf("cannot find thread '%v'", threadId)
+		return nil, false, nil
 	}
-	return thread, nil
+	return thread, true, nil
 }
