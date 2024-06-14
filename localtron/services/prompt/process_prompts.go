@@ -101,6 +101,7 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 		// in case prompts get retried over and over again
 		Id:             currentPrompt.Id,
 		ThreadId:       currentPrompt.ThreadId,
+		UserId:         currentPrompt.UserId,
 		IsUserMessage:  true,
 		MessageContent: currentPrompt.Prompt,
 		CreatedAt:      time.Now().Format(time.RFC3339),
