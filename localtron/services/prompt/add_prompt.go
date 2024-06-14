@@ -22,6 +22,10 @@ import (
 
 func (p *PromptService) AddPrompt(prompt *prompttypes.Prompt) error {
 	prompt.Status = prompttypes.PromptStatusScheduled
+	now := timeNow()
+	prompt.CreatedAt = now
+	prompt.UpdatedAt = now
+
 	p.promptsMem.Add(prompt)
 	p.promptsFile.MarkChanged()
 

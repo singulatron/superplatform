@@ -57,12 +57,25 @@ func (p *PromptService) processNextPrompt() error {
 	runningPrompts := p.promptsMem.Filter(func(v *prompttypes.Prompt) bool {
 		return v.Status == prompttypes.PromptStatusRunning
 	})
-	if len(runningPrompts) > 0 {
-		if runningPrompts[0].LastRun.Before(time.Now().Add(-promptTimeout)) {
-			runningPrompts[0].Status = prompttypes.PromptStatusErrored
-			runningPrompts[0].Error = "timed out"
-			return nil
+	hasRunning := false
+	hasTimedout := false
+	for _, runningPrompt := range runningPrompts {
+		if runningPrompt.LastRun.Before(time.Now().Add(-promptTimeout)) {
+			lib.Logger.Info("Setting prompt as timed out",
+				slog.String("promptId", runningPrompt.Id),
+			)
+			runningPrompt.Status = prompttypes.PromptStatusErrored
+			runningPrompt.Error = "timed out"
+			hasTimedout = true
+			continue
 		}
+		hasRunning = true
+	}
+	if hasTimedout {
+		p.promptsFile.MarkChanged()
+	}
+	if hasRunning {
+		return nil
 	}
 
 	currentPrompt := selectPrompt(p.promptsMem)
