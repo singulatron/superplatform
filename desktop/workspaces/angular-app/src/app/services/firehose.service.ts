@@ -10,7 +10,7 @@
  */
 import { Injectable } from '@angular/core';
 import { LocaltronService } from './localtron.service';
-import { Observable, Subject, timer, first } from 'rxjs';
+import { Observable, Subject, first } from 'rxjs';
 import { UserService } from './user.service';
 import { catchError, switchMap } from 'rxjs/operators';
 
