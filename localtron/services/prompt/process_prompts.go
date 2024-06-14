@@ -100,6 +100,12 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 		} else {
 			currentPrompt.Status = prompttypes.PromptStatusCompleted
 		}
+
+		lib.Logger.Info("Prompt finished",
+			slog.String("promptId", currentPrompt.Id),
+			slog.String("status", string(currentPrompt.Status)),
+		)
+
 		p.promptsFile.MarkChanged()
 	}()
 
