@@ -67,7 +67,11 @@ func (d *DockerService) LaunchModel(containerName string, hostPort int, image, m
 	containerConfig := &container.Config{
 		Image: image,
 		// ie. MODEL=/models/mistral-7b-instruct-v0.2.Q2_K.gguf
-		Env: []string{fmt.Sprintf("MODEL=/models/%v", filenameFromUrl)},
+		Env: []string{
+			fmt.Sprintf("MODEL=/models/%v", filenameFromUrl),
+			// only applicable to nvidia but should not affect others?
+			"NVIDIA_VISIBLE_DEVICES=all",
+		},
 		// @todo port 8000 here is llama cpp python specific
 		ExposedPorts: nat.PortSet{
 			nat.Port("8000/tcp"): {},
@@ -81,6 +85,16 @@ func (d *DockerService) LaunchModel(containerName string, hostPort int, image, m
 			nat.Port("8000/tcp"): {
 				{
 					HostPort: fmt.Sprintf("%v", hostPort),
+				},
+			},
+		},
+		Resources: container.Resources{
+			DeviceRequests: []container.DeviceRequest{
+				{
+					Capabilities: [][]string{
+						{"gpu"},
+					},
+					Count: -1,
 				},
 			},
 		},

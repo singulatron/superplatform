@@ -40,7 +40,14 @@ func (ms *ModelService) Start(modelId string) error {
 		return fmt.Errorf("cannot start selected model as it is not downloaded yet")
 	}
 
-	launchInfo, err := ms.dockerService.LaunchModel("the-singulatron", portNum, "crufter/llama-cpp-python-simple", stat.CurrentModelId)
+	image := "crufter/llama-cpp-python-simple"
+	imageOverride := os.Getenv("SINGULATRON_IMAGE_OVERRIDE")
+	if imageOverride != "" {
+		image = imageOverride
+	}
+	// @todo implement a way to detect optimal image for the host
+
+	launchInfo, err := ms.dockerService.LaunchModel("the-singulatron", portNum, image, stat.CurrentModelId)
 	if err != nil {
 		return errors.Wrap(err, "failed to launch container")
 	}
