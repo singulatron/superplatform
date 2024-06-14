@@ -57,7 +57,7 @@ func Subscribe(
 
 	for {
 		select {
-		// case <-time.After(time.Second * 15):
+		// case <-time.After(time.Second * 8):
 		// 	panic("timeout test")
 		case events, ok := <-eventsChannel:
 			if !ok {
