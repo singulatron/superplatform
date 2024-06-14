@@ -12,70 +12,69 @@
 	<app-centered headerHeight="0vh" [vertical]="true">
 		<div style="padding: 0rem 2rem">
 			<h2 style="margin-bottom: 2rem">{{ 'Add User' | translate }}</h2>
-			<ion-card-content>
-				<ion-item>
-					<ion-input
-						label="Name"
-						labelPlacement="floating"
-						type="text"
-						[(ngModel)]="user.name"
-						required
-					></ion-input>
-				</ion-item>
+			<form [formGroup]="addUserForm" (ngSubmit)="createUser()">
+				<ion-card-content>
+					<ion-item>
+						<ion-input
+							formControlName="name"
+							label="Name"
+							labelPlacement="floating"
+							type="text"
+						></ion-input>
+					</ion-item>
 
-				<ion-item>
-					<ion-input
-						label="Email"
-						labelPlacement="floating"
-						type="text"
-						[(ngModel)]="user.email"
-						required
-					></ion-input>
-				</ion-item>
+					<ion-item>
+						<ion-input
+							formControlName="email"
+							label="Email"
+							labelPlacement="floating"
+							type="text"
+						></ion-input>
+					</ion-item>
 
-				<ion-item>
-					<ion-select
-						label="Roles"
-						labelPlacement="floating"
-						multiple="true"
-						[(ngModel)]="user.roleIds"
-					>
-						<ion-select-option *ngFor="let role of roles" [value]="role.id">{{
-							role.name
-						}}</ion-select-option>
-					</ion-select>
-				</ion-item>
-
-				<ion-item>
-					<ion-input
-						label="Password"
-						labelPlacement="floating"
-						type="password"
-						[(ngModel)]="password"
-						required
-					></ion-input>
-				</ion-item>
-
-				<ion-item>
-					<ion-input
-						label="Password Confirmation"
-						labelPlacement="floating"
-						type="passwordConfirmation"
-						[(ngModel)]="passwordConfirmation"
-						required
-					></ion-input>
-				</ion-item>
-
-				<ion-row style="margin-top: 1em">
-					<ion-col size-lg="6" size-md="12" size-sm="12" size-xs="12">
-						<ion-button
-							style="margin-left: 0.75rem; color: white"
-							(click)="createUser()"
-							>Create</ion-button
+					<ion-item>
+						<ion-select
+							formControlName="roles"
+							label="Roles"
+							labelPlacement="floating"
+							multiple="true"
 						>
-					</ion-col>
-				</ion-row>
-			</ion-card-content>
+							<ion-select-option *ngFor="let role of roles" [value]="role.id">{{
+								role.name
+							}}</ion-select-option>
+						</ion-select>
+					</ion-item>
+
+					<ion-item>
+						<ion-input
+							formControlName="password"
+							label="Password"
+							labelPlacement="floating"
+							type="password"
+						></ion-input>
+					</ion-item>
+
+					<ion-item>
+						<ion-input
+							formControlName="passwordConfirmation"
+							label="Password Confirmation"
+							labelPlacement="floating"
+							type="password"
+						></ion-input>
+					</ion-item>
+
+					<ion-row style="margin-top: 1em">
+						<ion-col size-lg="6" size-md="12" size-sm="12" size-xs="12">
+							<ion-button
+								type="submit"
+								style="margin-left: 0.75rem; color: white"
+							>
+								Create
+							</ion-button>
+						</ion-col>
+					</ion-row>
+				</ion-card-content>
+			</form>
 		</div>
 	</app-centered>
 </b-sidebar-page>
