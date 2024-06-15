@@ -19,6 +19,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
 
+	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/llm"
 	"github.com/singulatron/singulatron/localtron/logger"
 
@@ -56,31 +57,41 @@ func (p *PromptService) processNextPrompt() error {
 	p.runMutex.Lock()
 	defer p.runMutex.Unlock()
 
-	runningPrompts := p.promptsMem.Filter(func(v *prompttypes.Prompt) bool {
-		return v.Status == prompttypes.PromptStatusRunning
-	})
+	runningPrompts, err := p.promptsStore.Query(
+		datastore.Equal("status", prompttypes.PromptStatusRunning),
+	).Find()
+	if err != nil {
+		return err
+	}
+
 	hasRunning := false
-	hasTimedout := false
 	for _, runningPrompt := range runningPrompts {
 		if runningPrompt.LastRun.Before(time.Now().Add(-promptTimeout)) {
 			logger.Info("Setting prompt as timed out",
 				slog.String("promptId", runningPrompt.Id),
 			)
+
 			runningPrompt.Status = prompttypes.PromptStatusErrored
 			runningPrompt.Error = "timed out"
-			hasTimedout = true
+			err = p.promptsStore.Query(
+				datastore.Id(runningPrompt.Id),
+			).Update(runningPrompt)
+			if err != nil {
+				return err
+			}
 			continue
 		}
 		hasRunning = true
 	}
-	if hasTimedout {
-		p.promptsFile.MarkChanged()
-	}
+
 	if hasRunning {
 		return nil
 	}
 
-	currentPrompt := selectPrompt(p.promptsMem)
+	currentPrompt, err := selectPrompt(p.promptsStore)
+	if err != nil {
+		return err
+	}
 	if currentPrompt == nil {
 		return nil
 	}
@@ -108,7 +119,15 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 			slog.String("status", string(currentPrompt.Status)),
 		)
 
-		p.promptsFile.MarkChanged()
+		err = p.promptsStore.Query(
+			datastore.Id(currentPrompt.Id),
+		).Update(currentPrompt)
+		if err != nil {
+			logger.Error("Error updating prompt",
+				slog.String("promptId", currentPrompt.Id),
+				slog.String("error", err.Error()),
+			)
+		}
 	}()
 
 	logger.Info("Picking up prompt from queue",
@@ -118,8 +137,6 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 	p.firehoseService.Publish(prompttypes.EventPromptProcessingStarted{
 		PromptId: currentPrompt.Id,
 	})
-
-	p.promptsFile.MarkChanged()
 
 	defer p.firehoseService.Publish(prompttypes.EventPromptProcessingFinished{
 		PromptId: currentPrompt.Id,

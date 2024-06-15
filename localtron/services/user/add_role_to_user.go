@@ -11,30 +11,36 @@
 package userservice
 
 import (
+	"errors"
 	"time"
 
+	"github.com/singulatron/singulatron/localtron/datastore"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func (s *UserService) AddRole(userID string, role *usertypes.Role) error {
-	s.usersMem.ForeachStop(func(i int, user *usertypes.User) bool {
-		if user.Id == userID {
-			alreadyHas := false
-			for _, v := range user.RoleIds {
-				if v == role.Id {
-					alreadyHas = true
-				}
-			}
-			if alreadyHas {
-				return true
-			}
-			user.RoleIds = append(user.RoleIds, role.Id)
-			user.UpdatedAt = time.Now()
-			return true
-		}
-		return false
-	})
+func (s *UserService) AddRole(userId string, role *usertypes.Role) error {
+	q := s.usersStore.Query(
+		datastore.Id(userId),
+	)
+	user, found, err := q.FindOne()
+	if err != nil {
+		return nil
+	}
+	if !found {
+		return errors.New("user not found")
+	}
 
-	s.usersFile.MarkChanged()
-	return nil
+	alreadyHasRole := false
+	for _, v := range user.RoleIds {
+		if v == role.Id {
+			alreadyHasRole = true
+		}
+	}
+	if alreadyHasRole {
+		return nil
+	}
+	user.RoleIds = append(user.RoleIds, role.Id)
+	user.UpdatedAt = time.Now()
+
+	return q.Update(user)
 }

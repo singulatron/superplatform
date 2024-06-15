@@ -76,8 +76,8 @@ func (s *UserService) bootstrap() error {
 
 	logger.Info("Bootstrapping users")
 
-	_, err = s.Register("singulatron", "changeme", "Admin", []*usertypes.Role{
-		usertypes.RoleAdmin,
+	_, err = s.Register("singulatron", "changeme", "Admin", []string{
+		usertypes.RoleAdmin.Id,
 	})
 	return err
 }

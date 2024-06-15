@@ -20,10 +20,12 @@ import (
 	"testing"
 	"time"
 
+	"github.com/singulatron/singulatron/localtron/datastore/localstore"
 	configservice "github.com/singulatron/singulatron/localtron/services/config"
 	types "github.com/singulatron/singulatron/localtron/services/download/types"
 	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -45,7 +47,10 @@ func TestDownloadFile(t *testing.T) {
 	assert.NoError(t, os.MkdirAll(dir, 0755))
 
 	cs, _ := configservice.NewConfigService()
-	us, _ := userservice.NewUserService(cs)
+	us, _ := userservice.NewUserService(cs, localstore.NewLocalStore[*usertypes.User](""),
+		localstore.NewLocalStore[*usertypes.Role](""),
+		localstore.NewLocalStore[*usertypes.AuthToken](""),
+		localstore.NewLocalStore[*usertypes.Permission](""))
 	fs, _ := firehoseservice.NewFirehoseService(us)
 	dm, _ := NewDownloadService(fs, us)
 	dm.StateFilePath = path.Join(dir, "downloadFile.json")
@@ -88,7 +93,10 @@ func TestDownloadFileWithPartFile(t *testing.T) {
 	}
 
 	cs, _ := configservice.NewConfigService()
-	us, _ := userservice.NewUserService(cs)
+	us, _ := userservice.NewUserService(cs, localstore.NewLocalStore[*usertypes.User](""),
+		localstore.NewLocalStore[*usertypes.Role](""),
+		localstore.NewLocalStore[*usertypes.AuthToken](""),
+		localstore.NewLocalStore[*usertypes.Permission](""))
 	fs, _ := firehoseservice.NewFirehoseService(us)
 	dm, _ := NewDownloadService(fs, us)
 	dm.StateFilePath = path.Join(dir, "downloadFilePartial.json")
@@ -118,7 +126,12 @@ func TestDownloadFileWithFullFile(t *testing.T) {
 	assert.NoError(t, os.WriteFile(fullFilePath, []byte("Hello world"), 0644))
 
 	cs, _ := configservice.NewConfigService()
-	us, _ := userservice.NewUserService(cs)
+	us, _ := userservice.NewUserService(cs,
+		localstore.NewLocalStore[*usertypes.User](""),
+		localstore.NewLocalStore[*usertypes.Role](""),
+		localstore.NewLocalStore[*usertypes.AuthToken](""),
+		localstore.NewLocalStore[*usertypes.Permission](""),
+	)
 	fs, _ := firehoseservice.NewFirehoseService(us)
 	dm, _ := NewDownloadService(fs, us)
 	dm.StateFilePath = path.Join(dir, "downloadFileFull.json")

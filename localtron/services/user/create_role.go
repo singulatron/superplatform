@@ -14,11 +14,17 @@ import (
 	"errors"
 
 	"github.com/google/uuid"
+	"github.com/singulatron/singulatron/localtron/datastore"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 func (s *UserService) CreateRole(name, description string, permissionIds []string) (*usertypes.Role, error) {
-	permissions := s.permissionsMem.FindByIds(permissionIds)
+	permissions, err := s.permissionsStore.Query(
+		datastore.Equal("id", permissionIds),
+	).Find()
+	if err != nil {
+		return nil, err
+	}
 	if len(permissions) < len(permissionIds) {
 		return nil, errors.New("nonexistent permissions")
 	}
@@ -30,8 +36,5 @@ func (s *UserService) CreateRole(name, description string, permissionIds []strin
 		PermissionIds: permissionIds,
 	}
 
-	s.rolesMem.Add(role)
-	s.rolesFile.MarkChanged()
-
-	return role, nil
+	return role, s.rolesStore.Create(role)
 }

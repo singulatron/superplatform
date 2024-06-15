@@ -27,8 +27,10 @@ func (p *PromptService) AddPrompt(prompt *prompttypes.Prompt) error {
 	prompt.CreatedAt = now
 	prompt.UpdatedAt = now
 
-	p.promptsMem.Add(prompt)
-	p.promptsFile.MarkChanged()
+	err := p.promptsStore.Create(prompt)
+	if err != nil {
+		return err
+	}
 
 	_, threadExists, err := p.appService.GetChatThread(prompt.Id)
 	if err != nil {

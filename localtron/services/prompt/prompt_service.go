@@ -13,10 +13,8 @@ package promptservice
 import (
 	"path"
 	"sync"
-	"time"
 
-	"github.com/singulatron/singulatron/localtron/memorystore"
-	"github.com/singulatron/singulatron/localtron/statemanager"
+	"github.com/singulatron/singulatron/localtron/datastore"
 
 	appservice "github.com/singulatron/singulatron/localtron/services/app"
 	configservice "github.com/singulatron/singulatron/localtron/services/config"
@@ -35,8 +33,7 @@ type PromptService struct {
 	PromptsFilePath string
 	StreamManager   *StreamManager
 
-	promptsMem  *memorystore.MemoryStore[*prompttypes.Prompt]
-	promptsFile *statemanager.StateManager[*prompttypes.Prompt]
+	promptsStore datastore.DataStore[*prompttypes.Prompt]
 
 	runMutex sync.Mutex
 	trigger  chan bool
@@ -48,10 +45,10 @@ func NewPromptService(
 	modelService *modelservice.ModelService,
 	appService *appservice.AppService,
 	firehoseService *firehoseservice.FirehoseService,
+	promptsStore datastore.DataStore[*prompttypes.Prompt],
 ) (*PromptService, error) {
 
 	promptsPath := path.Join(cs.ConfigDirectory, "data", "prompts")
-	pm := memorystore.New[*prompttypes.Prompt]()
 
 	service := &PromptService{
 		userService:     userService,
@@ -62,28 +59,34 @@ func NewPromptService(
 		PromptsFilePath: promptsPath,
 		StreamManager:   NewStreamManager(),
 
-		promptsMem:  pm,
-		promptsFile: statemanager.New[*prompttypes.Prompt](pm, promptsPath),
+		promptsStore: promptsStore,
 
 		trigger: make(chan bool, 1),
 	}
 
-	err := service.promptsFile.LoadState()
+	prompts, err := service.promptsStore.Query(
+		datastore.Equal("status", prompttypes.PromptStatusRunning),
+	).Find()
+	if err != nil {
+		return nil, err
+	}
+	promptIds := []string{}
+	for _, prompt := range prompts {
+		promptIds = append(promptIds, prompt.Id)
+	}
+
+	err = service.promptsStore.Query(
+		datastore.Equal("id", promptIds),
+	).UpdateFields(map[string]any{
+		"status": prompttypes.PromptStatusScheduled,
+	})
 	if err != nil {
 		return nil, err
 	}
 
-	service.promptsMem.Foreach(func(i int, item *prompttypes.Prompt) {
-		if item.Status == prompttypes.PromptStatusRunning {
-			item.Status = prompttypes.PromptStatusScheduled
-		}
-	})
-
 	service.registerPermissions()
-	service.promptsFile.MarkChanged()
 
 	go service.processPrompts()
-	go service.promptsFile.PeriodicSaveState(2 * time.Second)
 
 	return service, nil
 }

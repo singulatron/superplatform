@@ -21,8 +21,5 @@ func (s *UserService) CreatePermission(id, name, description string) (*usertypes
 		Description: description,
 	}
 
-	s.permissionsMem.Add(permission)
-	s.permissionsFile.MarkChanged()
-
-	return permission, nil
+	return permission, s.permissionsStore.Create(permission)
 }
