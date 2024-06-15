@@ -41,7 +41,8 @@ type StateManager[T any] struct {
 
 func New[T any](stateGetter func() []T, filePath string) *StateManager[T] {
 	sm := &StateManager[T]{
-		filePath: filePath + ".zip",
+		filePath:    filePath + ".zip",
+		stateGetter: stateGetter,
 	}
 	sm.setupSignalHandler()
 	return sm

@@ -16,6 +16,7 @@ import (
 	"io/ioutil"
 	"reflect"
 	"sort"
+	"strings"
 	"sync"
 	"time"
 
@@ -277,18 +278,42 @@ func (q *QueryBuilder[T]) match(obj T) bool {
 }
 
 func getField[T any](obj T, field string) interface{} {
+	field = strings.Title(field)
+
 	val := reflect.ValueOf(obj)
-	return val.FieldByName(field).Interface()
+	if val.Kind() == reflect.Ptr {
+		val = val.Elem()
+	}
+
+	fieldVal := val.FieldByName(field)
+	if !fieldVal.IsValid() {
+		return nil
+	}
+
+	return fieldVal.Interface()
 }
 
 func setField[T any](obj *T, field string, value interface{}) {
+	field = strings.Title(field)
+
 	val := reflect.ValueOf(obj).Elem()
-	val.FieldByName(field).Set(reflect.ValueOf(value))
+	fieldVal := val.FieldByName(field)
+
+	if fieldVal.IsValid() && fieldVal.CanSet() {
+		fieldVal.Set(reflect.ValueOf(value))
+	}
 }
 
 func compare(vi, vj interface{}, desc bool) bool {
 	viVal := reflect.ValueOf(vi)
 	vjVal := reflect.ValueOf(vj)
+
+	if viVal.Kind() == reflect.Ptr {
+		viVal = viVal.Elem()
+	}
+	if vjVal.Kind() == reflect.Ptr {
+		vjVal = vjVal.Elem()
+	}
 
 	switch viVal.Kind() {
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:

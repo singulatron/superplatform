@@ -74,8 +74,7 @@ export class PromptService {
 		return this.localtron.call('/prompt/list', {});
 	}
 
-	//promptUnsubscribe(threadId: string): {};
-
+	private resubCount = 0;
 	promptSubscribe(threadId: string): Observable<CompletionResponse> {
 		if (!threadId) {
 			console.log('No thread id');
@@ -194,7 +193,9 @@ export class PromptService {
 					});
 			};
 
-			subscribe();
+			sleep(this.resubCount * 20).then(() => {
+				subscribe();
+			});
 
 			return () => {
 				controller.abort(); // This ensures fetch is aborted when unsubscribing
@@ -204,10 +205,15 @@ export class PromptService {
 				console.error('Prompt subscription error', {
 					error: JSON.stringify(error),
 				});
+				this.resubCount++;
 				return this.promptSubscribe(threadId);
 			})
 		);
 	}
+}
+
+function sleep(ms: number) {
+	return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 export type PromptStatus =

@@ -36,6 +36,7 @@ export class FirehoseService {
 		});
 	}
 
+	private resubCount = 0;
 	private firehoseSubscribe(): Observable<FirehoseEvent> {
 		return new Observable<FirehoseEvent>((observer) => {
 			const controller = new AbortController();
@@ -144,7 +145,9 @@ export class FirehoseService {
 					});
 			};
 
-			subscribe();
+			sleep(this.resubCount * 20).then(() => {
+				subscribe();
+			});
 
 			return () => {
 				controller.abort(); // This ensures fetch is aborted when unsubscribing
@@ -154,6 +157,8 @@ export class FirehoseService {
 				console.error('Firehose subscription error', {
 					error: JSON.stringify(error),
 				});
+
+				this.resubCount++;
 				return this.firehoseSubscribe();
 			})
 		);
@@ -163,4 +168,8 @@ export class FirehoseService {
 export interface FirehoseEvent {
 	name: string;
 	data: any;
+}
+
+function sleep(ms: number) {
+	return new Promise((resolve) => setTimeout(resolve, ms));
 }
