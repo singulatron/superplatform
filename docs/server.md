@@ -34,6 +34,11 @@ singulatron-backend:
     - SINGULATRON_HOST_FOLDER=/var/lib/docker/volumes/singulatron-data/_data
     # address of the host so we can access the containers running the LLMs from the backend container
     - SINGULATRON_LLM_HOST=172.17.0.1
+    #
+    # For NVIDIA GPU acceleration uncomment the following flags
+    #
+    # - SINGULATRON_GPU_ENABLED=true
+    # - SINGULATRON_IMAGE_OVERRIDE=crufter/llama-cpp-python-cuda
 ```
 
 There are a few things that can go wrong here:
