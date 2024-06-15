@@ -67,6 +67,7 @@ func (s *LocalStore[T]) Create(obj T) error {
 	defer s.mu.Unlock()
 	id := s.newID()
 	s.data[id] = obj
+	s.stateManager.MarkChanged()
 	return nil
 }
 
@@ -77,6 +78,7 @@ func (s *LocalStore[T]) CreateMany(objs []T) error {
 		id := s.newID()
 		s.data[id] = obj
 	}
+	s.stateManager.MarkChanged()
 	return nil
 }
 
@@ -101,6 +103,7 @@ func (s *LocalStore[T]) BeginTransaction() (datastore.DataStore[T], error) {
 		lastID:        s.lastID,
 		inTransaction: true,
 		originalStore: s,
+		stateManager:  s.stateManager,
 	}
 
 	for k, v := range s.data {
@@ -187,18 +190,21 @@ func (q *QueryBuilder[T]) Select(fields ...string) datastore.QueryBuilder[T] {
 func (q *QueryBuilder[T]) Find() ([]T, error) {
 	q.store.mu.RLock()
 	defer q.store.mu.RUnlock()
+
 	var result []T
 	for _, obj := range q.store.data {
 		if q.match(obj) {
 			result = append(result, obj)
 		}
 	}
+
 	if q.orderField != "" {
 		sort.Slice(result, func(i, j int) bool {
 			vi, vj := getField(result[i], q.orderField), getField(result[j], q.orderField)
 			return compare(vi, vj, q.orderDesc)
 		})
 	}
+
 	if q.offset > 0 && q.offset < len(result) {
 		result = result[q.offset:]
 	}
@@ -235,11 +241,19 @@ func (q *QueryBuilder[T]) Count() (int64, error) {
 func (q *QueryBuilder[T]) Update(obj T) error {
 	q.store.mu.Lock()
 	defer q.store.mu.Unlock()
+
+	changed := false
 	for id, existingObj := range q.store.data {
 		if q.match(existingObj) {
+			changed = true
 			q.store.data[id] = obj
 		}
 	}
+
+	if changed {
+		q.store.stateManager.MarkChanged()
+	}
+
 	return nil
 }
 
@@ -254,6 +268,7 @@ func (q *QueryBuilder[T]) UpdateFields(fields map[string]interface{}) error {
 			q.store.data[id] = obj
 		}
 	}
+	q.store.stateManager.MarkChanged()
 	return nil
 }
 
@@ -265,13 +280,45 @@ func (q *QueryBuilder[T]) Delete() error {
 			delete(q.store.data, id)
 		}
 	}
+	q.store.stateManager.MarkChanged()
 	return nil
 }
 
 func (q *QueryBuilder[T]) match(obj T) bool {
 	for _, cond := range q.conditions {
-		if cond.Equal != nil && getField(obj, cond.Equal.FieldName) != cond.Equal.Value {
-			return false
+		if cond.Equal != nil {
+			fieldValue := getField(obj, cond.Equal.FieldName)
+
+			condValue := reflect.ValueOf(cond.Equal.Value)
+			if fieldV := reflect.ValueOf(fieldValue); fieldV.Kind() == reflect.Slice {
+				matched := false
+				for i := 0; i < fieldV.Len(); i++ {
+					if reflect.DeepEqual(fieldV.Index(i).Interface(), condValue.Interface()) {
+						matched = true
+						break
+					}
+				}
+				if !matched {
+					return false
+				}
+			} else if condValue.Kind() == reflect.Slice {
+				matched := false
+				for i := 0; i < condValue.Len(); i++ {
+					if reflect.DeepEqual(fieldValue, condValue.Index(i).Interface()) {
+						matched = true
+						break
+					}
+				}
+				if !matched {
+					return false
+				}
+			} else {
+				if !reflect.DeepEqual(fieldValue, cond.Equal.Value) {
+					return false
+				}
+			}
+		} else if cond.All != nil {
+			return true
 		}
 	}
 	return true

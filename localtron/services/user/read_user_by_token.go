@@ -46,5 +46,5 @@ func (s *UserService) ReadUserByToken(token string) (*usertypes.User, error) {
 		CreatedAt: user.CreatedAt,
 		UpdatedAt: user.UpdatedAt,
 	}
-	return ret, s.usersStore.Create(ret)
+	return ret, nil
 }

@@ -24,7 +24,6 @@ import (
 )
 
 func (s *UserService) Login(email, password string) (*usertypes.AuthToken, error) {
-	var token *usertypes.AuthToken
 	var newTokenCreated bool
 
 	user, found, err := s.usersStore.Query(
@@ -41,17 +40,17 @@ func (s *UserService) Login(email, password string) (*usertypes.AuthToken, error
 		return nil, errors.New("unauthorized")
 	}
 
-	token, found, err = s.authTokensStore.Query(
-		datastore.Equal("id", user.AuthTokenIds[0]),
-	).FindOne()
+	tokens, err := s.authTokensStore.Query(
+		datastore.Equal("id", user.AuthTokenIds),
+	).Find()
 	if err != nil {
 		return nil, err
 	}
-	if found {
-		return token, nil
+	if len(tokens) > 0 {
+		return tokens[0], nil
 	}
 
-	token = generateAuthToken(user.Id)
+	token := generateAuthToken(user.Id)
 	user.AuthTokenIds = append(user.AuthTokenIds, token.Id)
 
 	if !newTokenCreated {

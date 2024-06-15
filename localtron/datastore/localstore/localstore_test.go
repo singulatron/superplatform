@@ -19,8 +19,95 @@ import (
 )
 
 type TestObject struct {
-	Name  string
-	Value int
+	Name      string
+	Value     int
+	Age       int
+	NickNames []string
+}
+
+func TestMemoryStore_InClause(t *testing.T) {
+	store := localstore.NewLocalStore[TestObject]("")
+
+	obj1 := TestObject{Name: "Alice", Value: 10, Age: 25}
+	obj2 := TestObject{Name: "Bob", Value: 20, Age: 30}
+	obj3 := TestObject{Name: "Charlie", Value: 30, Age: 35}
+
+	err := store.Create(obj1)
+	assert.NoError(t, err)
+	err = store.Create(obj2)
+	assert.NoError(t, err)
+	err = store.Create(obj3)
+	assert.NoError(t, err)
+
+	// Test IN clause with string slice
+	results, err := store.Query(datastore.Equal("Name", []string{"Alice", "Bob"})).Find()
+	assert.NoError(t, err)
+	assert.Len(t, results, 2)
+	assert.Contains(t, results, obj1)
+	assert.Contains(t, results, obj2)
+
+	// Test IN clause with int slice
+	results, err = store.Query(datastore.Equal("Value", []int{10, 30})).Find()
+	assert.NoError(t, err)
+	assert.Len(t, results, 2)
+	assert.Contains(t, results, obj1)
+	assert.Contains(t, results, obj3)
+
+	// Test IN clause with empty slice (should return no results)
+	results, err = store.Query(datastore.Equal("Age", []int{})).Find()
+	assert.NoError(t, err)
+	assert.Len(t, results, 0)
+
+	// Test IN clause with one element slice
+	results, err = store.Query(datastore.Equal("Age", []int{30})).Find()
+	assert.NoError(t, err)
+	assert.Len(t, results, 1)
+	assert.Contains(t, results, obj2)
+
+	// Clean up
+	err = store.Query(datastore.Equal("Name", "Alice")).Delete()
+	assert.NoError(t, err)
+	err = store.Query(datastore.Equal("Name", "Bob")).Delete()
+	assert.NoError(t, err)
+	err = store.Query(datastore.Equal("Name", "Charlie")).Delete()
+	assert.NoError(t, err)
+}
+
+func TestMemoryStore_ReverseInClause(t *testing.T) {
+	store := localstore.NewLocalStore[TestObject]("")
+
+	obj1 := TestObject{Name: "Alice", NickNames: []string{"A1", "A2"}}
+	obj2 := TestObject{Name: "Bob", NickNames: []string{"B1"}}
+	obj3 := TestObject{Name: "Charlie"}
+
+	err := store.Create(obj1)
+	assert.NoError(t, err)
+	err = store.Create(obj2)
+	assert.NoError(t, err)
+	err = store.Create(obj3)
+	assert.NoError(t, err)
+
+	results, err := store.Query(
+		datastore.Equal("NickNames", "A1"),
+	).Find()
+	assert.NoError(t, err)
+	assert.Len(t, results, 1)
+	assert.Contains(t, results, obj1)
+
+	results, err = store.Query(
+		datastore.Equal("NickNames", "A2"),
+	).Find()
+	assert.NoError(t, err)
+	assert.Len(t, results, 1)
+	assert.Contains(t, results, obj1)
+
+	results, err = store.Query(
+		datastore.Equal("NickNames", "B1"),
+	).Find()
+	assert.NoError(t, err)
+	assert.Len(t, results, 1)
+	assert.Contains(t, results, obj2)
+
 }
 
 func TestMemoryStore_CreateReadUpdateDelete(t *testing.T) {
@@ -138,11 +225,12 @@ func TestMemoryStore_Query(t *testing.T) {
 	assert.Equal(t, objs[1], results[1])
 	assert.Equal(t, objs[0], results[2])
 
-	results, err = store.Query(datastore.All()).Limit(2).Offset(1).Find()
-	assert.NoError(t, err)
-	assert.Len(t, results, 2)
-	assert.Equal(t, objs[1], results[0])
-	assert.Equal(t, objs[2], results[1])
+	// order is nondeterministic when no OrderBy is supplied
+	// results, err = store.Query(datastore.All()).Limit(2).Offset(1).Find()
+	// assert.NoError(t, err)
+	// assert.Len(t, results, 2)
+	// assert.Equal(t, objs[1], results[0])
+	// assert.Equal(t, objs[2], results[1])
 
 	count, err := store.Query(datastore.Equal("Value", 10)).Count()
 	assert.NoError(t, err)
