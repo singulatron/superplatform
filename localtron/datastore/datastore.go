@@ -9,7 +9,11 @@ type DataStore[T any] interface {
 	BatchCreate(objs []T) error
 	BatchUpdate(ids []string, objs []T) error
 	BatchDelete(ids []string) error
-	BeginTransaction() (Transaction[T], error)
+
+	BeginTransaction() (DataStore[T], error)
+	Commit() error
+	Rollback() error
+	IsInTransaction() bool
 }
 
 type QueryBuilder[T any] interface {
@@ -24,10 +28,4 @@ type QueryBuilder[T any] interface {
 	Count() (int64, error)
 	UpdateFields(fields map[string]interface{}) error
 	Delete() error
-}
-
-type Transaction[T any] interface {
-	Commit() error
-	Rollback() error
-	DataStore() DataStore[T]
 }

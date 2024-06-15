@@ -26,23 +26,21 @@ import (
 	"time"
 
 	"github.com/singulatron/singulatron/localtron/logger"
-	memstore "github.com/singulatron/singulatron/localtron/memorystore"
 )
 
-type StateFile[T memstore.Row] struct {
+type StateFile[T any] struct {
 	Rows []T `json:"rows"`
 }
 
-type StateManager[T memstore.Row] struct {
-	memStore   *memstore.MemoryStore[T]
-	lock       sync.Mutex
-	filePath   string
-	hasChanged bool
+type StateManager[T any] struct {
+	lock        sync.Mutex
+	filePath    string
+	hasChanged  bool
+	stateGetter func() []T
 }
 
-func New[T memstore.Row](memStore *memstore.MemoryStore[T], filePath string) *StateManager[T] {
+func New[T any](stateGetter func() []T, filePath string) *StateManager[T] {
 	sm := &StateManager[T]{
-		memStore: memStore,
 		filePath: filePath + ".zip",
 	}
 	sm.setupSignalHandler()
@@ -91,16 +89,12 @@ func (sm *StateManager[T]) LoadState() error {
 		return err
 	}
 
-	sm.memStore.Reset(stateFile.Rows)
-
 	return nil
 }
 
-func (sm *StateManager[T]) SaveState() error {
+func (sm *StateManager[T]) SaveState(shallowCopy []T) error {
 	sm.lock.Lock()
 	defer sm.lock.Unlock()
-
-	shallowCopy := sm.memStore.SliceCopy()
 
 	data, err := json.Marshal(&StateFile[T]{
 		Rows: shallowCopy,
@@ -145,7 +139,7 @@ func (sm *StateManager[T]) PeriodicSaveState(interval time.Duration) {
 		select {
 		case <-ticker.C:
 			if sm.hasChanged {
-				if err := sm.SaveState(); err != nil {
+				if err := sm.SaveState(sm.stateGetter()); err != nil {
 					logger.Logger.Error("Error saving file state",
 						slog.String("filePath", sm.filePath),
 						slog.String("error", err.Error()),
@@ -162,7 +156,7 @@ func (sm *StateManager[T]) setupSignalHandler() {
 
 	go func() {
 		<-c
-		err := sm.SaveState()
+		err := sm.SaveState(sm.stateGetter())
 		if err != nil {
 			logger.Logger.Error("Error saving file state on shutdown",
 				slog.String("filePath", sm.filePath),

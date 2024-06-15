@@ -1,9 +1,19 @@
-package memorystore_test
+/**
+ * @license
+ * Copyright (c) The Authors (see the AUTHORS file)
+ *
+ * This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3) for personal, non-commercial use.
+ * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
+ *
+ * For commercial use, a separate license must be obtained by purchasing from The Authors.
+ * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
+ */
+package localstore_test
 
 import (
 	"testing"
 
-	"github.com/singulatron/singulatron/localtron/datastore/memorystore"
+	localstore "github.com/singulatron/singulatron/localtron/datastore/localstore"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -14,7 +24,7 @@ type TestObject struct {
 }
 
 func TestMemoryStore_CreateReadUpdateDelete(t *testing.T) {
-	store := memorystore.NewMemoryStore[TestObject]()
+	store := localstore.NewLocalStore[TestObject]("")
 
 	obj := TestObject{ID: "1", Name: "test", Value: 10}
 	err := store.Create(obj)
@@ -43,7 +53,7 @@ func TestMemoryStore_CreateReadUpdateDelete(t *testing.T) {
 }
 
 func TestMemoryStore_BatchCreateUpdateDelete(t *testing.T) {
-	store := memorystore.NewMemoryStore[TestObject]()
+	store := localstore.NewLocalStore[TestObject]("")
 
 	objs := []TestObject{
 		{ID: "1", Name: "test1", Value: 10},
@@ -91,7 +101,7 @@ func TestMemoryStore_BatchCreateUpdateDelete(t *testing.T) {
 }
 
 func TestMemoryStore_Query(t *testing.T) {
-	store := memorystore.NewMemoryStore[TestObject]()
+	store := localstore.NewLocalStore[TestObject]("")
 
 	objs := []TestObject{
 		{ID: "1", Name: "test1", Value: 10},
@@ -143,12 +153,12 @@ func TestMemoryStore_Query(t *testing.T) {
 }
 
 func TestMemoryStore_Transactions(t *testing.T) {
-	store := memorystore.NewMemoryStore[TestObject]()
+	store := localstore.NewLocalStore[TestObject]("")
 	tx, err := store.BeginTransaction()
 	assert.NoError(t, err)
 
 	obj := TestObject{ID: "1", Name: "test", Value: 10}
-	err = tx.DataStore().Create(obj)
+	err = tx.Create(obj)
 	assert.NoError(t, err)
 
 	_, found, err := store.Read("1")

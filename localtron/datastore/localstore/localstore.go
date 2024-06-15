@@ -1,28 +1,62 @@
-package memorystore
+/**
+ * @license
+ * Copyright (c) The Authors (see the AUTHORS file)
+ *
+ * This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3) for personal, non-commercial use.
+ * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
+ *
+ * For commercial use, a separate license must be obtained by purchasing from The Authors.
+ * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
+ */
+package localstore
 
 import (
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"reflect"
 	"sort"
 	"sync"
+	"time"
 
 	"github.com/singulatron/singulatron/localtron/datastore"
+	"github.com/singulatron/singulatron/localtron/datastore/localstore/statemanager"
 )
 
-type MemoryStore[T any] struct {
-	data   map[string]T
-	mu     sync.RWMutex
-	lastID int
+type LocalStore[T any] struct {
+	data          map[string]T
+	mu            sync.RWMutex
+	lastID        int
+	inTransaction bool
+	originalStore *LocalStore[T] // Reference to the original store in case of transaction
+	stateManager  *statemanager.StateManager[T]
 }
 
-func NewMemoryStore[T any]() *MemoryStore[T] {
-	return &MemoryStore[T]{
+func NewLocalStore[T any](filePath string) *LocalStore[T] {
+	if filePath == "" {
+		tempFile, err := ioutil.TempFile("", "example")
+		if err != nil {
+			panic(err)
+		}
+		filePath = tempFile.Name()
+	}
+
+	ls := &LocalStore[T]{
 		data: make(map[string]T),
 	}
+
+	sm := statemanager.New(func() []T {
+		vals, _ := ls.Query().Find()
+		return vals
+	}, filePath)
+
+	ls.stateManager = sm
+	go sm.PeriodicSaveState(5 * time.Second)
+
+	return ls
 }
 
-func (s *MemoryStore[T]) Create(obj T) error {
+func (s *LocalStore[T]) Create(obj T) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	id := s.newID()
@@ -30,7 +64,7 @@ func (s *MemoryStore[T]) Create(obj T) error {
 	return nil
 }
 
-func (s *MemoryStore[T]) Read(id string) (T, bool, error) {
+func (s *LocalStore[T]) Read(id string) (T, bool, error) {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
 	obj, exists := s.data[id]
@@ -41,7 +75,7 @@ func (s *MemoryStore[T]) Read(id string) (T, bool, error) {
 	return obj, true, nil
 }
 
-func (s *MemoryStore[T]) Update(id string, obj T) error {
+func (s *LocalStore[T]) Update(id string, obj T) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	if _, exists := s.data[id]; !exists {
@@ -51,7 +85,7 @@ func (s *MemoryStore[T]) Update(id string, obj T) error {
 	return nil
 }
 
-func (s *MemoryStore[T]) Delete(id string) error {
+func (s *LocalStore[T]) Delete(id string) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	if _, exists := s.data[id]; !exists {
@@ -61,11 +95,11 @@ func (s *MemoryStore[T]) Delete(id string) error {
 	return nil
 }
 
-func (s *MemoryStore[T]) Query() datastore.QueryBuilder[T] {
+func (s *LocalStore[T]) Query() datastore.QueryBuilder[T] {
 	return &QueryBuilder[T]{store: s}
 }
 
-func (s *MemoryStore[T]) BatchCreate(objs []T) error {
+func (s *LocalStore[T]) BatchCreate(objs []T) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	for _, obj := range objs {
@@ -75,7 +109,7 @@ func (s *MemoryStore[T]) BatchCreate(objs []T) error {
 	return nil
 }
 
-func (s *MemoryStore[T]) BatchUpdate(ids []string, objs []T) error {
+func (s *LocalStore[T]) BatchUpdate(ids []string, objs []T) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	if len(ids) != len(objs) {
@@ -90,7 +124,7 @@ func (s *MemoryStore[T]) BatchUpdate(ids []string, objs []T) error {
 	return nil
 }
 
-func (s *MemoryStore[T]) BatchDelete(ids []string) error {
+func (s *LocalStore[T]) BatchDelete(ids []string) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	for _, id := range ids {
@@ -102,17 +136,74 @@ func (s *MemoryStore[T]) BatchDelete(ids []string) error {
 	return nil
 }
 
-func (s *MemoryStore[T]) BeginTransaction() (datastore.Transaction[T], error) {
-	return &MemoryTransaction[T]{store: s}, nil
+func (s *LocalStore[T]) BeginTransaction() (datastore.DataStore[T], error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	if s.inTransaction {
+		return nil, errors.New("already in a transaction")
+	}
+
+	// Create a copy of the current store data
+	newStore := &LocalStore[T]{
+		data:          make(map[string]T),
+		lastID:        s.lastID,
+		inTransaction: true,
+		originalStore: s,
+	}
+
+	for k, v := range s.data {
+		newStore.data[k] = v
+	}
+
+	return newStore, nil
 }
 
-func (s *MemoryStore[T]) newID() string {
+func (s *LocalStore[T]) Commit() error {
+	if !s.inTransaction || s.originalStore == nil {
+		return errors.New("not in a transaction")
+	}
+
+	s.originalStore.mu.Lock()
+	defer s.originalStore.mu.Unlock()
+
+	// Apply the changes to the original store
+	for k, v := range s.data {
+		s.originalStore.data[k] = v
+	}
+
+	// Reset transaction state
+	s.inTransaction = false
+	s.originalStore.inTransaction = false
+	s.originalStore = nil
+
+	return nil
+}
+
+func (s *LocalStore[T]) Rollback() error {
+	if !s.inTransaction || s.originalStore == nil {
+		return errors.New("not in a transaction")
+	}
+
+	// Simply discard the transaction store
+	s.inTransaction = false
+	s.originalStore.inTransaction = false
+	s.originalStore = nil
+
+	return nil
+}
+
+func (s *LocalStore[T]) IsInTransaction() bool {
+	return s.inTransaction
+}
+
+func (s *LocalStore[T]) newID() string {
 	s.lastID++
 	return fmt.Sprintf("%d", s.lastID)
 }
 
 type QueryBuilder[T any] struct {
-	store        *MemoryStore[T]
+	store        *LocalStore[T]
 	conditions   []func(T) bool
 	orderField   string
 	orderDesc    bool
@@ -227,22 +318,6 @@ func (q *QueryBuilder[T]) match(obj T) bool {
 	return true
 }
 
-type MemoryTransaction[T any] struct {
-	store *MemoryStore[T]
-}
-
-func (t *MemoryTransaction[T]) Commit() error {
-	return nil
-}
-
-func (t *MemoryTransaction[T]) Rollback() error {
-	return nil
-}
-
-func (t *MemoryTransaction[T]) DataStore() datastore.DataStore[T] {
-	return t.store
-}
-
 func getField[T any](obj T, field string) interface{} {
 	val := reflect.ValueOf(obj)
 	return val.FieldByName(field).Interface()
@@ -279,6 +354,6 @@ func compare(vi, vj interface{}, desc bool) bool {
 		}
 		return viVal.String() < vjVal.String()
 	default:
-		panic("unsupported type for comparison")
+		return false
 	}
 }
