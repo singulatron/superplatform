@@ -32,7 +32,7 @@ See [this document](./docs/server.md) to help you get started.
 ## Why
 
 We bought quite a few beefy GPUs for our servers but realized we need good software to be able to experiment quickly.
-Singulatron aims to be both a desktop app for local usage and also to work as a distributed daemon to drive servers, with a frontend client that is the same as the local app.
+Singulatron aims to be both a desktop app for local usage and also to work as a distributed daemon to drive servers, with a web app frontend client that is the same as the local app.
 
 ## Highlights
 
