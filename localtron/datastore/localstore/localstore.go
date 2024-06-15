@@ -46,9 +46,14 @@ func NewLocalStore[T any](filePath string) *LocalStore[T] {
 	}
 
 	sm := statemanager.New(func() []T {
-		vals, _ := ls.Query().Find()
+		vals, _ := ls.Query(datastore.All()).Find()
 		return vals
 	}, filePath)
+
+	err := sm.LoadState()
+	if err != nil {
+		panic(err)
+	}
 
 	ls.stateManager = sm
 	go sm.PeriodicSaveState(5 * time.Second)
@@ -64,42 +69,7 @@ func (s *LocalStore[T]) Create(obj T) error {
 	return nil
 }
 
-func (s *LocalStore[T]) Read(id string) (T, bool, error) {
-	s.mu.RLock()
-	defer s.mu.RUnlock()
-	obj, exists := s.data[id]
-	if !exists {
-		var empty T
-		return empty, false, nil
-	}
-	return obj, true, nil
-}
-
-func (s *LocalStore[T]) Update(id string, obj T) error {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-	if _, exists := s.data[id]; !exists {
-		return errors.New("not found")
-	}
-	s.data[id] = obj
-	return nil
-}
-
-func (s *LocalStore[T]) Delete(id string) error {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-	if _, exists := s.data[id]; !exists {
-		return errors.New("not found")
-	}
-	delete(s.data, id)
-	return nil
-}
-
-func (s *LocalStore[T]) Query() datastore.QueryBuilder[T] {
-	return &QueryBuilder[T]{store: s}
-}
-
-func (s *LocalStore[T]) BatchCreate(objs []T) error {
+func (s *LocalStore[T]) CreateMany(objs []T) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	for _, obj := range objs {
@@ -109,31 +79,11 @@ func (s *LocalStore[T]) BatchCreate(objs []T) error {
 	return nil
 }
 
-func (s *LocalStore[T]) BatchUpdate(ids []string, objs []T) error {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-	if len(ids) != len(objs) {
-		return errors.New("mismatched ids and objs")
-	}
-	for i, id := range ids {
-		if _, exists := s.data[id]; !exists {
-			return errors.New("not found")
-		}
-		s.data[id] = objs[i]
-	}
-	return nil
-}
-
-func (s *LocalStore[T]) BatchDelete(ids []string) error {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-	for _, id := range ids {
-		if _, exists := s.data[id]; !exists {
-			return errors.New("not found")
-		}
-		delete(s.data, id)
-	}
-	return nil
+func (s *LocalStore[T]) Query(condition datastore.Condition, conditions ...datastore.Condition) datastore.QueryBuilder[T] {
+	q := &QueryBuilder[T]{store: s}
+	q.conditions = append(q.conditions, condition)
+	q.conditions = append(q.conditions, conditions...)
+	return q
 }
 
 func (s *LocalStore[T]) BeginTransaction() (datastore.DataStore[T], error) {
@@ -204,27 +154,12 @@ func (s *LocalStore[T]) newID() string {
 
 type QueryBuilder[T any] struct {
 	store        *LocalStore[T]
-	conditions   []func(T) bool
+	conditions   []datastore.Condition
 	orderField   string
 	orderDesc    bool
 	limit        int
 	offset       int
 	selectFields []string
-}
-
-func (q *QueryBuilder[T]) Where(field string, value interface{}) datastore.QueryBuilder[T] {
-	q.conditions = append(q.conditions, func(obj T) bool {
-		return getField(obj, field) == value
-	})
-	return q
-}
-
-func (q *QueryBuilder[T]) AndWhere(field string, value interface{}) datastore.QueryBuilder[T] {
-	return q.Where(field, value)
-}
-
-func (q *QueryBuilder[T]) OrWhere(field string, value interface{}) datastore.QueryBuilder[T] {
-	return q.Where(field, value)
 }
 
 func (q *QueryBuilder[T]) OrderBy(field string, desc bool) datastore.QueryBuilder[T] {
@@ -272,6 +207,18 @@ func (q *QueryBuilder[T]) Find() ([]T, error) {
 	return result, nil
 }
 
+func (q *QueryBuilder[T]) FindOne() (T, bool, error) {
+	q.store.mu.RLock()
+	defer q.store.mu.RUnlock()
+	for _, obj := range q.store.data {
+		if q.match(obj) {
+			return obj, true, nil
+		}
+	}
+	var empty T
+	return empty, false, nil
+}
+
 func (q *QueryBuilder[T]) Count() (int64, error) {
 	q.store.mu.RLock()
 	defer q.store.mu.RUnlock()
@@ -282,6 +229,17 @@ func (q *QueryBuilder[T]) Count() (int64, error) {
 		}
 	}
 	return count, nil
+}
+
+func (q *QueryBuilder[T]) Update(obj T) error {
+	q.store.mu.Lock()
+	defer q.store.mu.Unlock()
+	for id, existingObj := range q.store.data {
+		if q.match(existingObj) {
+			q.store.data[id] = obj
+		}
+	}
+	return nil
 }
 
 func (q *QueryBuilder[T]) UpdateFields(fields map[string]interface{}) error {
@@ -311,7 +269,7 @@ func (q *QueryBuilder[T]) Delete() error {
 
 func (q *QueryBuilder[T]) match(obj T) bool {
 	for _, cond := range q.conditions {
-		if !cond(obj) {
+		if cond.Equal != nil && getField(obj, cond.Equal.FieldName) != cond.Equal.Value {
 			return false
 		}
 	}

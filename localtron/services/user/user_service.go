@@ -11,12 +11,8 @@
 package userservice
 
 import (
-	"path"
-	"time"
-
+	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/logger"
-	"github.com/singulatron/singulatron/localtron/memorystore"
-	"github.com/singulatron/singulatron/localtron/statemanager"
 
 	configservice "github.com/singulatron/singulatron/localtron/services/config"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
@@ -25,60 +21,29 @@ import (
 type UserService struct {
 	configService *configservice.ConfigService
 
-	usersMem        *memorystore.MemoryStore[*usertypes.User]
-	usersFile       *statemanager.StateManager[*usertypes.User]
-	rolesMem        *memorystore.MemoryStore[*usertypes.Role]
-	rolesFile       *statemanager.StateManager[*usertypes.Role]
-	permissionsMem  *memorystore.MemoryStore[*usertypes.Permission]
-	permissionsFile *statemanager.StateManager[*usertypes.Permission]
-	authTokensMem   *memorystore.MemoryStore[*usertypes.AuthToken]
-	authTokensFile  *statemanager.StateManager[*usertypes.AuthToken]
+	usersStore       datastore.DataStore[*usertypes.User]
+	rolesStore       datastore.DataStore[*usertypes.Role]
+	permissionsStore datastore.DataStore[*usertypes.Permission]
+	authTokensStore  datastore.DataStore[*usertypes.AuthToken]
 }
 
-func NewUserService(cs *configservice.ConfigService) (*UserService, error) {
-	usersPath := path.Join(cs.ConfigDirectory, "data", "users")
-	rolesPath := path.Join(cs.ConfigDirectory, "data", "roles")
-	permissionsPath := path.Join(cs.ConfigDirectory, "data", "permissions")
-	authTokensPath := path.Join(cs.ConfigDirectory, "data", "authTokens")
-
-	um := memorystore.New[*usertypes.User]()
-	rm := memorystore.New[*usertypes.Role]()
-	pm := memorystore.New[*usertypes.Permission]()
-	am := memorystore.New[*usertypes.AuthToken]()
+func NewUserService(
+	cs *configservice.ConfigService,
+	usersStore datastore.DataStore[*usertypes.User],
+	rolesStore datastore.DataStore[*usertypes.Role],
+	authTokensStore datastore.DataStore[*usertypes.AuthToken],
+	permissionsStore datastore.DataStore[*usertypes.Permission]) (*UserService, error) {
 
 	service := &UserService{
-		configService:   cs,
-		usersMem:        um,
-		usersFile:       statemanager.New[*usertypes.User](um, usersPath),
-		rolesMem:        rm,
-		rolesFile:       statemanager.New[*usertypes.Role](rm, rolesPath),
-		permissionsMem:  pm,
-		permissionsFile: statemanager.New[*usertypes.Permission](pm, permissionsPath),
-		authTokensMem:   am,
-		authTokensFile:  statemanager.New[*usertypes.AuthToken](am, authTokensPath),
+		configService: cs,
+
+		usersStore:       usersStore,
+		rolesStore:       rolesStore,
+		authTokensStore:  authTokensStore,
+		permissionsStore: permissionsStore,
 	}
 
-	err := service.usersFile.LoadState()
-	if err != nil {
-		return nil, err
-	}
-
-	err = service.rolesFile.LoadState()
-	if err != nil {
-		return nil, err
-	}
-
-	err = service.permissionsFile.LoadState()
-	if err != nil {
-		return nil, err
-	}
-
-	err = service.authTokensFile.LoadState()
-	if err != nil {
-		return nil, err
-	}
-
-	err = service.registerRoles()
+	err := service.registerRoles()
 	if err != nil {
 		return nil, err
 	}
@@ -93,23 +58,28 @@ func NewUserService(cs *configservice.ConfigService) (*UserService, error) {
 		return nil, err
 	}
 
-	go service.usersFile.PeriodicSaveState(2 * time.Second)
-	go service.rolesFile.PeriodicSaveState(2 * time.Second)
-	go service.permissionsFile.PeriodicSaveState(2 * time.Second)
-	go service.authTokensFile.PeriodicSaveState(2 * time.Second)
-
 	return service, nil
 }
 
 func (s *UserService) bootstrap() error {
-	if s.usersMem.Count() == 0 {
-		logger.Info("Bootstrapping users")
-		_, err := s.Register("singulatron", "changeme", "Admin", []*usertypes.Role{
-			usertypes.RoleAdmin,
-		})
+	count, err := s.usersStore.Query(
+		datastore.All(),
+	).Count()
+
+	if err != nil {
 		return err
 	}
-	return nil
+
+	if count > 0 {
+		return nil
+	}
+
+	logger.Info("Bootstrapping users")
+
+	_, err = s.Register("singulatron", "changeme", "Admin", []*usertypes.Role{
+		usertypes.RoleAdmin,
+	})
+	return err
 }
 
 func (s *UserService) registerRoles() error {

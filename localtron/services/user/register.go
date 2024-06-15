@@ -15,31 +15,27 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/singulatron/singulatron/localtron/datastore"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 	"golang.org/x/crypto/bcrypt"
 )
 
-func (s *UserService) Register(email, password, name string, roles []*usertypes.Role) (*usertypes.AuthToken, error) {
+func (s *UserService) Register(email, password, name string, roleIds []string) (*usertypes.AuthToken, error) {
 	passwordHash, err := hashPassword(password)
 	if err != nil {
 		return nil, err
 	}
 
-	alreadyExists := false
-	s.usersMem.ForeachStop(func(i int, item *usertypes.User) bool {
-		if item.Email == email {
-			return true
-		}
-		return false
-	})
+	_, alreadyExists, err := s.usersStore.Query(
+		datastore.Equal("email", email),
+	).FindOne()
+	if err != nil {
+		return nil, err
+	}
 	if alreadyExists {
 		return nil, errors.New("email already exists")
 	}
 
-	roleIds := []string{}
-	for _, v := range roles {
-		roleIds = append(roleIds, v.Id)
-	}
 	user := &usertypes.User{
 		Id:           uuid.New().String(),
 		CreatedAt:    time.Now(),
@@ -50,16 +46,15 @@ func (s *UserService) Register(email, password, name string, roles []*usertypes.
 		RoleIds:      roleIds,
 	}
 
-	s.usersMem.Add(user)
-	s.usersFile.MarkChanged()
+	err = s.usersStore.Create(user)
+	if err != nil {
+		return nil, err
+	}
 
 	token := generateAuthToken(user.Id)
 	user.AuthTokenIds = append(user.AuthTokenIds, token.Id)
 
-	s.authTokensMem.Add(token)
-	s.usersFile.MarkChanged()
-
-	return token, nil
+	return token, s.authTokensStore.Create(token)
 }
 
 func hashPassword(password string) (string, error) {

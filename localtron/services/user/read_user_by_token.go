@@ -13,25 +13,28 @@ package userservice
 import (
 	"errors"
 
+	"github.com/singulatron/singulatron/localtron/datastore"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 func (s *UserService) ReadUserByToken(token string) (*usertypes.User, error) {
-	var authToken *usertypes.AuthToken
-
-	found := s.authTokensMem.ForeachStop(func(i int, at *usertypes.AuthToken) bool {
-		if at.Token == token {
-			authToken = at
-			return true
-		}
-		return false
-	})
+	authToken, found, err := s.authTokensStore.Query(
+		datastore.Equal("token", token),
+	).FindOne()
+	if err != nil {
+		return nil, err
+	}
 
 	if !found {
 		return nil, errors.New("token not found")
 	}
 
-	user, found := s.usersMem.FindById(authToken.UserId)
+	user, found, err := s.usersStore.Query(
+		datastore.Equal("id", authToken.UserId),
+	).FindOne()
+	if err != nil {
+		return nil, err
+	}
 	if !found {
 		return nil, errors.New("user not found")
 	}
@@ -43,5 +46,5 @@ func (s *UserService) ReadUserByToken(token string) (*usertypes.User, error) {
 		CreatedAt: user.CreatedAt,
 		UpdatedAt: user.UpdatedAt,
 	}
-	return ret, nil
+	return ret, s.usersStore.Create(ret)
 }

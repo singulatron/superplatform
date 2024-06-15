@@ -13,49 +13,59 @@ package userservice
 import (
 	"crypto/rand"
 	"encoding/hex"
-	"errors"
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/singulatron/singulatron/localtron/datastore"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 	"golang.org/x/crypto/bcrypt"
+
+	"github.com/pkg/errors"
 )
 
 func (s *UserService) Login(email, password string) (*usertypes.AuthToken, error) {
 	var token *usertypes.AuthToken
 	var newTokenCreated bool
 
-	found := s.usersMem.ForeachStop(func(i int, user *usertypes.User) bool {
-		if user.Email == email && checkPasswordHash(password, user.PasswordHash) {
-			if len(user.AuthTokenIds) > 0 {
-				var found bool
-				token, found = s.authTokensMem.FindById(user.AuthTokenIds[0])
-				if found {
-					return true
-				}
-			}
-			newTokenCreated = true
-			token = generateAuthToken(user.Id)
-			user.AuthTokenIds = append(user.AuthTokenIds, token.Id)
-
-			return true
-		}
-		return false
-	})
-
+	user, found, err := s.usersStore.Query(
+		datastore.Equal("email", email),
+	).FindOne()
+	if err != nil {
+		return nil, err
+	}
 	if !found {
 		return nil, errors.New("unauthorized")
 	}
+
+	if !checkPasswordHash(password, user.PasswordHash) {
+		return nil, errors.New("unauthorized")
+	}
+
+	token, found, err = s.authTokensStore.Query(
+		datastore.Equal("id", user.AuthTokenIds[0]),
+	).FindOne()
+	if err != nil {
+		return nil, err
+	}
+	if found {
+		return token, nil
+	}
+
+	token = generateAuthToken(user.Id)
+	user.AuthTokenIds = append(user.AuthTokenIds, token.Id)
+
 	if !newTokenCreated {
 		return token, nil
 	}
 
-	s.authTokensMem.Add(token)
+	err = s.authTokensStore.Create(token)
+	if err != nil {
+		return nil, errors.Wrap(err, "error creating token")
+	}
 
-	s.usersFile.MarkChanged()
-	s.authTokensFile.MarkChanged()
-
-	return token, nil
+	return token, s.usersStore.Query(
+		datastore.Id(user.Id),
+	).Update(user)
 }
 
 func checkPasswordHash(password, hash string) bool {

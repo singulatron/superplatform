@@ -78,6 +78,11 @@ func main() {
 		configService.ConfigDirectory = os.Getenv("SINGULATRON_CONFIG_PATH")
 	}
 
+	// usersPath := path.Join(cs.ConfigDirectory, "data", "users")
+	// rolesPath := path.Join(cs.ConfigDirectory, "data", "roles")
+	// permissionsPath := path.Join(cs.ConfigDirectory, "data", "permissions")
+	// authTokensPath := path.Join(cs.ConfigDirectory, "data", "authTokens")
+
 	userService, err := userservice.NewUserService(configService)
 	if err != nil {
 		logger.Error("User service start failed", slog.String("error", err.Error()))

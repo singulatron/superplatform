@@ -16,7 +16,9 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/logger"
+
 	apptypes "github.com/singulatron/singulatron/localtron/services/app/types"
 )
 
@@ -31,36 +33,40 @@ func (a *AppService) AddChatMessage(chatMessage *apptypes.ChatMessage) error {
 		chatMessage.CreatedAt = time.Now().Format(time.RFC3339)
 	}
 
-	threadExists := a.threadsMem.ForeachStop(func(i int, t *apptypes.ChatThread) bool {
-		return t.Id == chatMessage.ThreadId
-	})
+	threads, err := a.threadsStore.Query(
+		datastore.Equal("id", chatMessage.ThreadId),
+	).Find()
+	if err != nil {
+		return err
+	}
 
-	if !threadExists {
+	if len(threads) == 0 {
 		return errors.New("thread does not exist")
 	}
 
-	alreadySaved := false
+	messageCount, err := a.threadsStore.Query(
+		datastore.Equal("id", chatMessage.Id),
+	).Count()
+	if err != nil {
+		return err
+	}
 
-	a.messagesMem.Foreach(func(i int, v *apptypes.ChatMessage) {
-		if v.Id == chatMessage.Id {
-			alreadySaved = true
-		}
-	})
-
-	if alreadySaved {
+	if messageCount > 0 {
 		return nil
 	}
 
-	a.messagesMem.Add(chatMessage)
 	logger.Info("Saving chat message",
 		slog.String("messageId", chatMessage.Id),
 	)
 
+	err = a.messagesStore.Create(chatMessage)
+	if err != nil {
+		return err
+	}
+
 	a.firehoseService.Publish(apptypes.EventChatMessageAdded{
 		ThreadId: chatMessage.ThreadId,
 	})
-
-	a.messagesFile.MarkChanged()
 
 	return nil
 }
