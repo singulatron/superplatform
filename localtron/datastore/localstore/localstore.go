@@ -50,13 +50,17 @@ func NewLocalStore[T any](filePath string) *LocalStore[T] {
 		vals, _ := ls.Query(datastore.All()).Find()
 		return vals
 	}, filePath)
+	ls.stateManager = sm
 
-	err := sm.LoadState()
+	data, err := sm.LoadState()
+	if err != nil {
+		panic(err)
+	}
+	err = ls.CreateMany(data)
 	if err != nil {
 		panic(err)
 	}
 
-	ls.stateManager = sm
 	go sm.PeriodicSaveState(5 * time.Second)
 
 	return ls
@@ -65,6 +69,11 @@ func NewLocalStore[T any](filePath string) *LocalStore[T] {
 func (s *LocalStore[T]) Create(obj T) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
+
+	return s.createWithoutLock(obj)
+}
+
+func (s *LocalStore[T]) createWithoutLock(obj T) error {
 	id := s.newID()
 	s.data[id] = obj
 	s.stateManager.MarkChanged()
@@ -74,6 +83,7 @@ func (s *LocalStore[T]) Create(obj T) error {
 func (s *LocalStore[T]) CreateMany(objs []T) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
+
 	for _, obj := range objs {
 		id := s.newID()
 		s.data[id] = obj
@@ -229,6 +239,7 @@ func (q *QueryBuilder[T]) FindOne() (T, bool, error) {
 func (q *QueryBuilder[T]) Count() (int64, error) {
 	q.store.mu.RLock()
 	defer q.store.mu.RUnlock()
+
 	var count int64
 	for _, obj := range q.store.data {
 		if q.match(obj) {
@@ -242,16 +253,39 @@ func (q *QueryBuilder[T]) Update(obj T) error {
 	q.store.mu.Lock()
 	defer q.store.mu.Unlock()
 
-	changed := false
+	found := false
 	for id, existingObj := range q.store.data {
 		if q.match(existingObj) {
-			changed = true
+			found = true
 			q.store.data[id] = obj
 		}
 	}
 
-	if changed {
-		q.store.stateManager.MarkChanged()
+	if !found {
+		return errors.New("no records to update")
+	}
+
+	q.store.stateManager.MarkChanged()
+
+	return nil
+}
+
+func (q *QueryBuilder[T]) Upsert(obj T) error {
+	q.store.mu.Lock()
+	defer q.store.mu.Unlock()
+
+	q.store.stateManager.MarkChanged()
+
+	found := false
+	for id, existingObj := range q.store.data {
+		if q.match(existingObj) {
+			found = true
+			q.store.data[id] = obj
+		}
+	}
+
+	if !found {
+		return q.store.createWithoutLock(obj)
 	}
 
 	return nil
@@ -260,6 +294,7 @@ func (q *QueryBuilder[T]) Update(obj T) error {
 func (q *QueryBuilder[T]) UpdateFields(fields map[string]interface{}) error {
 	q.store.mu.Lock()
 	defer q.store.mu.Unlock()
+
 	for id, obj := range q.store.data {
 		if q.match(obj) {
 			for field, value := range fields {
@@ -275,6 +310,7 @@ func (q *QueryBuilder[T]) UpdateFields(fields map[string]interface{}) error {
 func (q *QueryBuilder[T]) Delete() error {
 	q.store.mu.Lock()
 	defer q.store.mu.Unlock()
+
 	for id, obj := range q.store.data {
 		if q.match(obj) {
 			delete(q.store.data, id)
@@ -340,15 +376,34 @@ func getField[T any](obj T, field string) interface{} {
 	return fieldVal.Interface()
 }
 
-func setField[T any](obj *T, field string, value interface{}) {
+func setField[T any](obj *T, field string, value interface{}) error {
 	field = strings.Title(field)
 
-	val := reflect.ValueOf(obj).Elem()
+	val := reflect.ValueOf(obj)
+
+	if val.Kind() != reflect.Ptr || val.Elem().Kind() != reflect.Struct {
+		return fmt.Errorf("obj must be a pointer to a struct")
+	}
+
+	val = val.Elem()
 	fieldVal := val.FieldByName(field)
 
-	if fieldVal.IsValid() && fieldVal.CanSet() {
-		fieldVal.Set(reflect.ValueOf(value))
+	if !fieldVal.IsValid() {
+		return fmt.Errorf("no such field: %s in obj", field)
 	}
+
+	if !fieldVal.CanSet() {
+		return fmt.Errorf("cannot set field %s in obj", field)
+	}
+
+	valToSet := reflect.ValueOf(value)
+	if valToSet.Type().ConvertibleTo(fieldVal.Type()) {
+		fieldVal.Set(valToSet.Convert(fieldVal.Type()))
+	} else {
+		return fmt.Errorf("cannot convert value of type %s to type %s", valToSet.Type(), fieldVal.Type())
+	}
+
+	return nil
 }
 
 func compare(vi, vj interface{}, desc bool) bool {

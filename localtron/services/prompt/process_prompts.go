@@ -14,6 +14,7 @@ import (
 	"fmt"
 	"log/slog"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/google/uuid"
@@ -30,7 +31,7 @@ import (
 const (
 	maxRetries    = 5
 	baseDelay     = 1 * time.Second
-	promptTimeout = 10 * time.Minute
+	promptTimeout = 1 * time.Minute
 )
 
 // a blocking method, call it in a goroutine
@@ -65,6 +66,7 @@ func (p *PromptService) processNextPrompt() error {
 	}
 
 	hasRunning := false
+	runningPromptId := ""
 	for _, runningPrompt := range runningPrompts {
 		if runningPrompt.LastRun.Before(time.Now().Add(-promptTimeout)) {
 			logger.Info("Setting prompt as timed out",
@@ -82,9 +84,13 @@ func (p *PromptService) processNextPrompt() error {
 			continue
 		}
 		hasRunning = true
+		runningPromptId = runningPrompt.Id
 	}
 
 	if hasRunning {
+		logger.Debug("Prompt is already running",
+			slog.String("promptId", runningPromptId),
+		)
 		return nil
 	}
 
@@ -183,12 +189,42 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 		fullPrompt = strings.Replace(currentPrompt.Template, "{prompt}", currentPrompt.Prompt, -1)
 	}
 
+	start := time.Now()
+	var responseCount int
+	var mu sync.Mutex
+
+	ticker := time.NewTicker(1 * time.Second)
+	defer ticker.Stop()
+	done := make(chan bool)
+
+	go func() {
+		for {
+			select {
+			case <-ticker.C:
+				mu.Lock()
+				logger.Debug("LLM is streaming",
+					slog.String("promptId", currentPrompt.Id),
+					slog.Float64("responsesPerSecond", float64(responseCount/int(time.Since(start).Seconds()))),
+					slog.Int("totalResponses", responseCount),
+				)
+				mu.Unlock()
+			case <-done:
+				return
+			}
+		}
+	}()
+
 	err = llmClient.PostCompletionsStreamed(llm.PostCompletionsRequest{
 		Prompt:    fullPrompt,
 		Stream:    true,
 		MaxTokens: 4096,
 	}, func(resp *llm.CompletionResponse) {
+		mu.Lock()
+		responseCount++
+		mu.Unlock()
+
 		p.StreamManager.Broadcast(currentPrompt.ThreadId, resp)
+
 		if len(resp.Choices) > 0 && resp.Choices[0].FinishReason == "stop" {
 			err := p.appService.AddChatMessage(&apptypes.ChatMessage{
 				Id:       uuid.New().String(),
@@ -204,6 +240,12 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 			delete(p.StreamManager.history, currentPrompt.ThreadId)
 		}
 	})
+
+	done <- true
+
+	logger.Debug("Finished streaming LLM",
+		slog.String("error", fmt.Sprintf("%v", err)),
+	)
 	if err != nil {
 		return errors.Wrap(err, "error streaming llm")
 	}

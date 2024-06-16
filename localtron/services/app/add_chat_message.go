@@ -44,29 +44,15 @@ func (a *AppService) AddChatMessage(chatMessage *apptypes.ChatMessage) error {
 		return errors.New("thread does not exist")
 	}
 
-	messageCount, err := a.threadsStore.Query(
-		datastore.Equal("id", chatMessage.Id),
-	).Count()
-	if err != nil {
-		return err
-	}
-
-	if messageCount > 0 {
-		return nil
-	}
-
 	logger.Info("Saving chat message",
 		slog.String("messageId", chatMessage.Id),
 	)
-
-	err = a.messagesStore.Create(chatMessage)
-	if err != nil {
-		return err
-	}
 
 	a.firehoseService.Publish(apptypes.EventChatMessageAdded{
 		ThreadId: chatMessage.ThreadId,
 	})
 
-	return nil
+	return a.messagesStore.Query(
+		datastore.Equal("id", chatMessage.Id),
+	).Upsert(chatMessage)
 }

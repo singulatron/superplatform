@@ -12,19 +12,18 @@ package userservice
 
 import (
 	"errors"
+	"log/slog"
 	"time"
 
 	"github.com/google/uuid"
 	"github.com/singulatron/singulatron/localtron/datastore"
+	"github.com/singulatron/singulatron/localtron/logger"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 	"golang.org/x/crypto/bcrypt"
 )
 
 func (s *UserService) Register(email, password, name string, roleIds []string) (*usertypes.AuthToken, error) {
-	passwordHash, err := hashPassword(password)
-	if err != nil {
-		return nil, err
-	}
+	logger.Info("Registering user", slog.String("name", name))
 
 	_, alreadyExists, err := s.usersStore.Query(
 		datastore.Equal("email", email),
@@ -34,6 +33,11 @@ func (s *UserService) Register(email, password, name string, roleIds []string) (
 	}
 	if alreadyExists {
 		return nil, errors.New("email already exists")
+	}
+
+	passwordHash, err := hashPassword(password)
+	if err != nil {
+		return nil, err
 	}
 
 	user := &usertypes.User{

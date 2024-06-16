@@ -32,7 +32,10 @@ type QueryBuilder[T any] interface {
 	FindOne() (T, bool, error)
 	Count() (int64, error)
 
+	// Update by query. Errors if no update happens
 	Update(obj T) error
+	// Upsert tries to update by query, and if no updateh appened, calls create.
+	Upsert(obj T) error
 	UpdateFields(fields map[string]interface{}) error
 	Delete() error
 }

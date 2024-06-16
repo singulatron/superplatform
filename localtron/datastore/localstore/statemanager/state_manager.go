@@ -48,7 +48,7 @@ func New[T any](stateGetter func() []T, filePath string) *StateManager[T] {
 	return sm
 }
 
-func (sm *StateManager[T]) LoadState() error {
+func (sm *StateManager[T]) LoadState() ([]T, error) {
 	sm.lock.Lock()
 	defer sm.lock.Unlock()
 
@@ -56,41 +56,41 @@ func (sm *StateManager[T]) LoadState() error {
 	if os.IsNotExist(err) {
 		err = os.MkdirAll(path.Dir(sm.filePath), 0755)
 		if err != nil {
-			return err
+			return nil, err
 		}
 		emptyData := []byte("{}")
 		zippedEmptyData, err := zipData(sm.filePath, emptyData)
 		if err != nil {
-			return err
+			return nil, err
 		}
 		err = ioutil.WriteFile(sm.filePath, zippedEmptyData, 0644)
 		if err != nil {
-			return err
+			return nil, err
 		}
 	} else if err != nil {
-		return err
+		return nil, err
 	}
 
 	data, err := ioutil.ReadFile(sm.filePath)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	unzippedData, err := unzipData(data)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	var stateFile StateFile[T]
 	if strings.TrimSpace(string(unzippedData)) == "" {
-		return nil
+		return nil, nil
 	}
 	err = json.Unmarshal(unzippedData, &stateFile)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	return stateFile.Rows, nil
 }
 
 func (sm *StateManager[T]) SaveState(shallowCopy []T) error {

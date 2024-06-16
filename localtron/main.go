@@ -16,6 +16,7 @@ import (
 	"net/http"
 	"os"
 	"path"
+	"runtime/debug"
 
 	"github.com/singulatron/singulatron/localtron/datastore/localstore"
 	"github.com/singulatron/singulatron/localtron/logger"
@@ -56,7 +57,10 @@ const port = "58231"
 func main() {
 	defer func() {
 		if r := recover(); r != nil {
-			logger.Error("Panic in main", slog.String("trace", fmt.Sprintf("%v", r)))
+			logger.Error("Panic in main",
+				slog.String("error", fmt.Sprintf("%v", r)),
+				slog.String("trace", string(debug.Stack())),
+			)
 			os.Exit(1)
 		}
 	}()
