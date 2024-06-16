@@ -12,11 +12,9 @@
 <br />
 <br />
 Singulatron is an app that lets you run AI anywhere!
-It's private, works offline, and can run on your laptop, PC, or even on your company computers or servers.
+It's private, works offline, and can run on your laptop or on servers.
 
-When self-hosted, it becomes a **multiuser, collaborative** AI application.
-
-It's also a platform that enables building other AI applications on top of it.
+When self-hosted, it becomes a **multiuser, distributed, real-time** AI platform.
 
 ![Run](https://singulatron.com/assets/chat.png?refresh=1)
 
@@ -38,8 +36,8 @@ Singulatron aims to be both a desktop app for local usage and also to work as a 
 
 ## Highlights
 
-- Private: your chats never leave your computer
-- Works without an internet connection
+- Private: your chats never leave your computer. Works even without an internet connection
+- Real-time and fast: utilize your hardware and your time to their full extent
 - The prompt queue system lets you input many prompts at once - even across threads - they will be processed sensibly. You can leave threads and return - streaming won't be interrupted
 - A download manager makes sure your models are well kept
 - Run as a binary (exe, deb etc) locally, or on your servers
@@ -61,3 +59,7 @@ For personal, non-commercial use, this project is licensed under the AGPL-3.0-or
 For commercial use, you must purchase a commercial license. Please refer to the [LICENSE-COMMERCIAL-USE](LICENSE-COMMERCIAL-USE) and [AUTHORS](AUTHORS) file for details.
 
 For more information, visit https://singulatron.com/home.
+
+## Status
+
+Fairly early phase but there are quite a few installations chugging along nicely already. Why don't you join them?
