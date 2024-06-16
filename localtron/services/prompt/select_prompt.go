@@ -24,7 +24,7 @@ var timeNow = time.Now
 func selectPrompt(promptsMem datastore.DataStore[*prompttypes.Prompt]) (*prompttypes.Prompt, error) {
 	prompts, err := promptsMem.Query(
 		datastore.All(),
-	).Find()
+	).OrderBy("createdAt", false).Find()
 	if err != nil {
 		return nil, err
 	}
