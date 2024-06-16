@@ -8,9 +8,10 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-package localstore_test
+package datastore_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/singulatron/singulatron/localtron/datastore"
@@ -25,9 +26,31 @@ type TestObject struct {
 	NickNames []string
 }
 
-func TestMemoryStore_InClause(t *testing.T) {
-	store := localstore.NewLocalStore[TestObject]("")
+func TestAll(t *testing.T) {
+	stores := map[string]func() datastore.DataStore[TestObject]{
+		"localStore": func() datastore.DataStore[TestObject] {
+			return localstore.NewLocalStore[TestObject]("")
+		},
+	}
+	tests := map[string]func(t *testing.T, store datastore.DataStore[TestObject]){
+		"InClause":               InClause,
+		"ReverseInClause":        ReverseInClause,
+		"CreateReadUpdateDelete": CreateReadUpdateDelete,
+		"CreateManyUpdateDelete": CreateManyUpdateDelete,
+		"Query":                  Query,
+		"Transactions":           Transactions,
+	}
 
+	for storeName, storeFunc := range stores {
+		for testName, test := range tests {
+			t.Run(fmt.Sprintf("%v %v", storeName, testName), func(t *testing.T) {
+				test(t, storeFunc())
+			})
+		}
+	}
+}
+
+func InClause(t *testing.T, store datastore.DataStore[TestObject]) {
 	obj1 := TestObject{Name: "Alice", Value: 10, Age: 25}
 	obj2 := TestObject{Name: "Bob", Value: 20, Age: 30}
 	obj3 := TestObject{Name: "Charlie", Value: 30, Age: 35}
@@ -73,9 +96,7 @@ func TestMemoryStore_InClause(t *testing.T) {
 	assert.NoError(t, err)
 }
 
-func TestMemoryStore_ReverseInClause(t *testing.T) {
-	store := localstore.NewLocalStore[TestObject]("")
-
+func ReverseInClause(t *testing.T, store datastore.DataStore[TestObject]) {
 	obj1 := TestObject{Name: "Alice", NickNames: []string{"A1", "A2"}}
 	obj2 := TestObject{Name: "Bob", NickNames: []string{"B1"}}
 	obj3 := TestObject{Name: "Charlie"}
@@ -110,9 +131,7 @@ func TestMemoryStore_ReverseInClause(t *testing.T) {
 
 }
 
-func TestMemoryStore_CreateReadUpdateDelete(t *testing.T) {
-	store := localstore.NewLocalStore[TestObject]("")
-
+func CreateReadUpdateDelete(t *testing.T, store datastore.DataStore[TestObject]) {
 	obj := TestObject{Name: "test", Value: 10}
 	err := store.Create(obj)
 	assert.NoError(t, err)
@@ -145,9 +164,7 @@ func TestMemoryStore_CreateReadUpdateDelete(t *testing.T) {
 	assert.Len(t, results, 0)
 }
 
-func TestMemoryStore_CreateManyUpdateDelete(t *testing.T) {
-	store := localstore.NewLocalStore[TestObject]("")
-
+func CreateManyUpdateDelete(t *testing.T, store datastore.DataStore[TestObject]) {
 	objs := []TestObject{
 		{Name: "test1", Value: 10},
 		{Name: "test2", Value: 20},
@@ -201,9 +218,7 @@ func TestMemoryStore_CreateManyUpdateDelete(t *testing.T) {
 	assert.Len(t, results, 0)
 }
 
-func TestMemoryStore_Query(t *testing.T) {
-	store := localstore.NewLocalStore[TestObject]("")
-
+func Query(t *testing.T, store datastore.DataStore[TestObject]) {
 	objs := []TestObject{
 		{Name: "test1", Value: 10},
 		{Name: "test2", Value: 20},
@@ -261,8 +276,7 @@ func TestMemoryStore_Query(t *testing.T) {
 	assert.Len(t, results, 0)
 }
 
-func TestMemoryStore_Transactions(t *testing.T) {
-	store := localstore.NewLocalStore[TestObject]("")
+func Transactions(t *testing.T, store datastore.DataStore[TestObject]) {
 	tx, err := store.BeginTransaction()
 	assert.NoError(t, err)
 
