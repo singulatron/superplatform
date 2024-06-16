@@ -14,54 +14,54 @@ import (
 	"errors"
 	"time"
 
-	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
+	"github.com/singulatron/singulatron/localtron/datastore"
 )
 
 func (s *UserService) ChangePassword(email, currentPassword, newPassword string) error {
-	var errRet error
-	changed := s.usersMem.ForeachStop(func(i int, user *usertypes.User) bool {
-		if user.Email == email {
-			if !checkPasswordHash(currentPassword, user.PasswordHash) {
-				errRet = errors.New("current password is incorrect")
-				return true
-			}
-
-			newPasswordHash, err := hashPassword(newPassword)
-			errRet = err
-
-			user.PasswordHash = newPasswordHash
-			user.UpdatedAt = time.Now()
-
-			return true
-		}
-		return false
-	})
-
-	if changed {
-		s.usersFile.MarkChanged()
+	q := s.usersStore.Query(
+		datastore.Equal("email", email),
+	)
+	user, found, err := q.FindOne()
+	if err != nil {
+		return err
+	}
+	if !found {
+		return errors.New("user not found")
 	}
 
-	return errRet
+	if !checkPasswordHash(currentPassword, user.PasswordHash) {
+		return errors.New("current password is incorrect")
+	}
+
+	newPasswordHash, err := hashPassword(newPassword)
+	if err != nil {
+		return err
+	}
+	user.PasswordHash = newPasswordHash
+	user.UpdatedAt = time.Now()
+
+	return q.Update(user)
 }
 
 func (s *UserService) ChangePasswordAdmin(email, newPassword string) error {
-	var errRet error
-	changed := s.usersMem.ForeachStop(func(i int, user *usertypes.User) bool {
-		if user.Email == email {
-			newPasswordHash, err := hashPassword(newPassword)
-			errRet = err
-
-			user.PasswordHash = newPasswordHash
-			user.UpdatedAt = time.Now()
-
-			return true
-		}
-		return false
-	})
-
-	if changed {
-		s.usersFile.MarkChanged()
+	q := s.usersStore.Query(
+		datastore.Equal("email", email),
+	)
+	user, found, err := q.FindOne()
+	if err != nil {
+		return err
+	}
+	if !found {
+		return errors.New("user not found")
 	}
 
-	return errRet
+	newPasswordHash, err := hashPassword(newPassword)
+	if err != nil {
+		return err
+	}
+
+	user.PasswordHash = newPasswordHash
+	user.UpdatedAt = time.Now()
+
+	return q.Update(user)
 }

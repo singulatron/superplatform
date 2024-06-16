@@ -19,7 +19,7 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/singulatron/singulatron/localtron/lib"
+	"github.com/singulatron/singulatron/localtron/logger"
 )
 
 type Client struct {
@@ -93,7 +93,10 @@ func (c *Client) PostCompletions(prompt PostCompletionsRequest) (*CompletionResp
 	var completionResp CompletionResponse
 	err = json.Unmarshal(body, &completionResp)
 	if err != nil {
-		lib.Logger.Error("Failed to unmarshal response body: %v, due to error: %v", string(body), err)
+		logger.Error("Failed to unmarshal LLM response body",
+			slog.String("body", string(body)),
+			slog.String("error", err.Error()),
+		)
 		return nil, err
 	}
 
@@ -141,7 +144,7 @@ func (c *Client) PostCompletionsStreamed(prompt PostCompletionsRequest, callback
 			}
 			err = json.Unmarshal([]byte(dat), &completionResp)
 			if err != nil {
-				lib.Logger.Error("Failed to unmarshal streamed response",
+				logger.Error("Failed to unmarshal streamed response",
 					slog.String("error", err.Error()),
 					slog.String("marshalledText", string(dat)),
 				)

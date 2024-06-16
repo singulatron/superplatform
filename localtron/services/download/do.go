@@ -21,7 +21,7 @@ import (
 	"strings"
 
 	"github.com/pkg/errors"
-	"github.com/singulatron/singulatron/localtron/lib"
+	"github.com/singulatron/singulatron/localtron/logger"
 	types "github.com/singulatron/singulatron/localtron/services/download/types"
 )
 
@@ -111,7 +111,7 @@ func (dm *DownloadService) Do(url, downloadDir string) error {
 	go func() {
 		err := dm.downloadFile(download)
 		if err != nil {
-			lib.Logger.Error("Error downlading file",
+			logger.Error("Error downlading file",
 				slog.String("url", download.URL),
 				slog.String("error", err.Error()),
 			)

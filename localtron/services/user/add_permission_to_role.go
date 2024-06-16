@@ -12,16 +12,20 @@ package userservice
 
 import (
 	"fmt"
+
+	"github.com/singulatron/singulatron/localtron/datastore"
 )
 
 func (s *UserService) AddPermissionToRole(roleId, permissionId string) error {
-	role, found := s.rolesMem.FindById(roleId)
+	q := s.rolesStore.Query(
+		datastore.Id(roleId),
+	)
+	role, found, err := q.FindOne()
+	if err != nil {
+		return err
+	}
 	if !found {
 		return fmt.Errorf("Cannot find role %v", roleId)
-	}
-	_, found = s.permissionsMem.FindById(permissionId)
-	if !found {
-		return fmt.Errorf("Cannot find permission %v", permissionId)
 	}
 
 	exists := false
@@ -35,8 +39,14 @@ func (s *UserService) AddPermissionToRole(roleId, permissionId string) error {
 		return nil
 	}
 
-	role.PermissionIds = append(role.PermissionIds, permissionId)
-	s.permissionsFile.MarkChanged()
+	_, found, err = s.permissionsStore.Query(
+		datastore.Id(permissionId),
+	).FindOne()
+	if !found {
+		return fmt.Errorf("Cannot find permission %v", permissionId)
+	}
 
-	return nil
+	role.PermissionIds = append(role.PermissionIds, permissionId)
+
+	return q.Update(role)
 }

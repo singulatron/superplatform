@@ -11,20 +11,11 @@
 package userservice
 
 import (
-	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
+	"github.com/singulatron/singulatron/localtron/datastore"
 )
 
-func (s *UserService) DeleteRole(roleID string) error {
-	changed := s.rolesMem.DeleteByFunc(func(r *usertypes.Role) bool {
-		if r.Id == roleID {
-			return true
-		}
-		return false
-	})
-
-	if changed {
-		s.rolesFile.MarkChanged()
-	}
-
-	return nil
+func (s *UserService) DeleteRole(roleId string) error {
+	return s.rolesStore.Query(
+		datastore.Id(roleId),
+	).Delete()
 }

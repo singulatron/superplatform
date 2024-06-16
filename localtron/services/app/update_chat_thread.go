@@ -11,17 +11,18 @@
 package appservice
 
 import (
+	"github.com/singulatron/singulatron/localtron/datastore"
 	apptypes "github.com/singulatron/singulatron/localtron/services/app/types"
 )
 
 func (a *AppService) UpdateChatThread(chatThread *apptypes.ChatThread) (*apptypes.ChatThread, error) {
-	a.threadsMem.Foreach(func(index int, i *apptypes.ChatThread) {
-		if i.Id == chatThread.Id {
-			i.Title = chatThread.Title
-		}
-	})
+	err := a.threadsStore.Query(
+		datastore.Equal("id", chatThread.Id),
+	).Update(chatThread)
 
-	a.threadsFile.MarkChanged()
+	if err != nil {
+		return nil, err
+	}
 
 	a.firehoseService.Publish(apptypes.EventChatThreadUpdate{
 		ThreadId: chatThread.Id,

@@ -11,11 +11,13 @@
 package userservice
 
 import (
+	"github.com/singulatron/singulatron/localtron/datastore"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 func (s *UserService) GetRoles() ([]*usertypes.Role, error) {
-	users, err := s.rolesMem.DeepCopy()
+	return s.rolesStore.Query(
+		datastore.All(),
+	).Find()
 
-	return users, err
 }

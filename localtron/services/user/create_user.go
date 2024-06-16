@@ -15,6 +15,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/singulatron/singulatron/localtron/datastore"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
@@ -29,9 +30,13 @@ func (s *UserService) CreateUser(user *usertypes.User, password string, roleIds 
 		return errors.New("Password missing")
 	}
 
-	emailExists := s.usersMem.ForeachStop(func(i int, u *usertypes.User) bool {
-		return u.Email == user.Email
-	})
+	_, emailExists, err := s.usersStore.Query(
+		datastore.Equal("email", user.Email),
+	).FindOne()
+	if err != nil {
+		return err
+	}
+
 	if emailExists {
 		return errors.New("email already exists")
 	}
@@ -41,7 +46,12 @@ func (s *UserService) CreateUser(user *usertypes.User, password string, roleIds 
 		return err
 	}
 
-	roles := s.rolesMem.FindByIds(roleIds)
+	roles, err := s.rolesStore.Query(
+		datastore.Equal("id", roleIds),
+	).Find()
+	if err != nil {
+		return err
+	}
 	if len(roles) < len(roleIds) {
 		return errors.New("some roles are not found")
 	}
@@ -56,8 +66,5 @@ func (s *UserService) CreateUser(user *usertypes.User, password string, roleIds 
 	user.UpdatedAt = now
 	user.CreatedAt = now
 
-	s.usersMem.Add(user)
-	s.usersFile.MarkChanged()
-
-	return nil
+	return s.usersStore.Create(user)
 }

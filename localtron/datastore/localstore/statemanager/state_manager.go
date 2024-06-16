@@ -8,7 +8,7 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-package lib
+package statemanager
 
 import (
 	"archive/zip"
@@ -24,29 +24,31 @@ import (
 	"sync"
 	"syscall"
 	"time"
+
+	"github.com/singulatron/singulatron/localtron/logger"
 )
 
-type StateFile[T Row] struct {
+type StateFile[T any] struct {
 	Rows []T `json:"rows"`
 }
 
-type StateManager[T Row] struct {
-	memStore   *MemoryStore[T]
-	lock       sync.Mutex
-	filePath   string
-	hasChanged bool
+type StateManager[T any] struct {
+	lock        sync.Mutex
+	filePath    string
+	hasChanged  bool
+	stateGetter func() []T
 }
 
-func NewStateManager[T Row](memStore *MemoryStore[T], filePath string) *StateManager[T] {
+func New[T any](stateGetter func() []T, filePath string) *StateManager[T] {
 	sm := &StateManager[T]{
-		memStore: memStore,
-		filePath: filePath + ".zip",
+		filePath:    filePath + ".zip",
+		stateGetter: stateGetter,
 	}
 	sm.setupSignalHandler()
 	return sm
 }
 
-func (sm *StateManager[T]) LoadState() error {
+func (sm *StateManager[T]) LoadState() ([]T, error) {
 	sm.lock.Lock()
 	defer sm.lock.Unlock()
 
@@ -54,52 +56,46 @@ func (sm *StateManager[T]) LoadState() error {
 	if os.IsNotExist(err) {
 		err = os.MkdirAll(path.Dir(sm.filePath), 0755)
 		if err != nil {
-			return err
+			return nil, err
 		}
 		emptyData := []byte("{}")
 		zippedEmptyData, err := zipData(sm.filePath, emptyData)
 		if err != nil {
-			return err
+			return nil, err
 		}
 		err = ioutil.WriteFile(sm.filePath, zippedEmptyData, 0644)
 		if err != nil {
-			return err
+			return nil, err
 		}
 	} else if err != nil {
-		return err
+		return nil, err
 	}
 
 	data, err := ioutil.ReadFile(sm.filePath)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	unzippedData, err := unzipData(data)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	var stateFile StateFile[T]
 	if strings.TrimSpace(string(unzippedData)) == "" {
-		return nil
+		return nil, nil
 	}
 	err = json.Unmarshal(unzippedData, &stateFile)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	// Logger.Info("Statefile loaded", slog.String("fileName", sm.filePath), slog.Int("row", len(stateFile.Rows)))
-
-	sm.memStore.Reset(stateFile.Rows)
-
-	return nil
+	return stateFile.Rows, nil
 }
 
-func (sm *StateManager[T]) SaveState() error {
+func (sm *StateManager[T]) SaveState(shallowCopy []T) error {
 	sm.lock.Lock()
 	defer sm.lock.Unlock()
-
-	shallowCopy := sm.memStore.SliceCopy()
 
 	data, err := json.Marshal(&StateFile[T]{
 		Rows: shallowCopy,
@@ -144,8 +140,8 @@ func (sm *StateManager[T]) PeriodicSaveState(interval time.Duration) {
 		select {
 		case <-ticker.C:
 			if sm.hasChanged {
-				if err := sm.SaveState(); err != nil {
-					Logger.Error("Error saving file state",
+				if err := sm.SaveState(sm.stateGetter()); err != nil {
+					logger.Logger.Error("Error saving file state",
 						slog.String("filePath", sm.filePath),
 						slog.String("error", err.Error()),
 					)
@@ -161,9 +157,9 @@ func (sm *StateManager[T]) setupSignalHandler() {
 
 	go func() {
 		<-c
-		err := sm.SaveState()
+		err := sm.SaveState(sm.stateGetter())
 		if err != nil {
-			Logger.Error("Error saving file state on shutdown",
+			logger.Logger.Error("Error saving file state on shutdown",
 				slog.String("filePath", sm.filePath),
 				slog.String("error", err.Error()),
 			)

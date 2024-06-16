@@ -18,7 +18,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/singulatron/singulatron/localtron/lib"
+	"github.com/singulatron/singulatron/localtron/logger"
 	types "github.com/singulatron/singulatron/localtron/services/download/types"
 	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
@@ -137,7 +137,7 @@ func (ds *DownloadService) periodicSaveState() {
 		if ds.hasChanged {
 			ds.lock.Unlock()
 			if err := ds.saveState(); err != nil {
-				lib.Logger.Error("Failed to save state", slog.String("error", err.Error()))
+				logger.Error("Failed to save state", slog.String("error", err.Error()))
 			}
 		} else {
 			ds.lock.Unlock()

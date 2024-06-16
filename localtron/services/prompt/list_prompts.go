@@ -13,6 +13,7 @@ package promptservice
 import (
 	"time"
 
+	"github.com/singulatron/singulatron/localtron/datastore"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
 )
 
@@ -24,28 +25,7 @@ type ListPromptOptions struct {
 }
 
 func (p *PromptService) ListPrompts(options *ListPromptOptions) ([]*prompttypes.Prompt, error) {
-	prompts := p.promptsMem.Filter(func(p *prompttypes.Prompt) bool {
-		passes := true
-		if len(options.Statuses) > 0 {
-			statusMatches := false
-			for _, v := range options.Statuses {
-				if p.Status == v {
-					statusMatches = true
-				}
-			}
-			if !statusMatches {
-				passes = false
-			}
-		}
-		if !options.CreatedAfter.IsZero() && p.CreatedAt.After(options.CreatedAfter) {
-			passes = false
-		}
-		if !options.LastRunAfter.IsZero() && p.LastRun.After(options.CreatedAfter) {
-			passes = false
-		}
-
-		return passes
-	})
-
-	return prompts, nil
+	return p.promptsStore.Query(
+		datastore.Equal("status", options.Statuses),
+	).OrderBy("createdAt", false).Find()
 }

@@ -32,7 +32,11 @@ func AddChatThread(
 		return
 	}
 
-	user, found := userService.GetUserFromRequest(r)
+	user, found, err := userService.GetUserFromRequest(r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
 	if !found {
 		http.Error(w, "unauthorized", http.StatusUnauthorized)
 		return

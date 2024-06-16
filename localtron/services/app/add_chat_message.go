@@ -16,7 +16,9 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/singulatron/singulatron/localtron/lib"
+	"github.com/singulatron/singulatron/localtron/datastore"
+	"github.com/singulatron/singulatron/localtron/logger"
+
 	apptypes "github.com/singulatron/singulatron/localtron/services/app/types"
 )
 
@@ -31,28 +33,18 @@ func (a *AppService) AddChatMessage(chatMessage *apptypes.ChatMessage) error {
 		chatMessage.CreatedAt = time.Now().Format(time.RFC3339)
 	}
 
-	threadExists := a.threadsMem.ForeachStop(func(i int, t *apptypes.ChatThread) bool {
-		return t.Id == chatMessage.ThreadId
-	})
+	threads, err := a.threadsStore.Query(
+		datastore.Equal("id", chatMessage.ThreadId),
+	).Find()
+	if err != nil {
+		return err
+	}
 
-	if !threadExists {
+	if len(threads) == 0 {
 		return errors.New("thread does not exist")
 	}
 
-	alreadySaved := false
-
-	a.messagesMem.Foreach(func(i int, v *apptypes.ChatMessage) {
-		if v.Id == chatMessage.Id {
-			alreadySaved = true
-		}
-	})
-
-	if alreadySaved {
-		return nil
-	}
-
-	a.messagesMem.Add(chatMessage)
-	lib.Logger.Info("Saving chat message",
+	logger.Info("Saving chat message",
 		slog.String("messageId", chatMessage.Id),
 	)
 
@@ -60,7 +52,7 @@ func (a *AppService) AddChatMessage(chatMessage *apptypes.ChatMessage) error {
 		ThreadId: chatMessage.ThreadId,
 	})
 
-	a.messagesFile.MarkChanged()
-
-	return nil
+	return a.messagesStore.Query(
+		datastore.Equal("id", chatMessage.Id),
+	).Upsert(chatMessage)
 }

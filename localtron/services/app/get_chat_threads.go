@@ -11,28 +11,17 @@
 package appservice
 
 import (
-	"sort"
-
+	"github.com/singulatron/singulatron/localtron/datastore"
 	apptypes "github.com/singulatron/singulatron/localtron/services/app/types"
 )
 
 func (a *AppService) GetChatThreads(userId string) ([]*apptypes.ChatThread, error) {
-	threads := a.threadsMem.SliceCopy()
-	ownThreads := []*apptypes.ChatThread{}
-	for _, v := range threads {
-		own := false
-		for _, uid := range v.UserIds {
-			if uid == userId {
-				own = true
-			}
-		}
-		if !own {
-			continue
-		}
-		ownThreads = append(ownThreads, v)
+	threads, err := a.threadsStore.Query(
+		datastore.Equal("userIds", userId),
+	).OrderBy("createdAt", true).Find()
+	if err != nil {
+		return nil, err
 	}
 
-	sort.Sort(apptypes.ThreadByTime(ownThreads))
-
-	return ownThreads, nil
+	return threads, nil
 }

@@ -14,12 +14,16 @@ import (
 	"fmt"
 	"log/slog"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
-	"github.com/singulatron/singulatron/localtron/lib"
+
+	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/llm"
+	"github.com/singulatron/singulatron/localtron/logger"
+
 	apptypes "github.com/singulatron/singulatron/localtron/services/app/types"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
 )
@@ -27,7 +31,7 @@ import (
 const (
 	maxRetries    = 5
 	baseDelay     = 1 * time.Second
-	promptTimeout = 10 * time.Minute
+	promptTimeout = 1 * time.Minute
 )
 
 // a blocking method, call it in a goroutine
@@ -43,7 +47,7 @@ func (p *PromptService) processPrompts() {
 
 		err := p.processNextPrompt()
 		if err != nil {
-			lib.Logger.Error("Error processing prompt",
+			logger.Error("Error processing prompt",
 				slog.String("error", err.Error()),
 			)
 		}
@@ -54,31 +58,46 @@ func (p *PromptService) processNextPrompt() error {
 	p.runMutex.Lock()
 	defer p.runMutex.Unlock()
 
-	runningPrompts := p.promptsMem.Filter(func(v *prompttypes.Prompt) bool {
-		return v.Status == prompttypes.PromptStatusRunning
-	})
+	runningPrompts, err := p.promptsStore.Query(
+		datastore.Equal("status", prompttypes.PromptStatusRunning),
+	).Find()
+	if err != nil {
+		return err
+	}
+
 	hasRunning := false
-	hasTimedout := false
+	runningPromptId := ""
 	for _, runningPrompt := range runningPrompts {
 		if runningPrompt.LastRun.Before(time.Now().Add(-promptTimeout)) {
-			lib.Logger.Info("Setting prompt as timed out",
+			logger.Info("Setting prompt as timed out",
 				slog.String("promptId", runningPrompt.Id),
 			)
+
 			runningPrompt.Status = prompttypes.PromptStatusErrored
 			runningPrompt.Error = "timed out"
-			hasTimedout = true
+			err = p.promptsStore.Query(
+				datastore.Id(runningPrompt.Id),
+			).Update(runningPrompt)
+			if err != nil {
+				return err
+			}
 			continue
 		}
 		hasRunning = true
+		runningPromptId = runningPrompt.Id
 	}
-	if hasTimedout {
-		p.promptsFile.MarkChanged()
-	}
+
 	if hasRunning {
+		logger.Debug("Prompt is already running",
+			slog.String("promptId", runningPromptId),
+		)
 		return nil
 	}
 
-	currentPrompt := selectPrompt(p.promptsMem)
+	currentPrompt, err := selectPrompt(p.promptsStore)
+	if err != nil {
+		return err
+	}
 	if currentPrompt == nil {
 		return nil
 	}
@@ -101,23 +120,29 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 			currentPrompt.Status = prompttypes.PromptStatusCompleted
 		}
 
-		lib.Logger.Info("Prompt finished",
+		logger.Info("Prompt finished",
 			slog.String("promptId", currentPrompt.Id),
 			slog.String("status", string(currentPrompt.Status)),
 		)
 
-		p.promptsFile.MarkChanged()
+		err = p.promptsStore.Query(
+			datastore.Id(currentPrompt.Id),
+		).Update(currentPrompt)
+		if err != nil {
+			logger.Error("Error updating prompt",
+				slog.String("promptId", currentPrompt.Id),
+				slog.String("error", err.Error()),
+			)
+		}
 	}()
 
-	lib.Logger.Info("Picking up prompt from queue",
+	logger.Info("Picking up prompt from queue",
 		slog.String("promptId", currentPrompt.Id),
 	)
 
 	p.firehoseService.Publish(prompttypes.EventPromptProcessingStarted{
 		PromptId: currentPrompt.Id,
 	})
-
-	p.promptsFile.MarkChanged()
 
 	defer p.firehoseService.Publish(prompttypes.EventPromptProcessingFinished{
 		PromptId: currentPrompt.Id,
@@ -164,12 +189,42 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 		fullPrompt = strings.Replace(currentPrompt.Template, "{prompt}", currentPrompt.Prompt, -1)
 	}
 
+	start := time.Now()
+	var responseCount int
+	var mu sync.Mutex
+
+	ticker := time.NewTicker(1 * time.Second)
+	defer ticker.Stop()
+	done := make(chan bool)
+
+	go func() {
+		for {
+			select {
+			case <-ticker.C:
+				mu.Lock()
+				logger.Debug("LLM is streaming",
+					slog.String("promptId", currentPrompt.Id),
+					slog.Float64("responsesPerSecond", float64(responseCount/int(time.Since(start).Seconds()))),
+					slog.Int("totalResponses", responseCount),
+				)
+				mu.Unlock()
+			case <-done:
+				return
+			}
+		}
+	}()
+
 	err = llmClient.PostCompletionsStreamed(llm.PostCompletionsRequest{
 		Prompt:    fullPrompt,
 		Stream:    true,
 		MaxTokens: 4096,
 	}, func(resp *llm.CompletionResponse) {
+		mu.Lock()
+		responseCount++
+		mu.Unlock()
+
 		p.StreamManager.Broadcast(currentPrompt.ThreadId, resp)
+
 		if len(resp.Choices) > 0 && resp.Choices[0].FinishReason == "stop" {
 			err := p.appService.AddChatMessage(&apptypes.ChatMessage{
 				Id:       uuid.New().String(),
@@ -177,7 +232,7 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 				Content:  llmResponseToText(p.StreamManager.history[currentPrompt.ThreadId]),
 			})
 			if err != nil {
-				lib.Logger.Error("Error when saving chat message after broadcast",
+				logger.Error("Error when saving chat message after broadcast",
 					slog.String("error", err.Error()))
 				return
 			}
@@ -185,6 +240,12 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 			delete(p.StreamManager.history, currentPrompt.ThreadId)
 		}
 	})
+
+	done <- true
+
+	logger.Debug("Finished streaming LLM",
+		slog.String("error", fmt.Sprintf("%v", err)),
+	)
 	if err != nil {
 		return errors.Wrap(err, "error streaming llm")
 	}

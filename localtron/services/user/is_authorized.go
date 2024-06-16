@@ -16,7 +16,9 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/singulatron/singulatron/localtron/lib"
+	"github.com/singulatron/singulatron/localtron/datastore"
+	"github.com/singulatron/singulatron/localtron/logger"
+
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
@@ -27,38 +29,39 @@ func (s *UserService) IsAuthorized(permissionId string, request *http.Request) e
 	}
 	authHeader = strings.Replace(authHeader, "Bearer ", "", 1)
 
-	// @todo this is very inefficient
-	var token *usertypes.AuthToken
-	found := s.authTokensMem.ForeachStop(func(i int, tk *usertypes.AuthToken) bool {
-		if tk.Token == authHeader {
-			token = tk
-			return true
-		}
-		return false
-	})
+	token, found, err := s.authTokensStore.Query(
+		datastore.Equal("token", authHeader),
+	).FindOne()
+	if err != nil {
+		return err
+	}
 
 	if !found {
 		return errors.New("unauthorized")
 	}
 
-	user, found := s.usersMem.FindById(token.UserId)
+	user, found, err := s.usersStore.Query(
+		datastore.Id(token.UserId),
+	).FindOne()
+	if err != nil {
+		return err
+	}
 	if !found {
-		lib.Logger.Error("Token refers to nonexistent user",
+		logger.Error("Token refers to nonexistent user",
 			slog.String("userId", token.UserId),
 			slog.String("tokenId", token.Id),
 		)
 		return errors.New("unauthorized")
 	}
 
-	for _, roleId := range user.RoleIds {
-		role, found := s.rolesMem.FindById(roleId)
-		if !found {
-			lib.Logger.Error("User refers to a nonexistent role",
-				slog.String("userId", token.UserId),
-				slog.String("roleId", roleId),
-			)
-			return errors.New("unauthorized")
-		}
+	roles, err := s.rolesStore.Query(
+		datastore.Equal("id", user.RoleIds),
+	).Find()
+	if err != nil {
+		return err
+	}
+
+	for _, role := range roles {
 		for _, permId := range role.PermissionIds {
 			if permId == permissionId {
 				return nil
@@ -69,35 +72,25 @@ func (s *UserService) IsAuthorized(permissionId string, request *http.Request) e
 	return errors.New("unauthorized")
 }
 
-func (s *UserService) GetUserFromRequest(request *http.Request) (*usertypes.User, bool) {
+func (s *UserService) GetUserFromRequest(request *http.Request) (*usertypes.User, bool, error) {
 	authHeader := request.Header.Get("Authorization")
 	if authHeader == "" {
-		return nil, false
+		return nil, false, nil
 	}
 	authHeader = strings.Replace(authHeader, "Bearer ", "", 1)
 
-	// @todo this is very inefficient
-	var token *usertypes.AuthToken
-	found := s.authTokensMem.ForeachStop(func(i int, tk *usertypes.AuthToken) bool {
-		if tk.Token == authHeader {
-			token = tk
-			return true
-		}
-		return false
-	})
-
-	if !found {
-		return nil, false
+	token, found, err := s.authTokensStore.Query(
+		datastore.Equal("token", authHeader),
+	).FindOne()
+	if err != nil {
+		return nil, false, err
 	}
 
-	user, found := s.usersMem.FindById(token.UserId)
 	if !found {
-		lib.Logger.Error("Token refers to nonexistent user",
-			slog.String("userId", token.UserId),
-			slog.String("tokenId", token.Id),
-		)
-		return nil, false
+		return nil, false, errors.New("unauthorized")
 	}
 
-	return user, true
+	return s.usersStore.Query(
+		datastore.Id(token.UserId),
+	).FindOne()
 }

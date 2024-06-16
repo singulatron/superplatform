@@ -16,7 +16,10 @@ import (
 	"net/http"
 	"os"
 	"path"
+	"runtime/debug"
 
+	"github.com/singulatron/singulatron/localtron/datastore/localstore"
+	"github.com/singulatron/singulatron/localtron/logger"
 	"github.com/singulatron/singulatron/localtron/middlewares"
 
 	dockerservice "github.com/singulatron/singulatron/localtron/services/docker"
@@ -24,6 +27,7 @@ import (
 
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
 	userendpoints "github.com/singulatron/singulatron/localtron/services/user/endpoints"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 
 	modelservice "github.com/singulatron/singulatron/localtron/services/model"
 	modelendpoints "github.com/singulatron/singulatron/localtron/services/model/endpoints"
@@ -36,15 +40,15 @@ import (
 
 	appservice "github.com/singulatron/singulatron/localtron/services/app"
 	appendpoints "github.com/singulatron/singulatron/localtron/services/app/endpoints"
+	apptypes "github.com/singulatron/singulatron/localtron/services/app/types"
 
 	promptservice "github.com/singulatron/singulatron/localtron/services/prompt"
 	promptendpoints "github.com/singulatron/singulatron/localtron/services/prompt/endpoints"
+	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
 
 	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
 	firehoseendpoints "github.com/singulatron/singulatron/localtron/services/firehose/endpoints"
 	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
-
-	"github.com/singulatron/singulatron/localtron/lib"
 )
 
 const singulatronFolder = ".singulatron"
@@ -53,24 +57,27 @@ const port = "58231"
 func main() {
 	defer func() {
 		if r := recover(); r != nil {
-			lib.Logger.Error("Panic in main", slog.String("trace", fmt.Sprintf("%v", r)))
+			logger.Error("Panic in main",
+				slog.String("error", fmt.Sprintf("%v", r)),
+				slog.String("trace", string(debug.Stack())),
+			)
 			os.Exit(1)
 		}
 	}()
 
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
-		lib.Logger.Error("Homedir creation failed", slog.String("error", err.Error()))
+		logger.Error("Homedir creation failed", slog.String("error", err.Error()))
 		os.Exit(1)
 	}
 
 	configService, err := configservice.NewConfigService()
 	if err != nil {
-		lib.Logger.Error("Config service creation failed", slog.String("error", err.Error()))
+		logger.Error("Config service creation failed", slog.String("error", err.Error()))
 		os.Exit(1)
 	}
 	configService.EventCallback = func(event firehosetypes.Event) {
-		lib.Logger.Debug("Received event from config before firehose is set up",
+		logger.Debug("Received event from config before firehose is set up",
 			slog.String("eventName", event.Name()),
 		)
 	}
@@ -79,9 +86,21 @@ func main() {
 		configService.ConfigDirectory = os.Getenv("SINGULATRON_CONFIG_PATH")
 	}
 
-	userService, err := userservice.NewUserService(configService)
+	configDir := configService.ConfigDirectory
+	usersPath := path.Join(configDir, "data", "users")
+	rolesPath := path.Join(configDir, "data", "roles")
+	permissionsPath := path.Join(configDir, "data", "permissions")
+	authTokensPath := path.Join(configDir, "data", "authTokens")
+
+	userService, err := userservice.NewUserService(
+		configService,
+		localstore.NewLocalStore[*usertypes.User](usersPath),
+		localstore.NewLocalStore[*usertypes.Role](rolesPath),
+		localstore.NewLocalStore[*usertypes.AuthToken](authTokensPath),
+		localstore.NewLocalStore[*usertypes.Permission](permissionsPath),
+	)
 	if err != nil {
-		lib.Logger.Error("User service start failed", slog.String("error", err.Error()))
+		logger.Error("User service start failed", slog.String("error", err.Error()))
 		os.Exit(1)
 	}
 	// hacks to avoid import cycles
@@ -90,13 +109,13 @@ func main() {
 
 	err = configService.Start()
 	if err != nil {
-		lib.Logger.Error("Config service start failed", slog.String("error", err.Error()))
+		logger.Error("Config service start failed", slog.String("error", err.Error()))
 		os.Exit(1)
 	}
 
 	firehoseService, err := firehoseservice.NewFirehoseService(userService)
 	if err != nil {
-		lib.Logger.Error("Firehose service creation failed", slog.String("error", err.Error()))
+		logger.Error("Firehose service creation failed", slog.String("error", err.Error()))
 		os.Exit(1)
 	}
 	configService.EventCallback = firehoseService.Publish
@@ -104,20 +123,20 @@ func main() {
 	singulatronFolder := path.Join(homeDir, singulatronFolder)
 	err = os.MkdirAll(singulatronFolder, 0755)
 	if err != nil {
-		lib.Logger.Error("Config folder creation failed", slog.String("error", err.Error()))
+		logger.Error("Config folder creation failed", slog.String("error", err.Error()))
 		os.Exit(1)
 	}
 
 	downloadFolder := path.Join(singulatronFolder, "downloads")
 	err = os.MkdirAll(downloadFolder, 0755)
 	if err != nil {
-		lib.Logger.Error("Downloads folder creation failed", slog.String("error", err.Error()))
+		logger.Error("Downloads folder creation failed", slog.String("error", err.Error()))
 		os.Exit(1)
 	}
 
 	downloadService, err := downloadservice.NewDownloadService(firehoseService, userService)
 	if err != nil {
-		lib.Logger.Error("Download service creation failed", slog.String("error", err.Error()))
+		logger.Error("Download service creation failed", slog.String("error", err.Error()))
 		os.Exit(1)
 	}
 
@@ -125,7 +144,7 @@ func main() {
 	downloadService.StateFilePath = path.Join(singulatronFolder, "downloads.json")
 	err = downloadService.Start()
 	if err != nil {
-		lib.Logger.Error("Download service start failed", slog.String("error", err.Error()))
+		logger.Error("Download service start failed", slog.String("error", err.Error()))
 		os.Exit(1)
 	}
 
@@ -157,7 +176,7 @@ func main() {
 
 	dockerService, err := dockerservice.NewDockerService(downloadService, userService, configService)
 	if err != nil {
-		lib.Logger.Error("Docker service creation failed", slog.String("error", err.Error()))
+		logger.Error("Docker service creation failed", slog.String("error", err.Error()))
 		os.Exit(1)
 	}
 
@@ -167,7 +186,7 @@ func main() {
 
 	modelService, err := modelservice.NewModelService(downloadService, userService, configService, dockerService)
 	if err != nil {
-		lib.Logger.Error("Model service creation failed", slog.String("error", err.Error()))
+		logger.Error("Model service creation failed", slog.String("error", err.Error()))
 		os.Exit(1)
 	}
 
@@ -185,9 +204,17 @@ func main() {
 		configendpoints.Get(w, r, userService, configService)
 	}))
 
-	appService, err := appservice.NewAppService(configService, firehoseService, userService)
+	messagesPath := path.Join(configDir, "data", "messages")
+	threadsPath := path.Join(configDir, "data", "threads")
+	appService, err := appservice.NewAppService(
+		configService,
+		firehoseService,
+		userService,
+		localstore.NewLocalStore[*apptypes.ChatMessage](messagesPath),
+		localstore.NewLocalStore[*apptypes.ChatThread](threadsPath),
+	)
 	if err != nil {
-		lib.Logger.Error("App service creation failed", slog.String("error", err.Error()))
+		logger.Error("App service creation failed", slog.String("error", err.Error()))
 		os.Exit(1)
 	}
 
@@ -239,9 +266,17 @@ func main() {
 		appendpoints.UpdateChatThread(w, r, userService, appService)
 	}))
 
-	promptService, err := promptservice.NewPromptService(configService, userService, modelService, appService, firehoseService)
+	promptsPath := path.Join(configDir, "data", "prompts")
+	promptService, err := promptservice.NewPromptService(
+		configService,
+		userService,
+		modelService,
+		appService,
+		firehoseService,
+		localstore.NewLocalStore[*prompttypes.Prompt](promptsPath),
+	)
 	if err != nil {
-		lib.Logger.Error("Prompt service creation failed", slog.String("error", err.Error()))
+		logger.Error("Prompt service creation failed", slog.String("error", err.Error()))
 		os.Exit(1)
 	}
 
@@ -283,10 +318,10 @@ func main() {
 		Handler: router,
 	}
 
-	lib.Logger.Info("Server started", slog.String("port", port))
+	logger.Info("Server started", slog.String("port", port))
 	err = http.ListenAndServe(":58231", srv.Handler)
 	if err != nil {
-		lib.Logger.Error("HTTP listen failed", slog.String("error", err.Error()))
+		logger.Error("HTTP listen failed", slog.String("error", err.Error()))
 		os.Exit(1)
 	}
 }

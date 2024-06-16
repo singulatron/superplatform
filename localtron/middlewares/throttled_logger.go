@@ -18,7 +18,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/singulatron/singulatron/localtron/lib"
+	"github.com/singulatron/singulatron/localtron/logger"
 )
 
 // Define constants for log interval
@@ -58,7 +58,7 @@ func ThrottledLogger(next http.HandlerFunc) http.HandlerFunc {
 		requestCount := data.RequestCount
 		shouldLog := time.Since(data.LastLogTime) > LogInterval
 		if shouldLog {
-			lib.Logger.Info("Endpoint request count",
+			logger.Info("Endpoint request count",
 				slog.String("method", r.Method),
 				slog.String("path", r.URL.Path),
 				slog.Int("statusCode", customWriter.statusCode),
@@ -98,7 +98,7 @@ func (rw *throttledResponseWriter) Write(b []byte) (int, error) {
 		errorMsg := fmt.Sprintf(`{"error": "%s"}`, errorMsgStr)
 
 		// Log the error message with the endpoint name, using the original message
-		lib.Logger.Error("Endpoint returned error",
+		logger.Error("Endpoint returned error",
 			slog.String("endpoint", rw.endpoint),
 			slog.String("error", strings.TrimSuffix(string(b), "\n")))
 
@@ -111,6 +111,6 @@ func (tw *throttledResponseWriter) Flush() {
 	if flusher, ok := tw.ResponseWriter.(http.Flusher); ok {
 		flusher.Flush()
 	} else {
-		lib.Logger.Warn("Flushing is not supported by the underlying responsewriter of throttledResponseWriter")
+		logger.Warn("Flushing is not supported by the underlying responsewriter of throttledResponseWriter")
 	}
 }

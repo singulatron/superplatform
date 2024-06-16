@@ -14,7 +14,7 @@ import (
 	"log/slog"
 	"time"
 
-	"github.com/singulatron/singulatron/localtron/lib"
+	"github.com/singulatron/singulatron/localtron/logger"
 )
 
 type ChatThread struct {
@@ -55,7 +55,7 @@ func (a ThreadByTime) Less(i, j int) bool {
 
 	ti, err := parseTime(a[i].CreatedAt)
 	if err != nil {
-		lib.Logger.Error("Error parsing thread time",
+		logger.Error("Error parsing thread time",
 			slog.String("threadId", a[i].Id),
 			slog.String("error", err.Error()))
 		return false // Could handle error differently if required
@@ -63,7 +63,7 @@ func (a ThreadByTime) Less(i, j int) bool {
 
 	tj, err := parseTime(a[j].CreatedAt)
 	if err != nil {
-		lib.Logger.Error("Error parsing thread time",
+		logger.Error("Error parsing thread time",
 			slog.String("threadId", a[j].Id),
 			slog.String("error", err.Error()))
 		return false // Could handle error differently if required

@@ -15,7 +15,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/singulatron/singulatron/localtron/lib"
+	"github.com/singulatron/singulatron/localtron/logger"
+
 	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
 	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
 
@@ -61,7 +62,7 @@ func Subscribe(
 		// 	panic("timeout test")
 		case events, ok := <-eventsChannel:
 			if !ok {
-				lib.Logger.Info("Events channel closed unexpectedly")
+				logger.Info("Events channel closed unexpectedly")
 				return
 			}
 

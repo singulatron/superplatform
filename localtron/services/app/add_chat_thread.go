@@ -32,12 +32,14 @@ func (a *AppService) AddChatThread(chatThread *apptypes.ChatThread) (*apptypes.C
 		return nil, errors.New("no user ids")
 	}
 
-	a.threadsMem.Add(chatThread)
+	err := a.threadsStore.Create(chatThread)
+	if err != nil {
+		return nil, err
+	}
 
 	a.firehoseService.Publish(apptypes.EventChatThreadAdded{
 		ThreadId: chatThread.Id,
 	})
-	a.threadsFile.MarkChanged()
 
 	return chatThread, nil
 }

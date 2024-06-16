@@ -19,7 +19,9 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
-	"github.com/singulatron/singulatron/localtron/lib"
+
+	"github.com/singulatron/singulatron/localtron/datastore"
+
 	apptypes "github.com/singulatron/singulatron/localtron/services/app/types"
 	configservice "github.com/singulatron/singulatron/localtron/services/config"
 	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
@@ -40,11 +42,8 @@ type AppService struct {
 	ThreadsFilePath  string
 	MessagesFilePath string
 
-	messagesMem *lib.MemoryStore[*apptypes.ChatMessage]
-	threadsMem  *lib.MemoryStore[*apptypes.ChatThread]
-
-	messagesFile *lib.StateManager[*apptypes.ChatMessage]
-	threadsFile  *lib.StateManager[*apptypes.ChatThread]
+	messagesStore datastore.DataStore[*apptypes.ChatMessage]
+	threadsStore  datastore.DataStore[*apptypes.ChatThread]
 
 	logMutex sync.Mutex
 }
@@ -53,14 +52,13 @@ func NewAppService(
 	cs *configservice.ConfigService,
 	fs *firehoseservice.FirehoseService,
 	userService *userservice.UserService,
+	messagesStore datastore.DataStore[*apptypes.ChatMessage],
+	threadStore datastore.DataStore[*apptypes.ChatThread],
 ) (*AppService, error) {
 	ci, err := cs.GetClientId()
 	if err != nil {
 		return nil, errors.Wrap(err, "app service canno get client id")
 	}
-
-	mm := lib.NewMemoryStore[*apptypes.ChatMessage]()
-	tm := lib.NewMemoryStore[*apptypes.ChatThread]()
 
 	err = os.MkdirAll(path.Join(cs.ConfigDirectory, "data"), 0755)
 	if err != nil {
@@ -75,11 +73,8 @@ func NewAppService(
 		firehoseService: fs,
 		userService:     userService,
 
-		messagesMem: mm,
-		threadsMem:  tm,
-
-		messagesFile: lib.NewStateManager(mm, messagesPath),
-		threadsFile:  lib.NewStateManager(tm, threadsPath),
+		messagesStore: messagesStore,
+		threadsStore:  threadStore,
 
 		LogBuffer:   make([]apptypes.Log, 0),
 		TriggerSend: make(chan bool, 1),
@@ -90,18 +85,10 @@ func NewAppService(
 	service.MessagesFilePath = messagesPath
 	service.ThreadsFilePath = threadsPath
 
-	err = service.loadChatFiles()
-	if err != nil {
-		return nil, err
-	}
-
 	err = service.registerPermissions()
 	if err != nil {
 		return nil, err
 	}
-
-	go service.messagesFile.PeriodicSaveState(2 * time.Second)
-	go service.threadsFile.PeriodicSaveState(2 * time.Second)
 
 	service.setupSignalHandler()
 	return service, nil
@@ -115,12 +102,4 @@ func (a *AppService) setupSignalHandler() {
 		a.sendLogs()
 		os.Exit(0)
 	}()
-}
-
-func (a *AppService) loadChatFiles() error {
-	err := a.messagesFile.LoadState()
-	if err != nil {
-		return err
-	}
-	return a.threadsFile.LoadState()
 }

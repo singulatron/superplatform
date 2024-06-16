@@ -11,15 +11,12 @@
 package appservice
 
 import (
+	"github.com/singulatron/singulatron/localtron/datastore"
 	apptypes "github.com/singulatron/singulatron/localtron/services/app/types"
 )
 
 func (a *AppService) GetChatThread(threadId string) (*apptypes.ChatThread, bool, error) {
-	thread, found := a.threadsMem.Find(func(i *apptypes.ChatThread) bool {
-		return i.Id == threadId
-	})
-	if !found {
-		return nil, false, nil
-	}
-	return thread, true, nil
+	return a.threadsStore.Query(
+		datastore.Equal("id", threadId),
+	).FindOne()
 }

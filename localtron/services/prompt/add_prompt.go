@@ -15,7 +15,8 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
-	"github.com/singulatron/singulatron/localtron/lib"
+	"github.com/singulatron/singulatron/localtron/logger"
+
 	apptypes "github.com/singulatron/singulatron/localtron/services/app/types"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
 )
@@ -26,18 +27,27 @@ func (p *PromptService) AddPrompt(prompt *prompttypes.Prompt) error {
 	prompt.CreatedAt = now
 	prompt.UpdatedAt = now
 
-	p.promptsMem.Add(prompt)
-	p.promptsFile.MarkChanged()
+	err := p.promptsStore.Create(prompt)
+	if err != nil {
+		return err
+	}
 
-	_, threadExists, err := p.appService.GetChatThread(prompt.Id)
+	logger.Info("Created prompt",
+		slog.String("promptId", prompt.Id),
+	)
+
+	threadId := prompt.ThreadId
+	if threadId == "" {
+		threadId = prompt.Id
+	}
+
+	_, threadExists, err := p.appService.GetChatThread(threadId)
 	if err != nil {
 		return errors.Wrap(err, "cannot get thread")
 	}
 
 	if !threadExists {
-		threadId := prompt.Id
-
-		lib.Logger.Info("Creating thread", slog.String("threadId", threadId))
+		logger.Info("Creating thread", slog.String("threadId", threadId))
 
 		// threads can be created when a message is sent
 		now := time.Now().Format(time.RFC3339)
@@ -74,8 +84,8 @@ func (p *PromptService) AddPrompt(prompt *prompttypes.Prompt) error {
 func (p *PromptService) triggerPromptProcessing() {
 	select {
 	case p.trigger <- true:
-		lib.Logger.Debug("Prompt trigger signal sent")
+		logger.Debug("Prompt trigger signal sent")
 	default:
-		lib.Logger.Debug("Prompt trigger signal skipped, already pending")
+		logger.Debug("Prompt trigger signal skipped, already pending")
 	}
 }

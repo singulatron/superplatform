@@ -11,17 +11,11 @@
 package userservice
 
 import (
-	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
+	"github.com/singulatron/singulatron/localtron/datastore"
 )
 
-func (s *UserService) DeletePermission(permissionID string) error {
-	s.permissionsMem.DeleteByFunc(func(p *usertypes.Permission) bool {
-		if p.Id == permissionID {
-			return true
-		}
-		return false
-	})
-	s.permissionsFile.MarkChanged()
-
-	return nil
+func (s *UserService) DeletePermission(permissionId string) error {
+	return s.permissionsStore.Query(
+		datastore.Id(permissionId),
+	).Delete()
 }

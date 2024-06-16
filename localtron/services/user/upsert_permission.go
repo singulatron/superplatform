@@ -11,14 +11,23 @@
 package userservice
 
 import (
+	"github.com/singulatron/singulatron/localtron/datastore"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 func (s *UserService) UpsertPermission(id, name, description string) (*usertypes.Permission, error) {
-	perm, found := s.permissionsMem.FindById(id)
+	query := s.permissionsStore.Query(
+		datastore.Equal("id", id),
+	)
+
+	perm, found, err := query.FindOne()
+	if err != nil {
+		return nil, err
+	}
 	if found {
 		perm.Name = name
 		perm.Description = description
+		query.Update(perm)
 		return perm, nil
 	}
 
@@ -28,8 +37,7 @@ func (s *UserService) UpsertPermission(id, name, description string) (*usertypes
 		Description: description,
 	}
 
-	s.permissionsMem.Add(permission)
-	s.permissionsFile.MarkChanged()
+	s.permissionsStore.Create(permission)
 
 	return permission, nil
 }

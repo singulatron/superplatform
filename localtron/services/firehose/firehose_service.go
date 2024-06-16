@@ -15,7 +15,8 @@ import (
 	"log/slog"
 	"sync"
 
-	"github.com/singulatron/singulatron/localtron/lib"
+	"github.com/singulatron/singulatron/localtron/logger"
+
 	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
@@ -43,7 +44,7 @@ func NewFirehoseService(userService *userservice.UserService) (*FirehoseService,
 
 func (fs *FirehoseService) PublishMany(events ...firehosetypes.Event) {
 	for _, event := range events {
-		lib.Logger.Debug("Event published",
+		logger.Debug("Event published",
 			slog.String("eventName", event.Name()),
 		)
 	}

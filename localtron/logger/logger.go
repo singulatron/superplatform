@@ -8,7 +8,7 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-package lib
+package logger
 
 import (
 	"log"
@@ -20,3 +20,8 @@ var jsonHandler = slog.NewJSONHandler(log.Writer(), &slog.HandlerOptions{
 })
 
 var Logger = slog.New(jsonHandler)
+
+var Debug = Logger.Debug
+var Info = Logger.Info
+var Warn = Logger.Warn
+var Error = Logger.Error

@@ -14,18 +14,28 @@ import (
 	"errors"
 	"time"
 
+	"github.com/singulatron/singulatron/localtron/datastore"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 func (s *UserService) UpsertRole(id, name, description string, permissionIds []string) (*usertypes.Role, error) {
-	permissions := s.permissionsMem.FindByIds(permissionIds)
+	permissions, err := s.permissionsStore.Query(
+		datastore.Equal("id", permissionIds),
+	).Find()
+	if err != nil {
+		return nil, err
+	}
+
 	if len(permissions) < len(permissionIds) {
 		return nil, errors.New("nonexistent permissions")
 	}
 
-	defer s.rolesFile.MarkChanged()
-
-	role, found := s.rolesMem.FindById(id)
+	role, found, err := s.rolesStore.Query(
+		datastore.Equal("id", id),
+	).FindOne()
+	if err != nil {
+		return nil, err
+	}
 	if !found {
 		role = &usertypes.Role{
 			Id:            id,
@@ -35,8 +45,7 @@ func (s *UserService) UpsertRole(id, name, description string, permissionIds []s
 			Description:   description,
 			PermissionIds: permissionIds,
 		}
-		s.rolesMem.Add(role)
-		return role, nil
+		return role, s.rolesStore.Create(role)
 	}
 
 	existingPermissionIdIndex := map[string]struct{}{}
@@ -51,5 +60,7 @@ func (s *UserService) UpsertRole(id, name, description string, permissionIds []s
 		}
 	}
 
-	return role, nil
+	return role, s.rolesStore.Query(
+		datastore.Equal("id", id),
+	).Update(role)
 }

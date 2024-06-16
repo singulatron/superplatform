@@ -11,10 +11,9 @@
 package userservice
 
 import (
-	"path"
-	"time"
+	"github.com/singulatron/singulatron/localtron/datastore"
+	"github.com/singulatron/singulatron/localtron/logger"
 
-	"github.com/singulatron/singulatron/localtron/lib"
 	configservice "github.com/singulatron/singulatron/localtron/services/config"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
@@ -22,60 +21,29 @@ import (
 type UserService struct {
 	configService *configservice.ConfigService
 
-	usersMem        *lib.MemoryStore[*usertypes.User]
-	usersFile       *lib.StateManager[*usertypes.User]
-	rolesMem        *lib.MemoryStore[*usertypes.Role]
-	rolesFile       *lib.StateManager[*usertypes.Role]
-	permissionsMem  *lib.MemoryStore[*usertypes.Permission]
-	permissionsFile *lib.StateManager[*usertypes.Permission]
-	authTokensMem   *lib.MemoryStore[*usertypes.AuthToken]
-	authTokensFile  *lib.StateManager[*usertypes.AuthToken]
+	usersStore       datastore.DataStore[*usertypes.User]
+	rolesStore       datastore.DataStore[*usertypes.Role]
+	permissionsStore datastore.DataStore[*usertypes.Permission]
+	authTokensStore  datastore.DataStore[*usertypes.AuthToken]
 }
 
-func NewUserService(cs *configservice.ConfigService) (*UserService, error) {
-	usersPath := path.Join(cs.ConfigDirectory, "data", "users")
-	rolesPath := path.Join(cs.ConfigDirectory, "data", "roles")
-	permissionsPath := path.Join(cs.ConfigDirectory, "data", "permissions")
-	authTokensPath := path.Join(cs.ConfigDirectory, "data", "authTokens")
-
-	um := lib.NewMemoryStore[*usertypes.User]()
-	rm := lib.NewMemoryStore[*usertypes.Role]()
-	pm := lib.NewMemoryStore[*usertypes.Permission]()
-	am := lib.NewMemoryStore[*usertypes.AuthToken]()
+func NewUserService(
+	cs *configservice.ConfigService,
+	usersStore datastore.DataStore[*usertypes.User],
+	rolesStore datastore.DataStore[*usertypes.Role],
+	authTokensStore datastore.DataStore[*usertypes.AuthToken],
+	permissionsStore datastore.DataStore[*usertypes.Permission]) (*UserService, error) {
 
 	service := &UserService{
-		configService:   cs,
-		usersMem:        um,
-		usersFile:       lib.NewStateManager[*usertypes.User](um, usersPath),
-		rolesMem:        rm,
-		rolesFile:       lib.NewStateManager[*usertypes.Role](rm, rolesPath),
-		permissionsMem:  pm,
-		permissionsFile: lib.NewStateManager[*usertypes.Permission](pm, permissionsPath),
-		authTokensMem:   am,
-		authTokensFile:  lib.NewStateManager[*usertypes.AuthToken](am, authTokensPath),
+		configService: cs,
+
+		usersStore:       usersStore,
+		rolesStore:       rolesStore,
+		authTokensStore:  authTokensStore,
+		permissionsStore: permissionsStore,
 	}
 
-	err := service.usersFile.LoadState()
-	if err != nil {
-		return nil, err
-	}
-
-	err = service.rolesFile.LoadState()
-	if err != nil {
-		return nil, err
-	}
-
-	err = service.permissionsFile.LoadState()
-	if err != nil {
-		return nil, err
-	}
-
-	err = service.authTokensFile.LoadState()
-	if err != nil {
-		return nil, err
-	}
-
-	err = service.registerRoles()
+	err := service.registerRoles()
 	if err != nil {
 		return nil, err
 	}
@@ -90,23 +58,28 @@ func NewUserService(cs *configservice.ConfigService) (*UserService, error) {
 		return nil, err
 	}
 
-	go service.usersFile.PeriodicSaveState(2 * time.Second)
-	go service.rolesFile.PeriodicSaveState(2 * time.Second)
-	go service.permissionsFile.PeriodicSaveState(2 * time.Second)
-	go service.authTokensFile.PeriodicSaveState(2 * time.Second)
-
 	return service, nil
 }
 
 func (s *UserService) bootstrap() error {
-	if s.usersMem.Count() == 0 {
-		lib.Logger.Info("Bootstrapping users")
-		_, err := s.Register("singulatron", "changeme", "Admin", []*usertypes.Role{
-			usertypes.RoleAdmin,
-		})
+	count, err := s.usersStore.Query(
+		datastore.All(),
+	).Count()
+
+	if err != nil {
 		return err
 	}
-	return nil
+
+	if count > 0 {
+		return nil
+	}
+
+	logger.Info("Bootstrapping users")
+
+	_, err = s.Register("singulatron", "changeme", "Admin", []string{
+		usertypes.RoleAdmin.Id,
+	})
+	return err
 }
 
 func (s *UserService) registerRoles() error {

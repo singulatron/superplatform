@@ -10,13 +10,14 @@
  */
 package appservice
 
-import apptypes "github.com/singulatron/singulatron/localtron/services/app/types"
+import (
+	"github.com/singulatron/singulatron/localtron/datastore"
+)
 
 func (a *AppService) DeleteChatMessage(id string) error {
-	a.messagesMem.DeleteByFunc(func(i *apptypes.ChatMessage) bool {
-		return i.Id == id
-	})
-	a.messagesFile.MarkChanged()
+	return a.messagesStore.Query(
+		datastore.Equal("id", id),
+	).Delete()
 
 	return nil
 }

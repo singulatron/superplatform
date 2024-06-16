@@ -14,20 +14,26 @@ import (
 	"math"
 	"time"
 
-	"github.com/singulatron/singulatron/localtron/lib"
+	"github.com/singulatron/singulatron/localtron/datastore"
+
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
 )
 
 var timeNow = time.Now
 
-func selectPrompt(promptsMem *lib.MemoryStore[*prompttypes.Prompt]) *prompttypes.Prompt {
-	var currentPrompt *prompttypes.Prompt
+func selectPrompt(promptsMem datastore.DataStore[*prompttypes.Prompt]) (*prompttypes.Prompt, error) {
+	prompts, err := promptsMem.Query(
+		datastore.All(),
+	).OrderBy("createdAt", false).Find()
+	if err != nil {
+		return nil, err
+	}
 
-	promptsMem.ForeachStop(func(i int, prompt *prompttypes.Prompt) bool {
+	for _, prompt := range prompts {
 		if prompt.Status == prompttypes.PromptStatusAbandoned ||
 			prompt.Status == prompttypes.PromptStatusCompleted ||
 			prompt.Status == prompttypes.PromptStatusCanceled {
-			return false
+			continue
 		}
 
 		runCount := prompt.RunCount
@@ -40,12 +46,9 @@ func selectPrompt(promptsMem *lib.MemoryStore[*prompttypes.Prompt]) *prompttypes
 
 		if prompt.RunCount == 0 ||
 			timeNow().Sub(prompt.LastRun) >= backoff {
-			currentPrompt = prompt
-
-			return true
+			return prompt, nil
 		}
-		return false
-	})
+	}
 
-	return currentPrompt
+	return nil, nil
 }

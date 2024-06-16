@@ -11,11 +11,12 @@
 package userservice
 
 import (
+	"github.com/singulatron/singulatron/localtron/datastore"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 func (s *UserService) GetUsers() ([]*usertypes.User, error) {
-	users, err := s.usersMem.DeepCopy()
-
-	return users, err
+	return s.usersStore.Query(
+		datastore.All(),
+	).Find()
 }
