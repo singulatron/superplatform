@@ -32,14 +32,21 @@ func (p *PromptService) AddPrompt(prompt *prompttypes.Prompt) error {
 		return err
 	}
 
-	_, threadExists, err := p.appService.GetChatThread(prompt.Id)
+	logger.Info("Created prompt",
+		slog.String("promptId", prompt.Id),
+	)
+
+	threadId := prompt.ThreadId
+	if threadId == "" {
+		threadId = prompt.Id
+	}
+
+	_, threadExists, err := p.appService.GetChatThread(threadId)
 	if err != nil {
 		return errors.Wrap(err, "cannot get thread")
 	}
 
 	if !threadExists {
-		threadId := prompt.Id
-
 		logger.Info("Creating thread", slog.String("threadId", threadId))
 
 		// threads can be created when a message is sent

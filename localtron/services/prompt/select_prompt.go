@@ -33,7 +33,7 @@ func selectPrompt(promptsMem datastore.DataStore[*prompttypes.Prompt]) (*promptt
 		if prompt.Status == prompttypes.PromptStatusAbandoned ||
 			prompt.Status == prompttypes.PromptStatusCompleted ||
 			prompt.Status == prompttypes.PromptStatusCanceled {
-			return nil, nil
+			continue
 		}
 
 		runCount := prompt.RunCount

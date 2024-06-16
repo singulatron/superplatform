@@ -20,9 +20,11 @@
 							src="/assets/s3d-min.png"
 							alt="Logo"
 						/>
-						<ion-label style="margin-left: 0.6rem">{{
-							message?.userId ? 'You' : 'Singulatron'
-						}}</ion-label>
+						<ion-label
+							title="{{ message?.createdAt }}"
+							style="margin-left: 0.6rem"
+							>{{ message?.userId ? 'You' : 'Singulatron' }}</ion-label
+						>
 						<div class="message-action-buttons">
 							<ion-icon
 								title="Copy to clipboard"

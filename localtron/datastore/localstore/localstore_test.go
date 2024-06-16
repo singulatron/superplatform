@@ -225,6 +225,13 @@ func TestMemoryStore_Query(t *testing.T) {
 	assert.Equal(t, objs[1], results[1])
 	assert.Equal(t, objs[0], results[2])
 
+	results, err = store.Query(datastore.All()).OrderBy("Name", true).Find()
+	assert.NoError(t, err)
+	assert.Len(t, results, 3)
+	assert.Equal(t, objs[2], results[0])
+	assert.Equal(t, objs[1], results[1])
+	assert.Equal(t, objs[0], results[2])
+
 	// order is nondeterministic when no OrderBy is supplied
 	// results, err = store.Query(datastore.All()).Limit(2).Offset(1).Find()
 	// assert.NoError(t, err)
