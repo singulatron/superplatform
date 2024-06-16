@@ -12,7 +12,9 @@
 <br />
 <br />
 Singulatron is an app that lets you run AI anywhere!
-It is private, works offline, and can run on your laptop, PC, or even on your company computers or servers.
+It's private, works offline, and can run on your laptop, PC, or even on your company computers or servers.
+
+When self-hosted, it becomes a **multiuser, collaborative** AI application.
 
 It's also a platform that enables building other AI applications on top of it.
 
