@@ -19,7 +19,8 @@ singulatron-frontend:
   ports:
     - "3901:80"
   environment:
-    # The `BACKEND_ADDRESS` must be accessible from the browser. It is not an internal address that should be accessible by the frontend. It's the address the browser will make API requests to.
+    # The `BACKEND_ADDRESS` must be accessible from the browser.
+    # It is not an internal address, it's the address the browser will make API requests to.
     - BACKEND_ADDRESS=http://127.0.0.1:58231
 
 singulatron-backend:
@@ -27,14 +28,15 @@ singulatron-backend:
   ports:
     - "58231:58231"
   volumes:
-    # we mount the docker socket so the backend can start containers
+    # We mount the docker socket so the backend can start containers
     - /var/run/docker.sock:/var/run/docker.sock
-    # without this no data will be persisted
+    # We mount a volume so data will be persisted
     - singulatron-data:/root/.singulatron
   environment:
-    # this folder will be mounted by the LLM containers to access the models
+    # This folder will be mounted by the LLM containers to access the models
     - SINGULATRON_HOST_FOLDER=/var/lib/docker/volumes/singulatron-data/_data
-    # address of the host so we can access the containers running the LLMs from the backend container
+    # Address of the host so we can access the containers running the LLMs from the backend container
+    # See "System Specific Settings" on this page for more information.
     - SINGULATRON_LLM_HOST=172.17.0.1
     #
     # For NVIDIA GPU acceleration uncomment the following flags
@@ -42,6 +44,8 @@ singulatron-backend:
     # - SINGULATRON_GPU_ENABLED=true
     # - SINGULATRON_IMAGE_OVERRIDE=crufter/llama-cpp-python-cuda
 ```
+
+### System Specific Settings
 
 There are a few things that can go wrong here:
 
