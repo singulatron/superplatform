@@ -11,10 +11,7 @@
 package appservice
 
 import (
-	"os"
-	"path"
 	"sync"
-	"time"
 
 	"github.com/pkg/errors"
 
@@ -24,16 +21,14 @@ import (
 	configservice "github.com/singulatron/singulatron/localtron/services/config"
 	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
+
+	storefactoryservice "github.com/singulatron/singulatron/localtron/services/store_factory"
 )
 
 type AppService struct {
 	configService   *configservice.ConfigService
 	userService     *userservice.UserService
 	firehoseService *firehoseservice.FirehoseService
-
-	LogBuffer   []apptypes.Log
-	TriggerSend chan bool
-	Timer       *time.Timer
 
 	clientId string
 
@@ -47,17 +42,19 @@ func NewAppService(
 	cs *configservice.ConfigService,
 	fs *firehoseservice.FirehoseService,
 	userService *userservice.UserService,
-	messagesStore datastore.DataStore[*apptypes.ChatMessage],
-	threadStore datastore.DataStore[*apptypes.ChatThread],
 ) (*AppService, error) {
+	threadsStore, err := storefactoryservice.GetStore[*apptypes.ChatThread]("threads")
+	if err != nil {
+		return nil, err
+	}
+	messagesStore, err := storefactoryservice.GetStore[*apptypes.ChatMessage]("messages")
+	if err != nil {
+		return nil, err
+	}
+
 	ci, err := cs.GetClientId()
 	if err != nil {
 		return nil, errors.Wrap(err, "app service canno get client id")
-	}
-
-	err = os.MkdirAll(path.Join(cs.ConfigDirectory, "data"), 0755)
-	if err != nil {
-		return nil, err
 	}
 
 	service := &AppService{
@@ -66,11 +63,7 @@ func NewAppService(
 		userService:     userService,
 
 		messagesStore: messagesStore,
-		threadsStore:  threadStore,
-
-		LogBuffer:   make([]apptypes.Log, 0),
-		TriggerSend: make(chan bool, 1),
-		Timer:       time.NewTimer(10 * time.Second),
+		threadsStore:  threadsStore,
 
 		clientId: ci,
 	}

@@ -17,7 +17,7 @@ import (
 )
 
 func (p *GenericService) registerPermissions() error {
-	for _, permission := range generictypes.PromptPermissions {
+	for _, permission := range generictypes.GenericPermissions {
 		_, err := p.userService.UpsertPermission(
 			permission.Id,
 			permission.Name,
@@ -32,7 +32,7 @@ func (p *GenericService) registerPermissions() error {
 		usertypes.RoleAdmin,
 		usertypes.RoleUser,
 	} {
-		for _, permission := range generictypes.PromptPermissions {
+		for _, permission := range generictypes.GenericPermissions {
 			p.userService.AddPermissionToRole(role.Id, permission.Id)
 		}
 	}

@@ -35,15 +35,20 @@ func NewGenericService(
 	fs *firehoseservice.FirehoseService,
 	userService *userservice.UserService,
 ) (*GenericService, error) {
+	store, err := storefactoryservice.GetStore[*generictypes.GenericObject]("generic")
+	if err != nil {
+		return nil, err
+	}
+
 	service := &GenericService{
 		configService:   cs,
 		firehoseService: fs,
 		userService:     userService,
 
-		store: storefactoryservice.GetStore[*generictypes.GenericObject]("generic"),
+		store: store,
 	}
 
-	err := service.registerPermissions()
+	err = service.registerPermissions()
 	if err != nil {
 		return nil, err
 	}

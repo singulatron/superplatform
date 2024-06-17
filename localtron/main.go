@@ -18,16 +18,15 @@ import (
 	"path"
 	"runtime/debug"
 
-	"github.com/singulatron/singulatron/localtron/datastore/localstore"
 	"github.com/singulatron/singulatron/localtron/logger"
 	"github.com/singulatron/singulatron/localtron/middlewares"
 
 	dockerservice "github.com/singulatron/singulatron/localtron/services/docker"
 	dockerendpoints "github.com/singulatron/singulatron/localtron/services/docker/endpoints"
+	storefactoryservice "github.com/singulatron/singulatron/localtron/services/store_factory"
 
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
 	userendpoints "github.com/singulatron/singulatron/localtron/services/user/endpoints"
-	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 
 	modelservice "github.com/singulatron/singulatron/localtron/services/model"
 	modelendpoints "github.com/singulatron/singulatron/localtron/services/model/endpoints"
@@ -40,11 +39,9 @@ import (
 
 	appservice "github.com/singulatron/singulatron/localtron/services/app"
 	appendpoints "github.com/singulatron/singulatron/localtron/services/app/endpoints"
-	apptypes "github.com/singulatron/singulatron/localtron/services/app/types"
 
 	promptservice "github.com/singulatron/singulatron/localtron/services/prompt"
 	promptendpoints "github.com/singulatron/singulatron/localtron/services/prompt/endpoints"
-	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
 
 	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
 	firehoseendpoints "github.com/singulatron/singulatron/localtron/services/firehose/endpoints"
@@ -85,19 +82,15 @@ func main() {
 	if os.Getenv("SINGULATRON_CONFIG_PATH") != "" {
 		configService.ConfigDirectory = os.Getenv("SINGULATRON_CONFIG_PATH")
 	}
-
-	configDir := configService.ConfigDirectory
-	usersPath := path.Join(configDir, "data", "users")
-	rolesPath := path.Join(configDir, "data", "roles")
-	permissionsPath := path.Join(configDir, "data", "permissions")
-	authTokensPath := path.Join(configDir, "data", "authTokens")
+	storefactoryservice.LocalStorePath = path.Join(configService.ConfigDirectory, "data")
+	err = os.MkdirAll(storefactoryservice.LocalStorePath, 0755)
+	if err != nil {
+		logger.Error("Creating data folder failed", slog.String("error", err.Error()))
+		os.Exit(1)
+	}
 
 	userService, err := userservice.NewUserService(
 		configService,
-		localstore.NewLocalStore[*usertypes.User](usersPath),
-		localstore.NewLocalStore[*usertypes.Role](rolesPath),
-		localstore.NewLocalStore[*usertypes.AuthToken](authTokensPath),
-		localstore.NewLocalStore[*usertypes.Permission](permissionsPath),
 	)
 	if err != nil {
 		logger.Error("User service start failed", slog.String("error", err.Error()))
@@ -204,14 +197,10 @@ func main() {
 		configendpoints.Get(w, r, userService, configService)
 	}))
 
-	messagesPath := path.Join(configDir, "data", "messages")
-	threadsPath := path.Join(configDir, "data", "threads")
 	appService, err := appservice.NewAppService(
 		configService,
 		firehoseService,
 		userService,
-		localstore.NewLocalStore[*apptypes.ChatMessage](messagesPath),
-		localstore.NewLocalStore[*apptypes.ChatThread](threadsPath),
 	)
 	if err != nil {
 		logger.Error("App service creation failed", slog.String("error", err.Error()))
@@ -262,14 +251,12 @@ func main() {
 		appendpoints.UpdateChatThread(w, r, userService, appService)
 	}))
 
-	promptsPath := path.Join(configDir, "data", "prompts")
 	promptService, err := promptservice.NewPromptService(
 		configService,
 		userService,
 		modelService,
 		appService,
 		firehoseService,
-		localstore.NewLocalStore[*prompttypes.Prompt](promptsPath),
 	)
 	if err != nil {
 		logger.Error("Prompt service creation failed", slog.String("error", err.Error()))

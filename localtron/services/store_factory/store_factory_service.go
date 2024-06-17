@@ -1,9 +1,13 @@
 package storefactoryservice
 
 import (
+	"path"
+
 	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/datastore/localstore"
 )
+
+var LocalStorePath = ""
 
 // GetStore is a standalone function that returns a new instance of a generic datastore.
 // This function needs to be standalone due to Go's current limitation on methods with type parameters.
@@ -13,6 +17,6 @@ import (
 // and type safety when creating instances of datastores.
 //
 // Unfortunately this means globals must be utilized to configure this package.
-func GetStore[T any](tableName string) datastore.DataStore[T] {
-	return localstore.NewLocalStore[T](tableName)
+func GetStore[T any](tableName string) (datastore.DataStore[T], error) {
+	return localstore.NewLocalStore[T](path.Join(LocalStorePath, tableName)), nil
 }
