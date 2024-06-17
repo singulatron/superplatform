@@ -41,13 +41,13 @@ type QueryBuilder[T any] interface {
 }
 
 type Condition struct {
-	Equal *EqualCondition
-	All   *AllCondition
+	Equal *EqualCondition `json:"equal,omitempty"`
+	All   *AllCondition   `json:"all,omitempty"`
 }
 
 type EqualCondition struct {
-	FieldName string
-	Value     any
+	FieldName string `json:"fieldName,omitempty"`
+	Value     any    `json:"value,omitempty"`
 }
 
 type AllCondition struct {

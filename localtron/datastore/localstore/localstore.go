@@ -20,6 +20,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/flusflas/dipper"
 	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/datastore/localstore/statemanager"
 )
@@ -360,50 +361,24 @@ func (q *QueryBuilder[T]) match(obj T) bool {
 	return true
 }
 
+func fixFieldName(s string) string {
+	parts := strings.Split(s, ".")
+	for i := range parts {
+		parts[i] = strings.Title(parts[i])
+	}
+	return strings.Join(parts, ".")
+}
+
 func getField[T any](obj T, field string) interface{} {
-	field = strings.Title(field)
+	field = fixFieldName(field)
 
-	val := reflect.ValueOf(obj)
-	if val.Kind() == reflect.Ptr {
-		val = val.Elem()
-	}
-
-	fieldVal := val.FieldByName(field)
-	if !fieldVal.IsValid() {
-		return nil
-	}
-
-	return fieldVal.Interface()
+	return dipper.Get(obj, field)
 }
 
 func setField[T any](obj *T, field string, value interface{}) error {
-	field = strings.Title(field)
+	field = fixFieldName(field)
 
-	val := reflect.ValueOf(obj)
-
-	if val.Kind() != reflect.Ptr || val.Elem().Kind() != reflect.Struct {
-		return fmt.Errorf("obj must be a pointer to a struct")
-	}
-
-	val = val.Elem()
-	fieldVal := val.FieldByName(field)
-
-	if !fieldVal.IsValid() {
-		return fmt.Errorf("no such field: %s in obj", field)
-	}
-
-	if !fieldVal.CanSet() {
-		return fmt.Errorf("cannot set field %s in obj", field)
-	}
-
-	valToSet := reflect.ValueOf(value)
-	if valToSet.Type().ConvertibleTo(fieldVal.Type()) {
-		fieldVal.Set(valToSet.Convert(fieldVal.Type()))
-	} else {
-		return fmt.Errorf("cannot convert value of type %s to type %s", valToSet.Type(), fieldVal.Type())
-	}
-
-	return nil
+	return dipper.Set(obj, field, value)
 }
 
 func compare(vi, vj interface{}, desc bool) bool {

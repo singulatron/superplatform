@@ -11,7 +11,6 @@
 package promptservice
 
 import (
-	"path"
 	"sync"
 
 	"github.com/singulatron/singulatron/localtron/datastore"
@@ -21,6 +20,7 @@ import (
 	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
 	modelservice "github.com/singulatron/singulatron/localtron/services/model"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
+	storefactoryservice "github.com/singulatron/singulatron/localtron/services/store_factory"
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
 
@@ -30,8 +30,7 @@ type PromptService struct {
 	appService      *appservice.AppService
 	firehoseService *firehoseservice.FirehoseService
 
-	PromptsFilePath string
-	StreamManager   *StreamManager
+	StreamManager *StreamManager
 
 	promptsStore datastore.DataStore[*prompttypes.Prompt]
 
@@ -45,10 +44,12 @@ func NewPromptService(
 	modelService *modelservice.ModelService,
 	appService *appservice.AppService,
 	firehoseService *firehoseservice.FirehoseService,
-	promptsStore datastore.DataStore[*prompttypes.Prompt],
-) (*PromptService, error) {
 
-	promptsPath := path.Join(cs.ConfigDirectory, "data", "prompts")
+) (*PromptService, error) {
+	promptsStore, err := storefactoryservice.GetStore[*prompttypes.Prompt]("prompts")
+	if err != nil {
+		return nil, err
+	}
 
 	service := &PromptService{
 		userService:     userService,
@@ -56,8 +57,7 @@ func NewPromptService(
 		appService:      appService,
 		firehoseService: firehoseService,
 
-		PromptsFilePath: promptsPath,
-		StreamManager:   NewStreamManager(),
+		StreamManager: NewStreamManager(),
 
 		promptsStore: promptsStore,
 

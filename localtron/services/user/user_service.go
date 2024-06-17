@@ -15,6 +15,7 @@ import (
 	"github.com/singulatron/singulatron/localtron/logger"
 
 	configservice "github.com/singulatron/singulatron/localtron/services/config"
+	storefactoryservice "github.com/singulatron/singulatron/localtron/services/store_factory"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
@@ -29,10 +30,23 @@ type UserService struct {
 
 func NewUserService(
 	cs *configservice.ConfigService,
-	usersStore datastore.DataStore[*usertypes.User],
-	rolesStore datastore.DataStore[*usertypes.Role],
-	authTokensStore datastore.DataStore[*usertypes.AuthToken],
-	permissionsStore datastore.DataStore[*usertypes.Permission]) (*UserService, error) {
+) (*UserService, error) {
+	usersStore, err := storefactoryservice.GetStore[*usertypes.User]("users")
+	if err != nil {
+		return nil, err
+	}
+	rolesStore, err := storefactoryservice.GetStore[*usertypes.Role]("roles")
+	if err != nil {
+		return nil, err
+	}
+	authTokensStore, err := storefactoryservice.GetStore[*usertypes.AuthToken]("authTokens")
+	if err != nil {
+		return nil, err
+	}
+	permissionsStore, err := storefactoryservice.GetStore[*usertypes.Permission]("permissions")
+	if err != nil {
+		return nil, err
+	}
 
 	service := &UserService{
 		configService: cs,
@@ -43,7 +57,7 @@ func NewUserService(
 		permissionsStore: permissionsStore,
 	}
 
-	err := service.registerRoles()
+	err = service.registerRoles()
 	if err != nil {
 		return nil, err
 	}

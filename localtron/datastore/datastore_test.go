@@ -19,11 +19,18 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+type Friend struct {
+	Name string
+	Age  int
+}
+
 type TestObject struct {
-	Name      string
-	Value     int
-	Age       int
-	NickNames []string
+	Name          string
+	Value         int
+	Age           int
+	NickNames     []string
+	Friend        Friend
+	FriendPointer *Friend
 }
 
 func TestAll(t *testing.T) {
@@ -39,6 +46,7 @@ func TestAll(t *testing.T) {
 		"CreateManyUpdateDelete": CreateManyUpdateDelete,
 		"Query":                  Query,
 		"Transactions":           Transactions,
+		"DotNotation":            DotNotation,
 	}
 
 	for storeName, storeFunc := range stores {
@@ -93,6 +101,82 @@ func InClause(t *testing.T, store datastore.DataStore[TestObject]) {
 	err = store.Query(datastore.Equal("Name", "Bob")).Delete()
 	assert.NoError(t, err)
 	err = store.Query(datastore.Equal("Name", "Charlie")).Delete()
+	assert.NoError(t, err)
+}
+
+func DotNotation(t *testing.T, store datastore.DataStore[TestObject]) {
+	obj1 := TestObject{Name: "Alice", Value: 10, Age: 25,
+		Friend:        Friend{Name: "AliceFriend", Age: 26},
+		FriendPointer: &Friend{Name: "AliceFriendP", Age: 27},
+	}
+	obj2 := TestObject{Name: "Bob", Value: 20, Age: 30,
+		Friend:        Friend{Name: "BobFriend", Age: 31},
+		FriendPointer: &Friend{Name: "BobFriendP", Age: 32},
+	}
+	obj3 := TestObject{Name: "Charlie", Value: 30, Age: 35,
+		Friend:        Friend{Name: "CharlieFriend", Age: 36},
+		FriendPointer: &Friend{Name: "CharlieFriendP", Age: 37},
+	}
+
+	err := store.Create(obj1)
+	assert.NoError(t, err)
+	err = store.Create(obj2)
+	assert.NoError(t, err)
+	err = store.Create(obj3)
+	assert.NoError(t, err)
+
+	// Test IN clause with string slice
+	results, err := store.Query(datastore.Equal("Friend.Name", []string{"AliceFriend", "BobFriend"})).Find()
+	assert.NoError(t, err)
+	assert.Len(t, results, 2)
+	assert.Contains(t, results, obj1)
+	assert.Contains(t, results, obj2)
+
+	results, err = store.Query(datastore.Equal("friendPointer.name", []string{"AliceFriendP", "BobFriendP"})).Find()
+	assert.NoError(t, err)
+	assert.Len(t, results, 2)
+	assert.Contains(t, results, obj1)
+	assert.Contains(t, results, obj2)
+
+	// Test IN clause with int slice
+	results, err = store.Query(datastore.Equal("Friend.Age", []int{26, 36})).Find()
+	assert.NoError(t, err)
+	assert.Len(t, results, 2)
+	assert.Contains(t, results, obj1)
+	assert.Contains(t, results, obj3)
+
+	// Test IN clause with empty slice (should return no results)
+	results, err = store.Query(datastore.Equal("Friend.Age", []int{})).Find()
+	assert.NoError(t, err)
+	assert.Len(t, results, 0)
+
+	// Test Ordering
+	results, err = store.Query(datastore.All()).OrderBy("Friend.Age", false).Find()
+	assert.NoError(t, err)
+	assert.Len(t, results, 3)
+	assert.Equal(t, "Alice", results[0].Name)
+	assert.Equal(t, "Bob", results[1].Name)
+	assert.Equal(t, "Charlie", results[2].Name)
+
+	results, err = store.Query(datastore.All()).OrderBy("Friend.Age", true).Find()
+	assert.NoError(t, err)
+	assert.Len(t, results, 3)
+	assert.Equal(t, "Charlie", results[0].Name)
+	assert.Equal(t, "Bob", results[1].Name)
+	assert.Equal(t, "Alice", results[2].Name)
+
+	// Test IN clause with one element slice
+	results, err = store.Query(datastore.Equal("FriendPointer.Age", []int{32})).Find()
+	assert.NoError(t, err)
+	assert.Len(t, results, 1)
+	assert.Contains(t, results, obj2)
+
+	// Clean up
+	err = store.Query(datastore.Equal("Name.Friend", "AliceFriend")).Delete()
+	assert.NoError(t, err)
+	err = store.Query(datastore.Equal("Name.FriendPointer", "BobFriendP")).Delete()
+	assert.NoError(t, err)
+	err = store.Query(datastore.Equal("Name.Friend", "CharlieFriend")).Delete()
 	assert.NoError(t, err)
 }
 
