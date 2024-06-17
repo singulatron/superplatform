@@ -1,0 +1,86 @@
+/**
+ * @license
+ * Copyright (c) The Authors (see the AUTHORS file)
+ *
+ * This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3) for personal, non-commercial use.
+ * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
+ *
+ * For commercial use, a separate license must be obtained by purchasing from The Authors.
+ * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
+ */
+package genericservice
+
+import (
+	"errors"
+
+	"github.com/singulatron/singulatron/localtron/datastore"
+	configservice "github.com/singulatron/singulatron/localtron/services/config"
+	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
+	storefactoryservice "github.com/singulatron/singulatron/localtron/services/store_factory"
+	userservice "github.com/singulatron/singulatron/localtron/services/user"
+
+	generictypes "github.com/singulatron/singulatron/localtron/services/generic/types"
+)
+
+type GenericService struct {
+	configService   *configservice.ConfigService
+	userService     *userservice.UserService
+	firehoseService *firehoseservice.FirehoseService
+
+	store datastore.DataStore[*generictypes.GenericObject]
+}
+
+func NewGenericService(
+	cs *configservice.ConfigService,
+	fs *firehoseservice.FirehoseService,
+	userService *userservice.UserService,
+) (*GenericService, error) {
+	service := &GenericService{
+		configService:   cs,
+		firehoseService: fs,
+		userService:     userService,
+
+		store: storefactoryservice.GetStore[*generictypes.GenericObject]("generic"),
+	}
+
+	err := service.registerPermissions()
+	if err != nil {
+		return nil, err
+	}
+
+	return service, nil
+}
+
+func (g *GenericService) Create(tableName string, object *generictypes.GenericObject) error {
+	return g.store.Create(object)
+}
+
+func (g *GenericService) Find(tableName string, conditions []datastore.Condition) ([]*generictypes.GenericObject, error) {
+	if len(conditions) == 0 {
+		return nil, errors.New("no conditions")
+	}
+
+	return g.store.Query(
+		conditions[0], conditions[1:]...,
+	).Find()
+}
+
+func (g *GenericService) Update(tableName string, conditions []datastore.Condition, object *generictypes.GenericObject) error {
+	if len(conditions) == 0 {
+		return errors.New("no conditions")
+	}
+
+	return g.store.Query(
+		conditions[0], conditions[1:]...,
+	).Update(object)
+}
+
+func (g *GenericService) Delete(tableName string, conditions []datastore.Condition) error {
+	if len(conditions) == 0 {
+		return errors.New("no conditions")
+	}
+
+	return g.store.Query(
+		conditions[0], conditions[1:]...,
+	).Delete()
+}
