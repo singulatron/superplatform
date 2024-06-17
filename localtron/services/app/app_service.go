@@ -12,10 +12,8 @@ package appservice
 
 import (
 	"os"
-	"os/signal"
 	"path"
 	"sync"
-	"syscall"
 	"time"
 
 	"github.com/pkg/errors"
@@ -38,9 +36,6 @@ type AppService struct {
 	Timer       *time.Timer
 
 	clientId string
-
-	ThreadsFilePath  string
-	MessagesFilePath string
 
 	messagesStore datastore.DataStore[*apptypes.ChatMessage]
 	threadsStore  datastore.DataStore[*apptypes.ChatThread]
@@ -65,9 +60,6 @@ func NewAppService(
 		return nil, err
 	}
 
-	messagesPath := path.Join(cs.ConfigDirectory, "data", "messages")
-	threadsPath := path.Join(cs.ConfigDirectory, "data", "threads")
-
 	service := &AppService{
 		configService:   cs,
 		firehoseService: fs,
@@ -82,24 +74,11 @@ func NewAppService(
 
 		clientId: ci,
 	}
-	service.MessagesFilePath = messagesPath
-	service.ThreadsFilePath = threadsPath
 
 	err = service.registerPermissions()
 	if err != nil {
 		return nil, err
 	}
 
-	service.setupSignalHandler()
 	return service, nil
-}
-
-func (a *AppService) setupSignalHandler() {
-	signals := make(chan os.Signal, 1)
-	signal.Notify(signals, syscall.SIGINT, syscall.SIGTERM)
-	go func() {
-		<-signals
-		a.sendLogs()
-		os.Exit(0)
-	}()
 }

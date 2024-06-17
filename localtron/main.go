@@ -218,10 +218,6 @@ func main() {
 		os.Exit(1)
 	}
 
-	router.HandleFunc("/app/log", appl(func(w http.ResponseWriter, r *http.Request) {
-		appendpoints.Log(w, r, appService)
-	}))
-
 	router.HandleFunc("/app/log/disable", appl(func(w http.ResponseWriter, r *http.Request) {
 		appendpoints.DisableLogging(w, r, appService)
 	}))

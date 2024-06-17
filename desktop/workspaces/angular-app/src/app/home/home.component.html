@@ -34,21 +34,19 @@
 						name="cloud-upload-outline"
 					></ion-icon>
 					<div *ngIf="loggingEnabled" style="margin-left: 20px">
+						{{ 'Logs are being saved on your system' | translate }}.<br />
 						{{
-							'Diagnostic logs are being uploaded to our server for analysis'
+							'Turn logging off entirely for extra privacy and safety'
 								| translate
-						}}.<br />
-						{{ 'Turn this off for extra privacy and safety' | translate }}
-						{{ 'This will also turn off local logging entirely' | translate }}.
+						}}.
 					</div>
 
 					<div *ngIf="!loggingEnabled" style="margin-left: 20px">
 						{{
-							'Diagnostic logs are turned off for extra privacy and security'
-								| translate
+							'Logs are turned off for extra privacy and security' | translate
 						}}.<br />
 						{{
-							'If you are not working with sensitive data, please turn this on to improve this application'
+							'If you are not working with extremely sensitive data, you can turn this on'
 								| translate
 						}}.
 					</div>
