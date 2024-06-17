@@ -32,7 +32,6 @@ export interface Environment {
 	brandName: string;
 	shortBrandName: string;
 	backendAddress: string;
-	localPromptAddress: string;
 }
 
 export interface ApiServiceConfig {
