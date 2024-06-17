@@ -35,11 +35,12 @@
 					></ion-icon>
 					<div *ngIf="loggingEnabled" style="margin-left: 20px">
 						{{
-							'Diagnostic logs are being uploaded to our server for analysis'
-								| translate
+							'Diagnostic logs are being saved onto your machine' | translate
 						}}.<br />
-						{{ 'Turn this off for extra privacy and safety' | translate }}
-						{{ 'This will also turn off local logging entirely' | translate }}.
+						{{
+							'Turn logging off entirely for extra privacy and safety'
+								| translate
+						}}
 					</div>
 
 					<div *ngIf="!loggingEnabled" style="margin-left: 20px">
@@ -48,7 +49,7 @@
 								| translate
 						}}.<br />
 						{{
-							'If you are not working with sensitive data, please turn this on to improve this application'
+							'If you are not working with extremely sensitive data, turn this on so you issues can be investigated'
 								| translate
 						}}.
 					</div>
