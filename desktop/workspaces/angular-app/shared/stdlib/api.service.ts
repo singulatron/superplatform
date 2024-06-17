@@ -137,7 +137,9 @@ export class ApiService {
 					this.modelsFromServer = rsp.models as any;
 				}
 			} catch (e) {
-				console.error('Error getting models from server', e);
+				console.error('Error getting models from server', {
+					error: JSON.stringify(e),
+				});
 			}
 		}
 
