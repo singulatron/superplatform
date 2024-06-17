@@ -94,7 +94,6 @@ jobs:
 
       - name: Install dependencies
         run: |
-          npm install --global windows-build-tools
           npm install
         working-directory: ./desktop
 
