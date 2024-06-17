@@ -46,6 +46,9 @@ import (
 	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
 	firehoseendpoints "github.com/singulatron/singulatron/localtron/services/firehose/endpoints"
 	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
+
+	genericservice "github.com/singulatron/singulatron/localtron/services/generic"
+	genericendpoints "github.com/singulatron/singulatron/localtron/services/generic/endpoints"
 )
 
 const singulatronFolder = ".singulatron"
@@ -295,6 +298,29 @@ func main() {
 	}))
 	router.HandleFunc("/user/get-roles", appl(func(w http.ResponseWriter, r *http.Request) {
 		userendpoints.GetRoles(w, r, userService)
+	}))
+
+	genericService, err := genericservice.NewGenericService(
+		configService,
+		firehoseService,
+		userService,
+	)
+	if err != nil {
+		logger.Error("Generic service creation failed", slog.String("error", err.Error()))
+		os.Exit(1)
+	}
+
+	router.HandleFunc("/generic/create", appl(func(w http.ResponseWriter, r *http.Request) {
+		genericendpoints.Create(w, r, userService, genericService)
+	}))
+	router.HandleFunc("/generic/update", appl(func(w http.ResponseWriter, r *http.Request) {
+		genericendpoints.Update(w, r, userService, genericService)
+	}))
+	router.HandleFunc("/generic/delete", appl(func(w http.ResponseWriter, r *http.Request) {
+		genericendpoints.Delete(w, r, userService, genericService)
+	}))
+	router.HandleFunc("/generic/find", appl(func(w http.ResponseWriter, r *http.Request) {
+		genericendpoints.Find(w, r, userService, genericService)
 	}))
 
 	srv := &http.Server{
