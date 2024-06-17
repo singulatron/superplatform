@@ -34,16 +34,6 @@ export class PromptService {
 			}
 			return null;
 		});
-
-		//try {
-		//	let rsp = await this.promptList();
-		//
-		//	this.onPromptListUpdateSubject.next(rsp.prompts);
-		//} catch (error) {
-		//	console.error('Error in pollPromptList', {
-		//		error: JSON.stringify(error),
-		//	});
-		//}
 	}
 
 	async create(table: string, object: GenericObject): Promise<void> {
@@ -55,13 +45,39 @@ export class PromptService {
 		return this.localtron.call('/generic/create', req);
 	}
 
-	async find(table: string, conditions: Condition[]): Promise<GenericObject[]> {
+	async find(table: string, conditions: Condition[]): Promise<FindResponse> {
 		let req: FindRequest = {
 			table: table,
 			conditions: conditions,
 		};
 
 		return this.localtron.call('/generic/find', req);
+	}
+
+	async update(
+		table: string,
+		conditions: Condition[],
+		object: GenericObject
+	): Promise<UpdateResponse> {
+		let req: UpdateRequest = {
+			table: table,
+			conditions: conditions,
+			object: object,
+		};
+
+		return this.localtron.call('/generic/update', req);
+	}
+
+	async delete(
+		table: string,
+		conditions: Condition[]
+	): Promise<DeleteResponse> {
+		let req: DeleteRequest = {
+			table: table,
+			conditions: conditions,
+		};
+
+		return this.localtron.call('/generic/delete', req);
 	}
 }
 
@@ -121,10 +137,18 @@ export interface CreateResponse {}
 
 export interface UpdateRequest {
 	table: string;
+	conditions: Condition[];
 	object: GenericObject;
 }
 
 export interface UpdateResponse {}
+
+export interface DeleteRequest {
+	table: string;
+	conditions: Condition[];
+}
+
+export interface DeleteResponse {}
 
 export interface FindRequest {
 	table: string;
