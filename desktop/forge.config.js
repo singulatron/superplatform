@@ -15,7 +15,7 @@ module.exports = {
 		icon: './workspaces/electron-app/main/assets/icons/icon.png',
 	},
 	hooks: {
-		afterPackaging: 'node ./workspaces/electron-app/main/after-copy-hook.ts',
+		// afterPackaging: 'node ./workspaces/electron-app/main/after-copy-hook.ts',
 	},
 	makers: [
 		{
