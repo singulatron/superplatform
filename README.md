@@ -36,7 +36,7 @@ Singulatron aims to be both a desktop app for local usage and also to work as a 
 
 ## Highlights
 
-- Private: your chats never leave your computer. Works even without an internet connection
+- [Private](./docs/privacy.md): your chats never leave your computer. Works even without an internet connection
 - Real-time and fast: utilize your hardware and your time to their full extent
 - The prompt queue system lets you input many prompts at once - even across threads - they will be processed sensibly. You can leave threads and return - streaming won't be interrupted
 - A download manager makes sure your models are well kept
