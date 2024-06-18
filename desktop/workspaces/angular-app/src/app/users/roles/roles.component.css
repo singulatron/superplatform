@@ -1,4 +1,4 @@
-/**
+/*
  * @license
  * Copyright (c) The Authors (see the AUTHORS file)
  *
@@ -8,15 +8,38 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-package userservice
-
-import (
-	"github.com/singulatron/singulatron/localtron/datastore"
-	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
-)
-
-func (s *UserService) GetRoles() ([]*usertypes.Role, error) {
-	return s.rolesStore.Query(
-		datastore.All(),
-	).OrderBy("name", false).Find()
+.flex-container {
+	display: flex;
+	height: 100vh;
 }
+
+.left-column {
+	width: 300px;
+	overflow-y: auto;
+	height: 100vh;
+	box-sizing: border-box;
+}
+
+.right-column {
+	height: 100vh;
+	width: 100%;
+	overflow-y: auto;
+}
+
+.role,
+.permission {
+	padding: 10px;
+	padding-left: 1rem;
+	margin-bottom: 5px;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: background-color 0.2s;
+	display: flex;
+	align-items: center;
+	font-size: 14px;
+}
+
+.role.selected {
+	background-color: #e0e0e0;
+}
+

@@ -299,6 +299,12 @@ func main() {
 	router.HandleFunc("/user/get-roles", appl(func(w http.ResponseWriter, r *http.Request) {
 		userendpoints.GetRoles(w, r, userService)
 	}))
+	router.HandleFunc("/user/get-permissions", appl(func(w http.ResponseWriter, r *http.Request) {
+		userendpoints.GetPermissions(w, r, userService)
+	}))
+	router.HandleFunc("/user/set-role-permissions", appl(func(w http.ResponseWriter, r *http.Request) {
+		userendpoints.SetRolePermissions(w, r, userService)
+	}))
 
 	genericService, err := genericservice.NewGenericService(
 		configService,

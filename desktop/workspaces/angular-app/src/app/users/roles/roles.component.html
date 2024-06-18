@@ -1,0 +1,35 @@
+<!--
+ * @license
+ * Copyright (c) The Authors (see the AUTHORS file)
+ *
+ * This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3) for personal, non-commercial use.
+ * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
+ *
+ * For commercial use, a separate license must be obtained by purchasing from The Authors.
+ * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
+ -->
+<b-sidebar-page>
+	<div class="flex-container">
+		<div class="left-column">
+			<div *ngFor="let role of roles" (click)="selectRole(role)">
+				<div class="role" [class.selected]="selectedRole?.id === role.id">
+					{{ role?.name }}
+				</div>
+			</div>
+		</div>
+		<div class="right-column" *ngIf="selectedRole">
+			<div *ngFor="let permission of permissions">
+				<div class="permission">
+					<input
+						type="checkbox"
+						[id]="permission.id"
+						[checked]="selectedRolePermissions.has(permission.id || '')"
+						(change)="togglePermission(permission.id || '')"
+					/>
+					<label [for]="permission.id">{{ permission?.name }}</label>
+				</div>
+			</div>
+			<button (click)="savePermissions()">Save Permissions</button>
+		</div>
+	</div>
+</b-sidebar-page>

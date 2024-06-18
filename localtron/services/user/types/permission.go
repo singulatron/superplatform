@@ -39,6 +39,12 @@ type CreatePermissionRequest struct {
 type CreatePermissionResponse struct {
 }
 
+type GetPermissionsRequest struct{}
+
+type GetPermissionsResponse struct {
+	Permissions []*Permission `json:"permissions"`
+}
+
 var PermissionUserCreate = Permission{
 	Id:   "user.create",
 	Name: "User Create",
