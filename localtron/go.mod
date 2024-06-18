@@ -1,6 +1,6 @@
 module github.com/singulatron/singulatron/localtron
 
-go 1.21
+go 1.22.4
 
 require (
 	github.com/andybalholm/brotli v1.1.0
