@@ -71,3 +71,10 @@ type GetRolesRequest struct {
 type GetRolesResponse struct {
 	Roles []*Role `json:"roles,omitempty"`
 }
+
+type SetRolePermissionsRequest struct {
+	RoleId        string   `json:"roleId,omitempty"`
+	PermissionIds []string `json:"permissionIds,omitempty"`
+}
+
+type SetRolePermissionsResponse struct{}

@@ -1,0 +1,71 @@
+/*
+ * @license
+ * Copyright (c) The Authors (see the AUTHORS file)
+ *
+ * This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3) for personal, non-commercial use.
+ * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
+ *
+ * For commercial use, a separate license must be obtained by purchasing from The Authors.
+ * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
+ */
+.flex-container {
+	display: flex;
+	height: 100vh;
+}
+
+.left-column {
+	width: 300px;
+	overflow-y: auto;
+	height: 100vh;
+	box-sizing: border-box;
+}
+
+.right-column {
+	height: 100vh;
+	width: 100%;
+	overflow-y: auto;
+}
+
+.role,
+.permission {
+	padding: 10px;
+	padding-left: 1rem;
+	margin-bottom: 5px;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: background-color 0.2s;
+	display: flex;
+	align-items: center;
+	font-size: 14px;
+}
+
+ion-item.selected {
+	background-color: var(--ion-color-light);
+	--background: var(--ion-color-light); 
+}
+
+ion-button {
+	margin-left: 10px;
+}
+
+ion-item ion-button {
+	margin-left: 0.5rem;
+	margin-right: 0;
+
+	font-size: 1rem;
+	line-height: 1.6rem;
+	--padding-top: 0.75rem;
+	--padding-bottom: 0.75rem;
+	--padding-start: 2rem;
+	--padding-end: 2rem;
+}
+
+ion-item {
+	--inner-padding-end: 0;
+}
+
+ion-checkbox.custom-checkbox {
+	--background: var(--ion-color-primary); /* Background color of the checkbox */
+	--border-color: var(--ion-color-primary); /* Border color of the checkbox */
+	--checkmark-color: var(--ion-color-light); /* Checkmark color */
+}

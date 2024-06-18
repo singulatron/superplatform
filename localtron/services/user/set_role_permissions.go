@@ -11,12 +11,34 @@
 package userservice
 
 import (
+	"fmt"
+
 	"github.com/singulatron/singulatron/localtron/datastore"
-	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func (s *UserService) GetRoles() ([]*usertypes.Role, error) {
-	return s.rolesStore.Query(
-		datastore.All(),
-	).OrderBy("name", false).Find()
+func (s *UserService) SetRolePermissions(roleId string, permissionIds []string) error {
+	q := s.rolesStore.Query(
+		datastore.Id(roleId),
+	)
+	role, found, err := q.FindOne()
+	if err != nil {
+		return err
+	}
+	if !found {
+		return fmt.Errorf("Cannot find role %v", roleId)
+	}
+
+	perms, err := s.permissionsStore.Query(
+		datastore.Equal("id", permissionIds),
+	).Find()
+	if err != nil {
+		return err
+	}
+	if len(perms) < len(permissionIds) {
+		return fmt.Errorf("cannot find some permissions")
+	}
+
+	role.PermissionIds = permissionIds
+
+	return q.Update(role)
 }

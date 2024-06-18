@@ -127,6 +127,21 @@ export class UserService {
 	getRoles(): Promise<GetRolesResposne> {
 		return this.localtron.call('/user/get-roles', {});
 	}
+
+	getPermissions(): Promise<GetPermissionsResposne> {
+		return this.localtron.call('/user/get-permissions', {});
+	}
+
+	setRolePermissions(
+		roleId: string,
+		permissionIds: string[]
+	): Promise<SetRolePermissionsResponse> {
+		let req: SetRolePermissionsRequest = {
+			roleId: roleId,
+			permissionIds: permissionIds,
+		};
+		return this.localtron.call('/user/set-role-permissions', req);
+	}
 }
 
 export interface User {
@@ -263,3 +278,12 @@ export interface GetRolesRequest {}
 export interface GetRolesResposne {
 	roles: Role[];
 }
+
+export interface GetPermissionsRequest {}
+
+export interface GetPermissionsResposne {
+	permissions: Permission[];
+}
+
+export interface SetRolePermissionsRequest {}
+export interface SetRolePermissionsResponse {}

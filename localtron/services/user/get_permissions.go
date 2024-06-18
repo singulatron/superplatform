@@ -15,8 +15,8 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func (s *UserService) GetRoles() ([]*usertypes.Role, error) {
-	return s.rolesStore.Query(
+func (s *UserService) GetPermissions() ([]*usertypes.Permission, error) {
+	return s.permissionsStore.Query(
 		datastore.All(),
 	).OrderBy("name", false).Find()
 }

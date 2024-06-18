@@ -13,7 +13,7 @@ import { NavController } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs/operators';
 
-type appGroup = 'ai' | 'user-management' | '';
+type appGroup = 'ai-group' | 'users-group' | '';
 
 @Component({
 	selector: 'b-sidebar-page',
@@ -52,11 +52,15 @@ export class SidebarPageComponent {
 			this.currentPath === 'chat' ||
 			this.currentPath === 'model-explorer'
 		) {
-			return 'ai';
+			return 'ai-group';
 		}
 
-		if (this.currentPath === 'users' || this.currentPath === 'add-user') {
-			return 'user-management';
+		if (
+			this.currentPath === 'users' ||
+			this.currentPath === 'add-user' ||
+			this.currentPath === 'roles'
+		) {
+			return 'users-group';
 		}
 
 		return '';
