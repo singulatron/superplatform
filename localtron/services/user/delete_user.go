@@ -18,6 +18,9 @@ import (
 )
 
 func (s *UserService) DeleteUser(userId string) error {
+	if userId == "" {
+		return errors.New("no user id")
+	}
 	q := s.usersStore.Query(
 		datastore.Id(userId),
 	)
@@ -42,6 +45,9 @@ func (s *UserService) DeleteUser(userId string) error {
 		).Find()
 		if err != nil {
 			return err
+		}
+		if len(adminUsers) == 0 {
+			return errors.New("cannot detect number of admin users")
 		}
 		if len(adminUsers) == 1 {
 			return errors.New("Cannot delete last admin user")
