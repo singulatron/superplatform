@@ -142,6 +142,13 @@ export class UserService {
 		};
 		return this.localtron.call('/user/set-role-permissions', req);
 	}
+
+	deleteRole(roleId: string): Promise<DeleteRoleResponse> {
+		let req: DeleteRoleRequest = {
+			roleId: roleId,
+		};
+		return this.localtron.call('/user/delete-role', req);
+	}
 }
 
 export interface User {
