@@ -215,8 +215,9 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 	}()
 
 	err = llmClient.PostCompletionsStreamed(llm.PostCompletionsRequest{
-		Prompt: fullPrompt,
-		Stream: true,
+		Prompt:    fullPrompt,
+		Stream:    true,
+		MaxTokens: -1,
 	}, func(resp *llm.CompletionResponse) {
 		mu.Lock()
 		responseCount++
