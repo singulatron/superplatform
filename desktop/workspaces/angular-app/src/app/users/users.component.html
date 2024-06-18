@@ -27,6 +27,12 @@
 								<span style="color: #666">({{ users[i].email }})</span>
 							</ion-label>
 							<ion-icon
+								(click)="deleteUser($event, users[i].id || '')"
+								name="trash-outline"
+								slot="end"
+								class="icon-delete"
+							></ion-icon>
+							<ion-icon
 								slot="end"
 								style="color: #bdbdbd; font-size: 1.25rem"
 								[name]="users[i].visible ? 'chevron-down' : 'chevron-forward'"

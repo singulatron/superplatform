@@ -14,20 +14,39 @@ import (
 	"errors"
 
 	"github.com/singulatron/singulatron/localtron/datastore"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 func (s *UserService) DeleteUser(userId string) error {
 	q := s.usersStore.Query(
 		datastore.Id(userId),
 	)
-	_, found, err := q.FindOne()
+	user, found, err := q.FindOne()
 	if err != nil {
 		return err
 	}
 	if !found {
 		return errors.New("user not found")
 	}
-	// @todo make sure the last admin cannot be deleted
+
+	isAdminUser := false
+	for _, roleId := range user.RoleIds {
+		if roleId == usertypes.RoleAdmin.Id {
+			isAdminUser = true
+		}
+	}
+
+	if isAdminUser {
+		adminUsers, err := s.usersStore.Query(
+			datastore.Equal("roleIds", usertypes.RoleAdmin.Id),
+		).Find()
+		if err != nil {
+			return err
+		}
+		if len(adminUsers) == 1 {
+			return errors.New("Cannot delete last admin user")
+		}
+	}
 
 	return q.Delete()
 }

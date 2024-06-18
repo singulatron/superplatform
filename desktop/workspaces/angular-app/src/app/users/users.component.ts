@@ -118,4 +118,37 @@ export class UsersComponent implements OnInit {
 			toast.present();
 		}
 	}
+
+	async deleteUser($event: any, userId: string) {
+		$event.stopPropagation();
+
+		try {
+			await this.userService.deleteUser(userId);
+
+			let toastMsg = `User ${name} deleted`;
+
+			const toast = await this.toast.create({
+				color: 'secondary',
+				message: toastMsg,
+				duration: 5000,
+				position: 'middle',
+			});
+			toast.present();
+
+			this.loggedInInit();
+		} catch (err) {
+			let errorMessage = 'An unexpected error occurred';
+			try {
+				errorMessage = (JSON.parse(err as any) as any)?.error;
+			} catch {}
+
+			const toast = await this.toast.create({
+				color: 'danger',
+				message: errorMessage,
+				duration: 5000,
+				position: 'middle',
+			});
+			toast.present();
+		}
+	}
 }

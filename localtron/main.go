@@ -296,8 +296,14 @@ func main() {
 	router.HandleFunc("/user/create-user", appl(func(w http.ResponseWriter, r *http.Request) {
 		userendpoints.CreateUser(w, r, userService)
 	}))
+	router.HandleFunc("/user/delete-user", appl(func(w http.ResponseWriter, r *http.Request) {
+		userendpoints.DeleteUser(w, r, userService)
+	}))
 	router.HandleFunc("/user/get-roles", appl(func(w http.ResponseWriter, r *http.Request) {
 		userendpoints.GetRoles(w, r, userService)
+	}))
+	router.HandleFunc("/user/delete-role", appl(func(w http.ResponseWriter, r *http.Request) {
+		userendpoints.DeleteRole(w, r, userService)
 	}))
 	router.HandleFunc("/user/get-permissions", appl(func(w http.ResponseWriter, r *http.Request) {
 		userendpoints.GetPermissions(w, r, userService)
