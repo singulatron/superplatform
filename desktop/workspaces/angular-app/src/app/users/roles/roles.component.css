@@ -39,7 +39,25 @@
 	font-size: 14px;
 }
 
-.role.selected {
-	background-color: #e0e0e0;
+.selected {
+	background-color: var(--ion-color-light);
 }
 
+ion-button {
+	margin-left: 10px;
+}
+
+ion-item ion-button {
+	margin-left: auto;
+	margin-right: 0;
+	padding: 0.5rem 1rem;
+	height: auto;
+	font-size: 1rem;
+	line-height: 1.6rem;
+}
+
+ion-checkbox.custom-checkbox {
+	--background: var(--ion-color-primary); /* Background color of the checkbox */
+	--border-color: var(--ion-color-primary); /* Border color of the checkbox */
+	--checkmark-color: var(--ion-color-light); /* Checkmark color */
+}

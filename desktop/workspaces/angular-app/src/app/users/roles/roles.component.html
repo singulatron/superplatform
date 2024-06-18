@@ -9,27 +9,55 @@
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  -->
 <b-sidebar-page>
-	<div class="flex-container">
-		<div class="left-column">
-			<div *ngFor="let role of roles" (click)="selectRole(role)">
-				<div class="role" [class.selected]="selectedRole?.id === role.id">
-					{{ role?.name }}
-				</div>
-			</div>
-		</div>
-		<div class="right-column" *ngIf="selectedRole">
-			<div *ngFor="let permission of permissions">
-				<div class="permission">
-					<input
-						type="checkbox"
-						[id]="permission.id"
-						[checked]="selectedRolePermissions.has(permission.id || '')"
-						(change)="togglePermission(permission.id || '')"
-					/>
-					<label [for]="permission.id">{{ permission?.name }}</label>
-				</div>
-			</div>
-			<button (click)="savePermissions()">Save Permissions</button>
-		</div>
-	</div>
+	<ion-grid>
+		<ion-row>
+			<ion-col size="4">
+				<ion-searchbar
+					[(ngModel)]="roleSearchQuery"
+					placeholder="Search Roles"
+				></ion-searchbar>
+				<ion-list>
+					<ion-list-header>
+						<ion-label>Roles</ion-label>
+					</ion-list-header>
+					<ion-item
+						*ngFor="let role of filteredRoles()"
+						(click)="selectRole(role)"
+						[class.selected]="selectedRole?.id === role.id"
+						button
+					>
+						<ion-label>{{ role?.name }}</ion-label>
+					</ion-item>
+				</ion-list>
+			</ion-col>
+			<ion-col size="8">
+				<ion-item *ngIf="selectedRole">
+					<ion-searchbar
+						[(ngModel)]="permissionSearchQuery"
+						placeholder="Search Permissions"
+					></ion-searchbar>
+					<ion-button
+						slot="end"
+						style="color: white;"
+						(click)="savePermissions()"
+						>Save</ion-button
+					>
+				</ion-item>
+				<ion-list *ngIf="selectedRole">
+					<ion-list-header>
+						<ion-label>Permissions</ion-label>
+					</ion-list-header>
+					<ion-item *ngFor="let permission of filteredPermissions()">
+						<ion-checkbox
+							class="custom-checkbox"
+							slot="start"
+							[checked]="selectedRolePermissions.has(permission.id || '')"
+							(ionChange)="togglePermission(permission.id || '')"
+						></ion-checkbox>
+						<ion-label>{{ permission?.name }}</ion-label>
+					</ion-item>
+				</ion-list>
+			</ion-col>
+		</ion-row>
+	</ion-grid>
 </b-sidebar-page>

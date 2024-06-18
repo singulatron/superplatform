@@ -13,6 +13,9 @@ export class RolesComponent {
 	selectedRole: Role | null = null;
 	selectedRolePermissions: Set<string> = new Set<string>();
 
+	roleSearchQuery: string = '';
+	permissionSearchQuery: string = '';
+
 	constructor(private userService: UserService) {
 		this.userService.user$.pipe(first()).subscribe(() => {
 			this.loggedInInit();
@@ -54,6 +57,21 @@ export class RolesComponent {
 				this.selectedRole.id as string,
 				permissionIds
 			);
+			// Optionally, you can provide some user feedback here, such as a success message
 		}
+	}
+
+	filteredRoles() {
+		return this.roles.filter((role) =>
+			role.name?.toLowerCase().includes(this.roleSearchQuery.toLowerCase())
+		);
+	}
+
+	filteredPermissions() {
+		return this.permissions.filter((permission) =>
+			permission.name
+				.toLowerCase()
+				.includes(this.permissionSearchQuery.toLowerCase())
+		);
 	}
 }
