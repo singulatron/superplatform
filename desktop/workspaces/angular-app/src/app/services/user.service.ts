@@ -133,13 +133,13 @@ export class UserService {
 	}
 
 	setRolePermissions(
-		userId: string,
+		roleId: string,
 		permissionIds: string[]
 	): Promise<SetRolePermissionsResponse> {
 		let req: SetRolePermissionsRequest = {
-			userId: userId,
+			roleId: roleId,
 			permissionIds: permissionIds,
-		}
+		};
 		return this.localtron.call('/user/set-role-permissions', req);
 	}
 }
