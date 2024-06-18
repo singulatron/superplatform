@@ -17,19 +17,41 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func (s *UserService) DeleteRole(roleId string) error {
-	q := s.rolesStore.Query(
-		datastore.Id(roleId),
+func (s *UserService) DeleteUser(userId string) error {
+	if userId == "" {
+		return errors.New("no user id")
+	}
+	q := s.usersStore.Query(
+		datastore.Id(userId),
 	)
-	role, found, err := q.FindOne()
+	user, found, err := q.FindOne()
 	if err != nil {
 		return err
 	}
 	if !found {
 		return errors.New("user not found")
 	}
-	if role.Id == usertypes.RoleAdmin.Id {
-		return errors.New("cannot delete default role")
+
+	isAdminUser := false
+	for _, roleId := range user.RoleIds {
+		if roleId == usertypes.RoleAdmin.Id {
+			isAdminUser = true
+		}
+	}
+
+	if isAdminUser {
+		adminUsers, err := s.usersStore.Query(
+			datastore.Equal("roleIds", usertypes.RoleAdmin.Id),
+		).Find()
+		if err != nil {
+			return err
+		}
+		if len(adminUsers) == 0 {
+			return errors.New("cannot detect number of admin users")
+		}
+		if len(adminUsers) == 1 {
+			return errors.New("Cannot delete last admin user")
+		}
 	}
 
 	return q.Delete()

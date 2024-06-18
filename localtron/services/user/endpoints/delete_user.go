@@ -18,17 +18,14 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func SetRolePermissions(
-	w http.ResponseWriter,
-	r *http.Request,
-	userService *userservice.UserService) {
-	err := userService.IsAuthorized(usertypes.PermissionRoleEdit.Id, r)
+func DeleteUser(w http.ResponseWriter, r *http.Request, userService *userservice.UserService) {
+	err := userService.IsAuthorized(usertypes.PermissionUserDelete.Id, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 
-	req := usertypes.SetRolePermissionsRequest{}
+	req := usertypes.DeleteUserRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `invalid JSON`, http.StatusBadRequest)
@@ -36,12 +33,12 @@ func SetRolePermissions(
 	}
 	defer r.Body.Close()
 
-	err = userService.SetRolePermissions(req.RoleId, req.PermissionIds)
+	err = userService.DeleteUser(req.UserId)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	bs, _ := json.Marshal(usertypes.SetRolePermissionsResponse{})
+	bs, _ := json.Marshal(usertypes.DeleteUserResponse{})
 	w.Write(bs)
 }

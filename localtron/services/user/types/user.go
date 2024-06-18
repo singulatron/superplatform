@@ -89,3 +89,9 @@ type CreateUserRequest struct {
 
 type CreateUserResponse struct {
 }
+
+type DeleteUserRequest struct {
+	UserId string `json:"userId,omitempty"`
+}
+
+type DeleteUserResponse struct{}
