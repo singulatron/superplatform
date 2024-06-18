@@ -14,24 +14,11 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/pkg/errors"
 	downloadtypes "github.com/singulatron/singulatron/localtron/services/download/types"
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 )
 
-func (ms *ModelService) Status(modelId string) (*modeltypes.Status, error) {
-	if modelId == "" {
-		conf, err := ms.confiService.GetConfig()
-		if err != nil {
-			return nil, err
-		}
-		modelId = conf.Model.CurrentModelId
-	}
-
-	if modelId == "" {
-		return nil, errors.New("cannot locate current model id")
-	}
-
+func (ms *ModelService) Status(platform *modeltypes.Platform, assets modeltypes.Assets) (*modeltypes.Status, error) {
 	dockerHost := ms.dockerService.GetDockerHost()
 	singulatronLLMHost := os.Getenv("SINGULATRON_LLM_HOST")
 	if singulatronLLMHost != "" {
@@ -40,17 +27,19 @@ func (ms *ModelService) Status(modelId string) (*modeltypes.Status, error) {
 
 	modelAddress := fmt.Sprintf("%v:%v", dockerHost, portNum)
 
-	downl, exists := ms.downloadService.GetDownload(modelId)
-	if !exists || downl.Status != downloadtypes.DownloadStatusCompleted {
-		return &modeltypes.Status{
-			CurrentModelId: modelId,
-			SelectedExists: false,
-			ModelAddress:   modelAddress,
-		}, nil
+	for _, assetUrl := range assets {
+		downl, exists := ms.downloadService.GetDownload(assetUrl)
+		if !exists || downl.Status != downloadtypes.DownloadStatusCompleted {
+			return &modeltypes.Status{
+				CurrentModelId: modelId,
+				SelectedExists: false,
+				ModelAddress:   modelAddress,
+			}, nil
+		}
 	}
 
 	isRunning := false
-	if v, err := ms.dockerService.ModelIsRunning(modelId); err == nil && v {
+	if v, err := ms.dockerService.HashIsRunning(modelId); err == nil && v {
 		isRunning = true
 	}
 	// @todo this is not threadsafe, needs locking, will panic

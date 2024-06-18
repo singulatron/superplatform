@@ -27,7 +27,7 @@ type ModelService struct {
 
 	userService     *userservice.UserService
 	downloadService *downloadservice.DownloadService
-	confiService    *configservice.ConfigService
+	configService   *configservice.ConfigService
 	dockerService   *dockerservice.DockerService
 }
 
@@ -39,7 +39,7 @@ func NewModelService(
 	srv := &ModelService{
 		userService:     userService,
 		downloadService: ds,
-		confiService:    cs,
+		configService:   cs,
 		dockerService:   dockerService,
 
 		modelStateMap: map[int]*modeltypes.ModelState{},

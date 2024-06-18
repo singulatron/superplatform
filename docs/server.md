@@ -42,7 +42,7 @@ singulatron-backend:
     # For NVIDIA GPU acceleration uncomment the following flags
     #
     # - SINGULATRON_GPU_ENABLED=true
-    # - SINGULATRON_IMAGE_OVERRIDE=crufter/llama-cpp-python-cuda
+    # - SINGULATRON_GPU_PLATFORM=cuda
 ```
 
 ### System Specific Settings

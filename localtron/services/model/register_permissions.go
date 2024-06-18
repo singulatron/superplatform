@@ -39,3 +39,27 @@ func (p *ModelService) registerPermissions() error {
 
 	return nil
 }
+
+func (p *ModelService) bootstrapModels() error {
+	for _, permission := range modeltypes.Models {
+		_, err := p.userService.UpsertPermission(
+			permission.Id,
+			permission.Name,
+			permission.Description,
+		)
+		if err != nil {
+			return err
+		}
+	}
+
+	for _, role := range []*usertypes.Role{
+		usertypes.RoleAdmin,
+		usertypes.RoleUser,
+	} {
+		for _, permission := range modeltypes.ModelPermissions {
+			p.userService.AddPermissionToRole(role.Id, permission.Id)
+		}
+	}
+
+	return nil
+}

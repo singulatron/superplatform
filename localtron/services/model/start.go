@@ -15,6 +15,7 @@ import (
 	"log/slog"
 	"net"
 	"os"
+	"regexp"
 	"strings"
 	"time"
 
@@ -23,6 +24,7 @@ import (
 	"github.com/singulatron/singulatron/localtron/llm"
 	"github.com/singulatron/singulatron/localtron/logger"
 
+	dockerservice "github.com/singulatron/singulatron/localtron/services/docker"
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 )
 
@@ -31,23 +33,48 @@ const portNum = 8001
 /*
 Starts the currently activated model
 */
-func (ms *ModelService) Start(modelId string) error {
-	stat, err := ms.Status(modelId)
-	if err != nil {
-		return err
-	}
-	if !stat.SelectedExists {
-		return fmt.Errorf("cannot start selected model as it is not downloaded yet")
+func (ms *ModelService) Start(platform *modeltypes.Platform, assets modeltypes.Assets) error {
+	env := map[string]string{}
+	for assetName, assetURL := range assets {
+		download, exists := ms.downloadService.GetDownload(assetURL)
+		if !exists {
+			return fmt.Errorf("asset with URL '%v' is cannot be found locally", assetURL)
+		}
+
+		assetPath := download.FilePath
+		assetPath = transformWinPaths(assetPath)
+
+		env[assetName] = assetPath
 	}
 
-	image := "crufter/llama-cpp-python-simple"
-	imageOverride := os.Getenv("SINGULATRON_IMAGE_OVERRIDE")
-	if imageOverride != "" {
-		image = imageOverride
-	}
-	// @todo implement a way to detect optimal image for the host
+	launchOptions := &dockerservice.LaunchOptions{}
 
-	launchInfo, err := ms.dockerService.LaunchModel("the-singulatron", portNum, image, stat.CurrentModelId)
+	configFolderPath := ms.configService.ConfigDirectory
+	singulatronHostFolder := os.Getenv("SINGULATRON_HOST_FOLDER")
+	for envName, assetPath := range env {
+		if singulatronHostFolder != "" {
+			assetPath = strings.Replace(assetPath, configFolderPath, sfolder, 1)
+		}
+		fileName := path.Base(assetPath)
+		// ie. MODEL=/models/mistral-7b-instruct-v0.2.Q2_K.gguf
+		launchOptions.Envs = append(launchOptions.Envs, fmt.Sprintf("%v:/assets/%v", envName, fileName))
+		launchOptions.Binds = append(launchOptions.Binds, fmt.Sprintf("%v:/assets/%v", assetPath, fileName))
+	}
+
+	image := platform.Container.Images.Default
+	gpuEnabled := os.Getenv("SINGULATRON_GPU_ENABLED")
+	if gpuEnabled == "true" {
+		launchOptions.GPUEnabled = true
+		switch os.Getenv("SINGULATRON_GPU_PLATFORM") {
+		case "cuda":
+			image = platform.Container.Images.Cuda
+		}
+
+		// only applicable to nvidia but should not affect others?
+		launchOptions.Env = append(launchOptions.Env, "NVIDIA_VISIBLE_DEVICES=all")
+	}
+
+	launchInfo, err := ms.dockerService.LaunchContainer(image, portNum, platform)
 	if err != nil {
 		return errors.Wrap(err, "failed to launch container")
 	}
@@ -60,6 +87,28 @@ func (ms *ModelService) Start(modelId string) error {
 	}
 
 	return nil
+}
+
+// transformWinPaths maps win paths to unix paths so WSL can understand it
+// eg. C:\users -> /mnt/c/users
+func transformWinPaths(modelDir string) string {
+	parts := strings.SplitN(modelDir, "\\", 2)
+	if len(parts) == 1 {
+		return modelDir
+	}
+
+	driveRegex := regexp.MustCompile(`^([A-Z]):`)
+	newFirstPart := driveRegex.ReplaceAllStringFunc(parts[0], func(match string) string {
+		driveLetter := strings.ToLower(match[:1])
+		return "/mnt/" + driveLetter
+	})
+
+	newModelDir := newFirstPart
+	if len(parts) > 1 {
+		newModelDir += "/" + strings.ReplaceAll(parts[1], "\\", "/")
+	}
+
+	return newModelDir
 }
 
 func (ms *ModelService) get(port int) *modeltypes.ModelState {

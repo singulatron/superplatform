@@ -152,14 +152,14 @@
 						"
 					>
 						<ion-button
-							(click)="download(model.id)"
+							(click)="download(model)"
 							*ngIf="
 								!isDownloading(
-									model.id,
+									model,
 									downloadService.onFileDownloadStatus$ | async
 								) &&
 								!downloaded(
-									model.id,
+									model,
 									downloadService.onFileDownloadStatus$ | async
 								)
 							"

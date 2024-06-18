@@ -2,6 +2,51 @@ package modeltypes
 
 import "sync"
 
+/*
+Platform roughly represents an AI container + its settings.
+*/
+type Platform struct {
+	ID        string    `json:"id"`
+	Name      *string   `json:"name,omitempty"`
+	Version   *int      `json:"version,omitempty"`
+	Container Container `json:"container"`
+}
+
+type Container struct {
+	Port   int    `json:"port"`
+	Images Images `json:"images"`
+}
+
+type Images struct {
+	Default string `json:"default"`
+	Cuda    string `json:"cuda,omitempty"`
+}
+
+type Assets map[string]string
+
+type Model struct {
+	Id             string
+	Platform       Platform
+	Name           string
+	Parameters     string
+	Flavour        string
+	Version        string
+	Quality        string
+	Extension      string
+	FullName       string
+	Tags           []string
+	Mirrors        []string
+	Size           float64
+	Uncensored     bool
+	MaxRam         float64
+	Description    string
+	PromptTemplate string
+	QuantComment   string
+	MaxBits        int
+	Bits           int
+	Assets         map[string]string
+}
+
 /* Internal type for ModelService */
 type ModelState struct {
 	sync.Mutex
@@ -41,7 +86,8 @@ type StatusResponse struct {
 }
 
 type StartRequest struct {
-	Url string `json:"url"`
+	Platform Platform `json:"assets"`
+	Assets   Assets   `json:"assets"`
 }
 
 type StartResponse struct {

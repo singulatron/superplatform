@@ -16,6 +16,7 @@ import {
 	DownloadStatusChangeEvent,
 } from '../../services/download.service';
 import { ConfigService } from '../../services/config.service';
+import { Mode } from 'fs';
 
 const veryLargeScreenWidth = 1900;
 
@@ -107,7 +108,8 @@ export class AdvancedModelExplorerComponent {
 			models = models.filter((model) => {
 				return downloadsResponse.downloads.find(
 					(download) =>
-						download.status === 'completed' && download.id === model.id
+						download.status === 'completed' &&
+						model.assetURLs?.includes(download.id)
 				);
 			});
 		}
@@ -149,11 +151,16 @@ export class AdvancedModelExplorerComponent {
 		this.loadPage(this.currentPage);
 	}
 
-	isDownloading(id: string, status: DownloadStatusChangeEvent | null): boolean {
+	isDownloading(
+		model: Model,
+		status: DownloadStatusChangeEvent | null
+	): boolean {
 		if (status === null) {
 			return false;
 		}
-		let c = status?.allDownloads?.find((v) => v.id === id);
+		let c = status?.allDownloads?.find((download) =>
+			model.assetURLs?.includes(download.url)
+		);
 		if (c?.status === 'inProgress' || c?.status === 'paused') {
 			return true;
 		}
@@ -178,12 +185,14 @@ export class AdvancedModelExplorerComponent {
 		return `Flavour ${flavour}`;
 	}
 
-	downloaded(id: string, status: DownloadStatusChangeEvent | null): boolean {
+	downloaded(model: Model, status: DownloadStatusChangeEvent | null): boolean {
 		if (status === null) {
 			return false;
 		}
 		if (
-			status?.allDownloads?.find((v) => v.id === id)?.status === 'completed'
+			status?.allDownloads?.find((download) =>
+				model.assetURLs?.includes(download.url)
+			)?.status === 'completed'
 		) {
 			return true;
 		}
@@ -194,8 +203,12 @@ export class AdvancedModelExplorerComponent {
 		return status?.allDownloads?.find((v) => v.id === id)?.progress || 0;
 	}
 
-	async download(id: string) {
-		this.downloadService.downloadDo(id);
+	async download(model: Model) {
+		if (!model?.assetURLs?.length) {
+			throw `No assets to download for ${model.id}`;
+		}
+
+		this.downloadService.downloadDo(model.assetURLs[0]);
 	}
 
 	toggleItem(id: string) {

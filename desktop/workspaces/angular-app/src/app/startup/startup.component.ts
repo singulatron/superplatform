@@ -169,10 +169,20 @@ export class StartupComponent implements OnInit {
 
 	async download() {
 		const config = this.configService.lastConfig;
-		if (!config?.model?.currentModelId) {
+		let modelId = config?.model?.currentModelId;
+		if (!modelId) {
 			throw 'Model id is empty';
 		}
-		this.downloadService.downloadDo(config?.model?.currentModelId);
+		let model = this.models?.find((v) => v.id == modelId);
+		if (!model) {
+			throw `Cannot find model with id ${modelId}`;
+		}
+		if (!model?.assetURLs?.length) {
+			throw `Nothing to download for ${modelId}`;
+		}
+		if (model.assetURLs) {
+			this.downloadService.downloadDo(model?.assetURLs[0]);
+		}
 	}
 
 	isRuntimeInstalling = false;

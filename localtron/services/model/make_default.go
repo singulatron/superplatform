@@ -21,10 +21,10 @@ func (ms *ModelService) MakeDefault(modelId string) error {
 		return fmt.Errorf("cannot set model as it is not downloaded yet")
 	}
 
-	conf, err := ms.confiService.GetConfig()
+	conf, err := ms.configService.GetConfig()
 	if err != nil {
 		return err
 	}
 	conf.Model.CurrentModelId = modelId
-	return ms.confiService.SaveConfig(conf)
+	return ms.configService.SaveConfig(conf)
 }
