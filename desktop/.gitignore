@@ -110,3 +110,4 @@ mycert.pfx.base64
 mycert.pfx
 mycert.pass
 app.json
+**/test-results*
