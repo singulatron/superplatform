@@ -10,9 +10,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-func (d *DockerService) GetContainerLogsAndStatus(modelURL string, logCount int) (string, error) {
-	modelHash := generateStringHash(modelURL)
-
+func (d *DockerService) GetContainerLogsAndStatus(singulatronHash string, logCount int) (string, error) {
 	ctx := context.Background()
 	containers, err := d.client.ContainerList(ctx, container.ListOptions{All: true})
 	if err != nil {
@@ -20,7 +18,7 @@ func (d *DockerService) GetContainerLogsAndStatus(modelURL string, logCount int)
 	}
 
 	for _, modelContainer := range containers {
-		if modelContainer.Labels["singulatron-model-hash"] == modelHash {
+		if modelContainer.Labels["singulatron-hash"] == singulatronHash {
 			logOptions := container.LogsOptions{
 				ShowStdout: true,
 				ShowStderr: true,

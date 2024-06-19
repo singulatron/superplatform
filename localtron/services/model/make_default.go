@@ -17,7 +17,7 @@ func (ms *ModelService) MakeDefault(modelId string) error {
 	if err != nil {
 		return err
 	}
-	if !stat.SelectedExists {
+	if !stat.AssetsReady {
 		return fmt.Errorf("cannot set model as it is not downloaded yet")
 	}
 

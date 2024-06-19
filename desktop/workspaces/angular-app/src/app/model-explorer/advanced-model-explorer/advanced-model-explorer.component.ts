@@ -9,14 +9,12 @@
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
 import { Component, HostListener } from '@angular/core';
-import { ModelService } from '../../services/model.service';
-import { ApiService, Model } from '../../../../shared/stdlib/api.service';
+import { ModelService, Model } from '../../services/model.service';
 import {
 	DownloadService,
 	DownloadStatusChangeEvent,
 } from '../../services/download.service';
 import { ConfigService } from '../../services/config.service';
-import { Mode } from 'fs';
 
 const veryLargeScreenWidth = 1900;
 
@@ -49,8 +47,7 @@ export class AdvancedModelExplorerComponent {
 	constructor(
 		public downloadService: DownloadService,
 		private modelService: ModelService,
-		public configService: ConfigService,
-		private api: ApiService
+		public configService: ConfigService
 	) {
 		this.detectLargeScreen();
 	}
@@ -109,7 +106,7 @@ export class AdvancedModelExplorerComponent {
 				return downloadsResponse.downloads.find(
 					(download) =>
 						download.status === 'completed' &&
-						model.assetURLs?.includes(download.id)
+						Object.values(model.assets)?.includes(download.id)
 				);
 			});
 		}
@@ -145,7 +142,7 @@ export class AdvancedModelExplorerComponent {
 	}
 
 	async ngOnInit(): Promise<void> {
-		this.allModels = await this.api.getModels();
+		this.allModels = await this.modelService.getModels();
 		this.allFilteredModels = this.allModels;
 		this.totalItems = this.allModels.length;
 		this.loadPage(this.currentPage);
@@ -159,7 +156,7 @@ export class AdvancedModelExplorerComponent {
 			return false;
 		}
 		let c = status?.allDownloads?.find((download) =>
-			model.assetURLs?.includes(download.url)
+			Object.values(model.assets).includes(download.url)
 		);
 		if (c?.status === 'inProgress' || c?.status === 'paused') {
 			return true;
@@ -191,7 +188,7 @@ export class AdvancedModelExplorerComponent {
 		}
 		if (
 			status?.allDownloads?.find((download) =>
-				model.assetURLs?.includes(download.url)
+				Object.values(model.assets)?.includes(download.url)
 			)?.status === 'completed'
 		) {
 			return true;
@@ -204,11 +201,14 @@ export class AdvancedModelExplorerComponent {
 	}
 
 	async download(model: Model) {
-		if (!model?.assetURLs?.length) {
+		let assetURLs = Object.values(model.assets);
+		if (!assetURLs?.length) {
 			throw `No assets to download for ${model.id}`;
 		}
 
-		this.downloadService.downloadDo(model.assetURLs[0]);
+		assetURLs.forEach((url) => {
+			this.downloadService.downloadDo(url);
+		});
 	}
 
 	toggleItem(id: string) {

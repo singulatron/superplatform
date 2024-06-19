@@ -174,14 +174,14 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 	if !stat.Running {
 		return fmt.Errorf("model '%v' is not running", currentPrompt.ModelId)
 	}
-	if stat.ModelAddress == "" {
+	if stat.Address == "" {
 		return errors.Wrap(err, "missing model address")
 	}
-	if !strings.HasPrefix(stat.ModelAddress, "http") {
-		stat.ModelAddress = "http://" + stat.ModelAddress
+	if !strings.HasPrefix(stat.Address, "http") {
+		stat.Address = "http://" + stat.Address
 	}
 	llmClient := llm.Client{
-		LLMAddress: stat.ModelAddress,
+		LLMAddress: stat.Address,
 	}
 
 	fullPrompt := currentPrompt.Prompt

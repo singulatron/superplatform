@@ -39,7 +39,7 @@ func Start(
 	}
 	defer r.Body.Close()
 
-	err = ms.Start(req.Url)
+	err = ms.Start(req.ModelId)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

@@ -16,7 +16,7 @@ import {
 	OnModelLaunch,
 	OnModelCheck,
 } from 'shared-lib/models/event-request-response';
-import { ApiService } from 'shared/stdlib/api.service';
+import { ApiService } from '../../../shared/stdlib/api.service';
 
 @Injectable({
 	providedIn: 'root',
@@ -46,7 +46,7 @@ export class ModelService {
 		this.listenToModelReady();
 	}
 
-	modelsFromServer = [];
+	modelsFromServer: Model[] = [];
 	serverModelsChecked = false;
 
 	async getModels(): Promise<Model[]> {
@@ -65,8 +65,8 @@ export class ModelService {
 			}
 		}
 
-		models.push(...this.modelsFromServer);
-		return models;
+		this.modelsFromServer.push(...this.modelsFromServer);
+		return this.modelsFromServer;
 	}
 
 	private listenToModelReady(): void {
@@ -74,7 +74,7 @@ export class ModelService {
 			this.dockerService.onDockerInfo$,
 			this.onModelCheck$,
 		]).subscribe(([dockerInfo, modelCheck]) => {
-			if (dockerInfo.hasDocker && modelCheck.selectedExists) {
+			if (dockerInfo.hasDocker && modelCheck.assetsReady) {
 				this.onModelReadySubject.next({ modelReady: true });
 			}
 		});
@@ -84,8 +84,8 @@ export class ModelService {
 		try {
 			let rsp = await this.modelStatus();
 
-			if (rsp?.status?.selectedExists) {
-				await this.modelStartWrapper(rsp?.status.currentModelId).catch((e) => {
+			if (rsp?.status?.assetsReady) {
+				await this.modelStart().catch((e) => {
 					console.error('Error starting model', {
 						error: e,
 					});
@@ -95,7 +95,7 @@ export class ModelService {
 				this.onModelLaunchSubject.next({});
 			}
 			this.onModelCheckSubject.next({
-				selectedExists: rsp?.status?.selectedExists,
+				assetsReady: rsp?.status?.assetsReady,
 			});
 		} catch (error) {
 			console.log(error);
@@ -105,27 +105,16 @@ export class ModelService {
 		}
 	}
 
-	async modelStatus(): Promise<ModelStatusResponse> {
-		return this.localtron.call('/model/status', {});
+	async modelStatus(modelId?: string): Promise<ModelStatusResponse> {
+		let req: ModelStatusRequest = {
+			modelId: modelId,
+		};
+		return this.localtron.call('/model/status', req);
 	}
 
-	private async modelStartWrapper(modelId: string) {
-		let models = await this.getModels();
-		let model = models.find((model) => model.id == modelId);
-		if (!model) {
-			throw `Model ${modelId} not found`;
-		}
-		await this.modelStart(model.platform, model.assets);
-		return;
-	}
-
-	async modelStart(
-		platform: Platform,
-		assets: { [key: string]: string }
-	): Promise<ModelStartResponse> {
+	async modelStart(modelId?: string): Promise<ModelStartResponse> {
 		let req: ModelStartRequest = {
-			platform: platform,
-			assets: assets,
+			modelId: modelId,
 		};
 		return this.localtron.call('/model/start', req);
 	}
@@ -140,29 +129,25 @@ export interface OnModelReady {
 }
 
 interface ModelStatus {
-	selectedExists: boolean;
-	currentModelId: string;
+	assetsReady: boolean;
 	/** Running triggers onModelLaunch on the frontend.
 	 * Running is true when the model is both running and answering
 	 * - fully loaded.
 	 */
 	running: boolean;
-	modelAddress: string;
+	address: string;
 }
 
-// {
-//   "status": {
-//     "selectedExists": false,
-//     "currentModelId": "https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q3_K_S.gguf"
-//   }
-// }
+interface ModelStatusRequest {
+	modelId?: string;
+}
+
 interface ModelStatusResponse {
 	status: ModelStatus | null;
 }
 
 interface ModelStartRequest {
-	platform: Platform;
-	assets: { [key: string]: string };
+	modelId?: string;
 }
 
 interface ModelStartResponse {}

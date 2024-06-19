@@ -171,10 +171,7 @@
 
 						<span
 							*ngIf="
-								downloaded(
-									model.id,
-									downloadService.onFileDownloadStatus$ | async
-								)
+								downloaded(model, downloadService.onFileDownloadStatus$ | async)
 							"
 						>
 							<ion-button
@@ -268,10 +265,10 @@
 				<ion-icon
 					*ngIf="
 						!isDownloading(
-							model.id,
+							model,
 							downloadService.onFileDownloadStatus$ | async
 						) &&
-						!downloaded(model.id, downloadService.onFileDownloadStatus$ | async)
+						!downloaded(model, downloadService.onFileDownloadStatus$ | async)
 					"
 					name="cloud-download-outline"
 				></ion-icon>

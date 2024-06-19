@@ -20,8 +20,6 @@ import {
 import { Subscription } from 'rxjs';
 
 import { ChangeDetectorRef } from '@angular/core';
-import { ApiService } from '../../stdlib/api.service';
-
 import { LocaltronService } from '../../../src/app/services/localtron.service';
 import {
 	ChatService,
@@ -32,7 +30,7 @@ import {
 	Prompt,
 	PromptService,
 } from '../../../src/app/services/prompt.service';
-import { Model } from '../../../src/app/services/model.service';
+import { ModelService, Model } from '../../../src/app/services/model.service';
 
 import { ElectronAppService } from '../../../src/app/services/electron-app.service';
 import { ConfigService } from '../../../src/app/services/config.service';
@@ -65,19 +63,19 @@ export class ChatBoxComponent implements OnChanges {
 	public messageCurrentlyStreamed = '';
 
 	constructor(
-		private api: ApiService,
 		private localtron: LocaltronService,
 		public lapi: ElectronAppService,
 		private cd: ChangeDetectorRef,
 		private configService: ConfigService,
 		private promptService: PromptService,
-		private chatService: ChatService
+		private chatService: ChatService,
+		private modelService: ModelService
 	) {}
 
 	private subscriptions: Subscription[] = [];
 
 	async ngOnInit() {
-		this.models = await this.api.getModels();
+		this.models = await this.modelService.getModels();
 		this.subscriptions.push(
 			this.configService.onConfigUpdate$.subscribe(async (config) => {
 				this.model = this.models?.find(

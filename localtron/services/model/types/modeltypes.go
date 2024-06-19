@@ -13,6 +13,7 @@ type Platform struct {
 }
 
 type Container struct {
+	/* Port is the internal port of the Container */
 	Port   int    `json:"port"`
 	Images Images `json:"images"`
 }
@@ -67,14 +68,13 @@ func (m *ModelState) SetHasCheckerRunning(v bool) {
 	m.HasCheckerRunning = v
 }
 
-type Status struct {
-	SelectedExists bool   `json:"selectedExists"`
-	CurrentModelId string `json:"currentModelId"`
+type ModelStatus struct {
+	AssetsReady bool `json:"assetsReady"`
 	/* Running triggers onModelLaunch on the frontend.
 	Running is true when the model is both running and answering
 	- fully loaded. */
-	Running      bool   `json:"running"`
-	ModelAddress string `json:"modelAddress"`
+	Running bool   `json:"running"`
+	Address string `json:"address"`
 }
 
 type StatusRequest struct {
@@ -82,12 +82,11 @@ type StatusRequest struct {
 }
 
 type StatusResponse struct {
-	Status *Status `json:"status"`
+	Status *ModelStatus `json:"status"`
 }
 
 type StartRequest struct {
-	Platform Platform `json:"assets"`
-	Assets   Assets   `json:"assets"`
+	ModelId string `json:"status,omitempty"`
 }
 
 type StartResponse struct {

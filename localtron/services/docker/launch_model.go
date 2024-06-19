@@ -12,8 +12,6 @@ package dockerservice
 
 import (
 	"context"
-	"crypto/sha256"
-	"encoding/hex"
 	"fmt"
 	"strings"
 
@@ -27,7 +25,7 @@ import (
 
 type LaunchOptions struct {
 	Name       string
-	Env        []string
+	Envs       []string
 	Labels     map[string]string
 	HostBinds  []string
 	GPUEnabled bool
@@ -61,7 +59,7 @@ func (d *DockerService) LaunchContainer(image string, internalPort, hostPort int
 
 	containerConfig := &container.Config{
 		Image: image,
-		Env:   options.Env,
+		Env:   options.Envs,
 		// @todo port 8000 here is llama cpp python specific
 		ExposedPorts: nat.PortSet{
 			nat.Port(fmt.Sprintf("%v/tcp", internalPort)): {},
@@ -128,7 +126,7 @@ func (d *DockerService) LaunchContainer(image string, internalPort, hostPort int
 
 	containerConfig.Labels["singulatron-hash"] = options.Hash
 
-	createdContainer, err := d.client.ContainerCreate(ctx, containerConfig, hostConfig, nil, nil, containerName)
+	createdContainer, err := d.client.ContainerCreate(ctx, containerConfig, hostConfig, nil, nil, options.Name)
 	if err != nil {
 		return nil, errors.Wrap(err, "error creating Docker container")
 	}
@@ -141,10 +139,4 @@ func (d *DockerService) LaunchContainer(image string, internalPort, hostPort int
 		NewContainerStarted: true,
 		PortNumber:          hostPort,
 	}, nil
-}
-
-func generateStringHash(vals string) string {
-	hasher := sha256.New()
-	hasher.Write([]byte(vals))
-	return hex.EncodeToString(hasher.Sum(nil))
 }

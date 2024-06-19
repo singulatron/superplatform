@@ -13,11 +13,9 @@ import { ElectronIpcService } from '../services/electron-ipc.service';
 import { WindowApiConst } from 'shared-lib';
 import { ElectronAppService } from '../services/electron-app.service';
 import { combineLatest, Subscription } from 'rxjs';
-import { ApiService } from '../../../shared/stdlib/api.service';
 import { DownloadService, DownloadDetails } from '../services/download.service';
-import { ModelService } from '../services/model.service';
+import { ModelService, Model } from '../services/model.service';
 import { DockerService } from '../services/docker.service';
-import { models } from '../../../shared/stdlib/api.service';
 import { ConfigService, Config } from '../services/config.service';
 
 @Component({
@@ -35,7 +33,7 @@ export class StartupComponent implements OnInit {
 		} catch (err) {}
 	}
 
-	models = models;
+	models: Model[] = [];
 	allIsWell = false;
 	isDownloading = false;
 	downloaded = false;
@@ -61,8 +59,7 @@ export class StartupComponent implements OnInit {
 		public configService: ConfigService,
 		public downloadService: DownloadService,
 		public dockerService: DockerService,
-		public modelService: ModelService,
-		private apiService: ApiService
+		public modelService: ModelService
 	) {}
 
 	handleDownloadStatus(data: DownloadDetails) {
@@ -115,7 +112,7 @@ export class StartupComponent implements OnInit {
 				this.scrollToBottom();
 			})
 		);
-		this.models = await this.apiService.getModels();
+		this.models = await this.modelService.getModels();
 
 		this.subscriptions.push(
 			this.lapi.onFolderSelect$.subscribe((data) => {
@@ -123,14 +120,14 @@ export class StartupComponent implements OnInit {
 			})
 		);
 
-		let selectedExists = false;
+		let assetsReady = false;
 		this.subscriptions.push(
 			this.modelService.onModelCheck$.subscribe((data) => {
-				if (data.selectedExists === undefined) {
+				if (data.assetsReady === undefined) {
 					return;
 				}
-				if (data.selectedExists !== selectedExists) {
-					selectedExists = data.selectedExists;
+				if (data.assetsReady !== assetsReady) {
+					assetsReady = data.assetsReady;
 				}
 			})
 		);
@@ -144,7 +141,7 @@ export class StartupComponent implements OnInit {
 			}
 			if (!dockerInfo.hasDocker) {
 				this.showSections.dependencies = true;
-			} else if (!modelCheck.selectedExists) {
+			} else if (!modelCheck.assetsReady) {
 				this.showSections.model = true;
 			} else {
 				this.showSections.starting = true;
@@ -177,12 +174,15 @@ export class StartupComponent implements OnInit {
 		if (!model) {
 			throw `Cannot find model with id ${modelId}`;
 		}
-		if (!model?.assetURLs?.length) {
+		let assetURLs = Object.values(model.assets);
+
+		if (!assetURLs?.length) {
 			throw `Nothing to download for ${modelId}`;
 		}
-		if (model.assetURLs) {
-			this.downloadService.downloadDo(model?.assetURLs[0]);
-		}
+
+		assetURLs.forEach((url) => {
+			this.downloadService.downloadDo(url);
+		});
 	}
 
 	isRuntimeInstalling = false;

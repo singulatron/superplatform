@@ -101,7 +101,7 @@
 					<ion-item button detail="false" (click)="toggleSection('model')">
 						<ion-icon
 							[ngStyle]="
-								(modelService.onModelCheck$ | async)?.selectedExists
+								(modelService.onModelCheck$ | async)?.assetsReady
 									? { color: '#53DD6C' }
 									: {}
 							"
@@ -117,12 +117,12 @@
 					</ion-item>
 					<ion-list class="dropdown" *ngIf="showSections.model">
 						<ion-item
-							*ngIf="(modelService?.onModelCheck$ | async)?.selectedExists"
+							*ngIf="(modelService?.onModelCheck$ | async)?.assetsReady"
 						>
 							{{ 'You successfully downloaded the model.' | translate }}
 						</ion-item>
 						<ion-item
-							*ngIf="!(modelService?.onModelCheck$ | async)?.selectedExists"
+							*ngIf="!(modelService?.onModelCheck$ | async)?.assetsReady"
 						>
 							<ion-label>
 								<ng-container *ngIf="!isDownloading && !downloaded">
@@ -211,7 +211,7 @@
 
 				<ng-container
 					*ngIf="
-						(modelService?.onModelCheck$ | async)?.selectedExists &&
+						(modelService?.onModelCheck$ | async)?.assetsReady &&
 						(dockerService?.onDockerInfo$ | async)?.hasDocker
 					"
 				>

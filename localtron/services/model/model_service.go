@@ -13,9 +13,12 @@ package modelservice
 import (
 	"sync"
 
+	"github.com/singulatron/singulatron/localtron/datastore"
+
 	configservice "github.com/singulatron/singulatron/localtron/services/config"
 	dockerservice "github.com/singulatron/singulatron/localtron/services/docker"
 	downloadservice "github.com/singulatron/singulatron/localtron/services/download"
+	storefactoryservice "github.com/singulatron/singulatron/localtron/services/store_factory"
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
 
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
@@ -23,7 +26,9 @@ import (
 
 type ModelService struct {
 	modelStateMutex sync.Mutex
-	modelStateMap   map[int]*modeltypes.ModelState
+	modelPortMap    map[int]*modeltypes.ModelState
+
+	modelsStore datastore.DataStore[*modeltypes.Model]
 
 	userService     *userservice.UserService
 	downloadService *downloadservice.DownloadService
@@ -42,9 +47,20 @@ func NewModelService(
 		configService:   cs,
 		dockerService:   dockerService,
 
-		modelStateMap: map[int]*modeltypes.ModelState{},
+		modelPortMap: map[int]*modeltypes.ModelState{},
 	}
-	err := srv.registerPermissions()
+	store, err := storefactoryservice.GetStore[*modeltypes.Model]("models")
+	if err != nil {
+		return nil, err
+	}
+	srv.modelsStore = store
+
+	err = srv.registerPermissions()
+	if err != nil {
+		return nil, err
+	}
+
+	err = srv.bootstrapModels()
 	if err != nil {
 		return nil, err
 	}
