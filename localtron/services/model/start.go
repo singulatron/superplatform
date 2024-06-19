@@ -83,7 +83,7 @@ func (ms *ModelService) Start(modelId string) error {
 		}
 		fileName := path.Base(assetPath)
 		// eg. MODEL=/assets/mistral-7b-instruct-v0.2.Q2_K.gguf
-		launchOptions.Envs = append(launchOptions.Envs, fmt.Sprintf("%v:/assets/%v", envName, fileName))
+		launchOptions.Envs = append(launchOptions.Envs, fmt.Sprintf("%v=/assets/%v", envName, fileName))
 		launchOptions.HostBinds = append(launchOptions.HostBinds, fmt.Sprintf("%v:/assets/%v", assetPath, fileName))
 	}
 
