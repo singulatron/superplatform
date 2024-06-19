@@ -28,7 +28,8 @@ type ModelService struct {
 	modelStateMutex sync.Mutex
 	modelPortMap    map[int]*modeltypes.ModelState
 
-	modelsStore datastore.DataStore[*modeltypes.Model]
+	modelsStore    datastore.DataStore[*modeltypes.Model]
+	platformsStore datastore.DataStore[*modeltypes.Platform]
 
 	userService     *userservice.UserService
 	downloadService *downloadservice.DownloadService
@@ -49,11 +50,17 @@ func NewModelService(
 
 		modelPortMap: map[int]*modeltypes.ModelState{},
 	}
-	store, err := storefactoryservice.GetStore[*modeltypes.Model]("models")
+	modelStore, err := storefactoryservice.GetStore[*modeltypes.Model]("models")
 	if err != nil {
 		return nil, err
 	}
-	srv.modelsStore = store
+	srv.modelsStore = modelStore
+
+	platformsStore, err := storefactoryservice.GetStore[*modeltypes.Platform]("platforms")
+	if err != nil {
+		return nil, err
+	}
+	srv.platformsStore = platformsStore
 
 	err = srv.registerPermissions()
 	if err != nil {

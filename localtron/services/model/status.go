@@ -61,7 +61,17 @@ func (ms *ModelService) Status(modelId string) (*modeltypes.ModelStatus, error) 
 		}
 	}
 
-	hash, err := modelToHash(model)
+	platform, found, err := ms.platformsStore.Query(
+		datastore.Id(model.PlatformId),
+	).FindOne()
+	if err != nil {
+		return nil, err
+	}
+	if !found {
+		return nil, errors.New("cannot find platform")
+	}
+
+	hash, err := modelToHash(model, platform)
 	if err != nil {
 		return nil, err
 	}

@@ -60,7 +60,6 @@ func (d *DockerService) LaunchContainer(image string, internalPort, hostPort int
 	containerConfig := &container.Config{
 		Image: image,
 		Env:   options.Envs,
-		// @todo port 8000 here is llama cpp python specific
 		ExposedPorts: nat.PortSet{
 			nat.Port(fmt.Sprintf("%v/tcp", internalPort)): {},
 		},
@@ -69,7 +68,6 @@ func (d *DockerService) LaunchContainer(image string, internalPort, hostPort int
 	hostConfig := &container.HostConfig{
 		Binds: options.HostBinds,
 		PortBindings: map[nat.Port][]nat.PortBinding{
-			// @todo port 8000 here is llama cpp python specific
 			nat.Port(fmt.Sprintf("%v/tcp", internalPort)): {
 				{
 					HostPort: fmt.Sprintf("%v", hostPort),

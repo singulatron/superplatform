@@ -106,6 +106,7 @@ export class AdvancedModelExplorerComponent {
 				return downloadsResponse.downloads.find(
 					(download) =>
 						download.status === 'completed' &&
+						model.assets &&
 						Object.values(model.assets)?.includes(download.id)
 				);
 			});
@@ -155,8 +156,9 @@ export class AdvancedModelExplorerComponent {
 		if (status === null) {
 			return false;
 		}
-		let c = status?.allDownloads?.find((download) =>
-			Object.values(model.assets).includes(download.url)
+		let c = status?.allDownloads?.find(
+			(download) =>
+				model.assets && Object.values(model.assets).includes(download.url)
 		);
 		if (c?.status === 'inProgress' || c?.status === 'paused') {
 			return true;
@@ -187,8 +189,9 @@ export class AdvancedModelExplorerComponent {
 			return false;
 		}
 		if (
-			status?.allDownloads?.find((download) =>
-				Object.values(model.assets)?.includes(download.url)
+			status?.allDownloads?.find(
+				(download) =>
+					model.assets && Object.values(model.assets)?.includes(download.url)
 			)?.status === 'completed'
 		) {
 			return true;
@@ -209,6 +212,13 @@ export class AdvancedModelExplorerComponent {
 		assetURLs.forEach((url) => {
 			this.downloadService.downloadDo(url);
 		});
+	}
+
+	hasAssets(model: Model): boolean {
+		if (!model?.assets) {
+			return false;
+		}
+		return Object.values(model.assets)?.length > 0;
 	}
 
 	toggleItem(id: string) {

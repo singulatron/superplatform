@@ -61,7 +61,7 @@ func (ms *ModelService) Start(modelId string) error {
 	}
 
 	env := map[string]string{}
-	for assetName, assetURL := range model.Assets {
+	for envarName, assetURL := range model.Assets {
 		download, exists := ms.downloadService.GetDownload(assetURL)
 		if !exists {
 			return fmt.Errorf("asset with URL '%v' is cannot be found locally", assetURL)
@@ -70,43 +70,91 @@ func (ms *ModelService) Start(modelId string) error {
 		assetPath := download.FilePath
 		assetPath = transformWinPaths(assetPath)
 
-		env[assetName] = assetPath
+		env[envarName] = assetPath
 	}
 
-	launchOptions := &dockerservice.LaunchOptions{}
+	platform, found, err := ms.platformsStore.Query(
+		datastore.Id(model.PlatformId),
+	).FindOne()
+	if err != nil {
+		return err
+	}
+	if !found {
+		return errors.New("cannot find platform")
+	}
+
+	launchOptions := &dockerservice.LaunchOptions{
+		Name: platform.Id,
+	}
 
 	configFolderPath := ms.configService.ConfigDirectory
+	// The SINGULATRON_HOST_FOLDER is a path on the host which is mounted
+	// by Singulatron to download models etc.
+	// (To persist the ~/.singulatron of the container basically).
+	// We then basically pass this folder down to
+	// containers launched by Singulatron.
+	//
+	// This way the intra-container path
+	// 		/root/.singulatron/downloads/somemodel
+	// Becomes
+	// 		/host/path/downloads/somemodel
 	singulatronHostFolder := os.Getenv("SINGULATRON_HOST_FOLDER")
 	for envName, assetPath := range env {
 		if singulatronHostFolder != "" {
+			// assetPath is an intra-container path, returned by the DownloadService
+			// eg. /root/.singulatron/downloads/somemodel
+			// configFolderPath is /root/.singulatron
+			// after replace: /host/path/download/somemodel
 			assetPath = strings.Replace(assetPath, configFolderPath, singulatronHostFolder, 1)
 		}
+
 		fileName := path.Base(assetPath)
 		// eg. MODEL=/assets/mistral-7b-instruct-v0.2.Q2_K.gguf
 		launchOptions.Envs = append(launchOptions.Envs, fmt.Sprintf("%v=/assets/%v", envName, fileName))
+
+		// eg. /path/on/host/fileName:/assets/fileName
 		launchOptions.HostBinds = append(launchOptions.HostBinds, fmt.Sprintf("%v:/assets/%v", assetPath, fileName))
 	}
 
-	image := model.Platform.Container.Images.Default
-	gpuEnabled := os.Getenv("SINGULATRON_GPU_ENABLED")
-	if gpuEnabled == "true" {
-		launchOptions.GPUEnabled = true
-		switch os.Getenv("SINGULATRON_GPU_PLATFORM") {
-		case "cuda":
-			image = model.Platform.Container.Images.Cuda
-		}
+	image := platform.Architectures.Default.Image
+	port := platform.Architectures.Default.Port
+	launchOptions.Envs = platform.Architectures.Default.Envars
+	persistentPaths := platform.Architectures.Default.PersistentPaths
 
-		// only applicable to nvidia but should not affect others?
-		launchOptions.Envs = append(launchOptions.Envs, "NVIDIA_VISIBLE_DEVICES=all")
+	switch os.Getenv("SINGULATRON_GPU_PLATFORM") {
+	case "cuda":
+		launchOptions.GPUEnabled = true
+		if platform.Architectures.Cuda.Image != "" {
+			image = platform.Architectures.Cuda.Image
+		}
+		if platform.Architectures.Cuda.Port != 0 {
+			port = platform.Architectures.Cuda.Port
+		}
+		if len(platform.Architectures.Cuda.Envars) > 0 {
+			launchOptions.Envs = platform.Architectures.Cuda.Envars
+		}
+		if len(platform.Architectures.Cuda.PersistentPaths) > 0 {
+			persistentPaths = platform.Architectures.Cuda.PersistentPaths
+		}
 	}
 
-	hash, err := modelToHash(model)
+	for _, persistentPath := range persistentPaths {
+		fold := singulatronHostFolder
+		if fold == "" {
+			fold = configFolderPath
+		}
+		launchOptions.HostBinds = append(launchOptions.HostBinds,
+			fmt.Sprintf("%v:%v", fold, path.Dir(persistentPath)),
+		)
+	}
+
+	hash, err := modelToHash(model, platform)
 	if err != nil {
 		return err
 	}
 	launchOptions.Hash = hash
 
-	launchInfo, err := ms.dockerService.LaunchContainer(image, model.Platform.Container.Port, hostPortNum, launchOptions)
+	launchInfo, err := ms.dockerService.LaunchContainer(image, port, hostPortNum, launchOptions)
 	if err != nil {
 		return errors.Wrap(err, "failed to launch container")
 	}
@@ -114,7 +162,7 @@ func (ms *ModelService) Start(modelId string) error {
 	if launchInfo.NewContainerStarted {
 		state := ms.get(launchInfo.PortNumber)
 		if !state.HasCheckerRunning {
-			go ms.checkIfAnswers(model, launchInfo.PortNumber, state)
+			go ms.checkIfAnswers(model, platform, launchInfo.PortNumber, state)
 		}
 	}
 
@@ -155,8 +203,8 @@ func (ms *ModelService) get(port int) *modeltypes.ModelState {
 	return ms.modelPortMap[port]
 }
 
-func modelToHash(model *modeltypes.Model) (string, error) {
-	bs, err := json.Marshal(model.Platform)
+func modelToHash(model *modeltypes.Model, platform *modeltypes.Platform) (string, error) {
+	bs, err := json.Marshal(platform)
 	if err != nil {
 		return "", err
 	}
@@ -175,7 +223,12 @@ func generateStringHash(vals string) string {
 	return hex.EncodeToString(hasher.Sum(nil))
 }
 
-func (ms *ModelService) checkIfAnswers(model *modeltypes.Model, port int, state *modeltypes.ModelState) {
+func (ms *ModelService) checkIfAnswers(
+	model *modeltypes.Model,
+	platform *modeltypes.Platform,
+	port int,
+	state *modeltypes.ModelState,
+) {
 	state.SetHasCheckerRunning(true)
 
 	defer func() {
@@ -200,7 +253,12 @@ func (ms *ModelService) checkIfAnswers(model *modeltypes.Model, port int, state 
 			continue
 		}
 		if !isModelRunning {
-			ms.printContainerLogs(model.Id)
+			hash, err := modelToHash(model, platform)
+			if err != nil {
+				logger.Error("cannot get hash to print logs", slog.Any("error", err))
+				continue
+			}
+			ms.printContainerLogs(model.Id, hash)
 			continue
 		}
 
@@ -225,7 +283,13 @@ func (ms *ModelService) checkIfAnswers(model *modeltypes.Model, port int, state 
 				slog.String("error", err.Error()),
 			)
 			state.SetAnswering(false)
-			ms.printContainerLogs(model.Id)
+
+			hash, err := modelToHash(model, platform)
+			if err != nil {
+				logger.Error("cannot get hash to print logs", slog.Any("error", err))
+				continue
+			}
+			ms.printContainerLogs(model.Id, hash)
 			continue
 		}
 
@@ -235,8 +299,8 @@ func (ms *ModelService) checkIfAnswers(model *modeltypes.Model, port int, state 
 	}
 }
 
-func (ms *ModelService) printContainerLogs(modelId string) {
-	logs, err := ms.dockerService.GetContainerLogsAndStatus(modelId, 100)
+func (ms *ModelService) printContainerLogs(modelId, hash string) {
+	logs, err := ms.dockerService.GetContainerLogsAndStatus(hash, 100)
 	if err != nil {
 		logger.Warn("Error getting container logs",
 			slog.String("modelId", modelId),

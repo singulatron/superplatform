@@ -28,17 +28,25 @@ export class DockerService {
 		}, 2000);
 	}
 
+	initInProgress = false;
 	async init() {
 		try {
+			if (this.initInProgress) {
+				return;
+			}
+			this.initInProgress = true;
+
 			let rsp = await this.dockerInfo();
 
 			this.onDockerInfoSubject.next({
 				hasDocker: rsp?.info?.hasDocker,
 			});
 		} catch (error) {
-			console.error('Error in pollDockerInfo', {
+			console.error('Error in docker.service init', {
 				error: JSON.stringify(error),
 			});
+		} finally {
+			this.initInProgress = true;
 		}
 	}
 

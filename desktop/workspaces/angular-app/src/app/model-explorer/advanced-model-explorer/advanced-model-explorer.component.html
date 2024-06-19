@@ -69,11 +69,13 @@
 							<span title="Model name is {{ model.name }}">{{
 								model.name
 							}}</span
-							>&nbsp;<span
+							><span
+								*ngIf="model?.parameters"
 								title="Number of parameters is {{ model.parameters }}"
-								>{{ model.parameters }}</span
+								>&nbsp;{{ model.parameters }}</span
 							> </span
 						>&nbsp;<ion-chip
+							*ngIf="model?.flavour"
 							title="Flavour {{ model.flavour }}"
 							color="tertiary"
 							outline
@@ -81,6 +83,7 @@
 							<ion-label>{{ model.flavour }}</ion-label>
 						</ion-chip>
 						<ion-chip
+							*ngIf="model?.version"
 							title="Version {{ model.version }}"
 							color="tertiary"
 							outline
@@ -88,6 +91,7 @@
 							<ion-label>{{ model.version }}</ion-label>
 						</ion-chip>
 						<ion-chip
+							*ngIf="model?.quality"
 							title="Quality {{ model.quality }}"
 							color="tertiary"
 							outline
@@ -111,7 +115,7 @@
 								text-align: right;
 							"
 						>
-							<ion-chip color="dark" outline>
+							<ion-chip *ngIf="model?.maxRam" color="dark" outline>
 								<ion-icon name="hardware-chip-outline"></ion-icon>
 								<ion-label
 									title="Amount of RAM or GPU VRAM required: {{
@@ -152,8 +156,9 @@
 						"
 					>
 						<ion-button
-							(click)="download(model)"
+							(click)=" download(model)"
 							*ngIf="
+							hasAssets(model) &&
 								!isDownloading(
 									model,
 									downloadService.onFileDownloadStatus$ | async
@@ -171,6 +176,7 @@
 
 						<span
 							*ngIf="
+								!hasAssets(model) ||
 								downloaded(model, downloadService.onFileDownloadStatus$ | async)
 							"
 						>
@@ -203,7 +209,7 @@
 							<app-downloading [url]="model.id"></app-downloading>
 						</span>
 
-						<span
+						<span *ngIf="model?.size"
 							>{{ 'Size on disk' | translate }}
 							<strong>{{ model.size | number }}</strong> GB</span
 						>

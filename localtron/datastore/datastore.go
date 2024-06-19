@@ -10,9 +10,31 @@
  */
 package datastore
 
-type DataStore[T any] interface {
+import "errors"
+
+type Row interface {
+	GetId() string
+}
+
+var (
+	ErrEntryAlreadyExists = errors.New("entry already exists")
+)
+
+type DataStore[T Row] interface {
+	/*
+	 * Create an object.
+	 * Returns ErrEntryAlreadyExists if the object already exists.
+	 */
 	Create(obj T) error
+	/* Create many objects
+	* Returns ErrEntryAlreadyExists if any of the objects are already in set,
+	* and no object will be created.
+	 */
 	CreateMany(objs []T) error
+	/* Create or Update an object */
+	Upsert(obj T) error
+	/* Create or Update many objects */
+	UpsertMany(objs []T) error
 
 	Query(condition Condition, conditions ...Condition) QueryBuilder[T]
 
@@ -22,7 +44,7 @@ type DataStore[T any] interface {
 	IsInTransaction() bool
 }
 
-type QueryBuilder[T any] interface {
+type QueryBuilder[T Row] interface {
 	OrderBy(field string, desc bool) QueryBuilder[T]
 	Limit(limit int) QueryBuilder[T]
 	Offset(offset int) QueryBuilder[T]
@@ -34,7 +56,7 @@ type QueryBuilder[T any] interface {
 
 	// Update by query. Errors if no update happens
 	Update(obj T) error
-	// Upsert tries to update by query, and if no updateh appened, calls create.
+	// Upsert tries to update by query, and if no update appened, calls create.
 	Upsert(obj T) error
 	UpdateFields(fields map[string]interface{}) error
 	Delete() error

@@ -1,24 +1,41 @@
 package modeltypes
 
 var PlatformLlamaCpp = Platform{
-	ID: "llama-cpp",
-	Container: Container{
-		Port: 8000,
-		Images: Images{
-			Default: "crufter/llama-cpp-python-simple",
-			Cuda:    "crufter/llama-cpp-python-cuda",
+	Id: "llama-cpp",
+	Architectures: Architectures{
+		Default: Container{
+			Port:  8000,
+			Image: "crufter/llama-cpp-python-simple",
+		},
+		Cuda: Container{
+			Port:   8000,
+			Image:  "crufter/llama-cpp-python-cuda",
+			Envars: []string{"NVIDIA_VISIBLE_DEVICES=all"},
 		},
 	},
 }
 
 var PlatformStableDiffusion = Platform{
-	ID: "stable-diffusion",
-	Container: Container{
-		Port: 7860,
-		Images: Images{
-			Default: "nicklucche/stable-diffusion",
+	Id: "stable-diffusion",
+	Architectures: Architectures{
+		Default: Container{
+			Port:            7860,
+			Image:           "nicklucche/stable-diffusion",
+			Envars:          []string{"FP16=0"},
+			PersistentPaths: []string{"/root/.cache/huggingface/diffusers"},
+		},
+		Cuda: Container{
+			Port:            7860,
+			Image:           "nicklucche/stable-diffusion",
+			Envars:          []string{"DEVICES=all"},
+			PersistentPaths: []string{"/root/.cache/huggingface/diffusers"},
 		},
 	},
+}
+
+var Platforms = []*Platform{
+	&PlatformLlamaCpp,
+	&PlatformStableDiffusion,
 }
 
 const mistralDescription = `Mistral excels in understanding and generating human-like text, making it a versatile tool across a multitude of domains. Its proficiency extends from generating coherent and contextually relevant text passages to providing detailed answers to queries, showcasing an impressive grasp of knowledge across a wide array of subjects.
@@ -32,7 +49,7 @@ const llamaChatUncensoredPrompt = `### HUMAN:
 ### RESPONSE:
 `
 
-var Models = []Model{
+var Models = []*Model{
 	//
 	// MISTRAL 7B
 	//
@@ -41,7 +58,7 @@ var Models = []Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q2_K.gguf",
 		},
-		Platform:       PlatformLlamaCpp,
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "Mistral",
 		Parameters:     "7B",
 		Flavour:        "Instruct",
@@ -60,7 +77,7 @@ var Models = []Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q3_K_S.gguf",
 		},
-		Platform:       PlatformLlamaCpp,
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "Mistral",
 		Parameters:     "7B",
 		Flavour:        "Instruct",
@@ -79,7 +96,7 @@ var Models = []Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q3_K_M.gguf",
 		},
-		Platform:       PlatformLlamaCpp,
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "Mistral",
 		Parameters:     "7B",
 		Flavour:        "Instruct",
@@ -98,7 +115,7 @@ var Models = []Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q3_K_L.gguf",
 		},
-		Platform:       PlatformLlamaCpp,
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "Mistral",
 		Parameters:     "7B",
 		Flavour:        "Instruct",
@@ -117,7 +134,7 @@ var Models = []Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q4_K_S.gguf",
 		},
-		Platform:       PlatformLlamaCpp,
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "Mistral",
 		Parameters:     "7B",
 		Flavour:        "Instruct",
@@ -136,7 +153,7 @@ var Models = []Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q4_K_M.gguf",
 		},
-		Platform:       PlatformLlamaCpp,
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "Mistral",
 		Parameters:     "7B",
 		Flavour:        "Instruct",
@@ -155,7 +172,7 @@ var Models = []Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q5_K_S.gguf",
 		},
-		Platform:       PlatformLlamaCpp,
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "Mistral",
 		Parameters:     "7B",
 		Flavour:        "Instruct",
@@ -174,7 +191,7 @@ var Models = []Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q5_K_M.gguf",
 		},
-		Platform:       PlatformLlamaCpp,
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "Mistral",
 		Parameters:     "7B",
 		Flavour:        "Instruct",
@@ -193,7 +210,7 @@ var Models = []Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q6_K.gguf",
 		},
-		Platform:       PlatformLlamaCpp,
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "Mistral",
 		Parameters:     "7B",
 		Flavour:        "Instruct",
@@ -212,7 +229,7 @@ var Models = []Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q8_0.gguf",
 		},
-		Platform:       PlatformLlamaCpp,
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "Mistral",
 		Parameters:     "7B",
 		Flavour:        "Instruct",
@@ -234,7 +251,7 @@ var Models = []Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/CodeLlama-7B-GGUF/resolve/main/codellama-7b.Q2_K.gguf",
 		},
-		Platform:       PlatformLlamaCpp,
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "CodeLlama",
 		Parameters:     "7B",
 		Flavour:        "Code",
@@ -253,7 +270,7 @@ var Models = []Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/CodeLlama-7B-GGUF/resolve/main/codellama-7b.Q3_K_S.gguf",
 		},
-		Platform:       PlatformLlamaCpp,
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "CodeLlama",
 		Parameters:     "7B",
 		Flavour:        "Code",
@@ -272,7 +289,7 @@ var Models = []Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/CodeLlama-7B-GGUF/resolve/main/codellama-7b.Q3_K_M.gguf",
 		},
-		Platform:       PlatformLlamaCpp,
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "CodeLlama",
 		Parameters:     "7B",
 		Flavour:        "Code",
@@ -291,7 +308,7 @@ var Models = []Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/CodeLlama-7B-GGUF/resolve/main/codellama-7b.Q3_K_L.gguf",
 		},
-		Platform:       PlatformLlamaCpp,
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "CodeLlama",
 		Parameters:     "7B",
 		Flavour:        "Code",
@@ -310,7 +327,7 @@ var Models = []Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/CodeLlama-7B-GGUF/resolve/main/codellama-7b.Q4_K_S.gguf",
 		},
-		Platform:       PlatformLlamaCpp,
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "CodeLlama",
 		Parameters:     "7B",
 		Flavour:        "Code",
@@ -330,7 +347,7 @@ var Models = []Model{
 			"MODEL": "https://huggingface.co/TheBloke/CodeLlama-7B-GGUF/resolve/main/codellama-7b.Q4_K_M.gguf",
 		},
 		Name:           "CodeLlama",
-		Platform:       PlatformLlamaCpp,
+		PlatformId:     PlatformLlamaCpp.Id,
 		Parameters:     "7B",
 		Flavour:        "Code",
 		Version:        "1",
@@ -348,7 +365,7 @@ var Models = []Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/CodeLlama-7B-GGUF/resolve/main/codellama-7b.Q5_K_S.gguf",
 		},
-		Platform:       PlatformLlamaCpp,
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "CodeLlama",
 		Parameters:     "7B",
 		Flavour:        "Code",
@@ -367,7 +384,7 @@ var Models = []Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/CodeLlama-7B-GGUF/resolve/main/codellama-7b.Q5_K_M.gguf",
 		},
-		Platform:       PlatformLlamaCpp,
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "CodeLlama",
 		Parameters:     "7B",
 		Flavour:        "Code",
@@ -386,7 +403,7 @@ var Models = []Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/CodeLlama-7B-GGUF/resolve/main/codellama-7b.Q6_K.gguf",
 		},
-		Platform:       PlatformLlamaCpp,
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "CodeLlama",
 		Parameters:     "7B",
 		Flavour:        "Code",
@@ -405,7 +422,7 @@ var Models = []Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/CodeLlama-7B-GGUF/resolve/main/codellama-7b.Q8_0.gguf",
 		},
-		Platform:       PlatformLlamaCpp,
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "CodeLlama",
 		Parameters:     "7B",
 		Flavour:        "Code",
@@ -425,7 +442,7 @@ var Models = []Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/CodeLlama-13B-GGUF/resolve/main/codellama-13b.Q2_K.gguf",
 		},
-		Platform:       PlatformLlamaCpp,
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "CodeLlama",
 		Parameters:     "13B",
 		Flavour:        "Code",
@@ -444,7 +461,7 @@ var Models = []Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/CodeLlama-13B-GGUF/resolve/main/codellama-13b.Q3_K_S.gguf",
 		},
-		Platform:       PlatformLlamaCpp,
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "CodeLlama",
 		Parameters:     "13B",
 		Flavour:        "Code",
@@ -463,7 +480,7 @@ var Models = []Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/CodeLlama-13B-GGUF/resolve/main/codellama-13b.Q3_K_M.gguf",
 		},
-		Platform:       PlatformLlamaCpp,
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "CodeLlama",
 		Parameters:     "13B",
 		Flavour:        "Code",
@@ -482,7 +499,7 @@ var Models = []Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/CodeLlama-13B-GGUF/resolve/main/codellama-13b.Q3_K_L.gguf",
 		},
-		Platform:       PlatformLlamaCpp,
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "CodeLlama",
 		Parameters:     "13B",
 		Flavour:        "Code",
@@ -501,7 +518,7 @@ var Models = []Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/CodeLlama-13B-GGUF/resolve/main/codellama-13b.Q4_K_S.gguf",
 		},
-		Platform:       PlatformLlamaCpp,
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "CodeLlama",
 		Parameters:     "13B",
 		Flavour:        "Code",
@@ -520,7 +537,7 @@ var Models = []Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/CodeLlama-13B-GGUF/resolve/main/codellama-13b.Q4_K_M.gguf",
 		},
-		Platform:       PlatformLlamaCpp,
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "CodeLlama",
 		Parameters:     "13B",
 		Flavour:        "Code",
@@ -539,7 +556,7 @@ var Models = []Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/CodeLlama-13B-GGUF/resolve/main/codellama-13b.Q5_K_S.gguf",
 		},
-		Platform:       PlatformLlamaCpp,
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "CodeLlama",
 		Parameters:     "13B",
 		Flavour:        "Code",
@@ -558,7 +575,7 @@ var Models = []Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/CodeLlama-13B-GGUF/resolve/main/codellama-13b.Q5_K_M.gguf",
 		},
-		Platform:       PlatformLlamaCpp,
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "CodeLlama",
 		Parameters:     "13B",
 		Flavour:        "Code",
@@ -577,7 +594,7 @@ var Models = []Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/CodeLlama-13B-GGUF/resolve/main/codellama-13b.Q6_K.gguf",
 		},
-		Platform:       PlatformLlamaCpp,
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "CodeLlama",
 		Parameters:     "13B",
 		Flavour:        "Code",
@@ -596,7 +613,7 @@ var Models = []Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/CodeLlama-13B-GGUF/resolve/main/codellama-13b.Q8_0.gguf",
 		},
-		Platform:       PlatformLlamaCpp,
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "CodeLlama",
 		Parameters:     "13B",
 		Flavour:        "Code",
@@ -618,7 +635,7 @@ var Models = []Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/llama2_7b_chat_uncensored-GGUF/resolve/main/llama2_7b_chat_uncensored.Q2_K.gguf",
 		},
-		Platform:       PlatformLlamaCpp,
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "LLaMA2",
 		Parameters:     "7B",
 		Flavour:        "Chat",
@@ -638,7 +655,7 @@ var Models = []Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/llama2_7b_chat_uncensored-GGUF/resolve/main/llama2_7b_chat_uncensored.Q3_K_S.gguf",
 		},
-		Platform:       PlatformLlamaCpp,
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "LLaMA2",
 		Parameters:     "7B",
 		Flavour:        "Chat",
@@ -658,7 +675,7 @@ var Models = []Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/llama2_7b_chat_uncensored-GGUF/resolve/main/llama2_7b_chat_uncensored.Q3_K_M.gguf",
 		},
-		Platform:       PlatformLlamaCpp,
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "LLaMA2",
 		Parameters:     "7B",
 		Flavour:        "Chat",
@@ -678,7 +695,7 @@ var Models = []Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/llama2_7b_chat_uncensored-GGUF/resolve/main/llama2_7b_chat_uncensored.Q3_K_L.gguf",
 		},
-		Platform:       PlatformLlamaCpp,
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "LLaMA2",
 		Parameters:     "7B",
 		Flavour:        "Chat",
@@ -698,7 +715,7 @@ var Models = []Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/llama2_7b_chat_uncensored-GGUF/resolve/main/llama2_7b_chat_uncensored.Q4_K_S.gguf",
 		},
-		Platform:       PlatformLlamaCpp,
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "LLaMA2",
 		Parameters:     "7B",
 		Flavour:        "Chat",
@@ -718,7 +735,7 @@ var Models = []Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/llama2_7b_chat_uncensored-GGUF/resolve/main/llama2_7b_chat_uncensored.Q4_K_M.gguf",
 		},
-		Platform:       PlatformLlamaCpp,
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "LLaMA2",
 		Parameters:     "7B",
 		Flavour:        "Chat",
@@ -738,7 +755,7 @@ var Models = []Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/llama2_7b_chat_uncensored-GGUF/resolve/main/llama2_7b_chat_uncensored.Q5_K_S.gguf",
 		},
-		Platform:       PlatformLlamaCpp,
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "LLaMA2",
 		Parameters:     "7B",
 		Flavour:        "Chat",
@@ -758,7 +775,7 @@ var Models = []Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/llama2_7b_chat_uncensored-GGUF/resolve/main/llama2_7b_chat_uncensored.Q5_K_M.gguf",
 		},
-		Platform:       PlatformLlamaCpp,
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "LLaMA2",
 		Parameters:     "7B",
 		Flavour:        "Chat",
@@ -778,7 +795,7 @@ var Models = []Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/llama2_7b_chat_uncensored-GGUF/resolve/main/llama2_7b_chat_uncensored.Q6_K.gguf",
 		},
-		Platform:       PlatformLlamaCpp,
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "LLaMA2",
 		Parameters:     "7B",
 		Flavour:        "Chat",
@@ -798,7 +815,7 @@ var Models = []Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/llama2_7b_chat_uncensored-GGUF/resolve/main/llama2_7b_chat_uncensored.Q8_0.gguf",
 		},
-		Platform:       PlatformLlamaCpp,
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "LLaMA2",
 		Parameters:     "7B",
 		Flavour:        "Chat",
@@ -819,7 +836,7 @@ var Models = []Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/QuantFactory/Meta-Llama-3-8B-Instruct-GGUF/resolve/main/Meta-Llama-3-8B-Instruct.Q3_K_M.gguf",
 		},
-		Platform:       PlatformLlamaCpp,
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "Llama 3",
 		Parameters:     "8B",
 		Flavour:        "Code",
@@ -831,6 +848,12 @@ var Models = []Model{
 		MaxRam:         5.33,
 		QuantComment:   "smallest, significant quality loss - not recommended for most purposes",
 		Description:    codellamaDescription,
+		PromptTemplate: "{prompt}",
+	},
+	{
+		Id:             "nicklucche/stable-diffusion",
+		PlatformId:     PlatformStableDiffusion.Id,
+		Name:           "Stable Diffusion",
 		PromptTemplate: "{prompt}",
 	},
 }

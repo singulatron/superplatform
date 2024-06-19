@@ -3,31 +3,43 @@ package modeltypes
 import "sync"
 
 /*
-Platform roughly represents an AI container + its settings.
+Platform (~AI Platform) roughly represents an AI container + its settings.
 */
 type Platform struct {
-	ID        string    `json:"id"`
-	Name      *string   `json:"name,omitempty"`
-	Version   *int      `json:"version,omitempty"`
-	Container Container `json:"container"`
+	Id            string        `json:"id"`
+	Name          *string       `json:"name,omitempty"`
+	Version       *int          `json:"version,omitempty"`
+	Architectures Architectures `json:"architectures"`
+}
+
+func (p Platform) GetId() string {
+	return p.Id
+}
+
+/* Containers by GPU/hardware platform */
+type Architectures struct {
+	Default Container `json:"default"`
+	Cuda    Container `json:"cuda,omitempty"`
 }
 
 type Container struct {
 	/* Port is the internal port of the Container */
-	Port   int    `json:"port"`
-	Images Images `json:"images"`
-}
-
-type Images struct {
-	Default string `json:"default"`
-	Cuda    string `json:"cuda,omitempty"`
+	Port  int    `json:"port"`
+	Image string `json:"image"`
+	/* Envars passed to the container. eg.
+	'DEVICES=all'
+	*/
+	Envars []string `json:"envars"`
+	/* Paths in the container to persist.
+	 */
+	PersistentPaths []string `json:"persistentPaths"`
 }
 
 type Assets map[string]string
 
 type Model struct {
 	Id             string            `json:"id"`
-	Platform       Platform          `json:"platform"`
+	PlatformId     string            `json:"platformId"`
 	Name           string            `json:"name"`
 	Parameters     string            `json:"parameters"`
 	Flavour        string            `json:"flavour"`
@@ -46,6 +58,10 @@ type Model struct {
 	MaxBits        int               `json:"max_bits"`
 	Bits           int               `json:"bits"`
 	Assets         map[string]string `json:"assets"`
+}
+
+func (g Model) GetId() string {
+	return g.Id
 }
 
 /* Internal type for ModelService */
