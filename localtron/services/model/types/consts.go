@@ -1,22 +1,34 @@
 package modeltypes
 
 var PlatformLlamaCpp = Platform{
-	ID: "llama-cpp",
-	Container: Container{
-		Port: 8000,
-		Images: Images{
-			Default: "crufter/llama-cpp-python-simple",
-			Cuda:    "crufter/llama-cpp-python-cuda",
+	Id: "llama-cpp",
+	Architectures: Architectures{
+		Default: Container{
+			Port:  8000,
+			Image: "crufter/llama-cpp-python-simple",
+		},
+		Cuda: Container{
+			Port:   8000,
+			Image:  "crufter/llama-cpp-python-cuda",
+			Envars: []string{"NVIDIA_VISIBLE_DEVICES=all"},
 		},
 	},
 }
 
 var PlatformStableDiffusion = Platform{
-	ID: "stable-diffusion",
-	Container: Container{
-		Port: 7860,
-		Images: Images{
-			Default: "nicklucche/stable-diffusion",
+	Id: "stable-diffusion",
+	Architectures: Architectures{
+		Default: Container{
+			Port:            7860,
+			Image:           "nicklucche/stable-diffusion",
+			Envars:          []string{"FP16=0"},
+			PersistentPaths: []string{"/root/.cache/huggingface/diffusers"},
+		},
+		Cuda: Container{
+			Port:            7860,
+			Image:           "nicklucche/stable-diffusion",
+			Envars:          []string{"DEVICES=all"},
+			PersistentPaths: []string{"/root/.cache/huggingface/diffusers"},
 		},
 	},
 }

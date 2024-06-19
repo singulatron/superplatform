@@ -41,8 +41,7 @@ singulatron-backend:
     #
     # For NVIDIA GPU acceleration uncomment the following flags
     #
-    # - SINGULATRON_GPU_ENABLED=true
-    # - SINGULATRON_GPU_PLATFORM=cuda
+    # - SINGULATRON_ARCHITECTURE=cuda
 ```
 
 ### System Specific Settings

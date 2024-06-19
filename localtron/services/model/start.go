@@ -61,7 +61,7 @@ func (ms *ModelService) Start(modelId string) error {
 	}
 
 	env := map[string]string{}
-	for assetName, assetURL := range model.Assets {
+	for envarName, assetURL := range model.Assets {
 		download, exists := ms.downloadService.GetDownload(assetURL)
 		if !exists {
 			return fmt.Errorf("asset with URL '%v' is cannot be found locally", assetURL)
@@ -70,12 +70,16 @@ func (ms *ModelService) Start(modelId string) error {
 		assetPath := download.FilePath
 		assetPath = transformWinPaths(assetPath)
 
-		env[assetName] = assetPath
+		env[envarName] = assetPath
 	}
 
-	launchOptions := &dockerservice.LaunchOptions{}
+	launchOptions := &dockerservice.LaunchOptions{
+		Name: model.Platform.Id,
+	}
 
 	configFolderPath := ms.configService.ConfigDirectory
+	// The SINGULATRON_HOST_FOLDER is a path on the host which is mounted
+	// by different containers to share data.
 	singulatronHostFolder := os.Getenv("SINGULATRON_HOST_FOLDER")
 	for envName, assetPath := range env {
 		if singulatronHostFolder != "" {
@@ -84,20 +88,41 @@ func (ms *ModelService) Start(modelId string) error {
 		fileName := path.Base(assetPath)
 		// eg. MODEL=/assets/mistral-7b-instruct-v0.2.Q2_K.gguf
 		launchOptions.Envs = append(launchOptions.Envs, fmt.Sprintf("%v=/assets/%v", envName, fileName))
+
+		// eg. /path/on/host/fileName:/assets/fileName
 		launchOptions.HostBinds = append(launchOptions.HostBinds, fmt.Sprintf("%v:/assets/%v", assetPath, fileName))
 	}
 
-	image := model.Platform.Container.Images.Default
-	gpuEnabled := os.Getenv("SINGULATRON_GPU_ENABLED")
-	if gpuEnabled == "true" {
-		launchOptions.GPUEnabled = true
-		switch os.Getenv("SINGULATRON_GPU_PLATFORM") {
-		case "cuda":
-			image = model.Platform.Container.Images.Cuda
-		}
+	image := model.Platform.Architectures.Default.Image
+	port := model.Platform.Architectures.Default.Port
+	launchOptions.Envs = model.Platform.Architectures.Default.Envars
+	persistentPaths := model.Platform.Architectures.Default.PersistentPaths
 
-		// only applicable to nvidia but should not affect others?
-		launchOptions.Envs = append(launchOptions.Envs, "NVIDIA_VISIBLE_DEVICES=all")
+	switch os.Getenv("SINGULATRON_GPU_PLATFORM") {
+	case "cuda":
+		launchOptions.GPUEnabled = true
+		if model.Platform.Architectures.Cuda.Image != "" {
+			image = model.Platform.Architectures.Cuda.Image
+		}
+		if model.Platform.Architectures.Cuda.Port != 0 {
+			port = model.Platform.Architectures.Cuda.Port
+		}
+		if len(model.Platform.Architectures.Cuda.Envars) > 0 {
+			launchOptions.Envs = model.Platform.Architectures.Cuda.Envars
+		}
+		if len(model.Platform.Architectures.Cuda.PersistentPaths) > 0 {
+			persistentPaths = model.Platform.Architectures.Cuda.PersistentPaths
+		}
+	}
+
+	for _, persistentPath := range persistentPaths {
+		fold := singulatronHostFolder
+		if fold == "" {
+			fold = configFolderPath
+		}
+		launchOptions.HostBinds = append(launchOptions.HostBinds,
+			fmt.Sprintf("%v:%v", fold, path.Dir(persistentPath)),
+		)
 	}
 
 	hash, err := modelToHash(model)
@@ -106,7 +131,7 @@ func (ms *ModelService) Start(modelId string) error {
 	}
 	launchOptions.Hash = hash
 
-	launchInfo, err := ms.dockerService.LaunchContainer(image, model.Platform.Container.Port, hostPortNum, launchOptions)
+	launchInfo, err := ms.dockerService.LaunchContainer(image, port, hostPortNum, launchOptions)
 	if err != nil {
 		return errors.Wrap(err, "failed to launch container")
 	}
