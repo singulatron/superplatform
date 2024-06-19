@@ -833,4 +833,10 @@ var Models = []Model{
 		Description:    codellamaDescription,
 		PromptTemplate: "{prompt}",
 	},
+	{
+		Id:             "nicklucche/stable-diffusion",
+		Platform:       PlatformStableDiffusion,
+		Name:           "Stable Diffusion",
+		PromptTemplate: "{prompt}",
+	},
 }

@@ -42,10 +42,13 @@ A low level method for launching containers running models.
 For a higher level one use `ModelService.Start“.
 */
 func (d *DockerService) LaunchContainer(image string, internalPort, hostPort int, options *LaunchOptions) (*LaunchInfo, error) {
+	logger.Info("launching image" + image)
 	err := d.pullImage(image)
 	if err != nil {
 		return nil, errors.Wrap(err, "image pull failure")
 	}
+
+	logger.Info("launching image" + image)
 
 	d.launchModelMutex.Lock()
 	defer d.launchModelMutex.Unlock()

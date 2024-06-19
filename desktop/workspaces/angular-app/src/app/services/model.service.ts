@@ -21,6 +21,8 @@ import {
 	providedIn: 'root',
 })
 export class ModelService {
+	private initInProgress: boolean = false;
+
 	private onModelCheckSubject = new ReplaySubject<OnModelCheck>(1);
 	/** Emitted any time when the currently selected model is checked */
 	public onModelCheck$ = this.onModelCheckSubject.asObservable();
@@ -71,27 +73,32 @@ export class ModelService {
 
 	async init() {
 		try {
+			if (this.initInProgress) {
+				return;
+			}
+			this.initInProgress = true;
+
 			this.models = await this.getModels();
 			let rsp = await this.modelStatus();
 
-			if (rsp?.status?.assetsReady) {
-				await this.modelStart().catch((e) => {
-					console.error('Error starting model', {
-						error: e,
-					});
-				});
-			}
-			if (rsp?.status?.running) {
-				this.onModelLaunchSubject.next({});
-			}
 			this.onModelCheckSubject.next({
 				assetsReady: rsp?.status?.assetsReady,
 			});
+
+			if (rsp?.status?.running) {
+				this.onModelLaunchSubject.next({});
+			}
+
+			if (rsp?.status?.assetsReady) {
+				await this.modelStart();
+			}
 		} catch (error) {
 			console.log(error);
-			console.error('Error in pollModelStatus', {
+			console.error('Error in model.service init', {
 				error: JSON.stringify(error),
 			});
+		} finally {
+			this.initInProgress = false;
 		}
 	}
 
