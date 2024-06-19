@@ -26,26 +26,26 @@ type Images struct {
 type Assets map[string]string
 
 type Model struct {
-	Id             string
-	Platform       Platform
-	Name           string
-	Parameters     string
-	Flavour        string
-	Version        string
-	Quality        string
-	Extension      string
-	FullName       string
-	Tags           []string
-	Mirrors        []string
-	Size           float64
-	Uncensored     bool
-	MaxRam         float64
-	Description    string
-	PromptTemplate string
-	QuantComment   string
-	MaxBits        int
-	Bits           int
-	Assets         map[string]string
+	Id             string            `json:"id"`
+	Platform       Platform          `json:"platform"`
+	Name           string            `json:"name"`
+	Parameters     string            `json:"parameters"`
+	Flavour        string            `json:"flavour"`
+	Version        string            `json:"version"`
+	Quality        string            `json:"quality"`
+	Extension      string            `json:"extension"`
+	FullName       string            `json:"full_name"`
+	Tags           []string          `json:"tags"`
+	Mirrors        []string          `json:"mirrors"`
+	Size           float64           `json:"size"`
+	Uncensored     bool              `json:"uncensored"`
+	MaxRam         float64           `json:"max_ram"`
+	Description    string            `json:"description"`
+	PromptTemplate string            `json:"prompt_template"`
+	QuantComment   string            `json:"quant_comment"`
+	MaxBits        int               `json:"max_bits"`
+	Bits           int               `json:"bits"`
+	Assets         map[string]string `json:"assets"`
 }
 
 /* Internal type for ModelService */

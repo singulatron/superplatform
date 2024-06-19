@@ -100,6 +100,12 @@ func (ms *ModelService) Start(modelId string) error {
 		launchOptions.Envs = append(launchOptions.Envs, "NVIDIA_VISIBLE_DEVICES=all")
 	}
 
+	hash, err := modelToHash(model)
+	if err != nil {
+		return err
+	}
+	launchOptions.Hash = hash
+
 	launchInfo, err := ms.dockerService.LaunchContainer(image, model.Platform.Container.Port, hostPortNum, launchOptions)
 	if err != nil {
 		return errors.Wrap(err, "failed to launch container")
@@ -223,7 +229,7 @@ func (ms *ModelService) checkIfAnswers(model *modeltypes.Model, port int, state 
 			continue
 		}
 
-		logger.Debug("LLM pinged", slog.Int("port", port))
+		logger.Debug("LLM pinged successfully", slog.Int("port", port))
 		state.SetAnswering(true)
 		return
 	}

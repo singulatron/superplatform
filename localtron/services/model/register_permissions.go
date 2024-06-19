@@ -62,8 +62,10 @@ func (p *ModelService) bootstrapModels() error {
 
 	missingModels := []*modeltypes.Model{}
 	for _, model := range modeltypes.Models {
+		// Create a new variable to hold each model within the loop
+		modelCopy := model
 		if !foundIds[model.Id] {
-			missingModels = append(missingModels, &model)
+			missingModels = append(missingModels, &modelCopy)
 		}
 	}
 

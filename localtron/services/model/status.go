@@ -35,7 +35,7 @@ func (ms *ModelService) Status(modelId string) (*modeltypes.ModelStatus, error) 
 			return nil, err
 		}
 		if conf.Model.CurrentModelId == "" {
-			return nil, errors.New("cannot detect model id")
+			return nil, errors.New("no model id specified and no default model")
 		}
 		modelId = conf.Model.CurrentModelId
 	}
@@ -60,8 +60,13 @@ func (ms *ModelService) Status(modelId string) (*modeltypes.ModelStatus, error) 
 		}
 	}
 
+	hash, err := modelToHash(model)
+	if err != nil {
+		return nil, err
+	}
+
 	isRunning := false
-	if v, err := ms.dockerService.HashIsRunning(modelId); err == nil && v {
+	if v, err := ms.dockerService.HashIsRunning(hash); err == nil && v {
 		isRunning = true
 	}
 
