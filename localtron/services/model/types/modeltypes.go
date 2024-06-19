@@ -39,7 +39,7 @@ type Assets map[string]string
 
 type Model struct {
 	Id             string            `json:"id"`
-	Platform       Platform          `json:"platform"`
+	PlatformId     string            `json:"platformId"`
 	Name           string            `json:"name"`
 	Parameters     string            `json:"parameters"`
 	Flavour        string            `json:"flavour"`

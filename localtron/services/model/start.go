@@ -73,8 +73,18 @@ func (ms *ModelService) Start(modelId string) error {
 		env[envarName] = assetPath
 	}
 
+	platform, found, err := ms.platformsStore.Query(
+		datastore.Id(model.PlatformId),
+	).FindOne()
+	if err != nil {
+		return err
+	}
+	if !found {
+		return errors.New("cannot find platform")
+	}
+
 	launchOptions := &dockerservice.LaunchOptions{
-		Name: model.Platform.Id,
+		Name: platform.Id,
 	}
 
 	configFolderPath := ms.configService.ConfigDirectory
@@ -93,25 +103,25 @@ func (ms *ModelService) Start(modelId string) error {
 		launchOptions.HostBinds = append(launchOptions.HostBinds, fmt.Sprintf("%v:/assets/%v", assetPath, fileName))
 	}
 
-	image := model.Platform.Architectures.Default.Image
-	port := model.Platform.Architectures.Default.Port
-	launchOptions.Envs = model.Platform.Architectures.Default.Envars
-	persistentPaths := model.Platform.Architectures.Default.PersistentPaths
+	image := platform.Architectures.Default.Image
+	port := platform.Architectures.Default.Port
+	launchOptions.Envs = platform.Architectures.Default.Envars
+	persistentPaths := platform.Architectures.Default.PersistentPaths
 
 	switch os.Getenv("SINGULATRON_GPU_PLATFORM") {
 	case "cuda":
 		launchOptions.GPUEnabled = true
-		if model.Platform.Architectures.Cuda.Image != "" {
-			image = model.Platform.Architectures.Cuda.Image
+		if platform.Architectures.Cuda.Image != "" {
+			image = platform.Architectures.Cuda.Image
 		}
-		if model.Platform.Architectures.Cuda.Port != 0 {
-			port = model.Platform.Architectures.Cuda.Port
+		if platform.Architectures.Cuda.Port != 0 {
+			port = platform.Architectures.Cuda.Port
 		}
-		if len(model.Platform.Architectures.Cuda.Envars) > 0 {
-			launchOptions.Envs = model.Platform.Architectures.Cuda.Envars
+		if len(platform.Architectures.Cuda.Envars) > 0 {
+			launchOptions.Envs = platform.Architectures.Cuda.Envars
 		}
-		if len(model.Platform.Architectures.Cuda.PersistentPaths) > 0 {
-			persistentPaths = model.Platform.Architectures.Cuda.PersistentPaths
+		if len(platform.Architectures.Cuda.PersistentPaths) > 0 {
+			persistentPaths = platform.Architectures.Cuda.PersistentPaths
 		}
 	}
 
@@ -125,7 +135,7 @@ func (ms *ModelService) Start(modelId string) error {
 		)
 	}
 
-	hash, err := modelToHash(model)
+	hash, err := modelToHash(model, platform)
 	if err != nil {
 		return err
 	}
@@ -139,7 +149,7 @@ func (ms *ModelService) Start(modelId string) error {
 	if launchInfo.NewContainerStarted {
 		state := ms.get(launchInfo.PortNumber)
 		if !state.HasCheckerRunning {
-			go ms.checkIfAnswers(model, launchInfo.PortNumber, state)
+			go ms.checkIfAnswers(model, platform, launchInfo.PortNumber, state)
 		}
 	}
 
@@ -180,8 +190,8 @@ func (ms *ModelService) get(port int) *modeltypes.ModelState {
 	return ms.modelPortMap[port]
 }
 
-func modelToHash(model *modeltypes.Model) (string, error) {
-	bs, err := json.Marshal(model.Platform)
+func modelToHash(model *modeltypes.Model, platform *modeltypes.Platform) (string, error) {
+	bs, err := json.Marshal(platform)
 	if err != nil {
 		return "", err
 	}
@@ -200,7 +210,12 @@ func generateStringHash(vals string) string {
 	return hex.EncodeToString(hasher.Sum(nil))
 }
 
-func (ms *ModelService) checkIfAnswers(model *modeltypes.Model, port int, state *modeltypes.ModelState) {
+func (ms *ModelService) checkIfAnswers(
+	model *modeltypes.Model,
+	platform *modeltypes.Platform,
+	port int,
+	state *modeltypes.ModelState,
+) {
 	state.SetHasCheckerRunning(true)
 
 	defer func() {
@@ -225,7 +240,7 @@ func (ms *ModelService) checkIfAnswers(model *modeltypes.Model, port int, state 
 			continue
 		}
 		if !isModelRunning {
-			hash, err := modelToHash(model)
+			hash, err := modelToHash(model, platform)
 			if err != nil {
 				logger.Error("cannot get hash to print logs", slog.Any("error", err))
 				continue
@@ -256,7 +271,7 @@ func (ms *ModelService) checkIfAnswers(model *modeltypes.Model, port int, state 
 			)
 			state.SetAnswering(false)
 
-			hash, err := modelToHash(model)
+			hash, err := modelToHash(model, platform)
 			if err != nil {
 				logger.Error("cannot get hash to print logs", slog.Any("error", err))
 				continue
