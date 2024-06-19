@@ -189,6 +189,9 @@ func main() {
 	router.HandleFunc("/model/status", appl(func(w http.ResponseWriter, r *http.Request) {
 		modelendpoints.Status(w, r, userService, modelService)
 	}))
+	router.HandleFunc("/model/get-models", appl(func(w http.ResponseWriter, r *http.Request) {
+		modelendpoints.GetModels(w, r, userService, modelService)
+	}))
 	router.HandleFunc("/model/start", appl(func(w http.ResponseWriter, r *http.Request) {
 		modelendpoints.Start(w, r, userService, modelService)
 	}))

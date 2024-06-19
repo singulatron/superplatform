@@ -17,7 +17,7 @@ type OnFolderSelect struct {
 }
 
 type OnModelCheck struct {
-	SelectedExists *bool `json:"selectedExists,omitempty"`
+	SelectedExists *bool `json:"assetsReady,omitempty"`
 }
 
 type OnModelReady struct {

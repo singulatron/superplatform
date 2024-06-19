@@ -12,6 +12,8 @@
 package modelservice
 
 import (
+	"github.com/singulatron/singulatron/localtron/datastore"
+
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
@@ -38,4 +40,34 @@ func (p *ModelService) registerPermissions() error {
 	}
 
 	return nil
+}
+
+func (p *ModelService) bootstrapModels() error {
+	ids := []string{}
+	for _, model := range modeltypes.Models {
+		ids = append(ids, model.Id)
+	}
+
+	models, err := p.modelsStore.Query(
+		datastore.Equal("id", ids),
+	).Find()
+	if err != nil {
+		return nil
+	}
+	foundIds := map[string]bool{}
+
+	for _, model := range models {
+		foundIds[model.Id] = true
+	}
+
+	missingModels := []*modeltypes.Model{}
+	for _, model := range modeltypes.Models {
+		// Create a new variable to hold each model within the loop
+		modelCopy := model
+		if !foundIds[model.Id] {
+			missingModels = append(missingModels, &modelCopy)
+		}
+	}
+
+	return p.modelsStore.CreateMany(missingModels)
 }

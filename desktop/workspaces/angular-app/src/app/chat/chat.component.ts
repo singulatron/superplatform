@@ -14,10 +14,9 @@ import { LocaltronService } from '../services/localtron.service';
 import { ElectronIpcService } from '../services/electron-ipc.service';
 import { WindowApiConst } from 'shared-lib';
 import { Subscription } from 'rxjs';
-import { ApiService } from '../../../shared/stdlib/api.service';
 import { ChatService, ChatThread, ChatMessage } from '../services/chat.service';
 import { Prompt, PromptService } from '../services/prompt.service';
-import { Model } from '../services/model.service';
+import { Model, ModelService } from '../services/model.service';
 import { ConfigService } from '../services/config.service';
 
 @Component({
@@ -41,7 +40,7 @@ export class ChatComponent implements OnInit {
 		private chatService: ChatService,
 		private configService: ConfigService,
 		public promptService: PromptService,
-		private api: ApiService,
+		private modelService: ModelService,
 		private ipcService: ElectronIpcService
 	) {}
 
@@ -76,7 +75,7 @@ export class ChatComponent implements OnInit {
 			};
 		}
 
-		this.models = await this.api.getModels();
+		this.models = await this.modelService.getModels();
 		this.subscriptions.push(
 			this.configService.onConfigUpdate$.subscribe((conf) => {
 				let model = this.models?.find(

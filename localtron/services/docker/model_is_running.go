@@ -17,9 +17,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-func (d *DockerService) ModelIsRunning(modelURL string) (bool, error) {
-	modelHash := generateStringHash(modelURL)
-
+func (d *DockerService) HashIsRunning(hash string) (bool, error) {
 	ctx := context.Background()
 	containers, err := d.client.ContainerList(ctx, container.ListOptions{All: true})
 	if err != nil {
@@ -30,7 +28,7 @@ func (d *DockerService) ModelIsRunning(modelURL string) (bool, error) {
 		if container.State != "running" {
 			continue
 		}
-		if container.Labels["singulatron-model-hash"] == modelHash {
+		if container.Labels["singulatron-hash"] == hash {
 			return true, nil
 		}
 	}

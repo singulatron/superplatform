@@ -15,7 +15,7 @@ export interface OnFolderSelect {
 }
 
 export interface OnModelCheck {
-	selectedExists?: boolean;
+	assetsReady?: boolean;
 }
 
 export interface onModelReady {

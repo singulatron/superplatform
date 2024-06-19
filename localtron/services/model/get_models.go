@@ -10,21 +10,14 @@
  */
 package modelservice
 
-import "fmt"
+import (
+	"github.com/singulatron/singulatron/localtron/datastore"
+	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
+)
 
-func (ms *ModelService) MakeDefault(modelId string) error {
-	stat, err := ms.Status(modelId)
-	if err != nil {
-		return err
-	}
-	if !stat.AssetsReady {
-		return fmt.Errorf("cannot set model as it is not downloaded yet")
-	}
+func (ms *ModelService) GetModels() ([]*modeltypes.Model, error) {
+	return ms.modelsStore.Query(
+		datastore.All(),
+	).Find()
 
-	conf, err := ms.configService.GetConfig()
-	if err != nil {
-		return err
-	}
-	conf.Model.CurrentModelId = modelId
-	return ms.configService.SaveConfig(conf)
 }

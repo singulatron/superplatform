@@ -8,7 +8,7 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-package dockerservice
+package modelservice
 
 import (
 	"testing"
@@ -54,7 +54,7 @@ func TestTransformModelDir(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			result := transformModelDir(tt.input)
+			result := transformWinPaths(tt.input)
 			if result != tt.expected {
 				t.Errorf("transformModelDir(%q) = %q, want %q", tt.input, result, tt.expected)
 			}

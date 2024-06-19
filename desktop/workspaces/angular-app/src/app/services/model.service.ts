@@ -44,12 +44,26 @@ export class ModelService {
 		this.listenToModelReady();
 	}
 
+	models: Model[] = [];
+
+	async getModels(): Promise<Model[]> {
+		if (this.models?.length) {
+			return this.models;
+		}
+
+		let rsp: GetModelsResponse = await this.localtron.call(
+			'/model/get-models',
+			{}
+		);
+		return rsp.models;
+	}
+
 	private listenToModelReady(): void {
 		combineLatest([
 			this.dockerService.onDockerInfo$,
 			this.onModelCheck$,
 		]).subscribe(([dockerInfo, modelCheck]) => {
-			if (dockerInfo.hasDocker && modelCheck.selectedExists) {
+			if (dockerInfo.hasDocker && modelCheck.assetsReady) {
 				this.onModelReadySubject.next({ modelReady: true });
 			}
 		});
@@ -57,9 +71,10 @@ export class ModelService {
 
 	async init() {
 		try {
+			this.models = await this.getModels();
 			let rsp = await this.modelStatus();
 
-			if (rsp?.status?.selectedExists) {
+			if (rsp?.status?.assetsReady) {
 				await this.modelStart().catch((e) => {
 					console.error('Error starting model', {
 						error: e,
@@ -70,7 +85,7 @@ export class ModelService {
 				this.onModelLaunchSubject.next({});
 			}
 			this.onModelCheckSubject.next({
-				selectedExists: rsp?.status?.selectedExists,
+				assetsReady: rsp?.status?.assetsReady,
 			});
 		} catch (error) {
 			console.log(error);
@@ -80,12 +95,18 @@ export class ModelService {
 		}
 	}
 
-	async modelStatus(): Promise<ModelStatusResponse> {
-		return this.localtron.call('/model/status', {});
+	async modelStatus(modelId?: string): Promise<ModelStatusResponse> {
+		let req: ModelStatusRequest = {
+			modelId: modelId,
+		};
+		return this.localtron.call('/model/status', req);
 	}
 
-	async modelStart(url?: string) {
-		this.localtron.call('/model/start', { url: url });
+	async modelStart(modelId?: string): Promise<ModelStartResponse> {
+		let req: ModelStartRequest = {
+			modelId: modelId,
+		};
+		return this.localtron.call('/model/start', req);
 	}
 
 	async makeDefault(url?: string) {
@@ -98,27 +119,47 @@ export interface OnModelReady {
 }
 
 interface ModelStatus {
-	selectedExists: boolean;
-	currentModelId: string;
+	assetsReady: boolean;
 	/** Running triggers onModelLaunch on the frontend.
 	 * Running is true when the model is both running and answering
 	 * - fully loaded.
 	 */
 	running: boolean;
-	modelAddress: string;
+	address: string;
 }
 
-// {
-//   "status": {
-//     "selectedExists": false,
-//     "currentModelId": "https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q3_K_S.gguf"
-//   }
-// }
+interface ModelStatusRequest {
+	modelId?: string;
+}
+
 interface ModelStatusResponse {
 	status: ModelStatus | null;
 }
 
-// also duplicated in the api service
+interface ModelStartRequest {
+	modelId?: string;
+}
+
+interface ModelStartResponse {}
+
+export interface Platform {
+	id: string;
+	name?: string;
+	version?: number;
+	container: PlatformContainer;
+}
+
+export interface PlatformContainer {
+	/** Internal port */
+	port: number;
+	images: PlatformImages;
+}
+
+export interface PlatformImages {
+	default: string;
+	cuda?: string;
+}
+
 export interface Model {
 	/** id is the download url of the model */
 	id: string;
@@ -137,4 +178,58 @@ export interface Model {
 	description?: string;
 	promptTemplate?: string;
 	quantComment?: string;
+}
+
+export const PlatformLlamaCpp: Platform = {
+	id: 'llama-cpp',
+	container: {
+		port: 8000,
+		images: {
+			default: 'crufter/llama-cpp-python-simple',
+			cuda: 'crufter/llama-cpp-python-cuda',
+		},
+	},
+};
+
+export const PlatformStableDiffusion: Platform = {
+	id: 'stable-diffusion',
+	container: {
+		port: 7860,
+		images: {
+			default: 'nicklucche/stable-diffusion',
+		},
+	},
+};
+
+export interface Model {
+	id: string;
+	platform: Platform;
+	name: string;
+	parameters?: string;
+	flavour?: string;
+	version?: string;
+	quality?: string;
+	extension?: string;
+	fullName?: string;
+	tags?: string[];
+	mirrors?: string[];
+	size?: number;
+	uncensored?: boolean;
+	maxRam?: number;
+	description?: string;
+	promptTemplate?: string;
+	quantComment?: string;
+	maxBits?: number;
+	bits?: number;
+	/** Asset maps asset name to URL, eg:
+	 * 	MODEL: "https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q2_K.gguf"
+	 *
+	 *  The asset will be downloaded and passed in to the container
+	 * as an envar (under the name MODEL).
+	 */
+	assets: { [key: string]: string };
+}
+
+export interface GetModelsResponse {
+	models: Model[];
 }

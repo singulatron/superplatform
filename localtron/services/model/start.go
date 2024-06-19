@@ -11,43 +11,102 @@
 package modelservice
 
 import (
+	"crypto/sha256"
+	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"log/slog"
 	"net"
 	"os"
+	"path"
+	"regexp"
 	"strings"
 	"time"
 
 	"github.com/pkg/errors"
 
-	"github.com/singulatron/singulatron/localtron/llm"
+	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/logger"
 
+	dockerservice "github.com/singulatron/singulatron/localtron/services/docker"
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 )
 
-const portNum = 8001
+const hostPortNum = 8001
 
 /*
-Starts the currently activated model
+Starts the model which has the supplied modelId or the currently activated one of
+the modelId is empty.
 */
 func (ms *ModelService) Start(modelId string) error {
-	stat, err := ms.Status(modelId)
+	if modelId == "" {
+		conf, err := ms.configService.GetConfig()
+		if err != nil {
+			return err
+		}
+		if conf.Model.CurrentModelId == "" {
+			return errors.New("no model id specified and no default model")
+		}
+		modelId = conf.Model.CurrentModelId
+	}
+
+	model, found, err := ms.modelsStore.Query(
+		datastore.Id(modelId),
+	).FindOne()
 	if err != nil {
 		return err
 	}
-	if !stat.SelectedExists {
-		return fmt.Errorf("cannot start selected model as it is not downloaded yet")
+	if !found {
+		return errors.New("model not found")
 	}
 
-	image := "crufter/llama-cpp-python-simple"
-	imageOverride := os.Getenv("SINGULATRON_IMAGE_OVERRIDE")
-	if imageOverride != "" {
-		image = imageOverride
-	}
-	// @todo implement a way to detect optimal image for the host
+	env := map[string]string{}
+	for assetName, assetURL := range model.Assets {
+		download, exists := ms.downloadService.GetDownload(assetURL)
+		if !exists {
+			return fmt.Errorf("asset with URL '%v' is cannot be found locally", assetURL)
+		}
 
-	launchInfo, err := ms.dockerService.LaunchModel("the-singulatron", portNum, image, stat.CurrentModelId)
+		assetPath := download.FilePath
+		assetPath = transformWinPaths(assetPath)
+
+		env[assetName] = assetPath
+	}
+
+	launchOptions := &dockerservice.LaunchOptions{}
+
+	configFolderPath := ms.configService.ConfigDirectory
+	singulatronHostFolder := os.Getenv("SINGULATRON_HOST_FOLDER")
+	for envName, assetPath := range env {
+		if singulatronHostFolder != "" {
+			assetPath = strings.Replace(assetPath, configFolderPath, singulatronHostFolder, 1)
+		}
+		fileName := path.Base(assetPath)
+		// eg. MODEL=/assets/mistral-7b-instruct-v0.2.Q2_K.gguf
+		launchOptions.Envs = append(launchOptions.Envs, fmt.Sprintf("%v=/assets/%v", envName, fileName))
+		launchOptions.HostBinds = append(launchOptions.HostBinds, fmt.Sprintf("%v:/assets/%v", assetPath, fileName))
+	}
+
+	image := model.Platform.Container.Images.Default
+	gpuEnabled := os.Getenv("SINGULATRON_GPU_ENABLED")
+	if gpuEnabled == "true" {
+		launchOptions.GPUEnabled = true
+		switch os.Getenv("SINGULATRON_GPU_PLATFORM") {
+		case "cuda":
+			image = model.Platform.Container.Images.Cuda
+		}
+
+		// only applicable to nvidia but should not affect others?
+		launchOptions.Envs = append(launchOptions.Envs, "NVIDIA_VISIBLE_DEVICES=all")
+	}
+
+	hash, err := modelToHash(model)
+	if err != nil {
+		return err
+	}
+	launchOptions.Hash = hash
+
+	launchInfo, err := ms.dockerService.LaunchContainer(image, model.Platform.Container.Port, hostPortNum, launchOptions)
 	if err != nil {
 		return errors.Wrap(err, "failed to launch container")
 	}
@@ -55,26 +114,68 @@ func (ms *ModelService) Start(modelId string) error {
 	if launchInfo.NewContainerStarted {
 		state := ms.get(launchInfo.PortNumber)
 		if !state.HasCheckerRunning {
-			go ms.checkIfAnswers(stat.CurrentModelId, launchInfo.PortNumber, state)
+			go ms.checkIfAnswers(model, launchInfo.PortNumber, state)
 		}
 	}
 
 	return nil
 }
 
+// transformWinPaths maps win paths to unix paths so WSL can understand it
+// eg. C:\users -> /mnt/c/users
+func transformWinPaths(modelDir string) string {
+	parts := strings.SplitN(modelDir, "\\", 2)
+	if len(parts) == 1 {
+		return modelDir
+	}
+
+	driveRegex := regexp.MustCompile(`^([A-Z]):`)
+	newFirstPart := driveRegex.ReplaceAllStringFunc(parts[0], func(match string) string {
+		driveLetter := strings.ToLower(match[:1])
+		return "/mnt/" + driveLetter
+	})
+
+	newModelDir := newFirstPart
+	if len(parts) > 1 {
+		newModelDir += "/" + strings.ReplaceAll(parts[1], "\\", "/")
+	}
+
+	return newModelDir
+}
+
 func (ms *ModelService) get(port int) *modeltypes.ModelState {
 	ms.modelStateMutex.Lock()
 	defer ms.modelStateMutex.Unlock()
 
-	_, ok := ms.modelStateMap[port]
+	_, ok := ms.modelPortMap[port]
 	if !ok {
-		ms.modelStateMap[port] = &modeltypes.ModelState{}
+		ms.modelPortMap[port] = &modeltypes.ModelState{}
 	}
 
-	return ms.modelStateMap[port]
+	return ms.modelPortMap[port]
 }
 
-func (ms *ModelService) checkIfAnswers(modelId string, port int, state *modeltypes.ModelState) {
+func modelToHash(model *modeltypes.Model) (string, error) {
+	bs, err := json.Marshal(model.Platform)
+	if err != nil {
+		return "", err
+	}
+
+	bs1, err := json.Marshal(model.Assets)
+	if err != nil {
+		return "", err
+	}
+
+	return generateStringHash(string(bs) + string(bs1)), nil
+}
+
+func generateStringHash(vals string) string {
+	hasher := sha256.New()
+	hasher.Write([]byte(vals))
+	return hex.EncodeToString(hasher.Sum(nil))
+}
+
+func (ms *ModelService) checkIfAnswers(model *modeltypes.Model, port int, state *modeltypes.ModelState) {
 	state.SetHasCheckerRunning(true)
 
 	defer func() {
@@ -90,22 +191,21 @@ func (ms *ModelService) checkIfAnswers(modelId string, port int, state *modeltyp
 
 		logger.Debug("Checking for answer started", slog.Int("port", port))
 
-		isModelRunning, err := ms.dockerService.ModelIsRunning(modelId)
+		isModelRunning, err := ms.dockerService.HashIsRunning(model.Id)
 		if err != nil {
 			logger.Warn("Model check error",
-				slog.String("modelId", modelId),
+				slog.String("modelId", model.Id),
 				slog.String("error", err.Error()),
 			)
 			continue
 		}
 		if !isModelRunning {
-			ms.printContainerLogs(modelId)
+			ms.printContainerLogs(model.Id)
 			continue
 		}
 
 		dockerHost := ms.dockerService.GetDockerHost()
 
-		// @todo document this
 		singulatronLLMHost := os.Getenv("SINGULATRON_LLM_HOST")
 		if singulatronLLMHost != "" {
 			dockerHost = singulatronLLMHost
@@ -125,42 +225,13 @@ func (ms *ModelService) checkIfAnswers(modelId string, port int, state *modeltyp
 				slog.String("error", err.Error()),
 			)
 			state.SetAnswering(false)
-			ms.printContainerLogs(modelId)
+			ms.printContainerLogs(model.Id)
 			continue
 		}
 
-		llmClient := llm.Client{
-			LLMAddress: fmt.Sprintf("%v:%v", dockerHost, port),
-		}
-
-		rsp, err := llmClient.PostCompletions(llm.PostCompletionsRequest{
-			MaxTokens: 32,
-			Prompt:    "My name is John. Please say hello to me.",
-		})
-		if err != nil {
-			logger.Debug("Answer failed for port",
-				slog.Int("port", port),
-				slog.String("error", err.Error()),
-			)
-			state.SetAnswering(false)
-			ms.printContainerLogs(modelId)
-			continue
-		}
-
-		answer := ""
-		for _, v := range rsp.Choices {
-			answer += v.Text
-		}
-
-		if !strings.Contains(answer, "John") {
-			logger.Debug("Answer failed to contain test sequence", slog.Int("port", port), slog.String("answer", answer))
-			state.SetAnswering(false)
-			continue
-		} else {
-			logger.Debug("LLM answered correctly", slog.Int("port", port))
-			state.SetAnswering(true)
-			return
-		}
+		logger.Debug("LLM pinged successfully", slog.Int("port", port))
+		state.SetAnswering(true)
+		return
 	}
 }
 

@@ -28,7 +28,7 @@ import (
 	"github.com/singulatron/singulatron/localtron/logger"
 )
 
-const defaultModelId = `https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q3_K_S.gguf`
+const defaultModelId = `huggingface/TheBloke/mistral-7b-instruct-v0.2.Q3_K_S.gguf`
 
 type ConfigService struct {
 	// import cycle doesn't alllow use to have

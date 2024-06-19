@@ -15,55 +15,72 @@ import (
 	"os"
 
 	"github.com/pkg/errors"
+	"github.com/singulatron/singulatron/localtron/datastore"
 	downloadtypes "github.com/singulatron/singulatron/localtron/services/download/types"
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 )
 
-func (ms *ModelService) Status(modelId string) (*modeltypes.Status, error) {
-	if modelId == "" {
-		conf, err := ms.confiService.GetConfig()
-		if err != nil {
-			return nil, err
-		}
-		modelId = conf.Model.CurrentModelId
-	}
-
-	if modelId == "" {
-		return nil, errors.New("cannot locate current model id")
-	}
-
+func (ms *ModelService) Status(modelId string) (*modeltypes.ModelStatus, error) {
 	dockerHost := ms.dockerService.GetDockerHost()
 	singulatronLLMHost := os.Getenv("SINGULATRON_LLM_HOST")
 	if singulatronLLMHost != "" {
 		dockerHost = singulatronLLMHost
 	}
 
-	modelAddress := fmt.Sprintf("%v:%v", dockerHost, portNum)
+	modelAddress := fmt.Sprintf("%v:%v", dockerHost, hostPortNum)
 
-	downl, exists := ms.downloadService.GetDownload(modelId)
-	if !exists || downl.Status != downloadtypes.DownloadStatusCompleted {
-		return &modeltypes.Status{
-			CurrentModelId: modelId,
-			SelectedExists: false,
-			ModelAddress:   modelAddress,
-		}, nil
+	if modelId == "" {
+		conf, err := ms.configService.GetConfig()
+		if err != nil {
+			return nil, err
+		}
+		if conf.Model.CurrentModelId == "" {
+			return nil, errors.New("no model id specified and no default model")
+		}
+		modelId = conf.Model.CurrentModelId
+	}
+
+	model, found, err := ms.modelsStore.Query(
+		datastore.Id(modelId),
+	).FindOne()
+	if err != nil {
+		return nil, err
+	}
+	if !found {
+		return nil, errors.New("model not found")
+	}
+
+	for _, assetUrl := range model.Assets {
+
+		downl, exists := ms.downloadService.GetDownload(assetUrl)
+		if !exists || downl.Status != downloadtypes.DownloadStatusCompleted {
+			return &modeltypes.ModelStatus{
+				AssetsReady: false,
+				Address:     modelAddress,
+			}, nil
+		}
+	}
+
+	hash, err := modelToHash(model)
+	if err != nil {
+		return nil, err
 	}
 
 	isRunning := false
-	if v, err := ms.dockerService.ModelIsRunning(modelId); err == nil && v {
+	if v, err := ms.dockerService.HashIsRunning(hash); err == nil && v {
 		isRunning = true
 	}
-	// @todo this is not threadsafe, needs locking, will panic
-	if v, ok := ms.modelStateMap[portNum]; ok {
+
+	// @todo lock this
+	if v, ok := ms.modelPortMap[hostPortNum]; ok {
 		if !v.Answering {
 			isRunning = false
 		}
 	}
 
-	return &modeltypes.Status{
-		CurrentModelId: modelId,
-		Running:        isRunning,
-		SelectedExists: true,
-		ModelAddress:   modelAddress,
+	return &modeltypes.ModelStatus{
+		Running:     isRunning,
+		AssetsReady: true,
+		Address:     modelAddress,
 	}, nil
 }

@@ -9,8 +9,7 @@
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
 import { Component, HostListener } from '@angular/core';
-import { ModelService } from '../../services/model.service';
-import { ApiService, Model } from '../../../../shared/stdlib/api.service';
+import { ModelService, Model } from '../../services/model.service';
 import {
 	DownloadService,
 	DownloadStatusChangeEvent,
@@ -48,8 +47,7 @@ export class AdvancedModelExplorerComponent {
 	constructor(
 		public downloadService: DownloadService,
 		private modelService: ModelService,
-		public configService: ConfigService,
-		private api: ApiService
+		public configService: ConfigService
 	) {
 		this.detectLargeScreen();
 	}
@@ -107,7 +105,8 @@ export class AdvancedModelExplorerComponent {
 			models = models.filter((model) => {
 				return downloadsResponse.downloads.find(
 					(download) =>
-						download.status === 'completed' && download.id === model.id
+						download.status === 'completed' &&
+						Object.values(model.assets)?.includes(download.id)
 				);
 			});
 		}
@@ -143,17 +142,22 @@ export class AdvancedModelExplorerComponent {
 	}
 
 	async ngOnInit(): Promise<void> {
-		this.allModels = await this.api.getModels();
+		this.allModels = await this.modelService.getModels();
 		this.allFilteredModels = this.allModels;
 		this.totalItems = this.allModels.length;
 		this.loadPage(this.currentPage);
 	}
 
-	isDownloading(id: string, status: DownloadStatusChangeEvent | null): boolean {
+	isDownloading(
+		model: Model,
+		status: DownloadStatusChangeEvent | null
+	): boolean {
 		if (status === null) {
 			return false;
 		}
-		let c = status?.allDownloads?.find((v) => v.id === id);
+		let c = status?.allDownloads?.find((download) =>
+			Object.values(model.assets).includes(download.url)
+		);
 		if (c?.status === 'inProgress' || c?.status === 'paused') {
 			return true;
 		}
@@ -178,12 +182,14 @@ export class AdvancedModelExplorerComponent {
 		return `Flavour ${flavour}`;
 	}
 
-	downloaded(id: string, status: DownloadStatusChangeEvent | null): boolean {
+	downloaded(model: Model, status: DownloadStatusChangeEvent | null): boolean {
 		if (status === null) {
 			return false;
 		}
 		if (
-			status?.allDownloads?.find((v) => v.id === id)?.status === 'completed'
+			status?.allDownloads?.find((download) =>
+				Object.values(model.assets)?.includes(download.url)
+			)?.status === 'completed'
 		) {
 			return true;
 		}
@@ -194,8 +200,15 @@ export class AdvancedModelExplorerComponent {
 		return status?.allDownloads?.find((v) => v.id === id)?.progress || 0;
 	}
 
-	async download(id: string) {
-		this.downloadService.downloadDo(id);
+	async download(model: Model) {
+		let assetURLs = Object.values(model.assets);
+		if (!assetURLs?.length) {
+			throw `No assets to download for ${model.id}`;
+		}
+
+		assetURLs.forEach((url) => {
+			this.downloadService.downloadDo(url);
+		});
 	}
 
 	toggleItem(id: string) {

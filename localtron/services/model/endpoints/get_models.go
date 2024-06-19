@@ -19,19 +19,19 @@ import (
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
 
-func Start(
+func GetModels(
 	w http.ResponseWriter,
 	r *http.Request,
 	userService *userservice.UserService,
 	ms *modelservice.ModelService,
 ) {
-	err := userService.IsAuthorized(modeltypes.PermissionModelCreate.Id, r)
+	err := userService.IsAuthorized(modeltypes.PermissionModelView.Id, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 
-	req := modeltypes.StartRequest{}
+	req := modeltypes.StatusRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `invalid JSON`, http.StatusBadRequest)
@@ -39,12 +39,14 @@ func Start(
 	}
 	defer r.Body.Close()
 
-	err = ms.Start(req.ModelId)
+	models, err := ms.GetModels()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	jsonData, _ := json.Marshal(modeltypes.StartResponse{})
+	jsonData, _ := json.Marshal(modeltypes.GetModelsResponse{
+		Models: models,
+	})
 	w.Write(jsonData)
 }

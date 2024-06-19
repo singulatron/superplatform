@@ -12,12 +12,7 @@ package dockerservice
 
 import (
 	"context"
-	"crypto/sha256"
-	"encoding/hex"
-	"encoding/json"
 	"fmt"
-	"os"
-	"regexp"
 	"strings"
 
 	"github.com/docker/docker/api/types"
@@ -28,6 +23,15 @@ import (
 	"github.com/singulatron/singulatron/localtron/logger"
 )
 
+type LaunchOptions struct {
+	Name       string
+	Envs       []string
+	Labels     map[string]string
+	HostBinds  []string
+	GPUEnabled bool
+	Hash       string
+}
+
 type LaunchInfo struct {
 	NewContainerStarted bool
 	PortNumber          int
@@ -37,7 +41,7 @@ type LaunchInfo struct {
 A low level method for launching containers running models.
 For a higher level one use `ModelService.Start“.
 */
-func (d *DockerService) LaunchModel(containerName string, hostPort int, image, modelURL string) (*LaunchInfo, error) {
+func (d *DockerService) LaunchContainer(image string, internalPort, hostPort int, options *LaunchOptions) (*LaunchInfo, error) {
 	err := d.pullImage(image)
 	if err != nil {
 		return nil, errors.Wrap(err, "image pull failure")
@@ -46,43 +50,27 @@ func (d *DockerService) LaunchModel(containerName string, hostPort int, image, m
 	d.launchModelMutex.Lock()
 	defer d.launchModelMutex.Unlock()
 
-	download, exists := d.ds.GetDownload(modelURL)
-	if !exists {
-		return nil, fmt.Errorf("model '%v' is cannot be found locally", modelURL)
+	if options == nil {
+		options = &LaunchOptions{}
 	}
-
-	modelPath := download.FilePath
-	modelPath = transformModelDir(modelPath)
-
-	// @todo this is a hack
-	configFolderPath := d.configService.ConfigDirectory
-	sfolder := os.Getenv("SINGULATRON_HOST_FOLDER")
-	if sfolder != "" {
-		modelPath = strings.Replace(modelPath, configFolderPath, sfolder, 1)
+	if options.Name == "" {
+		options.Name = "the-singulatron"
 	}
-
-	urlParts := strings.Split(download.URL, "/")
-	filenameFromUrl := urlParts[len(urlParts)-1]
 
 	containerConfig := &container.Config{
 		Image: image,
-		// ie. MODEL=/models/mistral-7b-instruct-v0.2.Q2_K.gguf
-		Env: []string{
-			fmt.Sprintf("MODEL=/models/%v", filenameFromUrl),
-			// only applicable to nvidia but should not affect others?
-			"NVIDIA_VISIBLE_DEVICES=all",
-		},
+		Env:   options.Envs,
 		// @todo port 8000 here is llama cpp python specific
 		ExposedPorts: nat.PortSet{
-			nat.Port("8000/tcp"): {},
+			nat.Port(fmt.Sprintf("%v/tcp", internalPort)): {},
 		},
 		Labels: map[string]string{},
 	}
 	hostConfig := &container.HostConfig{
-		Binds: []string{fmt.Sprintf("%v:/models/%v", modelPath, filenameFromUrl)},
+		Binds: options.HostBinds,
 		PortBindings: map[nat.Port][]nat.PortBinding{
 			// @todo port 8000 here is llama cpp python specific
-			nat.Port("8000/tcp"): {
+			nat.Port(fmt.Sprintf("%v/tcp", internalPort)): {
 				{
 					HostPort: fmt.Sprintf("%v", hostPort),
 				},
@@ -93,8 +81,7 @@ func (d *DockerService) LaunchModel(containerName string, hostPort int, image, m
 		},
 	}
 
-	gpuEnabled := os.Getenv("SINGULATRON_GPU_ENABLED")
-	if gpuEnabled == "true" {
+	if options.GPUEnabled {
 		hostConfig.Resources.DeviceRequests = append(hostConfig.Resources.DeviceRequests, container.DeviceRequest{
 			Capabilities: [][]string{
 				{"gpu"},
@@ -110,20 +97,10 @@ func (d *DockerService) LaunchModel(containerName string, hostPort int, image, m
 		return nil, errors.Wrap(err, "error listing docker containers when launching")
 	}
 
-	containerJSON, err := json.Marshal(containerConfig)
-	if err != nil {
-		return nil, err
-	}
-	hostJSON, err := json.Marshal(hostConfig)
-	if err != nil {
-		return nil, err
-	}
-	hash := generateStringHash(string(containerJSON) + string(hostJSON))
-
 	var existingContainer *types.Container
 	for _, container := range containers {
 		for _, name := range container.Names {
-			if name == "/"+containerName || name == containerName || strings.Contains(name, containerName) {
+			if name == "/"+options.Name || name == options.Name || strings.Contains(name, options.Name) {
 				existingContainer = &container
 				break
 			}
@@ -134,7 +111,7 @@ func (d *DockerService) LaunchModel(containerName string, hostPort int, image, m
 	}
 
 	if existingContainer != nil {
-		if existingContainer.State != "running" || existingContainer.Labels["singulatron-hash"] != hash {
+		if existingContainer.State != "running" || existingContainer.Labels["singulatron-hash"] != options.Hash {
 			logger.Debug("Container state is not running or hash is mismatched, removing...")
 			if err := d.client.ContainerRemove(ctx, existingContainer.ID, container.RemoveOptions{Force: true}); err != nil {
 				return nil, errors.Wrap(err, "error removing Docker container")
@@ -147,10 +124,9 @@ func (d *DockerService) LaunchModel(containerName string, hostPort int, image, m
 		}
 	}
 
-	containerConfig.Labels["singulatron-hash"] = hash
-	containerConfig.Labels["singulatron-model-hash"] = generateStringHash(modelURL)
+	containerConfig.Labels["singulatron-hash"] = options.Hash
 
-	createdContainer, err := d.client.ContainerCreate(ctx, containerConfig, hostConfig, nil, nil, containerName)
+	createdContainer, err := d.client.ContainerCreate(ctx, containerConfig, hostConfig, nil, nil, options.Name)
 	if err != nil {
 		return nil, errors.Wrap(err, "error creating Docker container")
 	}
@@ -163,30 +139,4 @@ func (d *DockerService) LaunchModel(containerName string, hostPort int, image, m
 		NewContainerStarted: true,
 		PortNumber:          hostPort,
 	}, nil
-}
-
-func transformModelDir(modelDir string) string {
-	parts := strings.SplitN(modelDir, "\\", 2)
-	if len(parts) == 1 {
-		return modelDir
-	}
-
-	driveRegex := regexp.MustCompile(`^([A-Z]):`)
-	newFirstPart := driveRegex.ReplaceAllStringFunc(parts[0], func(match string) string {
-		driveLetter := strings.ToLower(match[:1])
-		return "/mnt/" + driveLetter
-	})
-
-	newModelDir := newFirstPart
-	if len(parts) > 1 {
-		newModelDir += "/" + strings.ReplaceAll(parts[1], "\\", "/")
-	}
-
-	return newModelDir
-}
-
-func generateStringHash(vals string) string {
-	hasher := sha256.New()
-	hasher.Write([]byte(vals))
-	return hex.EncodeToString(hasher.Sum(nil))
 }
