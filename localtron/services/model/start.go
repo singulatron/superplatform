@@ -89,12 +89,25 @@ func (ms *ModelService) Start(modelId string) error {
 
 	configFolderPath := ms.configService.ConfigDirectory
 	// The SINGULATRON_HOST_FOLDER is a path on the host which is mounted
-	// by different containers to share data.
+	// by Singulatron to download models etc.
+	// (To persist the ~/.singulatron of the container basically).
+	// We then basically pass this folder down to
+	// containers launched by Singulatron.
+	//
+	// This way the intra-container path
+	// 		/root/.singulatron/downloads/somemodel
+	// Becomes
+	// 		/host/path/downloads/somemodel
 	singulatronHostFolder := os.Getenv("SINGULATRON_HOST_FOLDER")
 	for envName, assetPath := range env {
 		if singulatronHostFolder != "" {
+			// assetPath is an intra-container path, returned by the DownloadService
+			// eg. /root/.singulatron/downloads/somemodel
+			// configFolderPath is /root/.singulatron
+			// after replace: /host/path/download/somemodel
 			assetPath = strings.Replace(assetPath, configFolderPath, singulatronHostFolder, 1)
 		}
+
 		fileName := path.Base(assetPath)
 		// eg. MODEL=/assets/mistral-7b-instruct-v0.2.Q2_K.gguf
 		launchOptions.Envs = append(launchOptions.Envs, fmt.Sprintf("%v=/assets/%v", envName, fileName))
