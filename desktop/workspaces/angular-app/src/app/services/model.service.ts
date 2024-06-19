@@ -16,7 +16,6 @@ import {
 	OnModelLaunch,
 	OnModelCheck,
 } from 'shared-lib/models/event-request-response';
-import { ApiService } from '../../../shared/stdlib/api.service';
 
 @Injectable({
 	providedIn: 'root',
@@ -35,7 +34,6 @@ export class ModelService {
 
 	constructor(
 		private localtron: LocaltronService,
-		private apiService: ApiService,
 		private dockerService: DockerService
 	) {
 		// @todo nothing to trigger model start so we resolve to polling
@@ -46,27 +44,18 @@ export class ModelService {
 		this.listenToModelReady();
 	}
 
-	modelsFromServer: Model[] = [];
-	serverModelsChecked = false;
+	models: Model[] = [];
 
 	async getModels(): Promise<Model[]> {
-		if (!this.serverModelsChecked) {
-			this.serverModelsChecked = true;
-
-			try {
-				let rsp: ModelResponse = await this.apiService.getModelsFromServer();
-				if (rsp.models && Array.isArray(rsp.models) && rsp.models.length > 0) {
-					this.modelsFromServer = rsp.models as any;
-				}
-			} catch (e) {
-				console.error('Error getting models from server', {
-					error: JSON.stringify(e),
-				});
-			}
+		if (this.models?.length) {
+			return this.models;
 		}
 
-		this.modelsFromServer.push(...this.modelsFromServer);
-		return this.modelsFromServer;
+		let rsp: GetModelsResponse = await this.localtron.call(
+			'/model/get-models',
+			{}
+		);
+		return rsp.models;
 	}
 
 	private listenToModelReady(): void {
@@ -82,6 +71,7 @@ export class ModelService {
 
 	async init() {
 		try {
+			this.models = await this.getModels();
 			let rsp = await this.modelStatus();
 
 			if (rsp?.status?.assetsReady) {
@@ -240,6 +230,6 @@ export interface Model {
 	assets: { [key: string]: string };
 }
 
-export interface ModelResponse {
+export interface GetModelsResponse {
 	models: Model[];
 }

@@ -75,9 +75,9 @@ var Models = []Model{
 		PromptTemplate: "[INST] {prompt} [/INST]",
 	},
 	{
-		Id: "huggingface/TheBloke/mistral-7b-instruct-v0.2.Q3_K_S.gguf",
+		Id: "huggingface/TheBloke/mistral-7b-instruct-v0.2.Q3_K_M.gguf",
 		Assets: map[string]string{
-			"MODEL": "https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q3_K_S.gguf",
+			"MODEL": "https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q3_K_M.gguf",
 		},
 		Platform:       PlatformLlamaCpp,
 		Name:           "Mistral",

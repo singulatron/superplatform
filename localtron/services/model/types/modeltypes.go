@@ -99,6 +99,10 @@ type MakeDefaultRequest struct {
 type MakeDefaultResponse struct {
 }
 
+type GetModelsResponse struct {
+	Models []*Model `json:"models,omitempty"`
+}
+
 //
 // Events
 //
