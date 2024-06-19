@@ -225,7 +225,12 @@ func (ms *ModelService) checkIfAnswers(model *modeltypes.Model, port int, state 
 			continue
 		}
 		if !isModelRunning {
-			ms.printContainerLogs(model.Id)
+			hash, err := modelToHash(model)
+			if err != nil {
+				logger.Error("cannot get hash to print logs", slog.Any("error", err))
+				continue
+			}
+			ms.printContainerLogs(model.Id, hash)
 			continue
 		}
 
@@ -250,7 +255,13 @@ func (ms *ModelService) checkIfAnswers(model *modeltypes.Model, port int, state 
 				slog.String("error", err.Error()),
 			)
 			state.SetAnswering(false)
-			ms.printContainerLogs(model.Id)
+
+			hash, err := modelToHash(model)
+			if err != nil {
+				logger.Error("cannot get hash to print logs", slog.Any("error", err))
+				continue
+			}
+			ms.printContainerLogs(model.Id, hash)
 			continue
 		}
 
@@ -260,8 +271,8 @@ func (ms *ModelService) checkIfAnswers(model *modeltypes.Model, port int, state 
 	}
 }
 
-func (ms *ModelService) printContainerLogs(modelId string) {
-	logs, err := ms.dockerService.GetContainerLogsAndStatus(modelId, 100)
+func (ms *ModelService) printContainerLogs(modelId, hash string) {
+	logs, err := ms.dockerService.GetContainerLogsAndStatus(hash, 100)
 	if err != nil {
 		logger.Warn("Error getting container logs",
 			slog.String("modelId", modelId),

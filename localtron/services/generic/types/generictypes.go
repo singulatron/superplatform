@@ -30,6 +30,10 @@ type GenericObject struct {
 	Data any `json:"data,omitempty"`
 }
 
+func (g GenericObject) GetId() string {
+	return g.Id
+}
+
 type FindRequest struct {
 	Table      string                `json:"table"`
 	Conditions []datastore.Condition `json:"conditions"`

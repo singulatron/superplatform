@@ -17,6 +17,6 @@ var LocalStorePath = ""
 // and type safety when creating instances of datastores.
 //
 // Unfortunately this means globals must be utilized to configure this package.
-func GetStore[T any](tableName string) (datastore.DataStore[T], error) {
+func GetStore[T datastore.Row](tableName string) (datastore.DataStore[T], error) {
 	return localstore.NewLocalStore[T](path.Join(LocalStorePath, tableName)), nil
 }

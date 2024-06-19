@@ -33,6 +33,10 @@ type TestObject struct {
 	FriendPointer *Friend
 }
 
+func (t TestObject) GetId() string {
+	return t.Name
+}
+
 func TestAll(t *testing.T) {
 	stores := map[string]func() datastore.DataStore[TestObject]{
 		"localStore": func() datastore.DataStore[TestObject] {
@@ -40,6 +44,8 @@ func TestAll(t *testing.T) {
 		},
 	}
 	tests := map[string]func(t *testing.T, store datastore.DataStore[TestObject]){
+		"Create":                 Create,
+		"Upsert":                 Upsert,
 		"InClause":               InClause,
 		"ReverseInClause":        ReverseInClause,
 		"CreateReadUpdateDelete": CreateReadUpdateDelete,
@@ -56,6 +62,26 @@ func TestAll(t *testing.T) {
 			})
 		}
 	}
+}
+
+func Create(t *testing.T, store datastore.DataStore[TestObject]) {
+	obj1 := TestObject{Name: "AliceCreate", Value: 10, Age: 25}
+
+	err := store.Create(obj1)
+	assert.NoError(t, err)
+
+	err = store.Create(obj1)
+	assert.Error(t, err)
+}
+
+func Upsert(t *testing.T, store datastore.DataStore[TestObject]) {
+	obj1 := TestObject{Name: "AliceCreate", Value: 10, Age: 25}
+
+	err := store.Upsert(obj1)
+	assert.NoError(t, err)
+
+	err = store.Upsert(obj1)
+	assert.NoError(t, err)
 }
 
 func InClause(t *testing.T, store datastore.DataStore[TestObject]) {
@@ -304,9 +330,9 @@ func CreateManyUpdateDelete(t *testing.T, store datastore.DataStore[TestObject])
 
 func Query(t *testing.T, store datastore.DataStore[TestObject]) {
 	objs := []TestObject{
-		{Name: "test1", Value: 10},
-		{Name: "test2", Value: 20},
-		{Name: "test3", Value: 30},
+		{Name: "queryTest1", Value: 10},
+		{Name: "queryTest2", Value: 20},
+		{Name: "queryTest3", Value: 30},
 	}
 
 	err := store.CreateMany(objs)

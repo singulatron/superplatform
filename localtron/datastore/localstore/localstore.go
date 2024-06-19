@@ -12,7 +12,6 @@ package localstore
 
 import (
 	"errors"
-	"fmt"
 	"io/ioutil"
 	"reflect"
 	"sort"
@@ -21,11 +20,12 @@ import (
 	"time"
 
 	"github.com/flusflas/dipper"
+	"github.com/google/uuid"
 	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/datastore/localstore/statemanager"
 )
 
-type LocalStore[T any] struct {
+type LocalStore[T datastore.Row] struct {
 	data          map[string]T
 	mu            sync.RWMutex
 	lastID        int
@@ -34,9 +34,9 @@ type LocalStore[T any] struct {
 	stateManager  *statemanager.StateManager[T]
 }
 
-func NewLocalStore[T any](filePath string) *LocalStore[T] {
+func NewLocalStore[T datastore.Row](filePath string) *LocalStore[T] {
 	if filePath == "" {
-		tempFile, err := ioutil.TempFile("", "example")
+		tempFile, err := ioutil.TempFile("", uuid.NewString())
 		if err != nil {
 			panic(err)
 		}
@@ -75,7 +75,11 @@ func (s *LocalStore[T]) Create(obj T) error {
 }
 
 func (s *LocalStore[T]) createWithoutLock(obj T) error {
-	id := s.newID()
+	id := obj.GetId()
+	_, ok := s.data[id]
+	if ok {
+		return datastore.ErrEntryAlreadyExists
+	}
 	s.data[id] = obj
 	s.stateManager.MarkChanged()
 	return nil
@@ -86,10 +90,37 @@ func (s *LocalStore[T]) CreateMany(objs []T) error {
 	defer s.mu.Unlock()
 
 	for _, obj := range objs {
-		id := s.newID()
+		id := obj.GetId()
+		_, ok := s.data[id]
+		if ok {
+			return datastore.ErrEntryAlreadyExists
+		}
+	}
+
+	for _, obj := range objs {
+		id := obj.GetId()
 		s.data[id] = obj
 	}
+
 	s.stateManager.MarkChanged()
+	return nil
+}
+
+func (s *LocalStore[T]) Upsert(obj T) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	s.data[obj.GetId()] = obj
+	return nil
+}
+
+func (s *LocalStore[T]) UpsertMany(objs []T) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	for _, obj := range objs {
+		s.data[obj.GetId()] = obj
+	}
 	return nil
 }
 
@@ -162,12 +193,7 @@ func (s *LocalStore[T]) IsInTransaction() bool {
 	return s.inTransaction
 }
 
-func (s *LocalStore[T]) newID() string {
-	s.lastID++
-	return fmt.Sprintf("%d", s.lastID)
-}
-
-type QueryBuilder[T any] struct {
+type QueryBuilder[T datastore.Row] struct {
 	store        *LocalStore[T]
 	conditions   []datastore.Condition
 	orderField   string

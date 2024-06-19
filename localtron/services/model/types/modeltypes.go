@@ -12,6 +12,10 @@ type Platform struct {
 	Architectures Architectures `json:"architectures"`
 }
 
+func (p Platform) GetId() string {
+	return p.Id
+}
+
 /* Containers by GPU/hardware platform */
 type Architectures struct {
 	Default Container `json:"default"`
@@ -54,6 +58,10 @@ type Model struct {
 	MaxBits        int               `json:"max_bits"`
 	Bits           int               `json:"bits"`
 	Assets         map[string]string `json:"assets"`
+}
+
+func (g Model) GetId() string {
+	return g.Id
 }
 
 /* Internal type for ModelService */
