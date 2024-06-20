@@ -24,8 +24,10 @@ type GenericObject struct {
 	Id        string `json:"id"`
 	Table     string `json:"table"`
 	CreatedAt string `json:"createdAt"`
-	UpdatedAt string `json:"updatedAt"`
+	UpdatedAt string `json:"updatedAt,omitempty"`
 	UserId    string `json:"userId,omitempty"`
+	// Entry is visible to all users of the app
+	Public bool `json:"public,omitempty"`
 
 	Data any `json:"data,omitempty"`
 }
@@ -49,7 +51,7 @@ type CreateRequest struct {
 }
 
 type DeleteRequest struct {
-	Table      string                `json:"table,omitempty"`
+	Table      string                `json:"table"`
 	Conditions []datastore.Condition `json:"conditions"`
 }
 
@@ -58,7 +60,7 @@ type DeleteResponse struct {
 
 type UpdateRequest struct {
 	Table      string                `json:"table,omitempty"`
-	Conditions []datastore.Condition `json:"conditions"`
+	Conditions []datastore.Condition `json:"conditions,omitempty"`
 	Object     *GenericObject        `json:"object,omitempty"`
 }
 

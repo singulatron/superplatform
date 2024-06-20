@@ -31,7 +31,7 @@ func Delete(
 		return
 	}
 
-	_, found, err := userService.GetUserFromRequest(r)
+	user, found, err := userService.GetUserFromRequest(r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -49,7 +49,7 @@ func Delete(
 	}
 	defer r.Body.Close()
 
-	err = genericService.Delete(req.Table, req.Conditions)
+	err = genericService.Delete(req.Table, user.Id, req.Conditions)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

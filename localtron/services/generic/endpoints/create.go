@@ -31,7 +31,7 @@ func Create(
 		return
 	}
 
-	_, found, err := userService.GetUserFromRequest(r)
+	user, found, err := userService.GetUserFromRequest(r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -49,7 +49,7 @@ func Create(
 	}
 	defer r.Body.Close()
 
-	err = genericService.Create(req.Table, req.Object)
+	err = genericService.Create(req.Table, user.Id, req.Object)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
