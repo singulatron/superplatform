@@ -10,17 +10,18 @@
  -->
 <b-sidebar-page>
 	<app-centered headerHeight="0vh" [vertical]="true">
-		<div style="margin: 0 auto; margin-bottom: 2em; height: 6em; width: 6em">
-			<img src="/assets/logo-lighter.png" />
+		<div style="display: flex; margin-bottom: 2em">
+			<div style="height: 6em; width: 6em">
+				<img src="/assets/logo-lighter.png" style="height: 100%; width: 100%" />
+			</div>
+			<div style="flex-grow: 1; margin-left: 2rem">
+				<h1>Singulatron</h1>
+				<h3 style="margin-top: 0em; color: #888">
+					{{ 'AI You Can Trust' | translate }}.
+				</h3>
+			</div>
 		</div>
-		<div style="text-align: center">
-			<h1>{{ 'Welcome to' | translate }} Singulatron</h1>
-		</div>
-		<div style="text-align: center; color: #888">
-			<h3 style="margin-top: 0em">
-				{{ 'A free, private, offline-enabled AI platform' | translate }}.
-			</h3>
-		</div>
+
 		<ion-card style="margin-top: 3em">
 			<ion-card-content>
 				<div style="display: flex; align-items: center">
@@ -53,7 +54,7 @@
 				</div>
 			</ion-card-content>
 		</ion-card>
-		<div style="text-align: center; margin-top: 3em" class="buttons">
+		<div style="margin-left: 0.5rem; margin-top: 3em" class="buttons">
 			<ion-button
 				class="menu-buttons sng-test-ai-button"
 				routerLink="/startup"

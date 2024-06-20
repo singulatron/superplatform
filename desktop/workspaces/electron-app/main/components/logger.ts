@@ -13,6 +13,7 @@ import { homedir } from 'os';
 import { join } from 'path';
 import { sendLogToLocalServer } from '../ipc-handlers/log-request';
 import { Log } from '../../../angular-app/shared/backend-api/app';
+import chalk from 'chalk';
 
 let loggingEnabled = true;
 
@@ -70,8 +71,17 @@ const originalConsole: { [key: string]: (...data: any[]) => void } = {
 			log.time = new Date().toISOString();
 		}
 
-		const localMessage = formatForLocalLogs(log);
+		let localMessage = formatForLocalLogs(log);
 
+		if (mn == 'debug') {
+			localMessage = chalk.gray(localMessage);
+		}
+		if (mn == 'error') {
+			localMessage = chalk.red(localMessage);
+		}
+		if (mn == "warn") {
+			localMessage = chalk.yellow(localMessage)
+		}
 		originalConsole[methodName as keyof Console](localMessage);
 		sendLogToLocalServer(log);
 		logStream.write(localMessage + '\n');
