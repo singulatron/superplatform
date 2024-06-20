@@ -23,9 +23,26 @@ type ChatMessage struct {
 	Content  string `json:"content"`
 	// UserId is saved when the user is logged in to an account
 	// @todo not used yet
-	UserId    string `json:"userId,omitempty"`
-	CreatedAt string `json:"createdAt"`
-	UpdatedAt string `json:"updatedAt"`
+	UserId    string   `json:"userId,omitempty"`
+	CreatedAt string   `json:"createdAt"`
+	UpdatedAt string   `json:"updatedAt"`
+	AssetIds  []string `json:"assetIds,omitempty"`
+}
+
+type Asset struct {
+	Id  string `json:"id"`
+	Url string `json:"url,omitempty"`
+	/* Some assets might have the content directly in them as base64
+	encoded strings */
+	Content    string `json:"content,omitempty"`
+	Type       string `json:"type,omitempty"`
+	Decription string `json:"description,omitempty"`
+	CreatedAt  string `json:"createdAt"`
+	UpdatedAt  string `json:"updatedAt,omitempty"`
+}
+
+func (a Asset) GetId() string {
+	return a.Id
 }
 
 func (c *ChatMessage) GetId() string {

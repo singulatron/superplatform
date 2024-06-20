@@ -34,6 +34,7 @@ type AppService struct {
 
 	messagesStore datastore.DataStore[*apptypes.ChatMessage]
 	threadsStore  datastore.DataStore[*apptypes.ChatThread]
+	assetsStore   datastore.DataStore[*apptypes.Asset]
 
 	logMutex sync.Mutex
 }
@@ -51,6 +52,10 @@ func NewAppService(
 	if err != nil {
 		return nil, err
 	}
+	assetsStore, err := storefactoryservice.GetStore[*apptypes.Asset]("assets")
+	if err != nil {
+		return nil, err
+	}
 
 	ci, err := cs.GetClientId()
 	if err != nil {
@@ -64,6 +69,7 @@ func NewAppService(
 
 		messagesStore: messagesStore,
 		threadsStore:  threadsStore,
+		assetsStore:   assetsStore,
 
 		clientId: ci,
 	}

@@ -15,7 +15,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/singulatron/singulatron/localtron/llm"
+	"github.com/singulatron/singulatron/localtron/clients/llm"
 	"github.com/singulatron/singulatron/localtron/logger"
 
 	promptservice "github.com/singulatron/singulatron/localtron/services/prompt"

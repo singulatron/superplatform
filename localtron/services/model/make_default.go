@@ -10,7 +10,13 @@
  */
 package modelservice
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/pkg/errors"
+	"github.com/singulatron/singulatron/localtron/datastore"
+	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
+)
 
 func (ms *ModelService) MakeDefault(modelId string) error {
 	stat, err := ms.Status(modelId)
@@ -27,4 +33,28 @@ func (ms *ModelService) MakeDefault(modelId string) error {
 	}
 	conf.Model.CurrentModelId = modelId
 	return ms.configService.SaveConfig(conf)
+}
+
+func (ms *ModelService) GetPlatformByModelId(modelId string) (*modeltypes.Platform, error) {
+	model, found, err := ms.modelsStore.Query(
+		datastore.Id(modelId),
+	).FindOne()
+	if err != nil {
+		return nil, err
+	}
+	if !found {
+		return nil, errors.New("cannot find model")
+	}
+
+	platform, found, err := ms.platformsStore.Query(
+		datastore.Id(model.PlatformId),
+	).FindOne()
+	if err != nil {
+		return nil, err
+	}
+	if !found {
+		return nil, errors.New("cannot find platform")
+	}
+
+	return platform, nil
 }

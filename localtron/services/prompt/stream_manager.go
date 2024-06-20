@@ -13,7 +13,7 @@ package promptservice
 import (
 	"sync"
 
-	"github.com/singulatron/singulatron/localtron/llm"
+	"github.com/singulatron/singulatron/localtron/clients/llm"
 )
 
 type SubscriberChan chan *llm.CompletionResponse
