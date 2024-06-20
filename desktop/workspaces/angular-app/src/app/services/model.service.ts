@@ -187,26 +187,6 @@ export interface Model {
 	quantComment?: string;
 }
 
-export const PlatformLlamaCpp: Platform = {
-	id: 'llama-cpp',
-	container: {
-		port: 8000,
-		images: {
-			default: 'crufter/llama-cpp-python-simple',
-			cuda: 'crufter/llama-cpp-python-cuda',
-		},
-	},
-};
-
-export const PlatformStableDiffusion: Platform = {
-	id: 'stable-diffusion',
-	container: {
-		port: 7860,
-		images: {
-			default: 'nicklucche/stable-diffusion',
-		},
-	},
-};
 
 export interface Model {
 	id: string;

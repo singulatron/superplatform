@@ -20,13 +20,13 @@ var PlatformStableDiffusion = Platform{
 	Architectures: Architectures{
 		Default: Container{
 			Port:            7860,
-			Image:           "nicklucche/stable-diffusion",
+			Image:           "crufter/stable-diffusion",
 			Envars:          []string{"FP16=0"},
 			PersistentPaths: []string{"/root/.cache/huggingface/diffusers"},
 		},
 		Cuda: Container{
 			Port:            7860,
-			Image:           "nicklucche/stable-diffusion",
+			Image:           "crufter/stable-diffusion",
 			Envars:          []string{"DEVICES=all"},
 			PersistentPaths: []string{"/root/.cache/huggingface/diffusers"},
 		},
