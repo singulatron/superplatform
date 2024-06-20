@@ -14,9 +14,10 @@ import { ChatBoxComponent } from './chat-box/chat-box.component';
 import { IonicModule } from '@ionic/angular';
 import { StdlibModule } from '../stdlib/stdlib.module';
 import { MarkdownModule, MarkdownService } from 'ngx-markdown';
+import { MessageComponent } from './chat-box/message/message.component';
 
 @NgModule({
-	declarations: [ChatBoxComponent],
+	declarations: [ChatBoxComponent, MessageComponent],
 	providers: [MarkdownService],
 	exports: [ChatBoxComponent],
 	imports: [CommonModule, StdlibModule, IonicModule, MarkdownModule.forChild()],

@@ -87,6 +87,28 @@ func (ms *ModelService) Start(modelId string) error {
 		Name: platform.Id,
 	}
 
+	image := platform.Architectures.Default.Image
+	port := platform.Architectures.Default.Port
+	launchOptions.Envs = platform.Architectures.Default.Envars
+	persistentPaths := platform.Architectures.Default.PersistentPaths
+
+	switch os.Getenv("SINGULATRON_GPU_PLATFORM") {
+	case "cuda":
+		launchOptions.GPUEnabled = true
+		if platform.Architectures.Cuda.Image != "" {
+			image = platform.Architectures.Cuda.Image
+		}
+		if platform.Architectures.Cuda.Port != 0 {
+			port = platform.Architectures.Cuda.Port
+		}
+		if len(platform.Architectures.Cuda.Envars) > 0 {
+			launchOptions.Envs = platform.Architectures.Cuda.Envars
+		}
+		if len(platform.Architectures.Cuda.PersistentPaths) > 0 {
+			persistentPaths = platform.Architectures.Cuda.PersistentPaths
+		}
+	}
+
 	configFolderPath := ms.configService.ConfigDirectory
 	// The SINGULATRON_HOST_FOLDER is a path on the host which is mounted
 	// by Singulatron to download models etc.
@@ -114,28 +136,6 @@ func (ms *ModelService) Start(modelId string) error {
 
 		// eg. /path/on/host/fileName:/assets/fileName
 		launchOptions.HostBinds = append(launchOptions.HostBinds, fmt.Sprintf("%v:/assets/%v", assetPath, fileName))
-	}
-
-	image := platform.Architectures.Default.Image
-	port := platform.Architectures.Default.Port
-	launchOptions.Envs = platform.Architectures.Default.Envars
-	persistentPaths := platform.Architectures.Default.PersistentPaths
-
-	switch os.Getenv("SINGULATRON_GPU_PLATFORM") {
-	case "cuda":
-		launchOptions.GPUEnabled = true
-		if platform.Architectures.Cuda.Image != "" {
-			image = platform.Architectures.Cuda.Image
-		}
-		if platform.Architectures.Cuda.Port != 0 {
-			port = platform.Architectures.Cuda.Port
-		}
-		if len(platform.Architectures.Cuda.Envars) > 0 {
-			launchOptions.Envs = platform.Architectures.Cuda.Envars
-		}
-		if len(platform.Architectures.Cuda.PersistentPaths) > 0 {
-			persistentPaths = platform.Architectures.Cuda.PersistentPaths
-		}
 	}
 
 	for _, persistentPath := range persistentPaths {
@@ -300,7 +300,7 @@ func (ms *ModelService) checkIfAnswers(
 }
 
 func (ms *ModelService) printContainerLogs(modelId, hash string) {
-	logs, err := ms.dockerService.GetContainerLogsAndStatus(hash, 100)
+	logs, err := ms.dockerService.GetContainerLogsAndStatus(hash, 10)
 	if err != nil {
 		logger.Warn("Error getting container logs",
 			slog.String("modelId", modelId),

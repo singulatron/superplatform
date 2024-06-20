@@ -1,0 +1,55 @@
+<!--
+ * @license
+ * Copyright (c) The Authors (see the AUTHORS file)
+ *
+ * This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3) for personal, non-commercial use.
+ * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
+ *
+ * For commercial use, a separate license must be obtained by purchasing from The Authors.
+ * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
+ -->
+<div class="message-block" style="display: flex">
+	<div class="left-column" style="flex-shrink: 0; width: 2.5rem">
+		<ion-icon
+			class="chat-user-icon"
+			*ngIf="message?.userId"
+			title="You @ {{ message.createdAt | date }}"
+			name="person-circle-outline"
+		></ion-icon>
+		<img
+			*ngIf="!message?.userId"
+			class="chat-user-icon"
+			title="Singulatron @ {{ message.createdAt | date }}"
+			src="/assets/logo-lighter.png"
+			alt="Logo"
+		/>
+	</div>
+
+	<div class="main-content" style="flex-grow: 1">
+		<markdown class="markdown-body" [data]="message.content"> </markdown>
+		<img [src]="asset(message)" *ngIf="assets?.length" />
+		<div class="message-footer sng-test-message-footer">
+			<div class="message-action-buttons">
+				<ion-icon
+					title="Copy to clipboard"
+					class="small-icon"
+					name="copy-outline"
+					(click)="propagateCopyToClipboard(message.content)"
+				></ion-icon>
+				<ion-icon
+					title="Delete message"
+					class="small-icon"
+					name="trash-outline"
+					(click)="deleteMessage(message.id)"
+				></ion-icon>
+				<ion-icon
+					*ngIf="!message?.userId"
+					title="Regenerate answer"
+					class="small-icon"
+					name="reload-outline"
+					(click)="regenerateAnswer(message)"
+				></ion-icon>
+			</div>
+		</div>
+	</div>
+</div>
