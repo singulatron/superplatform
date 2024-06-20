@@ -236,7 +236,7 @@ export interface Prompt {
 		Prompt template (eg. `[INST]{prompt}[/INST]`)
 		Optional. Might be derived from/through the modelId
 	*/
-	template: string;
+	template?: string;
 	modelId?: string;
 	createdAt?: string;
 	status?: PromptStatus;

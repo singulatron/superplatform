@@ -14,70 +14,14 @@
 			<ng-container
 				*ngFor="let message of messages; let i = index; let isLast = last"
 			>
-				<div class="message-block">
-					<div
-						class="message-header sng-test-message-header"
-						[ngClass]="{ 'mt-20': i > 0 }"
-					>
-						<ion-icon
-							class="chat-user-icon"
-							*ngIf="message?.userId"
-							name="person-circle-outline"
-						></ion-icon>
-						<img
-							*ngIf="!message?.userId"
-							class="chat-user-icon"
-							src="/assets/logo-lighter.png"
-							alt="Logo"
-						/>
-						<ion-label
-							title="{{ message?.createdAt }}"
-							style="margin-left: 0.6rem"
-							>{{ message?.userId ? 'You' : 'Singulatron' }}</ion-label
-						>
-						<div class="message-action-buttons">
-							<ion-icon
-								title="Copy to clipboard"
-								class="copy-icon"
-								name="copy-outline"
-								(click)="propagateCopyToClipboard(message?.content)"
-							></ion-icon>
-							<ion-icon
-								title="Delete message"
-								class="copy-icon"
-								name="trash-outline"
-								(click)="deleteMessage(message?.id)"
-							></ion-icon>
-							<ion-icon
-								*ngIf="!message?.userId && isLast"
-								title="Regenerate answer"
-								class="copy-icon"
-								name="reload-outline"
-								(click)="regenerateAnswer(message)"
-							></ion-icon>
-						</div>
-					</div>
-					<markdown class="markdown-body" [data]="message?.content"> </markdown>
-					<img [src]="asset(message)" *ngIf="hasAsset(message)" />
-				</div>
+				<app-message
+					[message]="message"
+					[assets]="getAssets(message)"
+				></app-message>
 			</ng-container>
 
-			<ng-container *ngIf="messageCurrentlyStreamed?.length">
-				<div class="message-block">
-					<div class="message-header sng-test-message-header">
-						<img
-							class="chat-user-icon"
-							src="/assets/logo-lighter.png"
-							alt="Logo"
-						/>
-						<ion-label style="margin-left: 0.6rem">{{
-							'Singulatron'
-						}}</ion-label>
-						<div class="message-action-buttons"></div>
-					</div>
-					<markdown class="markdown-body" [data]="messageCurrentlyStreamed">
-					</markdown>
-				</div>
+			<ng-container *ngIf="messageCurrentlyStreamed.content?.length">
+				<app-message [message]="messageCurrentlyStreamed" [streaming]="true"></app-message>
 			</ng-container>
 
 			<ng-container *ngIf="promptQueue?.length">

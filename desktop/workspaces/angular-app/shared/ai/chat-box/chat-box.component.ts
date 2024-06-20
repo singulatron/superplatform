@@ -12,8 +12,6 @@ import {
 	Component,
 	ViewEncapsulation,
 	Input,
-	Output,
-	EventEmitter,
 	OnChanges,
 	SimpleChanges,
 } from '@angular/core';
@@ -53,8 +51,6 @@ export class ChatBoxComponent implements OnChanges {
 
 	@Input() thread!: ChatThread;
 
-	@Output() onCopyToClipboard = new EventEmitter<string>();
-
 	private model: Model | undefined;
 	private models: Model[] = [];
 	public promptQueue: Prompt[] = [];
@@ -62,7 +58,7 @@ export class ChatBoxComponent implements OnChanges {
 	public message: string = '';
 	public messages: ChatMessage[] = [];
 	public assets: Asset[] = [];
-	public messageCurrentlyStreamed = '';
+	public messageCurrentlyStreamed: ChatMessage = {} as any;
 
 	constructor(
 		private localtron: LocaltronService,
@@ -96,19 +92,8 @@ export class ChatBoxComponent implements OnChanges {
 		);
 	}
 
-	hasAsset(message: ChatMessage): boolean {
-		if (!message?.assetIds?.length) {
-			return false;
-		}
-		return (
-			this.assets.find((a) => message.assetIds.includes(a.id)) !== undefined
-		);
-	}
-
-	asset(message: ChatMessage): string {
-		return ('data:image/png;base64,' +
-			this.assets.find((a) => message.assetIds.includes(a.id))
-				?.content) as string;
+	getAssets(message: ChatMessage): Asset[] {
+		return this.assets?.filter((a) => message.assetIds?.includes(a.id));
 	}
 
 	streamSubscription!: Subscription;
@@ -153,7 +138,7 @@ export class ChatBoxComponent implements OnChanges {
 					this.promptQueue = promptQueue;
 				});
 
-			this.messageCurrentlyStreamed = '';
+			this.messageCurrentlyStreamed.content = '';
 			let first = true;
 
 			// We are always subscribed to this, even if streaming is not happening
@@ -168,7 +153,9 @@ export class ChatBoxComponent implements OnChanges {
 						response?.choices[0]?.text
 					) {
 						let insidePre =
-							(this.messageCurrentlyStreamed.match(/```/g) || []).length % 2 ===
+							(this.messageCurrentlyStreamed.content.match(/```/g) || [])
+								.length %
+								2 ===
 							1;
 						let addVal = insidePre
 							? response?.choices[0].text
@@ -178,7 +165,7 @@ export class ChatBoxComponent implements OnChanges {
 							addVal = addVal.trimStart();
 							first = false;
 						}
-						this.messageCurrentlyStreamed += addVal;
+						this.messageCurrentlyStreamed.content += addVal;
 					}
 
 					if (
@@ -193,7 +180,7 @@ export class ChatBoxComponent implements OnChanges {
 						let rsp = await this.chatService.chatMessages(threadId);
 						this.messages = rsp.messages;
 						this.assets = rsp.assets;
-						this.messageCurrentlyStreamed = '';
+						this.messageCurrentlyStreamed.content = '';
 					}
 					this.cd.detectChanges();
 				});
@@ -249,40 +236,6 @@ export class ChatBoxComponent implements OnChanges {
 			return;
 		}
 		// @todo summarize with llm at the end of the streaming
-	}
-
-	propagateCopyToClipboard(text: string | undefined) {
-		if (text === undefined) {
-			return;
-		}
-		this.onCopyToClipboard.emit(text);
-	}
-
-	deleteMessage(messageId: string | undefined) {
-		if (messageId === undefined) {
-			return;
-		}
-		this.chatService.chatMessageDelete(messageId);
-		this.messages = this.messages.filter((m) => m.id !== messageId);
-	}
-
-	getLastUserMessage(): ChatMessage | undefined {
-		let userMessages = this.messages?.filter((message) => {
-			return !!message.userId;
-		});
-		let length = userMessages?.length;
-		return length ? userMessages[length - 1] : undefined;
-	}
-
-	regenerateAnswer(message: ChatMessage) {
-		if (message.userId) {
-			return;
-		}
-		this.deleteMessage(message.id as string);
-		let lastUserMessage = this.getLastUserMessage();
-		if (lastUserMessage) {
-			this.sendMessage(lastUserMessage.content);
-		}
 	}
 }
 

@@ -133,7 +133,6 @@ export interface Asset {
 	decription: string;
 	createdAt: string;
 	updatedAt: string;
-
 }
 
 export interface AddChatMessageRequest {

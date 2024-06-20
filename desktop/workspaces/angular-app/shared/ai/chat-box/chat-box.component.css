@@ -50,44 +50,7 @@ ion-card-content {
 	flex-direction: column;
 }
 
-.mt-20 {
-	margin-top: 20px;
-}
 
-.message-header {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	height: 40px;
-	color: black;
-	font-size: 15px;
-}
-
-.chat-user-icon {
-	height: 24px;
-	width: 24px;
-}
-
-.message-action-buttons {
-	display: flex;
-	justify-content: start;
-	margin-left: auto;
-}
-
-.copy-icon {
-	width: 15px;
-	height: 15px;
-	cursor: pointer;
-	transition:
-		transform 0.2s ease,
-		color 0.2s ease;
-	margin-left: 3px;
-}
-
-.copy-icon:active {
-	transform: scale(1.1);
-	color: #4caf50;
-}
 
 ion-card.flat-card {
 	--background: #fff;
@@ -110,10 +73,6 @@ ion-textarea {
 
 .main-card {
 	padding-top: 0;
-}
-
-.message-block {
-	margin-bottom: 1rem;
 }
 
 /* MARKDOWN FORMATTING */

@@ -32,7 +32,7 @@ type Container struct {
 	Envars []string `json:"envars"`
 	/* Paths in the container to persist.
 	 */
-	PersistentPaths []string `json:"persistentPaths"`
+	PersistentPaths []string `json:"persistentPaths,omitempty"`
 }
 
 type Assets map[string]string
