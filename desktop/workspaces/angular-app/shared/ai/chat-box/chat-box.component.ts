@@ -25,6 +25,7 @@ import {
 	ChatService,
 	ChatThread,
 	ChatMessage,
+	Asset,
 } from '../../../src/app/services/chat.service';
 import {
 	Prompt,
@@ -60,6 +61,7 @@ export class ChatBoxComponent implements OnChanges {
 
 	public message: string = '';
 	public messages: ChatMessage[] = [];
+	public assets: Asset[] = [];
 	public messageCurrentlyStreamed = '';
 
 	constructor(
@@ -88,9 +90,25 @@ export class ChatBoxComponent implements OnChanges {
 				if (this.thread?.id && this.thread.id == event.threadId) {
 					let rsp = await this.chatService.chatMessages(this.thread?.id);
 					this.messages = rsp.messages;
+					this.assets = rsp.assets;
 				}
 			})
 		);
+	}
+
+	hasAsset(message: ChatMessage): boolean {
+		if (!message?.assetIds?.length) {
+			return false;
+		}
+		return (
+			this.assets.find((a) => message.assetIds.includes(a.id)) !== undefined
+		);
+	}
+
+	asset(message: ChatMessage): string {
+		return ('data:image/png;base64,' +
+			this.assets.find((a) => message.assetIds.includes(a.id))
+				?.content) as string;
 	}
 
 	streamSubscription!: Subscription;
@@ -124,6 +142,7 @@ export class ChatBoxComponent implements OnChanges {
 				threadId = changes.thread.currentValue.id;
 				let rsp = await this.chatService.chatMessages(threadId);
 				this.messages = rsp.messages;
+				this.assets = rsp.assets;
 			}
 
 			this.promptSubscription =
@@ -173,6 +192,7 @@ export class ChatBoxComponent implements OnChanges {
 						// event coming from the firehose
 						let rsp = await this.chatService.chatMessages(threadId);
 						this.messages = rsp.messages;
+						this.assets = rsp.assets;
 						this.messageCurrentlyStreamed = '';
 					}
 					this.cd.detectChanges();

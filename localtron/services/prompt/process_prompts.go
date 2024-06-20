@@ -20,11 +20,13 @@ import (
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
 
+	"github.com/singulatron/singulatron/localtron/clients/llm"
+	"github.com/singulatron/singulatron/localtron/clients/stable_diffusion"
 	"github.com/singulatron/singulatron/localtron/datastore"
-	"github.com/singulatron/singulatron/localtron/llm"
 	"github.com/singulatron/singulatron/localtron/logger"
 
 	apptypes "github.com/singulatron/singulatron/localtron/services/app/types"
+	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
 )
 
@@ -180,13 +182,111 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 	if !strings.HasPrefix(stat.Address, "http") {
 		stat.Address = "http://" + stat.Address
 	}
-	llmClient := llm.Client{
-		LLMAddress: stat.Address,
-	}
 
 	fullPrompt := currentPrompt.Prompt
 	if currentPrompt.Template != "" {
 		fullPrompt = strings.Replace(currentPrompt.Template, "{prompt}", currentPrompt.Prompt, -1)
+	}
+
+	err = p.processPlatform(stat.Address, fullPrompt, currentPrompt)
+
+	logger.Debug("Finished streaming LLM",
+		slog.String("error", fmt.Sprintf("%v", err)),
+	)
+	if err != nil {
+		return errors.Wrap(err, "error streaming llm")
+	}
+
+	return nil
+}
+
+func (p *PromptService) processPlatform(address string, fullPrompt string, currentPrompt *prompttypes.Prompt) error {
+	platform, err := p.modelService.GetPlatformByModelId(currentPrompt.ModelId)
+	if err != nil {
+		return err
+	}
+
+	switch platform.Id {
+	case modeltypes.PlatformLlamaCpp.Id:
+		return p.processLlamaCpp(address, fullPrompt, currentPrompt)
+	case modeltypes.PlatformStableDiffusion.Id:
+		return p.processStableDiffusion(address, fullPrompt, currentPrompt)
+	}
+
+	return fmt.Errorf("cannot find platform %v", platform.Id)
+}
+
+func (p *PromptService) processStableDiffusion(address string, fullPrompt string, currentPrompt *prompttypes.Prompt) error {
+	sd := stable_diffusion.Client{
+		Address: address,
+	}
+
+	req := stable_diffusion.PredictRequest{
+		FnIndex: 1,
+		Params: stable_diffusion.StableDiffusionParams{
+			Prompt:        fullPrompt,
+			NumImages:     1,
+			Steps:         50,
+			Width:         512,
+			Height:        512,
+			GuidanceScale: 7.5,
+			Seed:          0,
+			Flag1:         false,
+			Flag2:         false,
+			Scheduler:     "PNDM",
+			Rate:          0.25,
+		},
+	}
+	req.ConvertParamsToData()
+
+	rsp, err := sd.Predict(req)
+	if err != nil {
+		return err
+	}
+
+	if len(rsp.Data) == 0 {
+		return errors.New("no image in response")
+	}
+
+	imgUrl := stable_diffusion.FileURL(address, rsp.Data[0].FileData[0].Name)
+
+	base64String, err := stable_diffusion.GetImageAsBase64(imgUrl)
+	if err != nil {
+		return err
+	}
+	if len(base64String) == 0 {
+		return errors.New("empty image acquired")
+	}
+
+	asset := &apptypes.Asset{
+		Id:      uuid.New().String(),
+		Content: base64String,
+	}
+	err = p.appService.UpsertAssets([]*apptypes.Asset{
+		asset,
+	})
+	if err != nil {
+		return err
+	}
+
+	err = p.appService.AddChatMessage(&apptypes.ChatMessage{
+		Id:       uuid.New().String(),
+		ThreadId: currentPrompt.ThreadId,
+		Content:  "Sure, here is your image",
+		AssetIds: []string{asset.Id},
+	})
+	if err != nil {
+		logger.Error("Error when saving chat message after image generation",
+			slog.String("error", err.Error()))
+		return err
+	}
+
+	return nil
+}
+
+func (p *PromptService) processLlamaCpp(address string, fullPrompt string, currentPrompt *prompttypes.Prompt) error {
+	llmClient := llm.Client{
+		LLMAddress: address,
 	}
 
 	start := time.Now()
@@ -214,7 +314,9 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 		}
 	}()
 
-	err = llmClient.PostCompletionsStreamed(llm.PostCompletionsRequest{
+	done <- true
+
+	err := llmClient.PostCompletionsStreamed(llm.PostCompletionsRequest{
 		Prompt:    fullPrompt,
 		Stream:    true,
 		MaxTokens: 1000000,
@@ -241,14 +343,5 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 		}
 	})
 
-	done <- true
-
-	logger.Debug("Finished streaming LLM",
-		slog.String("error", fmt.Sprintf("%v", err)),
-	)
-	if err != nil {
-		return errors.Wrap(err, "error streaming llm")
-	}
-
-	return nil
+	return err
 }

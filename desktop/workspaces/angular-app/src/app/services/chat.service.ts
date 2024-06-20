@@ -120,11 +120,20 @@ export interface ChatMessage {
 	threadId: string;
 	userId?: string;
 	content: string;
+	assetIds: string[];
 }
 
-export interface ChatFile {
-	threads: ChatThread[];
-	messages: ChatMessage[];
+export interface Asset {
+	id: string;
+	url: string;
+	/* Some assets might have the content directly in them as base64
+	encoded strings */
+	content: string;
+	type: string;
+	decription: string;
+	createdAt: string;
+	updatedAt: string;
+
 }
 
 export interface AddChatMessageRequest {
@@ -173,6 +182,7 @@ type GetChatMessagesRequest = {};
 
 type GetChatMessagesResponse = {
 	messages: ChatMessage[];
+	assets: Asset[];
 };
 
 export interface ChatMessageAddedEvent {

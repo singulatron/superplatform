@@ -13,7 +13,7 @@ package promptservice
 import (
 	"strings"
 
-	"github.com/singulatron/singulatron/localtron/llm"
+	"github.com/singulatron/singulatron/localtron/clients/llm"
 )
 
 func llmResponseToText(responses []*llm.CompletionResponse) string {
