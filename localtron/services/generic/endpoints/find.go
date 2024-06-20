@@ -31,7 +31,7 @@ func Find(
 		return
 	}
 
-	_, found, err := userService.GetUserFromRequest(r)
+	user, found, err := userService.GetUserFromRequest(r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -49,7 +49,7 @@ func Find(
 	}
 	defer r.Body.Close()
 
-	objects, err := genericService.Find(req.Table, req.Conditions)
+	objects, err := genericService.Find(req.Table, user.Id, req.Conditions)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

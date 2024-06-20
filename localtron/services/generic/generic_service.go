@@ -56,11 +56,43 @@ func NewGenericService(
 	return service, nil
 }
 
-func (g *GenericService) Create(tableName string, object *generictypes.GenericObject) error {
+func (g *GenericService) Create(tableName string, userId string, object *generictypes.GenericObject) error {
+	object.Table = tableName
+	object.UserId = userId
 	return g.store.Create(object)
 }
 
-func (g *GenericService) Find(tableName string, conditions []datastore.Condition) ([]*generictypes.GenericObject, error) {
+func (g *GenericService) CreateMany(tableName string, userId string, objects []*generictypes.GenericObject) error {
+	for _, object := range objects {
+		object.Table = tableName
+		object.UserId = userId
+	}
+	return g.store.CreateMany(objects)
+}
+
+func (g *GenericService) Upsert(tableName string, userId string, object *generictypes.GenericObject) error {
+	v, found, err := g.store.Query(
+		datastore.Id(object.Id),
+	).FindOne()
+	if err != nil {
+		return err
+	}
+	if found && v.UserId != userId {
+		return errors.New("unauthorized")
+	}
+	object.Table = tableName
+	object.UserId = userId
+	return g.store.Upsert(object)
+}
+
+func (g *GenericService) UpsertMany(tableName string, userId string, objects []*generictypes.GenericObject) error {
+	for _, object := range objects {
+		object.Table = tableName
+	}
+	return g.store.UpsertMany(objects)
+}
+
+func (g *GenericService) Find(tableName string, userId string, conditions []datastore.Condition) ([]*generictypes.GenericObject, error) {
 	if len(conditions) == 0 {
 		return nil, errors.New("no conditions")
 	}
@@ -70,20 +102,28 @@ func (g *GenericService) Find(tableName string, conditions []datastore.Condition
 	).Find()
 }
 
-func (g *GenericService) Update(tableName string, conditions []datastore.Condition, object *generictypes.GenericObject) error {
+func (g *GenericService) Update(tableName string, userId string, conditions []datastore.Condition, object *generictypes.GenericObject) error {
 	if len(conditions) == 0 {
 		return errors.New("no conditions")
 	}
+	conditions = append(conditions, datastore.Equal(
+		"userId",
+		userId,
+	))
 
 	return g.store.Query(
 		conditions[0], conditions[1:]...,
 	).Update(object)
 }
 
-func (g *GenericService) Delete(tableName string, conditions []datastore.Condition) error {
+func (g *GenericService) Delete(tableName string, userId string, conditions []datastore.Condition) error {
 	if len(conditions) == 0 {
 		return errors.New("no conditions")
 	}
+	conditions = append(conditions, datastore.Equal(
+		"userId",
+		userId,
+	))
 
 	return g.store.Query(
 		conditions[0], conditions[1:]...,

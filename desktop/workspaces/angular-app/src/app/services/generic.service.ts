@@ -17,7 +17,7 @@ import { UserService } from './user.service';
 @Injectable({
 	providedIn: 'root',
 })
-export class PromptService {
+export class GenericService {
 	constructor(
 		private localtron: LocaltronService,
 		private userService: UserService,
@@ -125,7 +125,8 @@ export interface GenericObject {
 	createdAt: string;
 	updatedAt: string;
 	userId?: string;
-	data?: any;
+	data: any;
+	public?: boolean;
 }
 
 export interface CreateRequest {

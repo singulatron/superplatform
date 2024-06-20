@@ -45,38 +45,26 @@ singulatron-backend:
     - SINGULATRON_GPU_PLATFORM=cuda
 ```
 
-### System Specific Settings
+### Singulatron Frontend Environment Variables
 
-There are a few things that can go wrong here:
+#### `BACKEND_ADDRESS`
 
-#### `SINGULATRON_LLM_HOST`
+In a publicly accessible setup should be something like `https://singulatron-api.yourdomain.com`. The point is that it must be accessible from the outside/browser.
 
-You might be on a network that's different from the docker default so `172.17.0.1` might not be the correct one.
+### Singulatron Environment Variables
 
-Try `172.18.0.1` etc. or use `docker network inspect` to find out the IP range of the network you use.
+#### `SINGULATRON_GPU_PLATFORM`
 
-The reason why this is needed:
+This envar is used to enabel GPU acceleration.
+Supported platforms:
 
-```sh
-Host
- |
- |-> Singulatron Container
- |-> Container Launched By Singulatron
-```
+- `cuda`
 
-The `Singulatron Container` uses the envar `SINGULATRON_LLM_HOST` to address `Container Launched By Singulatron`.
-
-This envar is not needed if Singulatron runs directly on the host:
-
-```sh
-Host With Singulatron
- |
- |-> Container Launched By Singulatron
-```
+Do not set this if your card doesn't support the given architecture or things will break.
 
 #### `SINGULATRON_HOST_FOLDER`
 
-Similarly to the `SINGULATRON_LLM_HOST`, this envar is needed when Singulatron runs as a container next to containers it starts:
+This envar is needed when Singulatron runs as a container next to containers it starts:
 
 ```sh
 Host
@@ -94,11 +82,31 @@ So cycle goes like this:
 - Singulatron container writes to `/root/.singulatron`, which is mounted on host at `/var/lib/docker/volumes/singulatron-data/_data`
 - Assets (which are basically downloaded files) will be passed to containers created by Singulatron by mounting files in `/var/lib/docker/volumes/singulatron-data/_data`.
 
+#### `SINGULATRON_LLM_HOST`
 
+When Singulatron is running in a container, it needs to know how to address its siblings (other containers it started):
 
-#### `BACKEND_ADDRESS`
+```sh
+Host
+ |
+ |-> Singulatron Container
+ |-> Container Launched By Singulatron
+```
 
-In a publicly accessible setup should be something like `https://singulatron-api.yourdomain.com`. The point is that it must be accessible from the outside/browser.
+The `Singulatron Container` uses the envar `SINGULATRON_LLM_HOST` to address `Container Launched By Singulatron`.
+
+Typically this value should be `172.17.0.1` if you are using the default docker network.
+
+If you are using an other network than default, use `docker network inspect` to find out the IP of your docker bridge for that network.
+Usually it's going to be `172.18.0.1`.
+
+This envar is not needed if Singulatron runs directly on the host:
+
+```sh
+Host With Singulatron
+ |
+ |-> Container Launched By Singulatron
+```
 
 ## Using Your Server
 
@@ -107,4 +115,4 @@ Unless you configured otherwise, you can log in with the following default crede
 ```sh
 username: singulatron
 password: changeme
-````
+```

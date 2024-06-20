@@ -31,7 +31,7 @@ func Update(
 		return
 	}
 
-	_, found, err := userService.GetUserFromRequest(r)
+	user, found, err := userService.GetUserFromRequest(r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -49,7 +49,7 @@ func Update(
 	}
 	defer r.Body.Close()
 
-	err = genericService.Update(req.Table, req.Conditions, req.Object)
+	err = genericService.Update(req.Table, user.Id, req.Conditions, req.Object)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
