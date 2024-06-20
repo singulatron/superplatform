@@ -111,6 +111,7 @@ func (s *LocalStore[T]) Upsert(obj T) error {
 	defer s.mu.Unlock()
 
 	s.data[obj.GetId()] = obj
+	s.stateManager.MarkChanged()
 	return nil
 }
 
@@ -121,6 +122,7 @@ func (s *LocalStore[T]) UpsertMany(objs []T) error {
 	for _, obj := range objs {
 		s.data[obj.GetId()] = obj
 	}
+	s.stateManager.MarkChanged()
 	return nil
 }
 

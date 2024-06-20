@@ -99,6 +99,7 @@ type GetChatMessagesRequest struct {
 
 type GetChatMessagesResponse struct {
 	Messages []*ChatMessage `json:"messages"`
+	Assets   []*Asset       `json:"assets,omitempty"`
 }
 
 type DeleteChatMessageRequest struct {

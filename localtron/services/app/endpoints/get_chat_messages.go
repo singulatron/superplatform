@@ -45,8 +45,19 @@ func GetChatMessages(
 		return
 	}
 
+	assetIds := []string{}
+	for _, v := range messages {
+		assetIds = append(assetIds, v.AssetIds...)
+	}
+	assets, err := ds.GetAssets(assetIds)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 	jsonData, _ := json.Marshal(types.GetChatMessagesResponse{
 		Messages: messages,
+		Assets:   assets,
 	})
 	w.Write(jsonData)
 }

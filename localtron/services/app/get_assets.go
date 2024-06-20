@@ -11,17 +11,12 @@
 package appservice
 
 import (
-	"time"
-
+	"github.com/singulatron/singulatron/localtron/datastore"
 	apptypes "github.com/singulatron/singulatron/localtron/services/app/types"
 )
 
-func (a *AppService) UpsertAssets(assets []*apptypes.Asset) error {
-	now := time.Now().Format(time.RFC3339)
-	for _, v := range assets {
-		if v.CreatedAt == "" {
-			v.CreatedAt = now
-		}
-	}
-	return a.assetsStore.UpsertMany(assets)
+func (a *AppService) GetAssets(assetIds []string) ([]*apptypes.Asset, error) {
+	return a.assetsStore.Query(
+		datastore.Equal("id", assetIds),
+	).Find()
 }

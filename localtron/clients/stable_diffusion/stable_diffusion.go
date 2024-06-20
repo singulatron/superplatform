@@ -18,7 +18,10 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"log/slog"
 	"net/http"
+
+	"github.com/singulatron/singulatron/localtron/logger"
 )
 
 type Client struct {
@@ -86,12 +89,59 @@ type HistoryData struct {
 	Data    [][]string `json:"data"`
 }
 
+type PredictData struct {
+	FileData    []FileData  // This will hold FileData if JSON is an array
+	IsHistory   bool        // Flag to indicate if the JSON represents HistoryData
+	HistoryData HistoryData // This will hold HistoryData if JSON represents it
+}
+
+func (pd *PredictData) UnmarshalJSON(data []byte) error {
+	// First, try to unmarshal as FileData array
+	var files []FileData
+	if err := json.Unmarshal(data, &files); err == nil {
+		pd.FileData = files
+		pd.IsHistory = false
+		return nil
+	}
+
+	// If not FileData array, try to unmarshal as HistoryData
+	var history HistoryData
+	if err := json.Unmarshal(data, &history); err == nil {
+		pd.HistoryData = history
+		pd.IsHistory = true
+		return nil
+	}
+
+	return errors.New("cannot unmarshal into PredictData")
+}
+
+//	{
+//		"data": [
+//		  [
+//			{
+//			  "name": "/tmp/tmpj74v2rly/tmpr1li4qkz.png",
+//			  "data": null,
+//			  "is_file": true
+//			}
+//		  ],
+//		  {
+//			"headers": ["Prompt History"],
+//			"data": [
+//			  ["older prompt 1"],
+//			  ["older prompt 2"],
+//			]
+//		  }
+//		],
+//		"is_generating": false,
+//		"duration": 23.146581172943115,
+//		"average_duration": 19.378071202172173
+//	}
 type PredictResponse struct {
-	Data            [][]FileData `json:"data"`
-	HistoryData     HistoryData  `json:"history_data"`
-	IsGenerating    bool         `json:"is_generating"`
-	Duration        float64      `json:"duration"`
-	AverageDuration float64      `json:"average_duration"`
+	/* Can be either a []FileData or HistoryData */
+	Data            []PredictData `json:"data"`
+	IsGenerating    bool          `json:"is_generating"`
+	Duration        float64       `json:"duration"`
+	AverageDuration float64       `json:"average_duration"`
 }
 
 /*
@@ -161,6 +211,9 @@ func (c *Client) Predict(req PredictRequest) (*PredictResponse, error) {
 	var predictResp PredictResponse
 	err = json.Unmarshal(body, &predictResp)
 	if err != nil {
+		logger.Error("Mismatch between types and StableDiffusion response",
+			slog.String("responseJSON", string(body)),
+		)
 		return nil, err
 	}
 

@@ -221,28 +221,41 @@ func (p *PromptService) processStableDiffusion(address string, fullPrompt string
 		Address: address,
 	}
 
-	rsp, err := sd.Predict(stable_diffusion.PredictRequest{
+	req := stable_diffusion.PredictRequest{
+		FnIndex: 1,
 		Params: stable_diffusion.StableDiffusionParams{
-			Prompt:    fullPrompt,
-			NumImages: 1,
-			Steps:     50,
-			Width:     512,
-			Height:    512,
+			Prompt:        fullPrompt,
+			NumImages:     1,
+			Steps:         50,
+			Width:         512,
+			Height:        512,
+			GuidanceScale: 7.5,
+			Seed:          0,
+			Flag1:         false,
+			Flag2:         false,
+			Scheduler:     "PNDM",
+			Rate:          0.25,
 		},
-	})
+	}
+	req.ConvertParamsToData()
+
+	rsp, err := sd.Predict(req)
 	if err != nil {
 		return err
 	}
 
-	if len(rsp.Data) == 0 || len(rsp.Data[0]) == 0 {
+	if len(rsp.Data) == 0 {
 		return errors.New("no image in response")
 	}
 
-	imgUrl := stable_diffusion.FileURL(address, rsp.Data[0][0].Name)
+	imgUrl := stable_diffusion.FileURL(address, rsp.Data[0].FileData[0].Name)
 
 	base64String, err := stable_diffusion.GetImageAsBase64(imgUrl)
 	if err != nil {
 		return err
+	}
+	if len(base64String) == 0 {
+		return errors.New("empty image acquired")
 	}
 
 	asset := &apptypes.Asset{
