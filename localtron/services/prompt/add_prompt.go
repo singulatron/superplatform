@@ -50,7 +50,7 @@ func (p *PromptService) AddPrompt(prompt *prompttypes.Prompt) error {
 		logger.Info("Creating thread", slog.String("threadId", threadId))
 
 		// threads can be created when a message is sent
-		now := time.Now().Format(time.RFC3339)
+		now := time.Now().Format(time.RFC3339Nano)
 
 		thread := &apptypes.ChatThread{
 			Id:        prompt.ThreadId,

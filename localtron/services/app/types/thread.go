@@ -45,7 +45,7 @@ func (a ThreadByTime) Less(i, j int) bool {
 	// Attempt to parse time using RFC3339 and then with JavaScript ISO8601 format
 	parseTime := func(t string) (time.Time, error) {
 		// First, try parsing in RFC 3339 format
-		parsedTime, err := time.Parse(time.RFC3339, t)
+		parsedTime, err := time.Parse(time.RFC3339Nano, t)
 		if err != nil {
 			// If RFC 3339 fails, try parsing in a format that includes milliseconds (common in JavaScript)
 			parsedTime, err = time.Parse("2006-01-02T15:04:05.999Z07:00", t)

@@ -26,7 +26,7 @@ func (a *AppService) AddChatThread(chatThread *apptypes.ChatThread) (*apptypes.C
 		chatThread.Title = "New chat"
 	}
 	if chatThread.CreatedAt == "" {
-		chatThread.CreatedAt = time.Now().Format(time.RFC3339)
+		chatThread.CreatedAt = time.Now().Format(time.RFC3339Nano)
 	}
 	if len(chatThread.UserIds) == 0 {
 		return nil, errors.New("no user ids")

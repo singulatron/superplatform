@@ -68,9 +68,9 @@ func TestAll(t *testing.T) {
 }
 
 func CreatedAt(t *testing.T, store datastore.DataStore[TestObject]) {
-	obj1 := TestObject{Name: "A1", CreatedAt: time.Now().Format(time.RFC3339)}
+	obj1 := TestObject{Name: "A1", CreatedAt: time.Now().Format(time.RFC3339Nano)}
 	time.Sleep(1 * time.Second)
-	obj2 := TestObject{Name: "A2", CreatedAt: time.Now().Format(time.RFC3339)}
+	obj2 := TestObject{Name: "A2", CreatedAt: time.Now().Format(time.RFC3339Nano)}
 
 	err := store.Create(obj1)
 	assert.NoError(t, err)
