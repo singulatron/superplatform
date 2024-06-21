@@ -11,16 +11,13 @@
 package apptypes
 
 import (
-	"log/slog"
 	"time"
-
-	"github.com/singulatron/singulatron/localtron/logger"
 )
 
 type ChatThread struct {
-	Id        string `json:"id"`
-	CreatedAt string `json:"createdAt"`
-	UpdatedAt string `json:"updatedAt"`
+	Id        string    `json:"id"`
+	CreatedAt time.Time `json:"createdAt,omitempty"`
+	UpdatedAt time.Time `json:"updatedAt,omitempty"`
 
 	TopicIds []string `json:"topicIds,omitempty"`
 	UserIds  []string `json:"userIds,omitempty"`
@@ -42,32 +39,8 @@ func (a ThreadByTime) Len() int      { return len(a) }
 func (a ThreadByTime) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
 
 func (a ThreadByTime) Less(i, j int) bool {
-	// Attempt to parse time using RFC3339 and then with JavaScript ISO8601 format
-	parseTime := func(t string) (time.Time, error) {
-		// First, try parsing in RFC 3339 format
-		parsedTime, err := time.Parse(time.RFC3339, t)
-		if err != nil {
-			// If RFC 3339 fails, try parsing in a format that includes milliseconds (common in JavaScript)
-			parsedTime, err = time.Parse("2006-01-02T15:04:05.999Z07:00", t)
-		}
-		return parsedTime, err
-	}
-
-	ti, err := parseTime(a[i].CreatedAt)
-	if err != nil {
-		logger.Error("Error parsing thread time",
-			slog.String("threadId", a[i].Id),
-			slog.String("error", err.Error()))
-		return false // Could handle error differently if required
-	}
-
-	tj, err := parseTime(a[j].CreatedAt)
-	if err != nil {
-		logger.Error("Error parsing thread time",
-			slog.String("threadId", a[j].Id),
-			slog.String("error", err.Error()))
-		return false // Could handle error differently if required
-	}
+	ti := a[i].CreatedAt
+	tj := a[j].CreatedAt
 
 	return ti.After(tj)
 }

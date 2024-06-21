@@ -32,7 +32,7 @@ type TestObject struct {
 	NickNames     []string
 	Friend        Friend
 	FriendPointer *Friend
-	CreatedAt     string
+	CreatedAt     time.Time
 }
 
 func (t TestObject) GetId() string {
@@ -68,18 +68,24 @@ func TestAll(t *testing.T) {
 }
 
 func CreatedAt(t *testing.T, store datastore.DataStore[TestObject]) {
-	obj1 := TestObject{Name: "A1", CreatedAt: time.Now().Format(time.RFC3339)}
-	time.Sleep(1 * time.Second)
-	obj2 := TestObject{Name: "A2", CreatedAt: time.Now().Format(time.RFC3339)}
+	obj1 := TestObject{Name: "A1", Value: 10, CreatedAt: time.Now()}
+	obj2 := TestObject{Name: "A2", Value: 10, CreatedAt: time.Now()}
 
 	err := store.Create(obj1)
 	assert.NoError(t, err)
-
 	err = store.Create(obj2)
 	assert.NoError(t, err)
 
 	res, err := store.Query(
 		datastore.All(),
+		datastore.Equal("Value", 101),
+	).OrderBy("CreatedAt", false).Find()
+	assert.NoError(t, err)
+	assert.Equal(t, 0, len(res))
+
+	res, err = store.Query(
+		datastore.All(),
+		datastore.Equal("Value", 10),
 	).OrderBy("CreatedAt", false).Find()
 	assert.NoError(t, err)
 	assert.Equal(t, 2, len(res))
@@ -87,10 +93,12 @@ func CreatedAt(t *testing.T, store datastore.DataStore[TestObject]) {
 
 	res, err = store.Query(
 		datastore.All(),
+		datastore.Equal("Value", 10),
 	).OrderBy("CreatedAt", true).Find()
 	assert.NoError(t, err)
 	assert.Equal(t, 2, len(res))
 	assert.Equal(t, "A2", res[0].Name)
+
 }
 
 func Create(t *testing.T, store datastore.DataStore[TestObject]) {
