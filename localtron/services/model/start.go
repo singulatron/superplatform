@@ -235,6 +235,12 @@ func (ms *ModelService) checkIfAnswers(
 		state.SetHasCheckerRunning(false)
 	}()
 
+	hash, err := modelToHash(model, platform)
+	if err != nil {
+		logger.Error("cannot get hash to print logs", slog.Any("error", err))
+		return
+	}
+
 	first := true
 	for {
 		if !first {
@@ -244,7 +250,7 @@ func (ms *ModelService) checkIfAnswers(
 
 		logger.Debug("Checking for answer started", slog.Int("port", port))
 
-		isModelRunning, err := ms.dockerService.HashIsRunning(model.Id)
+		isModelRunning, err := ms.dockerService.HashIsRunning(hash)
 		if err != nil {
 			logger.Warn("Model check error",
 				slog.String("modelId", model.Id),
@@ -253,11 +259,6 @@ func (ms *ModelService) checkIfAnswers(
 			continue
 		}
 		if !isModelRunning {
-			hash, err := modelToHash(model, platform)
-			if err != nil {
-				logger.Error("cannot get hash to print logs", slog.Any("error", err))
-				continue
-			}
 			ms.printContainerLogs(model.Id, hash)
 			continue
 		}
@@ -284,11 +285,6 @@ func (ms *ModelService) checkIfAnswers(
 			)
 			state.SetAnswering(false)
 
-			hash, err := modelToHash(model, platform)
-			if err != nil {
-				logger.Error("cannot get hash to print logs", slog.Any("error", err))
-				continue
-			}
 			ms.printContainerLogs(model.Id, hash)
 			continue
 		}
