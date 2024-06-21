@@ -9,30 +9,31 @@
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  -->
 <div class="message-block" style="display: flex">
-	<div class="left-column" style="flex-shrink: 0; width: 3.5rem">
+	<div class="left-column">
 		<ion-icon
 			class="chat-user-icon"
 			*ngIf="message?.userId"
-			title="You @ {{ message.createdAt | date }}"
 			name="person-circle-outline"
 		></ion-icon>
 		<img
 			*ngIf="!message?.userId"
 			class="chat-user-icon"
-			title="Singulatron @ {{ message.createdAt | date }}"
 			src="/assets/logo-lighter.png"
 			alt="Logo"
 		/>
 	</div>
 
-	<div class="main-content message-container" style="flex-grow: 1">
+	<div class="main-content" style="flex-grow: 1">
 		<div style="font-size: 1rem">
 			<span style="color: #3c70ad"
 				><span *ngIf="message.userId">You</span>
 				<span *ngIf="!message.userId">Singulatron</span>
 			</span>
-			<span style="margin-left: 0.5rem; color: #999">
-				{{ message.createdAt | date: 'EEEE h:mm a, M/d/yy' }}</span
+			<span
+				title="{{ message.createdAt | date: 'EEEE h:mm a, M/d/yyyy' }}"
+				class="time"
+			>
+				{{ message.createdAt | date: 'EEEE h:mm a' }}</span
 			>
 		</div>
 		<markdown class="markdown-body" [data]="message.content"> </markdown>
