@@ -13,6 +13,7 @@
 .time {
 	margin-left: 0.25rem;
 	color: #999;
+	font-size: 0.8rem;
 }
 
 .small-icon {
@@ -46,6 +47,8 @@
 
 .message-block {
 	padding-top: 0.25rem;
+	padding-bottom: 0.25rem;
+	margin-bottom: 1rem;
 }
 
 .message-block:hover .message-footer {
