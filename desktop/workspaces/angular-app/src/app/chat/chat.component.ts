@@ -18,11 +18,26 @@ import { ChatService, ChatThread, ChatMessage } from '../services/chat.service';
 import { Prompt, PromptService } from '../services/prompt.service';
 import { Model, ModelService } from '../services/model.service';
 import { ConfigService } from '../services/config.service';
+import { ChatBoxComponent } from '../../../shared/ai/chat-box/chat-box.component';
+import { CenteredComponent } from '../../../shared/stdlib/components/centered/centered.component';
+import { NgFor, NgIf, AsyncPipe } from '@angular/common';
+import { IonicModule } from '@ionic/angular';
+import { SidebarPageComponent } from '../../../shared/stdlib/components/sidebar-page/sidebar-page.component';
 
 @Component({
-	selector: 'app-chat',
-	templateUrl: './chat.component.html',
-	styleUrl: './chat.component.scss',
+    selector: 'app-chat',
+    templateUrl: './chat.component.html',
+    styleUrl: './chat.component.scss',
+    standalone: true,
+    imports: [
+        SidebarPageComponent,
+        IonicModule,
+        NgFor,
+        NgIf,
+        CenteredComponent,
+        ChatBoxComponent,
+        AsyncPipe,
+    ],
 })
 export class ChatComponent implements OnInit {
 	public defaultPrompt = '[INST] {prompt} [/INST]';

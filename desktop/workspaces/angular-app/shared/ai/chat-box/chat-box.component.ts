@@ -33,14 +33,28 @@ import { ModelService, Model } from '../../../src/app/services/model.service';
 
 import { ElectronAppService } from '../../../src/app/services/electron-app.service';
 import { ConfigService } from '../../../src/app/services/config.service';
+import { TranslatePipe } from '../../stdlib/translate.pipe';
+import { FormsModule } from '@angular/forms';
+import { MessageComponent } from './message/message.component';
+import { NgFor, NgIf } from '@angular/common';
+import { IonicModule } from '@ionic/angular';
 
 const defaultThreadName = 'New chat';
 
 @Component({
-	selector: 'app-chat-box',
-	templateUrl: './chat-box.component.html',
-	styleUrl: './chat-box.component.css',
-	encapsulation: ViewEncapsulation.None,
+    selector: 'app-chat-box',
+    templateUrl: './chat-box.component.html',
+    styleUrl: './chat-box.component.css',
+    encapsulation: ViewEncapsulation.None,
+    standalone: true,
+    imports: [
+        IonicModule,
+        NgFor,
+        MessageComponent,
+        NgIf,
+        FormsModule,
+        TranslatePipe,
+    ],
 })
 export class ChatBoxComponent implements OnChanges {
 	@Input() promptTemplate: string = '[INST] {prompt} [/INST]';

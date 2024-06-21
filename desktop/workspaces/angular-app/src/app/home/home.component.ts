@@ -13,11 +13,29 @@ import { ElectronIpcService } from '../services/electron-ipc.service';
 import { WindowApiConst } from 'shared-lib';
 import { enableLogging, disableLogging } from '../app.component';
 import { LogService } from '../services/log.service';
+import { TranslatePipe } from '../../../shared/stdlib/translate.pipe';
+import { TranslateModule } from '@ngx-translate/core';
+import { RouterLink } from '@angular/router';
+import { NgClass, NgIf } from '@angular/common';
+import { IonicModule } from '@ionic/angular';
+import { CenteredComponent } from '../../../shared/stdlib/components/centered/centered.component';
+import { SidebarPageComponent } from '../../../shared/stdlib/components/sidebar-page/sidebar-page.component';
 
 @Component({
-	selector: 'app-home',
-	templateUrl: './home.component.html',
-	styleUrl: './home.component.css',
+    selector: 'app-home',
+    templateUrl: './home.component.html',
+    styleUrl: './home.component.css',
+    standalone: true,
+    imports: [
+        SidebarPageComponent,
+        CenteredComponent,
+        IonicModule,
+        NgClass,
+        NgIf,
+        RouterLink,
+        TranslateModule,
+        TranslatePipe,
+    ],
 })
 export class HomeComponent {
 	loggingEnabled = true;

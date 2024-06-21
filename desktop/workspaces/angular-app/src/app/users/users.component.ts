@@ -9,19 +9,36 @@
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { User, UserService } from '../services/user.service';
 import { first } from 'rxjs';
-import { ToastController } from '@ionic/angular';
+import { ToastController, IonicModule } from '@ionic/angular';
+import { TranslatePipe } from '../../../shared/stdlib/translate.pipe';
+import { TranslateModule } from '@ngx-translate/core';
+import { NgFor, NgIf } from '@angular/common';
+import { CenteredComponent } from '../../../shared/stdlib/components/centered/centered.component';
+import { SidebarPageComponent } from '../../../shared/stdlib/components/sidebar-page/sidebar-page.component';
 
 interface UserVisible extends User {
 	visible?: boolean;
 }
 
 @Component({
-	selector: 'app-users',
-	templateUrl: './users.component.html',
-	styleUrls: ['./users.component.scss'],
+    selector: 'app-users',
+    templateUrl: './users.component.html',
+    styleUrls: ['./users.component.scss'],
+    standalone: true,
+    imports: [
+        SidebarPageComponent,
+        CenteredComponent,
+        IonicModule,
+        NgFor,
+        FormsModule,
+        ReactiveFormsModule,
+        NgIf,
+        TranslateModule,
+        TranslatePipe,
+    ],
 })
 export class UsersComponent implements OnInit {
 	users: UserVisible[] = [];

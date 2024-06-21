@@ -16,11 +16,21 @@ import {
 } from '../../../../src/app/services/chat.service';
 import { PromptService } from '../../../../src/app/services/prompt.service';
 import { LocaltronService } from '../../../../src/app/services/localtron.service';
+import { MarkdownComponent } from 'ngx-markdown';
+import { IonicModule } from '@ionic/angular';
+import { NgIf, DatePipe } from '@angular/common';
 
 @Component({
-	selector: 'app-message',
-	templateUrl: './message.component.html',
-	styleUrl: './message.component.scss',
+    selector: 'app-message',
+    templateUrl: './message.component.html',
+    styleUrl: './message.component.scss',
+    standalone: true,
+    imports: [
+        NgIf,
+        IonicModule,
+        MarkdownComponent,
+        DatePipe,
+    ],
 })
 export class MessageComponent {
 	constructor(

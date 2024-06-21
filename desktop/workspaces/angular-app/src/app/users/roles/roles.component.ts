@@ -1,11 +1,23 @@
 import { Component } from '@angular/core';
 import { UserService, Role, Permission } from '../../services/user.service';
 import { first } from 'rxjs';
+import { NgFor, NgIf } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { IonicModule } from '@ionic/angular';
+import { SidebarPageComponent } from '../../../../shared/stdlib/components/sidebar-page/sidebar-page.component';
 
 @Component({
-	selector: 'app-roles',
-	templateUrl: './roles.component.html',
-	styleUrls: ['./roles.component.css'],
+    selector: 'app-roles',
+    templateUrl: './roles.component.html',
+    styleUrls: ['./roles.component.css'],
+    standalone: true,
+    imports: [
+        SidebarPageComponent,
+        IonicModule,
+        FormsModule,
+        NgFor,
+        NgIf,
+    ],
 })
 export class RolesComponent {
 	roles: Role[] = [];

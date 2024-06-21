@@ -36,31 +36,31 @@ export interface StdlibModuleConfig {
 }
 
 @NgModule({
-	declarations: [TranslatePipe, CenteredComponent, SidebarPageComponent],
-	exports: [
-		IonicModule,
-		FormsModule,
-		ReactiveFormsModule,
-		TranslatePipe,
-		CenteredComponent,
-		CommonModule,
-		SidebarPageComponent,
-	],
-	imports: [
-		CommonModule,
-		FormsModule,
-		ReactiveFormsModule,
-		IonicModule,
-		RouterModule,
-	],
-	providers: [
-		{
-			provide: TRANSLATE_OBJECT,
-			useValue: translations,
-		},
-		TranslatePipe,
-		provideHttpClient(withInterceptorsFromDi()),
-	],
+    exports: [
+        IonicModule,
+        FormsModule,
+        ReactiveFormsModule,
+        TranslatePipe,
+        CenteredComponent,
+        CommonModule,
+        SidebarPageComponent,
+    ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        IonicModule,
+        RouterModule,
+        TranslatePipe, CenteredComponent, SidebarPageComponent,
+    ],
+    providers: [
+        {
+            provide: TRANSLATE_OBJECT,
+            useValue: translations,
+        },
+        TranslatePipe,
+        provideHttpClient(withInterceptorsFromDi()),
+    ],
 })
 export class StdlibModule {
 	static forRoot(

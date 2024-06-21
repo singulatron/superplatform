@@ -11,11 +11,23 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Subscription, throttleTime } from 'rxjs';
 import { DownloadService, DownloadDetails } from '../services/download.service';
+import { TranslatePipe } from '../../../shared/stdlib/translate.pipe';
+import { TranslateModule } from '@ngx-translate/core';
+import { IonicModule } from '@ionic/angular';
+import { NgIf, DecimalPipe } from '@angular/common';
 
 @Component({
-	selector: 'app-downloading',
-	templateUrl: './downloading.component.html',
-	styleUrl: './downloading.component.scss',
+    selector: 'app-downloading',
+    templateUrl: './downloading.component.html',
+    styleUrl: './downloading.component.scss',
+    standalone: true,
+    imports: [
+        NgIf,
+        IonicModule,
+        DecimalPipe,
+        TranslateModule,
+        TranslatePipe,
+    ],
 })
 export class DownloadingComponent {
 	@Input() url!: string;

@@ -9,12 +9,18 @@
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
 import { Component, HostListener } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { ModelService, Model } from '../../services/model.service';
 import {
 	DownloadService,
 	DownloadStatusChangeEvent,
 } from '../../services/download.service';
 import { ConfigService } from '../../services/config.service';
+import { IonicModule } from '@ionic/angular';
+import { TranslatePipe } from '../../../../shared/stdlib/translate.pipe';
+import { DecimalPipe } from '@angular/common';
+import { DownloadingComponent } from '../../downloading/downloading.component';
+import { FormsModule } from '@angular/forms';
 
 const veryLargeScreenWidth = 1900;
 
@@ -22,6 +28,15 @@ const veryLargeScreenWidth = 1900;
 	selector: 'app-advanced-model-explorer',
 	templateUrl: './advanced-model-explorer.component.html',
 	styleUrl: './advanced-model-explorer.component.scss',
+	standalone: true,
+	imports: [
+		CommonModule,
+		IonicModule,
+		FormsModule,
+		DownloadingComponent,
+		TranslatePipe,
+		DecimalPipe,
+	],
 })
 export class AdvancedModelExplorerComponent {
 	expandedStates = new Map<string, boolean>();
@@ -252,7 +267,6 @@ export class AdvancedModelExplorerComponent {
 
 		return value;
 	}
-
 
 	getStatStyle(model: Model) {
 		let value: number = model.quality
