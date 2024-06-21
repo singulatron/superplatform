@@ -264,7 +264,9 @@ export class AdvancedModelExplorerComponent {
 
 		let hue = (value / maxBits) * 120;
 
-		const backgroundColor = `hsl(${hue}, 100%, 50%)`; // Adjust the lightness and saturation if needed
+		let backgroundColor = `hsl(${hue}, 100%, 50%)`; // Adjust the lightness and saturation if needed
+		backgroundColor = '#aaa';
+
 		return {
 			'background-color': backgroundColor,
 			width: `${percentageValue}%`,

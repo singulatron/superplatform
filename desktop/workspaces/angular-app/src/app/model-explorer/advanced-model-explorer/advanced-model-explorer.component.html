@@ -77,7 +77,6 @@
 						>&nbsp;<ion-chip
 							*ngIf="model?.flavour"
 							title="Flavour {{ model.flavour }}"
-							color="tertiary"
 							outline
 						>
 							<ion-label>{{ model.flavour }}</ion-label>
@@ -85,7 +84,6 @@
 						<ion-chip
 							*ngIf="model?.version"
 							title="Version {{ model.version }}"
-							color="tertiary"
 							outline
 						>
 							<ion-label>{{ model.version }}</ion-label>
@@ -93,7 +91,6 @@
 						<ion-chip
 							*ngIf="model?.quality"
 							title="Quality {{ model.quality }}"
-							color="tertiary"
 							outline
 						>
 							<ion-label style="color: #666">{{ model.quality }}</ion-label>
@@ -101,7 +98,6 @@
 						<ion-chip
 							*ngIf="model.uncensored"
 							title="Uncensored version"
-							color="tertiary"
 							outline
 						>
 							<ion-label>!</ion-label>
@@ -145,7 +141,6 @@
 					</div>
 				</ion-card-content>
 				<ion-card-footer>
-					<!-- Size Display and Download Button -->
 					<div
 						style="
 							display: flex;
@@ -156,9 +151,9 @@
 						"
 					>
 						<ion-button
-							(click)=" download(model)"
+							(click)="download(model)"
 							*ngIf="
-							hasAssets(model) &&
+								hasAssets(model) &&
 								!isDownloading(
 									model,
 									downloadService.onFileDownloadStatus$ | async
@@ -169,6 +164,7 @@
 								)
 							"
 							fill="outline"
+							color="secondary"
 						>
 							<ion-icon slot="start" name="download-outline"></ion-icon>
 							{{ 'Download' | translate }}
@@ -185,9 +181,9 @@
 									(configService.onConfigUpdate$ | async)?.model
 										?.currentModelId !== model.id
 								"
-								color="tertiary"
 								(click)="makeModelDefault(model.id)"
 								fill="outline"
+								color="secondary"
 							>
 								<ion-icon slot="start" name="caret-forward-outline"></ion-icon>
 								{{ 'Make default' | translate }}
@@ -197,7 +193,7 @@
 									(configService.onConfigUpdate$ | async)?.model
 										?.currentModelId === model.id
 								"
-								color="tertiary"
+								color="secondary"
 								(click)="makeModelDefault(model.id)"
 								fill="outline"
 								disabled="true"
@@ -214,7 +210,6 @@
 							<strong>{{ model.size | number }}</strong> GB</span
 						>
 					</div>
-					<!-- Additional action buttons can be added here -->
 				</ion-card-footer>
 			</ion-card>
 		</ion-col>

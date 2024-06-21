@@ -9,7 +9,7 @@
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  -->
 <div class="message-block" style="display: flex">
-	<div class="left-column" style="flex-shrink: 0; width: 2.5rem">
+	<div class="left-column" style="flex-shrink: 0; width: 3.5rem">
 		<ion-icon
 			class="chat-user-icon"
 			*ngIf="message?.userId"
@@ -26,10 +26,19 @@
 	</div>
 
 	<div class="main-content" style="flex-grow: 1">
+		<div style="font-size: 1rem">
+			<span style="color: #3c70ad"
+				><span *ngIf="message.userId">You</span>
+				<span *ngIf="!message.userId">Singulatron</span>
+			</span>
+			<span style="margin-left: 0.5rem; color: #999">
+				{{ message.createdAt | date: 'EEEE h:mm a, M/d/yy' }}</span
+			>
+		</div>
 		<markdown class="markdown-body" [data]="message.content"> </markdown>
 		<img [src]="asset(message)" *ngIf="assets?.length" />
 		<div class="message-footer sng-test-message-footer">
-			<div class="message-action-buttons">
+			<div *ngIf="!streaming" class="message-action-buttons">
 				<ion-icon
 					title="Copy to clipboard"
 					class="small-icon"
