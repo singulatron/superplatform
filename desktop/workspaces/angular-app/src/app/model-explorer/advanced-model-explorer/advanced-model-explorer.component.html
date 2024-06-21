@@ -8,6 +8,7 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  -->
+
 <ion-grid>
 	<ion-grid>
 		<ion-row class="ion-justify-content-center">
@@ -202,7 +203,10 @@
 							</ion-button>
 						</span>
 						<span style="padding-left: 0.25rem">
-							<app-downloading [url]="model.id"></app-downloading>
+							<app-downloading
+								*ngIf="model?.assets?.MODEL"
+								[url]="model.assets.MODEL"
+							></app-downloading>
 						</span>
 
 						<span *ngIf="model?.size"

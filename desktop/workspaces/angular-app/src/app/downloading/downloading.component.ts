@@ -76,4 +76,12 @@ export class DownloadingComponent {
 	resumeDownload() {
 		this.downloadService.downloadDo(this.url);
 	}
+
+	isValid(): boolean {
+		try {
+			new URL(this.url);
+			return true;
+		} catch {}
+		return false;
+	}
 }

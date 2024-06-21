@@ -67,13 +67,16 @@ export class StartupComponent implements OnInit {
 		this.downloaded = data.status == 'completed';
 	}
 
-	selectedModelName(cu: Config) {
+	selectedModelName(cu: Config): string {
 		let mod = this.models?.find((v) => v.id == cu?.model?.currentModelId);
 		let displayName = [mod?.name, mod?.flavour, mod?.version].join(' ');
 		return displayName;
 	}
 
-	selectedModel(cu: Config) {
+	selectedModel(cu: Config | null): Model | undefined {
+		if (!cu) {
+			null;
+		}
 		return this.models?.find((v) => v.id == cu?.model?.currentModelId);
 	}
 
