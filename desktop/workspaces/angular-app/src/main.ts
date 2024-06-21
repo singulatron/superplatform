@@ -1,4 +1,4 @@
-import { enableProdMode, importProvidersFrom } from '@angular/core';
+import { enableProdMode, importProvidersFrom, provideExperimentalZonelessChangeDetection } from '@angular/core';
 
 import { HttpLoaderFactory } from './app/app.module';
 import { environment } from './environments/environment';
@@ -12,37 +12,53 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app/app-routing.module';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
-import { provideHttpClient, withInterceptorsFromDi, HttpClient } from '@angular/common/http';
-import { LOCALTRON_SERVICE_CONFIG, LocaltronService } from './app/services/localtron.service';
+import {
+	provideHttpClient,
+	withInterceptorsFromDi,
+	HttpClient,
+} from '@angular/common/http';
+import {
+	LOCALTRON_SERVICE_CONFIG,
+	LocaltronService,
+} from './app/services/localtron.service';
 
 if (environment.production) {
 	enableProdMode();
 }
 
 bootstrapApplication(AppComponent, {
-    providers: [
-        importProvidersFrom(BrowserModule, AppRoutingModule, ReactiveFormsModule, IonicModule.forRoot({
-            // force Android mode across all platforms
-            mode: 'md',
-        }), TranslateModule.forRoot({
-            defaultLanguage: 'en',
-            loader: {
-                provide: TranslateLoader,
-                useFactory: HttpLoaderFactory,
-                deps: [HttpClient],
-            },
-        }), StdlibModule.forRoot({
-            apiServiceConfig: {
-                env: environment,
-            },
-        }), AiModule, MarkdownModule.forRoot()),
-        {
-            provide: LOCALTRON_SERVICE_CONFIG,
-            useValue: { env: environment },
-        },
-        LocaltronService,
-        provideHttpClient(withInterceptorsFromDi()),
-        provideAnimations(),
-    ]
-})
-	.catch((error) => console.error(error));
+	providers: [
+        provideExperimentalZonelessChangeDetection(),
+		importProvidersFrom(
+			BrowserModule,
+			AppRoutingModule,
+			ReactiveFormsModule,
+			IonicModule.forRoot({
+				// force Android mode across all platforms
+				mode: 'md',
+			}),
+			TranslateModule.forRoot({
+				defaultLanguage: 'en',
+				loader: {
+					provide: TranslateLoader,
+					useFactory: HttpLoaderFactory,
+					deps: [HttpClient],
+				},
+			}),
+			StdlibModule.forRoot({
+				apiServiceConfig: {
+					env: environment,
+				},
+			}),
+			AiModule,
+			MarkdownModule.forRoot()
+		),
+		{
+			provide: LOCALTRON_SERVICE_CONFIG,
+			useValue: { env: environment },
+		},
+		LocaltronService,
+		provideHttpClient(withInterceptorsFromDi()),
+		provideAnimations(),
+	],
+}).catch((error) => console.error(error));

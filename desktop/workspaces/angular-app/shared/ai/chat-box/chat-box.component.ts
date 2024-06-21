@@ -14,6 +14,7 @@ import {
 	Input,
 	OnChanges,
 	SimpleChanges,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 
@@ -42,19 +43,20 @@ import { IonicModule } from '@ionic/angular';
 const defaultThreadName = 'New chat';
 
 @Component({
-    selector: 'app-chat-box',
-    templateUrl: './chat-box.component.html',
-    styleUrl: './chat-box.component.css',
-    encapsulation: ViewEncapsulation.None,
-    standalone: true,
-    imports: [
-        IonicModule,
-        NgFor,
-        MessageComponent,
-        NgIf,
-        FormsModule,
-        TranslatePipe,
-    ],
+	selector: 'app-chat-box',
+	templateUrl: './chat-box.component.html',
+	styleUrl: './chat-box.component.css',
+	encapsulation: ViewEncapsulation.None,
+	standalone: true,
+	imports: [
+		IonicModule,
+		NgFor,
+		MessageComponent,
+		NgIf,
+		FormsModule,
+		TranslatePipe,
+	],
+	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChatBoxComponent implements OnChanges {
 	@Input() promptTemplate: string = '[INST] {prompt} [/INST]';
@@ -87,7 +89,15 @@ export class ChatBoxComponent implements OnChanges {
 	private subscriptions: Subscription[] = [];
 
 	async ngOnInit() {
+		if (this.thread?.id) {
+			let rsp = await this.chatService.chatMessages(this.thread.id);
+			this.messages = rsp.messages;
+			this.assets = rsp.assets;
+		}
+
 		this.models = await this.modelService.getModels();
+		this.cd.markForCheck();
+
 		this.subscriptions.push(
 			this.configService.onConfigUpdate$.subscribe(async (config) => {
 				this.model = this.models?.find(
@@ -101,6 +111,7 @@ export class ChatBoxComponent implements OnChanges {
 					let rsp = await this.chatService.chatMessages(this.thread?.id);
 					this.messages = rsp.messages;
 					this.assets = rsp.assets;
+					this.cd.markForCheck();
 				}
 			})
 		);
@@ -154,6 +165,8 @@ export class ChatBoxComponent implements OnChanges {
 
 			this.messageCurrentlyStreamed.content = '';
 			let first = true;
+
+			this.cd.markForCheck();
 
 			// We are always subscribed to this, even if streaming is not happening
 			// right now. There is always one streaming that is subscribed to

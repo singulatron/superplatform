@@ -8,7 +8,12 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-import { Component, HostListener } from '@angular/core';
+import {
+	Component,
+	HostListener,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ModelService, Model } from '../../services/model.service';
 import {
@@ -37,6 +42,7 @@ const veryLargeScreenWidth = 1900;
 		TranslatePipe,
 		DecimalPipe,
 	],
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdvancedModelExplorerComponent {
 	expandedStates = new Map<string, boolean>();
@@ -62,7 +68,8 @@ export class AdvancedModelExplorerComponent {
 	constructor(
 		public downloadService: DownloadService,
 		private modelService: ModelService,
-		public configService: ConfigService
+		public configService: ConfigService,
+		private cd: ChangeDetectorRef
 	) {
 		this.detectLargeScreen();
 	}
@@ -126,6 +133,7 @@ export class AdvancedModelExplorerComponent {
 				);
 			});
 		}
+
 		return !this.anyCategorySelected()
 			? models
 			: models.filter((model) => {
@@ -155,6 +163,7 @@ export class AdvancedModelExplorerComponent {
 		const startIndex = (page - 1) * this.itemsPerPage;
 		const endIndex = startIndex + this.itemsPerPage;
 		this.models = this.allFilteredModels.slice(startIndex, endIndex);
+		this.cd.markForCheck();
 	}
 
 	async ngOnInit(): Promise<void> {
@@ -239,6 +248,7 @@ export class AdvancedModelExplorerComponent {
 	toggleItem(id: string) {
 		const currentState = this.expandedStates.get(id);
 		this.expandedStates.set(id, !currentState);
+		this.cd.markForCheck();
 	}
 
 	getDescription(item: Model): string {
