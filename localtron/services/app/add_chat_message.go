@@ -29,8 +29,8 @@ func (a *AppService) AddChatMessage(chatMessage *apptypes.ChatMessage) error {
 	if chatMessage.Id == "" {
 		chatMessage.Id = uuid.New().String()
 	}
-	if chatMessage.CreatedAt == "" {
-		chatMessage.CreatedAt = time.Now().Format(time.RFC3339Nano)
+	if chatMessage.CreatedAt.IsZero() {
+		chatMessage.CreatedAt = time.Now()
 	}
 
 	threads, err := a.threadsStore.Query(

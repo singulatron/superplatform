@@ -32,7 +32,7 @@ type TestObject struct {
 	NickNames     []string
 	Friend        Friend
 	FriendPointer *Friend
-	CreatedAt     string
+	CreatedAt     time.Time
 }
 
 func (t TestObject) GetId() string {
@@ -68,12 +68,11 @@ func TestAll(t *testing.T) {
 }
 
 func CreatedAt(t *testing.T, store datastore.DataStore[TestObject]) {
-	obj1 := TestObject{Name: "A1", Value: 10, CreatedAt: time.Now().Format(time.RFC3339Nano)}
-	obj2 := TestObject{Name: "A2", Value: 10, CreatedAt: time.Now().Format(time.RFC3339Nano)}
+	obj1 := TestObject{Name: "A1", Value: 10, CreatedAt: time.Now()}
+	obj2 := TestObject{Name: "A2", Value: 10, CreatedAt: time.Now()}
 
 	err := store.Create(obj1)
 	assert.NoError(t, err)
-
 	err = store.Create(obj2)
 	assert.NoError(t, err)
 
@@ -83,6 +82,14 @@ func CreatedAt(t *testing.T, store datastore.DataStore[TestObject]) {
 	).OrderBy("CreatedAt", false).Find()
 	assert.NoError(t, err)
 	assert.Equal(t, 0, len(res))
+
+	res, err = store.Query(
+		datastore.All(),
+		datastore.Equal("Value", 10),
+	).OrderBy("CreatedAt", false).Find()
+	assert.NoError(t, err)
+	assert.Equal(t, 2, len(res))
+	assert.Equal(t, "A1", res[0].Name)
 
 	res, err = store.Query(
 		datastore.All(),

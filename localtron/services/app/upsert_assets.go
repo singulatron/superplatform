@@ -17,9 +17,9 @@ import (
 )
 
 func (a *AppService) UpsertAssets(assets []*apptypes.Asset) error {
-	now := time.Now().Format(time.RFC3339Nano)
+	now := time.Now()
 	for _, v := range assets {
-		if v.CreatedAt == "" {
+		if v.CreatedAt.IsZero() {
 			v.CreatedAt = now
 		}
 	}

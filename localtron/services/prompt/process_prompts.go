@@ -163,7 +163,7 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 		ThreadId:  currentPrompt.ThreadId,
 		UserId:    currentPrompt.UserId,
 		Content:   currentPrompt.Prompt,
-		CreatedAt: time.Now().Format(time.RFC3339Nano),
+		CreatedAt: time.Now(),
 	})
 	if err != nil {
 		return err

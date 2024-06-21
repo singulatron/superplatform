@@ -441,7 +441,28 @@ func compare(vi, vj interface{}, desc bool) bool {
 			return viVal.String() > vjVal.String()
 		}
 		return viVal.String() < vjVal.String()
+	case reflect.Struct:
+		if viVal.Type() == reflect.TypeOf(time.Time{}) {
+			viTime := viVal.Interface().(time.Time)
+			vjTime := vjVal.Interface().(time.Time)
+			if desc {
+				return viTime.After(vjTime)
+			}
+			return viTime.Before(vjTime)
+		}
 	default:
-		return false
+		// Handle pointers to time.Time explicitly
+		if viVal.Type() == reflect.TypeOf(&time.Time{}) && vjVal.Type() == reflect.TypeOf(&time.Time{}) {
+			viTime := viVal.Interface().(*time.Time)
+			vjTime := vjVal.Interface().(*time.Time)
+			if viTime == nil || vjTime == nil {
+				return false
+			}
+			if desc {
+				return viTime.After(*vjTime)
+			}
+			return viTime.Before(*vjTime)
+		}
 	}
+	return false
 }

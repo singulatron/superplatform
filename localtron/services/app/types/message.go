@@ -11,10 +11,7 @@
 package apptypes
 
 import (
-	"log/slog"
 	"time"
-
-	"github.com/singulatron/singulatron/localtron/logger"
 )
 
 type ChatMessage struct {
@@ -23,10 +20,10 @@ type ChatMessage struct {
 	Content  string `json:"content"`
 	// UserId is saved when the user is logged in to an account
 	// @todo not used yet
-	UserId    string   `json:"userId,omitempty"`
-	CreatedAt string   `json:"createdAt"`
-	UpdatedAt string   `json:"updatedAt"`
-	AssetIds  []string `json:"assetIds,omitempty"`
+	UserId    string    `json:"userId,omitempty"`
+	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `json:"updatedAt"`
+	AssetIds  []string  `json:"assetIds,omitempty"`
 }
 
 type Asset struct {
@@ -34,11 +31,11 @@ type Asset struct {
 	Url string `json:"url,omitempty"`
 	/* Some assets might have the content directly in them as base64
 	encoded strings */
-	Content    string `json:"content,omitempty"`
-	Type       string `json:"type,omitempty"`
-	Decription string `json:"description,omitempty"`
-	CreatedAt  string `json:"createdAt"`
-	UpdatedAt  string `json:"updatedAt,omitempty"`
+	Content    string    `json:"content,omitempty"`
+	Type       string    `json:"type,omitempty"`
+	Decription string    `json:"description,omitempty"`
+	CreatedAt  time.Time `json:"createdAt"`
+	UpdatedAt  time.Time `json:"updatedAt,omitempty"`
 }
 
 func (a Asset) GetId() string {
@@ -59,32 +56,8 @@ func (a ByTime) Len() int      { return len(a) }
 func (a ByTime) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
 
 func (a ByTime) Less(i, j int) bool {
-	// Attempt to parse time using RFC3339 and then with JavaScript ISO8601 format
-	parseTime := func(t string) (time.Time, error) {
-		// First, try parsing in RFC 3339 format
-		parsedTime, err := time.Parse(time.RFC3339Nano, t)
-		if err != nil {
-			// If RFC 3339 fails, try parsing in a format that includes milliseconds (common in JavaScript)
-			parsedTime, err = time.Parse("2006-01-02T15:04:05.999Z07:00", t)
-		}
-		return parsedTime, err
-	}
-
-	ti, err := parseTime(a[i].CreatedAt)
-	if err != nil {
-		logger.Error("Error parsing message time",
-			slog.String("messageId", a[i].Id),
-			slog.String("error", err.Error()))
-		return false // Could handle error differently if required
-	}
-
-	tj, err := parseTime(a[j].CreatedAt)
-	if err != nil {
-		logger.Error("Error parsing message time",
-			slog.String("messageId", a[j].Id),
-			slog.String("error", err.Error()))
-		return false // Could handle error differently if required
-	}
+	ti := a[i].CreatedAt
+	tj := a[j].CreatedAt
 
 	return ti.Before(tj)
 }
