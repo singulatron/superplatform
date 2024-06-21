@@ -13,6 +13,7 @@ package datastore_test
 import (
 	"fmt"
 	"testing"
+	"time"
 
 	"github.com/singulatron/singulatron/localtron/datastore"
 	localstore "github.com/singulatron/singulatron/localtron/datastore/localstore"
@@ -31,6 +32,7 @@ type TestObject struct {
 	NickNames     []string
 	Friend        Friend
 	FriendPointer *Friend
+	CreatedAt     string
 }
 
 func (t TestObject) GetId() string {
@@ -45,6 +47,7 @@ func TestAll(t *testing.T) {
 	}
 	tests := map[string]func(t *testing.T, store datastore.DataStore[TestObject]){
 		"Create":                 Create,
+		"CreatedAt":              CreatedAt,
 		"Upsert":                 Upsert,
 		"InClause":               InClause,
 		"ReverseInClause":        ReverseInClause,
@@ -62,6 +65,32 @@ func TestAll(t *testing.T) {
 			})
 		}
 	}
+}
+
+func CreatedAt(t *testing.T, store datastore.DataStore[TestObject]) {
+	obj1 := TestObject{Name: "A1", CreatedAt: time.Now().Format(time.RFC3339)}
+	time.Sleep(1 * time.Second)
+	obj2 := TestObject{Name: "A2", CreatedAt: time.Now().Format(time.RFC3339)}
+
+	err := store.Create(obj1)
+	assert.NoError(t, err)
+
+	err = store.Create(obj2)
+	assert.NoError(t, err)
+
+	res, err := store.Query(
+		datastore.All(),
+	).OrderBy("CreatedAt", false).Find()
+	assert.NoError(t, err)
+	assert.Equal(t, 2, len(res))
+	assert.Equal(t, "A1", res[0].Name)
+
+	res, err = store.Query(
+		datastore.All(),
+	).OrderBy("CreatedAt", true).Find()
+	assert.NoError(t, err)
+	assert.Equal(t, 2, len(res))
+	assert.Equal(t, "A2", res[0].Name)
 }
 
 func Create(t *testing.T, store datastore.DataStore[TestObject]) {

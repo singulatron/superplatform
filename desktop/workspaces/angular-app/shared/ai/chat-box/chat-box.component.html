@@ -28,43 +28,56 @@
 			</ng-container>
 
 			<ng-container *ngIf="promptQueue?.length">
-				<div
-					style="
-						max-width: inherit;
-						color: #666;
-						white-space: nowrap;
-						text-overflow: ellipsis;
-					"
-					*ngFor="let prompt of promptQueue"
-				>
-					<ng-container *ngIf="prompt.status !== 'running'">{{
-						prompt.prompt
-					}}</ng-container>
+				<div style="display: flex; width: 100%">
+					<div style="width: 3.25rem; flex-shrink: 0"></div>
+					<div style="flex: 1">
+					<div
+						style="
+							max-width: inherit;
+							color: #666;
+							white-space: nowrap;
+							text-overflow: ellipsis;
+						"
+						*ngFor="let prompt of promptQueue"
+					>
+						<ng-container *ngIf="prompt.status !== 'running'">{{
+							prompt.prompt
+						}}</ng-container>
+					</div>
+				</div>
 				</div>
 			</ng-container>
 		</ion-card-content>
 
-		<ion-item lines="full" >
-			<ion-textarea
-				class="sng-test-chat-textarea"
-				(keydown)="handleKeydown($event)"
-				placeholder="{{ 'Type your message' | translate }}"
-				autoGrow="true"
-				[(ngModel)]="message"
-			></ion-textarea>
-			<ion-fab-button
-				(click)="send()"
-				slot="end"
-				size="small"
-				color="primary"
-				[disabled]="!hasNonWhiteSpace(message)"
-				class="sng-test-chat-send-button"
-				><span style="color: white"
-					><ion-icon
-						style="font-size: 1.5rem"
-						name="arrow-up-outline"
-					></ion-icon></span
-			></ion-fab-button>
+		<ion-item lines="full">
+			<div style="display: flex; width: 100%">
+				<div style="width: 3.25rem; flex-shrink: 0"></div>
+				<div style="flex: 1; display: flex">
+					<ion-textarea
+						class="sng-test-chat-textarea"
+						(keydown)="handleKeydown($event)"
+						placeholder="{{ 'Type your message' | translate }}"
+						autoGrow="true"
+						[(ngModel)]="message"
+						style="flex-grow: 1; margin-right: 0rem"
+					></ion-textarea>
+					<ion-fab-button
+						(click)="send()"
+						size="small"
+						color="primary"
+						[disabled]="!hasNonWhiteSpace(message)"
+						class="sng-test-chat-send-button"
+						style="flex-shrink: 0"
+					>
+						<span style="color: white">
+							<ion-icon
+								style="font-size: 1.5rem"
+								name="arrow-up-outline"
+							></ion-icon>
+						</span>
+					</ion-fab-button>
+				</div>
+			</div>
 		</ion-item>
 	</ion-card>
 </div>
