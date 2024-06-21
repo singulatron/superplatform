@@ -133,7 +133,10 @@ export class ChatBoxComponent implements OnChanges {
 
 	async ngOnChanges(changes: SimpleChanges): Promise<void> {
 		if (changes.thread) {
-			// @todo investigate this if only the ID changed
+			this.messages = [];
+			this.assets = [];
+			this.cd.markForCheck();
+
 			if (this.streamSubscription) {
 				this.streamSubscription.unsubscribe();
 			}
