@@ -31,3 +31,11 @@
 	margin-top: 0.5rem;
 	margin-bottom: 0.75rem;
 }
+
+.message-footer {
+	visibility: hidden;
+}
+
+.message-container:hover .message-footer {
+	visibility: visible;
+}

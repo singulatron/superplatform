@@ -58,7 +58,7 @@ func ThrottledLogger(next http.HandlerFunc) http.HandlerFunc {
 		requestCount := data.RequestCount
 		shouldLog := time.Since(data.LastLogTime) > LogInterval
 		if shouldLog {
-			logger.Info("Endpoint request count",
+			logger.Debug("Endpoint request count",
 				slog.String("method", r.Method),
 				slog.String("path", r.URL.Path),
 				slog.Int("statusCode", customWriter.statusCode),
