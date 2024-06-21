@@ -360,7 +360,7 @@ func (q *QueryBuilder[T]) match(obj T) bool {
 				for i := 0; i < fieldV.Len(); i++ {
 					if reflect.DeepEqual(fieldV.Index(i).Interface(), condValue.Interface()) {
 						matched = true
-						break
+						continue
 					}
 				}
 				if !matched {
@@ -371,7 +371,7 @@ func (q *QueryBuilder[T]) match(obj T) bool {
 				for i := 0; i < condValue.Len(); i++ {
 					if reflect.DeepEqual(fieldValue, condValue.Index(i).Interface()) {
 						matched = true
-						break
+						continue
 					}
 				}
 				if !matched {
@@ -383,7 +383,7 @@ func (q *QueryBuilder[T]) match(obj T) bool {
 				}
 			}
 		} else if cond.All != nil {
-			return true
+			continue
 		}
 	}
 	return true
