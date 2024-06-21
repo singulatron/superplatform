@@ -16,8 +16,8 @@ import (
 
 type ChatThread struct {
 	Id        string    `json:"id"`
-	CreatedAt time.Time `json:"createdAt"`
-	UpdatedAt time.Time `json:"updatedAt"`
+	CreatedAt time.Time `json:"createdAt,omitempty"`
+	UpdatedAt time.Time `json:"updatedAt,omitempty"`
 
 	TopicIds []string `json:"topicIds,omitempty"`
 	UserIds  []string `json:"userIds,omitempty"`

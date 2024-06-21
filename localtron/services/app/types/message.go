@@ -21,8 +21,8 @@ type ChatMessage struct {
 	// UserId is saved when the user is logged in to an account
 	// @todo not used yet
 	UserId    string    `json:"userId,omitempty"`
-	CreatedAt time.Time `json:"createdAt"`
-	UpdatedAt time.Time `json:"updatedAt"`
+	CreatedAt time.Time `json:"createdAt,omitempty"`
+	UpdatedAt time.Time `json:"updatedAt,omitempty"`
 	AssetIds  []string  `json:"assetIds,omitempty"`
 }
 
@@ -34,7 +34,7 @@ type Asset struct {
 	Content    string    `json:"content,omitempty"`
 	Type       string    `json:"type,omitempty"`
 	Decription string    `json:"description,omitempty"`
-	CreatedAt  time.Time `json:"createdAt"`
+	CreatedAt  time.Time `json:"createdAt,omitempty"`
 	UpdatedAt  time.Time `json:"updatedAt,omitempty"`
 }
 
