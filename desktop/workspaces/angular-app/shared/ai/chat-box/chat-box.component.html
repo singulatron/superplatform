@@ -21,7 +21,10 @@
 			</ng-container>
 
 			<ng-container *ngIf="messageCurrentlyStreamed.content?.length">
-				<app-message [message]="messageCurrentlyStreamed" [streaming]="true"></app-message>
+				<app-message
+					[message]="messageCurrentlyStreamed"
+					[streaming]="true"
+				></app-message>
 			</ng-container>
 
 			<ng-container *ngIf="promptQueue?.length">
@@ -41,7 +44,7 @@
 			</ng-container>
 		</ion-card-content>
 
-		<ion-item lines="full" style="margin-top: 10px">
+		<ion-item lines="full" >
 			<ion-textarea
 				class="sng-test-chat-textarea"
 				(keydown)="handleKeydown($event)"
