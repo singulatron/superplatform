@@ -9,7 +9,14 @@
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+	FormBuilder,
+	FormGroup,
+	FormArray,
+	Validators,
+	FormsModule,
+	ReactiveFormsModule,
+} from '@angular/forms';
 import { User, UserService } from '../services/user.service';
 import { first } from 'rxjs';
 import { ToastController, IonicModule } from '@ionic/angular';
@@ -18,27 +25,29 @@ import { TranslateModule } from '@ngx-translate/core';
 import { NgFor, NgIf } from '@angular/common';
 import { CenteredComponent } from '../../../shared/stdlib/components/centered/centered.component';
 import { SidebarPageComponent } from '../../../shared/stdlib/components/sidebar-page/sidebar-page.component';
+import { ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 
 interface UserVisible extends User {
 	visible?: boolean;
 }
 
 @Component({
-    selector: 'app-users',
-    templateUrl: './users.component.html',
-    styleUrls: ['./users.component.scss'],
-    standalone: true,
-    imports: [
-        SidebarPageComponent,
-        CenteredComponent,
-        IonicModule,
-        NgFor,
-        FormsModule,
-        ReactiveFormsModule,
-        NgIf,
-        TranslateModule,
-        TranslatePipe,
-    ],
+	selector: 'app-users',
+	templateUrl: './users.component.html',
+	styleUrls: ['./users.component.scss'],
+	standalone: true,
+	imports: [
+		SidebarPageComponent,
+		CenteredComponent,
+		IonicModule,
+		NgFor,
+		FormsModule,
+		ReactiveFormsModule,
+		NgIf,
+		TranslateModule,
+		TranslatePipe,
+	],
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UsersComponent implements OnInit {
 	users: UserVisible[] = [];
@@ -47,7 +56,8 @@ export class UsersComponent implements OnInit {
 	constructor(
 		private fb: FormBuilder,
 		private userService: UserService,
-		private toast: ToastController
+		private toast: ToastController,
+		private cd: ChangeDetectorRef
 	) {
 		this.userForms = this.fb.array([]);
 		this.userService.user$.pipe(first()).subscribe(() => {
@@ -65,6 +75,7 @@ export class UsersComponent implements OnInit {
 		this.users.forEach((user) => {
 			this.userForms.push(this.createUserForm(user));
 		});
+		this.cd.markForCheck();
 	}
 
 	createUserForm(user: UserVisible): FormGroup {

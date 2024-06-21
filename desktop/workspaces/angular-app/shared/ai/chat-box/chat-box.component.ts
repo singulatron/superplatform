@@ -56,7 +56,7 @@ const defaultThreadName = 'New chat';
 		FormsModule,
 		TranslatePipe,
 	],
-	changeDetection: ChangeDetectionStrategy.OnPush
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatBoxComponent implements OnChanges {
 	@Input() promptTemplate: string = '[INST] {prompt} [/INST]';
@@ -161,6 +161,7 @@ export class ChatBoxComponent implements OnChanges {
 						return p.threadId == threadId;
 					});
 					this.promptQueue = promptQueue;
+					this.cd.markForCheck();
 				});
 
 			this.messageCurrentlyStreamed.content = '';
@@ -192,7 +193,11 @@ export class ChatBoxComponent implements OnChanges {
 							addVal = addVal.trimStart();
 							first = false;
 						}
-						this.messageCurrentlyStreamed.content += addVal;
+
+						this.messageCurrentlyStreamed = {
+							...this.messageCurrentlyStreamed,
+							content: this.messageCurrentlyStreamed.content + addVal,
+						} as any;
 					}
 
 					if (
@@ -207,7 +212,11 @@ export class ChatBoxComponent implements OnChanges {
 						let rsp = await this.chatService.chatMessages(threadId);
 						this.messages = rsp.messages;
 						this.assets = rsp.assets;
-						this.messageCurrentlyStreamed.content = '';
+
+						this.messageCurrentlyStreamed = {
+							...this.messageCurrentlyStreamed,
+							content: '',
+						} as any;
 					}
 					this.cd.detectChanges();
 				});
