@@ -197,9 +197,13 @@
 
 								<h2>
 									<app-downloading
+										*ngIf="
+											selectedModel(configService.onConfigUpdate$ | async)
+												?.assets?.MODEL
+										"
 										[url]="
-											(configService.onConfigUpdate$ | async)?.model
-												?.currentModelId || ''
+											selectedModel(configService.onConfigUpdate$ | async)
+												?.assets?.MODEL || ''
 										"
 										(downloadStatusChange)="handleDownloadStatus($event)"
 									></app-downloading>

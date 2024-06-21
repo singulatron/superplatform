@@ -253,6 +253,7 @@ export class AdvancedModelExplorerComponent {
 		return value;
 	}
 
+
 	getStatStyle(model: Model) {
 		let value: number = model.quality
 			? this.extractValueFromQuality(model.quality)
