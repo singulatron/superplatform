@@ -62,8 +62,6 @@
 				<app-chat-box
 					*ngIf="activeThread"
 					[thread]="activeThread"
-					[messages]="messages"
-					[modelId]="model?.id"
 					[promptTemplate]="model?.promptTemplate || defaultPrompt"
 					(onCopyToClipboard)="onCopyToClipboard($event)"
 				></app-chat-box>

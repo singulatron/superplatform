@@ -141,7 +141,7 @@
 						<div class="stat-bar" [ngStyle]="getStatStyle(model)"></div>
 					</div>
 				</ion-card-content>
-				<ion-card-footer>
+				<div>
 					<div
 						style="
 							display: flex;
@@ -214,7 +214,7 @@
 							<strong>{{ model.size | number }}</strong> GB</span
 						>
 					</div>
-				</ion-card-footer>
+				</div>
 			</ion-card>
 		</ion-col>
 	</ion-row>
@@ -238,32 +238,32 @@
 	<ion-grid class="list-view">
 		<ion-row>
 			<ion-col> Name </ion-col>
-			<ion-col data-tooltip="Number of parameters"> Parameters </ion-col>
+			<ion-col title="Number of parameters"> Parameters </ion-col>
 			<ion-col> Flavour </ion-col>
 			<ion-col> Version </ion-col>
-			<ion-col data-tooltip="Amount of RAM or GPU VRAM required"> RAM </ion-col>
-			<ion-col data-tooltip="Size on disk"> Size </ion-col>
+			<ion-col title="Amount of RAM or GPU VRAM required"> RAM </ion-col>
+			<ion-col title="Size on disk"> Size </ion-col>
 			<ion-col> Actions </ion-col>
 		</ion-row>
 		<ion-row *ngFor="let model of models">
-			<ion-col data-tooltip="Model name is {{ model.name }}">
+			<ion-col title="Model name is {{ model.name }}">
 				{{ model.name }}
 			</ion-col>
-			<ion-col data-tooltip="Number of parameters is {{ model.parameters }}">
+			<ion-col title="Number of parameters is {{ model.parameters }}">
 				{{ model.parameters }}
 			</ion-col>
-			<ion-col data-tooltip="Flavour {{ model.flavour }}">
+			<ion-col title="Flavour {{ model.flavour }}">
 				{{ model.flavour }}
 			</ion-col>
 			<ion-col>
 				{{ model.version }}
 			</ion-col>
 			<ion-col
-				data-tooltip="Amount of RAM or GPU VRAM required: {{ model.maxRam }} GB"
+				title="Amount of RAM or GPU VRAM required: {{ model.maxRam }} GB"
 			>
 				{{ model.maxRam }}
 			</ion-col>
-			<ion-col data-tooltip="Size on disk: {{ model.size }} GB">
+			<ion-col title="Size on disk: {{ model.size }} GB">
 				{{ model.size + 'GB' }}
 			</ion-col>
 			<ion-col>

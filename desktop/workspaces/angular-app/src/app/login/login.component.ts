@@ -10,12 +10,24 @@
  */
 import { Component } from '@angular/core';
 import { UserService, LoginResponse } from '../services/user.service';
-import { ToastController } from '@ionic/angular';
+import { ToastController, IonicModule } from '@ionic/angular';
+import { FormsModule } from '@angular/forms';
+import { NgIf } from '@angular/common';
+import { CenteredComponent } from '../../../shared/stdlib/components/centered/centered.component';
+import { SidebarPageComponent } from '../../../shared/stdlib/components/sidebar-page/sidebar-page.component';
 
 @Component({
-	selector: 'app-login',
-	templateUrl: './login.component.html',
-	styleUrl: './login.component.css',
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrl: './login.component.css',
+    standalone: true,
+    imports: [
+        SidebarPageComponent,
+        CenteredComponent,
+        IonicModule,
+        NgIf,
+        FormsModule,
+    ],
 })
 export class LoginComponent {
 	email: string = '';

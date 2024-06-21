@@ -8,13 +8,24 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-import { Component, HostListener } from '@angular/core';
+import {
+	Component,
+	HostListener,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+} from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { ModelService, Model } from '../../services/model.service';
 import {
 	DownloadService,
 	DownloadStatusChangeEvent,
 } from '../../services/download.service';
 import { ConfigService } from '../../services/config.service';
+import { IonicModule } from '@ionic/angular';
+import { TranslatePipe } from '../../../../shared/stdlib/translate.pipe';
+import { DecimalPipe } from '@angular/common';
+import { DownloadingComponent } from '../../downloading/downloading.component';
+import { FormsModule } from '@angular/forms';
 
 const veryLargeScreenWidth = 1900;
 
@@ -22,6 +33,16 @@ const veryLargeScreenWidth = 1900;
 	selector: 'app-advanced-model-explorer',
 	templateUrl: './advanced-model-explorer.component.html',
 	styleUrl: './advanced-model-explorer.component.scss',
+	standalone: true,
+	imports: [
+		CommonModule,
+		IonicModule,
+		FormsModule,
+		DownloadingComponent,
+		TranslatePipe,
+		DecimalPipe,
+	],
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdvancedModelExplorerComponent {
 	expandedStates = new Map<string, boolean>();
@@ -47,7 +68,8 @@ export class AdvancedModelExplorerComponent {
 	constructor(
 		public downloadService: DownloadService,
 		private modelService: ModelService,
-		public configService: ConfigService
+		public configService: ConfigService,
+		private cd: ChangeDetectorRef
 	) {
 		this.detectLargeScreen();
 	}
@@ -111,6 +133,7 @@ export class AdvancedModelExplorerComponent {
 				);
 			});
 		}
+
 		return !this.anyCategorySelected()
 			? models
 			: models.filter((model) => {
@@ -140,6 +163,7 @@ export class AdvancedModelExplorerComponent {
 		const startIndex = (page - 1) * this.itemsPerPage;
 		const endIndex = startIndex + this.itemsPerPage;
 		this.models = this.allFilteredModels.slice(startIndex, endIndex);
+		this.cd.markForCheck();
 	}
 
 	async ngOnInit(): Promise<void> {
@@ -224,6 +248,7 @@ export class AdvancedModelExplorerComponent {
 	toggleItem(id: string) {
 		const currentState = this.expandedStates.get(id);
 		this.expandedStates.set(id, !currentState);
+		this.cd.markForCheck();
 	}
 
 	getDescription(item: Model): string {
@@ -252,7 +277,6 @@ export class AdvancedModelExplorerComponent {
 
 		return value;
 	}
-
 
 	getStatStyle(model: Model) {
 		let value: number = model.quality

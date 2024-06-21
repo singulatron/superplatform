@@ -14,6 +14,7 @@ import {
 	Input,
 	OnChanges,
 	SimpleChanges,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 
@@ -33,6 +34,11 @@ import { ModelService, Model } from '../../../src/app/services/model.service';
 
 import { ElectronAppService } from '../../../src/app/services/electron-app.service';
 import { ConfigService } from '../../../src/app/services/config.service';
+import { TranslatePipe } from '../../stdlib/translate.pipe';
+import { FormsModule } from '@angular/forms';
+import { MessageComponent } from './message/message.component';
+import { NgFor, NgIf } from '@angular/common';
+import { IonicModule } from '@ionic/angular';
 
 const defaultThreadName = 'New chat';
 
@@ -41,6 +47,16 @@ const defaultThreadName = 'New chat';
 	templateUrl: './chat-box.component.html',
 	styleUrl: './chat-box.component.css',
 	encapsulation: ViewEncapsulation.None,
+	standalone: true,
+	imports: [
+		IonicModule,
+		NgFor,
+		MessageComponent,
+		NgIf,
+		FormsModule,
+		TranslatePipe,
+	],
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatBoxComponent implements OnChanges {
 	@Input() promptTemplate: string = '[INST] {prompt} [/INST]';
@@ -73,7 +89,15 @@ export class ChatBoxComponent implements OnChanges {
 	private subscriptions: Subscription[] = [];
 
 	async ngOnInit() {
+		if (this.thread?.id) {
+			let rsp = await this.chatService.chatMessages(this.thread.id);
+			this.messages = rsp.messages;
+			this.assets = rsp.assets;
+		}
+
 		this.models = await this.modelService.getModels();
+		this.cd.markForCheck();
+
 		this.subscriptions.push(
 			this.configService.onConfigUpdate$.subscribe(async (config) => {
 				this.model = this.models?.find(
@@ -87,6 +111,7 @@ export class ChatBoxComponent implements OnChanges {
 					let rsp = await this.chatService.chatMessages(this.thread?.id);
 					this.messages = rsp.messages;
 					this.assets = rsp.assets;
+					this.cd.markForCheck();
 				}
 			})
 		);
@@ -136,10 +161,13 @@ export class ChatBoxComponent implements OnChanges {
 						return p.threadId == threadId;
 					});
 					this.promptQueue = promptQueue;
+					this.cd.markForCheck();
 				});
 
 			this.messageCurrentlyStreamed.content = '';
 			let first = true;
+
+			this.cd.markForCheck();
 
 			// We are always subscribed to this, even if streaming is not happening
 			// right now. There is always one streaming that is subscribed to
@@ -165,7 +193,11 @@ export class ChatBoxComponent implements OnChanges {
 							addVal = addVal.trimStart();
 							first = false;
 						}
-						this.messageCurrentlyStreamed.content += addVal;
+
+						this.messageCurrentlyStreamed = {
+							...this.messageCurrentlyStreamed,
+							content: this.messageCurrentlyStreamed.content + addVal,
+						} as any;
 					}
 
 					if (
@@ -180,7 +212,11 @@ export class ChatBoxComponent implements OnChanges {
 						let rsp = await this.chatService.chatMessages(threadId);
 						this.messages = rsp.messages;
 						this.assets = rsp.assets;
-						this.messageCurrentlyStreamed.content = '';
+
+						this.messageCurrentlyStreamed = {
+							...this.messageCurrentlyStreamed,
+							content: '',
+						} as any;
 					}
 					this.cd.detectChanges();
 				});

@@ -9,15 +9,39 @@
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+	FormBuilder,
+	FormGroup,
+	Validators,
+	FormsModule,
+	ReactiveFormsModule,
+} from '@angular/forms';
 import { User, UserService, Role } from '../../services/user.service';
 import { first } from 'rxjs';
-import { ToastController } from '@ionic/angular';
+import { ToastController, IonicModule } from '@ionic/angular';
+import { TranslatePipe } from '../../../../shared/stdlib/translate.pipe';
+import { TranslateModule } from '@ngx-translate/core';
+import { NgFor } from '@angular/common';
+import { CenteredComponent } from '../../../../shared/stdlib/components/centered/centered.component';
+import { SidebarPageComponent } from '../../../../shared/stdlib/components/sidebar-page/sidebar-page.component';
+import { ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
 	selector: 'app-add-user',
 	templateUrl: './add-user.component.html',
 	styleUrls: ['./add-user.component.scss'],
+	standalone: true,
+	imports: [
+		SidebarPageComponent,
+		CenteredComponent,
+		FormsModule,
+		ReactiveFormsModule,
+		IonicModule,
+		NgFor,
+		TranslateModule,
+		TranslatePipe,
+	],
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddUserComponent implements OnInit {
 	addUserForm!: FormGroup;
@@ -26,7 +50,8 @@ export class AddUserComponent implements OnInit {
 	constructor(
 		private fb: FormBuilder,
 		private userService: UserService,
-		private toast: ToastController
+		private toast: ToastController,
+		private cd: ChangeDetectorRef
 	) {
 		this.userService.user$.pipe(first()).subscribe(() => {
 			this.loggedInInit();
@@ -46,6 +71,7 @@ export class AddUserComponent implements OnInit {
 	async loggedInInit() {
 		let rsp = await this.userService.getRoles();
 		this.roles = rsp.roles;
+		this.cd.markForCheck();
 	}
 
 	async createUser() {

@@ -8,7 +8,13 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import {
+	Component,
+	Input,
+	Output,
+	EventEmitter,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import {
 	ChatService,
 	ChatMessage,
@@ -16,11 +22,17 @@ import {
 } from '../../../../src/app/services/chat.service';
 import { PromptService } from '../../../../src/app/services/prompt.service';
 import { LocaltronService } from '../../../../src/app/services/localtron.service';
+import { MarkdownComponent } from 'ngx-markdown';
+import { IonicModule } from '@ionic/angular';
+import { NgIf, DatePipe } from '@angular/common';
 
 @Component({
 	selector: 'app-message',
 	templateUrl: './message.component.html',
 	styleUrl: './message.component.scss',
+	standalone: true,
+	imports: [NgIf, IonicModule, MarkdownComponent, DatePipe],
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MessageComponent {
 	constructor(

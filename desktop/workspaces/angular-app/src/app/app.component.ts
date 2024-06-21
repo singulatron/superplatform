@@ -12,6 +12,7 @@ import { Component } from '@angular/core';
 import { ElectronIpcService } from './services/electron-ipc.service';
 import { WindowApiConst } from 'shared-lib';
 import { Log } from '../../shared/backend-api/app';
+import { RouterOutlet } from '@angular/router';
 
 let loggingEnabled = true;
 
@@ -57,9 +58,11 @@ function overrideConsole(ipcService: ElectronIpcService) {
 }
 
 @Component({
-	selector: 'app-root',
-	templateUrl: './app.component.html',
-	styleUrls: ['./app.component.scss'],
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
+    standalone: true,
+    imports: [RouterOutlet],
 })
 export class AppComponent {
 	title = 'singulatron-angular-app';

@@ -1,11 +1,19 @@
 import { Component } from '@angular/core';
 import { UserService, Role, Permission } from '../../services/user.service';
 import { first } from 'rxjs';
+import { NgFor, NgIf } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { IonicModule } from '@ionic/angular';
+import { SidebarPageComponent } from '../../../../shared/stdlib/components/sidebar-page/sidebar-page.component';
+import { ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
 	selector: 'app-roles',
 	templateUrl: './roles.component.html',
 	styleUrls: ['./roles.component.css'],
+	standalone: true,
+	imports: [SidebarPageComponent, IonicModule, FormsModule, NgFor, NgIf],
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RolesComponent {
 	roles: Role[] = [];
@@ -16,7 +24,10 @@ export class RolesComponent {
 	roleSearchQuery: string = '';
 	permissionSearchQuery: string = '';
 
-	constructor(private userService: UserService) {
+	constructor(
+		private userService: UserService,
+		private cd: ChangeDetectorRef
+	) {
 		this.userService.user$.pipe(first()).subscribe(() => {
 			this.loggedInInit();
 		});
@@ -28,6 +39,8 @@ export class RolesComponent {
 
 		let rsp2 = await this.userService.getPermissions();
 		this.permissions = await rsp2.permissions;
+
+		this.cd.markForCheck();
 	}
 
 	selectRole(role: Role) {
