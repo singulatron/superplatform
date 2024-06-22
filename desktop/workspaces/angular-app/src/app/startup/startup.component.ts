@@ -24,7 +24,8 @@ import { RouterLink } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { NgIf, NgStyle, AsyncPipe } from '@angular/common';
 import { CenteredComponent } from '../../../shared/stdlib/components/centered/centered.component';
-import { SidebarPageComponent } from '../../../shared/stdlib/components/sidebar-page/sidebar-page.component';
+import { PageComponent } from '../../../shared/stdlib/components/page/page.component';
+import { IconMenuComponent } from '../../../shared/stdlib/components/icon-menu/icon-menu.component';
 
 @Component({
 	selector: 'app-startup',
@@ -32,7 +33,8 @@ import { SidebarPageComponent } from '../../../shared/stdlib/components/sidebar-
 	styleUrl: './startup.component.scss',
 	standalone: true,
 	imports: [
-		SidebarPageComponent,
+		IconMenuComponent,
+		PageComponent,
 		CenteredComponent,
 		NgIf,
 		IonicModule,
@@ -204,7 +206,7 @@ export class StartupComponent implements OnInit {
 
 		for (const url of assetURLs) {
 			this.downloadService.downloadDo(url);
-		};
+		}
 	}
 
 	isRuntimeInstalling = false;

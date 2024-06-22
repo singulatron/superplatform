@@ -11,7 +11,7 @@
 }
 
 ion-menu {
-	--width: 80%;
+	--width: var(--menu-width, 80%);
 }
 
 ion-list {

@@ -8,17 +8,11 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  -->
-<app-page title="Home" [columnWidths]="['3rem', '3rem', '4rem']">
-	<ng-template #columnContent let-width="width">
-		<div [ngStyle]="{ width: width }">
+<app-page title="Home" [menuEnabled]="false" [columnWidths]="['3rem']">
+	<ng-template #columnContent>
+		<div>
 			<app-icon-menu></app-icon-menu>
 		</div>
-	</ng-template>
-	<ng-template #columnContent let-width="width">
-		<div [ngStyle]="{ width: width }">Col 1</div>
-	</ng-template>
-	<ng-template #columnContent let-width="width">
-		<div [ngStyle]="{ width: width }">Col 2</div>
 	</ng-template>
 	<ng-template #mainContent>
 		<app-centered headerHeight="0vh" [vertical]="true">

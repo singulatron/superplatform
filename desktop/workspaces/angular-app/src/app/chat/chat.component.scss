@@ -8,25 +8,7 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-.flex-container {
-	display: flex;
-	height: 100vh;
-}
-
-.left-column {
-	width: 300px;
-	overflow-y: auto;
-	height: 100vh;
-	box-sizing: border-box;
-}
-
-.right-column {
-	height: 100vh;
-	width: 100%;
-	overflow-y: auto;
-}
-
-.left-column {
+.thread-list {
 	> div {
 		padding: 10px;
 		padding-left: 1rem;

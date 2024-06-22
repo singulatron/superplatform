@@ -1,4 +1,19 @@
-<ion-menu side="start" menuId="first" contentId="main-content">
+<!--
+ * @license
+ * Copyright (c) The Authors (see the AUTHORS file)
+ *
+ * This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3) for personal, non-commercial use.
+ * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
+ *
+ * For commercial use, a separate license must be obtained by purchasing from The Authors.
+ * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
+ -->
+<ion-menu
+	[style.--menu-width]="menuWidth"
+	side="start"
+	menuId="first"
+	contentId="main-content"
+>
 	<!-- <ion-header>
                 <ion-toolbar>
                     <ion-title>Menu</ion-title>
@@ -17,11 +32,7 @@
 					class="column"
 					[ngStyle]="{ flex: '0 0 ' + getColumnWidth(i) }"
 				>
-					<ng-container
-						[ngTemplateOutlet]="column"
-						[ngTemplateOutletContext]="{ width: getColumnWidth(i) }"
-					>
-					</ng-container>
+					<ng-container [ngTemplateOutlet]="column"> </ng-container>
 				</div>
 			</div>
 		</ion-list>
@@ -30,7 +41,7 @@
 
 <ion-header *ngIf="isMobile">
 	<ion-toolbar>
-		<ion-buttons slot="start">
+		<ion-buttons *ngIf="menuEnabled" slot="start">
 			<ion-menu-button autoHide="false"></ion-menu-button>
 		</ion-buttons>
 		<ion-title>{{ title }}</ion-title>
@@ -45,10 +56,7 @@
 			[ngStyle]="{ flex: '0 0 ' + getColumnWidth(i) }"
 		>
 			<ion-content>
-				<ng-container
-					[ngTemplateOutlet]="column"
-					[ngTemplateOutletContext]="{ width: getColumnWidth(i) }"
-				></ng-container>
+				<ng-container [ngTemplateOutlet]="column"></ng-container>
 			</ion-content>
 		</div>
 	</ng-container>

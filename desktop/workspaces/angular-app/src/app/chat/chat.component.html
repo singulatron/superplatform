@@ -8,14 +8,18 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  -->
-<app-page title="Chat" [columnWidths]="['3rem', '25%']">
-	<ng-template #columnContent let-width="width">
-		<div [ngStyle]="{ width: width }">
+<app-page
+	title="Chat"
+	[columnWidths]="['3rem', '20%']"
+	[mobileColumnWidths]="['3rem', '100%']"
+>
+	<ng-template #columnContent>
+		<div>
 			<app-icon-menu></app-icon-menu>
 		</div>
 	</ng-template>
-	<ng-template #columnContent let-width="width">
-		<div [ngStyle]="{ width: width }">
+	<ng-template #columnContent>
+		<div class="thread-list">
 			<div class="sng-test-open-new-thread" (click)="openNewThread()">
 				<img src="/assets/logo-lighter.png" alt="Singulatron" class="logo" />
 				<span class="brand-name">Singulatron</span>

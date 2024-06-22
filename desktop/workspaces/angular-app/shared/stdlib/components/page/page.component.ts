@@ -33,8 +33,11 @@ import { NgStyle, NgIf } from '@angular/common';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageComponent implements AfterContentInit {
+	@Input() menuWidth = '80%';
+	@Input() menuEnabled = true;
 	@Input() columnWidths: string[] = [];
-  @Input() title: string = ""
+	@Input() mobileColumnWidths: string[] = [];
+	@Input() title: string = '';
 	@Input() breakpoint: number = 768; // Default breakpoint is 768px
 
 	@ContentChildren('columnContent') columnsContent!: QueryList<any>;
@@ -65,6 +68,9 @@ export class PageComponent implements AfterContentInit {
 	}
 
 	getColumnWidth(index: number): string {
+		if (this.isMobile && this.mobileColumnWidths[index]) {
+			return this.mobileColumnWidths[index];
+		}
 		return this.columnWidths[index] || 'auto';
 	}
 
