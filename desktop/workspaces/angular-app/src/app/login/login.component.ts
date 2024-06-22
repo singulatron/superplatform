@@ -48,9 +48,9 @@ export class LoginComponent {
 		let rsp: LoginResponse;
 		try {
 			rsp = await this.userService.login(this.email, this.password);
-		} catch (err) {
+		} catch (error) {
 			const toast = await this.toast.create({
-				message: (err as any)?.error,
+				message: (error as any)?.error,
 				duration: 5000,
 				position: 'middle',
 			});

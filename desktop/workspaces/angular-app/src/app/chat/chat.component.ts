@@ -48,9 +48,9 @@ import { SidebarPageComponent } from '../../../shared/stdlib/components/sidebar-
 export class ChatComponent implements OnInit {
 	public defaultPrompt = '[INST] {prompt} [/INST]';
 	public chatThreads: Array<ChatThread> = [];
-	public activeThread: ChatThread | null = null;
+	public activeThread: ChatThread | undefined;
 
-	public model: Model | null = null;
+	public model: Model | undefined;
 	private models: Model[] = [];
 
 	private subscriptions: Subscription[] = [];
@@ -71,18 +71,17 @@ export class ChatComponent implements OnInit {
 		this.subscriptions.push(
 			this.chatService.onChatThreadUpdate$.subscribe(() => {
 				this.refreshThreadList();
-			})
-		);
-
-		this.subscriptions.push(
+			}),
 			this.chatService.onChatThreadAdded$.subscribe(() => {
 				this.refreshThreadList();
 			})
 		);
 
-		let activeThreadId = this.chatService.getActiveThreadId();
+		const activeThreadId = this.chatService.getActiveThreadId();
 		if (activeThreadId) {
-			let activeThread = this.chatThreads?.find((v) => v.id === activeThreadId);
+			const activeThread = this.chatThreads?.find(
+				(v) => v.id === activeThreadId
+			);
 			if (activeThread) {
 				this.activeThread = activeThread;
 			}
@@ -98,9 +97,9 @@ export class ChatComponent implements OnInit {
 
 		this.models = await this.modelService.getModels();
 		this.subscriptions.push(
-			this.configService.onConfigUpdate$.subscribe((conf) => {
-				let model = this.models?.find(
-					(m) => m.id == conf?.model?.currentModelId
+			this.configService.onConfigUpdate$.subscribe((config) => {
+				const model = this.models?.find(
+					(m) => m.id == config?.model?.currentModelId
 				);
 				if (model) {
 					this.model = model;
@@ -110,7 +109,9 @@ export class ChatComponent implements OnInit {
 	}
 
 	ngOnDestroy() {
-		this.subscriptions.forEach((sub) => sub.unsubscribe());
+		for (const sub of this.subscriptions) {
+			sub.unsubscribe();
+		}
 	}
 
 	public async setThreadAsActive(thread: ChatThread) {
@@ -136,13 +137,14 @@ export class ChatComponent implements OnInit {
 		if (!threadId) {
 			return -1;
 		}
-		let ind = -1;
-		promptList?.forEach((p, index) => {
+		let index = -1;
+		for (let index_ = 0; index_ < promptList.length; index_++) {
+			const p = promptList[index_];
 			if (p.threadId == threadId) {
-				ind = index;
+				index = index_;
 			}
-		});
-		return ind;
+		}
+		return index;
 	}
 
 	public async openNewThread() {
