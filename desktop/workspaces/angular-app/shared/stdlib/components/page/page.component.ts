@@ -19,7 +19,7 @@ import {
 	AfterContentInit,
 	ViewChild,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgFor } from '@angular/common';
 import { IonicModule, IonMenu } from '@ionic/angular';
 import { RouterLink } from '@angular/router';
 import { NgStyle, NgIf } from '@angular/common';
@@ -29,7 +29,7 @@ import { NgStyle, NgIf } from '@angular/common';
 	standalone: true,
 	templateUrl: './page.component.html',
 	styleUrl: './page.component.scss',
-	imports: [IonicModule, CommonModule, RouterLink, NgStyle, NgIf],
+	imports: [IonicModule, CommonModule, RouterLink, NgStyle, NgIf, NgFor],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageComponent implements AfterContentInit {
