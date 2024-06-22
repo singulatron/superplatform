@@ -8,75 +8,88 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  -->
-<b-sidebar-page>
-	<app-centered headerHeight="0vh" [vertical]="true">
-		<div style="padding: 1rem">
-			<div style="display: flex; margin-bottom: 2em">
-				<div style="height: 6em; width: 6em">
-					<img
-						src="/assets/logo-lighter.png"
-						style="height: 100%; width: 100%"
-					/>
-				</div>
-				<div style="flex-grow: 1; margin-left: 2rem">
-					<h1>Singulatron</h1>
-					<h3 style="margin-top: 0em; color: #888">
-						{{ 'AI You Can Trust' | translate }}.
-					</h3>
-				</div>
-			</div>
-
-			<ion-card *ngIf="false" style="margin-top: 3em">
-				<ion-card-content>
-					<div style="display: flex; align-items: center">
-						<ion-icon
-							class="log-icon"
-							[ngClass]="{
-								active: loggingEnabled,
-							}"
-							style="font-size: 2em; cursor: pointer"
-							(click)="toggleLogging()"
-							name="cloud-upload-outline"
-						></ion-icon>
-						<div *ngIf="loggingEnabled" style="margin-left: 20px">
-							{{ 'Logs are being saved on your system' | translate }}.<br />
-							{{
-								'Turn logging off entirely for extra privacy and safety'
-									| translate
-							}}.
-						</div>
-
-						<div *ngIf="!loggingEnabled" style="margin-left: 20px">
-							{{
-								'Logs are turned off for extra privacy and security'
-									| translate
-							}}.<br />
-							{{
-								'If you are not working with extremely sensitive data, you can turn this on'
-									| translate
-							}}.
-						</div>
-					</div>
-				</ion-card-content>
-			</ion-card>
-
-			<div
-				style="margin-left: 0.5rem; margin-top: 3em"
-				class="buttons-container"
-			>
-				<ion-button
-					class="menu-buttons sng-test-ai-button"
-					routerLink="/startup"
-					fill="outline"
-					>{{ 'AI' | translate }}</ion-button
-				>
-				<ion-button
-					class="menu-buttons sng-test-users-button"
-					routerLink="/users"
-					fill="outline"
-					>{{ 'Users' | translate }}</ion-button
-				>
-			</div>
+<app-page [columnWidths]="['3rem', '3rem', '4rem']">
+	<ng-template #columnContent let-width="width">
+		<div [ngStyle]="{ width: width }">
+			<app-icon-menu></app-icon-menu>
 		</div>
-	</app-centered>
-</b-sidebar-page>
+	</ng-template>
+	<ng-template #columnContent let-width="width">
+		<div [ngStyle]="{ width: width }">Col 1</div>
+	</ng-template>
+	<ng-template #columnContent let-width="width">
+		<div [ngStyle]="{ width: width }">Col 2</div>
+	</ng-template>
+	<ng-template #mainContent>
+		<app-centered headerHeight="0vh" [vertical]="true">
+			<div style="padding: 1rem">
+				<div style="display: flex; margin-bottom: 2em">
+					<div style="height: 6em; width: 6em">
+						<img
+							src="/assets/logo-lighter.png"
+							style="height: 100%; width: 100%"
+						/>
+					</div>
+					<div style="flex-grow: 1; margin-left: 2rem">
+						<h1>Singulatron</h1>
+						<h3 style="margin-top: 0em; color: #888">
+							{{ 'AI You Can Trust' | translate }}.
+						</h3>
+					</div>
+				</div>
+
+				<ion-card *ngIf="false" style="margin-top: 3em">
+					<ion-card-content>
+						<div style="display: flex; align-items: center">
+							<ion-icon
+								class="log-icon"
+								[ngClass]="{
+									active: loggingEnabled,
+								}"
+								style="font-size: 2em; cursor: pointer"
+								(click)="toggleLogging()"
+								name="cloud-upload-outline"
+							></ion-icon>
+							<div *ngIf="loggingEnabled" style="margin-left: 20px">
+								{{ 'Logs are being saved on your system' | translate }}.<br />
+								{{
+									'Turn logging off entirely for extra privacy and safety'
+										| translate
+								}}.
+							</div>
+
+							<div *ngIf="!loggingEnabled" style="margin-left: 20px">
+								{{
+									'Logs are turned off for extra privacy and security'
+										| translate
+								}}.<br />
+								{{
+									'If you are not working with extremely sensitive data, you can turn this on'
+										| translate
+								}}.
+							</div>
+						</div>
+					</ion-card-content>
+				</ion-card>
+
+				<div
+					style="margin-left: 0.5rem; margin-top: 3em"
+					class="buttons-container"
+				>
+					<ion-button
+						class="menu-buttons sng-test-ai-button"
+						routerLink="/startup"
+						fill="outline"
+						>{{ 'AI' | translate }}</ion-button
+					>
+					<ion-button
+						class="menu-buttons sng-test-users-button"
+						routerLink="/users"
+						fill="outline"
+						>{{ 'Users' | translate }}</ion-button
+					>
+				</div>
+			</div>
+		</app-centered>
+	</ng-template>
+</app-page>

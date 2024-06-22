@@ -1,0 +1,40 @@
+<ion-split-pane
+	contentId="main-content"
+	[when]="getBreakpointQuery()"
+>
+	<ion-menu side="start" menuId="first" contentId="main-content">
+		<ion-header>
+			<ion-toolbar>
+				<ion-title>Menu</ion-title>
+			</ion-toolbar>
+		</ion-header>
+		<ion-content>
+			<div *ngFor="let column of columns; let i = index">
+				<ng-container
+					[ngTemplateOutlet]="column"
+					[ngTemplateOutletContext]="{ width: getColumnWidth(i) }"
+				></ng-container>
+			</div>
+		</ion-content>
+	</ion-menu>
+
+	<div class="flex-container" id="main-content">
+		<div
+			*ngFor="let column of columns; let i = index"
+			class="column"
+			[ngStyle]="{ flex: '0 0 ' + getColumnWidth(i) }"
+		>
+			<ion-content>
+				<ng-container
+					[ngTemplateOutlet]="column"
+					[ngTemplateOutletContext]="{ width: getColumnWidth(i) }"
+				></ng-container>
+			</ion-content>
+		</div>
+		<div class="main-content" [ngStyle]="{ flex: '1' }">
+			<ion-content>
+				<ng-container *ngTemplateOutlet="main"></ng-container>
+			</ion-content>
+		</div>
+	</div>
+</ion-split-pane>
