@@ -1,4 +1,8 @@
-import { enableProdMode, importProvidersFrom, provideExperimentalZonelessChangeDetection } from '@angular/core';
+import {
+	enableProdMode,
+	importProvidersFrom,
+	provideExperimentalZonelessChangeDetection,
+} from '@angular/core';
 
 import { HttpLoaderFactory } from './app/app.module';
 import { environment } from './environments/environment';
@@ -26,9 +30,9 @@ if (environment.production) {
 	enableProdMode();
 }
 
-bootstrapApplication(AppComponent, {
+await bootstrapApplication(AppComponent, {
 	providers: [
-        provideExperimentalZonelessChangeDetection(),
+		provideExperimentalZonelessChangeDetection(),
 		importProvidersFrom(
 			BrowserModule,
 			AppRoutingModule,
@@ -61,4 +65,4 @@ bootstrapApplication(AppComponent, {
 		provideHttpClient(withInterceptorsFromDi()),
 		provideAnimations(),
 	],
-}).catch((error) => console.error(error));
+})

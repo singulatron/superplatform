@@ -34,7 +34,7 @@ const originalConsole = {
 };
 
 function overrideConsole(ipcService: ElectronIpcService) {
-	['log', 'error', 'warn', 'info', 'debug', 'trace'].forEach((mn) => {
+	for (let mn of ['log', 'error', 'warn', 'info', 'debug', 'trace']) {
 		const methodName: keyof Console = mn as any;
 
 		console[methodName] = ((...args: any[]) => {
@@ -54,15 +54,15 @@ function overrideConsole(ipcService: ElectronIpcService) {
 				originalConsole.error('Cannot send log to IPC', err);
 			}
 		}) as any;
-	});
+	};
 }
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss'],
-    standalone: true,
-    imports: [RouterOutlet],
+	selector: 'app-root',
+	templateUrl: './app.component.html',
+	styleUrls: ['./app.component.scss'],
+	standalone: true,
+	imports: [RouterOutlet],
 })
 export class AppComponent {
 	title = 'singulatron-angular-app';

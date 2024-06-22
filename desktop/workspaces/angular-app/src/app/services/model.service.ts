@@ -53,7 +53,7 @@ export class ModelService {
 			return this.models;
 		}
 
-		let rsp: GetModelsResponse = await this.localtron.call(
+		const rsp: GetModelsResponse = await this.localtron.call(
 			'/model/get-models',
 			{}
 		);
@@ -79,7 +79,7 @@ export class ModelService {
 			this.initInProgress = true;
 
 			this.models = await this.getModels();
-			let rsp = await this.modelStatus();
+			const rsp = await this.modelStatus();
 
 			this.onModelCheckSubject.next({
 				assetsReady: rsp?.status?.assetsReady,
@@ -103,17 +103,17 @@ export class ModelService {
 	}
 
 	async modelStatus(modelId?: string): Promise<ModelStatusResponse> {
-		let req: ModelStatusRequest = {
+		const request: ModelStatusRequest = {
 			modelId: modelId,
 		};
-		return this.localtron.call('/model/status', req);
+		return this.localtron.call('/model/status', request);
 	}
 
 	async modelStart(modelId?: string): Promise<ModelStartResponse> {
-		let req: ModelStartRequest = {
+		const request: ModelStartRequest = {
 			modelId: modelId,
 		};
-		return this.localtron.call('/model/start', req);
+		return this.localtron.call('/model/start', request);
 	}
 
 	async makeDefault(url?: string) {
@@ -147,6 +147,7 @@ interface ModelStartRequest {
 	modelId?: string;
 }
 
+// eslint-disable-next-line
 interface ModelStartResponse {}
 
 export interface Platform {
@@ -186,7 +187,6 @@ export interface Model {
 	promptTemplate?: string;
 	quantComment?: string;
 }
-
 
 export interface Model {
 	id: string;

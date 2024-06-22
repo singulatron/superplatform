@@ -35,24 +35,27 @@ export class PromptService {
 	async init() {
 		this.firehoseService.firehoseEvent$.subscribe(async (event) => {
 			switch (event.name) {
-				case 'promptAdded':
-					let rsp1 = await this.promptList();
-					this.onPromptListUpdateSubject.next(rsp1.prompts);
+				case 'promptAdded': {
+					const rsp = await this.promptList();
+					this.onPromptListUpdateSubject.next(rsp.prompts);
 					break;
-				case 'promptProcessingStarted':
-					let rsp2 = await this.promptList();
-					this.onPromptListUpdateSubject.next(rsp2.prompts);
+				}
+				case 'promptProcessingStarted': {
+					const rsp = await this.promptList();
+					this.onPromptListUpdateSubject.next(rsp.prompts);
 					break;
-				case 'promptProcessingFinished':
-					let rsp3 = await this.promptList();
-					this.onPromptListUpdateSubject.next(rsp3.prompts);
+				}
+				case 'promptProcessingFinished': {
+					const rsp = await this.promptList();
+					this.onPromptListUpdateSubject.next(rsp.prompts);
 					break;
+				}
 			}
-			return null;
+			return;
 		});
 
 		try {
-			let rsp = await this.promptList();
+			const rsp = await this.promptList();
 
 			this.onPromptListUpdateSubject.next(rsp.prompts);
 		} catch (error) {
@@ -66,8 +69,8 @@ export class PromptService {
 		if (!prompt.id) {
 			prompt.id = this.localtron.uuid();
 		}
-		let req: AddPromptRequest = { prompt: prompt };
-		return this.localtron.call('/prompt/add', req);
+		const request: AddPromptRequest = { prompt: prompt };
+		return this.localtron.call('/prompt/add', request);
 	}
 
 	async promptList(): Promise<ListPromptsResponse> {
@@ -90,7 +93,7 @@ export class PromptService {
 					threadId: threadId,
 				});
 
-				let uri =
+				const uri =
 					this.localtron.config.env.localtronAddress +
 					'/prompt/subscribe?threadId=' +
 					threadId;
@@ -129,8 +132,8 @@ export class PromptService {
 											}
 											// Convert the Uint8Array to string
 											const text = new TextDecoder().decode(value);
-											let lines = text.split('\n');
-											lines.forEach((line) => {
+											const lines = text.split('\n');
+											for (const line of lines) {
 												const trimmedLine = line.trim();
 
 												if (
@@ -143,7 +146,7 @@ export class PromptService {
 												}
 
 												const cleanedText = trimmedLine
-													.replace(/^data: /gm, '')
+													.replaceAll(/^data: /gm, '')
 													.trim();
 
 												try {
@@ -161,35 +164,35 @@ export class PromptService {
 													// For continuous streaming, we might not want to call observer.error() here
 													// unless it's a critical error that requires stopping the stream.
 												}
-											});
+											}
 
 											// Call push again outside the loop to continue reading
 											push();
 										})
-										.catch((err) => {
+										.catch((error) => {
 											if (
-												err instanceof Error &&
-												err.message.includes('BodyStreamBuffer was aborted')
+												error instanceof Error &&
+												error.message.includes('BodyStreamBuffer was aborted')
 											) {
 												// we ignore this because this is normal
 											} else {
 												console.error('Error reading from stream', {
-													error: JSON.stringify(err),
+													error: JSON.stringify(error),
 												});
 
-												observer.error(err);
-												controller.error(err);
+												observer.error(error);
+												controller.error(error);
 											}
-											observer.error(err);
-											controller.error(err);
+											observer.error(error);
+											controller.error(error);
 										});
 								}
 								push();
 							},
 						});
 					})
-					.catch((err) => {
-						observer.error(err);
+					.catch((error) => {
+						observer.error(error);
 					});
 			};
 
@@ -250,6 +253,7 @@ export interface AddPromptRequest {
 	prompt: Prompt;
 }
 
+// eslint-disable-next-line
 export interface ListPromptsRequest {}
 
 export interface ListPromptsResponse {
