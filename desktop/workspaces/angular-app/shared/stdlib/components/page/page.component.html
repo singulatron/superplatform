@@ -7,16 +7,22 @@
         -->
 	<ion-content>
 		<ion-list>
-			<ion-item (click)="toggleMenu()">
+			<ion-item *ngIf="false" (click)="toggleMenu()">
 				<ion-icon slot="start" name="close-outline"></ion-icon>
 				Close {{ title }} Menu
 			</ion-item>
-			<div *ngFor="let column of columns; let i = index">
-				<ng-container
-					[ngTemplateOutlet]="column"
-					[ngTemplateOutletContext]="{ width: getColumnWidth(i) }"
+			<div class="flex-container">
+				<div
+					*ngFor="let column of columns; let i = index"
+					class="column"
+					[ngStyle]="{ flex: '0 0 ' + getColumnWidth(i) }"
 				>
-				</ng-container>
+					<ng-container
+						[ngTemplateOutlet]="column"
+						[ngTemplateOutletContext]="{ width: getColumnWidth(i) }"
+					>
+					</ng-container>
+				</div>
 			</div>
 		</ion-list>
 	</ion-content>
