@@ -17,7 +17,7 @@ export type TranslateObject = { [key: string]: { [key: string]: string } };
 
 @Pipe({
     name: 'translate',
-    pure: false,
+    pure: true,
     standalone: true,
 })
 export class TranslatePipe implements PipeTransform {

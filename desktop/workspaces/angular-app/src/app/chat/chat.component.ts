@@ -174,4 +174,8 @@ export class ChatComponent implements OnInit {
 	public onCopyToClipboard(text: any) {
 		this.ipcService.send(WindowApiConst.COPY_TO_CLIPBOARD_REQUEST, text);
 	}
+
+	trackById(_: number, message: { id?: string }): string {
+		return message.id || '';
+	}
 }

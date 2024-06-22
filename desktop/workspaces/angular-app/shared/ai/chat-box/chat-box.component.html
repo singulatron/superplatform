@@ -12,7 +12,12 @@
 	<ion-card class="flat-card">
 		<ion-card-content class="main-card">
 			<ng-container
-				*ngFor="let message of messages; let i = index; let isLast = last"
+				*ngFor="
+					let message of messages;
+					let i = index;
+					let isLast = last;
+					trackBy: trackById
+				"
 			>
 				<app-message
 					[message]="message"
@@ -31,20 +36,20 @@
 				<div style="display: flex; width: 100%">
 					<div style="width: 3.25rem; flex-shrink: 0"></div>
 					<div style="flex: 1">
-					<div
-						style="
-							max-width: inherit;
-							color: #666;
-							white-space: nowrap;
-							text-overflow: ellipsis;
-						"
-						*ngFor="let prompt of promptQueue"
-					>
-						<ng-container *ngIf="prompt.status !== 'running'">{{
-							prompt.prompt
-						}}</ng-container>
+						<div
+							style="
+								max-width: inherit;
+								color: #666;
+								white-space: nowrap;
+								text-overflow: ellipsis;
+							"
+							*ngFor="let prompt of promptQueue; trackBy: trackById"
+						>
+							<ng-container *ngIf="prompt.status !== 'running'">{{
+								prompt.prompt
+							}}</ng-container>
+						</div>
 					</div>
-				</div>
 				</div>
 			</ng-container>
 		</ion-card-content>

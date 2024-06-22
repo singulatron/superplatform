@@ -17,7 +17,7 @@
 				<ion-icon name="create-outline"></ion-icon>
 			</div>
 			<div
-				*ngFor="let thread of chatThreads; let i = index"
+				*ngFor="let thread of chatThreads; let i = index; trackBy: trackById"
 				class="thread-item
 				sng-test-thread-item
 				sng-test-thread-item-index-{{ i }}"

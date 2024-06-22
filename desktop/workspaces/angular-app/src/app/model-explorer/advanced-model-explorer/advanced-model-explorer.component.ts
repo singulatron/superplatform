@@ -312,6 +312,10 @@ export class AdvancedModelExplorerComponent {
 		this.gridView = !this.gridView;
 		this.filterModels();
 	}
+
+	trackById(_: number, message: { id: string }): string {
+		return message.id;
+	}
 }
 
 export interface ModelCategoryOption {
