@@ -30,24 +30,22 @@
 	color: #444;
 	font-size: large;
 	white-space: normal;
-	width: 12em;
-	height: 10em;
+	width: 14rem;
+	height: 12rem;
 	margin-bottom: 1em;
 	margin-right: 1em;
 }
-.header {
+
+.buttons-container {
 	display: flex;
-	flex-direction: row;
-	align-items: center;
-	margin-top: 1em;
-	margin-bottom: 2em;
-	gap: 2em;
-}
-.global-shade {
-	height: 2em;
-}
-.global-shade-phone {
-	display: none;
+	flex-wrap: wrap;
+	gap: 1rem; /* Adjust the gap as per your design */
+
+	ion-button {
+		flex: 1 1 12rem; /* Flex properties to control item width */
+		max-width: 14rem; /* Optional: Max width for flexibility */
+		margin-bottom: 1rem; /* Optional: Adjust margin as needed */
+	}
 }
 
 @media only screen and (max-width: 767px) {
@@ -58,18 +56,11 @@
 		align-items: center;
 	}
 	.menu-buttons {
-		width: 11em;
-		height: 8em;
+		height: 12rem;
+		width: 14rem;
 		margin-right: 0;
 	}
 	h1 {
 		font-size: larger;
-	}
-	.global-shade {
-		display: none;
-	}
-	.global-shade-phone {
-		display: initial;
-		margin: 1em;
 	}
 }

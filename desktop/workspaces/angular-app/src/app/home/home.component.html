@@ -26,7 +26,7 @@
 				</div>
 			</div>
 
-			<ion-card style="margin-top: 3em">
+			<ion-card *ngIf="false" style="margin-top: 3em">
 				<ion-card-content>
 					<div style="display: flex; align-items: center">
 						<ion-icon
@@ -59,7 +59,11 @@
 					</div>
 				</ion-card-content>
 			</ion-card>
-			<div style="margin-left: 0.5rem; margin-top: 3em" class="buttons">
+
+			<div
+				style="margin-left: 0.5rem; margin-top: 3em"
+				class="buttons-container"
+			>
 				<ion-button
 					class="menu-buttons sng-test-ai-button"
 					routerLink="/startup"

@@ -8,7 +8,7 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ElectronIpcService } from '../services/electron-ipc.service';
 import { WindowApiConst } from 'shared-lib';
 import { enableLogging, disableLogging } from '../app.component';
@@ -36,6 +36,7 @@ import { SidebarPageComponent } from '../../../shared/stdlib/components/sidebar-
 		TranslateModule,
 		TranslatePipe,
 	],
+	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomeComponent {
 	loggingEnabled = true;
