@@ -91,7 +91,7 @@ export class FirehoseService {
 													trimmedLine === 'data: [DONE]'
 												) {
 													// Skip empty lines, lines containing only 'data: ', or "[DONE]" markers
-													return;
+													continue
 												}
 
 												const cleanedText = trimmedLine
