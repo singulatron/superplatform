@@ -8,9 +8,18 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  -->
-<b-sidebar-page>
-	<div class="flex-container">
-		<div class="left-column">
+<app-page
+	title="Chat"
+	[columnWidths]="['3rem', '20%']"
+	[mobileColumnWidths]="['3rem', '100%']"
+>
+	<ng-template #columnContent>
+		<div>
+			<app-icon-menu></app-icon-menu>
+		</div>
+	</ng-template>
+	<ng-template #columnContent>
+		<div class="thread-list">
 			<div class="sng-test-open-new-thread" (click)="openNewThread()">
 				<img src="/assets/logo-lighter.png" alt="Singulatron" class="logo" />
 				<span class="brand-name">Singulatron</span>
@@ -57,15 +66,15 @@
 				></ion-icon>
 			</div>
 		</div>
-		<div class="right-column">
-			<app-centered headerHeight="0vh" [vertical]="true">
-				<app-chat-box
-					*ngIf="activeThread"
-					[thread]="activeThread"
-					[promptTemplate]="model?.promptTemplate || defaultPrompt"
-					(onCopyToClipboard)="onCopyToClipboard($event)"
-				></app-chat-box>
-			</app-centered>
-		</div>
-	</div>
-</b-sidebar-page>
+	</ng-template>
+	<ng-template #mainContent>
+		<app-centered headerHeight="0vh" [vertical]="true">
+			<app-chat-box
+				*ngIf="activeThread"
+				[thread]="activeThread"
+				[promptTemplate]="model?.promptTemplate || defaultPrompt"
+				(onCopyToClipboard)="onCopyToClipboard($event)"
+			></app-chat-box>
+		</app-centered>
+	</ng-template>
+</app-page>

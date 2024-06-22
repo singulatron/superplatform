@@ -25,9 +25,10 @@ import { Model, ModelService } from '../services/model.service';
 import { ConfigService } from '../services/config.service';
 import { ChatBoxComponent } from '../../../shared/ai/chat-box/chat-box.component';
 import { CenteredComponent } from '../../../shared/stdlib/components/centered/centered.component';
-import { NgFor, NgIf, AsyncPipe } from '@angular/common';
+import { NgFor, NgIf, AsyncPipe, NgStyle } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
-import { SidebarPageComponent } from '../../../shared/stdlib/components/sidebar-page/sidebar-page.component';
+import { PageComponent } from '../../../shared/stdlib/components/page/page.component';
+import { IconMenuComponent } from '../../../shared/stdlib/components/icon-menu/icon-menu.component';
 
 @Component({
 	selector: 'app-chat',
@@ -35,13 +36,15 @@ import { SidebarPageComponent } from '../../../shared/stdlib/components/sidebar-
 	styleUrl: './chat.component.scss',
 	standalone: true,
 	imports: [
-		SidebarPageComponent,
+		PageComponent,
 		IonicModule,
 		NgFor,
 		NgIf,
 		CenteredComponent,
 		ChatBoxComponent,
 		AsyncPipe,
+		NgStyle,
+		IconMenuComponent,
 	],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })

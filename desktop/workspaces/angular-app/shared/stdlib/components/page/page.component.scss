@@ -1,0 +1,19 @@
+.flex-container {
+	display: flex;
+	height: 100vh;
+	overflow: hidden;
+}
+
+.column,
+.main-content {
+	overflow-y: auto;
+	height: 100vh;
+}
+
+ion-menu {
+	--width: var(--menu-width, 80%);
+}
+
+ion-list {
+	padding: 0;
+}

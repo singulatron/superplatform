@@ -8,7 +8,7 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ElectronIpcService } from '../services/electron-ipc.service';
 import { WindowApiConst } from 'shared-lib';
 import { enableLogging, disableLogging } from '../app.component';
@@ -16,10 +16,11 @@ import { LogService } from '../services/log.service';
 import { TranslatePipe } from '../../../shared/stdlib/translate.pipe';
 import { TranslateModule } from '@ngx-translate/core';
 import { RouterLink } from '@angular/router';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass, NgIf, NgStyle } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { CenteredComponent } from '../../../shared/stdlib/components/centered/centered.component';
-import { SidebarPageComponent } from '../../../shared/stdlib/components/sidebar-page/sidebar-page.component';
+import { PageComponent } from '../../../shared/stdlib/components/page/page.component';
+import { IconMenuComponent } from '../../../shared/stdlib/components/icon-menu/icon-menu.component';
 
 @Component({
 	selector: 'app-home',
@@ -27,7 +28,8 @@ import { SidebarPageComponent } from '../../../shared/stdlib/components/sidebar-
 	styleUrl: './home.component.css',
 	standalone: true,
 	imports: [
-		SidebarPageComponent,
+		IconMenuComponent,
+		PageComponent,
 		CenteredComponent,
 		IonicModule,
 		NgClass,
@@ -35,7 +37,9 @@ import { SidebarPageComponent } from '../../../shared/stdlib/components/sidebar-
 		RouterLink,
 		TranslateModule,
 		TranslatePipe,
+		NgStyle,
 	],
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent {
 	loggingEnabled = true;
