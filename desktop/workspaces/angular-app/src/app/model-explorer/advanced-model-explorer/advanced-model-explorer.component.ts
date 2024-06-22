@@ -124,23 +124,25 @@ export class AdvancedModelExplorerComponent {
 		);
 		let models = this.allModels;
 		if (this.showOnlyDownloadedModels) {
-			models = []
+			models = [];
 			const downloadsResponse = await this.downloadService.downloadList();
 			for (const model of models) {
-				if (downloadsResponse.downloads.find(
-					(download) =>
-						download.status === 'completed' &&
-						model.assets &&
-						Object.values(model.assets)?.includes(download.id)
-				)) {
-					models.push(model)
+				if (
+					downloadsResponse.downloads.some(
+						(download) =>
+							download.status === 'completed' &&
+							model.assets &&
+							Object.values(model.assets)?.includes(download.id)
+					)
+				) {
+					models.push(model);
 				}
 			}
 		}
 
 		return this.anyCategorySelected()
 			? models.filter((model) => {
-					const found = activeCategories.find((option) => {
+					const found = activeCategories.some((option) => {
 						switch (option.value) {
 							case 'Instruct':
 							case 'Code':

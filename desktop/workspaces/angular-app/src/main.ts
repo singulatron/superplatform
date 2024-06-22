@@ -69,4 +69,5 @@ async function start() {
 	});
 }
 
-start()
+// eslint-disable-next-line
+start();
