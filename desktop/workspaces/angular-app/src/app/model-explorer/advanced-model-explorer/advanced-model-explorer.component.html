@@ -61,7 +61,7 @@
 			size-md="12"
 			size-lg="12"
 			[attr.size-xl]="veryLargeScreen ? '4' : '6'"
-			*ngFor="let model of models"
+			*ngFor="let model of models; trackBy: trackById"
 		>
 			<ion-card style="padding-bottom: 0.5rem">
 				<ion-card-header style="padding-right: 0.5rem">
@@ -245,7 +245,7 @@
 			<ion-col title="Size on disk"> Size </ion-col>
 			<ion-col> Actions </ion-col>
 		</ion-row>
-		<ion-row *ngFor="let model of models">
+		<ion-row *ngFor="let model of models; trackBy: trackById">
 			<ion-col title="Model name is {{ model.name }}">
 				{{ model.name }}
 			</ion-col>

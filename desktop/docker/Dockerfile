@@ -3,7 +3,11 @@ FROM node:22 as build
 WORKDIR /app
 COPY . .
 
-RUN npm i && npm run package:angular-app
+RUN npm i && \
+    cd workspaces/angular-app && \
+    npm run lint && \
+    cd ../.. && \
+    npm run package:angular-app
 
 FROM nginx:alpine
 

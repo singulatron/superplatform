@@ -23,7 +23,6 @@
 						"outputPath": "./.dist/angular-app",
 						"index": "src/index.html",
 						"main": "src/main.ts",
-						"polyfills": "src/polyfills.ts",
 						"tsConfig": "tsconfig.app.json",
 						"inlineStyleLanguage": "scss",
 						"assets": [
@@ -139,7 +138,6 @@
 					"builder": "@angular-devkit/build-angular:karma",
 					"options": {
 						"main": "src/test.ts",
-						"polyfills": "src/polyfills.ts",
 						"tsConfig": "tsconfig.spec.json",
 						"karmaConfig": "karma.conf.js",
 						"inlineStyleLanguage": "scss",
@@ -179,11 +177,18 @@
 							"devServerTarget": "angular-app:serve:production"
 						}
 					}
+				},
+				"lint": {
+					"builder": "@angular-eslint/builder:lint",
+					"options": {
+						"lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
+					}
 				}
 			}
 		}
 	},
 	"cli": {
-		"analytics": false
+		"analytics": false,
+		"schematicCollections": ["@angular-eslint/schematics"]
 	}
 }

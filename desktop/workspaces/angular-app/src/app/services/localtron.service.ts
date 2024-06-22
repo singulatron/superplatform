@@ -53,12 +53,12 @@ export class LocaltronService {
 			throw 'Localtron address seems to be empty';
 		}
 
-		let uri = this.config.env.localtronAddress + path;
+		const uri = this.config.env.localtronAddress + path;
 
-		let body = JSON.stringify(request);
+		const body = JSON.stringify(request);
 
 		// @todo get this from the user service - import cycle currently
-		let headers = this.headers.set(
+		const headers = this.headers.set(
 			'Authorization',
 			'Bearer ' + this.cs.get('the_token')
 		);
@@ -84,12 +84,6 @@ export class LocaltronService {
 	}
 
 	uuid() {
-		function generateSegment(length: number) {
-			return Array.from({ length: length }, () =>
-				Math.floor(Math.random() * 16).toString(16)
-			).join('');
-		}
-
 		return (
 			generateSegment(8) +
 			'-' +
@@ -102,4 +96,10 @@ export class LocaltronService {
 			generateSegment(12)
 		);
 	}
+}
+
+function generateSegment(length: number) {
+	return Array.from({ length: length }, () =>
+		Math.floor(Math.random() * 16).toString(16)
+	).join('');
 }

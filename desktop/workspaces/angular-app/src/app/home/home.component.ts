@@ -22,20 +22,20 @@ import { CenteredComponent } from '../../../shared/stdlib/components/centered/ce
 import { SidebarPageComponent } from '../../../shared/stdlib/components/sidebar-page/sidebar-page.component';
 
 @Component({
-    selector: 'app-home',
-    templateUrl: './home.component.html',
-    styleUrl: './home.component.css',
-    standalone: true,
-    imports: [
-        SidebarPageComponent,
-        CenteredComponent,
-        IonicModule,
-        NgClass,
-        NgIf,
-        RouterLink,
-        TranslateModule,
-        TranslatePipe,
-    ],
+	selector: 'app-home',
+	templateUrl: './home.component.html',
+	styleUrl: './home.component.css',
+	standalone: true,
+	imports: [
+		SidebarPageComponent,
+		CenteredComponent,
+		IonicModule,
+		NgClass,
+		NgIf,
+		RouterLink,
+		TranslateModule,
+		TranslatePipe,
+	],
 })
 export class HomeComponent {
 	loggingEnabled = true;
@@ -46,11 +46,11 @@ export class HomeComponent {
 	) {}
 
 	async ngOnInit() {
-		let logStatus = await this.logService.logStatus();
+		const logStatus = await this.logService.logStatus();
 		this.loggingEnabled = logStatus.enabled;
 		if (!this.loggingEnabled) {
 			console.log('Logging is disabled');
-			this.ipcService.send(WindowApiConst.DISABLE_LOGGING_REQUEST, null);
+			this.ipcService.send(WindowApiConst.DISABLE_LOGGING_REQUEST, {});
 		}
 	}
 
@@ -65,8 +65,8 @@ export class HomeComponent {
 	async enableLog() {
 		this.loggingEnabled = true;
 		await this.logService.logEnable();
-		let rsp = await this.logService.logStatus();
-		this.ipcService.send(WindowApiConst.ENABLE_LOGGING_REQUEST, null);
+		const rsp = await this.logService.logStatus();
+		this.ipcService.send(WindowApiConst.ENABLE_LOGGING_REQUEST, {});
 		this.loggingEnabled = rsp.enabled;
 		enableLogging();
 		console.log('Enabled logging');
@@ -77,8 +77,8 @@ export class HomeComponent {
 		disableLogging();
 		this.loggingEnabled = false;
 		await this.logService.logDisable();
-		let rsp = await this.logService.logStatus();
-		this.ipcService.send(WindowApiConst.DISABLE_LOGGING_REQUEST, null);
+		const rsp = await this.logService.logStatus();
+		this.ipcService.send(WindowApiConst.DISABLE_LOGGING_REQUEST, {});
 		this.loggingEnabled = rsp.enabled;
 	}
 }

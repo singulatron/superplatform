@@ -18,7 +18,7 @@ import { ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 export class RolesComponent {
 	roles: Role[] = [];
 	permissions: Permission[] = [];
-	selectedRole: Role | null = null;
+	selectedRole: Role | undefined;
 	selectedRolePermissions: Set<string> = new Set<string>();
 
 	roleSearchQuery: string = '';
@@ -34,10 +34,10 @@ export class RolesComponent {
 	}
 
 	async loggedInInit() {
-		let rsp = await this.userService.getRoles();
+		const rsp = await this.userService.getRoles();
 		this.roles = await rsp.roles;
 
-		let rsp2 = await this.userService.getPermissions();
+		const rsp2 = await this.userService.getPermissions();
 		this.permissions = await rsp2.permissions;
 
 		this.cd.markForCheck();
@@ -51,7 +51,9 @@ export class RolesComponent {
 	loadRolePermissions(role: Role) {
 		this.selectedRolePermissions.clear();
 		if (role.permissionIds) {
-			role.permissionIds.forEach((id) => this.selectedRolePermissions.add(id));
+			for (const id of role.permissionIds) {
+				this.selectedRolePermissions.add(id);
+			}
 		}
 	}
 
@@ -65,7 +67,7 @@ export class RolesComponent {
 
 	async savePermissions() {
 		if (this.selectedRole) {
-			const permissionIds = Array.from(this.selectedRolePermissions);
+			const permissionIds = [...this.selectedRolePermissions];
 			await this.userService.setRolePermissions(
 				this.selectedRole.id as string,
 				permissionIds

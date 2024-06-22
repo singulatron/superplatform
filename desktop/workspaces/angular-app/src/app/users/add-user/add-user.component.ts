@@ -69,7 +69,7 @@ export class AddUserComponent implements OnInit {
 	}
 
 	async loggedInInit() {
-		let rsp = await this.userService.getRoles();
+		const rsp = await this.userService.getRoles();
 		this.roles = rsp.roles;
 		this.cd.markForCheck();
 	}
@@ -106,10 +106,11 @@ export class AddUserComponent implements OnInit {
 			toast.present();
 
 			this.addUserForm.reset();
-		} catch (err) {
+		} catch (error) {
 			let errorMessage = 'An unexpected error occurred';
 			try {
-				errorMessage = (JSON.parse(err as any) as any)?.error;
+				errorMessage = (JSON.parse(error as string) as { error: string })
+					?.error;
 			} catch {}
 
 			const toast = await this.toast.create({

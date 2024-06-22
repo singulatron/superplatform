@@ -45,7 +45,7 @@ export class FirehoseService {
 			const subscribe = () => {
 				console.info('Subscribing to the firehose');
 
-				let uri =
+				const uri =
 					this.localtron.config.env.localtronAddress + '/firehose/subscribe';
 
 				const headers = {
@@ -81,8 +81,8 @@ export class FirehoseService {
 											}
 											// Convert the Uint8Array to string
 											const text = new TextDecoder().decode(value);
-											let lines = text.split('\n');
-											lines.forEach((line) => {
+											const lines = text.split('\n');
+											for (const line of lines) {
 												const trimmedLine = line.trim();
 
 												if (
@@ -91,11 +91,11 @@ export class FirehoseService {
 													trimmedLine === 'data: [DONE]'
 												) {
 													// Skip empty lines, lines containing only 'data: ', or "[DONE]" markers
-													return;
+													continue
 												}
 
 												const cleanedText = trimmedLine
-													.replace(/^data: /gm, '')
+													.replaceAll(/^data: /gm, '')
 													.trim();
 
 												try {
@@ -113,35 +113,35 @@ export class FirehoseService {
 													// For continuous streaming, we might not want to call observer.error() here
 													// unless it's a critical error that requires stopping the stream.
 												}
-											});
+											}
 
 											// Call push again outside the loop to continue reading
 											push();
 										})
-										.catch((err) => {
+										.catch((error) => {
 											if (
-												err instanceof Error &&
-												err.message.includes('BodyStreamBuffer was aborted')
+												error instanceof Error &&
+												error.message.includes('BodyStreamBuffer was aborted')
 											) {
 												// we ignore this because this is normal
 											} else {
 												console.error('Error reading from stream', {
-													error: JSON.stringify(err),
+													error: JSON.stringify(error),
 												});
 
-												observer.error(err);
-												controller.error(err);
+												observer.error(error);
+												controller.error(error);
 											}
-											observer.error(err);
-											controller.error(err);
+											observer.error(error);
+											controller.error(error);
 										});
 								}
 								push();
 							},
 						});
 					})
-					.catch((err) => {
-						observer.error(err);
+					.catch((error) => {
+						observer.error(error);
 					});
 			};
 

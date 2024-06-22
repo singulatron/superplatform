@@ -27,22 +27,22 @@ import { CenteredComponent } from '../../../shared/stdlib/components/centered/ce
 import { SidebarPageComponent } from '../../../shared/stdlib/components/sidebar-page/sidebar-page.component';
 
 @Component({
-    selector: 'app-startup',
-    templateUrl: './startup.component.html',
-    styleUrl: './startup.component.scss',
-    standalone: true,
-    imports: [
-        SidebarPageComponent,
-        CenteredComponent,
-        NgIf,
-        IonicModule,
-        NgStyle,
-        RouterLink,
-        DownloadingComponent,
-        AsyncPipe,
-        TranslateModule,
-        TranslatePipe,
-    ],
+	selector: 'app-startup',
+	templateUrl: './startup.component.html',
+	styleUrl: './startup.component.scss',
+	standalone: true,
+	imports: [
+		SidebarPageComponent,
+		CenteredComponent,
+		NgIf,
+		IonicModule,
+		NgStyle,
+		RouterLink,
+		DownloadingComponent,
+		AsyncPipe,
+		TranslateModule,
+		TranslatePipe,
+	],
 })
 export class StartupComponent implements OnInit {
 	@ViewChild('logContainer') private logContainer!: ElementRef;
@@ -51,7 +51,7 @@ export class StartupComponent implements OnInit {
 		try {
 			this.logContainer.nativeElement.scrollTop =
 				this.logContainer.nativeElement.scrollHeight;
-		} catch (err) {}
+		} catch {}
 	}
 
 	models: Model[] = [];
@@ -89,20 +89,22 @@ export class StartupComponent implements OnInit {
 	}
 
 	selectedModelName(cu: Config): string {
-		let mod = this.models?.find((v) => v.id == cu?.model?.currentModelId);
-		let displayName = [mod?.name, mod?.flavour, mod?.version].join(' ');
+		const model = this.models?.find((v) => v.id == cu?.model?.currentModelId);
+		const displayName = [model?.name, model?.flavour, model?.version].join(' ');
 		return displayName;
 	}
 
 	selectedModel(cu: Config | null): Model | undefined {
 		if (!cu) {
-			null;
+			return;
 		}
 		return this.models?.find((v) => v.id == cu?.model?.currentModelId);
 	}
 
 	ngOnDestroy() {
-		this.subscriptions.forEach((v) => v.unsubscribe());
+		for (const v of this.subscriptions) {
+			v.unsubscribe();
+		}
 	}
 
 	private subscriptions: Subscription[] = [];
@@ -114,16 +116,12 @@ export class StartupComponent implements OnInit {
 					return;
 				}
 
-				data
-					.replace(this.log, '')
-					.trim()
-					.split('\n')
-					.forEach((l) => {
-						l = l?.trim();
-						if (l) {
-							console.log('Install log: ' + l);
-						}
-					});
+				for (let l of data.replace(this.log, '').trim().split('\n')) {
+					l = l?.trim();
+					if (l) {
+						console.log('Install log: ' + l);
+					}
+				}
 
 				this.log = data;
 				if (
@@ -165,7 +163,7 @@ export class StartupComponent implements OnInit {
 			}
 			if (!dockerInfo.hasDocker) {
 				this.showSections.dependencies = true;
-			} else if (!modelCheck.assetsReady) {
+			} else if (modelCheck.assetsReady == false) {
 				this.showSections.model = true;
 			} else {
 				this.showSections.starting = true;
@@ -190,23 +188,23 @@ export class StartupComponent implements OnInit {
 
 	async download() {
 		const config = this.configService.lastConfig;
-		let modelId = config?.model?.currentModelId;
+		const modelId = config?.model?.currentModelId;
 		if (!modelId) {
 			throw 'Model id is empty';
 		}
-		let model = this.models?.find((v) => v.id == modelId);
+		const model = this.models?.find((v) => v.id == modelId);
 		if (!model) {
 			throw `Cannot find model with id ${modelId}`;
 		}
-		let assetURLs = Object.values(model.assets);
+		const assetURLs = Object.values(model.assets);
 
 		if (!assetURLs?.length) {
 			throw `Nothing to download for ${modelId}`;
 		}
 
-		assetURLs.forEach((url) => {
+		for (const url of assetURLs) {
 			this.downloadService.downloadDo(url);
-		});
+		};
 	}
 
 	isRuntimeInstalling = false;

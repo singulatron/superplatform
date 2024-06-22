@@ -1,4 +1,8 @@
-import { enableProdMode, importProvidersFrom, provideExperimentalZonelessChangeDetection } from '@angular/core';
+import {
+	enableProdMode,
+	importProvidersFrom,
+	provideExperimentalZonelessChangeDetection,
+} from '@angular/core';
 
 import { HttpLoaderFactory } from './app/app.module';
 import { environment } from './environments/environment';
@@ -26,39 +30,44 @@ if (environment.production) {
 	enableProdMode();
 }
 
-bootstrapApplication(AppComponent, {
-	providers: [
-        provideExperimentalZonelessChangeDetection(),
-		importProvidersFrom(
-			BrowserModule,
-			AppRoutingModule,
-			ReactiveFormsModule,
-			IonicModule.forRoot({
-				// force Android mode across all platforms
-				mode: 'md',
-			}),
-			TranslateModule.forRoot({
-				defaultLanguage: 'en',
-				loader: {
-					provide: TranslateLoader,
-					useFactory: HttpLoaderFactory,
-					deps: [HttpClient],
-				},
-			}),
-			StdlibModule.forRoot({
-				apiServiceConfig: {
-					env: environment,
-				},
-			}),
-			AiModule,
-			MarkdownModule.forRoot()
-		),
-		{
-			provide: LOCALTRON_SERVICE_CONFIG,
-			useValue: { env: environment },
-		},
-		LocaltronService,
-		provideHttpClient(withInterceptorsFromDi()),
-		provideAnimations(),
-	],
-}).catch((error) => console.error(error));
+async function start() {
+	await bootstrapApplication(AppComponent, {
+		providers: [
+			provideExperimentalZonelessChangeDetection(),
+			importProvidersFrom(
+				BrowserModule,
+				AppRoutingModule,
+				ReactiveFormsModule,
+				IonicModule.forRoot({
+					// force Android mode across all platforms
+					mode: 'md',
+				}),
+				TranslateModule.forRoot({
+					defaultLanguage: 'en',
+					loader: {
+						provide: TranslateLoader,
+						useFactory: HttpLoaderFactory,
+						deps: [HttpClient],
+					},
+				}),
+				StdlibModule.forRoot({
+					apiServiceConfig: {
+						env: environment,
+					},
+				}),
+				AiModule,
+				MarkdownModule.forRoot()
+			),
+			{
+				provide: LOCALTRON_SERVICE_CONFIG,
+				useValue: { env: environment },
+			},
+			LocaltronService,
+			provideHttpClient(withInterceptorsFromDi()),
+			provideAnimations(),
+		],
+	});
+}
+
+// eslint-disable-next-line
+start();

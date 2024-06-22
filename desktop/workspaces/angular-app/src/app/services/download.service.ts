@@ -35,19 +35,20 @@ export class DownloadService {
 	async init() {
 		this.firehoseService.firehoseEvent$.subscribe(async (event) => {
 			switch (event.name) {
-				case 'downloadStatusChange':
-					let rsp = await this.downloadList();
+				case 'downloadStatusChange': {
+					const rsp = await this.downloadList();
 					this.onFileDownloadStatusSubject.next({
 						allDownloads: rsp.downloads,
 					});
 					break;
+				}
 			}
 		});
 	}
 
 	async loggedInInit() {
 		try {
-			let rsp = await this.downloadList();
+			const rsp = await this.downloadList();
 			this.onFileDownloadStatusSubject.next({
 				allDownloads: rsp?.downloads as DownloadDetails[],
 			});

@@ -17,17 +17,11 @@ import { IonicModule } from '@ionic/angular';
 import { NgIf, DecimalPipe } from '@angular/common';
 
 @Component({
-    selector: 'app-downloading',
-    templateUrl: './downloading.component.html',
-    styleUrl: './downloading.component.scss',
-    standalone: true,
-    imports: [
-        NgIf,
-        IonicModule,
-        DecimalPipe,
-        TranslateModule,
-        TranslatePipe,
-    ],
+	selector: 'app-downloading',
+	templateUrl: './downloading.component.html',
+	styleUrl: './downloading.component.scss',
+	standalone: true,
+	imports: [NgIf, IonicModule, DecimalPipe, TranslateModule, TranslatePipe],
 })
 export class DownloadingComponent {
 	@Input() url!: string;
@@ -42,7 +36,7 @@ export class DownloadingComponent {
 	ngOnInit() {
 		this.subscriptions.push(
 			this.downloadService.onFileDownloadStatus$.subscribe((data) => {
-				let d = data.allDownloads?.find((d) => {
+				const d = data.allDownloads?.find((d) => {
 					return d.url == this.url;
 				});
 
@@ -52,14 +46,11 @@ export class DownloadingComponent {
 
 				this.details = d;
 				this.downloadStatusChange.emit(this.details);
-			})
-		);
-
-		this.subscriptions.push(
+			}),
 			this.downloadService.onFileDownloadStatus$
 				.pipe(throttleTime(10 * 1000))
 				.subscribe((data) => {
-					let d = data.allDownloads?.find((d) => {
+					const d = data.allDownloads?.find((d) => {
 						return d.url == this.url;
 					});
 					if (!d) {
@@ -78,7 +69,9 @@ export class DownloadingComponent {
 	}
 
 	ngOnDestroy() {
-		this.subscriptions.forEach((v) => v.unsubscribe());
+		for (const v of this.subscriptions) {
+			v.unsubscribe();
+		}
 	}
 
 	pauseDownload() {

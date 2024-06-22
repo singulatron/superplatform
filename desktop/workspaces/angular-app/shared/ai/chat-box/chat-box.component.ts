@@ -276,6 +276,10 @@ export class ChatBoxComponent implements OnChanges {
 		}
 		// @todo summarize with llm at the end of the streaming
 	}
+
+	trackById(_: number, message: { id?: string }): string {
+		return message.id || '';
+	}
 }
 
 function escapeHtml(unsafe: string) {

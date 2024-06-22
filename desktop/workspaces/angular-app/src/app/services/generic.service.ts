@@ -32,26 +32,26 @@ export class GenericService {
 		this.firehoseService.firehoseEvent$.subscribe(async (event) => {
 			switch (event.name) {
 			}
-			return null;
+			return;
 		});
 	}
 
 	async create(table: string, object: GenericObject): Promise<void> {
-		let req: CreateRequest = {
+		const request: CreateRequest = {
 			table: table,
 			object: object,
 		};
 
-		return this.localtron.call('/generic/create', req);
+		return this.localtron.call('/generic/create', request);
 	}
 
 	async find(table: string, conditions: Condition[]): Promise<FindResponse> {
-		let req: FindRequest = {
+		const request: FindRequest = {
 			table: table,
 			conditions: conditions,
 		};
 
-		return this.localtron.call('/generic/find', req);
+		return this.localtron.call('/generic/find', request);
 	}
 
 	async update(
@@ -59,25 +59,25 @@ export class GenericService {
 		conditions: Condition[],
 		object: GenericObject
 	): Promise<UpdateResponse> {
-		let req: UpdateRequest = {
+		const request: UpdateRequest = {
 			table: table,
 			conditions: conditions,
 			object: object,
 		};
 
-		return this.localtron.call('/generic/update', req);
+		return this.localtron.call('/generic/update', request);
 	}
 
 	async delete(
 		table: string,
 		conditions: Condition[]
 	): Promise<DeleteResponse> {
-		let req: DeleteRequest = {
+		const request: DeleteRequest = {
 			table: table,
 			conditions: conditions,
 		};
 
-		return this.localtron.call('/generic/delete', req);
+		return this.localtron.call('/generic/delete', request);
 	}
 }
 
@@ -94,6 +94,7 @@ interface EqualCondition {
 	value: any;
 }
 
+// eslint-disable-next-line
 interface AllCondition {}
 
 export function equal(fieldName: string, value: any): Condition {
@@ -134,6 +135,7 @@ export interface CreateRequest {
 	object: GenericObject;
 }
 
+// eslint-disable-next-line
 export interface CreateResponse {}
 
 export interface UpdateRequest {
@@ -142,6 +144,7 @@ export interface UpdateRequest {
 	object: GenericObject;
 }
 
+// eslint-disable-next-line
 export interface UpdateResponse {}
 
 export interface DeleteRequest {
@@ -149,6 +152,7 @@ export interface DeleteRequest {
 	conditions: Condition[];
 }
 
+// eslint-disable-next-line
 export interface DeleteResponse {}
 
 export interface FindRequest {

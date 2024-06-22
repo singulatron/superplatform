@@ -70,11 +70,11 @@ export class UsersComponent implements OnInit {
 	}
 
 	async loggedInInit() {
-		let rsp = await this.userService.getUsers();
+		const rsp = await this.userService.getUsers();
 		this.users = rsp.users;
-		this.users.forEach((user) => {
+		for (const user of this.users) {
 			this.userForms.push(this.createUserForm(user));
-		});
+		}
 		this.cd.markForCheck();
 	}
 
@@ -114,27 +114,27 @@ export class UsersComponent implements OnInit {
 		}
 
 		try {
-			let toastMsg = `Profile ${name} saved`;
+			let toastMessage = `Profile ${name} saved`;
 			await this.userService.saveProfile(email, name);
 
 			if (password) {
-				toastMsg += ' and password changed';
+				toastMessage += ' and password changed';
 				await this.userService.changePassword(email, '', password);
 			}
 
 			const toast = await this.toast.create({
 				color: 'secondary',
-				message: toastMsg,
+				message: toastMessage,
 				duration: 5000,
 				position: 'middle',
 			});
 			toast.present();
 
 			this.loggedInInit();
-		} catch (err) {
+		} catch (error) {
 			let errorMessage = 'An unexpected error occurred';
 			try {
-				errorMessage = (JSON.parse(err as any) as any)?.error;
+				errorMessage = (JSON.parse(error as any) as any)?.error;
 			} catch {}
 
 			const toast = await this.toast.create({
@@ -153,21 +153,21 @@ export class UsersComponent implements OnInit {
 		try {
 			await this.userService.deleteUser(userId);
 
-			let toastMsg = `User ${name} deleted`;
+			const toastMessage = `User ${name} deleted`;
 
 			const toast = await this.toast.create({
 				color: 'secondary',
-				message: toastMsg,
+				message: toastMessage,
 				duration: 5000,
 				position: 'middle',
 			});
 			toast.present();
 
 			this.loggedInInit();
-		} catch (err) {
+		} catch (error) {
 			let errorMessage = 'An unexpected error occurred';
 			try {
-				errorMessage = (JSON.parse(err as any) as any)?.error;
+				errorMessage = (JSON.parse(error as any) as any)?.error;
 			} catch {}
 
 			const toast = await this.toast.create({
