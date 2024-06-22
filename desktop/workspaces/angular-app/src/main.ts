@@ -30,39 +30,43 @@ if (environment.production) {
 	enableProdMode();
 }
 
-await bootstrapApplication(AppComponent, {
-	providers: [
-		provideExperimentalZonelessChangeDetection(),
-		importProvidersFrom(
-			BrowserModule,
-			AppRoutingModule,
-			ReactiveFormsModule,
-			IonicModule.forRoot({
-				// force Android mode across all platforms
-				mode: 'md',
-			}),
-			TranslateModule.forRoot({
-				defaultLanguage: 'en',
-				loader: {
-					provide: TranslateLoader,
-					useFactory: HttpLoaderFactory,
-					deps: [HttpClient],
-				},
-			}),
-			StdlibModule.forRoot({
-				apiServiceConfig: {
-					env: environment,
-				},
-			}),
-			AiModule,
-			MarkdownModule.forRoot()
-		),
-		{
-			provide: LOCALTRON_SERVICE_CONFIG,
-			useValue: { env: environment },
-		},
-		LocaltronService,
-		provideHttpClient(withInterceptorsFromDi()),
-		provideAnimations(),
-	],
-})
+async function start() {
+	await bootstrapApplication(AppComponent, {
+		providers: [
+			provideExperimentalZonelessChangeDetection(),
+			importProvidersFrom(
+				BrowserModule,
+				AppRoutingModule,
+				ReactiveFormsModule,
+				IonicModule.forRoot({
+					// force Android mode across all platforms
+					mode: 'md',
+				}),
+				TranslateModule.forRoot({
+					defaultLanguage: 'en',
+					loader: {
+						provide: TranslateLoader,
+						useFactory: HttpLoaderFactory,
+						deps: [HttpClient],
+					},
+				}),
+				StdlibModule.forRoot({
+					apiServiceConfig: {
+						env: environment,
+					},
+				}),
+				AiModule,
+				MarkdownModule.forRoot()
+			),
+			{
+				provide: LOCALTRON_SERVICE_CONFIG,
+				useValue: { env: environment },
+			},
+			LocaltronService,
+			provideHttpClient(withInterceptorsFromDi()),
+			provideAnimations(),
+		],
+	});
+}
+
+start()

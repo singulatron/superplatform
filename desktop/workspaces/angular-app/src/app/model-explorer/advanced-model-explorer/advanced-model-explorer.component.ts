@@ -118,20 +118,23 @@ export class AdvancedModelExplorerComponent {
 		this.filterModels();
 	}
 
-	async getModels() {
+	async getModels(): Promise<Model[]> {
 		const activeCategories = this.modelCategoryOptions.filter(
 			(option) => option.active
 		);
-		const models = this.allModels;
+		let models = this.allModels;
 		if (this.showOnlyDownloadedModels) {
+			models = []
 			const downloadsResponse = await this.downloadService.downloadList();
 			for (const model of models) {
-				return downloadsResponse.downloads.find(
+				if (downloadsResponse.downloads.find(
 					(download) =>
 						download.status === 'completed' &&
 						model.assets &&
 						Object.values(model.assets)?.includes(download.id)
-				);
+				)) {
+					models.push(model)
+				}
 			}
 		}
 
