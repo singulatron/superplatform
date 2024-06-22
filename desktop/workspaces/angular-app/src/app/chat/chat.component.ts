@@ -138,8 +138,7 @@ export class ChatComponent implements OnInit {
 			return -1;
 		}
 		let index = -1;
-		for (let index_ = 0; index_ < promptList.length; index_++) {
-			const p = promptList[index_];
+		for (const [index_, p] of promptList.entries()) {
 			if (p.threadId == threadId) {
 				index = index_;
 			}
@@ -165,7 +164,7 @@ export class ChatComponent implements OnInit {
 	}
 
 	public async refreshThreadList() {
-		let rsp = await this.chatService.chatThreads();
+		const rsp = await this.chatService.chatThreads();
 		this.chatThreads = rsp.threads;
 		if (!this.chatThreads?.length) {
 			this.chatThreads = [];

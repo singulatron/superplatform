@@ -34,27 +34,27 @@ const originalConsole = {
 };
 
 function overrideConsole(ipcService: ElectronIpcService) {
-	for (let mn of ['log', 'error', 'warn', 'info', 'debug', 'trace']) {
+	for (const mn of ['log', 'error', 'warn', 'info', 'debug', 'trace']) {
 		const methodName: keyof Console = mn as any;
 
-		console[methodName] = ((...args: any[]) => {
+		console[methodName] = ((...arguments_: any[]) => {
 			if (!loggingEnabled) {
 				return;
 			}
-			(originalConsole as any)[methodName](...args);
+			(originalConsole as any)[methodName](...arguments_);
 			try {
-				let req: Log = {
+				const request: Log = {
 					level: methodName,
-					message: args[0],
+					message: arguments_[0],
 					source: 'frontend',
-					fields: args.length > 1 ? args[1] : {},
+					fields: arguments_.length > 1 ? arguments_[1] : {},
 				};
-				ipcService.send(WindowApiConst.LOG_REQUEST, req);
-			} catch (err) {
-				originalConsole.error('Cannot send log to IPC', err);
+				ipcService.send(WindowApiConst.LOG_REQUEST, request);
+			} catch (error) {
+				originalConsole.error('Cannot send log to IPC', error);
 			}
 		}) as any;
-	};
+	}
 }
 
 @Component({
