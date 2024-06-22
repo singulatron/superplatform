@@ -1,54 +1,54 @@
-    <ion-split-pane contentId="main-content" [when]="getBreakpointQuery()">
-        <ion-menu side="start" menuId="first" contentId="main-content">
-            <!-- <ion-header>
+<ion-menu side="start" menuId="first" contentId="main-content">
+	<!-- <ion-header>
                 <ion-toolbar>
                     <ion-title>Menu</ion-title>
                 </ion-toolbar>
             </ion-header>
         -->
-            <ion-content>
-                <ion-list>
-                    <ion-item (click)="toggleMenu()">
-                        <ion-icon slot="start" name="close-outline"></ion-icon>
-                        Close Menu
-                    </ion-item>
-                    <div *ngFor="let column of columns; let i = index">
-                        <ng-container
-                            [ngTemplateOutlet]="column"
-                            [ngTemplateOutletContext]="{ width: getColumnWidth(i) }"
-                        >
-                        </ng-container>
-                    </div>
-                </ion-list>
-            </ion-content>
-        </ion-menu>
+	<ion-content>
+		<ion-list>
+			<ion-item (click)="toggleMenu()">
+				<ion-icon slot="start" name="close-outline"></ion-icon>
+				Close {{ title }} Menu
+			</ion-item>
+			<div *ngFor="let column of columns; let i = index">
+				<ng-container
+					[ngTemplateOutlet]="column"
+					[ngTemplateOutletContext]="{ width: getColumnWidth(i) }"
+				>
+				</ng-container>
+			</div>
+		</ion-list>
+	</ion-content>
+</ion-menu>
 
-        <ion-header *ngIf="isMobile">
-            <ion-toolbar>
-                <ion-buttons slot="start">
-                    <ion-menu-button autoHide="false"></ion-menu-button>
-                </ion-buttons>
-                <ion-title>Main Content Area</ion-title>
-            </ion-toolbar>
-        </ion-header>
+<ion-header *ngIf="isMobile">
+	<ion-toolbar>
+		<ion-buttons slot="start">
+			<ion-menu-button autoHide="false"></ion-menu-button>
+		</ion-buttons>
+		<ion-title>{{ title }}</ion-title>
+	</ion-toolbar>
+</ion-header>
 
-        <div class="flex-container" id="main-content">
-            <div
-                *ngFor="let column of columns; let i = index"
-                class="column"
-                [ngStyle]="{ flex: '0 0 ' + getColumnWidth(i) }"
-            >
-                <ion-content>
-                    <ng-container
-                        [ngTemplateOutlet]="column"
-                        [ngTemplateOutletContext]="{ width: getColumnWidth(i) }"
-                    ></ng-container>
-                </ion-content>
-            </div>
-            <div class="main-content" [ngStyle]="{ flex: '1' }">
-                <ion-content>
-                    <ng-container *ngTemplateOutlet="main"></ng-container>
-                </ion-content>
-            </div>
-        </div>
-    </ion-split-pane>
+<div class="flex-container" id="main-content">
+	<ng-container *ngIf="!isMobile"
+		><div
+			*ngFor="let column of columns; let i = index"
+			class="column"
+			[ngStyle]="{ flex: '0 0 ' + getColumnWidth(i) }"
+		>
+			<ion-content>
+				<ng-container
+					[ngTemplateOutlet]="column"
+					[ngTemplateOutletContext]="{ width: getColumnWidth(i) }"
+				></ng-container>
+			</ion-content>
+		</div>
+	</ng-container>
+	<div class="main-content" [ngStyle]="{ flex: '1' }">
+		<ion-content>
+			<ng-container *ngTemplateOutlet="main"></ng-container>
+		</ion-content>
+	</div>
+</div>

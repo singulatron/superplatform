@@ -34,6 +34,7 @@ import { NgStyle, NgIf } from '@angular/common';
 })
 export class PageComponent implements AfterContentInit {
 	@Input() columnWidths: string[] = [];
+  @Input() title: string = ""
 	@Input() breakpoint: number = 768; // Default breakpoint is 768px
 
 	@ContentChildren('columnContent') columnsContent!: QueryList<any>;
