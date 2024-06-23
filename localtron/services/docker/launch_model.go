@@ -13,6 +13,7 @@ package dockerservice
 import (
 	"context"
 	"fmt"
+	"log/slog"
 	"strings"
 
 	"github.com/docker/docker/api/types"
@@ -110,7 +111,11 @@ func (d *DockerService) LaunchContainer(image string, internalPort, hostPort int
 
 	if existingContainer != nil {
 		if existingContainer.State != "running" || existingContainer.Labels["singulatron-hash"] != options.Hash {
-			logger.Debug("Container state is not running or hash is mismatched, removing...")
+			logs, _ := d.GetContainerLogsAndStatus(options.Hash, 10)
+			logger.Debug("Container state is not running or hash is mismatched, removing...",
+				slog.String("containerLogs", logs),
+			)
+
 			if err := d.client.ContainerRemove(ctx, existingContainer.ID, container.RemoveOptions{Force: true}); err != nil {
 				return nil, errors.Wrap(err, "error removing Docker container")
 			}

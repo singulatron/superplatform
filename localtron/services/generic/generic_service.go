@@ -96,6 +96,7 @@ func (g *GenericService) Find(tableName string, userId string, conditions []data
 	if len(conditions) == 0 {
 		return nil, errors.New("no conditions")
 	}
+	conditions = append(conditions, datastore.Equal("table", tableName))
 
 	return g.store.Query(
 		conditions[0], conditions[1:]...,
@@ -106,6 +107,8 @@ func (g *GenericService) Update(tableName string, userId string, conditions []da
 	if len(conditions) == 0 {
 		return errors.New("no conditions")
 	}
+
+	conditions = append(conditions, datastore.Equal("table", tableName))
 	conditions = append(conditions, datastore.Equal(
 		"userId",
 		userId,
@@ -120,6 +123,8 @@ func (g *GenericService) Delete(tableName string, userId string, conditions []da
 	if len(conditions) == 0 {
 		return errors.New("no conditions")
 	}
+
+	conditions = append(conditions, datastore.Equal("table", tableName))
 	conditions = append(conditions, datastore.Equal(
 		"userId",
 		userId,
