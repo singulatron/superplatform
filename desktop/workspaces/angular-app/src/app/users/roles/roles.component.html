@@ -8,11 +8,10 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  -->
-
 <app-page
 	title="Roles"
 	[columnWidths]="['3rem', '25%']"
-	[mobileColumnWidths]="['3rem', '100%']"
+	[mobileColumnWidths]="['3rem', 'calc(100% - 3rem)']"
 >
 	<ng-template #columnContent>
 		<div>
@@ -20,7 +19,7 @@
 		</div>
 	</ng-template>
 	<ng-template #columnContent>
-		<div>
+		<div class="roles-container">
 			<ion-searchbar
 				[(ngModel)]="roleSearchQuery"
 				placeholder="Search Roles"
@@ -41,28 +40,30 @@
 		</div>
 	</ng-template>
 	<ng-template #mainContent>
-		<ion-item *ngIf="selectedRole">
-			<ion-searchbar
-				[(ngModel)]="permissionSearchQuery"
-				placeholder="Search Permissions"
-			></ion-searchbar>
-			<ion-button slot="end" style="color: white" (click)="savePermissions()"
-				>Save</ion-button
-			>
-		</ion-item>
-		<ion-list *ngIf="selectedRole">
-			<ion-list-header>
-				<ion-label>Permissions</ion-label>
-			</ion-list-header>
-			<ion-item *ngFor="let permission of filteredPermissions()">
-				<ion-checkbox
-					class="custom-checkbox"
-					slot="start"
-					[checked]="selectedRolePermissions.has(permission.id || '')"
-					(ionChange)="togglePermission(permission.id || '')"
-				></ion-checkbox>
-				<ion-label>{{ permission?.name }}</ion-label>
+		<div class="permissions-container">
+			<ion-item *ngIf="selectedRole">
+				<ion-searchbar
+					[(ngModel)]="permissionSearchQuery"
+					placeholder="Search Permissions"
+				></ion-searchbar>
+				<ion-button slot="end" style="color: white" (click)="savePermissions()"
+					>Save</ion-button
+				>
 			</ion-item>
-		</ion-list>
+			<ion-list *ngIf="selectedRole">
+				<ion-list-header>
+					<ion-label>Permissions</ion-label>
+				</ion-list-header>
+				<ion-item *ngFor="let permission of filteredPermissions()">
+					<ion-checkbox
+						class="custom-checkbox"
+						slot="start"
+						[checked]="selectedRolePermissions.has(permission.id || '')"
+						(ionChange)="togglePermission(permission.id || '')"
+					></ion-checkbox>
+					<ion-label>{{ permission?.name }}</ion-label>
+				</ion-item>
+			</ion-list>
+		</div>
 	</ng-template>
 </app-page>
