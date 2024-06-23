@@ -60,7 +60,13 @@
 			</ion-content>
 		</div>
 	</ng-container>
-	<div class="main-content" [ngStyle]="{ flex: '1' }">
+	<div
+		class="main-content"
+		[ngStyle]="{
+			flex: '1',
+			height: isMobile ? 'calc(100vh - 56px)' : '100vh',
+		}"
+	>
 		<ion-content>
 			<ng-container *ngTemplateOutlet="main"></ng-container>
 		</ion-content>
