@@ -337,6 +337,9 @@ func main() {
 	router.HandleFunc("/generic/find", appl(func(w http.ResponseWriter, r *http.Request) {
 		genericendpoints.Find(w, r, userService, genericService)
 	}))
+	router.HandleFunc("/generic/upsert", appl(func(w http.ResponseWriter, r *http.Request) {
+		genericendpoints.Upsert(w, r, userService, genericService)
+	}))
 
 	srv := &http.Server{
 		Handler: router,

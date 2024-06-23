@@ -240,6 +240,7 @@ export interface Prompt {
 		Optional. Might be derived from/through the modelId
 	*/
 	template?: string;
+	character?: string;
 	modelId?: string;
 	createdAt?: string;
 	status?: PromptStatus;

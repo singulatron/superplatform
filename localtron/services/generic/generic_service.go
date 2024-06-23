@@ -98,6 +98,8 @@ func (g *GenericService) Find(tableName string, userId string, conditions []data
 	}
 	conditions = append(conditions, datastore.Equal("table", tableName))
 
+	conditions = append(conditions, datastore.Equal("table", tableName))
+
 	return g.store.Query(
 		conditions[0], conditions[1:]...,
 	).Find()

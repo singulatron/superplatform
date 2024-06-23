@@ -11,7 +11,7 @@
 import { Injectable } from '@angular/core';
 import { LocaltronService } from './localtron.service';
 import { CookieService } from 'ngx-cookie-service';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, firstValueFrom, first } from 'rxjs';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -165,6 +165,16 @@ export class UserService {
 			userId: userId,
 		};
 		return this.localtron.call('/user/delete-user', request);
+	}
+
+	async getUserId(): Promise<string> {
+		try {
+		  const user = await firstValueFrom(this.user$.pipe(first()));
+		  return user.id as string;
+		} catch (error) {
+		  console.error('Error getting user ID:', error);
+		  throw error;
+		}
 	}
 }
 

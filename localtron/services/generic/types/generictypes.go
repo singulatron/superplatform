@@ -50,6 +50,11 @@ type CreateRequest struct {
 	Object *GenericObject `json:"object,omitempty"`
 }
 
+type UpsertRequest struct {
+	Table  string         `json:"table,omitempty"`
+	Object *GenericObject `json:"object,omitempty"`
+}
+
 type DeleteRequest struct {
 	Table      string                `json:"table"`
 	Conditions []datastore.Condition `json:"conditions"`

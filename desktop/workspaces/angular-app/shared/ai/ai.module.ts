@@ -11,6 +11,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ChatBoxComponent } from './chat-box/chat-box.component';
+import { CharacterComponent } from './character/character.component';
 import { IonicModule } from '@ionic/angular';
 import { StdlibModule } from '../stdlib/stdlib.module';
 import { MarkdownModule, MarkdownService } from 'ngx-markdown';
@@ -18,7 +19,7 @@ import { MessageComponent } from './chat-box/message/message.component';
 
 @NgModule({
     providers: [MarkdownService],
-    exports: [ChatBoxComponent],
-    imports: [CommonModule, StdlibModule, IonicModule, MarkdownModule.forChild(), ChatBoxComponent, MessageComponent],
+    exports: [ChatBoxComponent, CharacterComponent],
+    imports: [CommonModule, StdlibModule, IonicModule, MarkdownModule.forChild(), ChatBoxComponent, MessageComponent, CharacterComponent],
 })
 export class AiModule {}

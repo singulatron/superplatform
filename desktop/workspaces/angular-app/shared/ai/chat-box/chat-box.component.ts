@@ -14,6 +14,7 @@ import {
 	Input,
 	OnChanges,
 	SimpleChanges,
+	ViewChild,
 	ChangeDetectionStrategy,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
@@ -31,9 +32,11 @@ import {
 	PromptService,
 } from '../../../src/app/services/prompt.service';
 import { ModelService, Model } from '../../../src/app/services/model.service';
+import { CharacterService, Character } from '../../../src/app/services/character.service';
 
 import { ElectronAppService } from '../../../src/app/services/electron-app.service';
 import { ConfigService } from '../../../src/app/services/config.service';
+import { CharacterComponent } from '../character/character.component';
 import { TranslatePipe } from '../../stdlib/translate.pipe';
 import { FormsModule } from '@angular/forms';
 import { MessageComponent } from './message/message.component';
@@ -52,6 +55,7 @@ const defaultThreadName = 'New chat';
 		IonicModule,
 		NgFor,
 		MessageComponent,
+		CharacterComponent,
 		NgIf,
 		FormsModule,
 		TranslatePipe,
@@ -59,6 +63,7 @@ const defaultThreadName = 'New chat';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatBoxComponent implements OnChanges {
+	@ViewChild(CharacterComponent) characterModal!: CharacterComponent;
 	@Input() promptTemplate: string = '[INST] {prompt} [/INST]';
 
 	// @todo push this to the backend too
@@ -83,7 +88,8 @@ export class ChatBoxComponent implements OnChanges {
 		private configService: ConfigService,
 		private promptService: PromptService,
 		private chatService: ChatService,
-		private modelService: ModelService
+		private modelService: ModelService,
+		private characterService: CharacterService
 	) {}
 
 	private subscriptions: Subscription[] = [];
@@ -238,9 +244,11 @@ export class ChatBoxComponent implements OnChanges {
 	}
 
 	async sendMessage(msg: string) {
+		const character = this.getSelectedCharacter();
 		await this.promptService.promptAdd({
 			id: this.localtron.uuid(),
 			prompt: msg,
+			character: character?.data?.behaviour,
 			template: this.promptTemplate,
 			threadId: this.thread.id as string,
 			modelId: this.model?.id as string,
@@ -275,6 +283,19 @@ export class ChatBoxComponent implements OnChanges {
 			return;
 		}
 		// @todo summarize with llm at the end of the streaming
+	}
+
+	public getSelectedCharacter(): Character {
+		return this.characterService.selectedCharacter;
+	}
+
+	public showCharacterModal() {
+		this.characterModal.show()
+	}
+
+	public getSelectedCharacterText(): string {
+		const selectedCharacter = this.getSelectedCharacter();
+		return selectedCharacter?.data?.name ? selectedCharacter.data.name : "None";
 	}
 
 	trackById(_: number, message: { id?: string }): string {
