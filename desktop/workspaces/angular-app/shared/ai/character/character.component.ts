@@ -14,12 +14,22 @@ import {
     ViewChild,
 } from '@angular/core';
 import { IonModal } from '@ionic/angular';
+import { NgFor, NgIf } from '@angular/common';
+import { IonicModule } from '@ionic/angular';
+import { FormsModule } from '@angular/forms';
 import { CharacterService, Character, initCharacter } from '../../../src/app/services/character.service';
 
 @Component({
 	selector: 'ai-character',
 	templateUrl: './character.component.html',
 	styleUrl: './character.component.scss',
+	imports: [
+		IonicModule,
+		NgFor,
+		NgIf,
+		FormsModule,
+	],
+	standalone: true,
 	encapsulation: ViewEncapsulation.None,
 })
 export class CharacterComponent {
@@ -52,7 +62,7 @@ export class CharacterComponent {
 	}
 
 	async upsertCharacter(character: Character) {
-		this.characterService.upsertCharacter(character);
+		await this.characterService.upsertCharacter(character);
 		this.clearEditingCharacter();
 		await this.loadCharacters();
 	}

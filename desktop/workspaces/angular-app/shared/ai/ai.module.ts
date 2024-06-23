@@ -20,6 +20,6 @@ import { MessageComponent } from './chat-box/message/message.component';
 @NgModule({
     providers: [MarkdownService],
     exports: [ChatBoxComponent, CharacterComponent],
-    imports: [CommonModule, StdlibModule, IonicModule, MarkdownModule.forChild(), ChatBoxComponent, MessageComponent],
+    imports: [CommonModule, StdlibModule, IonicModule, MarkdownModule.forChild(), ChatBoxComponent, MessageComponent, CharacterComponent],
 })
 export class AiModule {}

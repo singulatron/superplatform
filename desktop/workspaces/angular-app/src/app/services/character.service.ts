@@ -49,9 +49,9 @@ export class CharacterService {
 	async upsertCharacter(character: Character) {
 		const exists = await this.getCharacter(character.id);
 		if (exists) {
-			this.updateCharacter(character);
+			await this.updateCharacter(character);
 		} else {
-			this.createNewCharacter(character);
+			await this.createNewCharacter(character);
 		}
 	}
 

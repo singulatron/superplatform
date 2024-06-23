@@ -55,6 +55,7 @@ const defaultThreadName = 'New chat';
 		IonicModule,
 		NgFor,
 		MessageComponent,
+		CharacterComponent,
 		NgIf,
 		FormsModule,
 		TranslatePipe,
@@ -295,6 +296,8 @@ export class ChatBoxComponent implements OnChanges {
 	public getSelectedCharacterText(): string {
 		const selectedCharacter = this.getSelectedCharacter();
 		return selectedCharacter?.data?.name ? selectedCharacter.data.name : "None";
+	}
+
 	trackById(_: number, message: { id?: string }): string {
 		return message.id || '';
 	}
