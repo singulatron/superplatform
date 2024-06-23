@@ -38,6 +38,8 @@
 		// ],
 		"@typescript-eslint/no-explicit-any": "off",
 		"unicorn/prefer-module": "off",
-		"unicorn/no-abusive-eslint-disable": "off"
+		"unicorn/no-abusive-eslint-disable": "off",
+		// turned off because genericservice.find triggerds this
+		"unicorn/no-array-method-this-argument": "off"
 	}
 }

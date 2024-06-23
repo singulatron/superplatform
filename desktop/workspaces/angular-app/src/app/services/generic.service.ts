@@ -55,12 +55,12 @@ export class GenericService {
 	}
 
 	async upsert(table: string, object: GenericObject): Promise<void> {
-		let req: UpsertRequest = {
+		const request: UpsertRequest = {
 			table: table,
-			object: object
-		}
+			object: object,
+		};
 
-		return this.localtron.call('/generic/upsert', req);
+		return this.localtron.call('/generic/upsert', request);
 	}
 
 	async update(
@@ -134,9 +134,9 @@ export function userId(id: string): Condition {
 	return {
 		equal: {
 			fieldName: 'userId',
-			value: id
-		}
-	}
+			value: id,
+		},
+	};
 }
 
 export interface GenericObject {
@@ -187,4 +187,5 @@ export interface UpsertRequest {
 	object: GenericObject;
 }
 
+// eslint-disable-next-line
 export interface UpsertResponse {}
