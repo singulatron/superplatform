@@ -68,7 +68,7 @@
 		</div>
 	</ng-template>
 	<ng-template #mainContent>
-		<app-centered headerHeight="0vh" [vertical]="true">
+		<app-centered [headerHeight]="'56px'" [vertical]="true">
 			<app-chat-box
 				*ngIf="activeThread"
 				[thread]="activeThread"
