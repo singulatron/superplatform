@@ -89,6 +89,7 @@ export class AddUserComponent implements OnInit {
 				message: 'Passwords do not match',
 				duration: 5000,
 				color: 'danger',
+				cssClass: 'white-text-toast',
 				position: 'middle',
 			});
 			toast.present();
@@ -117,6 +118,7 @@ export class AddUserComponent implements OnInit {
 
 			const toast = await this.toast.create({
 				color: 'danger',
+				cssClass: 'white-text-toast',
 				message: errorMessage,
 				duration: 5000,
 				position: 'middle',
