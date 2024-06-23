@@ -15,7 +15,7 @@
 		</div>
 	</ng-template>
 	<ng-template #mainContent>
-		<app-centered headerHeight="0vh" [vertical]="true">
+		<app-centered [headerHeight]="'56px'" [vertical]="true">
 			<div style="padding: 0rem 2rem">
 				<h2 *ngIf="!allIsWell" style="margin-bottom: 2rem">
 					{{ 'Preparing to start your AI' | translate }}
