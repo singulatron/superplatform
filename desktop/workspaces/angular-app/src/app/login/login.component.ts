@@ -53,7 +53,7 @@ export class LoginComponent {
 			rsp = await this.userService.login(this.email, this.password);
 		} catch (error) {
 			const toast = await this.toast.create({
-				cssClass: 'white-text-toast',
+				cssClass: 'white-text',
 				color: 'danger',
 				message: JSON.parse(error as string)?.error,
 				duration: 5000,

@@ -31,6 +31,8 @@ export class UserService {
 		this.init();
 	}
 
+	noop() {}
+
 	async init() {
 		this.getToken();
 
@@ -40,6 +42,8 @@ export class UserService {
 				this.setToken(rsp.token.token as string);
 			} catch {
 				console.error('Login with default credentials failed');
+				this.router.navigateByUrl('/login');
+				return;
 			}
 
 			if (!this.hasToken()) {

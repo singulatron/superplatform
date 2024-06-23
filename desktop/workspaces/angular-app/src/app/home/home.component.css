@@ -8,59 +8,97 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-.log-icon:hover {
-	color: rgb(67, 231, 67);
+
+.container {
+	display: flex;
+	flex-wrap: wrap; /* Allow items to wrap */
+	margin-bottom: 2em;
+
+	.logo-container {
+		height: 6em;
+		width: 6em;
+		flex-shrink: 0; /* Prevent shrinking */
+	}
+
+	.logo-container img {
+		height: 100%;
+		width: 100%;
+		object-fit: contain; /* Ensure the image is not distorted */
+	}
+
+	.text-container {
+		flex-grow: 1;
+		margin-top: 1.25rem;
+		margin-left: 2rem;
+	}
+
+	.title {
+		margin: 0;
+	}
+
+	.subtitle {
+		margin-top: 0;
+		color: #888;
+	}
 }
 
-.log-icon.active:hover {
-	color: rgb(67, 231, 67); /* Active and hover state */
-}
+@media (max-width: 480px) {
+	.container {
+		flex-direction: column;
+		align-items: center;
 
-.log-icon.active {
-	color: rgb(0, 204, 0);
-}
 
-.log-icon {
-	color: grey;
-}
-
-/* copied from website dashboard home */
-
-.menu-buttons {
-	color: #444;
-	font-size: large;
-	white-space: normal;
-	width: 14rem;
-	height: 12rem;
-	margin-bottom: 1em;
-	margin-right: 1em;
+		.text-container {
+			text-align: center;
+			margin-left: 0;
+		}
+	}
 }
 
 .buttons-container {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 1rem; /* Adjust the gap as per your design */
+	gap: 1rem;
+
+	.menu-buttons {
+		color: #444;
+		font-size: large;
+		white-space: normal;
+		width: 14rem;
+		height: 12rem;
+		margin-bottom: 1em;
+	}
 
 	ion-button {
-		flex: 1 1 12rem; /* Flex properties to control item width */
-		max-width: 14rem; /* Optional: Max width for flexibility */
-		margin-bottom: 1rem; /* Optional: Adjust margin as needed */
+		flex: 1 1 12rem;
+		max-width: 14rem;
+		margin-bottom: 1rem;
 	}
 }
 
 @media only screen and (max-width: 767px) {
-	.buttons {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
+	.buttons-container {
+		.menu-buttons {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+
+			height: 12rem;
+			width: 14rem;
+			margin-right: 0;
+		}
 	}
-	.menu-buttons {
-		height: 12rem;
-		width: 14rem;
-		margin-right: 0;
-	}
-	h1 {
-		font-size: larger;
+}
+
+@media (max-width: 480px) {
+	.buttons-container {
+		width: 100%;
+
+		.menu-buttons {
+			margin: 0 auto;
+			width: 100%;
+			box-sizing: border-box;
+		}
 	}
 }
