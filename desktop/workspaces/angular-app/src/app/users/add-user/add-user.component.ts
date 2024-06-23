@@ -23,8 +23,9 @@ import { TranslatePipe } from '../../../../shared/stdlib/translate.pipe';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgFor } from '@angular/common';
 import { CenteredComponent } from '../../../../shared/stdlib/components/centered/centered.component';
-import { SidebarPageComponent } from '../../../../shared/stdlib/components/sidebar-page/sidebar-page.component';
 import { ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { PageComponent } from '../../../../shared/stdlib/components/page/page.component';
+import { IconMenuComponent } from '../../../../shared/stdlib/components/icon-menu/icon-menu.component';
 
 @Component({
 	selector: 'app-add-user',
@@ -32,7 +33,8 @@ import { ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 	styleUrls: ['./add-user.component.scss'],
 	standalone: true,
 	imports: [
-		SidebarPageComponent,
+		PageComponent,
+		IconMenuComponent,
 		CenteredComponent,
 		FormsModule,
 		ReactiveFormsModule,

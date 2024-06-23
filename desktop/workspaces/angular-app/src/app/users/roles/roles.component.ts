@@ -4,15 +4,23 @@ import { first } from 'rxjs';
 import { NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { SidebarPageComponent } from '../../../../shared/stdlib/components/sidebar-page/sidebar-page.component';
 import { ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { PageComponent } from '../../../../shared/stdlib/components/page/page.component';
+import { IconMenuComponent } from '../../../../shared/stdlib/components/icon-menu/icon-menu.component';
 
 @Component({
 	selector: 'app-roles',
 	templateUrl: './roles.component.html',
 	styleUrls: ['./roles.component.css'],
 	standalone: true,
-	imports: [SidebarPageComponent, IonicModule, FormsModule, NgFor, NgIf],
+	imports: [
+		PageComponent,
+		IconMenuComponent,
+		IonicModule,
+		FormsModule,
+		NgFor,
+		NgIf,
+	],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RolesComponent {
