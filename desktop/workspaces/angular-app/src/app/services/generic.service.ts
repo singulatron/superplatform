@@ -54,6 +54,15 @@ export class GenericService {
 		return this.localtron.call('/generic/find', req);
 	}
 
+	async upsert(table: string, object: GenericObject): Promise<void> {
+		let req: UpsertRequest = {
+			table: table,
+			object: object
+		}
+
+		return this.localtron.call('/generic/upsert', req);
+	}
+
 	async update(
 		table: string,
 		conditions: Condition[],
@@ -120,6 +129,15 @@ export function id(id: string): Condition {
 	};
 }
 
+export function userId(id: string): Condition {
+	return {
+		equal: {
+			fieldName: 'userId',
+			value: id
+		}
+	}
+}
+
 export interface GenericObject {
 	id: string;
 	createdAt: string;
@@ -159,3 +177,10 @@ export interface FindRequest {
 export interface FindResponse {
 	objects: GenericObject[];
 }
+
+export interface UpsertRequest {
+	table: string;
+	object: GenericObject;
+}
+
+export interface UpsertResponse {}

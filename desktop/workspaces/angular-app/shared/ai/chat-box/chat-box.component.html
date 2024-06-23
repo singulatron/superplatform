@@ -63,5 +63,14 @@
 					></ion-icon></span
 			></ion-fab-button>
 		</ion-item>
+		<div class="chat-settings">
+			<span (click)="showCharacterModal()">
+				Character: <span 
+					style="text-decoration: underline; cursor: pointer;"
+					>{{getSelectedCharacterText()}}</span>
+				</span>
+		</div>
 	</ion-card>
 </div>
+
+<ai-character ></ai-character>
