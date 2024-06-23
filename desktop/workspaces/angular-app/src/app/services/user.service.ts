@@ -33,9 +33,15 @@ export class UserService {
 
 	async init() {
 		this.getToken();
+
 		if (!this.hasToken()) {
-			const rsp = await this.login('singulatron', 'changeme');
-			this.setToken(rsp.token.token as string);
+			try {
+				const rsp = await this.login('singulatron', 'changeme');
+				this.setToken(rsp.token.token as string);
+			} catch {
+				console.error('Login with default credentials failed');
+			}
+
 			if (!this.hasToken()) {
 				console.error('Something is wrong with the setting of cookies');
 				this.router.navigateByUrl('/login');
