@@ -1,33 +1,54 @@
 import { Component } from '@angular/core';
 import { UserService, Role, Permission } from '../../services/user.service';
 import { first } from 'rxjs';
+import { NgFor, NgIf } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { IonicModule } from '@ionic/angular';
+import { ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { PageComponent } from '../../../../shared/stdlib/components/page/page.component';
+import { IconMenuComponent } from '../../../../shared/stdlib/components/icon-menu/icon-menu.component';
 
 @Component({
 	selector: 'app-roles',
 	templateUrl: './roles.component.html',
 	styleUrls: ['./roles.component.css'],
+	standalone: true,
+	imports: [
+		PageComponent,
+		IconMenuComponent,
+		IonicModule,
+		FormsModule,
+		NgFor,
+		NgIf,
+	],
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RolesComponent {
 	roles: Role[] = [];
 	permissions: Permission[] = [];
-	selectedRole: Role | null = null;
+	selectedRole: Role | undefined;
 	selectedRolePermissions: Set<string> = new Set<string>();
 
 	roleSearchQuery: string = '';
 	permissionSearchQuery: string = '';
 
-	constructor(private userService: UserService) {
+	constructor(
+		private userService: UserService,
+		private cd: ChangeDetectorRef
+	) {
 		this.userService.user$.pipe(first()).subscribe(() => {
 			this.loggedInInit();
 		});
 	}
 
 	async loggedInInit() {
-		let rsp = await this.userService.getRoles();
+		const rsp = await this.userService.getRoles();
 		this.roles = await rsp.roles;
 
-		let rsp2 = await this.userService.getPermissions();
+		const rsp2 = await this.userService.getPermissions();
 		this.permissions = await rsp2.permissions;
+
+		this.cd.markForCheck();
 	}
 
 	selectRole(role: Role) {
@@ -38,7 +59,9 @@ export class RolesComponent {
 	loadRolePermissions(role: Role) {
 		this.selectedRolePermissions.clear();
 		if (role.permissionIds) {
-			role.permissionIds.forEach((id) => this.selectedRolePermissions.add(id));
+			for (const id of role.permissionIds) {
+				this.selectedRolePermissions.add(id);
+			}
 		}
 	}
 
@@ -52,7 +75,7 @@ export class RolesComponent {
 
 	async savePermissions() {
 		if (this.selectedRole) {
-			const permissionIds = Array.from(this.selectedRolePermissions);
+			const permissionIds = [...this.selectedRolePermissions];
 			await this.userService.setRolePermissions(
 				this.selectedRole.id as string,
 				permissionIds

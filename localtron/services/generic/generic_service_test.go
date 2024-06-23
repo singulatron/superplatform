@@ -34,6 +34,16 @@ func TestCreate(t *testing.T) {
 	err = service.Create("test_table", userId, obj)
 	assert.NoError(t, err)
 
+	obj2 := &generictypes.GenericObject{
+		Id:        "1-2",
+		Table:     "test_table2",
+		CreatedAt: time.Now().String(),
+		Data:      map[string]interface{}{"key": "value"},
+	}
+
+	err = service.Create("test_table2", userId, obj2)
+	assert.NoError(t, err)
+
 	res, err := service.Find("test_table", userId, []datastore.Condition{
 		datastore.Id("1"),
 	})

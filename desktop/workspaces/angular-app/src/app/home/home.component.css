@@ -8,68 +8,97 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-.log-icon:hover {
-	color: rgb(67, 231, 67);
-}
 
-.log-icon.active:hover {
-	color: rgb(67, 231, 67); /* Active and hover state */
-}
-
-.log-icon.active {
-	color: rgb(0, 204, 0);
-}
-
-.log-icon {
-	color: grey;
-}
-
-/* copied from website dashboard home */
-
-.menu-buttons {
-	color: #444;
-	font-size: large;
-	white-space: normal;
-	width: 12em;
-	height: 10em;
-	margin-bottom: 1em;
-	margin-right: 1em;
-}
-.header {
+.container {
 	display: flex;
-	flex-direction: row;
-	align-items: center;
-	margin-top: 1em;
+	flex-wrap: wrap; /* Allow items to wrap */
 	margin-bottom: 2em;
-	gap: 2em;
+
+	.logo-container {
+		height: 6em;
+		width: 6em;
+		flex-shrink: 0; /* Prevent shrinking */
+	}
+
+	.logo-container img {
+		height: 100%;
+		width: 100%;
+		object-fit: contain; /* Ensure the image is not distorted */
+	}
+
+	.text-container {
+		flex-grow: 1;
+		margin-top: 1.25rem;
+		margin-left: 2rem;
+	}
+
+	.title {
+		margin: 0;
+	}
+
+	.subtitle {
+		margin-top: 0;
+		color: #888;
+	}
 }
-.global-shade {
-	height: 2em;
+
+@media (max-width: 480px) {
+	.container {
+		flex-direction: column;
+		align-items: center;
+
+
+		.text-container {
+			text-align: center;
+			margin-left: 0;
+		}
+	}
 }
-.global-shade-phone {
-	display: none;
+
+.buttons-container {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem;
+
+	.menu-buttons {
+		color: #444;
+		font-size: large;
+		white-space: normal;
+		width: 14rem;
+		height: 12rem;
+		margin-bottom: 1em;
+	}
+
+	ion-button {
+		flex: 1 1 12rem;
+		max-width: 14rem;
+		margin-bottom: 1rem;
+	}
 }
 
 @media only screen and (max-width: 767px) {
-	.buttons {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
+	.buttons-container {
+		.menu-buttons {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+
+			height: 12rem;
+			width: 14rem;
+			margin-right: 0;
+		}
 	}
-	.menu-buttons {
-		width: 11em;
-		height: 8em;
-		margin-right: 0;
-	}
-	h1 {
-		font-size: larger;
-	}
-	.global-shade {
-		display: none;
-	}
-	.global-shade-phone {
-		display: initial;
-		margin: 1em;
+}
+
+@media (max-width: 480px) {
+	.buttons-container {
+		width: 100%;
+
+		.menu-buttons {
+			margin: 0 auto;
+			width: 100%;
+			box-sizing: border-box;
+		}
 	}
 }

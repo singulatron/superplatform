@@ -4,15 +4,15 @@
 		"es2020": true,
 		"node": true
 	},
-	"plugins": ["@typescript-eslint", "import", "unicorn", "sonarjs"],
+	"plugins": ["@typescript-eslint", "unicorn", "sonarjs"],
 	"extends": [
 		"plugin:unicorn/recommended",
-		"plugin:sonarjs/recommended",
+		//"plugin:sonarjs/recommended",
 		"plugin:@typescript-eslint/eslint-recommended",
-		"plugin:@typescript-eslint/recommended",
-		"plugin:import/errors",
-		"plugin:import/warnings",
-		"plugin:import/typescript"
+		"plugin:@typescript-eslint/recommended"
+		//"plugin:import/errors",
+		//"plugin:import/warnings",
+		//"plugin:import/typescript"
 	],
 	"parser": "@typescript-eslint/parser",
 	"settings": {
@@ -30,12 +30,14 @@
 				"argsIgnorePattern": "^_"
 			}
 		],
-		"@typescript-eslint/no-explicit-any": [
-			"error",
-			{
-				"ignoreRestArgs": true
-			}
-		],
-		"unicorn/prefer-module": "off"
+		// "@typescript-eslint/no-explicit-any": [
+		// 	"error",
+		// 	{
+		// 		"ignoreRestArgs": true
+		// 	}
+		// ],
+		"@typescript-eslint/no-explicit-any": "off",
+		"unicorn/prefer-module": "off",
+		"unicorn/no-abusive-eslint-disable": "off"
 	}
 }

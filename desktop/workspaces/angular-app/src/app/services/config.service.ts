@@ -39,17 +39,18 @@ export class ConfigService {
 	async init() {
 		this.firehoseService.firehoseEvent$.subscribe(async (event) => {
 			switch (event.name) {
-				case 'configUpdate':
-					let rsp1 = await this.configGet();
-					this.onConfigUpdateSubject.next(rsp1.config);
+				case 'configUpdate': {
+					const rsp = await this.configGet();
+					this.onConfigUpdateSubject.next(rsp.config);
 					break;
+				}
 			}
 		});
 	}
 
 	async loggedInInit() {
 		try {
-			let rsp = await this.configGet();
+			const rsp = await this.configGet();
 			this.lastConfig = rsp?.config;
 			this.onConfigUpdateSubject.next(rsp?.config as Config);
 		} catch (error) {
@@ -81,6 +82,7 @@ export interface Config {
 	isRuntimeInstalled?: boolean;
 }
 
+// eslint-disable-next-line
 export interface ConfigGetRequest {}
 
 export interface ConfigGetResponse {

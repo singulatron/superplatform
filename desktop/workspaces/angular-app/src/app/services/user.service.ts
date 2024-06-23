@@ -31,11 +31,21 @@ export class UserService {
 		this.init();
 	}
 
+	noop() {}
+
 	async init() {
 		this.getToken();
+
 		if (!this.hasToken()) {
-			let rsp = await this.login('singulatron', 'changeme');
-			this.setToken(rsp.token.token as string);
+			try {
+				const rsp = await this.login('singulatron', 'changeme');
+				this.setToken(rsp.token.token as string);
+			} catch {
+				console.error('Login with default credentials failed');
+				this.router.navigateByUrl('/login');
+				return;
+			}
+
 			if (!this.hasToken()) {
 				console.error('Something is wrong with the setting of cookies');
 				this.router.navigateByUrl('/login');
@@ -44,7 +54,7 @@ export class UserService {
 		}
 
 		try {
-			let rsp = await this.readUserByToken(this.token);
+			const rsp = await this.readUserByToken(this.token);
 			this.userSubject.next(rsp.user);
 		} catch {
 			console.error('Cannot read user even with a token');
@@ -66,7 +76,7 @@ export class UserService {
 	}
 
 	hasToken(): boolean {
-		let t = this.cookieService.get('the_token');
+		const t = this.cookieService.get('the_token');
 		return !!t;
 	}
 
@@ -89,11 +99,11 @@ export class UserService {
 
 	/** Save profile on behalf of a user */
 	saveProfile(email: string, name: string): Promise<SaveProfileResponse> {
-		let req: SaveProfileRequest = {
+		const request: SaveProfileRequest = {
 			email: email,
 			name: name,
 		};
-		return this.localtron.call('/user/save-profile', req);
+		return this.localtron.call('/user/save-profile', request);
 	}
 
 	changePassword(
@@ -101,12 +111,12 @@ export class UserService {
 		currentPassword: string,
 		newPassword: string
 	): Promise<ChangePasswordResponse> {
-		let req: ChangePasswordRequest = {
+		const request: ChangePasswordRequest = {
 			email: email,
 			currentPassword: currentPassword,
 			newPassword: newPassword,
 		};
-		return this.localtron.call('/user/change-password', req);
+		return this.localtron.call('/user/change-password', request);
 	}
 
 	/** Create a user - alternative to registration
@@ -116,12 +126,12 @@ export class UserService {
 		password: string,
 		roleIds: string[]
 	): Promise<CreateUserResponse> {
-		let req: CreateUserRequest = {
+		const request: CreateUserRequest = {
 			user: user,
 			password: password,
 			roleIds: roleIds,
 		};
-		return this.localtron.call('/user/create-user', req);
+		return this.localtron.call('/user/create-user', request);
 	}
 
 	getRoles(): Promise<GetRolesResposne> {
@@ -136,25 +146,25 @@ export class UserService {
 		roleId: string,
 		permissionIds: string[]
 	): Promise<SetRolePermissionsResponse> {
-		let req: SetRolePermissionsRequest = {
+		const request: SetRolePermissionsRequest = {
 			roleId: roleId,
 			permissionIds: permissionIds,
 		};
-		return this.localtron.call('/user/set-role-permissions', req);
+		return this.localtron.call('/user/set-role-permissions', request);
 	}
 
 	deleteRole(roleId: string): Promise<DeleteRoleResponse> {
-		let req: DeleteRoleRequest = {
+		const request: DeleteRoleRequest = {
 			roleId: roleId,
 		};
-		return this.localtron.call('/user/delete-role', req);
+		return this.localtron.call('/user/delete-role', request);
 	}
 
 	deleteUser(userId: string): Promise<DeleteUserResponse> {
-		let req: DeleteUserRequest = {
+		const request: DeleteUserRequest = {
 			userId: userId,
 		};
-		return this.localtron.call('/user/delete-user', req);
+		return this.localtron.call('/user/delete-user', request);
 	}
 
 	async getUserId(): Promise<string> {
@@ -185,6 +195,7 @@ export interface RegisterRequest {
 	email?: string;
 }
 
+// eslint-disable-next-line
 export interface RegisterResponse {}
 
 export interface LoginRequest {
@@ -201,6 +212,7 @@ export interface SaveProfileRequest {
 	email?: string;
 }
 
+// eslint-disable-next-line
 export interface SaveProfileResponse {}
 
 export interface ChangePasswordRequest {
@@ -209,6 +221,7 @@ export interface ChangePasswordRequest {
 	newPassword?: string;
 }
 
+// eslint-disable-next-line
 export interface ChangePasswordResponse {}
 
 export const RoleAdmin: Role = {
@@ -246,6 +259,7 @@ export interface DeleteRoleRequest {
 	roleId?: string;
 }
 
+// eslint-disable-next-line
 export interface DeleteRoleResponse {}
 
 export interface RemoveRoleRequest {
@@ -253,6 +267,7 @@ export interface RemoveRoleRequest {
 	roleId?: string;
 }
 
+// eslint-disable-next-line
 export interface RemoveRoleResponse {}
 
 export interface Permission {
@@ -268,6 +283,7 @@ export interface CreatePermissionRequest {
 	description: string;
 }
 
+// eslint-disable-next-line
 export interface CreatePermissionResponse {}
 
 export interface AuthToken {
@@ -283,6 +299,7 @@ export interface ReadUserByTokenResponse {
 	user: User;
 }
 
+// eslint-disable-next-line
 export interface GetUsersRequest {}
 
 export interface GetUsersResponse {
@@ -295,24 +312,31 @@ export interface CreateUserRequest {
 	roleIds: string[];
 }
 
+// eslint-disable-next-line
 export interface CreateUserResponse {}
 
+// eslint-disable-next-line
 export interface GetRolesRequest {}
 
 export interface GetRolesResposne {
 	roles: Role[];
 }
 
+// eslint-disable-next-line
 export interface GetPermissionsRequest {}
 
 export interface GetPermissionsResposne {
 	permissions: Permission[];
 }
 
+// eslint-disable-next-line
 export interface SetRolePermissionsRequest {}
+
+// eslint-disable-next-line
 export interface SetRolePermissionsResponse {}
 
 export interface DeleteUserRequest {
 	userId: string;
 }
+// eslint-disable-next-line
 export interface DeleteUserResponse {}

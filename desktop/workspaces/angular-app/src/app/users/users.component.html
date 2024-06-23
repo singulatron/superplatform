@@ -8,112 +8,118 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  -->
-<b-sidebar-page>
-	<app-centered headerHeight="0vh" [vertical]="true">
-		<div style="padding: 0rem 2rem">
-			<h2 style="margin-bottom: 2rem">{{ 'Users' | translate }}</h2>
-
-			<ion-list>
-				<ng-container *ngFor="let user of users; let i = index">
-					<form [formGroup]="getUserForm(i)">
-						<ion-item
-							detail="false"
-							lines="full"
-							(click)="users[i].visible = !users[i].visible"
-							button
-						>
-							<ion-label>
-								{{ users[i].name }}
-								<span style="color: #666">({{ users[i].email }})</span>
-							</ion-label>
-							<ion-icon
-								(click)="deleteUser($event, users[i].id || '')"
-								name="trash-outline"
-								slot="end"
-								class="icon-delete"
-							></ion-icon>
-							<ion-icon
-								slot="end"
-								style="color: #bdbdbd; font-size: 1.25rem"
-								[name]="users[i].visible ? 'chevron-down' : 'chevron-forward'"
-							></ion-icon>
-						</ion-item>
-
-						<ion-card-content
-							*ngIf="users[i].visible"
-							style="padding-top: 2em; padding-bottom: 2em"
-						>
-							<ion-item>
-								<ion-input
-									formControlName="name"
-									label="Name"
-									labelPlacement="floating"
-									type="text"
-									required
-								></ion-input>
-							</ion-item>
-
-							<ion-item>
-								<ion-input
-									formControlName="email"
-									label="Email"
-									labelPlacement="floating"
-									type="text"
-									required
-								></ion-input>
-							</ion-item>
-
-							<ion-item>
-								<ion-input
-									formControlName="password"
-									label="New Password"
-									labelPlacement="floating"
-									type="password"
-									placeholder="If you leave this blank, the password won't be changed"
-								></ion-input>
-							</ion-item>
-
-							<ion-item *ngIf="getUserForm(i).get('password')?.value">
-								<ion-input
-									formControlName="passwordConfirmation"
-									label="Password Confirmation"
-									labelPlacement="floating"
-									type="password"
-								></ion-input>
-							</ion-item>
-
-							<ion-item>
-								<ion-input
-									formControlName="createdAt"
-									label="Created At"
-									labelPlacement="floating"
-									type="text"
-									[disabled]="true"
-								></ion-input>
-							</ion-item>
-							<ion-item>
-								<ion-input
-									formControlName="updatedAt"
-									label="Updated At"
-									labelPlacement="floating"
-									type="text"
-									[disabled]="true"
-								></ion-input>
-							</ion-item>
-
-							<ion-row style="margin-top: 1em">
-								<ion-col size-lg="6" size-md="12" size-sm="12" size-xs="12">
-									<ion-button
-										style="margin-left: 0.75rem; color: white"
-										(click)="saveUser(i)"
-										>Save</ion-button
-									>
-								</ion-col>
-							</ion-row>
-						</ion-card-content>
-					</form>
-				</ng-container>
-			</ion-list>
+<app-page title="Users" [menuWidth]="'3rem'" [columnWidths]="['3rem']">
+	<ng-template #columnContent>
+		<div>
+			<app-icon-menu></app-icon-menu>
 		</div>
-	</app-centered>
-</b-sidebar-page>
+	</ng-template>
+	<ng-template #mainContent>
+		<app-centered [headerHeight]="'56px'" [vertical]="true">
+			<div style="padding: 0rem 2rem">
+				<h2 style="margin-bottom: 2rem">{{ 'Users' | translate }}</h2>
+				<ion-list>
+					<ng-container *ngFor="let user of users; let i = index">
+						<form [formGroup]="getUserForm(i)">
+							<ion-item
+								detail="false"
+								lines="full"
+								(click)="users[i].visible = !users[i].visible"
+								button
+							>
+								<ion-label>
+									{{ users[i].name }}
+									<span style="color: #666">({{ users[i].email }})</span>
+								</ion-label>
+								<ion-icon
+									(click)="deleteUser($event, users[i].id || '')"
+									name="trash-outline"
+									slot="end"
+									class="icon-delete"
+								></ion-icon>
+								<ion-icon
+									slot="end"
+									style="color: #bdbdbd; font-size: 1.25rem"
+									[name]="users[i].visible ? 'chevron-down' : 'chevron-forward'"
+								></ion-icon>
+							</ion-item>
+
+							<ion-card-content
+								*ngIf="users[i].visible"
+								style="padding-top: 2em; padding-bottom: 2em"
+							>
+								<ion-item>
+									<ion-input
+										formControlName="name"
+										label="Name"
+										labelPlacement="floating"
+										type="text"
+										required
+									></ion-input>
+								</ion-item>
+
+								<ion-item>
+									<ion-input
+										formControlName="email"
+										label="Email"
+										labelPlacement="floating"
+										type="text"
+										required
+									></ion-input>
+								</ion-item>
+
+								<ion-item>
+									<ion-input
+										formControlName="password"
+										label="New Password"
+										labelPlacement="floating"
+										type="password"
+										placeholder="If you leave this blank, the password won't be changed"
+									></ion-input>
+								</ion-item>
+
+								<ion-item *ngIf="getUserForm(i).get('password')?.value">
+									<ion-input
+										formControlName="passwordConfirmation"
+										label="Password Confirmation"
+										labelPlacement="floating"
+										type="password"
+									></ion-input>
+								</ion-item>
+
+								<ion-item>
+									<ion-input
+										formControlName="createdAt"
+										label="Created At"
+										labelPlacement="floating"
+										type="text"
+										[disabled]="true"
+									></ion-input>
+								</ion-item>
+								<ion-item>
+									<ion-input
+										formControlName="updatedAt"
+										label="Updated At"
+										labelPlacement="floating"
+										type="text"
+										[disabled]="true"
+									></ion-input>
+								</ion-item>
+
+								<ion-row style="margin-top: 1em">
+									<ion-col size-lg="6" size-md="12" size-sm="12" size-xs="12">
+										<ion-button
+											style="margin-left: 0.75rem; color: white"
+											(click)="saveUser(i)"
+											>Save</ion-button
+										>
+									</ion-col>
+								</ion-row>
+							</ion-card-content>
+						</form>
+					</ng-container>
+				</ion-list>
+			</div>
+		</app-centered>
+	</ng-template>
+</app-page>

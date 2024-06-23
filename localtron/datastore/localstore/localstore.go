@@ -360,7 +360,7 @@ func (q *QueryBuilder[T]) match(obj T) bool {
 				for i := 0; i < fieldV.Len(); i++ {
 					if reflect.DeepEqual(fieldV.Index(i).Interface(), condValue.Interface()) {
 						matched = true
-						break
+						continue
 					}
 				}
 				if !matched {
@@ -371,7 +371,7 @@ func (q *QueryBuilder[T]) match(obj T) bool {
 				for i := 0; i < condValue.Len(); i++ {
 					if reflect.DeepEqual(fieldValue, condValue.Index(i).Interface()) {
 						matched = true
-						break
+						continue
 					}
 				}
 				if !matched {
@@ -383,7 +383,7 @@ func (q *QueryBuilder[T]) match(obj T) bool {
 				}
 			}
 		} else if cond.All != nil {
-			return true
+			continue
 		}
 	}
 	return true
@@ -441,7 +441,28 @@ func compare(vi, vj interface{}, desc bool) bool {
 			return viVal.String() > vjVal.String()
 		}
 		return viVal.String() < vjVal.String()
+	case reflect.Struct:
+		if viVal.Type() == reflect.TypeOf(time.Time{}) {
+			viTime := viVal.Interface().(time.Time)
+			vjTime := vjVal.Interface().(time.Time)
+			if desc {
+				return viTime.After(vjTime)
+			}
+			return viTime.Before(vjTime)
+		}
 	default:
-		return false
+		// Handle pointers to time.Time explicitly
+		if viVal.Type() == reflect.TypeOf(&time.Time{}) && vjVal.Type() == reflect.TypeOf(&time.Time{}) {
+			viTime := viVal.Interface().(*time.Time)
+			vjTime := vjVal.Interface().(*time.Time)
+			if viTime == nil || vjTime == nil {
+				return false
+			}
+			if desc {
+				return viTime.After(*vjTime)
+			}
+			return viTime.Before(*vjTime)
+		}
 	}
+	return false
 }

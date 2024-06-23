@@ -9,15 +9,41 @@
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+	FormBuilder,
+	FormGroup,
+	Validators,
+	FormsModule,
+	ReactiveFormsModule,
+} from '@angular/forms';
 import { User, UserService, Role } from '../../services/user.service';
 import { first } from 'rxjs';
-import { ToastController } from '@ionic/angular';
+import { ToastController, IonicModule } from '@ionic/angular';
+import { TranslatePipe } from '../../../../shared/stdlib/translate.pipe';
+import { TranslateModule } from '@ngx-translate/core';
+import { NgFor } from '@angular/common';
+import { CenteredComponent } from '../../../../shared/stdlib/components/centered/centered.component';
+import { ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { PageComponent } from '../../../../shared/stdlib/components/page/page.component';
+import { IconMenuComponent } from '../../../../shared/stdlib/components/icon-menu/icon-menu.component';
 
 @Component({
 	selector: 'app-add-user',
 	templateUrl: './add-user.component.html',
 	styleUrls: ['./add-user.component.scss'],
+	standalone: true,
+	imports: [
+		PageComponent,
+		IconMenuComponent,
+		CenteredComponent,
+		FormsModule,
+		ReactiveFormsModule,
+		IonicModule,
+		NgFor,
+		TranslateModule,
+		TranslatePipe,
+	],
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddUserComponent implements OnInit {
 	addUserForm!: FormGroup;
@@ -26,7 +52,8 @@ export class AddUserComponent implements OnInit {
 	constructor(
 		private fb: FormBuilder,
 		private userService: UserService,
-		private toast: ToastController
+		private toast: ToastController,
+		private cd: ChangeDetectorRef
 	) {
 		this.userService.user$.pipe(first()).subscribe(() => {
 			this.loggedInInit();
@@ -44,8 +71,9 @@ export class AddUserComponent implements OnInit {
 	}
 
 	async loggedInInit() {
-		let rsp = await this.userService.getRoles();
+		const rsp = await this.userService.getRoles();
 		this.roles = rsp.roles;
+		this.cd.markForCheck();
 	}
 
 	async createUser() {
@@ -61,6 +89,7 @@ export class AddUserComponent implements OnInit {
 				message: 'Passwords do not match',
 				duration: 5000,
 				color: 'danger',
+				cssClass: 'white-text',
 				position: 'middle',
 			});
 			toast.present();
@@ -80,14 +109,16 @@ export class AddUserComponent implements OnInit {
 			toast.present();
 
 			this.addUserForm.reset();
-		} catch (err) {
+		} catch (error) {
 			let errorMessage = 'An unexpected error occurred';
 			try {
-				errorMessage = (JSON.parse(err as any) as any)?.error;
+				errorMessage = (JSON.parse(error as string) as { error: string })
+					?.error;
 			} catch {}
 
 			const toast = await this.toast.create({
 				color: 'danger',
+				cssClass: 'white-text',
 				message: errorMessage,
 				duration: 5000,
 				position: 'middle',

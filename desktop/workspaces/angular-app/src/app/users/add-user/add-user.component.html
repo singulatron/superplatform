@@ -8,73 +8,87 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  -->
-<b-sidebar-page>
-	<app-centered headerHeight="0vh" [vertical]="true">
-		<div style="padding: 0rem 2rem">
-			<h2 style="margin-bottom: 2rem">{{ 'Add User' | translate }}</h2>
-			<form [formGroup]="addUserForm" (ngSubmit)="createUser()">
-				<ion-card-content>
-					<ion-item>
-						<ion-input
-							formControlName="name"
-							label="Name"
-							labelPlacement="floating"
-							type="text"
-						></ion-input>
-					</ion-item>
-
-					<ion-item>
-						<ion-input
-							formControlName="email"
-							label="Email"
-							labelPlacement="floating"
-							type="text"
-						></ion-input>
-					</ion-item>
-
-					<ion-item>
-						<ion-select
-							formControlName="roles"
-							label="Roles"
-							labelPlacement="floating"
-							multiple="true"
-						>
-							<ion-select-option *ngFor="let role of roles" [value]="role.id">{{
-								role.name
-							}}</ion-select-option>
-						</ion-select>
-					</ion-item>
-
-					<ion-item>
-						<ion-input
-							formControlName="password"
-							label="Password"
-							labelPlacement="floating"
-							type="password"
-						></ion-input>
-					</ion-item>
-
-					<ion-item>
-						<ion-input
-							formControlName="passwordConfirmation"
-							label="Password Confirmation"
-							labelPlacement="floating"
-							type="password"
-						></ion-input>
-					</ion-item>
-
-					<ion-row style="margin-top: 1em">
-						<ion-col size-lg="6" size-md="12" size-sm="12" size-xs="12">
-							<ion-button
-								type="submit"
-								style="margin-left: 0.75rem; color: white"
-							>
-								Create
-							</ion-button>
-						</ion-col>
-					</ion-row>
-				</ion-card-content>
-			</form>
+<app-page
+	title="Add User"
+	[menuWidth]="'3rem'"
+	[columnWidths]="['3rem']"
+	[mobileColumnWidths]="['3rem']"
+>
+	<ng-template #columnContent>
+		<div>
+			<app-icon-menu></app-icon-menu>
 		</div>
-	</app-centered>
-</b-sidebar-page>
+	</ng-template>
+	<ng-template #mainContent>
+		<app-centered [headerHeight]="'56px'" [vertical]="true">
+			<div style="padding: 0rem 2rem">
+				<h2 style="margin-bottom: 2rem">{{ 'Add User' | translate }}</h2>
+				<form [formGroup]="addUserForm" (ngSubmit)="createUser()">
+					<ion-card-content>
+						<ion-item>
+							<ion-input
+								formControlName="name"
+								label="Name"
+								labelPlacement="floating"
+								type="text"
+							></ion-input>
+						</ion-item>
+
+						<ion-item>
+							<ion-input
+								formControlName="email"
+								label="Email"
+								labelPlacement="floating"
+								type="text"
+							></ion-input>
+						</ion-item>
+
+						<ion-item>
+							<ion-select
+								formControlName="roles"
+								label="Roles"
+								labelPlacement="floating"
+								multiple="true"
+							>
+								<ion-select-option
+									*ngFor="let role of roles"
+									[value]="role.id"
+									>{{ role.name }}</ion-select-option
+								>
+							</ion-select>
+						</ion-item>
+
+						<ion-item>
+							<ion-input
+								formControlName="password"
+								label="Password"
+								labelPlacement="floating"
+								type="password"
+							></ion-input>
+						</ion-item>
+
+						<ion-item>
+							<ion-input
+								formControlName="passwordConfirmation"
+								label="Password Confirmation"
+								labelPlacement="floating"
+								type="password"
+							></ion-input>
+						</ion-item>
+
+						<ion-row style="margin-top: 1em">
+							<ion-col size-lg="6" size-md="12" size-sm="12" size-xs="12">
+								<ion-button
+									type="submit"
+									style="margin-left: 0.75rem; color: white"
+								>
+									Create
+								</ion-button>
+							</ion-col>
+						</ion-row>
+					</ion-card-content>
+				</form>
+			</div>
+		</app-centered>
+	</ng-template>
+</app-page>

@@ -8,6 +8,7 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  -->
+
 <ion-grid>
 	<ion-grid>
 		<ion-row class="ion-justify-content-center">
@@ -60,7 +61,7 @@
 			size-md="12"
 			size-lg="12"
 			[attr.size-xl]="veryLargeScreen ? '4' : '6'"
-			*ngFor="let model of models"
+			*ngFor="let model of models; trackBy: trackById"
 		>
 			<ion-card style="padding-bottom: 0.5rem">
 				<ion-card-header style="padding-right: 0.5rem">
@@ -140,7 +141,7 @@
 						<div class="stat-bar" [ngStyle]="getStatStyle(model)"></div>
 					</div>
 				</ion-card-content>
-				<ion-card-footer>
+				<div>
 					<div
 						style="
 							display: flex;
@@ -202,7 +203,10 @@
 							</ion-button>
 						</span>
 						<span style="padding-left: 0.25rem">
-							<app-downloading [url]="model.id"></app-downloading>
+							<app-downloading
+								*ngIf="model?.assets?.MODEL"
+								[url]="model.assets.MODEL"
+							></app-downloading>
 						</span>
 
 						<span *ngIf="model?.size"
@@ -210,7 +214,7 @@
 							<strong>{{ model.size | number }}</strong> GB</span
 						>
 					</div>
-				</ion-card-footer>
+				</div>
 			</ion-card>
 		</ion-col>
 	</ion-row>
@@ -234,32 +238,32 @@
 	<ion-grid class="list-view">
 		<ion-row>
 			<ion-col> Name </ion-col>
-			<ion-col data-tooltip="Number of parameters"> Parameters </ion-col>
+			<ion-col title="Number of parameters"> Parameters </ion-col>
 			<ion-col> Flavour </ion-col>
 			<ion-col> Version </ion-col>
-			<ion-col data-tooltip="Amount of RAM or GPU VRAM required"> RAM </ion-col>
-			<ion-col data-tooltip="Size on disk"> Size </ion-col>
+			<ion-col title="Amount of RAM or GPU VRAM required"> RAM </ion-col>
+			<ion-col title="Size on disk"> Size </ion-col>
 			<ion-col> Actions </ion-col>
 		</ion-row>
-		<ion-row *ngFor="let model of models">
-			<ion-col data-tooltip="Model name is {{ model.name }}">
+		<ion-row *ngFor="let model of models; trackBy: trackById">
+			<ion-col title="Model name is {{ model.name }}">
 				{{ model.name }}
 			</ion-col>
-			<ion-col data-tooltip="Number of parameters is {{ model.parameters }}">
+			<ion-col title="Number of parameters is {{ model.parameters }}">
 				{{ model.parameters }}
 			</ion-col>
-			<ion-col data-tooltip="Flavour {{ model.flavour }}">
+			<ion-col title="Flavour {{ model.flavour }}">
 				{{ model.flavour }}
 			</ion-col>
 			<ion-col>
 				{{ model.version }}
 			</ion-col>
 			<ion-col
-				data-tooltip="Amount of RAM or GPU VRAM required: {{ model.maxRam }} GB"
+				title="Amount of RAM or GPU VRAM required: {{ model.maxRam }} GB"
 			>
 				{{ model.maxRam }}
 			</ion-col>
-			<ion-col data-tooltip="Size on disk: {{ model.size }} GB">
+			<ion-col title="Size on disk: {{ model.size }} GB">
 				{{ model.size + 'GB' }}
 			</ion-col>
 			<ion-col>

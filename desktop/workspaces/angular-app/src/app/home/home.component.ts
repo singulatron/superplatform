@@ -8,31 +8,57 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component} from '@angular/core';
 import { ElectronIpcService } from '../services/electron-ipc.service';
 import { WindowApiConst } from 'shared-lib';
 import { enableLogging, disableLogging } from '../app.component';
 import { LogService } from '../services/log.service';
+import { TranslatePipe } from '../../../shared/stdlib/translate.pipe';
+import { TranslateModule } from '@ngx-translate/core';
+import { RouterLink } from '@angular/router';
+import { NgClass, NgIf, NgStyle } from '@angular/common';
+import { IonicModule } from '@ionic/angular';
+import { CenteredComponent } from '../../../shared/stdlib/components/centered/centered.component';
+import { PageComponent } from '../../../shared/stdlib/components/page/page.component';
+import { IconMenuComponent } from '../../../shared/stdlib/components/icon-menu/icon-menu.component';
+import { UserService } from '../services/user.service';
 
 @Component({
 	selector: 'app-home',
 	templateUrl: './home.component.html',
 	styleUrl: './home.component.css',
+	standalone: true,
+	imports: [
+		IconMenuComponent,
+		PageComponent,
+		CenteredComponent,
+		IonicModule,
+		NgClass,
+		NgIf,
+		RouterLink,
+		TranslateModule,
+		TranslatePipe,
+		NgStyle,
+	],
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent {
 	loggingEnabled = true;
 
 	constructor(
 		private logService: LogService,
-		private ipcService: ElectronIpcService
+		private ipcService: ElectronIpcService,
+		private userService: UserService
 	) {}
 
 	async ngOnInit() {
-		let logStatus = await this.logService.logStatus();
+		this.userService.noop();
+
+		const logStatus = await this.logService.logStatus();
 		this.loggingEnabled = logStatus.enabled;
 		if (!this.loggingEnabled) {
 			console.log('Logging is disabled');
-			this.ipcService.send(WindowApiConst.DISABLE_LOGGING_REQUEST, null);
+			this.ipcService.send(WindowApiConst.DISABLE_LOGGING_REQUEST, {});
 		}
 	}
 
@@ -47,8 +73,8 @@ export class HomeComponent {
 	async enableLog() {
 		this.loggingEnabled = true;
 		await this.logService.logEnable();
-		let rsp = await this.logService.logStatus();
-		this.ipcService.send(WindowApiConst.ENABLE_LOGGING_REQUEST, null);
+		const rsp = await this.logService.logStatus();
+		this.ipcService.send(WindowApiConst.ENABLE_LOGGING_REQUEST, {});
 		this.loggingEnabled = rsp.enabled;
 		enableLogging();
 		console.log('Enabled logging');
@@ -59,8 +85,8 @@ export class HomeComponent {
 		disableLogging();
 		this.loggingEnabled = false;
 		await this.logService.logDisable();
-		let rsp = await this.logService.logStatus();
-		this.ipcService.send(WindowApiConst.DISABLE_LOGGING_REQUEST, null);
+		const rsp = await this.logService.logStatus();
+		this.ipcService.send(WindowApiConst.DISABLE_LOGGING_REQUEST, {});
 		this.loggingEnabled = rsp.enabled;
 	}
 }

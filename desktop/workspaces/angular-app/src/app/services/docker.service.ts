@@ -36,7 +36,7 @@ export class DockerService {
 			}
 			this.initInProgress = true;
 
-			let rsp = await this.dockerInfo();
+			const rsp = await this.dockerInfo();
 
 			this.onDockerInfoSubject.next({
 				hasDocker: rsp?.info?.hasDocker,

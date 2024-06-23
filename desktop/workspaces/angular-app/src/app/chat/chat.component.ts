@@ -8,29 +8,52 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-import { Component, OnInit } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	OnInit,
+} from '@angular/core';
 import { LocaltronService } from '../services/localtron.service';
 
 import { ElectronIpcService } from '../services/electron-ipc.service';
 import { WindowApiConst } from 'shared-lib';
 import { Subscription } from 'rxjs';
-import { ChatService, ChatThread, ChatMessage } from '../services/chat.service';
+import { ChatService, ChatThread } from '../services/chat.service';
 import { Prompt, PromptService } from '../services/prompt.service';
 import { Model, ModelService } from '../services/model.service';
 import { ConfigService } from '../services/config.service';
+import { ChatBoxComponent } from '../../../shared/ai/chat-box/chat-box.component';
+import { CenteredComponent } from '../../../shared/stdlib/components/centered/centered.component';
+import { NgFor, NgIf, AsyncPipe, NgStyle } from '@angular/common';
+import { IonicModule } from '@ionic/angular';
+import { PageComponent } from '../../../shared/stdlib/components/page/page.component';
+import { IconMenuComponent } from '../../../shared/stdlib/components/icon-menu/icon-menu.component';
 
 @Component({
 	selector: 'app-chat',
 	templateUrl: './chat.component.html',
 	styleUrl: './chat.component.scss',
+	standalone: true,
+	imports: [
+		PageComponent,
+		IonicModule,
+		NgFor,
+		NgIf,
+		CenteredComponent,
+		ChatBoxComponent,
+		AsyncPipe,
+		NgStyle,
+		IconMenuComponent,
+	],
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatComponent implements OnInit {
 	public defaultPrompt = '[INST] {prompt} [/INST]';
 	public chatThreads: Array<ChatThread> = [];
-	public activeThread: ChatThread | null = null;
-	public messages: ChatMessage[] = [];
+	public activeThread: ChatThread | undefined;
 
-	public model: Model | null = null;
+	public model: Model | undefined;
 	private models: Model[] = [];
 
 	private subscriptions: Subscription[] = [];
@@ -41,7 +64,8 @@ export class ChatComponent implements OnInit {
 		private configService: ConfigService,
 		public promptService: PromptService,
 		private modelService: ModelService,
-		private ipcService: ElectronIpcService
+		private ipcService: ElectronIpcService,
+		private cd: ChangeDetectorRef
 	) {}
 
 	async ngOnInit() {
@@ -50,18 +74,17 @@ export class ChatComponent implements OnInit {
 		this.subscriptions.push(
 			this.chatService.onChatThreadUpdate$.subscribe(() => {
 				this.refreshThreadList();
-			})
-		);
-
-		this.subscriptions.push(
+			}),
 			this.chatService.onChatThreadAdded$.subscribe(() => {
 				this.refreshThreadList();
 			})
 		);
 
-		let activeThreadId = this.chatService.getActiveThreadId();
+		const activeThreadId = this.chatService.getActiveThreadId();
 		if (activeThreadId) {
-			let activeThread = this.chatThreads?.find((v) => v.id === activeThreadId);
+			const activeThread = this.chatThreads?.find(
+				(v) => v.id === activeThreadId
+			);
 			if (activeThread) {
 				this.activeThread = activeThread;
 			}
@@ -77,9 +100,9 @@ export class ChatComponent implements OnInit {
 
 		this.models = await this.modelService.getModels();
 		this.subscriptions.push(
-			this.configService.onConfigUpdate$.subscribe((conf) => {
-				let model = this.models?.find(
-					(m) => m.id == conf?.model?.currentModelId
+			this.configService.onConfigUpdate$.subscribe((config) => {
+				const model = this.models?.find(
+					(m) => m.id == config?.model?.currentModelId
 				);
 				if (model) {
 					this.model = model;
@@ -89,7 +112,9 @@ export class ChatComponent implements OnInit {
 	}
 
 	ngOnDestroy() {
-		this.subscriptions.forEach((sub) => sub.unsubscribe());
+		for (const sub of this.subscriptions) {
+			sub.unsubscribe();
+		}
 	}
 
 	public async setThreadAsActive(thread: ChatThread) {
@@ -100,9 +125,9 @@ export class ChatComponent implements OnInit {
 		if (!thread.id) {
 			return;
 		}
-		let rsp = await this.chatService.chatMessages(thread.id);
-		this.messages = rsp.messages;
+
 		this.chatService.setActiveThreadId(thread.id);
+		this.cd.markForCheck();
 	}
 
 	public num(
@@ -115,13 +140,13 @@ export class ChatComponent implements OnInit {
 		if (!threadId) {
 			return -1;
 		}
-		let ind = -1;
-		promptList?.forEach((p, index) => {
+		let index = -1;
+		for (const [index_, p] of promptList.entries()) {
 			if (p.threadId == threadId) {
-				ind = index;
+				index = index_;
 			}
-		});
-		return ind;
+		}
+		return index;
 	}
 
 	public async openNewThread() {
@@ -131,7 +156,6 @@ export class ChatComponent implements OnInit {
 		console.debug('Opened empty thread', {
 			threadId: this.activeThread.id,
 		});
-		this.messages = [];
 	}
 
 	public removeChatThread(thread: ChatThread) {
@@ -143,14 +167,19 @@ export class ChatComponent implements OnInit {
 	}
 
 	public async refreshThreadList() {
-		let rsp = await this.chatService.chatThreads();
+		const rsp = await this.chatService.chatThreads();
 		this.chatThreads = rsp.threads;
 		if (!this.chatThreads?.length) {
 			this.chatThreads = [];
 		}
+		this.cd.markForCheck();
 	}
 
 	public onCopyToClipboard(text: any) {
 		this.ipcService.send(WindowApiConst.COPY_TO_CLIPBOARD_REQUEST, text);
+	}
+
+	trackById(_: number, message: { id?: string }): string {
+		return message.id || '';
 	}
 }

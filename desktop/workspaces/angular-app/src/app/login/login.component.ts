@@ -8,14 +8,29 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { UserService, LoginResponse } from '../services/user.service';
-import { ToastController } from '@ionic/angular';
+import { ToastController, IonicModule } from '@ionic/angular';
+import { FormsModule } from '@angular/forms';
+import { NgIf } from '@angular/common';
+import { CenteredComponent } from '../../../shared/stdlib/components/centered/centered.component';
+import { PageComponent } from '../../../shared/stdlib/components/page/page.component';
+import { IconMenuComponent } from '../../../shared/stdlib/components/icon-menu/icon-menu.component';
 
 @Component({
 	selector: 'app-login',
 	templateUrl: './login.component.html',
 	styleUrl: './login.component.css',
+	standalone: true,
+	imports: [
+		PageComponent,
+		IconMenuComponent,
+		CenteredComponent,
+		IonicModule,
+		NgIf,
+		FormsModule,
+	],
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent {
 	email: string = '';
@@ -36,9 +51,11 @@ export class LoginComponent {
 		let rsp: LoginResponse;
 		try {
 			rsp = await this.userService.login(this.email, this.password);
-		} catch (err) {
+		} catch (error) {
 			const toast = await this.toast.create({
-				message: (err as any)?.error,
+				cssClass: 'white-text',
+				color: 'danger',
+				message: JSON.parse(error as string)?.error,
 				duration: 5000,
 				position: 'middle',
 			});

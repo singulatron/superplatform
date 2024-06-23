@@ -61,8 +61,6 @@ ion-card-content {
 	flex-direction: column;
 }
 
-
-
 ion-card.flat-card {
 	--background: #fff;
 	--shadow: none;
@@ -83,7 +81,7 @@ ion-textarea {
 }
 
 .main-card {
-	padding-top: 0;
+	padding: 0;
 }
 
 /* MARKDOWN FORMATTING */
