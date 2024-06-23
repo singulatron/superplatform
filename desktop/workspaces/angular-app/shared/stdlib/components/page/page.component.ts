@@ -33,7 +33,7 @@ import { NgStyle, NgIf } from '@angular/common';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageComponent implements AfterContentInit {
-	@Input() menuWidth = '80%';
+	@Input() menuWidth = '90%';
 	@Input() menuEnabled = true;
 	@Input() columnWidths: string[] = [];
 	@Input() mobileColumnWidths: string[] = [];

@@ -14,12 +14,13 @@
 	menuId="first"
 	contentId="main-content"
 >
-	<!-- <ion-header>
-                <ion-toolbar>
-                    <ion-title>Menu</ion-title>
-                </ion-toolbar>
-            </ion-header>
-        -->
+	<!--
+	<ion-header>
+		<ion-toolbar>
+			<ion-title>Menu</ion-title>
+		</ion-toolbar>
+    </ion-header>
+    -->
 	<ion-content>
 		<ion-list>
 			<ion-item *ngIf="false" (click)="toggleMenu()">
@@ -30,7 +31,7 @@
 				<div
 					*ngFor="let column of columns; let i = index"
 					class="column"
-					[ngStyle]="{ flex: '0 0 ' + getColumnWidth(i) }"
+					[ngStyle]="{ flex: '0 0 ' + getColumnWidth(i)  }"
 				>
 					<ng-container [ngTemplateOutlet]="column"> </ng-container>
 				</div>
