@@ -1,0 +1,27 @@
+.textarea-item {
+	flex-shrink: 0;
+	position: sticky;
+	bottom: 0;
+	width: 100%;
+	--padding-start: 0;
+	--padding-end: 0; /* No effect, leaving it here for future versions */
+	--inner-padding-end: 0px; /* This properly removes padding right */
+	--shadow: none;
+	--border-style: none;
+	box-shadow: none !important;
+	border: none !important;
+
+	textarea.native-textarea {
+		padding: 1rem 0rem 0rem 0rem !important;
+	}
+
+	ion-textarea {
+		border-radius: 1rem;
+		margin-left: 0;
+		margin-bottom: 0;
+	}
+
+	ion-fab-button {
+		margin-right: 0;
+	}
+}

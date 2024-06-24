@@ -19,9 +19,9 @@ import {
 	ChatService,
 	ChatMessage,
 	Asset,
-} from '../../../../src/app/services/chat.service';
-import { PromptService } from '../../../../src/app/services/prompt.service';
-import { LocaltronService } from '../../../../src/app/services/localtron.service';
+} from '../../../services/chat.service';
+import { PromptService } from '../../../services/prompt.service';
+import { LocaltronService } from '../../../services/localtron.service';
 import { MarkdownComponent } from 'ngx-markdown';
 import { IonicModule } from '@ionic/angular';
 import { NgIf, DatePipe } from '@angular/common';

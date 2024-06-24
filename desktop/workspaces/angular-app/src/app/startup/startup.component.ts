@@ -17,15 +17,15 @@ import { DownloadService, DownloadDetails } from '../services/download.service';
 import { ModelService, Model } from '../services/model.service';
 import { DockerService } from '../services/docker.service';
 import { ConfigService, Config } from '../services/config.service';
-import { TranslatePipe } from '../../../shared/stdlib/translate.pipe';
+import { TranslatePipe } from '../translate.pipe';
 import { TranslateModule } from '@ngx-translate/core';
 import { DownloadingComponent } from '../downloading/downloading.component';
 import { RouterLink } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { NgIf, NgStyle, AsyncPipe } from '@angular/common';
-import { CenteredComponent } from '../../../shared/stdlib/components/centered/centered.component';
-import { PageComponent } from '../../../shared/stdlib/components/page/page.component';
-import { IconMenuComponent } from '../../../shared/stdlib/components/icon-menu/icon-menu.component';
+import { CenteredComponent } from '../components/centered/centered.component';
+import { PageComponent } from '../components/page/page.component';
+import { IconMenuComponent } from '../components/icon-menu/icon-menu.component';
 
 @Component({
 	selector: 'app-startup',

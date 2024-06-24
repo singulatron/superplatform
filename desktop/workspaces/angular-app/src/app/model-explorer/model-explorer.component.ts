@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { AdvancedModelExplorerComponent } from './advanced-model-explorer/advanced-model-explorer.component';
-import { PageComponent } from '../../../shared/stdlib/components/page/page.component';
-import { CenteredComponent } from '../../../shared/stdlib/components/centered/centered.component';
-import { IconMenuComponent } from '../../../shared/stdlib/components/icon-menu/icon-menu.component';
+import { PageComponent } from '../components/page/page.component';
+import { CenteredComponent } from '../components/centered/centered.component';
+import { IconMenuComponent } from '../components/icon-menu/icon-menu.component';
 
 @Component({
 	selector: 'app-model-explorer',

@@ -13,9 +13,9 @@ import { UserService, LoginResponse } from '../services/user.service';
 import { ToastController, IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
-import { CenteredComponent } from '../../../shared/stdlib/components/centered/centered.component';
-import { PageComponent } from '../../../shared/stdlib/components/page/page.component';
-import { IconMenuComponent } from '../../../shared/stdlib/components/icon-menu/icon-menu.component';
+import { CenteredComponent } from '../components/centered/centered.component';
+import { PageComponent } from '../components/page/page.component';
+import { IconMenuComponent } from '../components/icon-menu/icon-menu.component';
 
 @Component({
 	selector: 'app-login',

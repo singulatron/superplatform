@@ -8,40 +8,33 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-import {
-	Component,
-	ViewEncapsulation,
-    ViewChild,
-} from '@angular/core';
+import { Component, ViewEncapsulation, ViewChild } from '@angular/core';
 import { IonModal } from '@ionic/angular';
 import { NgFor, NgIf } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
-import { CharacterService, Character, initCharacter } from '../../../src/app/services/character.service';
+import {
+	CharacterService,
+	Character,
+	initCharacter,
+} from '../../services/character.service';
 
 @Component({
 	selector: 'ai-character',
 	templateUrl: './character.component.html',
 	styleUrl: './character.component.scss',
-	imports: [
-		IonicModule,
-		NgFor,
-		NgIf,
-		FormsModule,
-	],
+	imports: [IonicModule, NgFor, NgIf, FormsModule],
 	standalone: true,
 	encapsulation: ViewEncapsulation.None,
 })
 export class CharacterComponent {
-    @ViewChild(IonModal) modal!: IonModal;
-    public isOpen: boolean = false;
-	public segment = "select";
+	@ViewChild(IonModal) modal!: IonModal;
+	public isOpen: boolean = false;
+	public segment = 'select';
 	public editingCharacter: Character = initCharacter();
-    public characters: Character[] = [];
+	public characters: Character[] = [];
 
-	constructor(
-		private characterService: CharacterService,
-	) {}
+	constructor(private characterService: CharacterService) {}
 
 	//private subscriptions: Subscription[] = [];
 
@@ -74,16 +67,16 @@ export class CharacterComponent {
 
 	async selectCharacterForEdit(character: Character) {
 		this.editingCharacter = character;
-		this.segment = "create";
+		this.segment = 'create';
 	}
 
 	getModeText(): string {
-		return this.editingCharacter?.id ? "Edit" : "Create";
+		return this.editingCharacter?.id ? 'Edit' : 'Create';
 	}
 
 	show(): void {
-        this.isOpen = true;
-    }
+		this.isOpen = true;
+	}
 
 	close(): void {
 		this.isOpen = false;

@@ -54,35 +54,7 @@
 		</ion-card-content>
 
 		<ion-item class="textarea-item" lines="full">
-			<div style="display: flex; width: 100%">
-				<div style="flex: 1; display: flex">
-					<ion-textarea
-						class="sng-test-chat-textarea"
-						(keydown)="handleKeydown($event)"
-						placeholder="{{ 'Type your message' | translate }}"
-						autoGrow="true"
-						[(ngModel)]="message"
-						style="flex-grow: 1; margin-right: 0rem"
-					></ion-textarea>
-					<ion-fab-button
-						(click)="send()"
-						size="small"
-						color="primary"
-						[disabled]="!hasNonWhiteSpace(message)"
-						class="sng-test-chat-send-button"
-						style="flex-shrink: 0"
-					>
-						<span style="color: white">
-							<ion-icon
-								style="font-size: 1.5rem"
-								name="arrow-up-outline"
-							></ion-icon>
-						</span>
-					</ion-fab-button>
-				</div>
-			</div>
+			<app-chat-input></app-chat-input>
 		</ion-item>
 	</ion-card>
 </div>
-
-<ai-character></ai-character>

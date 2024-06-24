@@ -11,7 +11,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Subscription, throttleTime } from 'rxjs';
 import { DownloadService, DownloadDetails } from '../services/download.service';
-import { TranslatePipe } from '../../../shared/stdlib/translate.pipe';
+import { TranslatePipe } from '../translate.pipe';
 import { TranslateModule } from '@ngx-translate/core';
 import { IonicModule } from '@ionic/angular';
 import { NgIf, DecimalPipe } from '@angular/common';
