@@ -20,7 +20,7 @@ import {
 } from '../../services/character.service';
 
 @Component({
-	selector: 'ai-character',
+	selector: 'app-ai-character',
 	templateUrl: './character.component.html',
 	styleUrl: './character.component.scss',
 	imports: [IonicModule, NgFor, NgIf, FormsModule],

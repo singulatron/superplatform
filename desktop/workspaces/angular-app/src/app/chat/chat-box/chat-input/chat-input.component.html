@@ -8,28 +8,37 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  -->
-<div style="display: flex; width: 100%">
-	<div style="flex: 1; display: flex">
+<div class="wrapper" style="display: flex; width: 100%">
+	<div style="flex: 1; position: relative; display: flex; align-items: center">
+		<ion-fab-button
+			(click)="send()"
+			size="small"
+			color="none"
+			class="settings-button sng-test-chat-settings-button"
+		>
+			<span class="icon">
+				<ion-icon name="settings-outline"></ion-icon>
+			</span>
+		</ion-fab-button>
 		<ion-textarea
-			class="sng-test-chat-textarea"
+			class="chat-input sng-test-chat-textarea"
 			(keydown)="handleKeydown($event)"
 			placeholder="{{ 'Type your message' | translate }}"
 			autoGrow="true"
 			[(ngModel)]="message"
-			style="flex-grow: 1; margin-right: 0rem"
 		></ion-textarea>
 		<ion-fab-button
 			(click)="send()"
 			size="small"
-			color="primary"
+			color="secondary"
 			[disabled]="!hasNonWhiteSpace(message)"
-			class="sng-test-chat-send-button"
-			style="flex-shrink: 0"
+			class="send-button sng-test-chat-send-button"
 		>
-			<span style="color: white">
-				<ion-icon style="font-size: 1.5rem" name="arrow-up-outline"></ion-icon>
+			<span class="icon">
+				<ion-icon name="arrow-up-outline"></ion-icon>
 			</span>
 		</ion-fab-button>
 	</div>
 </div>
-<ai-character></ai-character>
+
+<app-ai-character></app-ai-character>

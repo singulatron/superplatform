@@ -1,27 +1,51 @@
-.textarea-item {
-	flex-shrink: 0;
-	position: sticky;
-	bottom: 0;
-	width: 100%;
+.wrapper {
 	--padding-start: 0;
-	--padding-end: 0; /* No effect, leaving it here for future versions */
-	--inner-padding-end: 0px; /* This properly removes padding right */
+	--padding-end: 0;
+	--inner-padding-end: 0px;
 	--shadow: none;
 	--border-style: none;
-	box-shadow: none !important;
-	border: none !important;
 
-	textarea.native-textarea {
-		padding: 1rem 0rem 0rem 0rem !important;
-	}
-
-	ion-textarea {
+	ion-textarea.chat-input {
 		border-radius: 1rem;
 		margin-left: 0;
 		margin-bottom: 0;
+		border: 1px solid #ccc;
+		padding-left: 3.5rem; /* Make space for the left FAB */
+		padding-right: 3.5rem; /* Make space for the right FAB */
+
+		--highlight-color: none;
 	}
 
-	ion-fab-button {
+	ion-fab-button.send-button {
+		color: white;
 		margin-right: 0;
+		position: absolute;
+		top: -1rem;
+		right: 0.5rem;
+		top: 31%;
+		transform: translateY(-50%);
+
+		.icon {
+			ion-icon {
+				font-size: 1.5rem;
+			}
+		}
+	}
+
+	ion-fab-button.settings-button {
+		margin-right: 0;
+		position: absolute;
+
+		.icon {
+			color: #444;
+
+			ion-icon {
+				font-size: 1.5rem;
+			}
+		}
+	}
+
+	textarea.native-textarea {
+		padding: 1rem 0rem 0rem 0rem !important;
 	}
 }

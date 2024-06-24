@@ -5,6 +5,7 @@ import {
 	Output,
 	EventEmitter,
 	ViewChild,
+	ViewEncapsulation,
 } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { Subscription } from 'rxjs';
@@ -28,9 +29,10 @@ export interface SendOutput {
 @Component({
 	selector: 'app-chat-input',
 	standalone: true,
-	imports: [IonicModule, NgIf, FormsModule, TranslatePipe],
+	imports: [IonicModule, NgIf, FormsModule, TranslatePipe, CharacterComponent],
 	templateUrl: './chat-input.component.html',
 	styleUrl: './chat-input.component.scss',
+	encapsulation: ViewEncapsulation.None,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatInputComponent {

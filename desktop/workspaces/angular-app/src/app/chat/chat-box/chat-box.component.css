@@ -1,3 +1,10 @@
+ion-item.textarea-item {
+	flex-shrink: 0;
+	position: sticky;
+	bottom: 0;
+	width: 100%;
+}
+
 #chat-window {
 	overflow-y: auto;
 	font-size: 1rem;
@@ -7,21 +14,6 @@
 
 .card-content-md p {
 	font-size: 1rem;
-}
-
-ion-fab-button {
-	color: white;
-	position: relative;
-	top: -0.25rem;
-	margin-left: 1rem;
-}
-
-ion-textarea {
-	border: 1px solid #ccc;
-	border-radius: 4px;
-	padding: 0 0.5rem;
-	margin-bottom: 0.5rem;
-	flex-grow: 1;
 }
 
 ion-card {
@@ -59,7 +51,6 @@ ion-card.flat-card {
 .footer {
 	flex-shrink: 0;
 }
-
 
 .main-card {
 	padding: 0;
