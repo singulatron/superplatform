@@ -12,16 +12,12 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { NgIf, NgTemplateOutlet, NgStyle } from '@angular/common';
 
 @Component({
-    selector: 'app-centered',
-    templateUrl: './centered.component.html',
-    styleUrl: './centered.component.css',
-    standalone: true,
-    imports: [
-        NgIf,
-        NgTemplateOutlet,
-        NgStyle,
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+	selector: 'app-centered',
+	templateUrl: './centered.component.html',
+	styleUrl: './centered.component.css',
+	standalone: true,
+	imports: [NgIf, NgTemplateOutlet, NgStyle],
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CenteredComponent {
 	@Input() headerHeight = '25vh';

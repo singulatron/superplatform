@@ -68,13 +68,13 @@
 		</div>
 	</ng-template>
 	<ng-template #mainContent>
-		<app-centered [headerHeight]="'56px'" [vertical]="true">
+
 			<app-chat-box
 				*ngIf="activeThread"
 				[thread]="activeThread"
 				[promptTemplate]="model?.promptTemplate || defaultPrompt"
 				(onCopyToClipboard)="onCopyToClipboard($event)"
 			></app-chat-box>
-		</app-centered>
+	
 	</ng-template>
 </app-page>

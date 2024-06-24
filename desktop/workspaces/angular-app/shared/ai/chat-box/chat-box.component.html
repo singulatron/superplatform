@@ -10,7 +10,7 @@
  -->
 <div class="container-for-ion-card">
 	<ion-card class="flat-card">
-		<ion-card-content class="main-card">
+		<ion-card-content class="main-card" id="chat-window">
 			<ng-container
 				*ngFor="
 					let message of messages;
@@ -34,7 +34,6 @@
 
 			<ng-container *ngIf="promptQueue?.length">
 				<div style="display: flex; margin-bottom: 1rem; width: 100%">
-					<div style="width: 3.5rem; flex-shrink: 0"></div>
 					<div style="flex: 1">
 						<div
 							style="
@@ -54,9 +53,8 @@
 			</ng-container>
 		</ion-card-content>
 
-		<ion-item lines="full">
+		<ion-item class="textarea-item" lines="full">
 			<div style="display: flex; width: 100%">
-				<div style="width: 2.25rem; flex-shrink: 0"></div>
 				<div style="flex: 1; display: flex">
 					<ion-textarea
 						class="sng-test-chat-textarea"
@@ -84,14 +82,7 @@
 				</div>
 			</div>
 		</ion-item>
-		<div class="chat-settings">
-			<span (click)="showCharacterModal()">
-				Character: <span 
-					style="text-decoration: underline; cursor: pointer;"
-					>{{getSelectedCharacterText()}}</span>
-				</span>
-		</div>
 	</ion-card>
 </div>
 
-<ai-character ></ai-character>
+<ai-character></ai-character>
