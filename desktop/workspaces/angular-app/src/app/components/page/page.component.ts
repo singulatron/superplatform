@@ -51,7 +51,6 @@ export class PageComponent implements AfterContentInit {
 
 	@HostListener('window:resize', ['$event'])
 	onResize() {
-		console.log('resizing', window.innerWidth < this.breakpoint);
 		this.ui.setIsMobile(window.innerWidth < this.breakpoint);
 	}
 
@@ -72,13 +71,9 @@ export class PageComponent implements AfterContentInit {
 	}
 
 	async getColumnWidth(index: number): Promise<string> {
-		let isMobile = this.ui.getIsMobile();
-
-		if (isMobile && this.mobileColumnWidths[index]) {
-			console.log('mobile width', this.mobileColumnWidths[index]);
+		if (this.ui.getIsMobile() && this.mobileColumnWidths[index]) {
 			return this.mobileColumnWidths[index];
 		}
-		console.log('no mobile width', this.columnWidths[index] || 'auto');
 		return this.columnWidths[index] || 'auto';
 	}
 
