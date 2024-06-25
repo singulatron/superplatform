@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Type, ComponentRef } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 
 @Injectable({
@@ -6,6 +6,10 @@ import { ReplaySubject } from 'rxjs';
 })
 export class UiService {
 	private isMobile = false;
+
+	private footerComponentRef: ComponentRef<any> | null = null;
+	footerComponentSubject = new ReplaySubject<Type<any> | null>(1);
+	footerComponent$ = this.footerComponentSubject.asObservable();
 
 	isMobileSubject = new ReplaySubject<boolean>(1);
 	isMobile$ = this.isMobileSubject.asObservable();
@@ -19,5 +23,16 @@ export class UiService {
 
 	getIsMobile(): boolean {
 		return this.isMobile;
+	}
+
+	setFooterComponent(componentType: Type<any> | null) {
+		this.footerComponentSubject.next(componentType);
+	}
+
+	clearFooterComponent() {
+		if (this.footerComponentRef) {
+			this.footerComponentRef.destroy();
+			this.footerComponentRef = null;
+		}
 	}
 }

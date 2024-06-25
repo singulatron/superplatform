@@ -58,7 +58,7 @@
 		</ng-container>
 	</div>
 
-	<ion-footer>
+	<div *ngIf="!(ui.isMobile$ | async)" class="footer">
 		<app-chat-input (sends)="handleSend($event)"></app-chat-input>
-	</ion-footer>
+	</div>
 </div>

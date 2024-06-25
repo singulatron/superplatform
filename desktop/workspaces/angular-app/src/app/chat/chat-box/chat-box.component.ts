@@ -87,6 +87,14 @@ export class ChatBoxComponent implements OnChanges {
 	) {}
 
 	async ngOnInit() {
+		this.ui.isMobile$.subscribe((isMobile) => {
+			if (isMobile) {
+				this.ui.setFooterComponent(ChatInputComponent);
+			} else {
+				this.ui.clearFooterComponent();
+			}
+		});
+
 		if (this.thread?.id) {
 			const rsp = await this.chatService.chatMessages(this.thread.id);
 			this.messages = rsp.messages;
