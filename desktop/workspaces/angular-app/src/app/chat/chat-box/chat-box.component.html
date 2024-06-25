@@ -1,63 +1,64 @@
 <!--
- * @license
- * Copyright (c) The Authors (see the AUTHORS file)
- *
- * This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3) for personal, non-commercial use.
- * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
- *
- * For commercial use, a separate license must be obtained by purchasing from The Authors.
- * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
- -->
+	* @license
+	* Copyright (c) The Authors (see the AUTHORS file)
+	*
+	* This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3) for personal, non-commercial use.
+	* You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
+	*
+	* For commercial use, a separate license must be obtained by purchasing from The Authors.
+	* For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
+	-->
 <div class="container-for-ion-card">
-	<ion-card class="flat-card">
-		<ion-card-content class="main-card" id="chat-window">
-			<ng-container
-				*ngFor="
-					let message of messages;
-					let i = index;
-					let isLast = last;
-					trackBy: trackById
-				"
-			>
-				<app-message
-					[message]="message"
-					[assets]="getAssets(message)"
-				></app-message>
-			</ng-container>
+	<div class="main-card">
+		<ng-container
+			*ngFor="
+				let message of messages;
+				let i = index;
+				let isLast = last;
+				trackBy: trackById
+			"
+		>
+			<app-message
+				[message]="message"
+				[assets]="getAssets(message)"
+			></app-message>
+		</ng-container>
 
-			<ng-container *ngIf="messageCurrentlyStreamed.content?.length">
-				<app-message
-					[message]="messageCurrentlyStreamed"
-					[streaming]="true"
-				></app-message>
-			</ng-container>
+		<ng-container *ngIf="messageCurrentlyStreamed.content?.length">
+			<app-message
+				[message]="messageCurrentlyStreamed"
+				[streaming]="true"
+			></app-message>
+		</ng-container>
 
-			<ng-container *ngIf="promptQueue?.length">
-				<div style="display: flex; margin-bottom: 1rem; width: 100%">
-					<!-- Why 3.25 rem? To align with the icon with in the message component.
-					Admittedly suboptimal. @todo fix -->
-					<div *ngIf="!(ui.isMobile$ | async)" style="width: 3.25rem; flex-shrink: 0"></div>
-					<div style="flex: 1">
-						<div
-							style="
-								max-width: inherit;
-								color: #666;
-								white-space: nowrap;
-								text-overflow: ellipsis;
-							"
-							*ngFor="let prompt of promptQueue; trackBy: trackById"
-						>
-							<ng-container *ngIf="prompt.status !== 'running'">{{
-								prompt.prompt
-							}}</ng-container>
-						</div>
+		<ng-container *ngIf="promptQueue?.length">
+			<div style="display: flex; margin-bottom: 1rem; width: 100%">
+				<!-- Why 3.25 rem? To align with the icon with in the message component.
+						Admittedly suboptimal. @todo fix -->
+				<div
+					*ngIf="!(ui.isMobile$ | async)"
+					style="width: 3.25rem; flex-shrink: 0"
+				></div>
+				<div style="flex: 1">
+					<div
+						style="
+							max-width: inherit;
+							color: #666;
+							white-space: nowrap;
+							text-overflow: ellipsis;
+						"
+						*ngFor="let prompt of promptQueue; trackBy: trackById"
+					>
+						<ng-container *ngIf="prompt.status !== 'running'">{{
+							prompt.prompt
+						}}</ng-container>
 					</div>
 				</div>
-			</ng-container>
-		</ion-card-content>
+			</div>
+		</ng-container>
+	</div>
 
-		<div class="textarea-item" lines="full">
-			<app-chat-input (sends)="handleSend($event)"></app-chat-input>
-		</div>
-	</ion-card>
+	<div class="footer">
+	<app-chat-input (sends)="handleSend($event)"></app-chat-input>
+</div>
 </div>

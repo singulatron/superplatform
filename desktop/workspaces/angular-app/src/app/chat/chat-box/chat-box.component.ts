@@ -46,7 +46,7 @@ const defaultThreadName = 'New chat';
 @Component({
 	selector: 'app-chat-box',
 	templateUrl: './chat-box.component.html',
-	styleUrl: './chat-box.component.css',
+	styleUrl: './chat-box.component.scss',
 	encapsulation: ViewEncapsulation.None,
 	standalone: true,
 	imports: [
