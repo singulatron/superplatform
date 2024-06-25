@@ -86,11 +86,11 @@ export class ApiService {
 	}
 
 	call(path: string, request: any): Promise<any> {
-		let uri = this.config.env.backendAddress + path;
+		const uri = this.config.env.backendAddress + path;
 
-		let body = JSON.stringify(request);
+		const body = JSON.stringify(request);
 
-		let headers = this.headers.set(
+		const headers = this.headers.set(
 			'Authorization',
 			'Bearer ' + this.cs.get('the_token')
 		);

@@ -23,6 +23,7 @@ import { CommonModule, NgFor } from '@angular/common';
 import { IonicModule, IonMenu } from '@ionic/angular';
 import { RouterLink } from '@angular/router';
 import { NgStyle, NgIf } from '@angular/common';
+import { UiService } from '../../services/ui.service';
 
 @Component({
 	selector: 'app-page',
@@ -47,18 +48,20 @@ export class PageComponent implements AfterContentInit {
 
 	columns: any[] = [];
 	main: any;
-	isMobile = false;
 
 	@HostListener('window:resize', ['$event'])
 	onResize() {
-		this.isMobile = window.innerWidth < this.breakpoint;
+		this.ui.setIsMobile(window.innerWidth < this.breakpoint);
 	}
 
 	ngOnInit() {
-		this.isMobile = window.innerWidth < this.breakpoint;
+		this.ui.setIsMobile(window.innerWidth < this.breakpoint);
 	}
 
-	constructor(private cd: ChangeDetectorRef) {
+	constructor(
+		public ui: UiService,
+		private cd: ChangeDetectorRef
+	) {
 		this.cd.markForCheck();
 	}
 
@@ -68,7 +71,7 @@ export class PageComponent implements AfterContentInit {
 	}
 
 	getColumnWidth(index: number): string {
-		if (this.isMobile && this.mobileColumnWidths[index]) {
+		if (this.ui.getIsMobile() && this.mobileColumnWidths[index]) {
 			return this.mobileColumnWidths[index];
 		}
 		return this.columnWidths[index] || 'auto';

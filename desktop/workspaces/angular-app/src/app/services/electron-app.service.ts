@@ -18,7 +18,7 @@ import {
 	OnSystemLanguage,
 } from 'shared-lib/models/event-request-response';
 import { WindowApiConst } from 'shared-lib';
-import { ApiService } from '../../../shared/stdlib/api.service';
+import { ApiService } from '../api.service';
 
 @Injectable({
 	providedIn: 'root',

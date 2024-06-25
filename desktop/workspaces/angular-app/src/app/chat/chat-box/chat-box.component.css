@@ -1,42 +1,19 @@
+ion-item.textarea-item {
+	flex-shrink: 0;
+	position: sticky;
+	bottom: 0;
+	width: 100%;
+}
+
 #chat-window {
 	overflow-y: auto;
-
 	font-size: 1rem;
 	color: #444;
+	flex-grow: 1;
 }
 
 .card-content-md p {
 	font-size: 1rem;
-}
-
-ion-fab-button {
-	color: white;
-	position: relative;
-	top: -0.25rem;
-	margin-left: 1rem;
-}
-
-.chat-settings {
-	display: flex;
-	justify-content: flex-start;
-	align-items: center;
-	padding-left: 1em;
-}
-
-.chat-settings span {
-	padding: 5px;
-}
-
-ion-textarea {
-	border: 1px solid #ccc;
-	border-radius: 4px;
-	padding: 0 0.5rem;
-
-	margin-bottom: 0.5rem;
-}
-
-textarea.native-textarea {
-	padding: 1rem 0rem 0rem 0rem !important;
 }
 
 ion-card {
@@ -45,39 +22,34 @@ ion-card {
 	height: 100%;
 }
 
-ion-item {
-	flex-shrink: 0;
-}
-
-ion-card-content {
-	overflow-y: auto;
-	flex-grow: 1;
-}
-
-.container-for-ion-card {
-	margin: 0 auto;
-
-	display: flex;
-	flex-direction: column;
-}
-
 ion-card.flat-card {
 	--background: #fff;
 	--shadow: none;
 	--border-style: none;
 	box-shadow: none !important;
 	border: none !important;
+	flex-grow: 1;
 }
 
-ion-item {
-	--shadow: none;
-	--border-style: none;
-	box-shadow: none !important;
-	border: none !important;
+.container-for-ion-card {
+	display: flex;
+	flex-direction: column;
+	height: 100%; /* or any height that fits your layout */
 }
 
-ion-textarea {
-	border-radius: 1rem;
+.flat-card {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+}
+
+.main-card {
+	flex-grow: 1;
+	overflow-y: auto;
+}
+
+.footer {
+	flex-shrink: 0;
 }
 
 .main-card {

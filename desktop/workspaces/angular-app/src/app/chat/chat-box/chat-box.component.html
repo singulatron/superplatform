@@ -10,7 +10,7 @@
  -->
 <div class="container-for-ion-card">
 	<ion-card class="flat-card">
-		<ion-card-content class="main-card">
+		<ion-card-content class="main-card" id="chat-window">
 			<ng-container
 				*ngFor="
 					let message of messages;
@@ -34,7 +34,9 @@
 
 			<ng-container *ngIf="promptQueue?.length">
 				<div style="display: flex; margin-bottom: 1rem; width: 100%">
-					<div style="width: 3.5rem; flex-shrink: 0"></div>
+					<!-- Why 3.25 rem? To align with the icon with in the message component.
+					Admittedly suboptimal. @todo fix -->
+					<div *ngIf="!(ui.isMobile$ | async)" style="width: 3.25rem; flex-shrink: 0"></div>
 					<div style="flex: 1">
 						<div
 							style="
@@ -54,44 +56,8 @@
 			</ng-container>
 		</ion-card-content>
 
-		<ion-item lines="full">
-			<div style="display: flex; width: 100%">
-				<div style="width: 2.25rem; flex-shrink: 0"></div>
-				<div style="flex: 1; display: flex">
-					<ion-textarea
-						class="sng-test-chat-textarea"
-						(keydown)="handleKeydown($event)"
-						placeholder="{{ 'Type your message' | translate }}"
-						autoGrow="true"
-						[(ngModel)]="message"
-						style="flex-grow: 1; margin-right: 0rem"
-					></ion-textarea>
-					<ion-fab-button
-						(click)="send()"
-						size="small"
-						color="primary"
-						[disabled]="!hasNonWhiteSpace(message)"
-						class="sng-test-chat-send-button"
-						style="flex-shrink: 0"
-					>
-						<span style="color: white">
-							<ion-icon
-								style="font-size: 1.5rem"
-								name="arrow-up-outline"
-							></ion-icon>
-						</span>
-					</ion-fab-button>
-				</div>
-			</div>
-		</ion-item>
-		<div class="chat-settings">
-			<span (click)="showCharacterModal()">
-				Character: <span 
-					style="text-decoration: underline; cursor: pointer;"
-					>{{getSelectedCharacterText()}}</span>
-				</span>
+		<div class="textarea-item" lines="full">
+			<app-chat-input (sends)="handleSend($event)"></app-chat-input>
 		</div>
 	</ion-card>
 </div>
-
-<ai-character ></ai-character>

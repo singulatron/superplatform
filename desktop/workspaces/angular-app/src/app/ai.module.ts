@@ -10,16 +10,24 @@
  */
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ChatBoxComponent } from './chat-box/chat-box.component';
-import { CharacterComponent } from './character/character.component';
+import { ChatBoxComponent } from './chat/chat-box/chat-box.component';
+import { CharacterComponent } from './chat/character/character.component';
 import { IonicModule } from '@ionic/angular';
-import { StdlibModule } from '../stdlib/stdlib.module';
+import { StdlibModule } from '../app/stdlib.module';
 import { MarkdownModule, MarkdownService } from 'ngx-markdown';
-import { MessageComponent } from './chat-box/message/message.component';
+import { MessageComponent } from './chat/chat-box/message/message.component';
 
 @NgModule({
-    providers: [MarkdownService],
-    exports: [ChatBoxComponent, CharacterComponent],
-    imports: [CommonModule, StdlibModule, IonicModule, MarkdownModule.forChild(), ChatBoxComponent, MessageComponent, CharacterComponent],
+	providers: [MarkdownService],
+	exports: [ChatBoxComponent, CharacterComponent],
+	imports: [
+		CommonModule,
+		StdlibModule,
+		IonicModule,
+		MarkdownModule.forChild(),
+		ChatBoxComponent,
+		MessageComponent,
+		CharacterComponent,
+	],
 })
 export class AiModule {}

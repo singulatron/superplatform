@@ -20,13 +20,13 @@ import {
 import { User, UserService } from '../services/user.service';
 import { first } from 'rxjs';
 import { ToastController, IonicModule } from '@ionic/angular';
-import { TranslatePipe } from '../../../shared/stdlib/translate.pipe';
+import { TranslatePipe } from '../translate.pipe';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgFor, NgIf } from '@angular/common';
-import { CenteredComponent } from '../../../shared/stdlib/components/centered/centered.component';
+import { CenteredComponent } from '../components/centered/centered.component';
 import { ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
-import { PageComponent } from '../../../shared/stdlib/components/page/page.component';
-import { IconMenuComponent } from '../../../shared/stdlib/components/icon-menu/icon-menu.component';
+import { PageComponent } from '../components/page/page.component';
+import { IconMenuComponent } from '../components/icon-menu/icon-menu.component';
 
 interface UserVisible extends User {
 	visible?: boolean;

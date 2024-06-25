@@ -22,7 +22,7 @@ import {
 } from '../../services/download.service';
 import { ConfigService } from '../../services/config.service';
 import { IonicModule } from '@ionic/angular';
-import { TranslatePipe } from '../../../../shared/stdlib/translate.pipe';
+import { TranslatePipe } from '../../translate.pipe';
 import { DecimalPipe } from '@angular/common';
 import { DownloadingComponent } from '../../downloading/downloading.component';
 import { FormsModule } from '@angular/forms';

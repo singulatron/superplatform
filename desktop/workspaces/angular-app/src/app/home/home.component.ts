@@ -13,14 +13,14 @@ import { ElectronIpcService } from '../services/electron-ipc.service';
 import { WindowApiConst } from 'shared-lib';
 import { enableLogging, disableLogging } from '../app.component';
 import { LogService } from '../services/log.service';
-import { TranslatePipe } from '../../../shared/stdlib/translate.pipe';
+import { TranslatePipe } from '../translate.pipe';
 import { TranslateModule } from '@ngx-translate/core';
 import { RouterLink } from '@angular/router';
 import { NgClass, NgIf, NgStyle } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
-import { CenteredComponent } from '../../../shared/stdlib/components/centered/centered.component';
-import { PageComponent } from '../../../shared/stdlib/components/page/page.component';
-import { IconMenuComponent } from '../../../shared/stdlib/components/icon-menu/icon-menu.component';
+import { CenteredComponent } from '../components/centered/centered.component';
+import { PageComponent } from '../components/page/page.component';
+import { IconMenuComponent } from '../components/icon-menu/icon-menu.component';
 import { UserService } from '../services/user.service';
 
 @Component({

@@ -23,12 +23,12 @@ import { ChatService, ChatThread } from '../services/chat.service';
 import { Prompt, PromptService } from '../services/prompt.service';
 import { Model, ModelService } from '../services/model.service';
 import { ConfigService } from '../services/config.service';
-import { ChatBoxComponent } from '../../../shared/ai/chat-box/chat-box.component';
-import { CenteredComponent } from '../../../shared/stdlib/components/centered/centered.component';
+import { ChatBoxComponent } from './chat-box/chat-box.component';
+import { CenteredComponent } from '../components/centered/centered.component';
 import { NgFor, NgIf, AsyncPipe, NgStyle } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
-import { PageComponent } from '../../../shared/stdlib/components/page/page.component';
-import { IconMenuComponent } from '../../../shared/stdlib/components/icon-menu/icon-menu.component';
+import { PageComponent } from '../components/page/page.component';
+import { IconMenuComponent } from '../components/icon-menu/icon-menu.component';
 
 @Component({
 	selector: 'app-chat',

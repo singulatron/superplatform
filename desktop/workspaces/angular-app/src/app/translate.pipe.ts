@@ -30,7 +30,7 @@ export class TranslatePipe implements PipeTransform {
 		if (!this.translations[key]) {
 			return key;
 		}
-		let lang = this.apiService.getLocale();
+		const lang = this.apiService.getLocale();
 		if (lang) {
 			return this.translations[key][lang];
 		}

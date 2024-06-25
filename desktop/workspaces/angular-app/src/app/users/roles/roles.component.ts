@@ -5,8 +5,8 @@ import { NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
-import { PageComponent } from '../../../../shared/stdlib/components/page/page.component';
-import { IconMenuComponent } from '../../../../shared/stdlib/components/icon-menu/icon-menu.component';
+import { PageComponent } from '../../components/page/page.component';
+import { IconMenuComponent } from '../../components/icon-menu/icon-menu.component';
 
 @Component({
 	selector: 'app-roles',

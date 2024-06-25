@@ -14,34 +14,32 @@ import {
 	Input,
 	OnChanges,
 	SimpleChanges,
-	ViewChild,
 	ChangeDetectionStrategy,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { ChangeDetectorRef } from '@angular/core';
-import { LocaltronService } from '../../../src/app/services/localtron.service';
+import { LocaltronService } from '../../services/localtron.service';
 import {
 	ChatService,
 	ChatThread,
 	ChatMessage,
 	Asset,
-} from '../../../src/app/services/chat.service';
-import {
-	Prompt,
-	PromptService,
-} from '../../../src/app/services/prompt.service';
-import { ModelService, Model } from '../../../src/app/services/model.service';
-import { CharacterService, Character } from '../../../src/app/services/character.service';
+} from '../../services/chat.service';
+import { Prompt, PromptService } from '../../services/prompt.service';
 
-import { ElectronAppService } from '../../../src/app/services/electron-app.service';
-import { ConfigService } from '../../../src/app/services/config.service';
-import { CharacterComponent } from '../character/character.component';
-import { TranslatePipe } from '../../stdlib/translate.pipe';
+import { ElectronAppService } from '../../services/electron-app.service';
+
+import { TranslatePipe } from '../../translate.pipe';
 import { FormsModule } from '@angular/forms';
 import { MessageComponent } from './message/message.component';
-import { NgFor, NgIf } from '@angular/common';
+import { NgFor, NgIf, AsyncPipe } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
+import {
+	ChatInputComponent,
+	SendOutput,
+} from './chat-input/chat-input.component';
+import { UiService } from '../../services/ui.service';
 
 const defaultThreadName = 'New chat';
 
@@ -55,15 +53,15 @@ const defaultThreadName = 'New chat';
 		IonicModule,
 		NgFor,
 		MessageComponent,
-		CharacterComponent,
 		NgIf,
 		FormsModule,
 		TranslatePipe,
+		ChatInputComponent,
+		AsyncPipe,
 	],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatBoxComponent implements OnChanges {
-	@ViewChild(CharacterComponent) characterModal!: CharacterComponent;
 	@Input() promptTemplate: string = '[INST] {prompt} [/INST]';
 
 	// @todo push this to the backend too
@@ -72,49 +70,35 @@ export class ChatBoxComponent implements OnChanges {
 
 	@Input() thread!: ChatThread;
 
-	private model: Model | undefined;
-	private models: Model[] = [];
 	public promptQueue: Prompt[] = [];
 
-	public message: string = '';
 	public messages: ChatMessage[] = [];
 	public assets: Asset[] = [];
 	public messageCurrentlyStreamed: ChatMessage = {} as any;
+	private subscriptions: Subscription[] = [];
 
 	constructor(
 		private localtron: LocaltronService,
 		public lapi: ElectronAppService,
 		private cd: ChangeDetectorRef,
-		private configService: ConfigService,
 		private promptService: PromptService,
 		private chatService: ChatService,
-		private modelService: ModelService,
-		private characterService: CharacterService
+		public ui: UiService
 	) {}
-
-	private subscriptions: Subscription[] = [];
 
 	async ngOnInit() {
 		if (this.thread?.id) {
-			let rsp = await this.chatService.chatMessages(this.thread.id);
+			const rsp = await this.chatService.chatMessages(this.thread.id);
 			this.messages = rsp.messages;
 			this.assets = rsp.assets;
 		}
 
-		this.models = await this.modelService.getModels();
 		this.cd.markForCheck();
 
 		this.subscriptions.push(
-			this.configService.onConfigUpdate$.subscribe(async (config) => {
-				this.model = this.models?.find(
-					(m) => m.id == config?.model?.currentModelId
-				);
-			})
-		);
-		this.subscriptions.push(
 			this.chatService.onChatMessageAdded$.subscribe(async (event) => {
 				if (this.thread?.id && this.thread.id == event.threadId) {
-					let rsp = await this.chatService.chatMessages(this.thread?.id);
+					const rsp = await this.chatService.chatMessages(this.thread?.id);
 					this.messages = rsp.messages;
 					this.assets = rsp.assets;
 					this.cd.markForCheck();
@@ -127,14 +111,29 @@ export class ChatBoxComponent implements OnChanges {
 		return this.assets?.filter((a) => message.assetIds?.includes(a.id));
 	}
 
+	async handleSend(emitted: SendOutput) {
+		if (!this.thread?.title) {
+			this.thread.title = emitted.message.slice(0, 100);
+		}
+
+		await this.promptService.promptAdd({
+			id: this.localtron.uuid(),
+			prompt: emitted.message,
+			characterId: emitted.characterId,
+			template: this.promptTemplate,
+			threadId: this.thread.id as string,
+			modelId: emitted.modelId as string,
+		});
+	}
+
 	streamSubscription!: Subscription;
 	promptSubscription!: Subscription;
 
 	ngOnDestroy() {
 		this.streamSubscription.unsubscribe();
-		this.subscriptions.forEach((s) => {
+		for (const s of this.subscriptions) {
 			s.unsubscribe();
-		});
+		}
 	}
 
 	async ngOnChanges(changes: SimpleChanges): Promise<void> {
@@ -152,21 +151,21 @@ export class ChatBoxComponent implements OnChanges {
 
 			let threadId: string;
 
-			if (!this.thread) {
+			if (this.thread) {
+				threadId = changes.thread.currentValue.id;
+				const rsp = await this.chatService.chatMessages(threadId);
+				this.messages = rsp.messages;
+				this.assets = rsp.assets;
+			} else {
 				this.thread = {
 					id: this.localtron.uuid(),
 				};
 				threadId = this.thread.id as string;
-			} else {
-				threadId = changes.thread.currentValue.id;
-				let rsp = await this.chatService.chatMessages(threadId);
-				this.messages = rsp.messages;
-				this.assets = rsp.assets;
 			}
 
 			this.promptSubscription =
 				this.promptService.onPromptListUpdate$.subscribe((promptList) => {
-					let promptQueue = promptList?.filter((p) => {
+					const promptQueue = promptList?.filter((p) => {
 						return p.threadId == threadId;
 					});
 					this.promptQueue = promptQueue;
@@ -189,23 +188,23 @@ export class ChatBoxComponent implements OnChanges {
 						response?.choices?.length > 0 &&
 						response?.choices[0]?.text
 					) {
-						let insidePre =
+						const insidePre =
 							(this.messageCurrentlyStreamed.content.match(/```/g) || [])
 								.length %
 								2 ===
 							1;
-						let addVal = insidePre
+						let addValue = insidePre
 							? response?.choices[0].text
 							: escapeHtml(response?.choices[0].text);
 
 						if (first) {
-							addVal = addVal.trimStart();
+							addValue = addValue.trimStart();
 							first = false;
 						}
 
 						this.messageCurrentlyStreamed = {
 							...this.messageCurrentlyStreamed,
-							content: this.messageCurrentlyStreamed.content + addVal,
+							content: this.messageCurrentlyStreamed.content + addValue,
 						} as any;
 					}
 
@@ -218,7 +217,7 @@ export class ChatBoxComponent implements OnChanges {
 						}
 						// @todo might not be needed now we have the `chatMessageAdded`
 						// event coming from the firehose
-						let rsp = await this.chatService.chatMessages(threadId);
+						const rsp = await this.chatService.chatMessages(threadId);
 						this.messages = rsp.messages;
 						this.assets = rsp.assets;
 
@@ -232,70 +231,14 @@ export class ChatBoxComponent implements OnChanges {
 		}
 	}
 
-	async send() {
-		if (!this.thread?.title) {
-			this.thread.title = this.message.slice(0, 100);
-		}
-
-		let msg = this.message;
-		this.message = '';
-
-		this.sendMessage(msg);
-	}
-
-	async sendMessage(msg: string) {
-		const character = this.getSelectedCharacter();
-		await this.promptService.promptAdd({
-			id: this.localtron.uuid(),
-			prompt: msg,
-			character: character?.data?.behaviour,
-			template: this.promptTemplate,
-			threadId: this.thread.id as string,
-			modelId: this.model?.id as string,
-		});
-	}
-
-	// Handle keydown event to differentiate between Enter and Shift+Enter
-	handleKeydown(event: KeyboardEvent): void {
-		if (event.key === 'Enter' && !event.shiftKey) {
-			event.preventDefault();
-			if (this.hasNonWhiteSpace(this.message)) {
-				this.send();
-			}
-		} else if (event.key === 'Enter' && event.shiftKey) {
-			event.preventDefault();
-			this.message += '\n';
-		}
-	}
-
-	public hasNonWhiteSpace(value: string): boolean {
-		if (!value) {
-			return false;
-		}
-		return /\S/.test(value);
-	}
-
-	setThreadName(msg: string) {
-		if (!msg) {
+	setThreadName(message: string) {
+		if (!message) {
 			return;
 		}
 		if (this.thread?.title !== defaultThreadName) {
 			return;
 		}
 		// @todo summarize with llm at the end of the streaming
-	}
-
-	public getSelectedCharacter(): Character {
-		return this.characterService.selectedCharacter;
-	}
-
-	public showCharacterModal() {
-		this.characterModal.show()
-	}
-
-	public getSelectedCharacterText(): string {
-		const selectedCharacter = this.getSelectedCharacter();
-		return selectedCharacter?.data?.name ? selectedCharacter.data.name : "None";
 	}
 
 	trackById(_: number, message: { id?: string }): string {
@@ -305,9 +248,9 @@ export class ChatBoxComponent implements OnChanges {
 
 function escapeHtml(unsafe: string) {
 	return unsafe
-		.replace(/&/g, '&amp;')
-		.replace(/</g, '&lt;')
-		.replace(/>/g, '&gt;')
-		.replace(/"/g, '&quot;')
-		.replace(/'/g, '&#039;');
+		.replaceAll('&', '&amp;')
+		.replaceAll('<', '&lt;')
+		.replaceAll('>', '&gt;')
+		.replaceAll('"', '&quot;')
+		.replaceAll("'", '&#039;');
 }
