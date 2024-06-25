@@ -24,6 +24,7 @@ import { IonicModule, IonMenu } from '@ionic/angular';
 import { RouterLink } from '@angular/router';
 import { NgStyle, NgIf, NgClass } from '@angular/common';
 import { UiService } from '../../services/ui.service';
+import { LocaltronService } from '../../services/localtron.service';
 
 @Component({
 	selector: 'app-page',
@@ -42,6 +43,11 @@ import { UiService } from '../../services/ui.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageComponent implements AfterContentInit {
+	/** We give unique IDs to the ion-menu and ion-content elements
+	 * so multiple of them can coexists, since the page component is not a singleton one.
+	 */
+	id: string = '';
+
 	@Input() menuWidth = '90%';
 	@Input() menuEnabled = true;
 	@Input() columnWidths: string[] = [];
@@ -57,6 +63,15 @@ export class PageComponent implements AfterContentInit {
 	columns: any[] = [];
 	main: any;
 
+	constructor(
+		public ui: UiService,
+		private cd: ChangeDetectorRef,
+		private localtron: LocaltronService
+	) {
+		this.id = this.localtron.uuid();
+		this.cd.markForCheck();
+	}
+
 	@HostListener('window:resize', ['$event'])
 	onResize() {
 		this.ui.setIsMobile(window.innerWidth < this.breakpoint);
@@ -64,13 +79,6 @@ export class PageComponent implements AfterContentInit {
 
 	ngOnInit() {
 		this.ui.setIsMobile(window.innerWidth < this.breakpoint);
-	}
-
-	constructor(
-		public ui: UiService,
-		private cd: ChangeDetectorRef
-	) {
-		this.cd.markForCheck();
 	}
 
 	ngAfterContentInit(): void {
