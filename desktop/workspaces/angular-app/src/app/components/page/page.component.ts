@@ -79,6 +79,9 @@ export class PageComponent implements AfterContentInit {
 
 	ngOnInit() {
 		this.ui.setIsMobile(window.innerWidth < this.breakpoint);
+		this.ui.footerComponent$.subscribe(() => {
+			this.cd.detectChanges()
+		});
 	}
 
 	ngAfterContentInit(): void {

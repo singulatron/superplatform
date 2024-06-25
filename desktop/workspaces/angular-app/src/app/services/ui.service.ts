@@ -38,6 +38,10 @@ export class UiService {
 
 	clearFooterComponent() {
 		this.hasFooter = false;
+
+		// eslint-disable-next-line
+		this.footerComponentSubject.next(null);
+
 		if (this.footerComponentRef) {
 			this.footerComponentRef.destroy();
 			// eslint-disable-next-line

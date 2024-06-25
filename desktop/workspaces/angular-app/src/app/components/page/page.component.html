@@ -37,7 +37,10 @@
 	<ion-header *ngIf="ui.isMobile$ | async">
 		<ion-toolbar>
 			<ion-buttons *ngIf="menuEnabled" slot="start">
-				<ion-menu-button menu="menu-{{ id }}" autoHide="false"></ion-menu-button>
+				<ion-menu-button
+					menu="menu-{{ id }}"
+					autoHide="false"
+				></ion-menu-button>
 			</ion-buttons>
 			<ion-title>{{ title }}</ion-title>
 		</ion-toolbar>
@@ -69,7 +72,7 @@
 	<ion-footer
 		[ngClass]="{ 'ion-footer-mobile-padding': ui.getIsMobile() }"
 		no-border
-		*ngIf="ui.getIsMobile() && ui.getHasFooter()"
+		*ngIf="(ui.isMobile$ | async) && (ui.footerComponent$ | async)"
 	>
 		<ng-container
 			*ngComponentOutlet="ui.footerComponent$ | async"
