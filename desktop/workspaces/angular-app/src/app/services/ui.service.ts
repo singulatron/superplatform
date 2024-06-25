@@ -8,6 +8,7 @@ export class UiService {
 	private isMobile = false;
 	private hasFooter = false;
 
+	// eslint-disable-next-line
 	private footerComponentRef: ComponentRef<any> | null = null;
 	footerComponentSubject = new ReplaySubject<Type<any> | null>(1);
 	footerComponent$ = this.footerComponentSubject.asObservable();
@@ -39,6 +40,7 @@ export class UiService {
 		this.hasFooter = false;
 		if (this.footerComponentRef) {
 			this.footerComponentRef.destroy();
+			// eslint-disable-next-line
 			this.footerComponentRef = null;
 		}
 	}
