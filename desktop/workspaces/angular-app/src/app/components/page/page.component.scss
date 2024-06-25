@@ -1,13 +1,9 @@
 .flex-container {
 	display: flex;
-	max-height: 100%;
-	overflow: hidden;
 }
 
 .column,
 .main-content {
-	overflow-y: auto;
-	height: 100%;
 }
 
 ion-menu {
@@ -27,7 +23,6 @@ ion-footer {
 }
 
 ion-app {
-	height: 100%;
 }
 
 /* Ensure ion-content fills the full height */
@@ -36,4 +31,9 @@ ion-content {
 	--padding-bottom: 0;
 	--padding-start: 0;
 	--padding-end: 0;
+}
+
+ion-menu,
+ion-footer {
+	height: auto; /* Ensure they do not override height settings */
 }
