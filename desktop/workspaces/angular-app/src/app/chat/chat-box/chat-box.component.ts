@@ -142,6 +142,8 @@ export class ChatBoxComponent implements OnChanges {
 		for (const s of this.subscriptions) {
 			s.unsubscribe();
 		}
+
+		this.ui.clearFooterComponent();
 	}
 
 	async ngOnChanges(changes: SimpleChanges): Promise<void> {

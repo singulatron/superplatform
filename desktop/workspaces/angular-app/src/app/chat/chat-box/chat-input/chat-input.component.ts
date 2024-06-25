@@ -99,7 +99,6 @@ export class ChatInputComponent implements OnInit, AfterViewInit, OnDestroy {
 			this.modalContainer.clear();
 			const componentReference = this.modalContainer.createComponent(factory);
 			this.characterModal = componentReference.instance;
-			console.log('Character modal loaded:', this.characterModal);
 		} catch (error) {
 			console.error('Error loading character modal:', error);
 		}

@@ -28,3 +28,10 @@
 .white-text {
 	color: #ffffff;
 }
+
+/** This is to make ion menu content clickable
+https://forum.ionicframework.com/t/ion-items-not-clickable-as-button-in-content-of-ion-menu/179115/7
+*/
+ion-menu * {
+	pointer-events: auto !important;
+}
