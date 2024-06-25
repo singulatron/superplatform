@@ -12,7 +12,7 @@ import { Component } from '@angular/core';
 import { ElectronIpcService } from './services/electron-ipc.service';
 import { WindowApiConst } from 'shared-lib';
 import { Log } from '../../shared/backend-api/app';
-import { RouterOutlet } from '@angular/router';
+import { IonicModule } from '@ionic/angular';
 
 let loggingEnabled = true;
 
@@ -62,7 +62,7 @@ function overrideConsole(ipcService: ElectronIpcService) {
 	templateUrl: './app.component.html',
 	styleUrls: ['./app.component.scss'],
 	standalone: true,
-	imports: [RouterOutlet],
+	imports: [IonicModule],
 })
 export class AppComponent {
 	title = 'singulatron-angular-app';

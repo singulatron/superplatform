@@ -1,7 +1,7 @@
 .flex-container {
 	display: flex;
-	height: 100%;
-	overflow: visible;
+	max-height: 100%;
+	overflow: hidden;
 }
 
 .column,
@@ -16,4 +16,24 @@ ion-menu {
 
 ion-list {
 	padding: 0;
+}
+
+ion-footer {
+	box-shadow: none;
+}
+
+.ion-footer-mobile-padding {
+	padding: 0.25rem;
+}
+
+ion-app {
+	height: 100%;
+}
+
+/* Ensure ion-content fills the full height */
+ion-content {
+	--padding-top: 0;
+	--padding-bottom: 0;
+	--padding-start: 0;
+	--padding-end: 0;
 }

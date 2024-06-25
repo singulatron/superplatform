@@ -65,7 +65,7 @@ export class ChatComponent implements OnInit {
 		public promptService: PromptService,
 		private modelService: ModelService,
 		private ipcService: ElectronIpcService,
-		private cd: ChangeDetectorRef
+		private cd: ChangeDetectorRef,
 	) {}
 
 	async ngOnInit() {

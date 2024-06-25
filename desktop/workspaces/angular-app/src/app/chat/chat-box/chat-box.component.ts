@@ -46,7 +46,7 @@ const defaultThreadName = 'New chat';
 @Component({
 	selector: 'app-chat-box',
 	templateUrl: './chat-box.component.html',
-	styleUrl: './chat-box.component.css',
+	styleUrl: './chat-box.component.scss',
 	encapsulation: ViewEncapsulation.None,
 	standalone: true,
 	imports: [
@@ -87,6 +87,14 @@ export class ChatBoxComponent implements OnChanges {
 	) {}
 
 	async ngOnInit() {
+		this.ui.isMobile$.subscribe((isMobile) => {
+			if (isMobile) {
+				this.ui.setFooterComponent(ChatInputComponent);
+			} else {
+				this.ui.clearFooterComponent();
+			}
+		});
+
 		if (this.thread?.id) {
 			const rsp = await this.chatService.chatMessages(this.thread.id);
 			this.messages = rsp.messages;
@@ -134,6 +142,8 @@ export class ChatBoxComponent implements OnChanges {
 		for (const s of this.subscriptions) {
 			s.unsubscribe();
 		}
+
+		this.ui.clearFooterComponent();
 	}
 
 	async ngOnChanges(changes: SimpleChanges): Promise<void> {

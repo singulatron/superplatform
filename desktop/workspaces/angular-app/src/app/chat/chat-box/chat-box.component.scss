@@ -1,59 +1,23 @@
-ion-item.textarea-item {
-	flex-shrink: 0;
-	position: sticky;
-	bottom: 0;
-	width: 100%;
-}
-
-#chat-window {
-	overflow-y: auto;
-	font-size: 1rem;
-	color: #444;
-	flex-grow: 1;
-}
-
-.card-content-md p {
-	font-size: 1rem;
-}
-
-ion-card {
-	display: flex;
-	flex-direction: column;
-	height: 100%;
-}
-
-ion-card.flat-card {
-	--background: #fff;
-	--shadow: none;
-	--border-style: none;
-	box-shadow: none !important;
-	border: none !important;
-	flex-grow: 1;
-}
-
 .container-for-ion-card {
 	display: flex;
+	height: 100%;
 	flex-direction: column;
-	height: 100%; /* or any height that fits your layout */
-}
 
-.flat-card {
-	display: flex;
-	flex-direction: column;
-	flex-grow: 1;
-}
+	.main-card {
+		padding: 0.5rem;
+		flex: 1;
+		overflow-y: auto;
+		font-size: 1rem;
+		color: #444;
 
-.main-card {
-	flex-grow: 1;
-	overflow-y: auto;
-}
+		overflow-y: auto;
+	}
 
-.footer {
-	flex-shrink: 0;
-}
-
-.main-card {
-	padding: 0;
+	.footer {
+		position: sticky;
+		bottom: 0;
+		padding: 0.25rem;
+	}
 }
 
 /* MARKDOWN FORMATTING */
