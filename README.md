@@ -5,7 +5,7 @@
       <h1>Singulatron</h1>
     </span>
     <div>
-      AI You Can Trust
+      Server and desktop AI platform
     </div>
   </div>
 <p>
