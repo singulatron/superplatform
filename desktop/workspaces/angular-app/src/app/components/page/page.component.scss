@@ -1,13 +1,13 @@
 .flex-container {
 	display: flex;
-	height: 100vh;
-	overflow: visible;
+	max-height: 100%;
+	overflow: hidden;
 }
 
 .column,
 .main-content {
 	overflow-y: auto;
-	height: 100vh;
+	height: 100%;
 }
 
 ion-menu {
@@ -22,12 +22,18 @@ ion-footer {
 	box-shadow: none;
 }
 
-/** For some reason any padding on the footer causes the screen to be larger
-than 100vh */
 .ion-footer-mobile-padding {
 	padding: 0.25rem;
 }
 
 ion-app {
-	height: 100vh;
+	height: 100%;
+}
+
+/* Ensure ion-content fills the full height */
+ion-content {
+	--padding-top: 0;
+	--padding-bottom: 0;
+	--padding-start: 0;
+	--padding-end: 0;
 }
