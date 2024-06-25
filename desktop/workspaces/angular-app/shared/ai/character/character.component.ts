@@ -11,7 +11,13 @@
 import {
 	Component,
 	ViewEncapsulation,
+<<<<<<< Updated upstream:desktop/workspaces/angular-app/shared/ai/character/character.component.ts
     ViewChild,
+=======
+	ViewChild,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+>>>>>>> Stashed changes:desktop/workspaces/angular-app/src/app/chat/character/character.component.ts
 } from '@angular/core';
 import { IonModal } from '@ionic/angular';
 import { NgFor, NgIf } from '@angular/common';
@@ -31,6 +37,7 @@ import { CharacterService, Character, initCharacter } from '../../../src/app/ser
 	],
 	standalone: true,
 	encapsulation: ViewEncapsulation.None,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CharacterComponent {
     @ViewChild(IonModal) modal!: IonModal;
@@ -41,9 +48,12 @@ export class CharacterComponent {
 
 	constructor(
 		private characterService: CharacterService,
+<<<<<<< Updated upstream:desktop/workspaces/angular-app/shared/ai/character/character.component.ts
+=======
+		private cd: ChangeDetectorRef
+>>>>>>> Stashed changes:desktop/workspaces/angular-app/src/app/chat/character/character.component.ts
 	) {}
 
-	//private subscriptions: Subscription[] = [];
 
 	async ngOnInit() {
 		await this.loadCharacters();
@@ -82,10 +92,17 @@ export class CharacterComponent {
 	}
 
 	show(): void {
+<<<<<<< Updated upstream:desktop/workspaces/angular-app/shared/ai/character/character.component.ts
         this.isOpen = true;
     }
+=======
+		this.isOpen = true;
+		this.cd.markForCheck();
+	}
+>>>>>>> Stashed changes:desktop/workspaces/angular-app/src/app/chat/character/character.component.ts
 
 	close(): void {
 		this.isOpen = false;
+		this.cd.markForCheck();
 	}
 }

@@ -1,0 +1,54 @@
+.wrapper {
+	--padding-start: 0;
+	--padding-end: 0;
+	--inner-padding-end: 0px;
+	--shadow: none;
+	--border-style: none;
+
+	ion-textarea.chat-input {
+		cursor: pointer;
+		border-radius: 1rem;
+		margin-left: 0;
+		margin-bottom: 0;
+		border: 1px solid #ccc;
+		padding-left: 3.5rem; /* Make space for the left FAB */
+		padding-right: 3.5rem; /* Make space for the right FAB */
+
+		--highlight-color: none;
+		color: #222;
+	}
+
+	ion-fab-button.send-button {
+		margin-right: 0;
+		position: absolute;
+		top: -1rem;
+		right: 0.5rem;
+		top: 33%;
+		transform: translateY(-50%);
+
+		.send-icon {
+			ion-icon {
+				color: white;
+				font-size: 1.5rem;
+			}
+		}
+	}
+
+	.settings-icon {
+		z-index: 10;
+		margin-right: 0;
+		position: absolute;
+		left: 1rem;
+		top: 0.8rem;
+
+		ion-icon {
+			cursor: pointer;
+			color: #444;
+			font-size: 1.5rem;
+		}
+	}
+
+	textarea.native-textarea {
+		padding: 1rem 0rem 0rem 0rem !important;
+	}
+}

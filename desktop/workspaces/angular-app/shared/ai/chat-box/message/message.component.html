@@ -8,7 +8,11 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  -->
-<div class="message-block" style="display: flex; align-items: flex-start">
+<div
+	*ngIf="!(ui.isMobile$ | async)"
+	class="message-block-wide"
+	style="display: flex; align-items: flex-start"
+>
 	<div class="left-column">
 		<ion-icon
 			class="chat-user-icon"
@@ -37,6 +41,68 @@
 				>
 					{{ message.createdAt | date: 'EEEE h:mm a' }}
 				</span>
+			</div>
+			<div
+				class="message-action-wrapper sng-test-message-footer"
+				style="margin-left: auto"
+			>
+				<div *ngIf="!streaming" class="message-action-buttons">
+					<ion-icon
+						title="Copy to clipboard"
+						class="small-icon"
+						name="copy-outline"
+						(click)="propagateCopyToClipboard(message.content)"
+					></ion-icon>
+					<ion-icon
+						title="Delete message"
+						class="small-icon"
+						name="trash-outline"
+						(click)="deleteMessage(message.id)"
+					></ion-icon>
+					<ion-icon
+						*ngIf="!message?.userId"
+						title="Regenerate answer"
+						class="small-icon"
+						name="reload-outline"
+						(click)="regenerateAnswer(message)"
+					></ion-icon>
+				</div>
+			</div>
+		</div>
+		<markdown class="markdown-body" [data]="message.content"></markdown>
+		<img [src]="asset(message)" *ngIf="assets?.length" />
+	</div>
+</div>
+
+<div *ngIf="ui.isMobile$ | async" class="message-block-narrow">
+	<div class="main-content" style="flex-grow: 1; position: relative">
+		<div class="header" style="display: flex; align-items: center">
+			<div class="left-column">
+				<ion-icon
+					class="chat-user-icon"
+					*ngIf="message?.userId"
+					name="person-circle-outline"
+				></ion-icon>
+				<img
+					*ngIf="!message?.userId"
+					class="chat-user-icon"
+					src="/assets/logo-lighter.png"
+					alt="Logo"
+				/>
+			</div>
+
+			<div style="font-size: 1rem">
+				<div style="color: #3c70ad">
+					<span *ngIf="message.userId">You</span>
+					<span *ngIf="!message.userId">Singulatron</span>
+				</div>
+				<div
+					title="{{ message.createdAt | date: 'EEEE h:mm a, M/d/yyyy' }}"
+					class="time"
+					style="color: #999"
+				>
+					{{ message.createdAt | date: 'EEEE h:mm a' }}
+				</div>
 			</div>
 			<div
 				class="message-footer sng-test-message-footer"

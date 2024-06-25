@@ -34,7 +34,13 @@
 
 			<ng-container *ngIf="promptQueue?.length">
 				<div style="display: flex; margin-bottom: 1rem; width: 100%">
+<<<<<<< Updated upstream:desktop/workspaces/angular-app/shared/ai/chat-box/chat-box.component.html
 					<div style="width: 3.5rem; flex-shrink: 0"></div>
+=======
+					<!-- Why 3.25 rem? To align with the icon with in the message component.
+					Admittedly suboptimal. @todo fix -->
+					<div style="width: 3.25rem; flex-shrink: 0"></div>
+>>>>>>> Stashed changes:desktop/workspaces/angular-app/src/app/chat/chat-box/chat-box.component.html
 					<div style="flex: 1">
 						<div
 							style="
@@ -54,6 +60,7 @@
 			</ng-container>
 		</ion-card-content>
 
+<<<<<<< Updated upstream:desktop/workspaces/angular-app/shared/ai/chat-box/chat-box.component.html
 		<ion-item lines="full">
 			<div style="display: flex; width: 100%">
 				<div style="width: 2.25rem; flex-shrink: 0"></div>
@@ -90,6 +97,10 @@
 					style="text-decoration: underline; cursor: pointer;"
 					>{{getSelectedCharacterText()}}</span>
 				</span>
+=======
+		<div class="textarea-item" lines="full">
+			<app-chat-input (sends)="handleSend($event)"></app-chat-input>
+>>>>>>> Stashed changes:desktop/workspaces/angular-app/src/app/chat/chat-box/chat-box.component.html
 		</div>
 	</ion-card>
 </div>

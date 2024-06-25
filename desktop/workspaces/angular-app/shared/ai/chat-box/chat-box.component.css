@@ -59,6 +59,10 @@ ion-card-content {
 
 	display: flex;
 	flex-direction: column;
+<<<<<<< Updated upstream:desktop/workspaces/angular-app/shared/ai/chat-box/chat-box.component.css
+=======
+	height: 100%; /* or any height that fits your layout */
+>>>>>>> Stashed changes:desktop/workspaces/angular-app/src/app/chat/chat-box/chat-box.component.css
 }
 
 ion-card.flat-card {
