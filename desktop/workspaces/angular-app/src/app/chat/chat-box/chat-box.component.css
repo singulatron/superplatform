@@ -1,7 +1,4 @@
 ion-item.textarea-item {
-	flex-shrink: 0;
-	position: sticky;
-	bottom: 0;
 	width: 100%;
 }
 
