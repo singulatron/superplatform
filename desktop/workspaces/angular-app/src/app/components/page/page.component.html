@@ -31,7 +31,7 @@
 				<div
 					*ngFor="let column of columns; let i = index"
 					class="column"
-					[ngStyle]="{ flex: '0 0 ' + getColumnWidth(i)  }"
+					[ngStyle]="{ flex: '0 0 ' + getColumnWidth(i) }"
 				>
 					<ng-container [ngTemplateOutlet]="column"> </ng-container>
 				</div>
@@ -40,7 +40,7 @@
 	</ion-content>
 </ion-menu>
 
-<ion-header *ngIf="isMobile">
+<ion-header *ngIf="ui.isMobile$ | async">
 	<ion-toolbar>
 		<ion-buttons *ngIf="menuEnabled" slot="start">
 			<ion-menu-button autoHide="false"></ion-menu-button>
@@ -50,7 +50,7 @@
 </ion-header>
 
 <div class="flex-container" id="main-content">
-	<ng-container *ngIf="!isMobile"
+	<ng-container *ngIf="!(ui.isMobile$ | async)"
 		><div
 			*ngFor="let column of columns; let i = index"
 			class="column"
@@ -65,7 +65,7 @@
 		class="main-content"
 		[ngStyle]="{
 			flex: '1',
-			height: isMobile ? 'calc(100vh - 56px)' : '100vh',
+			height: ui.getIsMobile() ? 'calc(100vh - 56px)' : '100vh',
 		}"
 	>
 		<ion-content>

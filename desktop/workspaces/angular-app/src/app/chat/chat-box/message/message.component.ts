@@ -24,21 +24,23 @@ import { PromptService } from '../../../services/prompt.service';
 import { LocaltronService } from '../../../services/localtron.service';
 import { MarkdownComponent } from 'ngx-markdown';
 import { IonicModule } from '@ionic/angular';
-import { NgIf, DatePipe } from '@angular/common';
+import { NgIf, DatePipe, AsyncPipe } from '@angular/common';
+import { UiService } from '../../../services/ui.service';
 
 @Component({
 	selector: 'app-message',
 	templateUrl: './message.component.html',
 	styleUrl: './message.component.scss',
 	standalone: true,
-	imports: [NgIf, IonicModule, MarkdownComponent, DatePipe],
+	imports: [NgIf, IonicModule, MarkdownComponent, DatePipe, AsyncPipe],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MessageComponent {
 	constructor(
 		private chatService: ChatService,
 		private promptService: PromptService,
-		private localtron: LocaltronService
+		private localtron: LocaltronService,
+		public ui: UiService
 	) {}
 	hasAsset = false;
 

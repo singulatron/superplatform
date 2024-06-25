@@ -10,16 +10,10 @@
  -->
 <div class="wrapper" style="display: flex; width: 100%">
 	<div style="flex: 1; position: relative; display: flex; align-items: center">
-		<ion-fab-button
-			(click)="send()"
-			size="small"
-			color="none"
-			class="settings-button sng-test-chat-settings-button"
-		>
-			<span class="icon">
-				<ion-icon name="settings-outline"></ion-icon>
-			</span>
-		</ion-fab-button>
+		<span (click)="showCharacterModal()" class="settings-icon">
+			<ion-icon name="settings-outline"></ion-icon>
+		</span>
+
 		<ion-textarea
 			class="chat-input sng-test-chat-textarea"
 			(keydown)="handleKeydown($event)"
@@ -34,11 +28,10 @@
 			[disabled]="!hasNonWhiteSpace(message)"
 			class="send-button sng-test-chat-send-button"
 		>
-			<span class="icon">
+			<span class="send-icon">
 				<ion-icon name="arrow-up-outline"></ion-icon>
 			</span>
 		</ion-fab-button>
 	</div>
 </div>
-
-<app-ai-character></app-ai-character>
+<div #modalContainer></div>

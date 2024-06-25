@@ -6,6 +6,7 @@
 	--border-style: none;
 
 	ion-textarea.chat-input {
+		cursor: pointer;
 		border-radius: 1rem;
 		margin-left: 0;
 		margin-bottom: 0;
@@ -14,34 +15,36 @@
 		padding-right: 3.5rem; /* Make space for the right FAB */
 
 		--highlight-color: none;
+		color: #222;
 	}
 
 	ion-fab-button.send-button {
-		color: white;
 		margin-right: 0;
 		position: absolute;
 		top: -1rem;
 		right: 0.5rem;
-		top: 31%;
+		top: 33%;
 		transform: translateY(-50%);
 
-		.icon {
+		.send-icon {
 			ion-icon {
+				color: white;
 				font-size: 1.5rem;
 			}
 		}
 	}
 
-	ion-fab-button.settings-button {
+	.settings-icon {
+		z-index: 10;
 		margin-right: 0;
 		position: absolute;
+		left: 1rem;
+		top: 0.8rem;
 
-		.icon {
+		ion-icon {
+			cursor: pointer;
 			color: #444;
-
-			ion-icon {
-				font-size: 1.5rem;
-			}
+			font-size: 1.5rem;
 		}
 	}
 

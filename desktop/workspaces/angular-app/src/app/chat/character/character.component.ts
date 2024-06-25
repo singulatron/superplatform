@@ -8,7 +8,13 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-import { Component, ViewEncapsulation, ViewChild } from '@angular/core';
+import {
+	Component,
+	ViewEncapsulation,
+	ViewChild,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+} from '@angular/core';
 import { IonModal } from '@ionic/angular';
 import { NgFor, NgIf } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
@@ -26,6 +32,7 @@ import {
 	imports: [IonicModule, NgFor, NgIf, FormsModule],
 	standalone: true,
 	encapsulation: ViewEncapsulation.None,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CharacterComponent {
 	@ViewChild(IonModal) modal!: IonModal;
@@ -34,9 +41,11 @@ export class CharacterComponent {
 	public editingCharacter: Character = initCharacter();
 	public characters: Character[] = [];
 
-	constructor(private characterService: CharacterService) {}
+	constructor(
+		private characterService: CharacterService,
+		private cd: ChangeDetectorRef
+	) {}
 
-	//private subscriptions: Subscription[] = [];
 
 	async ngOnInit() {
 		await this.loadCharacters();
@@ -76,9 +85,11 @@ export class CharacterComponent {
 
 	show(): void {
 		this.isOpen = true;
+		this.cd.markForCheck();
 	}
 
 	close(): void {
 		this.isOpen = false;
+		this.cd.markForCheck();
 	}
 }

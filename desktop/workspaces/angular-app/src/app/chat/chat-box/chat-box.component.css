@@ -34,7 +34,7 @@ ion-card.flat-card {
 .container-for-ion-card {
 	display: flex;
 	flex-direction: column;
-	height: 100vh; /* or any height that fits your layout */
+	height: 100%; /* or any height that fits your layout */
 }
 
 .flat-card {
