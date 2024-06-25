@@ -22,9 +22,6 @@ ion-footer {
 	padding: 0.25rem;
 }
 
-ion-app {
-}
-
 /* Ensure ion-content fills the full height */
 ion-content {
 	--padding-top: 0;
@@ -33,7 +30,3 @@ ion-content {
 	--padding-end: 0;
 }
 
-ion-menu,
-ion-footer {
-	height: auto; /* Ensure they do not override height settings */
-}

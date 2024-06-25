@@ -57,7 +57,12 @@
 					<ng-container [ngTemplateOutlet]="column"></ng-container>
 				</div>
 			</ng-container>
-			<div class="main-content">
+			<div
+				class="main-content"
+				[ngStyle]="{
+					height: ui.getIsMobile() ? '' : '100vh',
+				}"
+			>
 				<ng-container [ngTemplateOutlet]="main"></ng-container>
 			</div>
 		</div>
