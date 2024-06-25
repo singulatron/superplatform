@@ -31,7 +31,7 @@ type appGroup = 'ai-group' | 'users-group' | '';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidebarPageComponent {
-	id = Math.random().toString(36).substring(7);
+	id = Math.random().toString(36).slice(7);
 	currentPath = '';
 
 	@ViewChild('template', { static: true }) template: any;

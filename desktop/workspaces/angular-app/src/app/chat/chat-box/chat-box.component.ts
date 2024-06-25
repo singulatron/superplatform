@@ -33,12 +33,13 @@ import { ElectronAppService } from '../../services/electron-app.service';
 import { TranslatePipe } from '../../translate.pipe';
 import { FormsModule } from '@angular/forms';
 import { MessageComponent } from './message/message.component';
-import { NgFor, NgIf } from '@angular/common';
+import { NgFor, NgIf, AsyncPipe } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import {
 	ChatInputComponent,
 	SendOutput,
 } from './chat-input/chat-input.component';
+import { UiService } from '../../services/ui.service';
 
 const defaultThreadName = 'New chat';
 
@@ -56,6 +57,7 @@ const defaultThreadName = 'New chat';
 		FormsModule,
 		TranslatePipe,
 		ChatInputComponent,
+		AsyncPipe,
 	],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -80,12 +82,13 @@ export class ChatBoxComponent implements OnChanges {
 		public lapi: ElectronAppService,
 		private cd: ChangeDetectorRef,
 		private promptService: PromptService,
-		private chatService: ChatService
+		private chatService: ChatService,
+		public ui: UiService
 	) {}
 
 	async ngOnInit() {
 		if (this.thread?.id) {
-			let rsp = await this.chatService.chatMessages(this.thread.id);
+			const rsp = await this.chatService.chatMessages(this.thread.id);
 			this.messages = rsp.messages;
 			this.assets = rsp.assets;
 		}
@@ -95,7 +98,7 @@ export class ChatBoxComponent implements OnChanges {
 		this.subscriptions.push(
 			this.chatService.onChatMessageAdded$.subscribe(async (event) => {
 				if (this.thread?.id && this.thread.id == event.threadId) {
-					let rsp = await this.chatService.chatMessages(this.thread?.id);
+					const rsp = await this.chatService.chatMessages(this.thread?.id);
 					this.messages = rsp.messages;
 					this.assets = rsp.assets;
 					this.cd.markForCheck();
@@ -128,9 +131,9 @@ export class ChatBoxComponent implements OnChanges {
 
 	ngOnDestroy() {
 		this.streamSubscription.unsubscribe();
-		this.subscriptions.forEach((s) => {
+		for (const s of this.subscriptions) {
 			s.unsubscribe();
-		});
+		}
 	}
 
 	async ngOnChanges(changes: SimpleChanges): Promise<void> {
@@ -148,21 +151,21 @@ export class ChatBoxComponent implements OnChanges {
 
 			let threadId: string;
 
-			if (!this.thread) {
+			if (this.thread) {
+				threadId = changes.thread.currentValue.id;
+				const rsp = await this.chatService.chatMessages(threadId);
+				this.messages = rsp.messages;
+				this.assets = rsp.assets;
+			} else {
 				this.thread = {
 					id: this.localtron.uuid(),
 				};
 				threadId = this.thread.id as string;
-			} else {
-				threadId = changes.thread.currentValue.id;
-				let rsp = await this.chatService.chatMessages(threadId);
-				this.messages = rsp.messages;
-				this.assets = rsp.assets;
 			}
 
 			this.promptSubscription =
 				this.promptService.onPromptListUpdate$.subscribe((promptList) => {
-					let promptQueue = promptList?.filter((p) => {
+					const promptQueue = promptList?.filter((p) => {
 						return p.threadId == threadId;
 					});
 					this.promptQueue = promptQueue;
@@ -185,23 +188,23 @@ export class ChatBoxComponent implements OnChanges {
 						response?.choices?.length > 0 &&
 						response?.choices[0]?.text
 					) {
-						let insidePre =
+						const insidePre =
 							(this.messageCurrentlyStreamed.content.match(/```/g) || [])
 								.length %
 								2 ===
 							1;
-						let addVal = insidePre
+						let addValue = insidePre
 							? response?.choices[0].text
 							: escapeHtml(response?.choices[0].text);
 
 						if (first) {
-							addVal = addVal.trimStart();
+							addValue = addValue.trimStart();
 							first = false;
 						}
 
 						this.messageCurrentlyStreamed = {
 							...this.messageCurrentlyStreamed,
-							content: this.messageCurrentlyStreamed.content + addVal,
+							content: this.messageCurrentlyStreamed.content + addValue,
 						} as any;
 					}
 
@@ -214,7 +217,7 @@ export class ChatBoxComponent implements OnChanges {
 						}
 						// @todo might not be needed now we have the `chatMessageAdded`
 						// event coming from the firehose
-						let rsp = await this.chatService.chatMessages(threadId);
+						const rsp = await this.chatService.chatMessages(threadId);
 						this.messages = rsp.messages;
 						this.assets = rsp.assets;
 
@@ -228,8 +231,8 @@ export class ChatBoxComponent implements OnChanges {
 		}
 	}
 
-	setThreadName(msg: string) {
-		if (!msg) {
+	setThreadName(message: string) {
+		if (!message) {
 			return;
 		}
 		if (this.thread?.title !== defaultThreadName) {
@@ -245,9 +248,9 @@ export class ChatBoxComponent implements OnChanges {
 
 function escapeHtml(unsafe: string) {
 	return unsafe
-		.replace(/&/g, '&amp;')
-		.replace(/</g, '&lt;')
-		.replace(/>/g, '&gt;')
-		.replace(/"/g, '&quot;')
-		.replace(/'/g, '&#039;');
+		.replaceAll('&', '&amp;')
+		.replaceAll('<', '&lt;')
+		.replaceAll('>', '&gt;')
+		.replaceAll('"', '&quot;')
+		.replaceAll("'", '&#039;');
 }

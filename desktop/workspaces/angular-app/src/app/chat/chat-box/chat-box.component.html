@@ -36,7 +36,7 @@
 				<div style="display: flex; margin-bottom: 1rem; width: 100%">
 					<!-- Why 3.25 rem? To align with the icon with in the message component.
 					Admittedly suboptimal. @todo fix -->
-					<div style="width: 3.25rem; flex-shrink: 0"></div>
+					<div *ngIf="!(ui.isMobile$ | async)" style="width: 3.25rem; flex-shrink: 0"></div>
 					<div style="flex: 1">
 						<div
 							style="

@@ -88,15 +88,17 @@ export class ChatInputComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 	ngOnDestroy() {
-		this.subscriptions.forEach((sub) => sub.unsubscribe());
+		for (const sub of this.subscriptions) {
+			sub.unsubscribe();
+		}
 	}
 
 	private loadCharacterModal() {
 		try {
 			const factory = this.resolver.resolveComponentFactory(CharacterComponent);
 			this.modalContainer.clear();
-			const componentRef = this.modalContainer.createComponent(factory);
-			this.characterModal = componentRef.instance;
+			const componentReference = this.modalContainer.createComponent(factory);
+			this.characterModal = componentReference.instance;
 			console.log('Character modal loaded:', this.characterModal);
 		} catch (error) {
 			console.error('Error loading character modal:', error);
@@ -123,13 +125,13 @@ export class ChatInputComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 	async send() {
-		let msg = this.message;
+		const message = this.message;
 		this.message = '';
 
 		const character = this.getSelectedCharacter();
 		this.sends.emit({
 			characterId: character?.id,
-			message: msg,
+			message: message,
 			modelId: this.model?.id || '',
 		});
 	}
@@ -149,6 +151,6 @@ export class ChatInputComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	public getSelectedCharacterText(): string {
 		const selectedCharacter = this.getSelectedCharacter();
-		return selectedCharacter?.data?.name ? selectedCharacter.data.name : 'None';
+		return selectedCharacter.data.name || 'None';
 	}
 }
