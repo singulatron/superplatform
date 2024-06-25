@@ -65,7 +65,7 @@
 		class="main-content"
 		[ngStyle]="{
 			flex: '1',
-			height: ui.getIsMobile() ? 'calc(100vh - 56px)' : '100vh',
+			height: (ui.isMobile$ | async) ? 'calc(100vh - 56px)' : '100vh',
 		}"
 	>
 		<ion-content>
