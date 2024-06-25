@@ -22,7 +22,7 @@ import {
 import { CommonModule, NgFor } from '@angular/common';
 import { IonicModule, IonMenu } from '@ionic/angular';
 import { RouterLink } from '@angular/router';
-import { NgStyle, NgIf } from '@angular/common';
+import { NgStyle, NgIf, NgClass } from '@angular/common';
 import { UiService } from '../../services/ui.service';
 
 @Component({
@@ -30,7 +30,15 @@ import { UiService } from '../../services/ui.service';
 	standalone: true,
 	templateUrl: './page.component.html',
 	styleUrl: './page.component.scss',
-	imports: [IonicModule, CommonModule, RouterLink, NgStyle, NgIf, NgFor],
+	imports: [
+		IonicModule,
+		CommonModule,
+		RouterLink,
+		NgStyle,
+		NgIf,
+		NgFor,
+		NgClass,
+	],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageComponent implements AfterContentInit {

@@ -17,3 +17,17 @@ ion-menu {
 ion-list {
 	padding: 0;
 }
+
+ion-footer {
+	box-shadow: none;
+}
+
+/** For some reason any padding on the footer causes the screen to be larger
+than 100vh */
+.ion-footer-mobile-padding {
+	padding: 0.25rem;
+}
+
+ion-app {
+	height: 100vh;
+}

@@ -6,6 +6,7 @@ import { ReplaySubject } from 'rxjs';
 })
 export class UiService {
 	private isMobile = false;
+	private hasFooter = false;
 
 	private footerComponentRef: ComponentRef<any> | null = null;
 	footerComponentSubject = new ReplaySubject<Type<any> | null>(1);
@@ -25,11 +26,17 @@ export class UiService {
 		return this.isMobile;
 	}
 
+	getHasFooter(): boolean {
+		return this.hasFooter;
+	}
+
 	setFooterComponent(componentType: Type<any> | null) {
+		this.hasFooter = true;
 		this.footerComponentSubject.next(componentType);
 	}
 
 	clearFooterComponent() {
+		this.hasFooter = false;
 		if (this.footerComponentRef) {
 			this.footerComponentRef.destroy();
 			this.footerComponentRef = null;
