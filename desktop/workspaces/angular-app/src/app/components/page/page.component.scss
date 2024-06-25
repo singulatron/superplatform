@@ -1,13 +1,13 @@
 .flex-container {
 	display: flex;
-	height: 100%;
+	height: 100vh;
 	overflow: visible;
 }
 
 .column,
 .main-content {
 	overflow-y: auto;
-	height: 100%;
+	height: 100vh;
 }
 
 ion-menu {

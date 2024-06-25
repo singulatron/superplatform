@@ -19,7 +19,6 @@ ion-item.textarea-item {
 ion-card {
 	display: flex;
 	flex-direction: column;
-	height: 100%;
 }
 
 ion-card.flat-card {
