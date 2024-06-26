@@ -20,9 +20,9 @@ export class FooterService {
 		private router: Router
 	) {
 		// Since ionic lifecycle hooks dont seem to
-		// be triggering properly - nor ngonint
-		// we need to do this hack here
-		// Idealy we would do something like this
+		// be triggering properly - nor ngOnDestroy -
+		// we need to do this hack here.
+		// Ideally we would do something like this
 		// in the chat box component:
 		//  this.subscriptions.push(
 		//  	this.mobile.isMobile$.subscribe((isMobile) => {
