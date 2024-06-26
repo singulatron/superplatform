@@ -14,24 +14,21 @@ export class FooterService {
 
 	constructor() {}
 
-	getHasFooter(): boolean {
+	hasFooterComponent(): boolean {
 		return this.hasFooter;
 	}
 
-	setFooterComponent(componentType: Type<any> | null) {
+	updateFooterComponent(componentType: Type<any> | null) {
 		this.hasFooter = true;
 		this.footerComponentSubject.next(componentType);
 	}
 
-	clearFooterComponent() {
+	removeFooterComponent() {
 		this.hasFooter = false;
-
-		// eslint-disable-next-line
 		this.footerComponentSubject.next(null);
 
 		if (this.footerComponentRef) {
 			this.footerComponentRef.destroy();
-			// eslint-disable-next-line
 			this.footerComponentRef = null;
 		}
 	}

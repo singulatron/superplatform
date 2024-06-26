@@ -59,8 +59,8 @@
 			</ng-container>
 			<div
 				class="main-content"
-				[class.mobile]="mobile.getIsMobile()"
-				[class.desktop]="!mobile.getIsMobile()"
+				[class.mobile]="mobile.getMobileStatus()"
+				[class.desktop]="!mobile.getMobileStatus()"
 			>
 				<ng-container [ngTemplateOutlet]="main"></ng-container>
 			</div>
@@ -68,7 +68,7 @@
 	</ion-content>
 
 	<ion-footer
-		[ngClass]="{ 'ion-footer-mobile-padding': mobile.getIsMobile() }"
+		[ngClass]="{ 'ion-footer-mobile-padding': mobile.getMobileStatus() }"
 		no-border
 		*ngIf="(mobile.isMobile$ | async) && (footer.footerComponent$ | async)"
 	>

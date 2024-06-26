@@ -1,9 +1,5 @@
-import { Injectable } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 
-@Injectable({
-	providedIn: 'root',
-})
 export class MobileService {
 	private isMobile = false;
 
@@ -12,12 +8,12 @@ export class MobileService {
 
 	constructor() {}
 
-	setIsMobile(isMobile: boolean) {
+	setMobileStatus(isMobile: boolean) {
 		this.isMobile = isMobile;
 		this.isMobileSubject.next(isMobile);
 	}
 
-	getIsMobile(): boolean {
+	getMobileStatus(): boolean {
 		return this.isMobile;
 	}
 }

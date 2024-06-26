@@ -76,11 +76,11 @@ export class PageComponent implements AfterContentInit {
 
 	@HostListener('window:resize', ['$event'])
 	onResize() {
-		this.mobile.setIsMobile(window.innerWidth < this.breakpoint);
+		this.mobile.setMobileStatus(window.innerWidth < this.breakpoint);
 	}
 
 	ngOnInit() {
-		this.mobile.setIsMobile(window.innerWidth < this.breakpoint);
+		this.mobile.setMobileStatus(window.innerWidth < this.breakpoint);
 		this.footer.footerComponent$.subscribe(() => {
 			this.cd.detectChanges();
 		});
@@ -92,7 +92,7 @@ export class PageComponent implements AfterContentInit {
 	}
 
 	getColumnWidth(index: number): string {
-		if (this.mobile.getIsMobile() && this.mobileColumnWidths[index]) {
+		if (this.mobile.getMobileStatus() && this.mobileColumnWidths[index]) {
 			return this.mobileColumnWidths[index];
 		}
 		return this.columnWidths[index] || 'auto';

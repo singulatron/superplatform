@@ -91,9 +91,9 @@ export class ChatBoxComponent implements OnChanges {
 	async ngOnInit() {
 		this.mobile.isMobile$.subscribe((isMobile) => {
 			if (isMobile) {
-				this.footer.setFooterComponent(ChatInputComponent);
+				this.footer.updateFooterComponent(ChatInputComponent);
 			} else {
-				this.footer.clearFooterComponent();
+				this.footer.removeFooterComponent();
 			}
 		});
 
@@ -145,7 +145,7 @@ export class ChatBoxComponent implements OnChanges {
 			s.unsubscribe();
 		}
 
-		this.footer.clearFooterComponent();
+		this.footer.removeFooterComponent();
 	}
 
 	async ngOnChanges(changes: SimpleChanges): Promise<void> {
