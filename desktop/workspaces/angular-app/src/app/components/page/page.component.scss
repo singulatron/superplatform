@@ -6,6 +6,15 @@
 .main-content {
 }
 
+.main-content.desktop {
+	height: 100vh;
+}
+
+.main-content.mobile {
+	width: 100vw;
+	overflow-x: scroll;
+}
+
 ion-menu {
 	--width: var(--menu-width, 80%);
 }
@@ -29,4 +38,3 @@ ion-content {
 	--padding-start: 0;
 	--padding-end: 0;
 }
-
