@@ -73,6 +73,10 @@ type ListPromptsResponse struct {
 	Prompts []*Prompt `json:"prompts"`
 }
 
+type RemovePromptRequest struct {
+	Prompt *Prompt `json:"prompt"`
+}
+
 //
 // Events
 //
@@ -85,6 +89,16 @@ type EventPromptAdded struct {
 
 func (e EventPromptAdded) Name() string {
 	return EventPromptAddedName
+}
+
+const EventPromptRemovedName = "promptRemoved"
+
+type EventPromptRemoved struct {
+	PromptId string `json:"promptId"`
+}
+
+func (e EventPromptRemoved) Name() string {
+	return EventPromptRemovedName
 }
 
 const EventPromptProcessingStartedName = "promptProcessingStarted"

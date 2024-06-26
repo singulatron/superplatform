@@ -33,7 +33,7 @@ import { ElectronAppService } from '../../services/electron-app.service';
 import { TranslatePipe } from '../../translate.pipe';
 import { FormsModule } from '@angular/forms';
 import { MessageComponent } from './message/message.component';
-import { NgFor, NgIf, AsyncPipe } from '@angular/common';
+import { NgFor, NgIf, AsyncPipe, NgStyle } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import {
 	ChatInputComponent,
@@ -59,6 +59,7 @@ const defaultThreadName = 'New chat';
 		TranslatePipe,
 		ChatInputComponent,
 		AsyncPipe,
+		NgStyle,
 	],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -253,6 +254,10 @@ export class ChatBoxComponent implements OnChanges {
 
 	trackById(_: number, message: { id?: string }): string {
 		return message.id || '';
+	}
+
+	removePromptFromQueue(prompt: Prompt): void {
+		this.promptService.promptRemove(prompt)
 	}
 }
 

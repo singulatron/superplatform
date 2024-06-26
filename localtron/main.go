@@ -273,6 +273,10 @@ func main() {
 		promptendpoints.Add(w, r, userService, promptService)
 	}))
 
+	router.HandleFunc("/prompt/remove", appl(func(w http.ResponseWriter, r *http.Request) {
+		promptendpoints.Remove(w, r, userService, promptService)
+	}))
+
 	router.HandleFunc("/prompt/subscribe", appl(func(w http.ResponseWriter, r *http.Request) {
 		promptendpoints.Subscribe(w, r, userService, promptService)
 	}))

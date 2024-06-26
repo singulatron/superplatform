@@ -73,6 +73,11 @@ export class PromptService {
 		return this.localtron.call('/prompt/add', request);
 	}
 
+	async promptRemove(prompt: Prompt): Promise<void> {
+		const request: RemovePromptRequest = { prompt: prompt };
+		return this.localtron.call('/prompt/remove', request);
+	}
+
 	async promptList(): Promise<ListPromptsResponse> {
 		return this.localtron.call('/prompt/list', {});
 	}
@@ -251,6 +256,10 @@ export interface Prompt {
 }
 
 export interface AddPromptRequest {
+	prompt: Prompt;
+}
+
+export interface RemovePromptRequest {
 	prompt: Prompt;
 }
 
