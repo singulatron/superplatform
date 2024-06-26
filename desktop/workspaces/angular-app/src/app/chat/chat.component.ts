@@ -111,7 +111,7 @@ export class ChatComponent implements OnInit {
 		);
 	}
 
-	ngOnDestroy() {
+	ionViewWillLeave() {
 		for (const sub of this.subscriptions) {
 			sub.unsubscribe();
 		}

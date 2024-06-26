@@ -19,6 +19,7 @@ import {
 	AfterContentInit,
 	ViewChild,
 } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { CommonModule, NgFor } from '@angular/common';
 import { IonicModule, IonMenu } from '@ionic/angular';
 import { RouterLink } from '@angular/router';
@@ -26,6 +27,7 @@ import { NgStyle, NgIf, NgClass } from '@angular/common';
 import { MobileService } from '../../services/mobile.service';
 import { FooterService } from '../../services/footer.service';
 import { LocaltronService } from '../../services/localtron.service';
+import { Router, NavigationStart } from '@angular/router';
 
 @Component({
 	selector: 'app-page',
@@ -64,11 +66,14 @@ export class PageComponent implements AfterContentInit {
 	columns: any[] = [];
 	main: any;
 
+	private subscriptions: Subscription[] = [];
+
 	constructor(
 		public mobile: MobileService,
 		public footer: FooterService,
 		private cd: ChangeDetectorRef,
-		private localtron: LocaltronService
+		private localtron: LocaltronService,
+		private router: Router
 	) {
 		this.id = this.localtron.uuid();
 		this.cd.markForCheck();
@@ -80,10 +85,33 @@ export class PageComponent implements AfterContentInit {
 	}
 
 	ngOnInit() {
+		this.subscriptions.push(
+			this.router.events.subscribe((event) => {
+				if (event instanceof NavigationStart) {
+					this.footer.removeFooterComponent();
+					this.cd.markForCheck();
+				}
+			}),
+			this.mobile.isMobile$.subscribe((isMobile) => {
+				if (isMobile) {
+					return;
+				}
+
+				this.footer.removeFooterComponent();
+				this.cd.markForCheck();
+			})
+		);
+
 		this.mobile.setMobileStatus(window.innerWidth < this.breakpoint);
 		this.footer.footerComponent$.subscribe(() => {
-			this.cd.detectChanges();
+			this.cd.markForCheck();
 		});
+	}
+
+	ionViewWillLeave() {
+		for (const s of this.subscriptions) {
+			s.unsubscribe();
+		}
 	}
 
 	ngAfterContentInit(): void {

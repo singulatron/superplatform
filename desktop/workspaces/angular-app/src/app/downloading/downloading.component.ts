@@ -68,7 +68,7 @@ export class DownloadingComponent {
 		);
 	}
 
-	ngOnDestroy() {
+	ionViewWillLeave() {
 		for (const v of this.subscriptions) {
 			v.unsubscribe();
 		}

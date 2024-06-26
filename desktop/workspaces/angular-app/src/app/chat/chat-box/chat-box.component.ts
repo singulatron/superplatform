@@ -89,13 +89,13 @@ export class ChatBoxComponent implements OnChanges {
 	) {}
 
 	async ngOnInit() {
-		this.mobile.isMobile$.subscribe((isMobile) => {
-			if (isMobile) {
-				this.footer.updateFooterComponent(ChatInputComponent);
-			} else {
-				this.footer.removeFooterComponent();
-			}
-		});
+		this.subscriptions.push(
+			this.mobile.isMobile$.subscribe((isMobile) => {
+				if (isMobile) {
+					this.footer.updateFooterComponent(ChatInputComponent);
+				}
+			})
+		);
 
 		if (this.thread?.id) {
 			const rsp = await this.chatService.chatMessages(this.thread.id);
@@ -139,13 +139,11 @@ export class ChatBoxComponent implements OnChanges {
 	streamSubscription!: Subscription;
 	promptSubscription!: Subscription;
 
-	ngOnDestroy() {
+	ionViewWillLeave() {
 		this.streamSubscription.unsubscribe();
 		for (const s of this.subscriptions) {
 			s.unsubscribe();
 		}
-
-		this.footer.removeFooterComponent();
 	}
 
 	async ngOnChanges(changes: SimpleChanges): Promise<void> {

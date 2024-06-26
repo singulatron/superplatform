@@ -13,7 +13,6 @@ export class FooterService {
 	footerComponent$ = this.footerComponentSubject.asObservable();
 
 	constructor() {}
-
 	hasFooterComponent(): boolean {
 		return this.hasFooter;
 	}

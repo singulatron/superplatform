@@ -103,7 +103,7 @@ export class StartupComponent implements OnInit {
 		return this.models?.find((v) => v.id == cu?.model?.currentModelId);
 	}
 
-	ngOnDestroy() {
+	ionViewWillLeave() {
 		for (const v of this.subscriptions) {
 			v.unsubscribe();
 		}

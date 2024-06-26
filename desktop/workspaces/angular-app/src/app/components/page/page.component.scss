@@ -6,18 +6,19 @@
 .main-content {
 }
 
-	/** On desktop we have at least one column on the left - the icon menu bar
+/** On desktop we have at least one column on the left - the icon menu bar
 	so we need the main content to fill out the remaining space. */
 .main-content.desktop {
-
 	flex: 1;
+	height: 100vh;
+	overflow-y: auto;
 }
 
 /** On mobile only the main content area is shown, the columns go to
 	the menu */
 .main-content.mobile {
 	width: 100vw;
-	overflow-x: scroll;
+	overflow-x: auto;
 }
 
 ion-menu {
