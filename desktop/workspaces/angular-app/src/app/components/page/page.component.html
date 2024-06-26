@@ -72,8 +72,6 @@
 		no-border
 		*ngIf="(mobile.isMobile$ | async) && (footer.footerComponent$ | async)"
 	>
-		<ng-container
-			*ngComponentOutlet="footer.footerComponent$ | async"
-		></ng-container>
+		<ng-container #footerContainer></ng-container>
 	</ion-footer>
 </ion-app>

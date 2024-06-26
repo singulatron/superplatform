@@ -15,8 +15,11 @@ import {
 	OnChanges,
 	SimpleChanges,
 	ChangeDetectionStrategy,
+	ViewChild,
+	ViewContainerRef,
+	ComponentRef,
 } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subscription, filter } from 'rxjs';
 
 import { ChangeDetectorRef } from '@angular/core';
 import { LocaltronService } from '../../services/localtron.service';
@@ -41,6 +44,7 @@ import {
 } from './chat-input/chat-input.component';
 import { MobileService } from '../../services/mobile.service';
 import { FooterService } from '../../services/footer.service';
+import { Router, NavigationEnd } from '@angular/router';
 
 const defaultThreadName = 'New chat';
 
@@ -78,6 +82,12 @@ export class ChatBoxComponent implements OnChanges {
 	public messageCurrentlyStreamed: ChatMessage = {} as any;
 	private subscriptions: Subscription[] = [];
 
+	@ViewChild('footerContainer', { read: ViewContainerRef, static: true })
+	container!: ViewContainerRef;
+
+	// eslint-disable-next-line
+	private footerComponentRef: ComponentRef<ChatInputComponent> | null = null;
+
 	constructor(
 		private localtron: LocaltronService,
 		public lapi: ElectronAppService,
@@ -85,16 +95,41 @@ export class ChatBoxComponent implements OnChanges {
 		private promptService: PromptService,
 		private chatService: ChatService,
 		public mobile: MobileService,
-		public footer: FooterService
+		public footer: FooterService,
+
+		private router: Router
 	) {}
 
+	getFooterComponent(): ComponentRef<ChatInputComponent> {
+		if (this.footerComponentRef) {
+			return this.footerComponentRef;
+		}
+
+		this.footerComponentRef =
+			this.container.createComponent(ChatInputComponent);
+
+		const chatInputComponentInstance = this.footerComponentRef.instance;
+
+		chatInputComponentInstance.sends.subscribe((event) => {
+			this.handleSend(event);
+		});
+
+		return this.footerComponentRef;
+	}
+
 	async ngOnInit() {
+		if (this.router.url === '/chat' && this.mobile.getMobileStatus()) {
+			this.footer.updateFooterComponent(this.getFooterComponent());
+		}
+
 		this.subscriptions.push(
-			this.mobile.isMobile$.subscribe((isMobile) => {
-				if (isMobile) {
-					this.footer.updateFooterComponent(ChatInputComponent);
-				}
-			})
+			this.router.events
+				.pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
+				.subscribe((navEnd) => {
+					if (navEnd.url === '/chat' && this.mobile.getMobileStatus()) {
+						this.footer.updateFooterComponent(this.getFooterComponent());
+					}
+				})
 		);
 
 		if (this.thread?.id) {
@@ -134,6 +169,8 @@ export class ChatBoxComponent implements OnChanges {
 			threadId: this.thread.id as string,
 			modelId: emitted.modelId as string,
 		});
+
+		this.cd.markForCheck();
 	}
 
 	streamSubscription!: Subscription;
