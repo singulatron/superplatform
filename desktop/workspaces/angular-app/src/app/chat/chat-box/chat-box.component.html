@@ -36,7 +36,7 @@
 				<!-- Why 3.25 rem? To align with the icon with in the message component.
 						Admittedly suboptimal. @todo fix -->
 				<div
-					*ngIf="!(ui.isMobile$ | async)"
+					*ngIf="!(mobile.isMobile$ | async)"
 					style="width: 3.25rem; flex-shrink: 0"
 				></div>
 				<div style="flex: 1">
@@ -58,7 +58,7 @@
 		</ng-container>
 	</div>
 
-	<div *ngIf="!(ui.isMobile$ | async)" class="footer">
+	<div *ngIf="!(mobile.isMobile$ | async)" class="footer">
 		<app-chat-input (sends)="handleSend($event)"></app-chat-input>
 	</div>
 </div>

@@ -25,6 +25,8 @@ import {
 	LOCALTRON_SERVICE_CONFIG,
 	LocaltronService,
 } from './app/services/localtron.service';
+import { MobileService } from './app/services/mobile.service';
+import { FooterService } from './app/services/footer.service';
 
 if (environment.production) {
 	enableProdMode();
@@ -33,6 +35,8 @@ if (environment.production) {
 async function start() {
 	await bootstrapApplication(AppComponent, {
 		providers: [
+			MobileService,
+			FooterService,
 			provideExperimentalZonelessChangeDetection(),
 			importProvidersFrom(
 				BrowserModule,

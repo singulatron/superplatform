@@ -39,7 +39,8 @@ import {
 	ChatInputComponent,
 	SendOutput,
 } from './chat-input/chat-input.component';
-import { UiService } from '../../services/ui.service';
+import { MobileService } from '../../services/mobile.service';
+import { FooterService } from '../../services/footer.service';
 
 const defaultThreadName = 'New chat';
 
@@ -83,15 +84,16 @@ export class ChatBoxComponent implements OnChanges {
 		private cd: ChangeDetectorRef,
 		private promptService: PromptService,
 		private chatService: ChatService,
-		public ui: UiService
+		public mobile: MobileService,
+		public footer: FooterService
 	) {}
 
 	async ngOnInit() {
-		this.ui.isMobile$.subscribe((isMobile) => {
+		this.mobile.isMobile$.subscribe((isMobile) => {
 			if (isMobile) {
-				this.ui.setFooterComponent(ChatInputComponent);
+				this.footer.updateFooterComponent(ChatInputComponent);
 			} else {
-				this.ui.clearFooterComponent();
+				this.footer.removeFooterComponent();
 			}
 		});
 
@@ -143,7 +145,7 @@ export class ChatBoxComponent implements OnChanges {
 			s.unsubscribe();
 		}
 
-		this.ui.clearFooterComponent();
+		this.footer.removeFooterComponent();
 	}
 
 	async ngOnChanges(changes: SimpleChanges): Promise<void> {
