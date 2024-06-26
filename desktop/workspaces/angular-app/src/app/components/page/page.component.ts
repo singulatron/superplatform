@@ -108,7 +108,7 @@ export class PageComponent implements AfterContentInit {
 		});
 	}
 
-	ionViewWillLeave() {
+	ionViewDidLeave() {
 		for (const s of this.subscriptions) {
 			s.unsubscribe();
 		}
