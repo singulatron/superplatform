@@ -91,6 +91,9 @@ export class PageComponent implements AfterContentInit {
 		this.subscriptions.push(
 			this.router.events.subscribe((event) => {
 				if (event instanceof NavigationStart) {
+					// Footers get removed here, but they are inserted by
+					// components because they might want to do plumbing
+					// like setting up @Output() subscriptions.
 					this.footer.removeFooterComponent();
 					this.cd.markForCheck();
 				}
