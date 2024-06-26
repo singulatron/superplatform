@@ -1,8 +1,7 @@
-import { Injectable, Type, ComponentRef } from '@angular/core';
+import { Injectable,  ComponentRef } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
-import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { Router, ActivatedRoute, NavigationStart } from '@angular/router';
 import { map, filter } from 'rxjs/operators';
-import { ChatInputComponent } from '../chat/chat-box/chat-input/chat-input.component';
 
 @Injectable({
 	providedIn: 'root',
@@ -12,7 +11,7 @@ export class FooterService {
 
 	// eslint-disable-next-line
 	private footerComponentRef: ComponentRef<any> | null = null;
-	footerComponentSubject = new ReplaySubject<Type<any> | null>(1);
+	footerComponentSubject = new ReplaySubject<ComponentRef<any> | null>(1);
 	footerComponent$ = this.footerComponentSubject.asObservable();
 
 	constructor(
@@ -22,19 +21,13 @@ export class FooterService {
 		// Since ionic lifecycle hooks dont seem to
 		// be triggering properly - nor ngOnDestroy -
 		// we need to do this hack here.
-		// Ideally we would do something like this
-		// in the chat box component:
-		//  this.subscriptions.push(
-		//  	this.mobile.isMobile$.subscribe((isMobile) => {
-		//  		if (isMobile) {
-		//  			this.footer.updateFooterComponent(ChatInputComponent);
-		//  		}
-		//  	})
-		//  );
-		// and then unscubscribe in ngOnDestroy.
+		// We always remove the footer at NavigationStart and then
+		// components can set their own footers when they detect NavigationEnd
+		// on their path. A huge drawback is that components must know
+		// their path.
 		this.router.events
 			.pipe(
-				filter((event) => event instanceof NavigationEnd),
+				filter((event) => event instanceof NavigationStart),
 				map(() => this.activatedRoute),
 				map((route) => {
 					while (route.firstChild) route = route.firstChild;
@@ -43,12 +36,8 @@ export class FooterService {
 				filter((route) => route.outlet === 'primary'),
 				map((route) => route.snapshot.url.join('/'))
 			)
-			.subscribe((path) => {
-				if (path === 'chat') {
-					this.updateFooterComponent(ChatInputComponent);
-				} else {
-					this.removeFooterComponent();
-				}
+			.subscribe(() => {
+				this.removeFooterComponent();
 			});
 	}
 
@@ -56,9 +45,9 @@ export class FooterService {
 		return this.hasFooter;
 	}
 
-	updateFooterComponent(componentType: Type<any> | null) {
+	updateFooterComponent(componentInstance: ComponentRef<any> | null) {
 		this.hasFooter = true;
-		this.footerComponentSubject.next(componentType);
+		this.footerComponentSubject.next(componentInstance);
 	}
 
 	removeFooterComponent() {
