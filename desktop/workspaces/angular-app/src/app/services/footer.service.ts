@@ -4,8 +4,7 @@ import { ReplaySubject } from 'rxjs';
 @Injectable({
 	providedIn: 'root',
 })
-export class UiService {
-	private isMobile = false;
+export class FooterService {
 	private hasFooter = false;
 
 	// eslint-disable-next-line
@@ -13,19 +12,7 @@ export class UiService {
 	footerComponentSubject = new ReplaySubject<Type<any> | null>(1);
 	footerComponent$ = this.footerComponentSubject.asObservable();
 
-	isMobileSubject = new ReplaySubject<boolean>(1);
-	isMobile$ = this.isMobileSubject.asObservable();
-
 	constructor() {}
-
-	setIsMobile(isMobile: boolean) {
-		this.isMobile = isMobile;
-		this.isMobileSubject.next(isMobile);
-	}
-
-	getIsMobile(): boolean {
-		return this.isMobile;
-	}
 
 	getHasFooter(): boolean {
 		return this.hasFooter;

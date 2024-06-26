@@ -34,7 +34,7 @@
 		</ion-content>
 	</ion-menu>
 
-	<ion-header *ngIf="ui.isMobile$ | async">
+	<ion-header *ngIf="mobile.isMobile$ | async">
 		<ion-toolbar>
 			<ion-buttons *ngIf="menuEnabled" slot="start">
 				<ion-menu-button
@@ -48,7 +48,7 @@
 
 	<ion-content id="main-content-{{ id }}">
 		<div class="flex-container">
-			<ng-container *ngIf="!(ui.isMobile$ | async)">
+			<ng-container *ngIf="!(mobile.isMobile$ | async)">
 				<div
 					*ngFor="let column of columns; let i = index"
 					class="column"
@@ -57,19 +57,23 @@
 					<ng-container [ngTemplateOutlet]="column"></ng-container>
 				</div>
 			</ng-container>
-			<div class="main-content" [class.mobile]="ui.getIsMobile()" [class.desktop]="!ui.getIsMobile()">
+			<div
+				class="main-content"
+				[class.mobile]="mobile.getIsMobile()"
+				[class.desktop]="!mobile.getIsMobile()"
+			>
 				<ng-container [ngTemplateOutlet]="main"></ng-container>
 			</div>
 		</div>
 	</ion-content>
 
 	<ion-footer
-		[ngClass]="{ 'ion-footer-mobile-padding': ui.getIsMobile() }"
+		[ngClass]="{ 'ion-footer-mobile-padding': mobile.getIsMobile() }"
 		no-border
-		*ngIf="(ui.isMobile$ | async) && (ui.footerComponent$ | async)"
+		*ngIf="(mobile.isMobile$ | async) && (footer.footerComponent$ | async)"
 	>
 		<ng-container
-			*ngComponentOutlet="ui.footerComponent$ | async"
+			*ngComponentOutlet="footer.footerComponent$ | async"
 		></ng-container>
 	</ion-footer>
 </ion-app>

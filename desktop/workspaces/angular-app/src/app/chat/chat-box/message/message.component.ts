@@ -25,7 +25,7 @@ import { LocaltronService } from '../../../services/localtron.service';
 import { MarkdownComponent } from 'ngx-markdown';
 import { IonicModule } from '@ionic/angular';
 import { NgIf, DatePipe, AsyncPipe } from '@angular/common';
-import { UiService } from '../../../services/ui.service';
+import { MobileService } from '../../../services/mobile.service';
 
 @Component({
 	selector: 'app-message',
@@ -40,7 +40,7 @@ export class MessageComponent {
 		private chatService: ChatService,
 		private promptService: PromptService,
 		private localtron: LocaltronService,
-		public ui: UiService
+		public mobile: MobileService
 	) {}
 	hasAsset = false;
 

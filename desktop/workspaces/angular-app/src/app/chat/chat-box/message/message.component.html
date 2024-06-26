@@ -9,7 +9,7 @@
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  -->
 <div
-	*ngIf="!(ui.isMobile$ | async)"
+	*ngIf="!(mobile.isMobile$ | async)"
 	class="message-block-wide"
 	style="display: flex; align-items: flex-start"
 >
@@ -74,7 +74,7 @@
 	</div>
 </div>
 
-<div *ngIf="ui.isMobile$ | async" class="message-block-narrow">
+<div *ngIf="mobile.isMobile$ | async" class="message-block-narrow">
 	<div class="main-content" style="flex-grow: 1; position: relative">
 		<div class="header" style="display: flex; align-items: center">
 			<div class="left-column">

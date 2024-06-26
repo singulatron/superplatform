@@ -23,7 +23,8 @@ import { CommonModule, NgFor } from '@angular/common';
 import { IonicModule, IonMenu } from '@ionic/angular';
 import { RouterLink } from '@angular/router';
 import { NgStyle, NgIf, NgClass } from '@angular/common';
-import { UiService } from '../../services/ui.service';
+import { MobileService } from '../../services/mobile.service';
+import { FooterService } from '../../services/footer.service';
 import { LocaltronService } from '../../services/localtron.service';
 
 @Component({
@@ -64,7 +65,8 @@ export class PageComponent implements AfterContentInit {
 	main: any;
 
 	constructor(
-		public ui: UiService,
+		public mobile: MobileService,
+		public footer: FooterService,
 		private cd: ChangeDetectorRef,
 		private localtron: LocaltronService
 	) {
@@ -74,13 +76,13 @@ export class PageComponent implements AfterContentInit {
 
 	@HostListener('window:resize', ['$event'])
 	onResize() {
-		this.ui.setIsMobile(window.innerWidth < this.breakpoint);
+		this.mobile.setIsMobile(window.innerWidth < this.breakpoint);
 	}
 
 	ngOnInit() {
-		this.ui.setIsMobile(window.innerWidth < this.breakpoint);
-		this.ui.footerComponent$.subscribe(() => {
-			this.cd.detectChanges()
+		this.mobile.setIsMobile(window.innerWidth < this.breakpoint);
+		this.footer.footerComponent$.subscribe(() => {
+			this.cd.detectChanges();
 		});
 	}
 
@@ -90,7 +92,7 @@ export class PageComponent implements AfterContentInit {
 	}
 
 	getColumnWidth(index: number): string {
-		if (this.ui.getIsMobile() && this.mobileColumnWidths[index]) {
+		if (this.mobile.getIsMobile() && this.mobileColumnWidths[index]) {
 			return this.mobileColumnWidths[index];
 		}
 		return this.columnWidths[index] || 'auto';
