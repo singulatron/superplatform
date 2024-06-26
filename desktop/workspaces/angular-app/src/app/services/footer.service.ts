@@ -44,12 +44,9 @@ export class FooterService {
 				map((route) => route.snapshot.url.join('/'))
 			)
 			.subscribe((path) => {
-				console.log('path is', path);
 				if (path === 'chat') {
-					console.log('updating footer to ChatInputComponent');
 					this.updateFooterComponent(ChatInputComponent);
 				} else {
-					console.log('removing footer');
 					this.removeFooterComponent();
 				}
 			});
