@@ -18,7 +18,6 @@ import {
 	ViewContainerRef,
 	ComponentFactoryResolver,
 	AfterViewInit,
-	OnDestroy,
 	OnInit,
 	ViewEncapsulation,
 } from '@angular/core';
@@ -50,7 +49,7 @@ export interface SendOutput {
 	encapsulation: ViewEncapsulation.None,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChatInputComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ChatInputComponent implements OnInit, AfterViewInit {
 	private model: Model | undefined;
 	private models: Model[] = [];
 	public message: string = '';
@@ -87,7 +86,7 @@ export class ChatInputComponent implements OnInit, AfterViewInit, OnDestroy {
 		this.loadCharacterModal();
 	}
 
-	ngOnDestroy() {
+	ionViewWillLeave() {
 		for (const sub of this.subscriptions) {
 			sub.unsubscribe();
 		}
