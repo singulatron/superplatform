@@ -1,9 +1,18 @@
+/**
+ * @license
+ * Copyright (c) The Authors (see the AUTHORS file)
+ *
+ * This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3) for personal, non-commercial use.
+ * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
+ *
+ * For commercial use, a separate license must be obtained by purchasing from The Authors.
+ * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
+ */
 package sqlstore
 
 import (
 	"database/sql"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"reflect"
 	"strings"
@@ -14,6 +23,8 @@ import (
 	"github.com/lib/pq"
 	_ "github.com/lib/pq"
 	"github.com/singulatron/singulatron/localtron/datastore"
+
+	"github.com/pkg/errors"
 )
 
 type PlaceholderStyle int
@@ -34,7 +45,7 @@ type SQLStore[T datastore.Row] struct {
 	db               *DebugDB
 	mu               sync.RWMutex
 	inTransaction    bool
-	tx               *sql.Tx
+	tx               *DebugTx
 	placeholderStyle PlaceholderStyle
 	driverName       string
 	tableName        string
@@ -43,7 +54,7 @@ type SQLStore[T datastore.Row] struct {
 func NewSQLStore[T datastore.Row](driverName, connStr string, tableName string, debug bool) (*SQLStore[T], error) {
 	db, err := sql.Open(driverName, connStr)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "error opening sql db")
 	}
 
 	placeholderStyle := DollarSignPlaceholder
@@ -63,8 +74,8 @@ func NewSQLStore[T datastore.Row](driverName, connStr string, tableName string, 
 	}
 	sstore.db.Debug = debug
 
-	if err := sstore.createTable(db, tableName); err != nil {
-		panic(err)
+	if err := sstore.createTable(sstore.db, tableName); err != nil {
+		return nil, errors.Wrap(err, "error creating table")
 	}
 
 	var obj T
@@ -94,7 +105,12 @@ func (s *SQLStore[T]) Create(obj T) error {
 	if err != nil {
 		return err
 	}
-	_, err = s.db.Exec(query, values...)
+
+	if s.inTransaction {
+		_, err = s.tx.Exec(query, values...)
+	} else {
+		_, err = s.db.Exec(query, values...)
+	}
 	if err != nil {
 		if strings.Contains(err.Error(), "duplicate key value") {
 			return datastore.ErrEntryAlreadyExists
@@ -109,26 +125,30 @@ func (s *SQLStore[T]) CreateMany(objs []T) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	// tx, err := s.db.Begin()
-	// if err != nil {
-	// 	return err
-	// }
+	tx, err := s.db.Begin()
+	if err != nil {
+		return errors.Wrap(err, "error beginning transacion in create many")
+	}
 	for _, obj := range objs {
 		query, values, err := s.buildInsertQuery(obj)
 		if err != nil {
-			return err
+			return errors.Wrap(err, "error building insert query in create many")
 		}
-		_, err = s.db.Exec(query, values...)
+		if s.inTransaction {
+			_, err = s.tx.Exec(query, values...)
+		} else {
+			_, err = s.db.Exec(query, values...)
+		}
 		if err != nil {
-			// tx.Rollback()
+			tx.Rollback()
 			if strings.Contains(err.Error(), "duplicate key value") {
 				return datastore.ErrEntryAlreadyExists
 			}
-			return err
+			return errors.Wrap(err, "error executing query in create many")
 		}
 	}
-	// return tx.Commit()
-	return nil
+
+	return tx.Commit()
 }
 
 func (s *SQLStore[T]) Upsert(obj T) error {
@@ -137,9 +157,15 @@ func (s *SQLStore[T]) Upsert(obj T) error {
 
 	query, values, err := s.buildUpsertQuery(obj)
 	if err != nil {
-		return err
+		return errors.Wrap(err, "error building query in upsert")
 	}
-	_, err = s.db.Exec(query, values...)
+
+	if s.inTransaction {
+		_, err = s.tx.Exec(query, values...)
+	} else {
+		_, err = s.db.Exec(query, values...)
+	}
+
 	return err
 }
 
@@ -147,23 +173,22 @@ func (s *SQLStore[T]) UpsertMany(objs []T) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	// tx, err := s.db.Begin()
-	// if err != nil {
-	// 	return err
-	// }
+	tx, err := s.db.Begin()
+	if err != nil {
+		return errors.Wrap(err, "error beginning transaction in upsert many")
+	}
 	for _, obj := range objs {
 		query, values, err := s.buildUpsertQuery(obj)
 		if err != nil {
-			return err
+			return errors.Wrap(err, "error building query in upsert many")
 		}
-		_, err = s.db.Exec(query, values...)
+		_, err = tx.Exec(query, values...)
 		if err != nil {
-			//tx.Rollback()
-			return err
+			tx.Rollback()
+			return errors.Wrap(err, "error executing query in upsert many")
 		}
 	}
-	//return tx.Commit()
-	return nil
+	return tx.Commit()
 }
 
 func (s *SQLStore[T]) Query(condition datastore.Condition, conditions ...datastore.Condition) datastore.QueryBuilder[T] {
@@ -183,11 +208,13 @@ func (s *SQLStore[T]) BeginTransaction() (datastore.DataStore[T], error) {
 
 	tx, err := s.db.Begin()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "error beginning transaction")
 	}
 
 	return &SQLStore[T]{
 		db:            s.db,
+		tableName:     s.tableName,
+		driverName:    s.driverName,
 		inTransaction: true,
 		tx:            tx,
 	}, nil
@@ -200,7 +227,7 @@ func (s *SQLStore[T]) Commit() error {
 
 	err := s.tx.Commit()
 	if err != nil {
-		return err
+		return errors.Wrap(err, "error committing transaction")
 	}
 
 	s.inTransaction = false
@@ -208,6 +235,10 @@ func (s *SQLStore[T]) Commit() error {
 }
 
 func (s *SQLStore[T]) Rollback() error {
+	defer func() {
+		s.inTransaction = false
+	}()
+
 	if !s.inTransaction {
 		return errors.New("not in a transaction")
 	}
@@ -217,7 +248,6 @@ func (s *SQLStore[T]) Rollback() error {
 		return err
 	}
 
-	s.inTransaction = false
 	return nil
 }
 
@@ -226,7 +256,11 @@ func (s *SQLStore[T]) IsInTransaction() bool {
 }
 
 func (s *SQLStore[T]) convertParam(param any) (any, error) {
-	switch reflect.TypeOf(param).Kind() {
+	t := reflect.TypeOf(param)
+
+	switch t.Kind() {
+	case reflect.Ptr:
+		return s.convertParam(reflect.ValueOf(param).Elem().Interface())
 	case reflect.Struct:
 		if reflect.TypeOf(param) == reflect.TypeOf(time.Time{}) {
 			return param, nil
@@ -246,6 +280,8 @@ func (s *SQLStore[T]) convertParam(param any) (any, error) {
 			return string(bs), nil
 		case DriverPostGRES:
 			return pq.Array(param), nil
+		default:
+			return nil, fmt.Errorf("unrecognized driver: '%v'", s.driverName)
 		}
 	}
 
@@ -362,12 +398,12 @@ func (q *SQLQueryBuilder[T]) Select(fields ...string) datastore.QueryBuilder[T] 
 func (q *SQLQueryBuilder[T]) Find() ([]T, error) {
 	query, params, err := q.buildSelectQuery()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "error building select query")
 	}
 
 	rows, err := q.store.db.Query(query, params...)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "error querying")
 	}
 	defer rows.Close()
 
@@ -398,7 +434,7 @@ func (q *SQLQueryBuilder[T]) Find() ([]T, error) {
 
 		err := rows.Scan(fields...)
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "error scanning")
 		}
 
 		for i := 0; i < tType.NumField(); i++ {
@@ -419,7 +455,7 @@ func (q *SQLQueryBuilder[T]) Find() ([]T, error) {
 					newField := reflect.New(fieldType).Interface()
 					err := json.Unmarshal([]byte(str.String), newField)
 					if err != nil {
-						return nil, err
+						return nil, errors.Wrap(err, "error unmarshaling struct")
 					}
 					field.Set(reflect.ValueOf(newField).Elem())
 				}
@@ -444,7 +480,7 @@ func (q *SQLQueryBuilder[T]) FindOne() (T, bool, error) {
 
 	query, params, err := q.buildSelectQuery()
 	if err != nil {
-		return obj, false, err
+		return obj, false, errors.Wrap(err, "error building select query when finding one")
 	}
 	query += " LIMIT 1"
 
@@ -456,7 +492,7 @@ func (q *SQLQueryBuilder[T]) FindOne() (T, bool, error) {
 			var empty T
 			return empty, false, nil
 		}
-		return obj, false, err
+		return obj, false, errors.Wrap(err, "error scanning when finding one")
 	}
 
 	return obj, true, nil
@@ -537,7 +573,7 @@ func (q *SQLQueryBuilder[T]) buildSelectQuery() (string, []interface{}, error) {
 	}
 
 	if q.orderField != "" {
-		query += fmt.Sprintf(" ORDER BY %s", q.orderField)
+		query += fmt.Sprintf(" ORDER BY %s", q.store.fieldName(q.orderField))
 		if q.orderDesc {
 			query += " DESC"
 		}

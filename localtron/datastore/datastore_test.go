@@ -51,7 +51,7 @@ func TestAll(t *testing.T) {
 			table := uuid.New().String()
 			table = strings.Replace(table, "-", "", -1)[0:10]
 			store, err := sqlstore.NewSQLStore[TestObject](
-				"postgres",
+				sqlstore.DriverPostGRES,
 				"postgres://postgres:mysecretpassword@localhost:5432/mydatabase?sslmode=disable",
 				"table_"+table,
 				true,
