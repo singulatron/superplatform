@@ -21,7 +21,7 @@ It uses no third party APIs, everything runs on your computer(s).
 - [x] User management: multi-user support, role-based access control
 - [ ] <- [IN PROGRESS] Supporting different database backends (local files, SQL and many more) and other distributed primitives
 - [ ] Chat with other users in your organization in Singulatron
-- [ ] Running, scheduling applications built on top of Singulatron
+- [ ] Running, scheduling mini-(or not so mini)-apps built on top of Singulatron
 - [ ] Improving this roadmap : )
 
 ![Run](https://singulatron.com/assets/chat.png?refresh=1)
