@@ -17,8 +17,8 @@ It uses no third party APIs, everything runs on your computer(s).
 
 ## Roadmap
 
-- [ x ] AI functionality: prompting, threads, prompt queues, download manager
-- [ x ] User management: multi-user support, role-based access control
+- [x] AI functionality: prompting, threads, prompt queues, download manager
+- [x] User management: multi-user support, role-based access control
 - [ in progress ] Supporting different database backends (local files, SQL and many more) and other distributed primitives
 - [ ] Chat with other users in your organization in Singulatron
 - [ ] Running, scheduling applications built on top of Singulatron
