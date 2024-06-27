@@ -8,6 +8,7 @@ import (
 	"reflect"
 	"strings"
 	"sync"
+	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/lib/pq"
@@ -202,6 +203,9 @@ func (s *SQLStore[T]) IsInTransaction() bool {
 func (s *SQLStore[T]) convertParam(param any) (any, error) {
 	switch reflect.TypeOf(param).Kind() {
 	case reflect.Struct:
+		if reflect.TypeOf(param) == reflect.TypeOf(time.Time{}) {
+			return param, nil
+		}
 		bs, err := json.Marshal(param)
 		if err != nil {
 			return nil, err
@@ -324,7 +328,6 @@ func (q *SQLQueryBuilder[T]) Select(fields ...string) datastore.QueryBuilder[T] 
 	q.selectFields = fields
 	return q
 }
-
 func (q *SQLQueryBuilder[T]) Find() ([]T, error) {
 	query, params := q.buildSelectQuery()
 
@@ -335,13 +338,59 @@ func (q *SQLQueryBuilder[T]) Find() ([]T, error) {
 	defer rows.Close()
 
 	var result []T
+	tType := reflect.TypeOf((*T)(nil)).Elem()
+
 	for rows.Next() {
-		var obj T
-		err := rows.Scan(&obj)
+		obj := reflect.New(tType).Elem()
+		fields := make([]interface{}, tType.NumField())
+
+		for i := 0; i < tType.NumField(); i++ {
+			field := obj.Field(i)
+			fieldType := field.Type()
+
+			switch {
+			case fieldType.Kind() == reflect.Slice && fieldType.Elem().Kind() == reflect.String:
+				var str sql.NullString
+				fields[i] = &str
+			case fieldType.Kind() == reflect.Struct && fieldType != reflect.TypeOf(time.Time{}):
+				var str sql.NullString
+				fields[i] = &str
+			default:
+				fields[i] = field.Addr().Interface()
+			}
+		}
+
+		err := rows.Scan(fields...)
 		if err != nil {
 			return nil, err
 		}
-		result = append(result, obj)
+
+		for i := 0; i < tType.NumField(); i++ {
+			field := obj.Field(i)
+			fieldType := field.Type()
+
+			switch {
+			case fieldType.Kind() == reflect.Slice && fieldType.Elem().Kind() == reflect.String:
+				str, ok := fields[i].(*sql.NullString)
+				if ok && str.Valid {
+					field.Set(reflect.ValueOf(strings.Split(str.String, ",")))
+				} else {
+					field.Set(reflect.Zero(fieldType))
+				}
+			case fieldType.Kind() == reflect.Struct && fieldType != reflect.TypeOf(time.Time{}):
+				str, ok := fields[i].(*sql.NullString)
+				if ok && str.Valid {
+					newField := reflect.New(fieldType).Interface()
+					err := json.Unmarshal([]byte(str.String), newField)
+					if err != nil {
+						return nil, err
+					}
+					field.Set(reflect.ValueOf(newField).Elem())
+				}
+			}
+		}
+
+		result = append(result, obj.Interface().(T))
 	}
 
 	return result, nil
