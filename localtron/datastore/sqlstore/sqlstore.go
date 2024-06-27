@@ -2,6 +2,7 @@ package sqlstore
 
 import (
 	"database/sql"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"reflect"
@@ -9,6 +10,7 @@ import (
 	"sync"
 
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/lib/pq"
 	_ "github.com/lib/pq"
 	"github.com/singulatron/singulatron/localtron/datastore"
 )
@@ -20,15 +22,23 @@ const (
 	DollarSignPlaceholder
 )
 
+type Driver string
+
+const (
+	DriverMySQL    = "mysql"
+	DriverPostGRES = "postgres"
+)
+
 type SQLStore[T datastore.Row] struct {
 	db               *sql.DB
 	mu               sync.RWMutex
 	inTransaction    bool
 	tx               *sql.Tx
 	placeholderStyle PlaceholderStyle
+	driverName       string
 }
 
-func NewSQLStore[T datastore.Row](driverName, connStr string) (*SQLStore[T], error) {
+func NewSQLStore[T datastore.Row](driverName, connStr string, tableName string) (*SQLStore[T], error) {
 	db, err := sql.Open(driverName, connStr)
 	if err != nil {
 		return nil, err
@@ -39,18 +49,28 @@ func NewSQLStore[T datastore.Row](driverName, connStr string) (*SQLStore[T], err
 		placeholderStyle = QuestionMarkPlaceholder
 	}
 
-	return &SQLStore[T]{
+	sstore := &SQLStore[T]{
+		driverName:       driverName,
 		placeholderStyle: placeholderStyle,
 		db:               db,
-	}, nil
+	}
+
+	if err := sstore.createTable(db, tableName); err != nil {
+		panic(err)
+	}
+
+	return sstore, nil
 }
 
 func (s *SQLStore[T]) Create(obj T) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	query := buildInsertQuery(obj)
-	_, err := s.db.Exec(query)
+	query, values, err := s.buildInsertQuery(obj)
+	if err != nil {
+		return err
+	}
+	_, err = s.db.Exec(query, values...)
 	if err != nil {
 		if strings.Contains(err.Error(), "duplicate key value") {
 			return datastore.ErrEntryAlreadyExists
@@ -70,8 +90,11 @@ func (s *SQLStore[T]) CreateMany(objs []T) error {
 		return err
 	}
 	for _, obj := range objs {
-		query := buildInsertQuery(obj)
-		_, err = tx.Exec(query)
+		query, values, err := s.buildInsertQuery(obj)
+		if err != nil {
+			return err
+		}
+		_, err = tx.Exec(query, values...)
 		if err != nil {
 			tx.Rollback()
 			if strings.Contains(err.Error(), "duplicate key value") {
@@ -87,8 +110,11 @@ func (s *SQLStore[T]) Upsert(obj T) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	query := buildUpsertQuery(obj)
-	_, err := s.db.Exec(query)
+	query, values, err := s.buildUpsertQuery(obj)
+	if err != nil {
+		return err
+	}
+	_, err = s.db.Exec(query, values...)
 	return err
 }
 
@@ -101,8 +127,11 @@ func (s *SQLStore[T]) UpsertMany(objs []T) error {
 		return err
 	}
 	for _, obj := range objs {
-		query := buildUpsertQuery(obj)
-		_, err = tx.Exec(query)
+		query, values, err := s.buildUpsertQuery(obj)
+		if err != nil {
+			return err
+		}
+		_, err = tx.Exec(query, values...)
 		if err != nil {
 			tx.Rollback()
 			return err
@@ -170,7 +199,31 @@ func (s *SQLStore[T]) IsInTransaction() bool {
 	return s.inTransaction
 }
 
-func buildInsertQuery[T datastore.Row](obj T) string {
+func (s *SQLStore[T]) convertParam(param any) (any, error) {
+	switch reflect.TypeOf(param).Kind() {
+	case reflect.Struct:
+		bs, err := json.Marshal(param)
+		if err != nil {
+			return nil, err
+		}
+		return string(bs), nil
+	case reflect.Slice:
+		switch s.driverName {
+		case DriverMySQL:
+			bs, err := json.Marshal(param)
+			if err != nil {
+				return nil, err
+			}
+			return string(bs), nil
+		case DriverPostGRES:
+			return pq.Array(param), nil
+		}
+	}
+
+	return param, nil
+}
+
+func (s *SQLStore[T]) buildInsertQuery(obj T) (string, []interface{}, error) {
 	val := reflect.ValueOf(obj)
 	typ := val.Type()
 
@@ -180,18 +233,30 @@ func buildInsertQuery[T datastore.Row](obj T) string {
 	}
 
 	var fields []string
-	var values []string
+	var placeholders []string
+	var params []interface{}
 
 	for i := 0; i < val.NumField(); i++ {
 		field := typ.Field(i)
 		fields = append(fields, strings.ToLower(field.Name))
-		values = append(values, fmt.Sprintf("'%v'", val.Field(i).Interface()))
+		placeholders = append(placeholders, fmt.Sprintf("$%d", i+1))
+		param := val.Field(i).Interface()
+		param, err := s.convertParam(param)
+		if err != nil {
+			return "", nil, err
+		}
+		params = append(params, param)
 	}
 
-	return fmt.Sprintf("INSERT INTO %s (%s) VALUES (%s);", strings.ToLower(typ.Name()), strings.Join(fields, ", "), strings.Join(values, ", "))
+	query := fmt.Sprintf("INSERT INTO %s (%s) VALUES (%s);",
+		strings.ToLower(typ.Name()),
+		strings.Join(fields, ", "),
+		strings.Join(placeholders, ", "))
+
+	return query, params, nil
 }
 
-func buildUpsertQuery[T datastore.Row](obj T) string {
+func (s *SQLStore[T]) buildUpsertQuery(obj T) (string, []interface{}, error) {
 	val := reflect.ValueOf(obj)
 	typ := val.Type()
 
@@ -201,25 +266,32 @@ func buildUpsertQuery[T datastore.Row](obj T) string {
 	}
 
 	var fields []string
-	var values []string
+	var placeholders []string
 	var updateFields []string
+	var params []interface{}
 
 	for i := 0; i < val.NumField(); i++ {
 		field := typ.Field(i)
 		fieldName := strings.ToLower(field.Name)
-		fieldValue := val.Field(i).Interface()
-
 		fields = append(fields, fieldName)
-		values = append(values, fmt.Sprintf("'%v'", fieldValue))
+		placeholders = append(placeholders, fmt.Sprintf("$%d", i+1))
+		param := val.Field(i).Interface()
+		param, err := s.convertParam(param)
+		if err != nil {
+			return "", nil, err
+		}
+		params = append(params, param)
 		updateFields = append(updateFields, fmt.Sprintf("%s=EXCLUDED.%s", fieldName, fieldName))
 	}
 
-	return fmt.Sprintf("INSERT INTO %s (%s) VALUES (%s) ON CONFLICT (%s) DO UPDATE SET %s;",
+	query := fmt.Sprintf("INSERT INTO %s (%s) VALUES (%s) ON CONFLICT (%s) DO UPDATE SET %s;",
 		strings.ToLower(typ.Name()),
 		strings.Join(fields, ", "),
-		strings.Join(values, ", "),
+		strings.Join(placeholders, ", "),
 		strings.ToLower(typ.Field(0).Name),
 		strings.Join(updateFields, ", "))
+
+	return query, params, nil
 }
 
 type SQLQueryBuilder[T datastore.Row] struct {
@@ -313,8 +385,11 @@ func (q *SQLQueryBuilder[T]) Update(obj T) error {
 }
 
 func (q *SQLQueryBuilder[T]) Upsert(obj T) error {
-	query := buildUpsertQuery(obj)
-	_, err := q.store.db.Exec(query)
+	query, values, err := q.store.buildUpsertQuery(obj)
+	if err != nil {
+		return err
+	}
+	_, err = q.store.db.Exec(query, values...)
 	return err
 }
 
@@ -325,10 +400,11 @@ func (q *SQLQueryBuilder[T]) UpdateFields(fields map[string]interface{}) error {
 }
 
 func (q *SQLQueryBuilder[T]) Delete() error {
-	query := q.buildDeleteQuery()
-	_, err := q.store.db.Exec(query)
+	query, values := q.buildDeleteQuery()
+	_, err := q.store.db.Exec(query, values...)
 	return err
 }
+
 func (q *SQLQueryBuilder[T]) buildSelectQuery() (string, []interface{}) {
 	var conditions []string
 	var params []interface{}
@@ -430,11 +506,28 @@ func (q *SQLQueryBuilder[T]) buildUpdateFieldsQuery(fields map[string]interface{
 	return query
 }
 
-func (q *SQLQueryBuilder[T]) buildDeleteQuery() string {
+func (q *SQLQueryBuilder[T]) buildDeleteQuery() (string, []interface{}) {
 	var conditions []string
+	var params []interface{}
+	paramCounter := 1
+
+	// Define a function for generating placeholders
+	placeholder := func(counter int) string {
+		switch q.store.placeholderStyle {
+		case QuestionMarkPlaceholder:
+			return "?"
+		case DollarSignPlaceholder:
+			return fmt.Sprintf("$%d", counter)
+		default:
+			return "?"
+		}
+	}
+
 	for _, cond := range q.conditions {
 		if cond.Equal != nil {
-			conditions = append(conditions, fmt.Sprintf("%s = '%v'", cond.Equal.FieldName, cond.Equal.Value))
+			conditions = append(conditions, fmt.Sprintf("%s = %s", cond.Equal.FieldName, placeholder(paramCounter)))
+			params = append(params, cond.Equal.Value)
+			paramCounter++
 		}
 	}
 
@@ -443,5 +536,5 @@ func (q *SQLQueryBuilder[T]) buildDeleteQuery() string {
 		query += " WHERE " + strings.Join(conditions, " AND ")
 	}
 
-	return query
+	return query, params
 }

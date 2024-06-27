@@ -12,9 +12,11 @@ package datastore_test
 
 import (
 	"fmt"
+	"strings"
 	"testing"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/singulatron/singulatron/localtron/datastore"
 	localstore "github.com/singulatron/singulatron/localtron/datastore/localstore"
 	"github.com/singulatron/singulatron/localtron/datastore/sqlstore"
@@ -46,7 +48,13 @@ func TestAll(t *testing.T) {
 			return localstore.NewLocalStore[TestObject]("")
 		},
 		"sqlStore": func() datastore.DataStore[TestObject] {
-			store, err := sqlstore.NewSQLStore[TestObject]("postgres", "postgres://postgres:mysecretpassword@localhost:5432/mydatabase?sslmode=disable")
+			table := uuid.New().String()
+			table = strings.Replace(table, "-", "", -1)[0:10]
+			store, err := sqlstore.NewSQLStore[TestObject](
+				"postgres",
+				"postgres://postgres:mysecretpassword@localhost:5432/mydatabase?sslmode=disable",
+				"table_"+table,
+			)
 			assert.NoError(t, err)
 			return store
 		},
