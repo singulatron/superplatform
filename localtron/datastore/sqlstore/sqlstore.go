@@ -37,9 +37,10 @@ type SQLStore[T datastore.Row] struct {
 	tx               *sql.Tx
 	placeholderStyle PlaceholderStyle
 	driverName       string
+	tableName        string
 }
 
-func NewSQLStore[T datastore.Row](driverName, connStr string, tableName string) (*SQLStore[T], error) {
+func NewSQLStore[T datastore.Row](driverName, connStr string, tableName string, debug bool) (*SQLStore[T], error) {
 	db, err := sql.Open(driverName, connStr)
 	if err != nil {
 		return nil, err
@@ -50,17 +51,35 @@ func NewSQLStore[T datastore.Row](driverName, connStr string, tableName string) 
 		placeholderStyle = QuestionMarkPlaceholder
 	}
 
+	if tableName == "" {
+		tableName = reflect.TypeOf(new(T)).Elem().Name()
+	}
+
 	sstore := &SQLStore[T]{
 		driverName:       driverName,
+		tableName:        tableName,
 		placeholderStyle: placeholderStyle,
 		db:               NewDebugDB(db, tableName),
 	}
+	sstore.db.Debug = debug
 
 	if err := sstore.createTable(db, tableName); err != nil {
 		panic(err)
 	}
 
-	return sstore, nil
+	var obj T
+	val := reflect.ValueOf(obj)
+	typ := val.Type()
+	fieldName := sstore.fieldName(typ.Field(0).Name)
+
+	_, err = sstore.db.Exec(fmt.Sprintf("ALTER TABLE %v ADD CONSTRAINT %v_%v_unique UNIQUE (%v);",
+		sstore.tableName,
+		sstore.tableName,
+		fieldName,
+		fieldName,
+	))
+
+	return sstore, err
 }
 
 func (s *SQLStore[T]) SetDebug(debug bool) {
@@ -248,7 +267,7 @@ func (s *SQLStore[T]) buildInsertQuery(obj T) (string, []interface{}, error) {
 
 	for i := 0; i < val.NumField(); i++ {
 		field := typ.Field(i)
-		fields = append(fields, strings.ToLower(field.Name))
+		fields = append(fields, s.fieldName(field.Name))
 		placeholders = append(placeholders, fmt.Sprintf("$%d", i+1))
 		param := val.Field(i).Interface()
 		param, err := s.convertParam(param)
@@ -259,7 +278,7 @@ func (s *SQLStore[T]) buildInsertQuery(obj T) (string, []interface{}, error) {
 	}
 
 	query := fmt.Sprintf("INSERT INTO %s (%s) VALUES (%s);",
-		strings.ToLower(typ.Name()),
+		strings.ToLower(s.tableName),
 		strings.Join(fields, ", "),
 		strings.Join(placeholders, ", "))
 
@@ -280,11 +299,16 @@ func (s *SQLStore[T]) buildUpsertQuery(obj T) (string, []interface{}, error) {
 	var updateFields []string
 	var params []interface{}
 
+	conflictField := s.fieldName(typ.Field(0).Name)
+
 	for i := 0; i < val.NumField(); i++ {
 		field := typ.Field(i)
-		fieldName := strings.ToLower(field.Name)
+		fieldName := s.fieldName(field.Name)
+		if fieldName == conflictField {
+			continue
+		}
 		fields = append(fields, fieldName)
-		placeholders = append(placeholders, fmt.Sprintf("$%d", i+1))
+		placeholders = append(placeholders, fmt.Sprintf("$%d", i))
 		param := val.Field(i).Interface()
 		param, err := s.convertParam(param)
 		if err != nil {
@@ -295,10 +319,10 @@ func (s *SQLStore[T]) buildUpsertQuery(obj T) (string, []interface{}, error) {
 	}
 
 	query := fmt.Sprintf("INSERT INTO %s (%s) VALUES (%s) ON CONFLICT (%s) DO UPDATE SET %s;",
-		strings.ToLower(typ.Name()),
+		strings.ToLower(s.tableName),
 		strings.Join(fields, ", "),
 		strings.Join(placeholders, ", "),
-		strings.ToLower(typ.Field(0).Name),
+		strings.ToLower(s.fieldName(typ.Field(0).Name)),
 		strings.Join(updateFields, ", "))
 
 	return query, params, nil
@@ -499,9 +523,13 @@ func (q *SQLQueryBuilder[T]) buildSelectQuery() (string, []interface{}, error) {
 
 	var query string
 	if len(q.selectFields) > 0 {
-		query = fmt.Sprintf("SELECT %s FROM %s", strings.Join(q.selectFields, ", "), strings.ToLower(reflect.TypeOf(new(T)).Elem().Name()))
+		selectFields := []string{}
+		for _, selectField := range q.selectFields {
+			selectFields = append(selectFields, q.store.fieldName(selectField))
+		}
+		query = fmt.Sprintf("SELECT %s FROM %s", strings.Join(selectFields, ", "), q.store.db.tableName)
 	} else {
-		query = fmt.Sprintf("SELECT * FROM %s", strings.ToLower(reflect.TypeOf(new(T)).Elem().Name()))
+		query = fmt.Sprintf("SELECT * FROM %s", strings.ToLower(q.store.db.tableName))
 	}
 
 	if len(conditions) > 0 {
@@ -536,7 +564,7 @@ func (q *SQLQueryBuilder[T]) buildUpdateQuery(obj T) (string, []any, error) {
 	var sets []string
 	for i := 0; i < val.NumField(); i++ {
 		field := typ.Field(i)
-		sets = append(sets, fmt.Sprintf("%s = '%v'", strings.ToLower(field.Name), val.Field(i).Interface()))
+		sets = append(sets, fmt.Sprintf("%s = '%v'", q.store.fieldName(field.Name), val.Field(i).Interface()))
 	}
 
 	conditions, params, err := q.buildConditions()
@@ -544,7 +572,7 @@ func (q *SQLQueryBuilder[T]) buildUpdateQuery(obj T) (string, []any, error) {
 		return "", nil, err
 	}
 
-	query := fmt.Sprintf("UPDATE %s SET %s", strings.ToLower(typ.Name()), strings.Join(sets, ", "))
+	query := fmt.Sprintf("UPDATE %s SET %s", q.store.tableName, strings.Join(sets, ", "))
 	if len(conditions) > 0 {
 		query += " WHERE " + strings.Join(conditions, " AND ")
 	}
@@ -563,7 +591,7 @@ func (q *SQLQueryBuilder[T]) buildUpdateFieldsQuery(fields map[string]interface{
 		return "", nil, err
 	}
 
-	query := fmt.Sprintf("UPDATE %s SET %s", strings.ToLower(reflect.TypeOf(new(T)).Elem().Name()), strings.Join(sets, ", "))
+	query := fmt.Sprintf("UPDATE %s SET %s", q.store.tableName, strings.Join(sets, ", "))
 	if len(conditions) > 0 {
 		query += " WHERE " + strings.Join(conditions, " AND ")
 	}
@@ -577,7 +605,7 @@ func (q *SQLQueryBuilder[T]) buildDeleteQuery() (string, []interface{}, error) {
 		return "", nil, err
 	}
 
-	query := fmt.Sprintf("DELETE FROM %s", strings.ToLower(reflect.TypeOf(new(T)).Elem().Name()))
+	query := fmt.Sprintf("DELETE FROM %s", q.store.tableName)
 	if len(conditions) > 0 {
 		query += " WHERE " + strings.Join(conditions, " AND ")
 	}

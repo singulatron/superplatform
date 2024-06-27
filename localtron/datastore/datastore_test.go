@@ -54,6 +54,7 @@ func TestAll(t *testing.T) {
 				"postgres",
 				"postgres://postgres:mysecretpassword@localhost:5432/mydatabase?sslmode=disable",
 				"table_"+table,
+				true,
 			)
 			assert.NoError(t, err)
 			return store
@@ -76,7 +77,6 @@ func TestAll(t *testing.T) {
 		for storeName, storeFunc := range stores {
 			t.Run(fmt.Sprintf("%v %v", storeName, testName), func(t *testing.T) {
 				store := storeFunc()
-				store.SetDebug(true)
 				test(t, store)
 			})
 		}

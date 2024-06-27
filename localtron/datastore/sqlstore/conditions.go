@@ -19,7 +19,7 @@ func (q *SQLQueryBuilder[T]) buildConditions() ([]string, []interface{}, error) 
 	var conditions []string
 	for _, cond := range q.conditions {
 		if cond.Equal != nil {
-			conditions = append(conditions, fmt.Sprintf("%s = %s", cond.Equal.FieldName, q.store.placeholder(paramCounter)))
+			conditions = append(conditions, fmt.Sprintf("%s = %s", q.store.fieldName(cond.Equal.FieldName), q.store.placeholder(paramCounter)))
 			param, err := q.store.convertParam(cond.Equal.Value)
 			if err != nil {
 				return nil, nil, err
