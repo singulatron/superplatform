@@ -5,7 +5,7 @@
       <h1>Singulatron</h1>
     </span>
     <div>
-      The Self-Hosted AI SuperApp
+      Self-Hosted AI SuperApp
     </div>
   </div>
 <p>
