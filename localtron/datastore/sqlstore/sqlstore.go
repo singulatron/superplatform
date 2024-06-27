@@ -328,6 +328,7 @@ func (q *SQLQueryBuilder[T]) Select(fields ...string) datastore.QueryBuilder[T] 
 	q.selectFields = fields
 	return q
 }
+
 func (q *SQLQueryBuilder[T]) Find() ([]T, error) {
 	query, params := q.buildSelectQuery()
 
@@ -355,6 +356,8 @@ func (q *SQLQueryBuilder[T]) Find() ([]T, error) {
 			case fieldType.Kind() == reflect.Struct && fieldType != reflect.TypeOf(time.Time{}):
 				var str sql.NullString
 				fields[i] = &str
+			case fieldType == reflect.TypeOf(time.Time{}):
+				fields[i] = new(sql.NullTime)
 			default:
 				fields[i] = field.Addr().Interface()
 			}
@@ -386,6 +389,13 @@ func (q *SQLQueryBuilder[T]) Find() ([]T, error) {
 						return nil, err
 					}
 					field.Set(reflect.ValueOf(newField).Elem())
+				}
+			case fieldType == reflect.TypeOf(time.Time{}):
+				nullTime, ok := fields[i].(*sql.NullTime)
+				if ok && nullTime.Valid {
+					field.Set(reflect.ValueOf(nullTime.Time.UTC()))
+				} else {
+					field.Set(reflect.Zero(fieldType))
 				}
 			}
 		}
