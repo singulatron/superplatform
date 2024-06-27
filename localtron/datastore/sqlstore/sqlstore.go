@@ -31,7 +31,7 @@ const (
 )
 
 type SQLStore[T datastore.Row] struct {
-	db               *sql.DB
+	db               *DebugDB
 	mu               sync.RWMutex
 	inTransaction    bool
 	tx               *sql.Tx
@@ -53,7 +53,7 @@ func NewSQLStore[T datastore.Row](driverName, connStr string, tableName string) 
 	sstore := &SQLStore[T]{
 		driverName:       driverName,
 		placeholderStyle: placeholderStyle,
-		db:               db,
+		db:               NewDebugDB(db, tableName),
 	}
 
 	if err := sstore.createTable(db, tableName); err != nil {
@@ -61,6 +61,10 @@ func NewSQLStore[T datastore.Row](driverName, connStr string, tableName string) 
 	}
 
 	return sstore, nil
+}
+
+func (s *SQLStore[T]) SetDebug(debug bool) {
+	s.db.Debug = true
 }
 
 func (s *SQLStore[T]) Create(obj T) error {
@@ -86,25 +90,26 @@ func (s *SQLStore[T]) CreateMany(objs []T) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	tx, err := s.db.Begin()
-	if err != nil {
-		return err
-	}
+	// tx, err := s.db.Begin()
+	// if err != nil {
+	// 	return err
+	// }
 	for _, obj := range objs {
 		query, values, err := s.buildInsertQuery(obj)
 		if err != nil {
 			return err
 		}
-		_, err = tx.Exec(query, values...)
+		_, err = s.db.Exec(query, values...)
 		if err != nil {
-			tx.Rollback()
+			// tx.Rollback()
 			if strings.Contains(err.Error(), "duplicate key value") {
 				return datastore.ErrEntryAlreadyExists
 			}
 			return err
 		}
 	}
-	return tx.Commit()
+	// return tx.Commit()
+	return nil
 }
 
 func (s *SQLStore[T]) Upsert(obj T) error {
@@ -123,22 +128,23 @@ func (s *SQLStore[T]) UpsertMany(objs []T) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	tx, err := s.db.Begin()
-	if err != nil {
-		return err
-	}
+	// tx, err := s.db.Begin()
+	// if err != nil {
+	// 	return err
+	// }
 	for _, obj := range objs {
 		query, values, err := s.buildUpsertQuery(obj)
 		if err != nil {
 			return err
 		}
-		_, err = tx.Exec(query, values...)
+		_, err = s.db.Exec(query, values...)
 		if err != nil {
-			tx.Rollback()
+			//tx.Rollback()
 			return err
 		}
 	}
-	return tx.Commit()
+	//return tx.Commit()
+	return nil
 }
 
 func (s *SQLStore[T]) Query(condition datastore.Condition, conditions ...datastore.Condition) datastore.QueryBuilder[T] {
@@ -330,7 +336,10 @@ func (q *SQLQueryBuilder[T]) Select(fields ...string) datastore.QueryBuilder[T] 
 }
 
 func (q *SQLQueryBuilder[T]) Find() ([]T, error) {
-	query, params := q.buildSelectQuery()
+	query, params, err := q.buildSelectQuery()
+	if err != nil {
+		return nil, err
+	}
 
 	rows, err := q.store.db.Query(query, params...)
 	if err != nil {
@@ -407,12 +416,17 @@ func (q *SQLQueryBuilder[T]) Find() ([]T, error) {
 }
 
 func (q *SQLQueryBuilder[T]) FindOne() (T, bool, error) {
-	query, params := q.buildSelectQuery()
+	var obj T
+
+	query, params, err := q.buildSelectQuery()
+	if err != nil {
+		return obj, false, err
+	}
 	query += " LIMIT 1"
 
 	row := q.store.db.QueryRow(query, params...)
-	var obj T
-	err := row.Scan(&obj)
+
+	err = row.Scan(&obj)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			var empty T
@@ -425,11 +439,14 @@ func (q *SQLQueryBuilder[T]) FindOne() (T, bool, error) {
 }
 
 func (q *SQLQueryBuilder[T]) Count() (int64, error) {
-	query, params := q.buildSelectQuery()
+	query, params, err := q.buildSelectQuery()
+	if err != nil {
+		return 0, err
+	}
 	query = fmt.Sprintf("SELECT COUNT(*) FROM (%s) AS subquery", query)
 
 	var count int64
-	err := q.store.db.QueryRow(query, params...).Scan(&count)
+	err = q.store.db.QueryRow(query, params...).Scan(&count)
 	if err != nil {
 		return 0, err
 	}
@@ -438,8 +455,11 @@ func (q *SQLQueryBuilder[T]) Count() (int64, error) {
 }
 
 func (q *SQLQueryBuilder[T]) Update(obj T) error {
-	query := q.buildUpdateQuery(obj)
-	_, err := q.store.db.Exec(query)
+	query, params, err := q.buildUpdateQuery(obj)
+	if err != nil {
+		return err
+	}
+	_, err = q.store.db.Exec(query, params...)
 	return err
 }
 
@@ -453,39 +473,29 @@ func (q *SQLQueryBuilder[T]) Upsert(obj T) error {
 }
 
 func (q *SQLQueryBuilder[T]) UpdateFields(fields map[string]interface{}) error {
-	query := q.buildUpdateFieldsQuery(fields)
-	_, err := q.store.db.Exec(query)
+	query, params, err := q.buildUpdateFieldsQuery(fields)
+	if err != nil {
+		return err
+	}
+	_, err = q.store.db.Exec(query, params...)
 	return err
 }
 
 func (q *SQLQueryBuilder[T]) Delete() error {
-	query, values := q.buildDeleteQuery()
-	_, err := q.store.db.Exec(query, values...)
+	query, values, err := q.buildDeleteQuery()
+	if err != nil {
+		return err
+	}
+	_, err = q.store.db.Exec(query, values...)
 	return err
 }
 
-func (q *SQLQueryBuilder[T]) buildSelectQuery() (string, []interface{}) {
-	var conditions []string
-	var params []interface{}
-	paramCounter := 1
-	placeholder := func(counter int) string {
-		switch q.store.placeholderStyle {
-		case QuestionMarkPlaceholder:
-			return "?"
-		case DollarSignPlaceholder:
-			return fmt.Sprintf("$%d", counter)
-		default:
-			return "?"
-		}
+func (q *SQLQueryBuilder[T]) buildSelectQuery() (string, []interface{}, error) {
+	conditions, params, err := q.buildConditions()
+	if err != nil {
+		return "", nil, err
 	}
-
-	for _, cond := range q.conditions {
-		if cond.Equal != nil {
-			conditions = append(conditions, fmt.Sprintf("%s = %s", cond.Equal.FieldName, placeholder(paramCounter)))
-			params = append(params, cond.Equal.Value)
-			paramCounter++
-		}
-	}
+	paramCounter := len(params) + 1
 
 	var query string
 	if len(q.selectFields) > 0 {
@@ -506,20 +516,20 @@ func (q *SQLQueryBuilder[T]) buildSelectQuery() (string, []interface{}) {
 	}
 
 	if len(q.after) > 0 {
-		query += fmt.Sprintf(" OFFSET %s", placeholder(paramCounter))
+		query += fmt.Sprintf(" OFFSET %s", q.store.placeholder(paramCounter))
 		params = append(params, q.after[0])
 		paramCounter++
 	}
 
 	if q.limit > 0 {
-		query += fmt.Sprintf(" LIMIT %s", placeholder(paramCounter))
+		query += fmt.Sprintf(" LIMIT %s", q.store.placeholder(paramCounter))
 		params = append(params, q.limit)
 	}
 
-	return query, params
+	return query, params, nil
 }
 
-func (q *SQLQueryBuilder[T]) buildUpdateQuery(obj T) string {
+func (q *SQLQueryBuilder[T]) buildUpdateQuery(obj T) (string, []any, error) {
 	val := reflect.ValueOf(obj).Elem()
 	typ := val.Type()
 
@@ -529,11 +539,9 @@ func (q *SQLQueryBuilder[T]) buildUpdateQuery(obj T) string {
 		sets = append(sets, fmt.Sprintf("%s = '%v'", strings.ToLower(field.Name), val.Field(i).Interface()))
 	}
 
-	var conditions []string
-	for _, cond := range q.conditions {
-		if cond.Equal != nil {
-			conditions = append(conditions, fmt.Sprintf("%s = '%v'", cond.Equal.FieldName, cond.Equal.Value))
-		}
+	conditions, params, err := q.buildConditions()
+	if err != nil {
+		return "", nil, err
 	}
 
 	query := fmt.Sprintf("UPDATE %s SET %s", strings.ToLower(typ.Name()), strings.Join(sets, ", "))
@@ -541,20 +549,18 @@ func (q *SQLQueryBuilder[T]) buildUpdateQuery(obj T) string {
 		query += " WHERE " + strings.Join(conditions, " AND ")
 	}
 
-	return query
+	return query, params, nil
 }
 
-func (q *SQLQueryBuilder[T]) buildUpdateFieldsQuery(fields map[string]interface{}) string {
+func (q *SQLQueryBuilder[T]) buildUpdateFieldsQuery(fields map[string]interface{}) (string, []any, error) {
 	var sets []string
 	for key, value := range fields {
 		sets = append(sets, fmt.Sprintf("%s = '%v'", key, value))
 	}
 
-	var conditions []string
-	for _, cond := range q.conditions {
-		if cond.Equal != nil {
-			conditions = append(conditions, fmt.Sprintf("%s = '%v'", cond.Equal.FieldName, cond.Equal.Value))
-		}
+	conditions, params, err := q.buildConditions()
+	if err != nil {
+		return "", nil, err
 	}
 
 	query := fmt.Sprintf("UPDATE %s SET %s", strings.ToLower(reflect.TypeOf(new(T)).Elem().Name()), strings.Join(sets, ", "))
@@ -562,32 +568,13 @@ func (q *SQLQueryBuilder[T]) buildUpdateFieldsQuery(fields map[string]interface{
 		query += " WHERE " + strings.Join(conditions, " AND ")
 	}
 
-	return query
+	return query, params, nil
 }
 
-func (q *SQLQueryBuilder[T]) buildDeleteQuery() (string, []interface{}) {
-	var conditions []string
-	var params []interface{}
-	paramCounter := 1
-
-	// Define a function for generating placeholders
-	placeholder := func(counter int) string {
-		switch q.store.placeholderStyle {
-		case QuestionMarkPlaceholder:
-			return "?"
-		case DollarSignPlaceholder:
-			return fmt.Sprintf("$%d", counter)
-		default:
-			return "?"
-		}
-	}
-
-	for _, cond := range q.conditions {
-		if cond.Equal != nil {
-			conditions = append(conditions, fmt.Sprintf("%s = %s", cond.Equal.FieldName, placeholder(paramCounter)))
-			params = append(params, cond.Equal.Value)
-			paramCounter++
-		}
+func (q *SQLQueryBuilder[T]) buildDeleteQuery() (string, []interface{}, error) {
+	conditions, params, err := q.buildConditions()
+	if err != nil {
+		return "", nil, err
 	}
 
 	query := fmt.Sprintf("DELETE FROM %s", strings.ToLower(reflect.TypeOf(new(T)).Elem().Name()))
@@ -595,5 +582,5 @@ func (q *SQLQueryBuilder[T]) buildDeleteQuery() (string, []interface{}) {
 		query += " WHERE " + strings.Join(conditions, " AND ")
 	}
 
-	return query, params
+	return query, params, nil
 }

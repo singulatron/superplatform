@@ -42,6 +42,8 @@ type DataStore[T Row] interface {
 	Commit() error
 	Rollback() error
 	IsInTransaction() bool
+
+	SetDebug(debug bool)
 }
 
 type QueryBuilder[T Row] interface {

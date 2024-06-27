@@ -72,10 +72,12 @@ func TestAll(t *testing.T) {
 		"DotNotation":            DotNotation,
 	}
 
-	for storeName, storeFunc := range stores {
-		for testName, test := range tests {
+	for testName, test := range tests {
+		for storeName, storeFunc := range stores {
 			t.Run(fmt.Sprintf("%v %v", storeName, testName), func(t *testing.T) {
-				test(t, storeFunc())
+				store := storeFunc()
+				store.SetDebug(true)
+				test(t, store)
 			})
 		}
 	}

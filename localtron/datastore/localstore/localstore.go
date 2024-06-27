@@ -67,6 +67,9 @@ func NewLocalStore[T datastore.Row](filePath string) *LocalStore[T] {
 	return ls
 }
 
+func (s *LocalStore[T]) SetDebug(debug bool) {
+}
+
 func (s *LocalStore[T]) Create(obj T) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
