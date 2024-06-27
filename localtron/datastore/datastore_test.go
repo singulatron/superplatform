@@ -17,6 +17,7 @@ import (
 
 	"github.com/singulatron/singulatron/localtron/datastore"
 	localstore "github.com/singulatron/singulatron/localtron/datastore/localstore"
+	"github.com/singulatron/singulatron/localtron/datastore/sqlstore"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -43,6 +44,11 @@ func TestAll(t *testing.T) {
 	stores := map[string]func() datastore.DataStore[TestObject]{
 		"localStore": func() datastore.DataStore[TestObject] {
 			return localstore.NewLocalStore[TestObject]("")
+		},
+		"sqlStore": func() datastore.DataStore[TestObject] {
+			store, err := sqlstore.NewSQLStore[TestObject]("postgres", "postgres://postgres:mysecretpassword@localhost:5432/mydatabase?sslmode=disable")
+			assert.NoError(t, err)
+			return store
 		},
 	}
 	tests := map[string]func(t *testing.T, store datastore.DataStore[TestObject]){

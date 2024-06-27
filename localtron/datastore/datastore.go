@@ -47,7 +47,7 @@ type DataStore[T Row] interface {
 type QueryBuilder[T Row] interface {
 	OrderBy(field string, desc bool) QueryBuilder[T]
 	Limit(limit int) QueryBuilder[T]
-	Offset(offset int) QueryBuilder[T]
+	After(value ...any) QueryBuilder[T]
 
 	Select(fields ...string) QueryBuilder[T]
 	Find() ([]T, error)
