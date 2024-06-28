@@ -19,7 +19,9 @@
 			<div style="padding: 0rem 2rem">
 				<h2 style="margin-bottom: 2rem">{{ 'Users' | translate }}</h2>
 				<ion-list>
-					<ng-container *ngFor="let user of users; let i = index; ; trackBy: trackById">
+					<ng-container
+						*ngFor="let user of users; let i = index; trackBy: trackById"
+					>
 						<form [formGroup]="getUserForm(i)">
 							<ion-item
 								detail="false"
@@ -87,6 +89,7 @@
 									></ion-input>
 								</ion-item>
 
+								<!-- 
 								<ion-item>
 									<ion-input
 										formControlName="createdAt"
@@ -105,6 +108,7 @@
 										[disabled]="true"
 									></ion-input>
 								</ion-item>
+								-->
 
 								<ion-row style="margin-top: 1em">
 									<ion-col size-lg="6" size-md="12" size-sm="12" size-xs="12">

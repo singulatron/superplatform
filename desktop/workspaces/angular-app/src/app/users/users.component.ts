@@ -74,7 +74,7 @@ export class UsersComponent implements OnInit {
 	async loggedInInit() {
 		const rsp = await this.userService.getUsers();
 		this.users = rsp.users;
-		this.userForms?.clear()
+		this.userForms?.clear();
 
 		for (const user of this.users) {
 			this.userForms.push(this.createUserForm(user));
