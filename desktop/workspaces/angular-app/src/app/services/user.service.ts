@@ -82,6 +82,10 @@ export class UserService {
 		);
 	}
 
+	removeToken() {
+		this.cookieService.delete('the_token', '/', '', this.localtron.config.env.production ? true : false)
+	}
+
 	hasToken(): boolean {
 		const t = this.cookieService.get('the_token');
 		return !!t;
