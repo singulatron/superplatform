@@ -18,9 +18,14 @@
 		<app-centered [headerHeight]="'56px'" [vertical]="true">
 			<div style="padding: 0rem 2rem">
 				<h2 style="margin-bottom: 2rem">{{ 'Users' | translate }}</h2>
+				<ion-searchbar
+					debounce="500"
+					(ionInput)="filterUsers($event.target.value)"
+					placeholder="Search users"
+				></ion-searchbar>
 				<ion-list>
 					<ng-container
-						*ngFor="let user of users; let i = index; trackBy: trackById"
+						*ngFor="let user of filteredUsers; let i = index; trackBy: trackById"
 					>
 						<form [formGroup]="getUserForm(i)">
 							<ion-item

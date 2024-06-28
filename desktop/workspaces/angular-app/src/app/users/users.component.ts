@@ -53,7 +53,9 @@ interface UserVisible extends User {
 })
 export class UsersComponent implements OnInit {
 	users: UserVisible[] = [];
+	filteredUsers: UserVisible[] = [];
 	userForms: FormArray;
+	searchText = '';
 
 	constructor(
 		private fb: FormBuilder,
@@ -74,6 +76,7 @@ export class UsersComponent implements OnInit {
 	async loggedInInit() {
 		const rsp = await this.userService.getUsers();
 		this.users = rsp.users;
+		this.filteredUsers = [...this.users];
 		this.userForms?.clear();
 
 		for (const user of this.users) {
@@ -151,6 +154,22 @@ export class UsersComponent implements OnInit {
 			});
 			toast.present();
 		}
+	}
+
+	filterUsers(searchText: string | null | undefined) {
+		if (!searchText) {
+			this.filteredUsers = this.users;
+			this.cd.markForCheck();
+			return;
+		}
+		this.searchText = searchText.trim().toLowerCase();
+		this.filteredUsers = this.users.filter(
+			(user) =>
+				user.name?.toLowerCase().includes(this.searchText) ||
+				user.email?.toLowerCase().includes(this.searchText)
+		);
+		console.log(this.filteredUsers, searchText)
+		this.cd.markForCheck();
 	}
 
 	async deleteUser($event: any, userId: string) {

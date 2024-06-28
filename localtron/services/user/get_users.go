@@ -18,5 +18,5 @@ import (
 func (s *UserService) GetUsers() ([]*usertypes.User, error) {
 	return s.usersStore.Query(
 		datastore.All(),
-	).Find()
+	).OrderBy("createdAt", true).Find()
 }
