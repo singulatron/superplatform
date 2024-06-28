@@ -7,6 +7,9 @@
     <div>
       Self-Hosted AI SuperApp
     </div>
+    <div>
+      <a href="https://singulatron.com/home">singulatron.com/home</a>
+    </div>
   </div>
 <p>
 <br />
