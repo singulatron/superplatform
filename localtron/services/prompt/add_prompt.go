@@ -21,6 +21,8 @@ import (
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
 )
 
+const maxThreadTitle = 100
+
 func (p *PromptService) AddPrompt(prompt *prompttypes.Prompt) error {
 	prompt.Status = prompttypes.PromptStatusScheduled
 	now := timeNow()
@@ -60,8 +62,8 @@ func (p *PromptService) AddPrompt(prompt *prompttypes.Prompt) error {
 		}
 
 		if thread.Title == "" {
-			if len(prompt.Prompt) > 100 {
-				thread.Title = prompt.Prompt[:100]
+			if len(prompt.Prompt) > maxThreadTitle {
+				thread.Title = prompt.Prompt[:maxThreadTitle]
 			} else {
 				thread.Title = prompt.Prompt
 			}
