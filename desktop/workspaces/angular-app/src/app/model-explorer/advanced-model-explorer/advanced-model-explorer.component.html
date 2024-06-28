@@ -218,7 +218,7 @@
 			</ion-card>
 		</ion-col>
 	</ion-row>
-	<ion-row>
+	<ion-row *ngIf="itemsPerPage < totalItems">
 		<ion-col class="ion-text-center">
 			<ion-button
 				(click)="loadPage(currentPage - 1)"
