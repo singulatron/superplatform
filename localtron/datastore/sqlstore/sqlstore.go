@@ -271,6 +271,18 @@ func (s *SQLStore[T]) convertParam(param any) (any, error) {
 		}
 		return string(bs), nil
 	case reflect.Slice:
+		v := reflect.ValueOf(param)
+		if v.Len() == 0 {
+			switch s.driverName {
+			case DriverMySQL:
+				return "[]", nil
+			case DriverPostGRES:
+				return pq.Array([]interface{}{}), nil
+			default:
+				return nil, fmt.Errorf("unrecognized driver: '%v'", s.driverName)
+			}
+		}
+
 		switch s.driverName {
 		case DriverMySQL:
 			bs, err := json.Marshal(param)

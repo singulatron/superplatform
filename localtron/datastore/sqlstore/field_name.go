@@ -30,7 +30,8 @@ func (s *SQLStore[T]) fieldName(fieldName string) string {
 
 	fieldName = strings.Join(fieldParts, ".")
 
-	fieldName = strings.Replace(fieldName, ".", "->>", -1)
+	accessor := "->>"
+	fieldName = strings.Replace(fieldName, ".", accessor, -1)
 
 	return fieldName
 }

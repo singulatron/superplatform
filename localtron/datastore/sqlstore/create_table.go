@@ -26,7 +26,7 @@ func (s *SQLStore[T]) createTable(db *DebugDB, tableName string) error {
 	var fields []string
 	for i := 0; i < val.NumField(); i++ {
 		field := typ.Field(i)
-		fieldName := strings.ToLower(field.Name)
+		fieldName := s.fieldName(field.Name)
 		fieldType := s.sqlType(field.Type)
 
 		fields = append(fields, fmt.Sprintf("%s %s", fieldName, fieldType))
