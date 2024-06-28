@@ -59,8 +59,9 @@
 						name="trash-outline"
 						(click)="deleteMessage(message.id)"
 					></ion-icon>
+
 					<ion-icon
-						*ngIf="!message?.userId"
+						*ngIf="false && !message?.userId"
 						title="Regenerate answer"
 						class="small-icon"
 						name="reload-outline"
