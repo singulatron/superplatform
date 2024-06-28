@@ -123,7 +123,7 @@ export class AdvancedModelExplorerComponent {
 		);
 		let models = this.allModels;
 		if (this.showOnlyDownloadedModels) {
-			let downloadedModels = [];
+			const downloadedModels = [];
 			const downloadsResponse = await this.downloadService.downloadList();
 			for (const model of models) {
 				if (
@@ -137,7 +137,7 @@ export class AdvancedModelExplorerComponent {
 					downloadedModels.push(model);
 				}
 			}
-			models = downloadedModels
+			models = downloadedModels;
 		}
 
 		return this.anyCategorySelected()
