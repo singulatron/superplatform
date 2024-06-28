@@ -12,7 +12,6 @@ import { Component, OnInit } from '@angular/core';
 import {
 	FormBuilder,
 	FormGroup,
-	FormArray,
 	Validators,
 	FormsModule,
 	ReactiveFormsModule,
@@ -53,7 +52,9 @@ interface UserVisible extends User {
 })
 export class UsersComponent implements OnInit {
 	users: UserVisible[] = [];
-	userForms: FormArray;
+	filteredUsers: UserVisible[] = [];
+	private userForms: Map<string, FormGroup> = new Map();
+	searchText = '';
 
 	constructor(
 		private fb: FormBuilder,
@@ -61,7 +62,7 @@ export class UsersComponent implements OnInit {
 		private toast: ToastController,
 		private cd: ChangeDetectorRef
 	) {
-		this.userForms = this.fb.array([]);
+		this.userForms = new Map();
 		this.userService.user$.pipe(first()).subscribe(() => {
 			this.loggedInInit();
 		});
@@ -74,10 +75,11 @@ export class UsersComponent implements OnInit {
 	async loggedInInit() {
 		const rsp = await this.userService.getUsers();
 		this.users = rsp.users;
+		this.filteredUsers = [...this.users];
 		this.userForms?.clear();
 
 		for (const user of this.users) {
-			this.userForms.push(this.createUserForm(user));
+			this.userForms.set(user.id!, this.createUserForm(user));
 		}
 		this.cd.markForCheck();
 	}
@@ -94,12 +96,12 @@ export class UsersComponent implements OnInit {
 		});
 	}
 
-	getUserForm(index: number): FormGroup {
-		return this.userForms.at(index) as FormGroup;
+	getUserForm(userId: string): FormGroup {
+		return this.userForms.get(userId)!;
 	}
 
-	async saveUser(index: number) {
-		const userForm = this.getUserForm(index);
+	async saveUser(userId: string) {
+		const userForm = this.getUserForm(userId);
 		if (userForm.invalid) {
 			return;
 		}
@@ -151,6 +153,22 @@ export class UsersComponent implements OnInit {
 			});
 			toast.present();
 		}
+	}
+
+	filterUsers(searchText: string | null | undefined) {
+		if (!searchText) {
+			this.filteredUsers = this.users;
+			this.cd.markForCheck();
+			return;
+		}
+		this.searchText = searchText.trim().toLowerCase();
+		this.filteredUsers = this.users.filter(
+			(user) =>
+				user.name?.toLowerCase().includes(this.searchText) ||
+				user.email?.toLowerCase().includes(this.searchText)
+		);
+
+		this.cd.markForCheck();
 	}
 
 	async deleteUser($event: any, userId: string) {
