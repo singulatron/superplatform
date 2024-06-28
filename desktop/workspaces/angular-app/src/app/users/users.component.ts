@@ -12,7 +12,6 @@ import { Component, OnInit } from '@angular/core';
 import {
 	FormBuilder,
 	FormGroup,
-	FormArray,
 	Validators,
 	FormsModule,
 	ReactiveFormsModule,
@@ -54,7 +53,7 @@ interface UserVisible extends User {
 export class UsersComponent implements OnInit {
 	users: UserVisible[] = [];
 	filteredUsers: UserVisible[] = [];
-	userForms: FormArray;
+	private userForms: Map<string, FormGroup> = new Map();
 	searchText = '';
 
 	constructor(
@@ -63,7 +62,7 @@ export class UsersComponent implements OnInit {
 		private toast: ToastController,
 		private cd: ChangeDetectorRef
 	) {
-		this.userForms = this.fb.array([]);
+		this.userForms = new Map();
 		this.userService.user$.pipe(first()).subscribe(() => {
 			this.loggedInInit();
 		});
@@ -80,7 +79,7 @@ export class UsersComponent implements OnInit {
 		this.userForms?.clear();
 
 		for (const user of this.users) {
-			this.userForms.push(this.createUserForm(user));
+			this.userForms.set(user.id!, this.createUserForm(user));
 		}
 		this.cd.markForCheck();
 	}
@@ -97,12 +96,12 @@ export class UsersComponent implements OnInit {
 		});
 	}
 
-	getUserForm(index: number): FormGroup {
-		return this.userForms.at(index) as FormGroup;
+	getUserForm(userId: string): FormGroup {
+		return this.userForms.get(userId)!;
 	}
 
-	async saveUser(index: number) {
-		const userForm = this.getUserForm(index);
+	async saveUser(userId: string) {
+		const userForm = this.getUserForm(userId);
 		if (userForm.invalid) {
 			return;
 		}
@@ -168,7 +167,7 @@ export class UsersComponent implements OnInit {
 				user.name?.toLowerCase().includes(this.searchText) ||
 				user.email?.toLowerCase().includes(this.searchText)
 		);
-		console.log(this.filteredUsers, searchText)
+
 		this.cd.markForCheck();
 	}
 
