@@ -19,7 +19,7 @@
 			<div style="padding: 0rem 2rem">
 				<h2 style="margin-bottom: 2rem">{{ 'Users' | translate }}</h2>
 				<ion-list>
-					<ng-container *ngFor="let user of users; let i = index">
+					<ng-container *ngFor="let user of users; let i = index; ; trackBy: trackById">
 						<form [formGroup]="getUserForm(i)">
 							<ion-item
 								detail="false"

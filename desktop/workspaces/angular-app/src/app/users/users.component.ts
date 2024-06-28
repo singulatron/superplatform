@@ -67,13 +67,15 @@ export class UsersComponent implements OnInit {
 		});
 	}
 
-	ngOnInit() {
-		this.loggedInInit();
+	async ngOnInit() {
+		await this.loggedInInit();
 	}
 
 	async loggedInInit() {
 		const rsp = await this.userService.getUsers();
 		this.users = rsp.users;
+		this.userForms?.clear()
+
 		for (const user of this.users) {
 			this.userForms.push(this.createUserForm(user));
 		}
@@ -183,5 +185,9 @@ export class UsersComponent implements OnInit {
 			});
 			toast.present();
 		}
+	}
+
+	trackById(_: number, message: { id?: string }): string {
+		return message.id || '';
 	}
 }
