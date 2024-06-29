@@ -22,7 +22,7 @@ It uses no third party APIs, and you have compelte control over your data and pr
 
 - [x] AI functionality: prompting, threads, prompt queues, download manager
 - [x] User management: multi-user support, role-based access control
-- [ ] <- [IN PROGRESS] Supporting different database backends (local files, SQL and many more) and other distributed primitives
+- [x] Supporting different database backends (local files, SQL and more is coming) and other distributed primitives
 - [ ] Collaborate with other users in your organization
 - [ ] Running, scheduling mini-(or not so mini)-apps built on top of Singulatron
 - [ ] Improving this roadmap : )
