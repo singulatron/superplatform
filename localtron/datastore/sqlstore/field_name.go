@@ -23,7 +23,7 @@ func (s *SQLStore[T]) fieldName(fieldName string) string {
 	fieldParts := strings.Split(fieldName, ".")
 
 	for i, v := range fieldParts {
-		f := strings.ToLower(v[0:1]) + v[1:]
+		f := escape(strings.ToLower(v[0:1]) + v[1:])
 
 		if i == 0 {
 			fieldParts[i] = f
@@ -38,4 +38,18 @@ func (s *SQLStore[T]) fieldName(fieldName string) string {
 	}
 
 	return strings.Join(fieldParts, "")
+}
+
+func escape(columnName string) string {
+	toEscape := false
+	switch columnName {
+	case "table":
+		toEscape = true
+	}
+
+	if toEscape {
+		return fmt.Sprintf(`"%v"`, columnName)
+	}
+
+	return columnName
 }

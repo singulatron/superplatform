@@ -313,6 +313,10 @@ func Upsert(t *testing.T, store datastore.DataStore[TestObject]) {
 	err := store.Upsert(obj1)
 	require.NoError(t, err)
 
+	res, err := store.Query(datastore.All()).Find()
+	require.NoError(t, err)
+	require.Equal(t, 1, len(res))
+
 	err = store.Upsert(obj1)
 	require.NoError(t, err)
 }
@@ -322,6 +326,10 @@ func PointerUpsert(t *testing.T, store datastore.DataStore[*TestObject]) {
 
 	err := store.Upsert(obj1)
 	require.NoError(t, err)
+
+	res, err := store.Query(datastore.All()).Find()
+	require.NoError(t, err)
+	require.Equal(t, 1, len(res))
 
 	err = store.Upsert(obj1)
 	require.NoError(t, err)

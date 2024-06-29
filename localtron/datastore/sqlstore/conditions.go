@@ -22,7 +22,7 @@ func (s *SQLStore[T]) placeholder(counter int) string {
 	case DollarSignPlaceholder:
 		return fmt.Sprintf("$%d", counter)
 	default:
-		return "?"
+		panic(fmt.Sprintf("unrecognized placeholder style '%v'", s.placeholderStyle))
 	}
 }
 

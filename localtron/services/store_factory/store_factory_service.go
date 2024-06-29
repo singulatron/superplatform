@@ -21,6 +21,14 @@ import (
 
 var LocalStorePath = ""
 
+func init() {
+	dir, err := os.UserHomeDir()
+	if err != nil {
+		panic(err)
+	}
+	LocalStorePath = path.Join(dir, "data", "test")
+}
+
 // GetStore is a standalone function that returns a new instance of a generic datastore.
 // This function needs to be standalone due to Go's current limitation on methods with type parameters.
 // In Go, methods defined on a concrete type (like StoreFactoryService) cannot have type parameters.

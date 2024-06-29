@@ -33,7 +33,8 @@ import (
 type PlaceholderStyle int
 
 const (
-	QuestionMarkPlaceholder PlaceholderStyle = iota
+	InvalidPlaceholder PlaceholderStyle = iota
+	QuestionMarkPlaceholder
 	DollarSignPlaceholder
 )
 
@@ -226,12 +227,13 @@ func (s *SQLStore[T]) BeginTransaction() (datastore.DataStore[T], error) {
 	}
 
 	return &SQLStore[T]{
-		db:            s.db,
-		tableName:     s.tableName,
-		driverName:    s.driverName,
-		inTransaction: true,
-		tx:            tx,
-		fieldTypes:    s.fieldTypes,
+		db:               s.db,
+		tableName:        s.tableName,
+		driverName:       s.driverName,
+		inTransaction:    true,
+		tx:               tx,
+		fieldTypes:       s.fieldTypes,
+		placeholderStyle: s.placeholderStyle,
 	}, nil
 }
 
@@ -289,6 +291,12 @@ func (s *SQLStore[T]) convertParam(param any) (any, error) {
 			return nil, err
 		}
 		return string(bs), nil
+	case reflect.Map:
+		bs, err := json.Marshal(param)
+		if err != nil {
+			return nil, err
+		}
+		return string(bs), nil
 	case reflect.Slice:
 		if v.Len() == 0 {
 			switch s.driverName {
@@ -330,17 +338,19 @@ func (s *SQLStore[T]) buildInsertQuery(obj T) (string, []interface{}, error) {
 	var fields []string
 	var placeholders []string
 	var params []interface{}
+	paramCounter := 1
 
 	for i := 0; i < val.NumField(); i++ {
 		field := typ.Field(i)
 		fields = append(fields, s.fieldName(field.Name))
-		placeholders = append(placeholders, fmt.Sprintf("$%d", i+1))
+		placeholders = append(placeholders, s.placeholder(paramCounter))
 		param := val.Field(i).Interface()
 		param, err := s.convertParam(param)
 		if err != nil {
 			return "", nil, err
 		}
 		params = append(params, param)
+		paramCounter++
 	}
 
 	query := fmt.Sprintf("INSERT INTO %s (%s) VALUES (%s);",
@@ -364,17 +374,14 @@ func (s *SQLStore[T]) buildUpsertQuery(obj T) (string, []interface{}, error) {
 	var placeholders []string
 	var updateFields []string
 	var params []interface{}
-
-	conflictField := s.fieldName(typ.Field(0).Name)
+	paramCounter := 1
 
 	for i := 0; i < val.NumField(); i++ {
 		field := typ.Field(i)
 		fieldName := s.fieldName(field.Name)
-		if fieldName == conflictField {
-			continue
-		}
+
 		fields = append(fields, fieldName)
-		placeholders = append(placeholders, fmt.Sprintf("$%d", i))
+		placeholders = append(placeholders, s.placeholder(paramCounter))
 		param := val.Field(i).Interface()
 		param, err := s.convertParam(param)
 		if err != nil {
@@ -382,6 +389,7 @@ func (s *SQLStore[T]) buildUpsertQuery(obj T) (string, []interface{}, error) {
 		}
 		params = append(params, param)
 		updateFields = append(updateFields, fmt.Sprintf("%s=EXCLUDED.%s", fieldName, fieldName))
+		paramCounter++
 	}
 
 	query := fmt.Sprintf("INSERT INTO %s (%s) VALUES (%s) ON CONFLICT (%s) DO UPDATE SET %s;",
