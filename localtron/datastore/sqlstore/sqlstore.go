@@ -53,6 +53,7 @@ type SQLStore[T datastore.Row] struct {
 	driverName       string
 	tableName        string
 	fieldTypes       map[string]reflect.Type
+	idFieldName      string
 }
 
 func NewSQLStore[T datastore.Row](driverName, connStr string, tableName string, debug bool) (*SQLStore[T], error) {
@@ -91,6 +92,7 @@ func NewSQLStore[T datastore.Row](driverName, connStr string, tableName string, 
 	}
 
 	fieldName := sstore.fieldName(typ.Field(0).Name)
+	sstore.idFieldName = fieldName
 
 	_, err = sstore.db.Exec(fmt.Sprintf("ALTER TABLE %v ADD CONSTRAINT %v_%v_unique UNIQUE (%v);",
 		sstore.tableName,
@@ -694,19 +696,41 @@ func (q *SQLQueryBuilder[T]) buildSelectQuery() (string, []interface{}, error) {
 }
 
 func (q *SQLQueryBuilder[T]) buildUpdateQuery(obj T) (string, []any, error) {
-	val := reflect.ValueOf(obj).Elem()
+	val := reflect.ValueOf(obj)
 	typ := val.Type()
 
-	var sets []string
-	for i := 0; i < val.NumField(); i++ {
-		field := typ.Field(i)
-		sets = append(sets, fmt.Sprintf("%s = '%v'", q.store.fieldName(field.Name), val.Field(i).Interface()))
+	if typ.Kind() == reflect.Pointer {
+		val = reflect.ValueOf(obj).Elem()
+		typ = val.Type()
+	} else {
+		val = reflect.ValueOf(obj)
+		typ = val.Type()
 	}
 
-	conditions, params, err := q.buildConditions()
+	var sets []string
+	var params []interface{}
+	paramCounter := 1
+
+	for i := 0; i < val.NumField(); i++ {
+		field := typ.Field(i)
+		fieldName := q.store.fieldName(field.Name)
+
+		param, err := q.store.convertParam(val.Field(i).Interface())
+		if err != nil {
+			return "", nil, err
+		}
+		placeHolder := q.store.placeholder(paramCounter)
+
+		sets = append(sets, fmt.Sprintf("%s = %v", fieldName, placeHolder))
+		params = append(params, param)
+		paramCounter++
+	}
+
+	conditions, conditionParams, err := q.buildConditions(paramCounter - 1)
 	if err != nil {
 		return "", nil, err
 	}
+	params = append(params, conditionParams...)
 
 	query := fmt.Sprintf("UPDATE %s SET %s", q.store.tableName, strings.Join(sets, ", "))
 	if len(conditions) > 0 {
@@ -717,15 +741,28 @@ func (q *SQLQueryBuilder[T]) buildUpdateQuery(obj T) (string, []any, error) {
 }
 
 func (q *SQLQueryBuilder[T]) buildUpdateFieldsQuery(fields map[string]interface{}) (string, []any, error) {
+
 	var sets []string
+	var params []interface{}
+	paramCounter := 1
+
 	for key, value := range fields {
-		sets = append(sets, fmt.Sprintf("%s = '%v'", key, value))
+		fieldName := q.store.fieldName(key)
+		param, err := q.store.convertParam(value)
+		if err != nil {
+			return "", nil, err
+		}
+		placeHolder := q.store.placeholder(paramCounter)
+		sets = append(sets, fmt.Sprintf("%s = %v", fieldName, placeHolder))
+		params = append(params, param)
+		paramCounter++
 	}
 
-	conditions, params, err := q.buildConditions()
+	conditions, conditionParams, err := q.buildConditions(paramCounter - 1)
 	if err != nil {
 		return "", nil, err
 	}
+	params = append(params, conditionParams...)
 
 	query := fmt.Sprintf("UPDATE %s SET %s", q.store.tableName, strings.Join(sets, ", "))
 	if len(conditions) > 0 {

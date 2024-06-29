@@ -90,6 +90,7 @@ func TestAll(t *testing.T) {
 		"DotNotation":            DotNotation,
 		"Pagination":             Pagination,
 		"FindOne":                FindOne,
+		"Update":                 Update,
 	}
 	pointerTests := map[string]func(t *testing.T, store datastore.DataStore[*TestObject]){
 		"PointerCreate":                 PointerCreate,
@@ -104,6 +105,7 @@ func TestAll(t *testing.T) {
 		"PointerDotNotation":            PointerDotNotation,
 		"PointerPagination":             PointerPagination,
 		"PointerFindOne":                PointerFindOne,
+		"PointerUpdate":                 PointerUpdate,
 	}
 
 	for testName, test := range tests {
@@ -306,7 +308,7 @@ func PointerCreate(t *testing.T, store datastore.DataStore[*TestObject]) {
 }
 
 func Upsert(t *testing.T, store datastore.DataStore[TestObject]) {
-	obj1 := TestObject{Name: "AliceCreate", Value: 10, Age: 25}
+	obj1 := TestObject{Name: "AliceCreate", Value: 10, Age: 25, CreatedAt: time.Now()}
 
 	err := store.Upsert(obj1)
 	require.NoError(t, err)
@@ -316,13 +318,50 @@ func Upsert(t *testing.T, store datastore.DataStore[TestObject]) {
 }
 
 func PointerUpsert(t *testing.T, store datastore.DataStore[*TestObject]) {
-	obj1 := &TestObject{Name: "AliceCreate", Value: 10, Age: 25}
+	obj1 := &TestObject{Name: "AliceCreate", Value: 10, Age: 25, CreatedAt: time.Now()}
 
 	err := store.Upsert(obj1)
 	require.NoError(t, err)
 
 	err = store.Upsert(obj1)
 	require.NoError(t, err)
+}
+
+func Update(t *testing.T, store datastore.DataStore[TestObject]) {
+	obj1 := TestObject{Name: "AliceCreate", Value: 10, Age: 25, CreatedAt: time.Now()}
+
+	err := store.Create(obj1)
+	require.NoError(t, err)
+
+	obj1.Value = 50
+	err = store.Query(datastore.Equal("Name", "AliceCreate")).Update(obj1)
+	require.NoError(t, err)
+
+	res, err := store.Query(
+		datastore.Equal("Value", 50),
+	).Find()
+	require.NoError(t, err)
+	require.Equal(t, 1, len(res))
+	require.Equal(t, res[0].Value, 50)
+}
+
+func PointerUpdate(t *testing.T, store datastore.DataStore[*TestObject]) {
+	obj1 := &TestObject{Name: "AliceCreate", Value: 10, Age: 25, CreatedAt: time.Now()}
+
+	err := store.Create(obj1)
+	require.NoError(t, err)
+
+	obj1.Value = 50
+
+	err = store.Query(datastore.Equal("Name", "AliceCreate")).Update(obj1)
+	require.NoError(t, err)
+
+	res, err := store.Query(
+		datastore.Equal("Value", 50),
+	).Find()
+	require.NoError(t, err)
+	require.Equal(t, 1, len(res))
+	require.Equal(t, res[0].Value, 50)
 }
 
 func InClause(t *testing.T, store datastore.DataStore[TestObject]) {

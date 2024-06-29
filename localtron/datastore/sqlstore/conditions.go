@@ -26,9 +26,12 @@ func (s *SQLStore[T]) placeholder(counter int) string {
 	}
 }
 
-func (q *SQLQueryBuilder[T]) buildConditions() ([]string, []interface{}, error) {
+func (q *SQLQueryBuilder[T]) buildConditions(start ...int) ([]string, []interface{}, error) {
 	var params []interface{}
 	paramCounter := 1
+	if len(start) > 0 {
+		paramCounter += start[0]
+	}
 	var conditions []string
 
 	for _, cond := range q.conditions {
