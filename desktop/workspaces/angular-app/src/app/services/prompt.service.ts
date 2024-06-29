@@ -35,17 +35,10 @@ export class PromptService {
 	async init() {
 		this.firehoseService.firehoseEvent$.subscribe(async (event) => {
 			switch (event.name) {
+				case 'promptRemoved':
+				case 'promptProcessingStarted':
+				case 'promptProcessingFinished':
 				case 'promptAdded': {
-					const rsp = await this.promptList();
-					this.onPromptListUpdateSubject.next(rsp.prompts);
-					break;
-				}
-				case 'promptProcessingStarted': {
-					const rsp = await this.promptList();
-					this.onPromptListUpdateSubject.next(rsp.prompts);
-					break;
-				}
-				case 'promptProcessingFinished': {
 					const rsp = await this.promptList();
 					this.onPromptListUpdateSubject.next(rsp.prompts);
 					break;

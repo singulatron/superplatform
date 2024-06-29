@@ -46,7 +46,7 @@ func (p *PromptService) processPrompts() {
 		case <-ticker.C:
 		case <-p.trigger:
 		}
-		return
+
 		err := p.processNextPrompt()
 		if err != nil {
 			logger.Error("Error processing prompt",

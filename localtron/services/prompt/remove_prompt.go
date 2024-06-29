@@ -13,6 +13,7 @@ package promptservice
 import (
 	"log/slog"
 
+	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/logger"
 
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
@@ -26,6 +27,14 @@ func (p *PromptService) Remove(prompt *prompttypes.Prompt) error {
 	logger.Info("Removing prompt",
 		slog.String("promptId", prompt.Id),
 	)
+
+	err := p.promptsStore.Query(
+		datastore.Id(prompt.Id),
+	).Delete()
+
+	if err != nil {
+		return err
+	}
 
 	p.firehoseService.Publish(prompttypes.EventPromptRemoved{
 		PromptId: prompt.Id,

@@ -9,29 +9,31 @@
 	* For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
 	-->
 <div class="container-for-ion-card">
-	<div class="main-card">
-		<ng-container
-			*ngFor="
-				let message of messages;
-				let i = index;
-				let isLast = last;
-				trackBy: trackById
-			"
-		>
-			<app-message
-				[message]="message"
-				[assets]="getAssets(message)"
-			></app-message>
-		</ng-container>
+	<div class="main-card" #scrollableElement>
+		<div>
+			<ng-container
+				*ngFor="
+					let message of messages;
+					let i = index;
+					let isLast = last;
+					trackBy: trackById
+				"
+			>
+				<app-message
+					[message]="message"
+					[assets]="getAssets(message)"
+				></app-message>
+			</ng-container>
+	
+			<ng-container *ngIf="messageCurrentlyStreamed.content?.length">
+				<app-message
+					[message]="messageCurrentlyStreamed"
+					[streaming]="true"
+				></app-message>
+			</ng-container>
+		</div>
 
-		<ng-container *ngIf="messageCurrentlyStreamed.content?.length">
-			<app-message
-				[message]="messageCurrentlyStreamed"
-				[streaming]="true"
-			></app-message>
-		</ng-container>
-
-		<ng-container *ngIf="promptQueue?.length">
+		<div *ngIf="promptQueue?.length">
 			<div style="display: flex; margin-bottom: 1rem; width: 100%">
 				<!-- Why 3.25 rem? To align with the icon with in the message component.
 						Admittedly suboptimal. @todo fix -->
@@ -39,10 +41,10 @@
 					*ngIf="!(mobile.isMobile$ | async)"
 					style="width: 3.25rem; flex-shrink: 0"
 				></div>
-				<div style="flex: 1;" [ngStyle]="{'max-width': (mobile.isMobile$ | async) ? '100%' : 'calc(100% - 1.5rem)'}">
+				<div style="flex: 1;" [ngStyle]="{'max-width': (mobile.isMobile$ | async) ? '100%' : 'calc(100% - 3.5rem)'}">
 					<div
 						style="
-							max-width: inherit;
+							max-width: 100%;
 							color: #666;
 							overflow: hidden;
 							text-overflow: ellipsis;
@@ -71,7 +73,7 @@
 					</div>
 				</div>
 			</div>
-		</ng-container>
+		</div>
 	</div>
 
 	<div *ngIf="!(mobile.isMobile$ | async)" class="footer">

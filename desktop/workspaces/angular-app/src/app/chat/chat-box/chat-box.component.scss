@@ -9,8 +9,9 @@
 		overflow-y: auto;
 		font-size: 1rem;
 		color: #444;
-
-		overflow-y: auto;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
 	}
 
 	.footer {

@@ -15,10 +15,15 @@ import {
 	OnChanges,
 	SimpleChanges,
 	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	ViewChild,
+	ElementRef,
+	AfterViewInit,
+	OnDestroy,
+
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { ChangeDetectorRef } from '@angular/core';
 import { LocaltronService } from '../../services/localtron.service';
 import {
 	ChatService,
@@ -63,7 +68,7 @@ const defaultThreadName = 'New chat';
 	],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChatBoxComponent implements OnChanges {
+export class ChatBoxComponent implements OnChanges, AfterViewInit, OnDestroy {
 	@Input() promptTemplate: string = '[INST] {prompt} [/INST]';
 
 	// @todo push this to the backend too
@@ -79,6 +84,11 @@ export class ChatBoxComponent implements OnChanges {
 	public messageCurrentlyStreamed: ChatMessage = {} as any;
 	private subscriptions: Subscription[] = [];
 
+	@ViewChild('scrollableElement') private scrollableElement!: ElementRef;
+	private scrollListener!: () => void;
+	private shouldScrollToBottom = true;
+	private mutationObserver!: MutationObserver;
+
 	constructor(
 		private localtron: LocaltronService,
 		public lapi: ElectronAppService,
@@ -87,7 +97,7 @@ export class ChatBoxComponent implements OnChanges {
 		private chatService: ChatService,
 		public mobile: MobileService,
 		public footer: FooterService
-	) {}
+	) { }
 
 	async ngOnInit() {
 		this.subscriptions.push(
@@ -116,6 +126,36 @@ export class ChatBoxComponent implements OnChanges {
 				}
 			})
 		);
+	}
+
+	ngAfterViewInit() {
+		this.mutationObserver = new MutationObserver(() => {
+			this.scrollToBottom();
+
+		});
+
+		this.mutationObserver.observe(this.scrollableElement.nativeElement, {
+			childList: true,
+			subtree: true,
+		});
+		this.scrollListener = this.onScroll.bind(this);
+		this.scrollableElement.nativeElement.addEventListener('scroll', this.scrollListener);
+	}
+
+	ngOnDestroy() {
+		if (this.scrollListener) {
+			this.scrollableElement?.nativeElement?.removeEventListener('scroll', this.scrollListener);
+		}
+	}
+
+	private onScroll(): void {
+		const element = this.scrollableElement.nativeElement;
+		const atBottom = element.scrollHeight - element.scrollTop < (element.clientHeight + element.clientHeight * 0.05);
+		if (!atBottom) {
+			this.shouldScrollToBottom = false;
+		} else {
+			this.shouldScrollToBottom = true;
+		}
 	}
 
 	getAssets(message: ChatMessage): Asset[] {
@@ -149,6 +189,7 @@ export class ChatBoxComponent implements OnChanges {
 
 	async ngOnChanges(changes: SimpleChanges): Promise<void> {
 		if (changes.thread) {
+			this.shouldScrollToBottom = true;
 			this.messages = [];
 			this.assets = [];
 			this.cd.markForCheck();
@@ -202,7 +243,7 @@ export class ChatBoxComponent implements OnChanges {
 						const insidePre =
 							(this.messageCurrentlyStreamed.content.match(/```/g) || [])
 								.length %
-								2 ===
+							2 ===
 							1;
 						let addValue = insidePre
 							? response?.choices[0].text
@@ -258,6 +299,17 @@ export class ChatBoxComponent implements OnChanges {
 
 	removePromptFromQueue(prompt: Prompt): void {
 		this.promptService.promptRemove(prompt)
+	}
+
+	private scrollToBottom(force: boolean = false): void {
+		if (!this.shouldScrollToBottom && !force) {
+			return;
+		}
+		try {
+			this.scrollableElement.nativeElement.scrollTop = this.scrollableElement.nativeElement.scrollHeight;
+		} catch (err) {
+			console.error('Scroll to bottom failed:', err);
+		}
 	}
 }
 
