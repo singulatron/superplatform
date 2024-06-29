@@ -24,7 +24,7 @@ import (
 	types "github.com/singulatron/singulatron/localtron/services/download/types"
 	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestDownloadFile(t *testing.T) {
@@ -42,14 +42,19 @@ func TestDownloadFile(t *testing.T) {
 	defer server.Close()
 
 	dir := path.Join(os.TempDir(), "download_test")
-	assert.NoError(t, os.MkdirAll(dir, 0755))
+	require.NoError(t, os.MkdirAll(dir, 0755))
 
-	cs, _ := configservice.NewConfigService()
-	us, _ := userservice.NewUserService(cs)
-	fs, _ := firehoseservice.NewFirehoseService(us)
-	dm, _ := NewDownloadService(fs, us)
+	cs, err := configservice.NewConfigService()
+	require.NoError(t, err)
+	us, err := userservice.NewUserService(cs)
+	require.NoError(t, err)
+	fs, err := firehoseservice.NewFirehoseService(us)
+	require.NoError(t, err)
+	dm, err := NewDownloadService(fs, us)
+	require.NoError(t, err)
+
 	dm.StateFilePath = path.Join(dir, "downloadFile.json")
-	assert.NoError(t, dm.Do(server.URL, dir))
+	require.NoError(t, dm.Do(server.URL, dir))
 
 	for {
 		time.Sleep(5 * time.Millisecond)
@@ -61,8 +66,8 @@ func TestDownloadFile(t *testing.T) {
 
 	expectedFilePath := filepath.Join(dir, encodeURLtoFileName(server.URL))
 	data, err := os.ReadFile(expectedFilePath)
-	assert.NoError(t, err)
-	assert.Equal(t, "Hello world", string(data))
+	require.NoError(t, err)
+	require.Equal(t, "Hello world", string(data))
 }
 
 func TestDownloadFileWithPartFile(t *testing.T) {
@@ -79,7 +84,7 @@ func TestDownloadFileWithPartFile(t *testing.T) {
 	defer server.Close()
 
 	dir := path.Join(os.TempDir(), "download_test")
-	assert.NoError(t, os.MkdirAll(dir, 0755))
+	require.NoError(t, os.MkdirAll(dir, 0755))
 
 	downloadURL := server.URL + "/file"
 	partFilePath := filepath.Join(dir, encodeURLtoFileName(downloadURL)+".part")
@@ -87,13 +92,18 @@ func TestDownloadFileWithPartFile(t *testing.T) {
 		t.Fatalf("Failed to create part file: %s", err)
 	}
 
-	cs, _ := configservice.NewConfigService()
-	us, _ := userservice.NewUserService(cs)
-	fs, _ := firehoseservice.NewFirehoseService(us)
-	dm, _ := NewDownloadService(fs, us)
+	cs, err := configservice.NewConfigService()
+	require.NoError(t, err)
+	us, err := userservice.NewUserService(cs)
+	require.NoError(t, err)
+	fs, err := firehoseservice.NewFirehoseService(us)
+	require.NoError(t, err)
+	dm, err := NewDownloadService(fs, us)
+	require.NoError(t, err)
+
 	dm.StateFilePath = path.Join(dir, "downloadFilePartial.json")
 
-	assert.NoError(t, dm.Do(downloadURL, dir))
+	require.NoError(t, dm.Do(downloadURL, dir))
 
 	for {
 		time.Sleep(5 * time.Millisecond)
@@ -105,24 +115,29 @@ func TestDownloadFileWithPartFile(t *testing.T) {
 
 	expectedFilePath := filepath.Join(dir, encodeURLtoFileName(downloadURL))
 	data, err := os.ReadFile(expectedFilePath)
-	assert.NoError(t, err)
-	assert.Equal(t, "Hello world", string(data))
+	require.NoError(t, err)
+	require.Equal(t, "Hello world", string(data))
 }
 
 func TestDownloadFileWithFullFile(t *testing.T) {
 	dir := path.Join(os.TempDir(), "download_test")
-	assert.NoError(t, os.MkdirAll(dir, 0755))
+	require.NoError(t, os.MkdirAll(dir, 0755))
 
 	downloadURL := "full-file"
 	fullFilePath := filepath.Join(dir, encodeURLtoFileName(downloadURL))
-	assert.NoError(t, os.WriteFile(fullFilePath, []byte("Hello world"), 0644))
+	require.NoError(t, os.WriteFile(fullFilePath, []byte("Hello world"), 0644))
 
-	cs, _ := configservice.NewConfigService()
-	us, _ := userservice.NewUserService(cs)
-	fs, _ := firehoseservice.NewFirehoseService(us)
-	dm, _ := NewDownloadService(fs, us)
+	cs, err := configservice.NewConfigService()
+	require.NoError(t, err)
+	us, err := userservice.NewUserService(cs)
+	require.NoError(t, err)
+	fs, err := firehoseservice.NewFirehoseService(us)
+	require.NoError(t, err)
+	dm, err := NewDownloadService(fs, us)
+	require.NoError(t, err)
+
 	dm.StateFilePath = path.Join(dir, "downloadFileFull.json")
-	assert.NoError(t, dm.Do(downloadURL, dir))
+	require.NoError(t, dm.Do(downloadURL, dir))
 
 	var (
 		d  *types.Download
@@ -136,6 +151,6 @@ func TestDownloadFileWithFullFile(t *testing.T) {
 		}
 	}
 
-	assert.Equal(t, int64(11), d.DownloadedSize)
-	assert.Equal(t, int64(11), d.TotalSize)
+	require.Equal(t, int64(11), d.DownloadedSize)
+	require.Equal(t, int64(11), d.TotalSize)
 }

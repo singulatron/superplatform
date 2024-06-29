@@ -15,6 +15,7 @@ import (
 	"database/sql/driver"
 	"encoding/json"
 	"fmt"
+	"log/slog"
 	"reflect"
 	"strings"
 	"sync"
@@ -24,6 +25,7 @@ import (
 	"github.com/lib/pq"
 	_ "github.com/lib/pq"
 	"github.com/singulatron/singulatron/localtron/datastore"
+	"github.com/singulatron/singulatron/localtron/logger"
 
 	"github.com/pkg/errors"
 )
@@ -96,8 +98,11 @@ func NewSQLStore[T datastore.Row](driverName, connStr string, tableName string, 
 		fieldName,
 		fieldName,
 	))
+	if err != nil {
+		logger.Debug("Error adding constraint", slog.Any("error", err))
+	}
 
-	return sstore, err
+	return sstore, nil
 }
 
 func (s *SQLStore[T]) SetDebug(debug bool) {

@@ -10,16 +10,19 @@ import (
 	genericservice "github.com/singulatron/singulatron/localtron/services/generic"
 	generictypes "github.com/singulatron/singulatron/localtron/services/generic/types"
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestCreate(t *testing.T) {
-	cs, _ := configservice.NewConfigService()
-	us, _ := userservice.NewUserService(cs)
-	fs, _ := firehoseservice.NewFirehoseService(us)
+	cs, err := configservice.NewConfigService()
+	require.NoError(t, err)
+	us, err := userservice.NewUserService(cs)
+	require.NoError(t, err)
+	fs, err := firehoseservice.NewFirehoseService(us)
+	require.NoError(t, err)
 
 	service, err := genericservice.NewGenericService(cs, fs, us)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	userId := "user_1"
 	otherUserId := "user_2"
@@ -32,7 +35,7 @@ func TestCreate(t *testing.T) {
 	}
 
 	err = service.Create("test_table", userId, obj)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	obj2 := &generictypes.GenericObject{
 		Id:        "1-2",
@@ -42,43 +45,43 @@ func TestCreate(t *testing.T) {
 	}
 
 	err = service.Create("test_table2", userId, obj2)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	res, err := service.Find("test_table", userId, []datastore.Condition{
 		datastore.Id("1"),
 	})
-	assert.NoError(t, err)
-	assert.Equal(t, 1, len(res))
-	assert.Contains(t, res, obj)
+	require.NoError(t, err)
+	require.Equal(t, 1, len(res))
+	require.Contains(t, res, obj)
 
 	err = service.Create("test_table", userId, obj)
 	// entry already exists
-	assert.Error(t, err)
+	require.Error(t, err)
 
 	res, err = service.Find("test_table", userId, []datastore.Condition{
 		datastore.Id("2"),
 	})
-	assert.NoError(t, err)
-	assert.Equal(t, 0, len(res))
+	require.NoError(t, err)
+	require.Equal(t, 0, len(res))
 
 	err = service.Upsert("test_table", otherUserId, obj)
 	// unauthorized
-	assert.Error(t, err)
+	require.Error(t, err)
 
 	err = service.Upsert("test_table", userId, obj)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	err = service.Delete("test_table", otherUserId, []datastore.Condition{
 		datastore.Id(obj.Id),
 	})
 	// no unauthorized but...
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	// ...item wont be deleted
 	res, err = service.Find("test_table", otherUserId, []datastore.Condition{
 		datastore.All(),
 	})
-	assert.NoError(t, err)
-	assert.Equal(t, 1, len(res))
-	assert.Contains(t, res, obj)
+	require.NoError(t, err)
+	require.Equal(t, 1, len(res))
+	require.Contains(t, res, obj)
 }

@@ -33,7 +33,8 @@ func GetStore[T datastore.Row](tableName string) (datastore.DataStore[T], error)
 	db := os.Getenv("SINGULATRON_DB")
 	connStr := os.Getenv("SINGULATRON_DB_SQL_CONNECTION_STRING")
 	if db == "postgres" {
-		return sqlstore.NewSQLStore[T]("postgres", connStr, tableName, false)
+		debug := os.Getenv("SINGULATRON_DB_DEBUG") == "true"
+		return sqlstore.NewSQLStore[T]("postgres", connStr, tableName, debug)
 	}
 	return localstore.NewLocalStore[T](path.Join(LocalStorePath, tableName)), nil
 }

@@ -32,6 +32,7 @@ jobs:
           go test ./... -v
 
           # We rerun the tests with an SQL backend
-          export SINGULATRON_DB=postgres
-          export SINGULATRON_DB_SQL_CONNECTION_STRING="postgres://postgres:mysecretpassword@localhost:5432/mydatabase?sslmode=disable"
-          go test ./... -v
+          SINGULATRON_DB=postgres \
+            SINGULATRON_DB_DEBUG=true \
+            SINGULATRON_DB_SQL_CONNECTION_STRING="postgres://postgres:mysecretpassword@localhost:5432/mydatabase?sslmode=disable" \
+            go test ./... -v
