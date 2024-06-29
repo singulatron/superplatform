@@ -2,7 +2,7 @@
   "name": "angular-app",
   "version": "2.0.0",
   "scripts": {
-    "start": "ng serve",
+    "start": "ng serve --host 0.0.0.0",
     "package": "ng build --configuration production --base-href ./",
     "e2e": "ng e2e",
     "cypress:open": "cypress open",

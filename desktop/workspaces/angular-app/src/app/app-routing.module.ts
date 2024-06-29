@@ -18,6 +18,7 @@ import { LoginComponent } from './login/login.component';
 import { UsersComponent } from './users/users.component';
 import { AddUserComponent } from './users/add-user/add-user.component';
 import { RolesComponent } from './users/roles/roles.component';
+import { LogoutComponent } from './users/logout/logout.component';
 
 const routes: Routes = [
 	{
@@ -52,6 +53,10 @@ const routes: Routes = [
 		path: 'login',
 		component: LoginComponent,
 	},
+	{
+		path: 'logout',
+		component: LogoutComponent
+	}
 ];
 
 @NgModule({

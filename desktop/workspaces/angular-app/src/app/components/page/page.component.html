@@ -25,7 +25,10 @@
 					<div
 						*ngFor="let column of columns; let i = index"
 						class="column"
-						[ngStyle]="{ flex: '0 0 ' + getColumnWidth(i) }"
+						[ngStyle]="{
+							flex: '0 0 ' + getColumnWidth(i),
+							'max-width': getColumnWidth(i),
+						}"
 					>
 						<ng-container [ngTemplateOutlet]="column"> </ng-container>
 					</div>
@@ -52,7 +55,7 @@
 				<div
 					*ngFor="let column of columns; let i = index"
 					class="column"
-					[ngStyle]="{ flex: '0 0 ' + getColumnWidth(i) }"
+					[ngStyle]="{ flex: '0 0 ' + getColumnWidth(i), 							'max-width': getColumnWidth(i), }"
 				>
 					<ng-container [ngTemplateOutlet]="column"></ng-container>
 				</div>
@@ -72,8 +75,6 @@
 		no-border
 		*ngIf="(mobile.isMobile$ | async) && (footer.footerComponent$ | async)"
 	>
-		<ng-container
-			*ngComponentOutlet="footer.footerComponent$ | async"
-		></ng-container>
+		<ng-container #footerContainer></ng-container>
 	</ion-footer>
 </ion-app>

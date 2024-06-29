@@ -48,7 +48,8 @@ export class IconMenuComponent {
 		if (
 			this.currentPath === 'users' ||
 			this.currentPath === 'add-user' ||
-			this.currentPath === 'roles'
+			this.currentPath === 'roles' ||
+			this.currentPath === 'logout'
 		) {
 			return 'users-group';
 		}

@@ -18,6 +18,7 @@ import {
 	HostListener,
 	AfterContentInit,
 	ViewChild,
+	ViewContainerRef,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CommonModule, NgFor } from '@angular/common';
@@ -60,6 +61,8 @@ export class PageComponent implements AfterContentInit {
 
 	@ContentChildren('columnContent') columnsContent!: QueryList<any>;
 	@ContentChildren('mainContent') mainContent!: QueryList<any>;
+	@ViewChild('footerContainer', { read: ViewContainerRef, static: false })
+	footerContainer!: ViewContainerRef;
 
 	@ViewChild(IonMenu, { static: true }) menu!: IonMenu;
 
@@ -88,6 +91,9 @@ export class PageComponent implements AfterContentInit {
 		this.subscriptions.push(
 			this.router.events.subscribe((event) => {
 				if (event instanceof NavigationStart) {
+					// Footers get removed here, but they are inserted by
+					// components because they might want to do plumbing
+					// like setting up @Output() subscriptions.
 					this.footer.removeFooterComponent();
 					this.cd.markForCheck();
 				}
@@ -98,13 +104,20 @@ export class PageComponent implements AfterContentInit {
 				}
 
 				this.footer.removeFooterComponent();
-				this.cd.markForCheck();
 			})
 		);
 
 		this.mobile.setMobileStatus(window.innerWidth < this.breakpoint);
-		this.footer.footerComponent$.subscribe(() => {
-			this.cd.markForCheck();
+
+		this.footer.footerComponent$.subscribe((componentReference) => {
+			// @todo incredibly nasty hack
+			// #footerContainer in the html template is not available at this
+			// point because the *ngIf="footerComponent" is just being evaluated
+			setTimeout(() => {
+				if (componentReference && this.footerContainer) {
+					this.footerContainer.insert(componentReference.hostView);
+				}
+			}, 1);
 		});
 	}
 

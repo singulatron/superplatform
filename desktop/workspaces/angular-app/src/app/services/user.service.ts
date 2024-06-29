@@ -72,7 +72,18 @@ export class UserService {
 
 	setToken(token: string) {
 		this.token = token;
-		this.cookieService.set('the_token', this.token, 3650, '/', '', true);
+		this.cookieService.set(
+			'the_token',
+			this.token,
+			3650,
+			'/',
+			'',
+			this.localtron.config.env.production ? true : false
+		);
+	}
+
+	removeToken() {
+		this.cookieService.delete('the_token', '/', '', this.localtron.config.env.production ? true : false)
 	}
 
 	hasToken(): boolean {
@@ -169,11 +180,11 @@ export class UserService {
 
 	async getUserId(): Promise<string> {
 		try {
-		  const user = await firstValueFrom(this.user$.pipe(first()));
-		  return user.id as string;
+			const user = await firstValueFrom(this.user$.pipe(first()));
+			return user.id as string;
 		} catch (error) {
-		  console.error('Error getting user ID:', error);
-		  throw error;
+			console.error('Error getting user ID:', error);
+			throw error;
 		}
 	}
 }

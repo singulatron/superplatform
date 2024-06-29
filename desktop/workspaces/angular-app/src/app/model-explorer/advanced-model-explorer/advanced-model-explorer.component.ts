@@ -110,7 +110,6 @@ export class AdvancedModelExplorerComponent {
 		// After filtering, reload the pagination with the filtered list
 		this.totalItems = this.allFilteredModels.length;
 		this.loadPage(1); // Reset to the first page
-		console.log(this.allFilteredModels);
 	}
 
 	modelCategoryClicked(option: ModelCategoryOption) {
@@ -124,7 +123,7 @@ export class AdvancedModelExplorerComponent {
 		);
 		let models = this.allModels;
 		if (this.showOnlyDownloadedModels) {
-			models = [];
+			const downloadedModels = [];
 			const downloadsResponse = await this.downloadService.downloadList();
 			for (const model of models) {
 				if (
@@ -132,12 +131,13 @@ export class AdvancedModelExplorerComponent {
 						(download) =>
 							download.status === 'completed' &&
 							model.assets &&
-							Object.values(model.assets)?.includes(download.id)
+							Object.values(model.assets)?.includes(download.url)
 					)
 				) {
-					models.push(model);
+					downloadedModels.push(model);
 				}
 			}
+			models = downloadedModels;
 		}
 
 		return this.anyCategorySelected()

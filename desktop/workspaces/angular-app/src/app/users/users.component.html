@@ -18,21 +18,32 @@
 		<app-centered [headerHeight]="'56px'" [vertical]="true">
 			<div style="padding: 0rem 2rem">
 				<h2 style="margin-bottom: 2rem">{{ 'Users' | translate }}</h2>
+				<ion-searchbar
+					debounce="500"
+					(ionInput)="filterUsers($event.target.value)"
+					placeholder="Search users"
+				></ion-searchbar>
 				<ion-list>
-					<ng-container *ngFor="let user of users; let i = index">
-						<form [formGroup]="getUserForm(i)">
+					<ng-container
+						*ngFor="
+							let user of filteredUsers;
+							let i = index;
+							trackBy: trackById
+						"
+					>
+						<form [formGroup]="getUserForm(user.id!)">
 							<ion-item
 								detail="false"
 								lines="full"
-								(click)="users[i].visible = !users[i].visible"
+								(click)="filteredUsers[i].visible = !filteredUsers[i].visible"
 								button
 							>
 								<ion-label>
-									{{ users[i].name }}
-									<span style="color: #666">({{ users[i].email }})</span>
+									{{ filteredUsers[i].name }}
+									<span style="color: #666">({{ filteredUsers[i].email }})</span>
 								</ion-label>
 								<ion-icon
-									(click)="deleteUser($event, users[i].id || '')"
+									(click)="deleteUser($event, filteredUsers[i].id || '')"
 									name="trash-outline"
 									slot="end"
 									class="icon-delete"
@@ -40,12 +51,12 @@
 								<ion-icon
 									slot="end"
 									style="color: #bdbdbd; font-size: 1.25rem"
-									[name]="users[i].visible ? 'chevron-down' : 'chevron-forward'"
+									[name]="filteredUsers[i].visible ? 'chevron-down' : 'chevron-forward'"
 								></ion-icon>
 							</ion-item>
 
 							<ion-card-content
-								*ngIf="users[i].visible"
+								*ngIf="filteredUsers[i].visible"
 								style="padding-top: 2em; padding-bottom: 2em"
 							>
 								<ion-item>
@@ -78,7 +89,7 @@
 									></ion-input>
 								</ion-item>
 
-								<ion-item *ngIf="getUserForm(i).get('password')?.value">
+								<ion-item *ngIf="getUserForm(user.id!).get('password')?.value">
 									<ion-input
 										formControlName="passwordConfirmation"
 										label="Password Confirmation"
@@ -87,6 +98,7 @@
 									></ion-input>
 								</ion-item>
 
+								<!-- 
 								<ion-item>
 									<ion-input
 										formControlName="createdAt"
@@ -105,12 +117,13 @@
 										[disabled]="true"
 									></ion-input>
 								</ion-item>
+								-->
 
 								<ion-row style="margin-top: 1em">
 									<ion-col size-lg="6" size-md="12" size-sm="12" size-xs="12">
 										<ion-button
 											style="margin-left: 0.75rem; color: white"
-											(click)="saveUser(i)"
+											(click)="saveUser(user.id!)"
 											>Save</ion-button
 										>
 									</ion-col>

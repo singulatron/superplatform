@@ -5,18 +5,32 @@
       <h1>Singulatron</h1>
     </span>
     <div>
-      Server and desktop AI platform
+      Self-Hosted AI SuperApp
+    </div>
+    <div>
+      <a href="https://singulatron.com/home">singulatron.com/home</a>
     </div>
   </div>
 <p>
 <br />
 <br />
-Singulatron is an app that lets you run AI anywhere!
-It's private, works offline, and can run on your laptop or on servers.
 
-When self-hosted, it becomes a multiuser, distributed (*coming soon), real-time AI platform.
+Singulatron is SuperApp where AI takes center stage.  
+It uses no third party APIs, everything runs on your computer(s).
+
+## Roadmap
+
+- [x] AI functionality: prompting, threads, prompt queues, download manager
+- [x] User management: multi-user support, role-based access control
+- [ ] <- [IN PROGRESS] Supporting different database backends (local files, SQL and many more) and other distributed primitives
+- [ ] Chat with other users in your organization in Singulatron
+- [ ] Running, scheduling mini-(or not so mini)-apps built on top of Singulatron
+- [ ] Improving this roadmap : )
 
 ![Run](https://singulatron.com/assets/chat.png?refresh=1)
+## Run On Your Servers
+
+See [this document](./docs/server.md) to help you get started.
 
 ## Run On Your Laptop/PC
 
@@ -24,10 +38,6 @@ Download as a binary for your laptop or PC for Windows or Linux from the website
 MacOS support is coming soon.
 
 **Note/Troubleshooting**: currently the focus is on server setups. If the app doesn't want to work on your machine, just make sure Docker is running on your system, as the Docker/VM installation is not entirely reliable on every machine yet.
-
-## Run On Your Servers
-
-See [this document](./docs/server.md) to help you get started.
 
 ## Why
 
