@@ -455,6 +455,9 @@ func (q *SQLQueryBuilder[T]) Find() ([]T, error) {
 				elemType := fieldType.Elem()
 				slicePtr := reflect.New(reflect.SliceOf(elemType)).Interface()
 				fields[i] = &GenericArray{Array: slicePtr}
+			case fieldType.Kind() == reflect.Pointer:
+				var str sql.NullString
+				fields[i] = &str
 			case fieldType.Kind() == reflect.Struct && fieldType != reflect.TypeOf(time.Time{}):
 				var str sql.NullString
 				fields[i] = &str
@@ -483,6 +486,28 @@ func (q *SQLQueryBuilder[T]) Find() ([]T, error) {
 				} else {
 					field.Set(reflect.Zero(fieldType))
 				}
+			case fieldType.Kind() == reflect.Pointer:
+				str, ok := fields[i].(*sql.NullString)
+				if ok && str.Valid {
+					newField := reflect.New(fieldType.Elem()).Interface()
+					err := json.Unmarshal([]byte(str.String), newField)
+					if err != nil {
+						return nil, errors.Wrap(err, "error unmarshaling struct")
+					}
+					field.Set(reflect.ValueOf(newField))
+				} else {
+					bin, ok := fields[i].(*[]uint8)
+					if ok && bin != nil {
+						newField := reflect.New(fieldType.Elem()).Interface()
+						err := json.Unmarshal(*bin, newField)
+						if err != nil {
+							return nil, errors.Wrap(err, "error unmarshaling JSONB binary data")
+						}
+						field.Set(reflect.ValueOf(newField))
+					} else {
+						field.Set(reflect.Zero(fieldType))
+					}
+				}
 			case fieldType.Kind() == reflect.Struct && fieldType != reflect.TypeOf(time.Time{}):
 				str, ok := fields[i].(*sql.NullString)
 				if ok && str.Valid {
@@ -492,6 +517,19 @@ func (q *SQLQueryBuilder[T]) Find() ([]T, error) {
 						return nil, errors.Wrap(err, "error unmarshaling struct")
 					}
 					field.Set(reflect.ValueOf(newField).Elem())
+				} else {
+					// Handle JSONB binary data
+					bin, ok := fields[i].(*[]uint8)
+					if ok && bin != nil {
+						newField := reflect.New(fieldType).Interface()
+						err := json.Unmarshal(*bin, newField)
+						if err != nil {
+							return nil, errors.Wrap(err, "error unmarshaling JSONB binary data")
+						}
+						field.Set(reflect.ValueOf(newField).Elem())
+					} else {
+						field.Set(reflect.Zero(fieldType))
+					}
 				}
 			case fieldType == reflect.TypeOf(time.Time{}):
 				nullTime, ok := fields[i].(*sql.NullTime)

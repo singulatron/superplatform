@@ -14,6 +14,7 @@ import (
 	"database/sql"
 	"fmt"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/singulatron/singulatron/localtron/logger"
 )
 
@@ -56,7 +57,7 @@ func (db *DebugDB) Prepare(query string) (*sql.Stmt, error) {
 
 func (db *DebugDB) logQuery(query string, err error, args ...interface{}) {
 	if db.Debug {
-		logger.Info(fmt.Sprintf("[%v] [ERROR: %v] Executing query: %s, args: %v", db.tableName, err, query, args))
+		logger.Info(fmt.Sprintf("[%v] [ERROR: %v] Executing query: %s, args: %v", db.tableName, err, query, spew.Sdump(args)))
 	}
 }
 
@@ -91,6 +92,6 @@ func (db *DebugTx) Prepare(query string) (*sql.Stmt, error) {
 
 func (db *DebugTx) logQuery(query string, err error, args ...interface{}) {
 	if db.Debug {
-		logger.Info(fmt.Sprintf("[%v] [ERROR: %v] [TRANSACTION] Executing query: %s, args: %v", db.tableName, err, query, args))
+		logger.Info(fmt.Sprintf("[%v] [ERROR: %v] [TRANSACTION] Executing query: %s, args: %v", db.tableName, err, query, spew.Sdump(args)))
 	}
 }

@@ -12,10 +12,7 @@ package sqlstore
 
 import (
 	"fmt"
-	"reflect"
 	"strings"
-
-	"github.com/flusflas/dipper"
 )
 
 func (s *SQLStore[T]) fieldName(fieldName string) string {
@@ -24,6 +21,7 @@ func (s *SQLStore[T]) fieldName(fieldName string) string {
 	}
 
 	fieldParts := strings.Split(fieldName, ".")
+
 	for i, v := range fieldParts {
 		f := strings.ToLower(v[0:1]) + v[1:]
 
@@ -33,14 +31,7 @@ func (s *SQLStore[T]) fieldName(fieldName string) string {
 		}
 
 		if i == len(fieldParts)-1 {
-			var schema T
-			schemaField := dipper.Get(schema, fieldName)
-			fieldType := reflect.TypeOf(schemaField)
-			if fieldType.Kind() == reflect.String {
-				fieldParts[i] = "->>" + fmt.Sprintf("'%v'", fieldParts[i])
-			} else {
-				fieldParts[i] = "->" + f
-			}
+			fieldParts[i] = "->>" + fmt.Sprintf("'%v'", f)
 		} else {
 			fieldParts[i] = "->" + f
 		}
