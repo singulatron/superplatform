@@ -22,6 +22,11 @@ import (
 var LocalStorePath = ""
 
 func init() {
+	localStoragePath := os.Getenv("SINGULARON_LOCAL_STORAGE_PATH")
+	if localStoragePath != "" {
+		localStoragePath = localStoragePath
+		return
+	}
 	dir, err := os.UserHomeDir()
 	if err != nil {
 		panic(err)

@@ -45,6 +45,10 @@ singulatron-backend:
     - SINGULATRON_GPU_PLATFORM=cuda
 ```
 
+Please keep in mind that this will store data locally on your machine in as gzipped JSON because Singulatron defaults to local file storage.
+
+See `SINGULATRON_DB` envar for more information.
+
 ### Singulatron Frontend Environment Variables
 
 #### `BACKEND_ADDRESS`
@@ -107,6 +111,23 @@ Host With Singulatron
  |
  |-> Container Launched By Singulatron
 ```
+
+#### `SINGULATRON_DB`
+
+You can use this envar to make Singulatron actually use a database instead of local file storage to store data.
+
+##### PostgreSQL
+
+```sh
+SINGULATRON_DB=postgres
+SINGULATRON_DB_SQL_CONNECTION_STRING="postgres://postgres:mysecretpassword@localhost:5432/mydatabase?sslmode=disable"
+```
+
+Naturally, you should change the details of the connection string to reflect your environment.
+
+#### `SINGULARON_LOCAL_STORAGE_PATH`
+
+By default the local file storage will place files into `~/.singulatron/data`, but this flag (and other config options) can override that.
 
 ## Using Your Server
 
