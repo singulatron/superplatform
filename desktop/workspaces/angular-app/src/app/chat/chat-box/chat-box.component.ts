@@ -296,8 +296,8 @@ export class ChatBoxComponent implements OnChanges, AfterViewInit, OnDestroy {
 		this.promptService.promptRemove(prompt)
 	}
 
-	private scrollToBottom(force: boolean = false): void {
-		if (!this.shouldScrollToBottom && !force) {
+	private scrollToBottom(): void {
+		if (!this.shouldScrollToBottom) {
 			return;
 		}
 		try {
