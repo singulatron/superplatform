@@ -71,6 +71,7 @@ func TestAll(t *testing.T) {
 		"Query":                  Query,
 		"Transactions":           Transactions,
 		"DotNotation":            DotNotation,
+		"Pagination":             Pagination,
 	}
 
 	for testName, test := range tests {
@@ -81,6 +82,27 @@ func TestAll(t *testing.T) {
 			})
 		}
 	}
+}
+
+func Pagination(t *testing.T, store datastore.DataStore[TestObject]) {
+	for i := 1; i <= 10; i++ {
+		obj := TestObject{Name: fmt.Sprintf("PaginationTest%d", i), Value: i}
+		err := store.Create(obj)
+		require.NoError(t, err)
+	}
+
+	results, err := store.Query(datastore.All()).OrderBy("Value", true).Limit(5).Find()
+	require.NoError(t, err)
+	require.Len(t, results, 5)
+	require.Equal(t, "PaginationTest10", results[0].Name)
+	require.Equal(t, 10, results[0].Value)
+
+	lastValue := results[len(results)-1].Value
+	results, err = store.Query(datastore.All()).OrderBy("Value", true).Limit(5).After(lastValue).Find()
+	require.NoError(t, err)
+	require.Len(t, results, 5)
+	require.Equal(t, "PaginationTest5", results[0].Name)
+	require.Equal(t, 5, results[0].Value)
 }
 
 func CreatedAt(t *testing.T, store datastore.DataStore[TestObject]) {

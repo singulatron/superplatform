@@ -386,16 +386,16 @@ func (s *SQLStore[T]) buildUpsertQuery(obj T) (string, []interface{}, error) {
 type SQLQueryBuilder[T datastore.Row] struct {
 	store        *SQLStore[T]
 	conditions   []datastore.Condition
-	orderField   string
-	orderDesc    bool
+	orderFields  []string
+	orderDescs   []bool
 	limit        int
 	after        []any
 	selectFields []string
 }
 
 func (q *SQLQueryBuilder[T]) OrderBy(field string, desc bool) datastore.QueryBuilder[T] {
-	q.orderField = field
-	q.orderDesc = desc
+	q.orderFields = append(q.orderFields, field)
+	q.orderDescs = append(q.orderDescs, desc)
 	return q
 }
 
@@ -644,17 +644,14 @@ func (q *SQLQueryBuilder[T]) buildSelectQuery() (string, []interface{}, error) {
 		query += " WHERE " + strings.Join(conditions, " AND ")
 	}
 
-	if q.orderField != "" {
-		query += fmt.Sprintf(" ORDER BY %s", q.store.fieldName(q.orderField))
-		if q.orderDesc {
-			query += " DESC"
+	if q.orderFields != nil {
+		for i, orderField := range q.orderFields {
+			orderDesc := q.orderDescs[i]
+			query += fmt.Sprintf(" ORDER BY %s", q.store.fieldName(orderField))
+			if orderDesc {
+				query += " DESC"
+			}
 		}
-	}
-
-	if len(q.after) > 0 {
-		query += fmt.Sprintf(" OFFSET %s", q.store.placeholder(paramCounter))
-		params = append(params, q.after[0])
-		paramCounter++
 	}
 
 	if q.limit > 0 {

@@ -62,5 +62,19 @@ func (q *SQLQueryBuilder[T]) buildConditions() ([]string, []interface{}, error) 
 
 	}
 
+	if len(q.after) > 0 {
+		for i, afterValue := range q.after {
+			fieldName := q.store.fieldName(q.orderFields[i])
+			placeHolder := q.store.placeholder(paramCounter)
+			if q.orderDescs[i] {
+				conditions = append(conditions, fmt.Sprintf("%s < %s", fieldName, placeHolder))
+			} else {
+				conditions = append(conditions, fmt.Sprintf("%s > %s", fieldName, placeHolder))
+			}
+			params = append(params, afterValue)
+			paramCounter++
+		}
+	}
+
 	return conditions, params, nil
 }
