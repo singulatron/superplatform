@@ -30,19 +30,34 @@ func (q *SQLQueryBuilder[T]) buildConditions() ([]string, []interface{}, error) 
 	var params []interface{}
 	paramCounter := 1
 	var conditions []string
+
 	for _, cond := range q.conditions {
+
+		var param any
+		var err error
+
 		if cond.Equal != nil {
+			fieldName := q.store.fieldName(cond.Equal.FieldName)
+			placeHolder := q.store.placeholder(paramCounter)
+
 			if reflect.TypeOf(cond.Equal.Value).Kind() == reflect.Slice {
-				conditions = append(conditions, fmt.Sprintf("%s = ANY(%s)", q.store.fieldName(cond.Equal.FieldName), q.store.placeholder(paramCounter)))
+				conditions = append(conditions, fmt.Sprintf("%s = ANY(%s)", fieldName, placeHolder))
+				param, err = q.store.convertParam(cond.Equal.Value)
+			} else if typ, hasTyp := q.store.fieldTypes[fieldName]; hasTyp && typ.Kind() == reflect.Slice {
+				// "reverse" IN clause
+				conditions = append(conditions, fmt.Sprintf("%s = ANY(%s)", placeHolder, fieldName))
+				param, err = q.store.convertParam(cond.Equal.Value)
 			} else {
-				conditions = append(conditions, fmt.Sprintf("%s = %s", q.store.fieldName(cond.Equal.FieldName), q.store.placeholder(paramCounter)))
+				conditions = append(conditions, fmt.Sprintf("%s = %s", fieldName, placeHolder))
+				param, err = q.store.convertParam(cond.Equal.Value)
 			}
-			param, err := q.store.convertParam(cond.Equal.Value)
-			if err != nil {
-				return nil, nil, err
-			}
+
 			params = append(params, param)
 			paramCounter++
+		}
+
+		if err != nil {
+			return nil, nil, err
 		}
 
 	}

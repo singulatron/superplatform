@@ -12,6 +12,7 @@ package sqlstore
 
 import (
 	"database/sql"
+	"database/sql/driver"
 	"encoding/json"
 	"fmt"
 	"reflect"
@@ -49,6 +50,7 @@ type SQLStore[T datastore.Row] struct {
 	placeholderStyle PlaceholderStyle
 	driverName       string
 	tableName        string
+	fieldTypes       map[string]reflect.Type
 }
 
 func NewSQLStore[T datastore.Row](driverName, connStr string, tableName string, debug bool) (*SQLStore[T], error) {
@@ -71,6 +73,7 @@ func NewSQLStore[T datastore.Row](driverName, connStr string, tableName string, 
 		tableName:        tableName,
 		placeholderStyle: placeholderStyle,
 		db:               NewDebugDB(db, tableName),
+		fieldTypes:       map[string]reflect.Type{},
 	}
 	sstore.db.Debug = debug
 
@@ -217,6 +220,7 @@ func (s *SQLStore[T]) BeginTransaction() (datastore.DataStore[T], error) {
 		driverName:    s.driverName,
 		inTransaction: true,
 		tx:            tx,
+		fieldTypes:    s.fieldTypes,
 	}, nil
 }
 
@@ -257,9 +261,13 @@ func (s *SQLStore[T]) IsInTransaction() bool {
 
 func (s *SQLStore[T]) convertParam(param any) (any, error) {
 	t := reflect.TypeOf(param)
+	v := reflect.ValueOf(param)
 
 	switch t.Kind() {
 	case reflect.Ptr:
+		if v.IsNil() {
+			return nil, nil
+		}
 		return s.convertParam(reflect.ValueOf(param).Elem().Interface())
 	case reflect.Struct:
 		if reflect.TypeOf(param) == reflect.TypeOf(time.Time{}) {
@@ -271,13 +279,12 @@ func (s *SQLStore[T]) convertParam(param any) (any, error) {
 		}
 		return string(bs), nil
 	case reflect.Slice:
-		v := reflect.ValueOf(param)
 		if v.Len() == 0 {
 			switch s.driverName {
 			case DriverMySQL:
 				return "[]", nil
 			case DriverPostGRES:
-				return pq.Array([]interface{}{}), nil
+				return pq.Array(nil), nil
 			default:
 				return nil, fmt.Errorf("unrecognized driver: '%v'", s.driverName)
 			}
@@ -407,6 +414,18 @@ func (q *SQLQueryBuilder[T]) Select(fields ...string) datastore.QueryBuilder[T] 
 	return q
 }
 
+type GenericArray struct {
+	Array interface{}
+}
+
+func (a *GenericArray) Scan(src interface{}) error {
+	return pq.Array(a.Array).Scan(src)
+}
+
+func (a *GenericArray) Value() (driver.Value, error) {
+	return pq.Array(a.Array).Value()
+}
+
 func (q *SQLQueryBuilder[T]) Find() ([]T, error) {
 	query, params, err := q.buildSelectQuery()
 	if err != nil {
@@ -431,9 +450,11 @@ func (q *SQLQueryBuilder[T]) Find() ([]T, error) {
 			fieldType := field.Type()
 
 			switch {
-			case fieldType.Kind() == reflect.Slice && fieldType.Elem().Kind() == reflect.String:
-				var str sql.NullString
-				fields[i] = &str
+			case fieldType.Kind() == reflect.Slice:
+				// Create a GenericArray with the appropriate type
+				elemType := fieldType.Elem()
+				slicePtr := reflect.New(reflect.SliceOf(elemType)).Interface()
+				fields[i] = &GenericArray{Array: slicePtr}
 			case fieldType.Kind() == reflect.Struct && fieldType != reflect.TypeOf(time.Time{}):
 				var str sql.NullString
 				fields[i] = &str
@@ -454,10 +475,11 @@ func (q *SQLQueryBuilder[T]) Find() ([]T, error) {
 			fieldType := field.Type()
 
 			switch {
-			case fieldType.Kind() == reflect.Slice && fieldType.Elem().Kind() == reflect.String:
-				str, ok := fields[i].(*sql.NullString)
-				if ok && str.Valid {
-					field.Set(reflect.ValueOf(strings.Split(str.String, ",")))
+			case fieldType.Kind() == reflect.Slice:
+				// Set the scanned slice to the appropriate field
+				genericArray, ok := fields[i].(*GenericArray)
+				if ok {
+					field.Set(reflect.ValueOf(genericArray.Array).Elem())
 				} else {
 					field.Set(reflect.Zero(fieldType))
 				}

@@ -85,11 +85,14 @@ func TestAll(t *testing.T) {
 
 func CreatedAt(t *testing.T, store datastore.DataStore[TestObject]) {
 	obj1 := TestObject{Name: "A1", Value: 10, CreatedAt: time.Now()}
-	obj2 := TestObject{Name: "A2", Value: 10, CreatedAt: time.Now()}
+	obj2 := TestObject{Name: "A2", Value: 10, CreatedAt: time.Now().Add(time.Minute)}
+	obj3 := TestObject{Name: "A3", Value: 20, CreatedAt: time.Now().Add(2 * time.Minute)}
 
 	err := store.Create(obj1)
 	assert.NoError(t, err)
 	err = store.Create(obj2)
+	assert.NoError(t, err)
+	err = store.Create(obj3)
 	assert.NoError(t, err)
 
 	res, err := store.Query(
@@ -111,10 +114,10 @@ func CreatedAt(t *testing.T, store datastore.DataStore[TestObject]) {
 		datastore.All(),
 		datastore.Equal("Value", 10),
 	).OrderBy("CreatedAt", true).Find()
+
 	assert.NoError(t, err)
 	assert.Equal(t, 2, len(res))
 	assert.Equal(t, "A2", res[0].Name)
-
 }
 
 func Create(t *testing.T, store datastore.DataStore[TestObject]) {
