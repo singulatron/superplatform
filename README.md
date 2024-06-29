@@ -8,7 +8,7 @@
       The Self-Hosted AI Superplatform
     </div>
     <div>
-      <a href="https://singulatron.com">singulatron.com/home</a>
+      <a href="https://singulatron.com/home">singulatron.com</a>
     </div>
   </div>
 <p>
