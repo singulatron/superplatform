@@ -5,7 +5,7 @@
       <h1>Singulatron</h1>
     </span>
     <div>
-      Self-Hosted AI SuperApp
+      Self-Hosted AI Superplatform
     </div>
     <div>
       <a href="https://singulatron.com/home">singulatron.com/home</a>
@@ -15,8 +15,8 @@
 <br />
 <br />
 
-Singulatron is SuperApp where AI takes center stage.  
-It uses no third party APIs, everything runs on your computer(s).
+Singulatron is the AI Superplatform that runs on your computer(s) and server(s). 
+It uses no third party APIs, and you have compelte control over your data and privacy.
 
 ## Roadmap
 
