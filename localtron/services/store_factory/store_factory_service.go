@@ -1,10 +1,22 @@
+/**
+ * @license
+ * Copyright (c) The Authors (see the AUTHORS file)
+ *
+ * This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3) for personal, non-commercial use.
+ * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
+ *
+ * For commercial use, a separate license must be obtained by purchasing from The Authors.
+ * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
+ */
 package storefactoryservice
 
 import (
+	"os"
 	"path"
 
 	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/datastore/localstore"
+	"github.com/singulatron/singulatron/localtron/datastore/sqlstore"
 )
 
 var LocalStorePath = ""
@@ -18,5 +30,10 @@ var LocalStorePath = ""
 //
 // Unfortunately this means globals must be utilized to configure this package.
 func GetStore[T datastore.Row](tableName string) (datastore.DataStore[T], error) {
+	db := os.Getenv("SINGULATRON_DB")
+	connStr := os.Getenv("SINGULATRON_DB_SQL_CONNECTION_STRING")
+	if db == "postgres" {
+		return sqlstore.NewSQLStore[T]("postgres", connStr, tableName, false)
+	}
 	return localstore.NewLocalStore[T](path.Join(LocalStorePath, tableName)), nil
 }
