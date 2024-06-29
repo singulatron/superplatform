@@ -112,6 +112,13 @@ export class ChatBoxComponent implements OnChanges, AfterViewInit, OnDestroy {
 			const rsp = await this.chatService.chatMessages(this.thread.id);
 			this.messages = rsp.messages;
 			this.assets = rsp.assets;
+			// The mutationObserver triggers before the app-messages components are rendered.
+			// This ensures scrollToBottom is called when the app loads for the first time,
+			// after the app-messages have been rendered.
+			// TODO: Find a better solution
+			setTimeout(async () => {
+				this.scrollToBottom();
+			}, 1000)
 		}
 
 		this.cd.markForCheck();
@@ -142,14 +149,18 @@ export class ChatBoxComponent implements OnChanges, AfterViewInit, OnDestroy {
 	}
 
 	ngOnDestroy() {
-		if (this.scrollListener) {
+		try {
 			this.scrollableElement?.nativeElement?.removeEventListener('scroll', this.scrollListener);
-		}
+		} catch (error) { }
+		try {
+			this.mutationObserver.disconnect();
+		} catch (error) { }
 	}
 
 	private onScroll(): void {
 		const element = this.scrollableElement.nativeElement;
 		const atBottom = element.scrollHeight - element.scrollTop < (element.clientHeight + element.clientHeight * 0.05);
+		console.log("aha", atBottom)
 		this.shouldScrollToBottom = atBottom;
 	}
 
