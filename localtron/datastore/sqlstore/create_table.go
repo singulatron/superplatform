@@ -19,13 +19,17 @@ import (
 
 func (s *SQLStore[T]) createTable(db *DebugDB, tableName string) error {
 	var v T
-	obj := &v
-	val := reflect.ValueOf(obj).Elem()
-	typ := val.Type()
+
+	typ := reflect.TypeOf(v)
+	if typ.Kind() == reflect.Pointer {
+		typ = typ.Elem()
+	}
 
 	var fields []string
-	for i := 0; i < val.NumField(); i++ {
+
+	for i := 0; i < typ.NumField(); i++ {
 		field := typ.Field(i)
+		fmt.Println("FIELD NAME", field.Name)
 		fieldName := s.fieldName(field.Name)
 		s.fieldTypes[fieldName] = field.Type
 		fieldType := s.sqlType(field.Type)

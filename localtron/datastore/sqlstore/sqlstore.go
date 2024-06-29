@@ -81,9 +81,13 @@ func NewSQLStore[T datastore.Row](driverName, connStr string, tableName string, 
 		return nil, errors.Wrap(err, "error creating table")
 	}
 
-	var obj T
-	val := reflect.ValueOf(obj)
-	typ := val.Type()
+	var v T
+
+	typ := reflect.TypeOf(v)
+	if typ.Kind() == reflect.Pointer {
+		typ = typ.Elem()
+	}
+
 	fieldName := sstore.fieldName(typ.Field(0).Name)
 
 	_, err = sstore.db.Exec(fmt.Sprintf("ALTER TABLE %v ADD CONSTRAINT %v_%v_unique UNIQUE (%v);",
@@ -439,13 +443,29 @@ func (q *SQLQueryBuilder[T]) Find() ([]T, error) {
 	defer rows.Close()
 
 	var result []T
-	tType := reflect.TypeOf((*T)(nil)).Elem()
+
+	var v T
+	tType := reflect.TypeOf(v)
+	tIsPointer := tType.Kind() == reflect.Pointer
+
+	var safeNumFieldsType reflect.Type
+	if tIsPointer {
+		safeNumFieldsType = tType.Elem()
+	} else {
+		safeNumFieldsType = tType
+	}
 
 	for rows.Next() {
-		obj := reflect.New(tType).Elem()
-		fields := make([]interface{}, tType.NumField())
+		var obj reflect.Value
+		if tIsPointer {
+			obj = reflect.New(tType.Elem()).Elem()
+		} else {
+			obj = reflect.New(tType).Elem()
+		}
 
-		for i := 0; i < tType.NumField(); i++ {
+		fields := make([]interface{}, safeNumFieldsType.NumField())
+
+		for i := 0; i < safeNumFieldsType.NumField(); i++ {
 			field := obj.Field(i)
 			fieldType := field.Type()
 
@@ -473,8 +493,16 @@ func (q *SQLQueryBuilder[T]) Find() ([]T, error) {
 			return nil, errors.Wrap(err, "error scanning")
 		}
 
-		for i := 0; i < tType.NumField(); i++ {
+		for i := 0; i < safeNumFieldsType.NumField(); i++ {
+			// var field reflect.Value
 			field := obj.Field(i)
+			//spew.Dump(tIsPointer, obj)
+			//if tIsPointer {
+			//	field = obj.Elem().Field(i)
+			//} else {
+			//
+			//}
+
 			fieldType := field.Type()
 
 			switch {
@@ -541,7 +569,14 @@ func (q *SQLQueryBuilder[T]) Find() ([]T, error) {
 			}
 		}
 
-		result = append(result, obj.Interface().(T))
+		if tIsPointer {
+			val := obj.Interface()
+			valPtr := reflect.New(reflect.TypeOf(val))
+			valPtr.Elem().Set(reflect.ValueOf(val))
+			result = append(result, valPtr.Interface().(T))
+		} else {
+			result = append(result, obj.Interface().(T))
+		}
 	}
 
 	return result, nil

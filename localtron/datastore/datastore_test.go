@@ -60,6 +60,23 @@ func TestAll(t *testing.T) {
 			return store
 		},
 	}
+	pointerStores := map[string]func() datastore.DataStore[*TestObject]{
+		"localStore": func() datastore.DataStore[*TestObject] {
+			return localstore.NewLocalStore[*TestObject]("")
+		},
+		"sqlStore": func() datastore.DataStore[*TestObject] {
+			table := uuid.New().String()
+			table = strings.Replace(table, "-", "", -1)[0:10]
+			store, err := sqlstore.NewSQLStore[*TestObject](
+				sqlstore.DriverPostGRES,
+				"postgres://postgres:mysecretpassword@localhost:5432/mydatabase?sslmode=disable",
+				"table_"+table,
+				true,
+			)
+			require.NoError(t, err)
+			return store
+		},
+	}
 	tests := map[string]func(t *testing.T, store datastore.DataStore[TestObject]){
 		"Create":                 Create,
 		"CreatedAt":              CreatedAt,
@@ -73,6 +90,9 @@ func TestAll(t *testing.T) {
 		"DotNotation":            DotNotation,
 		"Pagination":             Pagination,
 	}
+	pointerTests := map[string]func(t *testing.T, store datastore.DataStore[*TestObject]){
+		"PointerPagination": PointerPagination,
+	}
 
 	for testName, test := range tests {
 		for storeName, storeFunc := range stores {
@@ -81,7 +101,39 @@ func TestAll(t *testing.T) {
 				test(t, store)
 			})
 		}
+
 	}
+	for testName, test := range pointerTests {
+		for storeName, storeFunc := range pointerStores {
+			t.Run(fmt.Sprintf("%v %v", storeName, testName), func(t *testing.T) {
+				store := storeFunc()
+				test(t, store)
+			})
+		}
+
+	}
+
+}
+
+func PointerPagination(t *testing.T, store datastore.DataStore[*TestObject]) {
+	for i := 1; i <= 10; i++ {
+		obj := &TestObject{Name: fmt.Sprintf("PaginationTest%d", i), Value: i}
+		err := store.Create(obj)
+		require.NoError(t, err)
+	}
+
+	results, err := store.Query(datastore.All()).OrderBy("Value", true).Limit(5).Find()
+	require.NoError(t, err)
+	require.Len(t, results, 5)
+	require.Equal(t, "PaginationTest10", results[0].Name)
+	require.Equal(t, 10, results[0].Value)
+
+	lastValue := results[len(results)-1].Value
+	results, err = store.Query(datastore.All()).OrderBy("Value", true).Limit(5).After(lastValue).Find()
+	require.NoError(t, err)
+	require.Len(t, results, 5)
+	require.Equal(t, "PaginationTest5", results[0].Name)
+	require.Equal(t, 5, results[0].Value)
 }
 
 func Pagination(t *testing.T, store datastore.DataStore[TestObject]) {
