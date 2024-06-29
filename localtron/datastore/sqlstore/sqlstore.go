@@ -588,26 +588,17 @@ func (q *SQLQueryBuilder[T]) Find() ([]T, error) {
 }
 
 func (q *SQLQueryBuilder[T]) FindOne() (T, bool, error) {
-	var obj T
-
-	query, params, err := q.buildSelectQuery()
+	var def T
+	res, err := q.Find()
 	if err != nil {
-		return obj, false, errors.Wrap(err, "error building select query when finding one")
-	}
-	query += " LIMIT 1"
-
-	row := q.store.db.QueryRow(query, params...)
-
-	err = row.Scan(&obj)
-	if err != nil {
-		if err == sql.ErrNoRows {
-			var empty T
-			return empty, false, nil
-		}
-		return obj, false, errors.Wrap(err, "error scanning when finding one")
+		return def, false, err
 	}
 
-	return obj, true, nil
+	if len(res) == 0 {
+		return def, false, nil
+	}
+
+	return res[0], true, nil
 }
 
 func (q *SQLQueryBuilder[T]) Count() (int64, error) {

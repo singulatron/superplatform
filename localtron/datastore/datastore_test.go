@@ -89,6 +89,7 @@ func TestAll(t *testing.T) {
 		"Transactions":           Transactions,
 		"DotNotation":            DotNotation,
 		"Pagination":             Pagination,
+		"FindOne":                FindOne,
 	}
 	pointerTests := map[string]func(t *testing.T, store datastore.DataStore[*TestObject]){
 		"PointerCreate":                 PointerCreate,
@@ -102,6 +103,7 @@ func TestAll(t *testing.T) {
 		"PointerTransactions":           PointerTransactions,
 		"PointerDotNotation":            PointerDotNotation,
 		"PointerPagination":             PointerPagination,
+		"PointerFindOne":                PointerFindOne,
 	}
 
 	for testName, test := range tests {
@@ -239,6 +241,48 @@ func PointerCreatedAt(t *testing.T, store datastore.DataStore[*TestObject]) {
 	require.NoError(t, err)
 	require.Equal(t, 2, len(res))
 	require.Equal(t, "A2", res[0].Name)
+}
+
+func FindOne(t *testing.T, store datastore.DataStore[TestObject]) {
+	obj1 := TestObject{Name: "A1", Value: 10, CreatedAt: time.Now()}
+	obj2 := TestObject{Name: "A2", Value: 10, CreatedAt: time.Now().Add(time.Minute)}
+	obj3 := TestObject{Name: "A3", Value: 20, CreatedAt: time.Now().Add(2 * time.Minute)}
+
+	err := store.Create(obj1)
+	require.NoError(t, err)
+	err = store.Create(obj2)
+	require.NoError(t, err)
+	err = store.Create(obj3)
+	require.NoError(t, err)
+
+	res, found, err := store.Query(
+		datastore.All(),
+		datastore.Equal("Value", 20),
+	).FindOne()
+	require.Equal(t, true, found)
+	require.NoError(t, err)
+	require.Equal(t, obj3.Name, res.Name)
+}
+
+func PointerFindOne(t *testing.T, store datastore.DataStore[*TestObject]) {
+	obj1 := &TestObject{Name: "A1", Value: 10, CreatedAt: time.Now()}
+	obj2 := &TestObject{Name: "A2", Value: 10, CreatedAt: time.Now().Add(time.Minute)}
+	obj3 := &TestObject{Name: "A3", Value: 20, CreatedAt: time.Now().Add(2 * time.Minute)}
+
+	err := store.Create(obj1)
+	require.NoError(t, err)
+	err = store.Create(obj2)
+	require.NoError(t, err)
+	err = store.Create(obj3)
+	require.NoError(t, err)
+
+	res, found, err := store.Query(
+		datastore.All(),
+		datastore.Equal("Value", 20),
+	).FindOne()
+	require.Equal(t, true, found)
+	require.NoError(t, err)
+	require.Equal(t, obj3.Name, res.Name)
 }
 
 func Create(t *testing.T, store datastore.DataStore[TestObject]) {
