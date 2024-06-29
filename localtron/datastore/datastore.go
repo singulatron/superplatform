@@ -42,12 +42,14 @@ type DataStore[T Row] interface {
 	Commit() error
 	Rollback() error
 	IsInTransaction() bool
+
+	SetDebug(debug bool)
 }
 
 type QueryBuilder[T Row] interface {
 	OrderBy(field string, desc bool) QueryBuilder[T]
 	Limit(limit int) QueryBuilder[T]
-	Offset(offset int) QueryBuilder[T]
+	After(value ...any) QueryBuilder[T]
 
 	Select(fields ...string) QueryBuilder[T]
 	Find() ([]T, error)

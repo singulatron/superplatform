@@ -67,6 +67,9 @@ func NewLocalStore[T datastore.Row](filePath string) *LocalStore[T] {
 	return ls
 }
 
+func (s *LocalStore[T]) SetDebug(debug bool) {
+}
+
 func (s *LocalStore[T]) Create(obj T) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
@@ -201,7 +204,7 @@ type QueryBuilder[T datastore.Row] struct {
 	orderField   string
 	orderDesc    bool
 	limit        int
-	offset       int
+	after        []any
 	selectFields []string
 }
 
@@ -216,8 +219,8 @@ func (q *QueryBuilder[T]) Limit(limit int) datastore.QueryBuilder[T] {
 	return q
 }
 
-func (q *QueryBuilder[T]) Offset(offset int) datastore.QueryBuilder[T] {
-	q.offset = offset
+func (q *QueryBuilder[T]) After(value ...any) datastore.QueryBuilder[T] {
+	q.after = value
 	return q
 }
 
@@ -244,9 +247,22 @@ func (q *QueryBuilder[T]) Find() ([]T, error) {
 		})
 	}
 
-	if q.offset > 0 && q.offset < len(result) {
-		result = result[q.offset:]
+	if len(q.after) > 0 {
+		startIndex := -1
+		for i, obj := range result {
+			vi := getField(obj, q.orderField)
+			if reflect.DeepEqual(vi, q.after[0]) {
+				startIndex = i + 1
+				break
+			}
+		}
+		if startIndex != -1 {
+			result = result[startIndex:]
+		} else {
+			result = []T{} // No matching "after" value found
+		}
 	}
+
 	if q.limit > 0 && q.limit < len(result) {
 		result = result[:q.limit]
 	}
