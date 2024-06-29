@@ -131,7 +131,6 @@ export class ChatBoxComponent implements OnChanges, AfterViewInit, OnDestroy {
 	ngAfterViewInit() {
 		this.mutationObserver = new MutationObserver(() => {
 			this.scrollToBottom();
-
 		});
 
 		this.mutationObserver.observe(this.scrollableElement.nativeElement, {
@@ -151,11 +150,7 @@ export class ChatBoxComponent implements OnChanges, AfterViewInit, OnDestroy {
 	private onScroll(): void {
 		const element = this.scrollableElement.nativeElement;
 		const atBottom = element.scrollHeight - element.scrollTop < (element.clientHeight + element.clientHeight * 0.05);
-		if (!atBottom) {
-			this.shouldScrollToBottom = false;
-		} else {
-			this.shouldScrollToBottom = true;
-		}
+		this.shouldScrollToBottom = atBottom;
 	}
 
 	getAssets(message: ChatMessage): Asset[] {
