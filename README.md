@@ -15,7 +15,7 @@
 <br />
 
 Singulatron is the AI Superplatform that runs on your computer(s) and server(s). 
-It uses no third party APIs, and you have compelte control over your data and privacy.
+It uses no third party APIs, and you have complete control over your data and privacy.
 
 ## Roadmap
 
