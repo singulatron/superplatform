@@ -40,6 +40,5 @@ func (p *PromptService) Remove(prompt *prompttypes.Prompt) error {
 		PromptId: prompt.Id,
 	})
 
-	go p.triggerPromptProcessing()
 	return nil
 }
