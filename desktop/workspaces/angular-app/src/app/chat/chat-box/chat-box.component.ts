@@ -15,13 +15,16 @@ import {
 	OnChanges,
 	SimpleChanges,
 	ChangeDetectionStrategy,
+	ChangeDetectorRef,
 	ViewChild,
+	ElementRef,
+	AfterViewInit,
+	OnDestroy,
 	ViewContainerRef,
 	ComponentRef,
 } from '@angular/core';
 import { Subscription, filter } from 'rxjs';
 
-import { ChangeDetectorRef } from '@angular/core';
 import { LocaltronService } from '../../services/localtron.service';
 import {
 	ChatService,
@@ -36,7 +39,7 @@ import { ElectronAppService } from '../../services/electron-app.service';
 import { TranslatePipe } from '../../translate.pipe';
 import { FormsModule } from '@angular/forms';
 import { MessageComponent } from './message/message.component';
-import { NgFor, NgIf, AsyncPipe } from '@angular/common';
+import { NgFor, NgIf, AsyncPipe, NgStyle } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import {
 	ChatInputComponent,
@@ -63,10 +66,11 @@ const defaultThreadName = 'New chat';
 		TranslatePipe,
 		ChatInputComponent,
 		AsyncPipe,
+		NgStyle,
 	],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChatBoxComponent implements OnChanges {
+export class ChatBoxComponent implements OnChanges, AfterViewInit, OnDestroy {
 	@Input() promptTemplate: string = '[INST] {prompt} [/INST]';
 
 	// @todo push this to the backend too
@@ -87,6 +91,11 @@ export class ChatBoxComponent implements OnChanges {
 
 	// eslint-disable-next-line
 	private footerComponentRef: ComponentRef<ChatInputComponent> | null = null;
+
+	@ViewChild('scrollableElement') private scrollableElement!: ElementRef;
+	private scrollListener!: () => void;
+	private shouldScrollToBottom = true;
+	private mutationObserver!: MutationObserver;
 
 	constructor(
 		private localtron: LocaltronService,
@@ -136,6 +145,13 @@ export class ChatBoxComponent implements OnChanges {
 			const rsp = await this.chatService.chatMessages(this.thread.id);
 			this.messages = rsp.messages;
 			this.assets = rsp.assets;
+			// The mutationObserver triggers before the app-messages components are rendered.
+			// This ensures scrollToBottom is called when the app loads for the first time,
+			// after the app-messages have been rendered.
+			// TODO: Find a better solution
+			setTimeout(async () => {
+				this.scrollToBottom();
+			}, 1000)
 		}
 
 		this.cd.markForCheck();
@@ -150,6 +166,35 @@ export class ChatBoxComponent implements OnChanges {
 				}
 			})
 		);
+	}
+
+	ngAfterViewInit() {
+		this.mutationObserver = new MutationObserver(() => {
+			this.scrollToBottom();
+		});
+
+		this.mutationObserver.observe(this.scrollableElement.nativeElement, {
+			childList: true,
+			subtree: true,
+		});
+		this.scrollListener = this.onScroll.bind(this);
+		this.scrollableElement.nativeElement.addEventListener('scroll', this.scrollListener);
+	}
+
+	ngOnDestroy() {
+		try {
+			this.scrollableElement?.nativeElement?.removeEventListener('scroll', this.scrollListener);
+		} catch (error) { }
+		try {
+			this.mutationObserver.disconnect();
+		} catch (error) { }
+	}
+
+	private onScroll(): void {
+		const element = this.scrollableElement.nativeElement;
+		const atBottom = element.scrollHeight - element.scrollTop < (element.clientHeight + element.clientHeight * 0.05);
+		console.log("aha", atBottom)
+		this.shouldScrollToBottom = atBottom;
 	}
 
 	getAssets(message: ChatMessage): Asset[] {
@@ -185,6 +230,7 @@ export class ChatBoxComponent implements OnChanges {
 
 	async ngOnChanges(changes: SimpleChanges): Promise<void> {
 		if (changes.thread) {
+			this.shouldScrollToBottom = true;
 			this.messages = [];
 			this.assets = [];
 			this.cd.markForCheck();
@@ -238,7 +284,7 @@ export class ChatBoxComponent implements OnChanges {
 						const insidePre =
 							(this.messageCurrentlyStreamed.content.match(/```/g) || [])
 								.length %
-								2 ===
+							2 ===
 							1;
 						let addValue = insidePre
 							? response?.choices[0].text
@@ -290,6 +336,21 @@ export class ChatBoxComponent implements OnChanges {
 
 	trackById(_: number, message: { id?: string }): string {
 		return message.id || '';
+	}
+
+	removePromptFromQueue(prompt: Prompt): void {
+		this.promptService.promptRemove(prompt)
+	}
+
+	private scrollToBottom(): void {
+		if (!this.shouldScrollToBottom) {
+			return;
+		}
+		try {
+			this.scrollableElement.nativeElement.scrollTop = this.scrollableElement.nativeElement.scrollHeight;
+		} catch (err) {
+			console.error('Scroll to bottom failed:', err);
+		}
 	}
 }
 
