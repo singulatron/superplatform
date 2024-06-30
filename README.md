@@ -58,7 +58,8 @@ It is an Electron application, with Angular on the frontend and Go on the backen
 
 ## License
 
-Singulatron is dual-licensed under the AGPL-3.0-or-later and a commercial license.
+Singulatron is at the moment dual-licensed under the AGPL-3.0-or-later and a commercial license.
+We understand this is not optimal for everyone and we might fully open source it at some point.
 
 ### AGPL-3.0-or-later (Personal Use)
 
