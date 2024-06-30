@@ -1,5 +1,5 @@
 ---
-title: Singulatron - The Self-Hosted AI Superplatform
+title: Home
 ---
 
 <p align="center">
