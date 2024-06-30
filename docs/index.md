@@ -1,3 +1,7 @@
+---
+title: Singulatron - The Self-Hosted AI Superplatform
+---
+
 <p align="center">
   <img width="150px" src="https://singulatron.com/assets/logo-lighter.png" />
   <div align="center">
@@ -7,14 +11,11 @@
     <div>
       The Self-Hosted AI Superplatform
     </div>
-    <div>
-      <a href="https://singulatron.com/home">singulatron.com</a>
-    </div>
   </div>
 <p>
 <br />
 
-Singulatron is the AI Superplatform that runs on your computer(s) and server(s). 
+Singulatron is the AI Superplatform that runs on your computer(s) and server(s).
 It uses no third party APIs, and you have compelte control over your data and privacy.
 
 ## Roadmap
@@ -27,9 +28,10 @@ It uses no third party APIs, and you have compelte control over your data and pr
 - [ ] Improving this roadmap : )
 
 ![Run](https://singulatron.com/assets/chat.png?refresh=1)
+
 ## Run On Your Servers
 
-See [this document](./docs/server.md) to help you get started.
+See [this document](./server.md) to help you get started.
 
 ## Run On Your Laptop/PC
 
