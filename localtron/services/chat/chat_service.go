@@ -11,8 +11,6 @@
 package chatservice
 
 import (
-	"sync"
-
 	"github.com/singulatron/singulatron/localtron/datastore"
 
 	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
@@ -31,8 +29,6 @@ type ChatService struct {
 	messagesStore datastore.DataStore[*chattypes.Message]
 	threadsStore  datastore.DataStore[*chattypes.Thread]
 	assetsStore   datastore.DataStore[*chattypes.Asset]
-
-	logMutex sync.Mutex
 }
 
 func NewChatService(
