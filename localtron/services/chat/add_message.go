@@ -8,7 +8,7 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-package appservice
+package chatservice
 
 import (
 	"errors"
@@ -19,10 +19,10 @@ import (
 	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/logger"
 
-	apptypes "github.com/singulatron/singulatron/localtron/services/app/types"
+	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
 )
 
-func (a *AppService) AddChatMessage(chatMessage *apptypes.ChatMessage) error {
+func (a *ChatService) AddMessage(chatMessage *chattypes.Message) error {
 	if chatMessage.ThreadId == "" {
 		return errors.New("empty chat message thread id")
 	}
@@ -48,7 +48,7 @@ func (a *AppService) AddChatMessage(chatMessage *apptypes.ChatMessage) error {
 		slog.String("messageId", chatMessage.Id),
 	)
 
-	a.firehoseService.Publish(apptypes.EventChatMessageAdded{
+	a.firehoseService.Publish(chattypes.EventMessageAdded{
 		ThreadId: chatMessage.ThreadId,
 	})
 

@@ -8,44 +8,75 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-package appservice
+package chatservice
 
 import (
 	"sync"
 
 	"github.com/pkg/errors"
 
+	"github.com/singulatron/singulatron/localtron/datastore"
+
+	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
 	configservice "github.com/singulatron/singulatron/localtron/services/config"
 	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
+
+	storefactoryservice "github.com/singulatron/singulatron/localtron/services/store_factory"
 )
 
-type AppService struct {
+type ChatService struct {
 	configService   *configservice.ConfigService
 	userService     *userservice.UserService
 	firehoseService *firehoseservice.FirehoseService
 
 	clientId string
 
+	messagesStore datastore.DataStore[*chattypes.Message]
+	threadsStore  datastore.DataStore[*chattypes.Thread]
+	assetsStore   datastore.DataStore[*chattypes.Asset]
+
 	logMutex sync.Mutex
 }
 
-func NewAppService(
+func NewChatService(
 	cs *configservice.ConfigService,
 	fs *firehoseservice.FirehoseService,
 	userService *userservice.UserService,
-) (*AppService, error) {
+) (*ChatService, error) {
+	threadsStore, err := storefactoryservice.GetStore[*chattypes.Thread]("threads")
+	if err != nil {
+		return nil, err
+	}
+	messagesStore, err := storefactoryservice.GetStore[*chattypes.Message]("messages")
+	if err != nil {
+		return nil, err
+	}
+	assetsStore, err := storefactoryservice.GetStore[*chattypes.Asset]("assets")
+	if err != nil {
+		return nil, err
+	}
+
 	ci, err := cs.GetClientId()
 	if err != nil {
 		return nil, errors.Wrap(err, "app service canno get client id")
 	}
 
-	service := &AppService{
+	service := &ChatService{
 		configService:   cs,
 		firehoseService: fs,
 		userService:     userService,
 
+		messagesStore: messagesStore,
+		threadsStore:  threadsStore,
+		assetsStore:   assetsStore,
+
 		clientId: ci,
+	}
+
+	err = service.registerPermissions()
+	if err != nil {
+		return nil, err
 	}
 
 	return service, nil

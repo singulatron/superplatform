@@ -1,4 +1,4 @@
-package appservice_test
+package chatservice_test
 
 import (
 	"testing"
@@ -6,8 +6,8 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
 
-	appservice "github.com/singulatron/singulatron/localtron/services/app"
-	apptypes "github.com/singulatron/singulatron/localtron/services/app/types"
+	chatservice "github.com/singulatron/singulatron/localtron/services/chat"
+	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
 	configservice "github.com/singulatron/singulatron/localtron/services/config"
 	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
@@ -20,11 +20,11 @@ func TestMessageCreatesThread(t *testing.T) {
 	require.NoError(t, err)
 	fs, err := firehoseservice.NewFirehoseService(us)
 	require.NoError(t, err)
-	as, err := appservice.NewAppService(cs, fs, us)
+	as, err := chatservice.NewChatService(cs, fs, us)
 	require.NoError(t, err)
 
 	t.Run("no thread id", func(t *testing.T) {
-		err := as.AddMessage(&apptypes.Message{
+		err := as.AddMessage(&chattypes.Message{
 			Id:      uuid.New().String(),
 			Content: "hi there",
 		})
@@ -32,7 +32,7 @@ func TestMessageCreatesThread(t *testing.T) {
 	})
 
 	t.Run("thread does not exist", func(t *testing.T) {
-		err := as.AddMessage(&apptypes.Message{
+		err := as.AddMessage(&chattypes.Message{
 			Id:       uuid.New().String(),
 			ThreadId: "1",
 			Content:  "hi there",
@@ -43,7 +43,7 @@ func TestMessageCreatesThread(t *testing.T) {
 	t.Run("no user id", func(t *testing.T) {
 		tid := uuid.New().String()
 		title := "Test Thread Title"
-		_, err := as.AddThread(&apptypes.Thread{
+		_, err := as.AddThread(&chattypes.Thread{
 			Id:    tid,
 			Title: title,
 		})
@@ -56,7 +56,7 @@ func TestMessageCreatesThread(t *testing.T) {
 	t.Run("create thread", func(t *testing.T) {
 		tid := uuid.New().String()
 		title := "Test Thread Title"
-		thread, err := as.AddThread(&apptypes.Thread{
+		thread, err := as.AddThread(&chattypes.Thread{
 			Id:      tid,
 			Title:   title,
 			UserIds: []string{userId},
@@ -68,7 +68,7 @@ func TestMessageCreatesThread(t *testing.T) {
 	})
 
 	t.Run("no user id", func(t *testing.T) {
-		err := as.AddMessage(&apptypes.Message{
+		err := as.AddMessage(&chattypes.Message{
 			Id:       uuid.New().String(),
 			ThreadId: threadId,
 			Content:  "hi there",

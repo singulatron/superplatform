@@ -40,6 +40,9 @@ import (
 	appservice "github.com/singulatron/singulatron/localtron/services/app"
 	appendpoints "github.com/singulatron/singulatron/localtron/services/app/endpoints"
 
+	chatservice "github.com/singulatron/singulatron/localtron/services/chat"
+	chatendpoints "github.com/singulatron/singulatron/localtron/services/chat/endpoints"
+
 	promptservice "github.com/singulatron/singulatron/localtron/services/prompt"
 	promptendpoints "github.com/singulatron/singulatron/localtron/services/prompt/endpoints"
 
@@ -225,43 +228,53 @@ func main() {
 		appendpoints.LoggingStatus(w, r, appService)
 	}))
 
+	chatService, err := chatservice.NewChatService(
+		configService,
+		firehoseService,
+		userService,
+	)
+	if err != nil {
+		logger.Error("Chat service creation failed", slog.String("error", err.Error()))
+		os.Exit(1)
+	}
+
 	router.HandleFunc("/chat/message/add", appl(func(w http.ResponseWriter, r *http.Request) {
-		appendpoints.AddChatMessage(w, r, userService, appService)
+		chatendpoints.AddMessage(w, r, userService, chatService)
 	}))
 
 	router.HandleFunc("/chat/message/delete", appl(func(w http.ResponseWriter, r *http.Request) {
-		appendpoints.DeleteChatMessage(w, r, userService, appService)
+		chatendpoints.DeleteMessage(w, r, userService, chatService)
 	}))
 
 	router.HandleFunc("/chat/messages", appl(func(w http.ResponseWriter, r *http.Request) {
-		appendpoints.GetChatMessages(w, r, userService, appService)
+		chatendpoints.GetMessages(w, r, userService, chatService)
 	}))
 
 	router.HandleFunc("/chat/thread/add", appl(func(w http.ResponseWriter, r *http.Request) {
-		appendpoints.AddChatThread(w, r, userService, appService)
+		chatendpoints.AddThread(w, r, userService, chatService)
 	}))
 
 	router.HandleFunc("/chat/thread/delete", appl(func(w http.ResponseWriter, r *http.Request) {
-		appendpoints.DeleteChatThread(w, r, userService, appService)
+		chatendpoints.DeleteThread(w, r, userService, chatService)
 	}))
 
 	router.HandleFunc("/chat/threads", appl(func(w http.ResponseWriter, r *http.Request) {
-		appendpoints.GetChatThreads(w, r, userService, appService)
+		chatendpoints.GetThreads(w, r, userService, chatService)
 	}))
 
 	router.HandleFunc("/chat/thread", appl(func(w http.ResponseWriter, r *http.Request) {
-		appendpoints.GetChatThread(w, r, userService, appService)
+		chatendpoints.GetThread(w, r, userService, chatService)
 	}))
 
 	router.HandleFunc("/chat/thread/update", appl(func(w http.ResponseWriter, r *http.Request) {
-		appendpoints.UpdateChatThread(w, r, userService, appService)
+		chatendpoints.UpdateThread(w, r, userService, chatService)
 	}))
 
 	promptService, err := promptservice.NewPromptService(
 		configService,
 		userService,
 		modelService,
-		appService,
+		chatService,
 		firehoseService,
 	)
 	if err != nil {

@@ -8,17 +8,17 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-package appservice
+package chatservice
 
 import (
 	"errors"
 	"time"
 
 	"github.com/google/uuid"
-	apptypes "github.com/singulatron/singulatron/localtron/services/app/types"
+	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
 )
 
-func (a *AppService) AddChatThread(chatThread *apptypes.ChatThread) (*apptypes.ChatThread, error) {
+func (a *ChatService) AddThread(chatThread *chattypes.Thread) (*chattypes.Thread, error) {
 	if chatThread.Id == "" {
 		chatThread.Id = uuid.New().String()
 	}
@@ -37,7 +37,7 @@ func (a *AppService) AddChatThread(chatThread *apptypes.ChatThread) (*apptypes.C
 		return nil, err
 	}
 
-	a.firehoseService.Publish(apptypes.EventChatThreadAdded{
+	a.firehoseService.Publish(chattypes.EventThreadAdded{
 		ThreadId: chatThread.Id,
 	})
 

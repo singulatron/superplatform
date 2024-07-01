@@ -14,24 +14,24 @@ import (
 	"encoding/json"
 	"net/http"
 
-	appservice "github.com/singulatron/singulatron/localtron/services/app"
-	types "github.com/singulatron/singulatron/localtron/services/app/types"
+	chatservice "github.com/singulatron/singulatron/localtron/services/chat"
+	types "github.com/singulatron/singulatron/localtron/services/chat/types"
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
 
-func DeleteChatThread(
+func GetMessages(
 	w http.ResponseWriter,
 	r *http.Request,
 	userService *userservice.UserService,
-	ds *appservice.AppService,
+	ds *chatservice.ChatService,
 ) {
-	err := userService.IsAuthorized(types.PermissionThreadCreate.Id, r)
+	err := userService.IsAuthorized(types.PermissionMessageView.Id, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 
-	req := types.DeleteChatThreadRequest{}
+	req := types.GetMessagesRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `invalid JSON`, http.StatusBadRequest)
@@ -39,12 +39,25 @@ func DeleteChatThread(
 	}
 	defer r.Body.Close()
 
-	err = ds.DeleteChatThread(req.ThreadId)
+	messages, err := ds.GetMessages(req.ThreadId)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	jsonData, _ := json.Marshal(map[string]any{})
+	assetIds := []string{}
+	for _, v := range messages {
+		assetIds = append(assetIds, v.AssetIds...)
+	}
+	assets, err := ds.GetAssets(assetIds)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	jsonData, _ := json.Marshal(types.GetMessagesResponse{
+		Messages: messages,
+		Assets:   assets,
+	})
 	w.Write(jsonData)
 }

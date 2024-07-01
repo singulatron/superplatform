@@ -14,34 +14,24 @@ import (
 	"encoding/json"
 	"net/http"
 
-	appservice "github.com/singulatron/singulatron/localtron/services/app"
-	types "github.com/singulatron/singulatron/localtron/services/app/types"
+	chatservice "github.com/singulatron/singulatron/localtron/services/chat"
+	types "github.com/singulatron/singulatron/localtron/services/chat/types"
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
 
-func GetChatThreads(
+func UpdateThread(
 	w http.ResponseWriter,
 	r *http.Request,
 	userService *userservice.UserService,
-	ds *appservice.AppService,
+	ds *chatservice.ChatService,
 ) {
-	err := userService.IsAuthorized(types.PermissionThreadView.Id, r)
+	err := userService.IsAuthorized(types.PermissionThreadCreate.Id, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 
-	user, found, err := userService.GetUserFromRequest(r)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
-		return
-	}
-	if !found {
-		http.Error(w, "unauthorized", http.StatusUnauthorized)
-		return
-	}
-
-	req := types.GetChatThreadsRequest{}
+	req := types.UpdateThreadRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `invalid JSON`, http.StatusBadRequest)
@@ -49,14 +39,14 @@ func GetChatThreads(
 	}
 	defer r.Body.Close()
 
-	threads, err := ds.GetChatThreads(user.Id)
+	thread, err := ds.UpdateThread(req.Thread)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	jsonData, _ := json.Marshal(types.GetChatThreadsResponse{
-		Threads: threads,
+	jsonData, _ := json.Marshal(types.AddThreadResponse{
+		Thread: thread,
 	})
 	w.Write(jsonData)
 }

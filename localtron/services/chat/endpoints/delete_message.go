@@ -14,26 +14,24 @@ import (
 	"encoding/json"
 	"net/http"
 
-	appservice "github.com/singulatron/singulatron/localtron/services/app"
-	apptypes "github.com/singulatron/singulatron/localtron/services/app/types"
+	chatservice "github.com/singulatron/singulatron/localtron/services/chat"
+	types "github.com/singulatron/singulatron/localtron/services/chat/types"
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
-
-	types "github.com/singulatron/singulatron/localtron/services/app/types"
 )
 
-func AddChatMessage(
+func DeleteMessage(
 	w http.ResponseWriter,
 	r *http.Request,
 	userService *userservice.UserService,
-	ds *appservice.AppService,
+	ds *chatservice.ChatService,
 ) {
-	err := userService.IsAuthorized(apptypes.PermissionMessageCreate.Id, r)
+	err := userService.IsAuthorized(types.PermissionMessageDelete.Id, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 
-	req := types.AddChatMessageRequest{}
+	req := types.DeleteMessageRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `invalid JSON`, http.StatusBadRequest)
@@ -41,7 +39,7 @@ func AddChatMessage(
 	}
 	defer r.Body.Close()
 
-	err = ds.AddChatMessage(req.Message)
+	err = ds.DeleteMessage(req.MessageId)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

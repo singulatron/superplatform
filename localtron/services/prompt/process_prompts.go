@@ -25,7 +25,7 @@ import (
 	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/logger"
 
-	apptypes "github.com/singulatron/singulatron/localtron/services/app/types"
+	apptypes "github.com/singulatron/singulatron/localtron/services/chat/types"
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
 )
@@ -156,7 +156,7 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 	currentPrompt.Status = prompttypes.PromptStatusRunning
 	currentPrompt.RunCount++
 
-	err = p.appService.AddChatMessage(&apptypes.ChatMessage{
+	err = p.appService.AddMessage(&apptypes.Message{
 		// not a fan of taking the prompt id but at least it makes this idempotent
 		// in case prompts get retried over and over again
 		Id:        currentPrompt.Id,
@@ -269,7 +269,7 @@ func (p *PromptService) processStableDiffusion(address string, fullPrompt string
 		return err
 	}
 
-	err = p.appService.AddChatMessage(&apptypes.ChatMessage{
+	err = p.appService.AddMessage(&apptypes.Message{
 		Id:       uuid.New().String(),
 		ThreadId: currentPrompt.ThreadId,
 		Content:  "Sure, here is your image",
@@ -328,7 +328,7 @@ func (p *PromptService) processLlamaCpp(address string, fullPrompt string, curre
 		p.StreamManager.Broadcast(currentPrompt.ThreadId, resp)
 
 		if len(resp.Choices) > 0 && resp.Choices[0].FinishReason == "stop" {
-			err := p.appService.AddChatMessage(&apptypes.ChatMessage{
+			err := p.appService.AddMessage(&apptypes.Message{
 				Id:       uuid.New().String(),
 				ThreadId: currentPrompt.ThreadId,
 				Content:  llmResponseToText(p.StreamManager.history[currentPrompt.ThreadId]),

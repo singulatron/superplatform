@@ -8,20 +8,25 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-package appservice
+package chatservice
 
 import (
 	"github.com/singulatron/singulatron/localtron/datastore"
-	apptypes "github.com/singulatron/singulatron/localtron/services/app/types"
+	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
 )
 
-func (a *AppService) GetChatThreads(userId string) ([]*apptypes.ChatThread, error) {
-	threads, err := a.threadsStore.Query(
-		datastore.Equal("userIds", userId),
-	).OrderBy("createdAt", true).Find()
+func (a *ChatService) UpdateThread(chatThread *chattypes.Thread) (*chattypes.Thread, error) {
+	err := a.threadsStore.Query(
+		datastore.Equal("id", chatThread.Id),
+	).Update(chatThread)
+
 	if err != nil {
 		return nil, err
 	}
 
-	return threads, nil
+	a.firehoseService.Publish(chattypes.EventThreadUpdate{
+		ThreadId: chatThread.Id,
+	})
+
+	return chatThread, nil
 }

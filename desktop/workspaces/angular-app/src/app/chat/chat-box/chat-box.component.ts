@@ -28,8 +28,8 @@ import { Subscription, filter } from 'rxjs';
 import { LocaltronService } from '../../services/localtron.service';
 import {
 	ChatService,
-	ChatThread,
-	ChatMessage,
+	Thread,
+	Message,
 	Asset,
 } from '../../services/chat.service';
 import { Prompt, PromptService } from '../../services/prompt.service';
@@ -77,13 +77,13 @@ export class ChatBoxComponent implements OnChanges, AfterViewInit, OnDestroy {
 	@Input() threadNameSummaryTemplate =
 		'Summarize, shorten this question in 3-5 words, keep it as a question: {message}';
 
-	@Input() thread!: ChatThread;
+	@Input() thread!: Thread;
 
 	public promptQueue: Prompt[] = [];
 
-	public messages: ChatMessage[] = [];
+	public messages: Message[] = [];
 	public assets: Asset[] = [];
-	public messageCurrentlyStreamed: ChatMessage = {} as any;
+	public messageCurrentlyStreamed: Message = {} as any;
 	private subscriptions: Subscription[] = [];
 
 	@ViewChild('footerContainer', { read: ViewContainerRef, static: true })
@@ -161,7 +161,7 @@ export class ChatBoxComponent implements OnChanges, AfterViewInit, OnDestroy {
 		this.cd.markForCheck();
 
 		this.subscriptions.push(
-			this.chatService.onChatMessageAdded$.subscribe(async (event) => {
+			this.chatService.onMessageAdded$.subscribe(async (event) => {
 				if (this.thread?.id && this.thread.id == event.threadId) {
 					const rsp = await this.chatService.chatMessages(this.thread?.id);
 					this.messages = rsp.messages;
@@ -209,7 +209,7 @@ export class ChatBoxComponent implements OnChanges, AfterViewInit, OnDestroy {
 		this.shouldScrollToBottom = atBottom;
 	}
 
-	getAssets(message: ChatMessage): Asset[] {
+	getAssets(message: Message): Asset[] {
 		return this.assets?.filter((a) => message.assetIds?.includes(a.id));
 	}
 

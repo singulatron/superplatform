@@ -8,12 +8,16 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-package appservice
+package chatservice
 
-import "github.com/singulatron/singulatron/localtron/datastore"
+import (
+	"github.com/singulatron/singulatron/localtron/datastore"
+)
 
-func (a *AppService) DeleteChatThread(id string) error {
-	return a.threadsStore.Query(
+func (a *ChatService) DeleteMessage(id string) error {
+	return a.messagesStore.Query(
 		datastore.Equal("id", id),
 	).Delete()
+
+	return nil
 }

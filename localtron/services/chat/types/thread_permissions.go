@@ -9,7 +9,7 @@
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
 
-package apptypes
+package chattypes
 
 import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"

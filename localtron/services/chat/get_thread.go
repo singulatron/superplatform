@@ -8,20 +8,15 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-package appservice
+package chatservice
 
 import (
-	"time"
-
-	apptypes "github.com/singulatron/singulatron/localtron/services/app/types"
+	"github.com/singulatron/singulatron/localtron/datastore"
+	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
 )
 
-func (a *AppService) UpsertAssets(assets []*apptypes.Asset) error {
-	now := time.Now()
-	for _, v := range assets {
-		if v.CreatedAt.IsZero() {
-			v.CreatedAt = now
-		}
-	}
-	return a.assetsStore.UpsertMany(assets)
+func (a *ChatService) GetThread(threadId string) (*chattypes.Thread, bool, error) {
+	return a.threadsStore.Query(
+		datastore.Equal("id", threadId),
+	).FindOne()
 }

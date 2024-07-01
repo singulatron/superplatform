@@ -8,13 +8,13 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-package apptypes
+package chattypes
 
 import (
 	"time"
 )
 
-type ChatThread struct {
+type Thread struct {
 	Id        string    `json:"id"`
 	CreatedAt time.Time `json:"createdAt,omitempty"`
 	UpdatedAt time.Time `json:"updatedAt,omitempty"`
@@ -25,15 +25,15 @@ type ChatThread struct {
 	Title string `json:"title"`
 }
 
-func (c *ChatThread) GetId() string {
+func (c *Thread) GetId() string {
 	return c.Id
 }
 
-func (c *ChatThread) GetUpdatedAt() string {
+func (c *Thread) GetUpdatedAt() string {
 	return c.Id
 }
 
-type ThreadByTime []*ChatThread
+type ThreadByTime []*Thread
 
 func (a ThreadByTime) Len() int      { return len(a) }
 func (a ThreadByTime) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
@@ -45,32 +45,32 @@ func (a ThreadByTime) Less(i, j int) bool {
 	return ti.After(tj)
 }
 
-type AddChatThreadRequest struct {
-	Thread *ChatThread `json:"thread"`
+type AddThreadRequest struct {
+	Thread *Thread `json:"thread"`
 }
 
-type UpdateChatThreadRequest struct {
-	Thread *ChatThread `json:"thread"`
+type UpdateThreadRequest struct {
+	Thread *Thread `json:"thread"`
 }
 
-type AddChatThreadResponse struct {
-	Thread *ChatThread `json:"thread"`
+type AddThreadResponse struct {
+	Thread *Thread `json:"thread"`
 }
 
-type DeleteChatThreadRequest struct {
+type DeleteThreadRequest struct {
 	ThreadId string `json:"threadId"`
 }
 
-type GetChatThreadRequest struct {
+type GetThreadRequest struct {
 	ThreadId string `json:"threadId"`
 }
 
-type GetChatThreadResponse struct {
-	Thread ChatThread `json:"thread"`
+type GetThreadResponse struct {
+	Thread Thread `json:"thread"`
 }
 
-type GetChatThreadsRequest struct{}
+type GetThreadsRequest struct{}
 
-type GetChatThreadsResponse struct {
-	Threads []*ChatThread `json:"threads"`
+type GetThreadsResponse struct {
+	Threads []*Thread `json:"threads"`
 }

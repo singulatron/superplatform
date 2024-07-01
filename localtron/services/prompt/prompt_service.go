@@ -15,7 +15,7 @@ import (
 
 	"github.com/singulatron/singulatron/localtron/datastore"
 
-	appservice "github.com/singulatron/singulatron/localtron/services/app"
+	chatservice "github.com/singulatron/singulatron/localtron/services/chat"
 	configservice "github.com/singulatron/singulatron/localtron/services/config"
 	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
 	modelservice "github.com/singulatron/singulatron/localtron/services/model"
@@ -27,7 +27,7 @@ import (
 type PromptService struct {
 	userService     *userservice.UserService
 	modelService    *modelservice.ModelService
-	appService      *appservice.AppService
+	appService      *chatservice.ChatService
 	firehoseService *firehoseservice.FirehoseService
 
 	StreamManager *StreamManager
@@ -42,7 +42,7 @@ func NewPromptService(
 	cs *configservice.ConfigService,
 	userService *userservice.UserService,
 	modelService *modelservice.ModelService,
-	appService *appservice.AppService,
+	appService *chatservice.ChatService,
 	firehoseService *firehoseservice.FirehoseService,
 
 ) (*PromptService, error) {

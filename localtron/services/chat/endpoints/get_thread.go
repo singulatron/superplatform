@@ -14,24 +14,24 @@ import (
 	"encoding/json"
 	"net/http"
 
-	appservice "github.com/singulatron/singulatron/localtron/services/app"
-	types "github.com/singulatron/singulatron/localtron/services/app/types"
+	chatservice "github.com/singulatron/singulatron/localtron/services/chat"
+	types "github.com/singulatron/singulatron/localtron/services/chat/types"
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
 
-func DeleteChatMessage(
+func GetThread(
 	w http.ResponseWriter,
 	r *http.Request,
 	userService *userservice.UserService,
-	ds *appservice.AppService,
+	ds *chatservice.ChatService,
 ) {
-	err := userService.IsAuthorized(types.PermissionMessageDelete.Id, r)
+	err := userService.IsAuthorized(types.PermissionThreadCreate.Id, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 
-	req := types.DeleteChatMessageRequest{}
+	req := types.GetThreadRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `invalid JSON`, http.StatusBadRequest)
@@ -39,12 +39,14 @@ func DeleteChatMessage(
 	}
 	defer r.Body.Close()
 
-	err = ds.DeleteChatMessage(req.MessageId)
+	thread, _, err := ds.GetThread(req.ThreadId)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	jsonData, _ := json.Marshal(map[string]any{})
+	jsonData, _ := json.Marshal(types.GetThreadResponse{
+		Thread: *thread,
+	})
 	w.Write(jsonData)
 }
