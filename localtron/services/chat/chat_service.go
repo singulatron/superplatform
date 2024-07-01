@@ -13,8 +13,6 @@ package chatservice
 import (
 	"sync"
 
-	"github.com/pkg/errors"
-
 	"github.com/singulatron/singulatron/localtron/datastore"
 
 	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
@@ -29,8 +27,6 @@ type ChatService struct {
 	configService   *configservice.ConfigService
 	userService     *userservice.UserService
 	firehoseService *firehoseservice.FirehoseService
-
-	clientId string
 
 	messagesStore datastore.DataStore[*chattypes.Message]
 	threadsStore  datastore.DataStore[*chattypes.Thread]
@@ -57,11 +53,6 @@ func NewChatService(
 		return nil, err
 	}
 
-	ci, err := cs.GetClientId()
-	if err != nil {
-		return nil, errors.Wrap(err, "app service canno get client id")
-	}
-
 	service := &ChatService{
 		configService:   cs,
 		firehoseService: fs,
@@ -70,8 +61,6 @@ func NewChatService(
 		messagesStore: messagesStore,
 		threadsStore:  threadsStore,
 		assetsStore:   assetsStore,
-
-		clientId: ci,
 	}
 
 	err = service.registerPermissions()
