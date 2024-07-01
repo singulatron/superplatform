@@ -205,7 +205,7 @@ export class ChatBoxComponent implements OnChanges, AfterViewInit, OnDestroy {
 		const atBottom =
 			element.scrollHeight - element.scrollTop <
 			element.clientHeight + element.clientHeight * 0.05;
-		console.log('aha', atBottom);
+
 		this.shouldScrollToBottom = atBottom;
 	}
 
