@@ -1,3 +1,4 @@
 *.zip
 *.zip.tmp
 **/data/
+clientId.txt

@@ -133,7 +133,11 @@ export class ChatBoxComponent implements OnChanges, AfterViewInit, OnDestroy {
 
 		this.subscriptions.push(
 			this.router.events
-				.pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
+				.pipe(
+					filter(
+						(event): event is NavigationEnd => event instanceof NavigationEnd
+					)
+				)
 				.subscribe((navEnd) => {
 					if (navEnd.url === '/chat' && this.mobile.getMobileStatus()) {
 						this.footer.updateFooterComponent(this.getFooterComponent());
@@ -151,7 +155,7 @@ export class ChatBoxComponent implements OnChanges, AfterViewInit, OnDestroy {
 			// TODO: Find a better solution
 			setTimeout(async () => {
 				this.scrollToBottom();
-			}, 1000)
+			}, 1000);
 		}
 
 		this.cd.markForCheck();
@@ -178,22 +182,30 @@ export class ChatBoxComponent implements OnChanges, AfterViewInit, OnDestroy {
 			subtree: true,
 		});
 		this.scrollListener = this.onScroll.bind(this);
-		this.scrollableElement.nativeElement.addEventListener('scroll', this.scrollListener);
+		this.scrollableElement.nativeElement.addEventListener(
+			'scroll',
+			this.scrollListener
+		);
 	}
 
 	ngOnDestroy() {
 		try {
-			this.scrollableElement?.nativeElement?.removeEventListener('scroll', this.scrollListener);
-		} catch (error) { }
+			this.scrollableElement?.nativeElement?.removeEventListener(
+				'scroll',
+				this.scrollListener
+			);
+		} catch {}
 		try {
 			this.mutationObserver.disconnect();
-		} catch (error) { }
+		} catch {}
 	}
 
 	private onScroll(): void {
 		const element = this.scrollableElement.nativeElement;
-		const atBottom = element.scrollHeight - element.scrollTop < (element.clientHeight + element.clientHeight * 0.05);
-		console.log("aha", atBottom)
+		const atBottom =
+			element.scrollHeight - element.scrollTop <
+			element.clientHeight + element.clientHeight * 0.05;
+		console.log('aha', atBottom);
 		this.shouldScrollToBottom = atBottom;
 	}
 
@@ -284,7 +296,7 @@ export class ChatBoxComponent implements OnChanges, AfterViewInit, OnDestroy {
 						const insidePre =
 							(this.messageCurrentlyStreamed.content.match(/```/g) || [])
 								.length %
-							2 ===
+								2 ===
 							1;
 						let addValue = insidePre
 							? response?.choices[0].text
@@ -339,7 +351,7 @@ export class ChatBoxComponent implements OnChanges, AfterViewInit, OnDestroy {
 	}
 
 	removePromptFromQueue(prompt: Prompt): void {
-		this.promptService.promptRemove(prompt)
+		this.promptService.promptRemove(prompt);
 	}
 
 	private scrollToBottom(): void {
@@ -347,9 +359,10 @@ export class ChatBoxComponent implements OnChanges, AfterViewInit, OnDestroy {
 			return;
 		}
 		try {
-			this.scrollableElement.nativeElement.scrollTop = this.scrollableElement.nativeElement.scrollHeight;
-		} catch (err) {
-			console.error('Scroll to bottom failed:', err);
+			this.scrollableElement.nativeElement.scrollTop =
+				this.scrollableElement.nativeElement.scrollHeight;
+		} catch (error) {
+			console.error('Scroll to bottom failed:', error);
 		}
 	}
 }
