@@ -8,13 +8,13 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-package apptypes
+package chattypes
 
 import (
 	"time"
 )
 
-type ChatMessage struct {
+type Message struct {
 	Id       string `json:"id"`
 	ThreadId string `json:"threadId"`
 	Content  string `json:"content"`
@@ -42,15 +42,15 @@ func (a Asset) GetId() string {
 	return a.Id
 }
 
-func (c *ChatMessage) GetId() string {
+func (c *Message) GetId() string {
 	return c.Id
 }
 
-func (c *ChatMessage) GetUpdatedAt() string {
+func (c *Message) GetUpdatedAt() string {
 	return c.Id
 }
 
-type ByTime []*ChatMessage
+type ByTime []*Message
 
 func (a ByTime) Len() int      { return len(a) }
 func (a ByTime) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
@@ -62,19 +62,19 @@ func (a ByTime) Less(i, j int) bool {
 	return ti.Before(tj)
 }
 
-type AddChatMessageRequest struct {
-	Message *ChatMessage `json:"message"`
+type AddMessageRequest struct {
+	Message *Message `json:"message"`
 }
 
-type GetChatMessagesRequest struct {
+type GetMessagesRequest struct {
 	ThreadId string `json:"threadId"`
 }
 
-type GetChatMessagesResponse struct {
-	Messages []*ChatMessage `json:"messages"`
-	Assets   []*Asset       `json:"assets,omitempty"`
+type GetMessagesResponse struct {
+	Messages []*Message `json:"messages"`
+	Assets   []*Asset   `json:"assets,omitempty"`
 }
 
-type DeleteChatMessageRequest struct {
+type DeleteMessageRequest struct {
 	MessageId string `json:"messageId"`
 }

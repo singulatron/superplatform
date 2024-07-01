@@ -8,15 +8,20 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-package appservice
+package chatservice
 
 import (
-	"github.com/singulatron/singulatron/localtron/datastore"
-	apptypes "github.com/singulatron/singulatron/localtron/services/app/types"
+	"time"
+
+	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
 )
 
-func (a *AppService) GetAssets(assetIds []string) ([]*apptypes.Asset, error) {
-	return a.assetsStore.Query(
-		datastore.Equal("id", assetIds),
-	).Find()
+func (a *ChatService) UpsertAssets(assets []*chattypes.Asset) error {
+	now := time.Now()
+	for _, v := range assets {
+		if v.CreatedAt.IsZero() {
+			v.CreatedAt = now
+		}
+	}
+	return a.assetsStore.UpsertMany(assets)
 }

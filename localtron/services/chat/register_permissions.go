@@ -9,15 +9,15 @@
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
 
-package appservice
+package chatservice
 
 import (
-	apptypes "github.com/singulatron/singulatron/localtron/services/app/types"
+	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func (p *AppService) registerPermissions() error {
-	for _, permission := range apptypes.ThreadPermissions {
+func (p *ChatService) registerPermissions() error {
+	for _, permission := range chattypes.ThreadPermissions {
 		_, err := p.userService.UpsertPermission(
 			permission.Id,
 			permission.Name,
@@ -32,12 +32,12 @@ func (p *AppService) registerPermissions() error {
 		usertypes.RoleAdmin,
 		usertypes.RoleUser,
 	} {
-		for _, permission := range apptypes.ThreadPermissions {
+		for _, permission := range chattypes.ThreadPermissions {
 			p.userService.AddPermissionToRole(role.Id, permission.Id)
 		}
 	}
 
-	for _, permission := range apptypes.MessagePermissions {
+	for _, permission := range chattypes.MessagePermissions {
 		_, err := p.userService.UpsertPermission(
 			permission.Id,
 			permission.Name,
@@ -52,7 +52,7 @@ func (p *AppService) registerPermissions() error {
 		usertypes.RoleAdmin,
 		usertypes.RoleUser,
 	} {
-		for _, permission := range apptypes.MessagePermissions {
+		for _, permission := range chattypes.MessagePermissions {
 			p.userService.AddPermissionToRole(role.Id, permission.Id)
 		}
 	}

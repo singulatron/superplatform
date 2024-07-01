@@ -19,7 +19,7 @@ import { LocaltronService } from '../services/localtron.service';
 import { ElectronIpcService } from '../services/electron-ipc.service';
 import { WindowApiConst } from 'shared-lib';
 import { Subscription } from 'rxjs';
-import { ChatService, ChatThread } from '../services/chat.service';
+import { ChatService, Thread } from '../services/chat.service';
 import { Prompt, PromptService } from '../services/prompt.service';
 import { Model, ModelService } from '../services/model.service';
 import { ConfigService } from '../services/config.service';
@@ -50,8 +50,8 @@ import { IconMenuComponent } from '../components/icon-menu/icon-menu.component';
 })
 export class ChatComponent implements OnInit {
 	public defaultPrompt = '[INST] {prompt} [/INST]';
-	public chatThreads: Array<ChatThread> = [];
-	public activeThread: ChatThread | undefined;
+	public chatThreads: Array<Thread> = [];
+	public activeThread: Thread | undefined;
 
 	public model: Model | undefined;
 	private models: Model[] = [];
@@ -72,10 +72,10 @@ export class ChatComponent implements OnInit {
 		await this.refreshThreadList();
 
 		this.subscriptions.push(
-			this.chatService.onChatThreadUpdate$.subscribe(() => {
+			this.chatService.onThreadUpdate$.subscribe(() => {
 				this.refreshThreadList();
 			}),
-			this.chatService.onChatThreadAdded$.subscribe(() => {
+			this.chatService.onThreadAdded$.subscribe(() => {
 				this.refreshThreadList();
 			})
 		);
@@ -117,7 +117,7 @@ export class ChatComponent implements OnInit {
 		}
 	}
 
-	public async setThreadAsActive(thread: ChatThread) {
+	public async setThreadAsActive(thread: Thread) {
 		this.activeThread = thread;
 		console.debug('Loading thread', {
 			threadId: thread.id,
@@ -158,7 +158,7 @@ export class ChatComponent implements OnInit {
 		});
 	}
 
-	public removeChatThread(thread: ChatThread) {
+	public removeThread(thread: Thread) {
 		if (!thread.id) {
 			return;
 		}

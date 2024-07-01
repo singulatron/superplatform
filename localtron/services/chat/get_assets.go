@@ -8,16 +8,15 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-package appservice
+package chatservice
 
 import (
 	"github.com/singulatron/singulatron/localtron/datastore"
+	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
 )
 
-func (a *AppService) DeleteChatMessage(id string) error {
-	return a.messagesStore.Query(
-		datastore.Equal("id", id),
-	).Delete()
-
-	return nil
+func (a *ChatService) GetAssets(assetIds []string) ([]*chattypes.Asset, error) {
+	return a.assetsStore.Query(
+		datastore.Equal("id", assetIds),
+	).Find()
 }

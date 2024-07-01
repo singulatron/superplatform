@@ -19,14 +19,14 @@ import { FirehoseService } from './firehose.service';
 export class ChatService {
 	public activeThreadId: string = '';
 
-	onChatMessageAddedSubject = new ReplaySubject<ChatMessageAddedEvent>(1);
-	onChatMessageAdded$ = this.onChatMessageAddedSubject.asObservable();
+	onMessageAddedSubject = new ReplaySubject<MessageAddedEvent>(1);
+	onMessageAdded$ = this.onMessageAddedSubject.asObservable();
 
-	onChatThreadAddedSubject = new ReplaySubject<ChatThreadAddedEvent>(1);
-	onChatThreadAdded$ = this.onChatMessageAddedSubject.asObservable();
+	onThreadAddedSubject = new ReplaySubject<ThreadAddedEvent>(1);
+	onThreadAdded$ = this.onMessageAddedSubject.asObservable();
 
-	onChatThreadUpdateSubject = new ReplaySubject<ChatMessageAddedEvent>(1);
-	onChatThreadUpdate$ = this.onChatMessageAddedSubject.asObservable();
+	onThreadUpdateSubject = new ReplaySubject<MessageAddedEvent>(1);
+	onThreadUpdate$ = this.onMessageAddedSubject.asObservable();
 
 	constructor(
 		private localtron: LocaltronService,
@@ -39,55 +39,55 @@ export class ChatService {
 		this.firehoseService.firehoseEvent$.subscribe(async (event) => {
 			switch (event.name) {
 				case 'chatMessageAdded': {
-					this.onChatMessageAddedSubject.next(event.data);
+					this.onMessageAddedSubject.next(event.data);
 					break;
 				}
 				case 'chatThreadAdded': {
-					this.onChatMessageAddedSubject.next(event.data);
+					this.onMessageAddedSubject.next(event.data);
 					break;
 				}
 				case 'chatThreadUpdate': {
-					this.onChatThreadUpdateSubject.next(event.data);
+					this.onThreadUpdateSubject.next(event.data);
 					break;
 				}
 			}
 		});
 	}
 
-	async chatMessageDelete(messageId: string): Promise<GetChatThreadResponse> {
-		const request: DeleteChatMessageRequest = { messageId: messageId };
+	async chatMessageDelete(messageId: string): Promise<GetThreadResponse> {
+		const request: DeleteMessageRequest = { messageId: messageId };
 		return this.localtron.call('/chat/message/delete', request);
 	}
 
-	async chatMessages(threadId: string): Promise<GetChatMessagesResponse> {
-		const request: GetChatMessagesRequest = { threadId: threadId };
+	async chatMessages(threadId: string): Promise<GetMessagesResponse> {
+		const request: GetMessagesRequest = { threadId: threadId };
 		return this.localtron.call('/chat/messages', request);
 	}
 
-	async chatThread(threadId: string): Promise<GetChatThreadResponse> {
-		const request: GetChatThreadRequest = { threadId: threadId };
+	async chatThread(threadId: string): Promise<GetThreadResponse> {
+		const request: GetThreadRequest = { threadId: threadId };
 		return this.localtron.call('/chat/thread', request);
 	}
 
-	async chatThreadAdd(thread: ChatThread): Promise<AddChatThreadResponse> {
-		const request: AddChatThreadRequest = { thread: thread };
+	async chatThreadAdd(thread: Thread): Promise<AddThreadResponse> {
+		const request: AddThreadRequest = { thread: thread };
 		return this.localtron.call('/chat/thread/add', request);
 	}
 
 	async chatThreadUpdate(
-		thread: ChatThread
-	): Promise<UpdateChatThreadResponse> {
-		const request: UpdateChatThreadRequest = { thread: thread };
+		thread: Thread
+	): Promise<UpdateThreadResponse> {
+		const request: UpdateThreadRequest = { thread: thread };
 		return this.localtron.call('/chat/thread/update', request);
 	}
 
 	async chatThreadDelete(threadId: string): Promise<void> {
-		const request: DeleteChatThreadRequest = { threadId: threadId };
+		const request: DeleteThreadRequest = { threadId: threadId };
 		return this.localtron.call('/chat/thread/delete', request);
 	}
 
-	async chatThreads(): Promise<GetChatThreadsResponse> {
-		const request: GetChatThreadsRequest = {};
+	async chatThreads(): Promise<GetThreadsResponse> {
+		const request: GetThreadsRequest = {};
 		return this.localtron.call('/chat/threads', request);
 	}
 
@@ -104,7 +104,7 @@ export class ChatService {
 	}
 }
 
-export interface ChatThread {
+export interface Thread {
 	id?: string;
 	createdAt?: string;
 	updatedAt?: string;
@@ -115,7 +115,7 @@ export interface ChatThread {
 	title?: string;
 }
 
-export interface ChatMessage {
+export interface Message {
 	id?: string;
 	createdAt?: string;
 	updatedAt?: string;
@@ -138,65 +138,65 @@ export interface Asset {
 	updatedAt: string;
 }
 
-export interface AddChatMessageRequest {
-	message: ChatMessage;
+export interface AddMessageRequest {
+	message: Message;
 }
 
-export interface AddChatThreadRequest {
-	thread: ChatThread;
+export interface AddThreadRequest {
+	thread: Thread;
 }
 
-export interface AddChatThreadResponse {
-	thread: ChatThread;
+export interface AddThreadResponse {
+	thread: Thread;
 }
 
-export interface UpdateChatThreadRequest {
-	thread: ChatThread;
+export interface UpdateThreadRequest {
+	thread: Thread;
 }
 
-export interface UpdateChatThreadResponse {
-	thread: ChatThread;
+export interface UpdateThreadResponse {
+	thread: Thread;
 }
 
-export interface DeleteChatThreadRequest {
+export interface DeleteThreadRequest {
 	threadId: string;
 }
 
-export interface DeleteChatMessageRequest {
+export interface DeleteMessageRequest {
 	messageId: string;
 }
 
-export interface GetChatThreadRequest {
+export interface GetThreadRequest {
 	threadId: string;
 }
 
-type GetChatThreadResponse = {
-	thread: ChatThread;
+type GetThreadResponse = {
+	thread: Thread;
 };
 
 // eslint-disable-next-line
-type GetChatThreadsRequest = {};
+type GetThreadsRequest = {};
 
-type GetChatThreadsResponse = {
-	threads: ChatThread[];
+type GetThreadsResponse = {
+	threads: Thread[];
 };
 
 // eslint-disable-next-line
-type GetChatMessagesRequest = {};
+type GetMessagesRequest = {};
 
-type GetChatMessagesResponse = {
-	messages: ChatMessage[];
+type GetMessagesResponse = {
+	messages: Message[];
 	assets: Asset[];
 };
 
-export interface ChatMessageAddedEvent {
+export interface MessageAddedEvent {
 	threadId: string;
 }
 
-export interface ChatThreadAddedEvent {
+export interface ThreadAddedEvent {
 	threadId: string;
 }
 
-export interface ChatThreadUpdateEvent {
+export interface ThreadUpdateEvent {
 	threadId: string;
 }

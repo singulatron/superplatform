@@ -8,14 +8,14 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-package appservice
+package chatservice
 
 import (
 	"github.com/singulatron/singulatron/localtron/datastore"
-	apptypes "github.com/singulatron/singulatron/localtron/services/app/types"
+	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
 )
 
-func (a *AppService) GetChatMessages(threadId string) ([]*apptypes.ChatMessage, error) {
+func (a *ChatService) GetMessages(threadId string) ([]*chattypes.Message, error) {
 	messages, err := a.messagesStore.Query(
 		datastore.Equal("threadId", threadId),
 	).OrderBy("createdAt", false).Find()

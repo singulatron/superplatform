@@ -14,17 +14,17 @@ import (
 	"encoding/json"
 	"net/http"
 
-	appservice "github.com/singulatron/singulatron/localtron/services/app"
+	chatservice "github.com/singulatron/singulatron/localtron/services/chat"
 
-	types "github.com/singulatron/singulatron/localtron/services/app/types"
+	types "github.com/singulatron/singulatron/localtron/services/chat/types"
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
 
-func AddChatThread(
+func AddThread(
 	w http.ResponseWriter,
 	r *http.Request,
 	userService *userservice.UserService,
-	ds *appservice.AppService,
+	ds *chatservice.ChatService,
 ) {
 	err := userService.IsAuthorized(types.PermissionThreadCreate.Id, r)
 	if err != nil {
@@ -42,7 +42,7 @@ func AddChatThread(
 		return
 	}
 
-	req := types.AddChatThreadRequest{}
+	req := types.AddThreadRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `invalid JSON`, http.StatusBadRequest)
@@ -52,13 +52,13 @@ func AddChatThread(
 
 	req.Thread.UserIds = append(req.Thread.UserIds, user.Id)
 
-	thread, err := ds.AddChatThread(req.Thread)
+	thread, err := ds.AddThread(req.Thread)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	jsonData, _ := json.Marshal(types.AddChatThreadResponse{
+	jsonData, _ := json.Marshal(types.AddThreadResponse{
 		Thread: thread,
 	})
 	w.Write(jsonData)

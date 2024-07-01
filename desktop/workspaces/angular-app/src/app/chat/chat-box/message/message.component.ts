@@ -17,7 +17,7 @@ import {
 } from '@angular/core';
 import {
 	ChatService,
-	ChatMessage,
+	Message,
 	Asset,
 } from '../../../services/chat.service';
 import { PromptService } from '../../../services/prompt.service';
@@ -44,7 +44,7 @@ export class MessageComponent {
 	) {}
 	hasAsset = false;
 
-	@Input() message!: ChatMessage;
+	@Input() message!: Message;
 	@Input() assets: Asset[] = [];
 	@Input() streaming: boolean = false;
 	@Input() modelId: string = '';
@@ -57,7 +57,7 @@ export class MessageComponent {
 		}
 	}
 
-	async regenerateAnswer(message: ChatMessage) {
+	async regenerateAnswer(message: Message) {
 		if (message.userId) {
 			return;
 		}
@@ -70,7 +70,7 @@ export class MessageComponent {
 		});
 	}
 
-	asset(message: ChatMessage): string {
+	asset(message: Message): string {
 		return ('data:image/png;base64,' +
 			this.assets.find((a) => message.assetIds?.includes(a.id))
 				?.content) as string;

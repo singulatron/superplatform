@@ -17,7 +17,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/singulatron/singulatron/localtron/logger"
 
-	apptypes "github.com/singulatron/singulatron/localtron/services/app/types"
+	apptypes "github.com/singulatron/singulatron/localtron/services/chat/types"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
 )
 
@@ -43,7 +43,7 @@ func (p *PromptService) AddPrompt(prompt *prompttypes.Prompt) error {
 		threadId = prompt.Id
 	}
 
-	_, threadExists, err := p.appService.GetChatThread(threadId)
+	_, threadExists, err := p.appService.GetThread(threadId)
 	if err != nil {
 		return errors.Wrap(err, "cannot get thread")
 	}
@@ -54,7 +54,7 @@ func (p *PromptService) AddPrompt(prompt *prompttypes.Prompt) error {
 		// threads can be created when a message is sent
 		now := time.Now()
 
-		thread := &apptypes.ChatThread{
+		thread := &apptypes.Thread{
 			Id:        prompt.ThreadId,
 			UserIds:   []string{prompt.UserId},
 			CreatedAt: now,
@@ -69,7 +69,7 @@ func (p *PromptService) AddPrompt(prompt *prompttypes.Prompt) error {
 			}
 		}
 
-		_, err := p.appService.AddChatThread(thread)
+		_, err := p.appService.AddThread(thread)
 		if err != nil {
 			return errors.Wrap(err, "failed to add thread")
 		}

@@ -8,34 +8,34 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-package apptypes
+package chattypes
 
-const EventChatMessageAddedName = "chatMessageAdded"
+const EventMessageAddedName = "chatMessageAdded"
 
-type EventChatMessageAdded struct {
+type EventMessageAdded struct {
 	ThreadId string `json:"threadId"`
 }
 
-func (e EventChatMessageAdded) Name() string {
-	return EventChatMessageAddedName
+func (e EventMessageAdded) Name() string {
+	return EventMessageAddedName
 }
 
-const EventChatThreadAddedName = "chatThreadAdded"
+const EventThreadAddedName = "chatThreadAdded"
 
-type EventChatThreadAdded struct {
+type EventThreadAdded struct {
 	ThreadId string `json:"threadId"`
 }
 
-func (e EventChatThreadAdded) Name() string {
-	return EventChatThreadAddedName
+func (e EventThreadAdded) Name() string {
+	return EventThreadAddedName
 }
 
-const EventChatThreadUpdateName = "chatThreadUpdate"
+const EventThreadUpdateName = "chatThreadUpdate"
 
-type EventChatThreadUpdate struct {
+type EventThreadUpdate struct {
 	ThreadId string `json:"threadId"`
 }
 
-func (e EventChatThreadUpdate) Name() string {
-	return EventChatThreadUpdateName
+func (e EventThreadUpdate) Name() string {
+	return EventThreadUpdateName
 }

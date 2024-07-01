@@ -41,15 +41,15 @@ export const API_SERVICE_CONFIG = new InjectionToken<ApiServiceConfig>(
 	'ApiServiceConfig'
 );
 
-export interface ChatThread {
+export interface Thread {
 	id: string;
 	name: string;
-	messages?: Array<ChatMessage>;
+	messages?: Array<Message>;
 }
 
 export const defaultThreadName = 'New chat';
 
-export interface ChatMessage {
+export interface Message {
 	id: string;
 	content?: string;
 	userId?: string;
