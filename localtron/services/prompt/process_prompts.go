@@ -125,6 +125,7 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 		logger.Info("Prompt finished",
 			slog.String("promptId", currentPrompt.Id),
 			slog.String("status", string(currentPrompt.Status)),
+			slog.Any("error", err),
 		)
 
 		err = p.promptsStore.Query(
