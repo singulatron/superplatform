@@ -126,7 +126,7 @@ export class UsersComponent implements OnInit {
 
 			if (password) {
 				toastMessage += ' and password changed';
-				await this.userService.changePassword(email, '', password);
+				await this.userService.changePasswordAdmin(email,  password);
 			}
 
 			const toast = await this.toast.create({
