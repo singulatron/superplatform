@@ -11,7 +11,9 @@ import (
 )
 
 func TestMessageCreatesThread(t *testing.T) {
-	univ, err := di.MakeUniverse()
+	univ, err := di.MakeUniverse(di.UniverseOptions{
+		Test: true,
+	})
 	require.NoError(t, err)
 	ps := univ.PromptService
 

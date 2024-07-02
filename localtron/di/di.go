@@ -35,7 +35,11 @@ type Universe struct {
 	DockerService   *dockerservice.DockerService
 }
 
-func MakeUniverse() (*Universe, error) {
+type UniverseOptions struct {
+	Test bool
+}
+
+func MakeUniverse(options UniverseOptions) (*Universe, error) {
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
 		logger.Error("Homedir creation failed", slog.String("error", err.Error()))
@@ -56,11 +60,21 @@ func MakeUniverse() (*Universe, error) {
 	if os.Getenv("SINGULATRON_CONFIG_PATH") != "" {
 		configService.ConfigDirectory = os.Getenv("SINGULATRON_CONFIG_PATH")
 	}
-	storefactoryservice.LocalStorePath = path.Join(configService.ConfigDirectory, "data")
-	err = os.MkdirAll(storefactoryservice.LocalStorePath, 0755)
-	if err != nil {
-		logger.Error("Creating data folder failed", slog.String("error", err.Error()))
-		os.Exit(1)
+
+	if options.Test {
+		storefactoryservice.LocalStorePath, err = os.MkdirTemp("", "data-")
+		if err != nil {
+			logger.Error("Creating data folder failed", slog.String("error", err.Error()))
+			os.Exit(1)
+		}
+		logger.Info("Temporary directory created at:", storefactoryservice.LocalStorePath)
+	} else {
+		storefactoryservice.LocalStorePath = path.Join(configService.ConfigDirectory, "data")
+		err = os.MkdirAll(storefactoryservice.LocalStorePath, 0755)
+		if err != nil {
+			logger.Error("Creating data folder failed", slog.String("error", err.Error()))
+			os.Exit(1)
+		}
 	}
 
 	userService, err := userservice.NewUserService(

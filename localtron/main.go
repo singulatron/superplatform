@@ -46,7 +46,9 @@ func main() {
 		}
 	}()
 
-	univ, err := di.MakeUniverse()
+	univ, err := di.MakeUniverse(di.UniverseOptions{
+		Test: false,
+	})
 	if err != nil {
 		logger.Error("Cannot make universe", slog.Any("error", err))
 		os.Exit(1)
