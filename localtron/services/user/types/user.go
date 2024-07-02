@@ -75,6 +75,13 @@ type ChangePasswordRequest struct {
 
 type ChangePasswordResponse struct{}
 
+type ChangePasswordAdminRequest struct {
+	Email       string `json:"email,omitempty"`
+	NewPassword string `json:"newPassword,omitempty"`
+}
+
+type ChangePasswordAdminResponse struct{}
+
 type GetUsersRequest struct{}
 
 type GetUsersResponse struct {

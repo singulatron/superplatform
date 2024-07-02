@@ -130,6 +130,17 @@ export class UserService {
 		return this.localtron.call('/user/change-password', request);
 	}
 
+	changePasswordAdmin(
+		email: string,
+		newPassword: string
+	): Promise<ChangePasswordAdminResponse> {
+		const request: ChangePasswordAdminRequest = {
+			email: email,
+			newPassword: newPassword,
+		};
+		return this.localtron.call('/user/change-password-admin', request);
+	}
+
 	/** Create a user - alternative to registration
 	 */
 	createUser(
@@ -234,6 +245,14 @@ export interface ChangePasswordRequest {
 
 // eslint-disable-next-line
 export interface ChangePasswordResponse {}
+
+export interface ChangePasswordAdminRequest {
+	email?: string;
+	newPassword?: string;
+}
+
+// eslint-disable-next-line
+export interface ChangePasswordAdminResponse {}
 
 export const RoleAdmin: Role = {
 	id: 'role.admin',

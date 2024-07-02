@@ -176,6 +176,9 @@ func main() {
 	router.HandleFunc("/user/change-password", appl(func(w http.ResponseWriter, r *http.Request) {
 		userendpoints.ChangePassword(w, r, univ.UserService)
 	}))
+	router.HandleFunc("/user/change-password-admin", appl(func(w http.ResponseWriter, r *http.Request) {
+		userendpoints.ChangePasswordAdmin(w, r, univ.UserService)
+	}))
 	router.HandleFunc("/user/create-user", appl(func(w http.ResponseWriter, r *http.Request) {
 		userendpoints.CreateUser(w, r, univ.UserService)
 	}))

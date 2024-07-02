@@ -488,9 +488,6 @@ func (q *SQLQueryBuilder[T]) Find() ([]T, error) {
 
 		for i := 0; i < safeNumFieldsType.NumField(); i++ {
 			field := obj.Field(i)
-			if !field.IsExported() {
-				continue
-			}
 			fieldType := field.Type()
 
 			switch {
@@ -519,9 +516,6 @@ func (q *SQLQueryBuilder[T]) Find() ([]T, error) {
 
 		for i := 0; i < safeNumFieldsType.NumField(); i++ {
 			field := obj.Field(i)
-			if !field.IsExported() {
-				continue
-			}
 
 			fieldType := field.Type()
 
