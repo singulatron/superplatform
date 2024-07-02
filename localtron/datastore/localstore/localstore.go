@@ -11,6 +11,7 @@
 package localstore
 
 import (
+	"encoding/json"
 	"errors"
 	"io/ioutil"
 	"reflect"
@@ -266,18 +267,36 @@ func (q *QueryBuilder[T]) Find() ([]T, error) {
 	if q.limit > 0 && q.limit < len(result) {
 		result = result[:q.limit]
 	}
-	return result, nil
+
+	// deep copy result before returning
+	var resultCopy []T
+	bs, err := json.Marshal(result)
+	if err != nil {
+		return nil, err
+	}
+
+	return resultCopy, json.Unmarshal(bs, &resultCopy)
 }
 
 func (q *QueryBuilder[T]) FindOne() (T, bool, error) {
 	q.store.mu.RLock()
 	defer q.store.mu.RUnlock()
+
+	var empty T
+
 	for _, obj := range q.store.data {
 		if q.match(obj) {
-			return obj, true, nil
+			var cop T
+			// deep copy result before returning
+			bs, err := json.Marshal(obj)
+			if err != nil {
+				return empty, false, err
+			}
+
+			return cop, true, json.Unmarshal(bs, &cop)
 		}
 	}
-	var empty T
+
 	return empty, false, nil
 }
 
