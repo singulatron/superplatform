@@ -193,5 +193,6 @@ func MakeUniverse(options UniverseOptions) (*Universe, error) {
 		DownloadService: downloadService,
 		AppService:      appService,
 		DockerService:   dockerService,
+		ModelService:    modelService,
 	}, nil
 }
