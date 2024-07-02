@@ -19,7 +19,7 @@
 			<div style="padding: 0rem 2rem">
 				<h2 style="margin-bottom: 2rem">{{ 'Users' | translate }}</h2>
 				<ion-searchbar
-					debounce="500"
+					debounce="200"
 					(ionInput)="filterUsers($event.target.value)"
 					placeholder="Search users"
 				></ion-searchbar>
