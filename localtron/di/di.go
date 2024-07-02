@@ -40,10 +40,20 @@ type UniverseOptions struct {
 }
 
 func MakeUniverse(options UniverseOptions) (*Universe, error) {
-	homeDir, err := os.UserHomeDir()
-	if err != nil {
-		logger.Error("Homedir creation failed", slog.String("error", err.Error()))
-		os.Exit(1)
+	var homeDir string
+	var err error
+	if options.Test {
+		homeDir, err = os.MkdirTemp("", "singulatron-")
+		if err != nil {
+			logger.Error("Homedir creation failed", slog.String("error", err.Error()))
+			os.Exit(1)
+		}
+	} else {
+		homeDir, err = os.UserHomeDir()
+		if err != nil {
+			logger.Error("Homedir creation failed", slog.String("error", err.Error()))
+			os.Exit(1)
+		}
 	}
 
 	configService, err := configservice.NewConfigService()
@@ -61,20 +71,11 @@ func MakeUniverse(options UniverseOptions) (*Universe, error) {
 		configService.ConfigDirectory = os.Getenv("SINGULATRON_CONFIG_PATH")
 	}
 
-	if options.Test {
-		storefactoryservice.LocalStorePath, err = os.MkdirTemp("", "data-")
-		if err != nil {
-			logger.Error("Creating data folder failed", slog.String("error", err.Error()))
-			os.Exit(1)
-		}
-		logger.Info("Temporary directory created at:", storefactoryservice.LocalStorePath)
-	} else {
-		storefactoryservice.LocalStorePath = path.Join(configService.ConfigDirectory, "data")
-		err = os.MkdirAll(storefactoryservice.LocalStorePath, 0755)
-		if err != nil {
-			logger.Error("Creating data folder failed", slog.String("error", err.Error()))
-			os.Exit(1)
-		}
+	storefactoryservice.LocalStorePath = path.Join(configService.ConfigDirectory, "data")
+	err = os.MkdirAll(storefactoryservice.LocalStorePath, 0755)
+	if err != nil {
+		logger.Error("Creating data folder failed", slog.String("error", err.Error()))
+		os.Exit(1)
 	}
 
 	userService, err := userservice.NewUserService(

@@ -28,7 +28,7 @@ import (
 	"github.com/singulatron/singulatron/localtron/logger"
 )
 
-const defaultModelId = `huggingface/TheBloke/mistral-7b-instruct-v0.2.Q3_K_S.gguf`
+const DefaultModelId = `huggingface/TheBloke/mistral-7b-instruct-v0.2.Q3_K_S.gguf`
 
 type ConfigService struct {
 	// import cycle doesn't alllow use to have
@@ -100,7 +100,7 @@ func (cs *ConfigService) loadConfig() error {
 	}
 
 	if cs.config.Model.CurrentModelId == "" {
-		cs.config.Model.CurrentModelId = defaultModelId
+		cs.config.Model.CurrentModelId = DefaultModelId
 	}
 
 	return nil
