@@ -342,6 +342,9 @@ func (s *SQLStore[T]) buildInsertQuery(obj T) (string, []interface{}, error) {
 
 	for i := 0; i < val.NumField(); i++ {
 		field := typ.Field(i)
+		if !field.IsExported() {
+			continue
+		}
 		fields = append(fields, s.fieldName(field.Name))
 		placeholders = append(placeholders, s.placeholder(paramCounter))
 		param := val.Field(i).Interface()
@@ -378,6 +381,9 @@ func (s *SQLStore[T]) buildUpsertQuery(obj T) (string, []interface{}, error) {
 
 	for i := 0; i < val.NumField(); i++ {
 		field := typ.Field(i)
+		if !field.IsExported() {
+			continue
+		}
 		fieldName := s.fieldName(field.Name)
 
 		fields = append(fields, fieldName)
@@ -482,6 +488,9 @@ func (q *SQLQueryBuilder[T]) Find() ([]T, error) {
 
 		for i := 0; i < safeNumFieldsType.NumField(); i++ {
 			field := obj.Field(i)
+			if !field.IsExported() {
+				continue
+			}
 			fieldType := field.Type()
 
 			switch {
@@ -509,14 +518,10 @@ func (q *SQLQueryBuilder[T]) Find() ([]T, error) {
 		}
 
 		for i := 0; i < safeNumFieldsType.NumField(); i++ {
-			// var field reflect.Value
 			field := obj.Field(i)
-			//spew.Dump(tIsPointer, obj)
-			//if tIsPointer {
-			//	field = obj.Elem().Field(i)
-			//} else {
-			//
-			//}
+			if !field.IsExported() {
+				continue
+			}
 
 			fieldType := field.Type()
 
@@ -721,6 +726,9 @@ func (q *SQLQueryBuilder[T]) buildUpdateQuery(obj T) (string, []any, error) {
 
 	for i := 0; i < val.NumField(); i++ {
 		field := typ.Field(i)
+		if !field.IsExported() {
+			continue
+		}
 		fieldName := q.store.fieldName(field.Name)
 
 		param, err := q.store.convertParam(val.Field(i).Interface())

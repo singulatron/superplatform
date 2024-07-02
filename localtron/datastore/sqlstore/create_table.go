@@ -29,6 +29,9 @@ func (s *SQLStore[T]) createTable(db *DebugDB, tableName string) error {
 
 	for i := 0; i < typ.NumField(); i++ {
 		field := typ.Field(i)
+		if !field.IsExported() {
+			continue
+		}
 		fieldName := s.fieldName(field.Name)
 		s.fieldTypes[fieldName] = field.Type
 		fieldType := s.sqlType(field.Type)
