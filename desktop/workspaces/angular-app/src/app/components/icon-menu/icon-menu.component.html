@@ -55,6 +55,20 @@
 	</div>
 
 	<div
+		*ngIf="group() === 'ai-group'"
+		class="menu-entry"
+		title="Prompts"
+		routerLink="/prompts"
+	>
+		<ion-icon
+			[ngStyle]="{
+				color: currentPath === 'prompts' ? 'gold' : '',
+			}"
+			name="code-working-outline"
+		></ion-icon>
+	</div>
+
+	<div
 		*ngIf="group() === 'users-group'"
 		class="menu-entry"
 		title="Users"

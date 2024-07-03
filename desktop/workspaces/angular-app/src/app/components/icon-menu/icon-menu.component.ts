@@ -40,7 +40,8 @@ export class IconMenuComponent {
 		if (
 			this.currentPath === 'startup' ||
 			this.currentPath === 'chat' ||
-			this.currentPath === 'model-explorer'
+			this.currentPath === 'model-explorer' ||
+			this.currentPath === 'prompts'
 		) {
 			return 'ai-group';
 		}

@@ -67,7 +67,12 @@ type AddPromptRequest struct {
 	Prompt *Prompt `json:"prompt"`
 }
 
-type ListPromptsRequest struct{}
+type ListPromptsRequest struct {
+	CreatedAfter time.Time `json:"createdAfter"`
+	// or relationship
+	Statuses     []PromptStatus `json:"statuses"`
+	LastRunAfter time.Time      `json:"lastRunAfter"`
+}
 
 type ListPromptsResponse struct {
 	Prompts []*Prompt `json:"prompts"`
