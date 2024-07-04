@@ -17,7 +17,7 @@
 	<ng-template #mainContent>
 		<app-centered [headerHeight]="'56px'" [vertical]="true">
 			<div *ngFor="let prompt of prompts">
-				{{ prompt.prompt }}
+				<app-prompt [prompt]="prompt"></app-prompt>
 			</div>
 		</app-centered>
 	</ng-template>

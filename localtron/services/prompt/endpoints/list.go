@@ -53,6 +53,7 @@ func List(
 		CreatedAfter: req.CreatedAfter,
 		Statuses:     req.Statuses,
 		LastRunAfter: req.LastRunAfter,
+		Desc:         req.Desc,
 	}
 
 	if len(options.Statuses) == 0 {

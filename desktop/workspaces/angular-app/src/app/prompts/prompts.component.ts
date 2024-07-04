@@ -23,6 +23,7 @@ import { first } from 'rxjs';
 import { PageComponent } from '../components/page/page.component';
 import { IconMenuComponent } from '../components/icon-menu/icon-menu.component';
 import { CenteredComponent } from '../components/centered/centered.component';
+import { PromptComponent } from './prompt/prompt.component';
 
 @Component({
 	selector: 'app-prompts',
@@ -36,6 +37,7 @@ import { CenteredComponent } from '../components/centered/centered.component';
 		NgIf,
 		FormsModule,
 		NgStyle,
+		PromptComponent,
 	],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	templateUrl: './prompts.component.html',
@@ -64,6 +66,7 @@ export class PromptsComponent {
 				'abandoned',
 				'canceled',
 			],
+			desc: true,
 		});
 		this.prompts = rsp.prompts;
 		this.cd.markForCheck();

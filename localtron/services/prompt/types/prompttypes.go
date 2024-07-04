@@ -72,6 +72,7 @@ type ListPromptsRequest struct {
 	// or relationship
 	Statuses     []PromptStatus `json:"statuses"`
 	LastRunAfter time.Time      `json:"lastRunAfter"`
+	Desc         bool           `json:"desc"`
 }
 
 type ListPromptsResponse struct {

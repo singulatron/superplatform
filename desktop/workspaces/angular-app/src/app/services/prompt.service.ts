@@ -260,6 +260,7 @@ export interface ListPromptsRequest {
 	createdAfter?: string;
 	statuses?: string[];
 	lastRunAfter?: string;
+	desc?: boolean;
 }
 
 export interface ListPromptsResponse {
