@@ -15,8 +15,7 @@
 <br />
 
 Singulatron runs AIs on your servers. It's source-available, private, and uses no third party APIs.
-
-Our goal is to support both AI usage and AI app development.
+A tool for AI consumption and AI app development.
 
 ## Roadmap
 
