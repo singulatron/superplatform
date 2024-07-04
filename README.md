@@ -17,6 +17,8 @@
 Singulatron is the AI Superplatform that runs on your computer(s) and server(s). 
 It's source-available, uses no third party APIs, and you have complete control over your data and privacy.
 
+Our goal is to serve as the foundation for AI app development, seamlessly supporting everything from local desktop applications to distributed server-based AI solutions.
+
 ## Roadmap
 
 - [x] AI functionality: prompting, threads, prompt queues, download manager
