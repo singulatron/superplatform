@@ -5,7 +5,7 @@
       <h1>Singulatron</h1>
     </span>
     <div>
-      The AI Superplatform
+      The AI Superplatform. Have your own internal AI network.
     </div>
     <div>
       <a href="https://superplatform.ai">superplatform.ai</a>
