@@ -13,6 +13,7 @@ package sqlstore
 import (
 	"fmt"
 	"reflect"
+	"strings"
 )
 
 func (s *SQLStore[T]) placeholder(counter int) string {
@@ -40,23 +41,40 @@ func (q *SQLQueryBuilder[T]) buildConditions(start ...int) ([]string, []interfac
 		var err error
 
 		if cond.Equal != nil {
-			fieldName := q.store.fieldName(cond.Equal.FieldName)
-			placeHolder := q.store.placeholder(paramCounter)
-
-			if reflect.TypeOf(cond.Equal.Value).Kind() == reflect.Slice {
-				conditions = append(conditions, fmt.Sprintf("%s = ANY(%s)", fieldName, placeHolder))
-				param, err = q.store.convertParam(cond.Equal.Value)
-			} else if typ, hasTyp := q.store.fieldTypes[fieldName]; hasTyp && typ.Kind() == reflect.Slice {
-				// "reverse" IN clause
-				conditions = append(conditions, fmt.Sprintf("%s = ANY(%s)", placeHolder, fieldName))
-				param, err = q.store.convertParam(cond.Equal.Value)
-			} else {
-				conditions = append(conditions, fmt.Sprintf("%s = %s", fieldName, placeHolder))
-				param, err = q.store.convertParam(cond.Equal.Value)
+			fieldNames := []string{}
+			if cond.Equal.Selector.Field != "" {
+				fieldNames = append(fieldNames, cond.Equal.Selector.Field)
+			} else if len(cond.Equal.Selector.OneOf) > 0 {
+				fieldNames = append(fieldNames, cond.Equal.Selector.OneOf...)
 			}
 
-			params = append(params, param)
-			paramCounter++
+			orConditions := []string{}
+
+			for _, field := range fieldNames {
+				fieldName := q.store.fieldName(field)
+				placeHolder := q.store.placeholder(paramCounter)
+
+				if reflect.TypeOf(cond.Equal.Value).Kind() == reflect.Slice {
+					orConditions = append(orConditions, fmt.Sprintf("%s = ANY(%s)", fieldName, placeHolder))
+					param, err = q.store.convertParam(cond.Equal.Value)
+				} else if typ, hasTyp := q.store.fieldTypes[fieldName]; hasTyp && typ.Kind() == reflect.Slice {
+					// "reverse" IN clause
+					orConditions = append(orConditions, fmt.Sprintf("%s = ANY(%s)", placeHolder, fieldName))
+					param, err = q.store.convertParam(cond.Equal.Value)
+				} else {
+					orConditions = append(orConditions, fmt.Sprintf("%s = %s", fieldName, placeHolder))
+					param, err = q.store.convertParam(cond.Equal.Value)
+				}
+
+				params = append(params, param)
+				paramCounter++
+			}
+
+			if len(orConditions) == 1 {
+				conditions = append(conditions, orConditions...)
+			} else {
+				conditions = append(conditions, fmt.Sprintf("(%s)", strings.Join(orConditions, " OR ")))
+			}
 		}
 
 		if err != nil {

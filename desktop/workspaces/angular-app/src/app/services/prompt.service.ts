@@ -71,8 +71,8 @@ export class PromptService {
 		return this.localtron.call('/prompt/remove', request);
 	}
 
-	async promptList(req: ListPromptsRequest): Promise<ListPromptsResponse> {
-		return this.localtron.call('/prompt/list', req);
+	async promptList(request: ListPromptsRequest): Promise<ListPromptsResponse> {
+		return this.localtron.call('/prompt/list', request);
 	}
 
 	private resubCount = 0;

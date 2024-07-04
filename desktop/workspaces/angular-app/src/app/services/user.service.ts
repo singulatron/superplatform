@@ -83,7 +83,12 @@ export class UserService {
 	}
 
 	removeToken() {
-		this.cookieService.delete('the_token', '/', '', this.localtron.config.env.production ? true : false)
+		this.cookieService.delete(
+			'the_token',
+			'/',
+			'',
+			this.localtron.config.env.production ? true : false
+		);
 	}
 
 	hasToken(): boolean {

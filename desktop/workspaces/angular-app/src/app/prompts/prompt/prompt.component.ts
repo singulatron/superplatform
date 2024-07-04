@@ -30,7 +30,7 @@ import { DatePipe } from '@angular/common';
 		NgIf,
 		FormsModule,
 		NgStyle,
-    DatePipe
+		DatePipe,
 	],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	templateUrl: './prompt.component.html',
