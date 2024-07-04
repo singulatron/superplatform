@@ -21,7 +21,7 @@ Our goal is to support both AI usage and AI app development, from local desktop 
 
 ## Roadmap
 
-- [x] AI functionality: prompting, prompt scheduling, threads, prompt queues, download manager
+- [x] AI functionality: prompting, prompt queues, threads, download manager
 - [x] Streaming, real time updates
 - [x] User management: multi-user support, role-based access control
 - [x] Supporting different database backends (local files, SQL and more is coming) and other distributed primitives
