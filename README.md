@@ -14,8 +14,7 @@
 <p>
 <br />
 
-Singulatron is the AI Superplatform that runs on your servers. 
-It's source-available, uses no third party APIs, and you have complete control over your data and privacy.
+Singulatron runs AIs on your servers. It's source-available, private, and uses no third party APIs.
 
 Our goal is to support both AI usage and AI app development.
 
