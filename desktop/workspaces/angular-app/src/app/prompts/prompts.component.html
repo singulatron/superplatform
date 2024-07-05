@@ -19,6 +19,16 @@
 			<div *ngFor="let prompt of prompts">
 				<app-prompt [prompt]="prompt"></app-prompt>
 			</div>
+			<ion-row *ngIf="prompts?.length">
+				<ion-col class="ion-text-center">
+					<ion-button (click)="prev()" [disabled]="afters.length < 2"
+						><span style="color: white">Previous</span></ion-button
+					>
+					<ion-button (click)="next()" [disabled]="done"
+						><span style="color: white">Next</span></ion-button
+					>
+				</ion-col>
+			</ion-row>
 		</app-centered>
 	</ng-template>
 </app-page>

@@ -53,6 +53,7 @@ func List(
 		CreatedAfter: req.CreatedAfter,
 		Statuses:     req.Statuses,
 		LastRunAfter: req.LastRunAfter,
+		After:        req.After,
 		Desc:         req.Desc,
 	}
 
@@ -78,8 +79,13 @@ func List(
 		}
 	}
 
-	bs, _ := json.Marshal(prompttypes.ListPromptsResponse{
+	response := prompttypes.ListPromptsResponse{
 		Prompts: prompts,
-	})
+	}
+	if len(prompts) >= 20 {
+		response.After = prompts[len(prompts)-1].CreatedAt
+	}
+
+	bs, _ := json.Marshal(response)
 	w.Write(bs)
 }

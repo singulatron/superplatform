@@ -261,10 +261,12 @@ export interface ListPromptsRequest {
 	statuses?: string[];
 	lastRunAfter?: string;
 	desc?: boolean;
+	after?: string;
 }
 
 export interface ListPromptsResponse {
 	prompts: Prompt[];
+	after: string;
 }
 
 export interface PromptRequest {

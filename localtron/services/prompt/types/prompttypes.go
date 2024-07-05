@@ -73,10 +73,13 @@ type ListPromptsRequest struct {
 	Statuses     []PromptStatus `json:"statuses"`
 	LastRunAfter time.Time      `json:"lastRunAfter"`
 	Desc         bool           `json:"desc"`
+	After        time.Time      `json:"after"`
 }
 
 type ListPromptsResponse struct {
 	Prompts []*Prompt `json:"prompts"`
+	After   time.Time `json:"after"`
+	Done    bool      `json:"done"`
 }
 
 type RemovePromptRequest struct {

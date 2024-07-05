@@ -45,6 +45,19 @@ import { PromptComponent } from './prompt/prompt.component';
 })
 export class PromptsComponent {
 	prompts: Prompt[] = [];
+	afters: any[] = [];
+	done = false;
+	request = {
+		statuses: [
+			'scheduled',
+			'running',
+			'completed',
+			'errored',
+			'abandoned',
+			'canceled',
+		],
+		desc: true,
+	};
 
 	constructor(
 		private cd: ChangeDetectorRef,
@@ -58,17 +71,38 @@ export class PromptsComponent {
 
 	async loggedInInit() {
 		const rsp = await this.promptService.promptList({
-			statuses: [
-				'scheduled',
-				'running',
-				'completed',
-				'errored',
-				'abandoned',
-				'canceled',
-			],
-			desc: true,
+			...this.request,
 		});
 		this.prompts = rsp.prompts;
+		this.afters.push(rsp.after);
+		this.cd.markForCheck();
+	}
+
+	async prev() {
+		if (this.afters.length >= 2) {
+			const rsp = await this.promptService.promptList({
+				...this.request,
+				after: this.afters[this.afters.length - 2],
+			});
+			this.prompts = rsp.prompts;
+			this.afters.pop();
+			this.cd.markForCheck();
+		}
+	}
+
+	async next() {
+		const rsp = await this.promptService.promptList({
+			...this.request,
+			after: this.afters[this.afters.length - 1],
+		});
+
+		this.prompts = rsp.prompts;
+		if (rsp.after) {
+			this.afters.push(rsp.after);
+		} else {
+			this.done = true;
+		}
+
 		this.cd.markForCheck();
 	}
 }
