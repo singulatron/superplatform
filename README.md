@@ -14,7 +14,7 @@
 <p>
 <br />
 
-Singulatron runs AIs on your servers. It's source-available, private, and uses no third party APIs.
+Singulatron runs AIs on your servers. It works with any database (just write shims for your favourite ones, or ask for it). It's source-available, private, and uses no third party APIs.
 A tool for AI consumption and AI app development.
 
 ## Roadmap
