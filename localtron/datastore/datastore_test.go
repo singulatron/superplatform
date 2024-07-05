@@ -29,14 +29,17 @@ type Friend struct {
 }
 
 type TestObject struct {
-	Name          string                 `json:"name"`
-	Value         int                    `json:"value"`
-	Age           int                    `json:"age"`
-	NickNames     []string               `json:"nickNames"`
-	Friend        Friend                 `json:"friend"`
-	Amap          map[string]interface{} `json:"amap"`
-	FriendPointer *Friend                `json:"friendPointer"`
-	CreatedAt     time.Time              `json:"createdAt"`
+	Name              string                  `json:"name"`
+	Value             int                     `json:"value"`
+	Age               int                     `json:"age"`
+	NickNames         []string                `json:"nickNames"`
+	Friend            Friend                  `json:"friend"`
+	Amap              map[string]interface{}  `json:"amap"`
+	AmapPointer       *map[string]interface{} `json:"amapPointer"`
+	AmapString        map[string]string       `json:"amapString"`
+	AmapStringPointer *map[string]string      `json:"amapStringPointer"`
+	FriendPointer     *Friend                 `json:"friendPointer"`
+	CreatedAt         time.Time               `json:"createdAt"`
 }
 
 func (t TestObject) GetId() string {
@@ -92,6 +95,7 @@ func TestAll(t *testing.T) {
 		"Pagination":             Pagination,
 		"FindOne":                FindOne,
 		"Update":                 Update,
+		"Map":                    Map,
 	}
 	pointerTests := map[string]func(t *testing.T, store datastore.DataStore[*TestObject]){
 		"PointerCreate":                 PointerCreate,
@@ -107,6 +111,7 @@ func TestAll(t *testing.T) {
 		"PointerPagination":             PointerPagination,
 		"PointerFindOne":                PointerFindOne,
 		"PointerUpdate":                 PointerUpdate,
+		"MapPointer":                    MapPointer,
 	}
 
 	for testName, test := range tests {
@@ -128,6 +133,34 @@ func TestAll(t *testing.T) {
 
 	}
 
+}
+
+func Map(t *testing.T, store datastore.DataStore[TestObject]) {
+	obj := TestObject{Name: "A", Amap: map[string]interface{}{
+		"name:": "A",
+	}, AmapPointer: &map[string]interface{}{
+		"name:": "A",
+	}}
+	err := store.Create(obj)
+	require.NoError(t, err)
+
+	res, err := store.Query(datastore.All()).Find()
+	require.NoError(t, err)
+	require.Equal(t, 1, len(res))
+}
+
+func MapPointer(t *testing.T, store datastore.DataStore[*TestObject]) {
+	obj := &TestObject{Name: "A", Amap: map[string]interface{}{
+		"name:": "A",
+	}, AmapPointer: &map[string]interface{}{
+		"name:": "A",
+	}}
+	err := store.Create(obj)
+	require.NoError(t, err)
+
+	res, err := store.Query(datastore.All()).Find()
+	require.NoError(t, err)
+	require.Equal(t, 1, len(res))
 }
 
 func Pagination(t *testing.T, store datastore.DataStore[TestObject]) {

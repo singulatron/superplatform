@@ -504,7 +504,7 @@ func (q *SQLQueryBuilder[T]) Find() ([]T, error) {
 				fields[i] = &str
 			case fieldType == reflect.TypeOf(time.Time{}):
 				fields[i] = new(sql.NullTime)
-			case fieldType == reflect.TypeOf(map[string]interface{}{}):
+			case fieldType.Kind() == reflect.Map:
 				fields[i] = new(sql.NullString)
 			default:
 				fields[i] = field.Addr().Interface()
