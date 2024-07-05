@@ -86,7 +86,7 @@ export class PromptsComponent {
 			const rsp = await this.promptService.promptList({
 				...this.request,
 				after: this.afters[this.afters.length - 2],
-				count: true
+				count: true,
 			});
 			this.prompts = rsp.prompts;
 			this.count = rsp.count || 0;
@@ -99,7 +99,7 @@ export class PromptsComponent {
 		const rsp = await this.promptService.promptList({
 			...this.request,
 			after: this.afters[this.afters.length - 1],
-			count: true
+			count: true,
 		});
 
 		this.prompts = rsp.prompts;
