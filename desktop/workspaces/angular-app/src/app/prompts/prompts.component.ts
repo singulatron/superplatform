@@ -85,7 +85,7 @@ export class PromptsComponent {
 		if (this.afters.length >= 2) {
 			const rsp = await this.promptService.promptList({
 				...this.request,
-				after: this.afters[this.afters.length - 2],
+				after: this.afters.at(-1),
 				count: true,
 			});
 			this.prompts = rsp.prompts;
@@ -98,7 +98,7 @@ export class PromptsComponent {
 	async next() {
 		const rsp = await this.promptService.promptList({
 			...this.request,
-			after: this.afters[this.afters.length - 1],
+			after: this.afters.at(-1),
 			count: true,
 		});
 

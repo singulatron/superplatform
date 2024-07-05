@@ -72,9 +72,9 @@ export class UsersComponent implements OnInit {
 	}
 
 	async ngOnInit() {
-		this.route.queryParams.subscribe((params: Params) => {
-			if (params['search']) {
-				this.searchText = params['search'];
+		this.route.queryParams.subscribe((parameters: Params) => {
+			if (parameters['search']) {
+				this.searchText = parameters['search'];
 				this.filterUsers(this.searchText);
 			} else {
 				this.filteredUsers = [...this.users];
