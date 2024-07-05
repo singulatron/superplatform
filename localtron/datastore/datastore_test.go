@@ -29,13 +29,14 @@ type Friend struct {
 }
 
 type TestObject struct {
-	Name          string    `json:"name"`
-	Value         int       `json:"value"`
-	Age           int       `json:"age"`
-	NickNames     []string  `json:"nickNames"`
-	Friend        Friend    `json:"friend"`
-	FriendPointer *Friend   `json:"friendPointer"`
-	CreatedAt     time.Time `json:"createdAt"`
+	Name          string                 `json:"name"`
+	Value         int                    `json:"value"`
+	Age           int                    `json:"age"`
+	NickNames     []string               `json:"nickNames"`
+	Friend        Friend                 `json:"friend"`
+	Amap          map[string]interface{} `json:"amap"`
+	FriendPointer *Friend                `json:"friendPointer"`
+	CreatedAt     time.Time              `json:"createdAt"`
 }
 
 func (t TestObject) GetId() string {
