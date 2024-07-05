@@ -387,35 +387,41 @@ func (q *QueryBuilder[T]) Delete() error {
 func (q *QueryBuilder[T]) match(obj T) bool {
 	for _, cond := range q.conditions {
 		if cond.Equal != nil {
-			fieldValue := getField(obj, cond.Equal.FieldName)
+			fieldNames := []string{}
+			if cond.Equal.Selector.Field != "" {
+				fieldNames = append(fieldNames, cond.Equal.Selector.Field)
+			} else if cond.Equal.Selector.OneOf != nil {
+				fieldNames = cond.Equal.Selector.OneOf
+			}
 
-			condValue := reflect.ValueOf(cond.Equal.Value)
-			if fieldV := reflect.ValueOf(fieldValue); fieldV.Kind() == reflect.Slice {
-				matched := false
-				for i := 0; i < fieldV.Len(); i++ {
-					if reflect.DeepEqual(fieldV.Index(i).Interface(), condValue.Interface()) {
+			matched := false
+			for _, fieldName := range fieldNames {
+				fieldValue := getField(obj, fieldName)
+
+				condValue := reflect.ValueOf(cond.Equal.Value)
+				if fieldV := reflect.ValueOf(fieldValue); fieldV.Kind() == reflect.Slice {
+					for i := 0; i < fieldV.Len(); i++ {
+						if reflect.DeepEqual(fieldV.Index(i).Interface(), condValue.Interface()) {
+							matched = true
+							continue
+						}
+					}
+
+				} else if condValue.Kind() == reflect.Slice {
+					for i := 0; i < condValue.Len(); i++ {
+						if reflect.DeepEqual(fieldValue, condValue.Index(i).Interface()) {
+							matched = true
+							continue
+						}
+					}
+				} else {
+					if reflect.DeepEqual(fieldValue, cond.Equal.Value) {
 						matched = true
-						continue
 					}
 				}
-				if !matched {
-					return false
-				}
-			} else if condValue.Kind() == reflect.Slice {
-				matched := false
-				for i := 0; i < condValue.Len(); i++ {
-					if reflect.DeepEqual(fieldValue, condValue.Index(i).Interface()) {
-						matched = true
-						continue
-					}
-				}
-				if !matched {
-					return false
-				}
-			} else {
-				if !reflect.DeepEqual(fieldValue, cond.Equal.Value) {
-					return false
-				}
+			}
+			if !matched {
+				return false
 			}
 		} else if cond.All != nil {
 			continue
