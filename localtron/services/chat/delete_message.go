@@ -16,7 +16,7 @@ import (
 
 func (a *ChatService) DeleteMessage(id string) error {
 	return a.messagesStore.Query(
-		datastore.Equal("id", id),
+		datastore.Equal(datastore.Field("id"), id),
 	).Delete()
 
 	return nil

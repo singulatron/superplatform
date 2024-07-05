@@ -17,7 +17,7 @@ import (
 
 func (a *ChatService) UpdateThread(chatThread *chattypes.Thread) (*chattypes.Thread, error) {
 	err := a.threadsStore.Query(
-		datastore.Equal("id", chatThread.Id),
+		datastore.Equal(datastore.Field("id"), chatThread.Id),
 	).Update(chatThread)
 
 	if err != nil {

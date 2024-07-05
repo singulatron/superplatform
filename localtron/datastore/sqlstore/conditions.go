@@ -45,7 +45,7 @@ func (q *SQLQueryBuilder[T]) buildConditions(start ...int) ([]string, []interfac
 			if cond.Equal.Selector.Field != "" {
 				fieldNames = append(fieldNames, cond.Equal.Selector.Field)
 			} else if len(cond.Equal.Selector.OneOf) > 0 {
-				fieldNames = append(fieldNames, cond.Equal.Selector.OneOf...)
+				fieldNames = cond.Equal.Selector.OneOf
 			}
 
 			orConditions := []string{}

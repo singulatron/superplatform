@@ -20,7 +20,7 @@ import (
 
 func (s *UserService) CreateRole(name, description string, permissionIds []string) (*usertypes.Role, error) {
 	permissions, err := s.permissionsStore.Query(
-		datastore.Equal("id", permissionIds),
+		datastore.Equal(datastore.Field("id"), permissionIds),
 	).Find()
 	if err != nil {
 		return nil, err

@@ -25,7 +25,7 @@ import (
 
 func (s *UserService) Login(email, password string) (*usertypes.AuthToken, error) {
 	user, found, err := s.usersStore.Query(
-		datastore.Equal("email", email),
+		datastore.Equal(datastore.Field("email"), email),
 	).FindOne()
 	if err != nil {
 		return nil, err
@@ -39,7 +39,7 @@ func (s *UserService) Login(email, password string) (*usertypes.AuthToken, error
 	}
 
 	tokens, err := s.authTokensStore.Query(
-		datastore.Equal("id", user.AuthTokenIds),
+		datastore.Equal(datastore.Field("id"), user.AuthTokenIds),
 	).OrderBy("createdAt", true).Find()
 	if err != nil {
 		return nil, err

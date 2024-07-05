@@ -27,6 +27,6 @@ type ListPromptOptions struct {
 
 func (p *PromptService) ListPrompts(options *ListPromptOptions) ([]*prompttypes.Prompt, error) {
 	return p.promptsStore.Query(
-		datastore.Equal("status", options.Statuses),
+		datastore.Equal(datastore.Field("status"), options.Statuses),
 	).OrderBy("createdAt", options.Desc).Find()
 }

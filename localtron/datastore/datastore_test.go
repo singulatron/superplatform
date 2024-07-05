@@ -24,15 +24,15 @@ import (
 )
 
 type Friend struct {
-	Name string `json:datastore.Field("Name")`
+	Name string `json:"name"`
 	Age  int    `json:"age"`
 }
 
 type TestObject struct {
-	Name          string    `json:datastore.Field("Name")`
-	Value         int       `json:datastore.Field("Value")`
+	Name          string    `json:"name"`
+	Value         int       `json:"value"`
 	Age           int       `json:"age"`
-	NickNames     []string  `json:datastore.Field("NickNames")`
+	NickNames     []string  `json:"nickNames"`
 	Friend        Friend    `json:"friend"`
 	FriendPointer *Friend   `json:"friendPointer"`
 	CreatedAt     time.Time `json:"createdAt"`

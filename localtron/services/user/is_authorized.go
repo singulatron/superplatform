@@ -30,7 +30,7 @@ func (s *UserService) IsAuthorized(permissionId string, request *http.Request) e
 	authHeader = strings.Replace(authHeader, "Bearer ", "", 1)
 
 	token, found, err := s.authTokensStore.Query(
-		datastore.Equal("token", authHeader),
+		datastore.Equal(datastore.Field("token"), authHeader),
 	).FindOne()
 	if err != nil {
 		return err
@@ -55,7 +55,7 @@ func (s *UserService) IsAuthorized(permissionId string, request *http.Request) e
 	}
 
 	roles, err := s.rolesStore.Query(
-		datastore.Equal("id", user.RoleIds),
+		datastore.Equal(datastore.Field("id"), user.RoleIds),
 	).Find()
 	if err != nil {
 		return err
@@ -80,7 +80,7 @@ func (s *UserService) GetUserFromRequest(request *http.Request) (*usertypes.User
 	authHeader = strings.Replace(authHeader, "Bearer ", "", 1)
 
 	token, found, err := s.authTokensStore.Query(
-		datastore.Equal("token", authHeader),
+		datastore.Equal(datastore.Field("token"), authHeader),
 	).FindOne()
 	if err != nil {
 		return nil, false, err

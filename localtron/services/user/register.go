@@ -26,7 +26,7 @@ func (s *UserService) Register(email, password, name string, roleIds []string) (
 	logger.Info("Registering user", slog.String("name", name))
 
 	_, alreadyExists, err := s.usersStore.Query(
-		datastore.Equal("email", email),
+		datastore.Equal(datastore.Field("email"), email),
 	).FindOne()
 	if err != nil {
 		return nil, err
