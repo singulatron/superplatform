@@ -16,13 +16,35 @@
 	</ng-template>
 	<ng-template #mainContent>
 		<app-centered [headerHeight]="'56px'" [vertical]="true">
-			<div *ngFor="let prompt of prompts">
+			<div>
+				<h1>
+					Prompts.
+					<span *ngIf="count > 0" style="font-size: 1rem; color: #444"
+						>Total: {{ count }}.
+						<span>Page {{ afters.length || 1 }}/{{ pageCount() }}</span></span
+					>
+				</h1>
+			</div>
+			<div class="prompt-wrapper" *ngFor="let prompt of prompts">
 				<app-prompt [prompt]="prompt"></app-prompt>
 			</div>
 			<ion-row *ngIf="prompts?.length">
 				<ion-col class="ion-text-center">
 					<ion-button (click)="prev()" [disabled]="afters.length < 2"
 						><span style="color: white">Previous</span></ion-button
+					>
+					<span
+						*ngIf="count > 0"
+						style="
+							position: relative;
+							top: 0.3rem;
+							padding-left: 1rem;
+							padding-right: 1rem;
+							font-size: 1rem;
+							color: #444;
+						"
+						>Total: {{ count }}.
+						<span>Page {{ afters.length || 1 }}/{{ pageCount() }}</span></span
 					>
 					<ion-button (click)="next()" [disabled]="done"
 						><span style="color: white">Next</span></ion-button

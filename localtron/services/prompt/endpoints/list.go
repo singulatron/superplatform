@@ -55,6 +55,7 @@ func List(
 		LastRunAfter: req.LastRunAfter,
 		After:        req.After,
 		Desc:         req.Desc,
+		Count:        req.Count,
 	}
 
 	if len(options.Statuses) == 0 {
@@ -64,7 +65,7 @@ func List(
 		}
 	}
 
-	prompts, err := promptService.ListPrompts(options)
+	prompts, count, err := promptService.ListPrompts(options)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -81,6 +82,7 @@ func List(
 
 	response := prompttypes.ListPromptsResponse{
 		Prompts: prompts,
+		Count:   count,
 	}
 	if len(prompts) >= 20 {
 		response.After = prompts[len(prompts)-1].CreatedAt

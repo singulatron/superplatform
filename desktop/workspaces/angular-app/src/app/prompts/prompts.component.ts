@@ -58,6 +58,7 @@ export class PromptsComponent {
 		],
 		desc: true,
 	};
+	count = 0;
 
 	constructor(
 		private cd: ChangeDetectorRef,
@@ -72,8 +73,10 @@ export class PromptsComponent {
 	async loggedInInit() {
 		const rsp = await this.promptService.promptList({
 			...this.request,
+			count: true,
 		});
 		this.prompts = rsp.prompts;
+		this.count = rsp.count || 0;
 		this.afters.push(rsp.after);
 		this.cd.markForCheck();
 	}
@@ -83,8 +86,10 @@ export class PromptsComponent {
 			const rsp = await this.promptService.promptList({
 				...this.request,
 				after: this.afters[this.afters.length - 2],
+				count: true
 			});
 			this.prompts = rsp.prompts;
+			this.count = rsp.count || 0;
 			this.afters.pop();
 			this.cd.markForCheck();
 		}
@@ -94,9 +99,11 @@ export class PromptsComponent {
 		const rsp = await this.promptService.promptList({
 			...this.request,
 			after: this.afters[this.afters.length - 1],
+			count: true
 		});
 
 		this.prompts = rsp.prompts;
+		this.count = rsp.count || 0;
 		if (rsp.after) {
 			this.afters.push(rsp.after);
 		} else {
@@ -104,5 +111,9 @@ export class PromptsComponent {
 		}
 
 		this.cd.markForCheck();
+	}
+
+	pageCount(): number {
+		return Math.ceil(this.count / 20);
 	}
 }

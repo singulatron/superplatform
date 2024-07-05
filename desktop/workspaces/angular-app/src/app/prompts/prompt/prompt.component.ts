@@ -38,6 +38,7 @@ import { DatePipe } from '@angular/common';
 })
 export class PromptComponent {
 	@Input() prompt!: Prompt;
+	@Input() expanded = false;
 
 	constructor() {}
 }

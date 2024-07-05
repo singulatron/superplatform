@@ -262,11 +262,14 @@ export interface ListPromptsRequest {
 	lastRunAfter?: string;
 	desc?: boolean;
 	after?: string;
+	// Return count?
+	count?: boolean;
 }
 
 export interface ListPromptsResponse {
 	prompts: Prompt[];
 	after: string;
+	count?: number;
 }
 
 export interface PromptRequest {

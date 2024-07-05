@@ -24,9 +24,10 @@ type ListPromptOptions struct {
 	LastRunAfter time.Time
 	Desc         bool
 	After        time.Time
+	Count        bool
 }
 
-func (p *PromptService) ListPrompts(options *ListPromptOptions) ([]*prompttypes.Prompt, error) {
+func (p *PromptService) ListPrompts(options *ListPromptOptions) ([]*prompttypes.Prompt, int64, error) {
 	q := p.promptsStore.Query(
 		datastore.Equal(datastore.Field("status"), options.Statuses),
 	).Limit(20).OrderBy("createdAt", options.Desc)
@@ -35,5 +36,19 @@ func (p *PromptService) ListPrompts(options *ListPromptOptions) ([]*prompttypes.
 		q = q.After(options.After)
 	}
 
-	return q.Find()
+	var count int64
+	if options.Count {
+		var err error
+		count, err = q.Count()
+		if err != nil {
+			return nil, 0, err
+		}
+	}
+
+	res, err := q.Find()
+	if err != nil {
+		return nil, 0, err
+	}
+
+	return res, count, nil
 }

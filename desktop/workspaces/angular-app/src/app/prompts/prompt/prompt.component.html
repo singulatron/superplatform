@@ -9,9 +9,6 @@
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  -->
 <ion-card>
-	<ion-card-header>
-		<ion-card-title>{{ prompt.id }}</ion-card-title>
-	</ion-card-header>
 	<ion-card-content>
 		<ion-item>
 			<ion-label>
@@ -19,7 +16,7 @@
 				<p>{{ prompt.id }}</p>
 			</ion-label>
 		</ion-item>
-		<ion-item>
+		<ion-item *ngIf="expanded">
 			<ion-label>
 				<h2>Thread ID</h2>
 				<p>{{ prompt.threadId }}</p>
@@ -31,19 +28,19 @@
 				<p>{{ prompt.userId }}</p>
 			</ion-label>
 		</ion-item>
-		<ion-item>
+		<ion-item *ngIf="expanded">
 			<ion-label>
 				<h2>Prompt</h2>
 				<p>{{ prompt.prompt }}</p>
 			</ion-label>
 		</ion-item>
-		<ion-item *ngIf="prompt.template">
+		<ion-item *ngIf="expanded && prompt.template">
 			<ion-label>
 				<h2>Template</h2>
 				<p>{{ prompt.template }}</p>
 			</ion-label>
 		</ion-item>
-		<ion-item *ngIf="prompt.characterId">
+		<ion-item *ngIf="expanded && prompt.characterId">
 			<ion-label>
 				<h2>Character ID</h2>
 				<p>{{ prompt.characterId }}</p>
@@ -58,7 +55,7 @@
 		<ion-item *ngIf="prompt.createdAt">
 			<ion-label>
 				<h2>Created At</h2>
-				<p>{{ prompt.createdAt | date }}</p>
+				<p>{{ prompt.createdAt | date: 'EEEE h:mm a, M/d/yyyy' }}</p>
 			</ion-label>
 		</ion-item>
 		<ion-item *ngIf="prompt.status">
@@ -70,7 +67,7 @@
 		<ion-item *ngIf="prompt.lastRun">
 			<ion-label>
 				<h2>Last Run</h2>
-				<p>{{ prompt.lastRun | date }}</p>
+				<p>{{ prompt.lastRun | date: 'h:mm:s a, M/d/yyyy' }}</p>
 			</ion-label>
 		</ion-item>
 		<ion-item *ngIf="prompt.runCount !== undefined">

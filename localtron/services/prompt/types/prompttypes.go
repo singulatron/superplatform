@@ -74,12 +74,17 @@ type ListPromptsRequest struct {
 	LastRunAfter time.Time      `json:"lastRunAfter"`
 	Desc         bool           `json:"desc"`
 	After        time.Time      `json:"after"`
+	// Return count?
+	Count bool `json:"count"`
 }
 
 type ListPromptsResponse struct {
 	Prompts []*Prompt `json:"prompts"`
 	After   time.Time `json:"after"`
 	Done    bool      `json:"done"`
+	// Count of all records, only returned when
+	// `ListPromptsRequest.Count` is set to true
+	Count int64 `json:"count"`
 }
 
 type RemovePromptRequest struct {
