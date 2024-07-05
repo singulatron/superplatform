@@ -5,7 +5,7 @@
       <h1>Singulatron</h1>
     </span>
     <div>
-      The AI Superplatform. Have your own internal AI network.
+      The AI Superplatform. Have your own distributed internal AI network that runs on any stack.
     </div>
     <div>
       <a href="https://superplatform.ai">superplatform.ai</a>
