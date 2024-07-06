@@ -18,18 +18,25 @@ export class QueryParser {
 	parse(queryString: string): Query {
 		const query: Query = {};
 
-		const fieldRegex = /(\w+):([^~]?[\w.\-]+)/g;
+		// Regex to match field:value pairs including quoted values with spaces
+		const fieldRegex = /(\w+):(".*?"|[^ ]+)/g;
 		let match;
 		while ((match = fieldRegex.exec(queryString)) !== null) {
 			const field = match[1];
-			const value = match[2];
+			let value = match[2];
+
+			// Remove surrounding quotes from the value if they exist
+			if (value.startsWith('"') && value.endsWith('"')) {
+				value = value.slice(1, -1);
+			}
 
 			if (!query.conditions) query.conditions = [];
 			query.conditions.push(this.createCondition(field, value));
 		}
 
-		const orderByRegex = /orderBy:([\w,]+)/;
+		const orderByRegex = /orderBy:([\w:,-]+)/;
 		const orderByMatch = orderByRegex.exec(queryString);
+
 		if (orderByMatch) {
 			query.orderBy = orderByMatch[1].split(',').map((field) => {
 				const [fieldName, order] = field.split(':');

@@ -1,11 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { QueryParser } from './query.service'; // Adjust the path as needed
-import {
-	equal,
-	contains,
-	startsWith,
-	field,
-} from './generic.service'; // Adjust the path as needed
+import { equal, contains, startsWith, field } from './generic.service'; // Adjust the path as needed
 
 describe('QueryParser', () => {
 	let parser: QueryParser;

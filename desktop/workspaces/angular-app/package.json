@@ -35,6 +35,7 @@
     "@angular-devkit/build-angular": "^18.0.4",
     "@angular/cli": "^18.0.4",
     "@angular/compiler-cli": "^18.0.3",
+    "@types/jest": "^29.5.12",
     "@types/node": "^20.14.4",
     "angular-eslint": "18.0.1",
     "eslint": "^9.5.0",

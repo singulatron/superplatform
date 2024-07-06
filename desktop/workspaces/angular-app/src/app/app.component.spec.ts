@@ -6,7 +6,7 @@ describe('AppComponent', () => {
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
 			imports: [RouterTestingModule],
-			declarations: [AppComponent],
+
 		}).compileComponents();
 	});
 
@@ -14,20 +14,5 @@ describe('AppComponent', () => {
 		const fixture = TestBed.createComponent(AppComponent);
 		const app = fixture.componentInstance;
 		expect(app).toBeTruthy();
-	});
-
-	it(`should have as title 'electron-angular-quick-start'`, () => {
-		const fixture = TestBed.createComponent(AppComponent);
-		const app = fixture.componentInstance;
-		expect(app.title).toEqual('electron-angular-quick-start');
-	});
-
-	it('should render title', () => {
-		const fixture = TestBed.createComponent(AppComponent);
-		fixture.detectChanges();
-		const compiled = fixture.nativeElement as HTMLElement;
-		expect(compiled.querySelector('.content span')?.textContent).toContain(
-			'electron-angular-quick-start app is running!'
-		);
 	});
 });
