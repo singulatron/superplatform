@@ -6,6 +6,7 @@ COPY . .
 RUN npm i && \
     cd workspaces/angular-app && \
     npm run lint && \
+    npm install -g @angular/cli@latest && \
     ng test && \
     cd ../.. && \
     npm run package:angular-app
