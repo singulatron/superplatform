@@ -31,7 +31,6 @@ describe('ChatComponent', () => {
 		chatServiceMock.chatMessages.and.returnValue(
 			Promise.resolve({ threads: [] })
 		);
-		chatServiceMock.getActiveThreadId.and.returnValue(null);
 		chatServiceMock.onThreadUpdate$ = of();
 		chatServiceMock.onThreadAdded$ = of();
 		chatServiceMock.onMessageAdded$ = of();
@@ -39,7 +38,7 @@ describe('ChatComponent', () => {
 		chatServiceMock.chatThreads.and.returnValue(
 			Promise.resolve({ threads: [] })
 		);
-		chatServiceMock.getActiveThreadId.and.returnValue(null);
+
 
 		const configServiceMock = {
 			onConfigUpdate$: of({ model: { currentModelId: '1' } }),

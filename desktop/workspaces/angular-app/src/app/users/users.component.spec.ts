@@ -16,7 +16,7 @@ describe('UsersComponent', () => {
 	let toastControllerMock: any;
 	let routerMock: any;
 	let activatedRouteMock: any;
-	let changeDetectorRefMock: any;
+	let changeDetectorReferenceMock: any;
 
 	beforeEach(async () => {
 		userServiceMock = {
@@ -50,7 +50,6 @@ describe('UsersComponent', () => {
 			Promise.resolve({ present: jasmine.createSpy('present') })
 		);
 
-		// Mock the router's events observable
 		routerMock = {
 			events: of({}),
 			navigate: jasmine.createSpy('navigate'),
@@ -60,7 +59,7 @@ describe('UsersComponent', () => {
 			queryParams: of({ search: '' }),
 		};
 
-		changeDetectorRefMock = jasmine.createSpyObj('ChangeDetectorRef', [
+		changeDetectorReferenceMock = jasmine.createSpyObj('ChangeDetectorRef', [
 			'markForCheck',
 		]);
 
@@ -75,7 +74,7 @@ describe('UsersComponent', () => {
 				{ provide: ToastController, useValue: toastControllerMock },
 				{ provide: Router, useValue: routerMock },
 				{ provide: ActivatedRoute, useValue: activatedRouteMock },
-				{ provide: ChangeDetectorRef, useValue: changeDetectorRefMock },
+				{ provide: ChangeDetectorRef, useValue: changeDetectorReferenceMock },
 				TranslatePipe,
 			],
 		}).compileComponents();

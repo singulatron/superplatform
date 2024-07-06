@@ -16,7 +16,6 @@ describe('ChatInputComponent', () => {
 
 	beforeEach(async () => {
 		userServiceMock = jasmine.createSpyObj('UserService', ['init']);
-		userServiceMock.init.and.returnValue(null);
 
 		const modelServiceMock = jasmine.createSpyObj('ModelService', [
 			'getModels',
@@ -41,7 +40,7 @@ describe('ChatInputComponent', () => {
 		chatServiceMock.chatMessages.and.returnValue(
 			Promise.resolve({ threads: [] })
 		);
-		chatServiceMock.getActiveThreadId.and.returnValue(null);
+
 		chatServiceMock.onThreadUpdate$ = of();
 		chatServiceMock.onThreadAdded$ = of();
 		chatServiceMock.onMessageAdded$ = of();
@@ -49,7 +48,6 @@ describe('ChatInputComponent', () => {
 		chatServiceMock.chatThreads.and.returnValue(
 			Promise.resolve({ threads: [] })
 		);
-		chatServiceMock.getActiveThreadId.and.returnValue(null);
 
 		const characterServiceMock = jasmine.createSpyObj('CharacterService', [
 			'loadCharacters',

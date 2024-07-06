@@ -63,7 +63,6 @@ describe('ChatBoxComponent', () => {
 		]);
 
 		userServiceMock = jasmine.createSpyObj('UserService', ['init']);
-		userServiceMock.init.and.returnValue(null);
 
 		await TestBed.configureTestingModule({
 			imports: [IonicModule.forRoot()],
