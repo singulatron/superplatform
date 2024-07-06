@@ -19,7 +19,7 @@ import (
 
 func (s *UserService) ChangePassword(email, currentPassword, newPassword string) error {
 	q := s.usersStore.Query(
-		datastore.Equal("email", email),
+		datastore.Equal(datastore.Field("email"), email),
 	)
 	user, found, err := q.FindOne()
 	if err != nil {
@@ -45,7 +45,7 @@ func (s *UserService) ChangePassword(email, currentPassword, newPassword string)
 
 func (s *UserService) ChangePasswordAdmin(email, newPassword string) error {
 	q := s.usersStore.Query(
-		datastore.Equal("email", email),
+		datastore.Equal(datastore.Field("email"), email),
 	)
 	user, found, err := q.FindOne()
 	if err != nil {

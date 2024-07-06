@@ -29,13 +29,17 @@ type Friend struct {
 }
 
 type TestObject struct {
-	Name          string    `json:"name"`
-	Value         int       `json:"value"`
-	Age           int       `json:"age"`
-	NickNames     []string  `json:"nickNames"`
-	Friend        Friend    `json:"friend"`
-	FriendPointer *Friend   `json:"friendPointer"`
-	CreatedAt     time.Time `json:"createdAt"`
+	Name              string                  `json:"name"`
+	Value             int                     `json:"value"`
+	Age               int                     `json:"age"`
+	NickNames         []string                `json:"nickNames"`
+	Friend            Friend                  `json:"friend"`
+	Amap              map[string]interface{}  `json:"amap"`
+	AmapPointer       *map[string]interface{} `json:"amapPointer"`
+	AmapString        map[string]string       `json:"amapString"`
+	AmapStringPointer *map[string]string      `json:"amapStringPointer"`
+	FriendPointer     *Friend                 `json:"friendPointer"`
+	CreatedAt         time.Time               `json:"createdAt"`
 }
 
 func (t TestObject) GetId() string {
@@ -91,6 +95,7 @@ func TestAll(t *testing.T) {
 		"Pagination":             Pagination,
 		"FindOne":                FindOne,
 		"Update":                 Update,
+		"Map":                    Map,
 	}
 	pointerTests := map[string]func(t *testing.T, store datastore.DataStore[*TestObject]){
 		"PointerCreate":                 PointerCreate,
@@ -106,6 +111,7 @@ func TestAll(t *testing.T) {
 		"PointerPagination":             PointerPagination,
 		"PointerFindOne":                PointerFindOne,
 		"PointerUpdate":                 PointerUpdate,
+		"MapPointer":                    MapPointer,
 	}
 
 	for testName, test := range tests {
@@ -127,6 +133,34 @@ func TestAll(t *testing.T) {
 
 	}
 
+}
+
+func Map(t *testing.T, store datastore.DataStore[TestObject]) {
+	obj := TestObject{Name: "A", Amap: map[string]interface{}{
+		"name:": "A",
+	}, AmapPointer: &map[string]interface{}{
+		"name:": "A",
+	}}
+	err := store.Create(obj)
+	require.NoError(t, err)
+
+	res, err := store.Query(datastore.All()).Find()
+	require.NoError(t, err)
+	require.Equal(t, 1, len(res))
+}
+
+func MapPointer(t *testing.T, store datastore.DataStore[*TestObject]) {
+	obj := &TestObject{Name: "A", Amap: map[string]interface{}{
+		"name:": "A",
+	}, AmapPointer: &map[string]interface{}{
+		"name:": "A",
+	}}
+	err := store.Create(obj)
+	require.NoError(t, err)
+
+	res, err := store.Query(datastore.All()).Find()
+	require.NoError(t, err)
+	require.Equal(t, 1, len(res))
 }
 
 func Pagination(t *testing.T, store datastore.DataStore[TestObject]) {
@@ -185,14 +219,14 @@ func CreatedAt(t *testing.T, store datastore.DataStore[TestObject]) {
 
 	res, err := store.Query(
 		datastore.All(),
-		datastore.Equal("Value", 101),
+		datastore.Equal(datastore.Field("Value"), 101),
 	).OrderBy("CreatedAt", false).Find()
 	require.NoError(t, err)
 	require.Equal(t, 0, len(res))
 
 	res, err = store.Query(
 		datastore.All(),
-		datastore.Equal("Value", 10),
+		datastore.Equal(datastore.Field("Value"), 10),
 	).OrderBy("CreatedAt", false).Find()
 	require.NoError(t, err)
 	require.Equal(t, 2, len(res))
@@ -200,7 +234,7 @@ func CreatedAt(t *testing.T, store datastore.DataStore[TestObject]) {
 
 	res, err = store.Query(
 		datastore.All(),
-		datastore.Equal("Value", 10),
+		datastore.Equal(datastore.Field("Value"), 10),
 	).OrderBy("CreatedAt", true).Find()
 
 	require.NoError(t, err)
@@ -222,14 +256,14 @@ func PointerCreatedAt(t *testing.T, store datastore.DataStore[*TestObject]) {
 
 	res, err := store.Query(
 		datastore.All(),
-		datastore.Equal("Value", 101),
+		datastore.Equal(datastore.Field("Value"), 101),
 	).OrderBy("CreatedAt", false).Find()
 	require.NoError(t, err)
 	require.Equal(t, 0, len(res))
 
 	res, err = store.Query(
 		datastore.All(),
-		datastore.Equal("Value", 10),
+		datastore.Equal(datastore.Field("Value"), 10),
 	).OrderBy("CreatedAt", false).Find()
 	require.NoError(t, err)
 	require.Equal(t, 2, len(res))
@@ -237,7 +271,7 @@ func PointerCreatedAt(t *testing.T, store datastore.DataStore[*TestObject]) {
 
 	res, err = store.Query(
 		datastore.All(),
-		datastore.Equal("Value", 10),
+		datastore.Equal(datastore.Field("Value"), 10),
 	).OrderBy("CreatedAt", true).Find()
 
 	require.NoError(t, err)
@@ -259,7 +293,7 @@ func FindOne(t *testing.T, store datastore.DataStore[TestObject]) {
 
 	res, found, err := store.Query(
 		datastore.All(),
-		datastore.Equal("Value", 20),
+		datastore.Equal(datastore.Field("Value"), 20),
 	).FindOne()
 	require.Equal(t, true, found)
 	require.NoError(t, err)
@@ -280,7 +314,7 @@ func PointerFindOne(t *testing.T, store datastore.DataStore[*TestObject]) {
 
 	res, found, err := store.Query(
 		datastore.All(),
-		datastore.Equal("Value", 20),
+		datastore.Equal(datastore.Field("Value"), 20),
 	).FindOne()
 	require.Equal(t, true, found)
 	require.NoError(t, err)
@@ -342,11 +376,11 @@ func Update(t *testing.T, store datastore.DataStore[TestObject]) {
 	require.NoError(t, err)
 
 	obj1.Value = 50
-	err = store.Query(datastore.Equal("Name", "AliceCreate")).Update(obj1)
+	err = store.Query(datastore.Equal(datastore.Field("Name"), "AliceCreate")).Update(obj1)
 	require.NoError(t, err)
 
 	res, err := store.Query(
-		datastore.Equal("Value", 50),
+		datastore.Equal(datastore.Field("Value"), 50),
 	).Find()
 	require.NoError(t, err)
 	require.Equal(t, 1, len(res))
@@ -361,11 +395,11 @@ func PointerUpdate(t *testing.T, store datastore.DataStore[*TestObject]) {
 
 	obj1.Value = 50
 
-	err = store.Query(datastore.Equal("Name", "AliceCreate")).Update(obj1)
+	err = store.Query(datastore.Equal(datastore.Field("Name"), "AliceCreate")).Update(obj1)
 	require.NoError(t, err)
 
 	res, err := store.Query(
-		datastore.Equal("Value", 50),
+		datastore.Equal(datastore.Field("Value"), 50),
 	).Find()
 	require.NoError(t, err)
 	require.Equal(t, 1, len(res))
@@ -385,36 +419,36 @@ func InClause(t *testing.T, store datastore.DataStore[TestObject]) {
 	require.NoError(t, err)
 
 	// Test IN clause with string slice
-	results, err := store.Query(datastore.Equal("Name", []string{"Alice", "Bob"})).Find()
+	results, err := store.Query(datastore.Equal(datastore.Field("Name"), []string{"Alice", "Bob"})).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 2)
 	require.Contains(t, results, obj1)
 	require.Contains(t, results, obj2)
 
 	// Test IN clause with int slice
-	results, err = store.Query(datastore.Equal("Value", []int{10, 30})).Find()
+	results, err = store.Query(datastore.Equal(datastore.Field("Value"), []int{10, 30})).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 2)
 	require.Contains(t, results, obj1)
 	require.Contains(t, results, obj3)
 
 	// Test IN clause with empty slice (should return no results)
-	results, err = store.Query(datastore.Equal("Age", []int{})).Find()
+	results, err = store.Query(datastore.Equal(datastore.Field("Age"), []int{})).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 0)
 
 	// Test IN clause with one element slice
-	results, err = store.Query(datastore.Equal("Age", []int{30})).Find()
+	results, err = store.Query(datastore.Equal(datastore.Field("Age"), []int{30})).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Contains(t, results, obj2)
 
 	// Clean up
-	err = store.Query(datastore.Equal("Name", "Alice")).Delete()
+	err = store.Query(datastore.Equal(datastore.Field("Name"), "Alice")).Delete()
 	require.NoError(t, err)
-	err = store.Query(datastore.Equal("Name", "Bob")).Delete()
+	err = store.Query(datastore.Equal(datastore.Field("Name"), "Bob")).Delete()
 	require.NoError(t, err)
-	err = store.Query(datastore.Equal("Name", "Charlie")).Delete()
+	err = store.Query(datastore.Equal(datastore.Field("Name"), "Charlie")).Delete()
 	require.NoError(t, err)
 }
 
@@ -431,36 +465,36 @@ func PointerInClause(t *testing.T, store datastore.DataStore[*TestObject]) {
 	require.NoError(t, err)
 
 	// Test IN clause with string slice
-	results, err := store.Query(datastore.Equal("Name", []string{"Alice", "Bob"})).Find()
+	results, err := store.Query(datastore.Equal(datastore.Field("Name"), []string{"Alice", "Bob"})).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 2)
 	require.Contains(t, results, obj1)
 	require.Contains(t, results, obj2)
 
 	// Test IN clause with int slice
-	results, err = store.Query(datastore.Equal("Value", []int{10, 30})).Find()
+	results, err = store.Query(datastore.Equal(datastore.Field("Value"), []int{10, 30})).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 2)
 	require.Contains(t, results, obj1)
 	require.Contains(t, results, obj3)
 
 	// Test IN clause with empty slice (should return no results)
-	results, err = store.Query(datastore.Equal("Age", []int{})).Find()
+	results, err = store.Query(datastore.Equal(datastore.Field("Age"), []int{})).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 0)
 
 	// Test IN clause with one element slice
-	results, err = store.Query(datastore.Equal("Age", []int{30})).Find()
+	results, err = store.Query(datastore.Equal(datastore.Field("Age"), []int{30})).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Contains(t, results, obj2)
 
 	// Clean up
-	err = store.Query(datastore.Equal("Name", "Alice")).Delete()
+	err = store.Query(datastore.Equal(datastore.Field("Name"), "Alice")).Delete()
 	require.NoError(t, err)
-	err = store.Query(datastore.Equal("Name", "Bob")).Delete()
+	err = store.Query(datastore.Equal(datastore.Field("Name"), "Bob")).Delete()
 	require.NoError(t, err)
-	err = store.Query(datastore.Equal("Name", "Charlie")).Delete()
+	err = store.Query(datastore.Equal(datastore.Field("Name"), "Charlie")).Delete()
 	require.NoError(t, err)
 }
 
@@ -486,27 +520,27 @@ func DotNotation(t *testing.T, store datastore.DataStore[TestObject]) {
 	require.NoError(t, err)
 
 	// Test IN clause with string slice
-	results, err := store.Query(datastore.Equal("Friend.Name", []string{"AliceFriend", "BobFriend"})).Find()
+	results, err := store.Query(datastore.Equal(datastore.Field("Friend.Name"), []string{"AliceFriend", "BobFriend"})).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 2)
 	require.Contains(t, results, obj1)
 	require.Contains(t, results, obj2)
 
-	results, err = store.Query(datastore.Equal("friendPointer.name", []string{"AliceFriendP", "BobFriendP"})).Find()
+	results, err = store.Query(datastore.Equal(datastore.Field("friendPointer.name"), []string{"AliceFriendP", "BobFriendP"})).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 2)
 	require.Contains(t, results, obj1)
 	require.Contains(t, results, obj2)
 
 	// Test IN clause with int slice
-	results, err = store.Query(datastore.Equal("Friend.Age", []int{26, 36})).Find()
+	results, err = store.Query(datastore.Equal(datastore.Field("Friend.Age"), []int{26, 36})).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 2)
 	require.Contains(t, results, obj1)
 	require.Contains(t, results, obj3)
 
 	// Test IN clause with empty slice (should return no results)
-	results, err = store.Query(datastore.Equal("Friend.Age", []int{})).Find()
+	results, err = store.Query(datastore.Equal(datastore.Field("Friend.Age"), []int{})).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 0)
 
@@ -526,17 +560,17 @@ func DotNotation(t *testing.T, store datastore.DataStore[TestObject]) {
 	require.Equal(t, "Alice", results[2].Name)
 
 	// Test IN clause with one element slice
-	results, err = store.Query(datastore.Equal("FriendPointer.Age", []int{32})).Find()
+	results, err = store.Query(datastore.Equal(datastore.Field("FriendPointer.Age"), []int{32})).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Contains(t, results, obj2)
 
 	// Clean up
-	err = store.Query(datastore.Equal("Friend.Name", "AliceFriend")).Delete()
+	err = store.Query(datastore.Equal(datastore.Field("Friend.Name"), "AliceFriend")).Delete()
 	require.NoError(t, err)
-	err = store.Query(datastore.Equal("Friend.Name", "BobFriendP")).Delete()
+	err = store.Query(datastore.Equal(datastore.Field("Friend.Name"), "BobFriendP")).Delete()
 	require.NoError(t, err)
-	err = store.Query(datastore.Equal("Friend.Name", "CharlieFriend")).Delete()
+	err = store.Query(datastore.Equal(datastore.Field("Friend.Name"), "CharlieFriend")).Delete()
 	require.NoError(t, err)
 }
 
@@ -562,27 +596,27 @@ func PointerDotNotation(t *testing.T, store datastore.DataStore[*TestObject]) {
 	require.NoError(t, err)
 
 	// Test IN clause with string slice
-	results, err := store.Query(datastore.Equal("Friend.Name", []string{"AliceFriend", "BobFriend"})).Find()
+	results, err := store.Query(datastore.Equal(datastore.Field("Friend.Name"), []string{"AliceFriend", "BobFriend"})).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 2)
 	require.Contains(t, results, obj1)
 	require.Contains(t, results, obj2)
 
-	results, err = store.Query(datastore.Equal("friendPointer.name", []string{"AliceFriendP", "BobFriendP"})).Find()
+	results, err = store.Query(datastore.Equal(datastore.Field("friendPointer.name"), []string{"AliceFriendP", "BobFriendP"})).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 2)
 	require.Contains(t, results, obj1)
 	require.Contains(t, results, obj2)
 
 	// Test IN clause with int slice
-	results, err = store.Query(datastore.Equal("Friend.Age", []int{26, 36})).Find()
+	results, err = store.Query(datastore.Equal(datastore.Field("Friend.Age"), []int{26, 36})).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 2)
 	require.Contains(t, results, obj1)
 	require.Contains(t, results, obj3)
 
 	// Test IN clause with empty slice (should return no results)
-	results, err = store.Query(datastore.Equal("Friend.Age", []int{})).Find()
+	results, err = store.Query(datastore.Equal(datastore.Field("Friend.Age"), []int{})).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 0)
 
@@ -602,17 +636,17 @@ func PointerDotNotation(t *testing.T, store datastore.DataStore[*TestObject]) {
 	require.Equal(t, "Alice", results[2].Name)
 
 	// Test IN clause with one element slice
-	results, err = store.Query(datastore.Equal("FriendPointer.Age", []int{32})).Find()
+	results, err = store.Query(datastore.Equal(datastore.Field("FriendPointer.Age"), []int{32})).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Contains(t, results, obj2)
 
 	// Clean up
-	err = store.Query(datastore.Equal("Friend.Name", "AliceFriend")).Delete()
+	err = store.Query(datastore.Equal(datastore.Field("Friend.Name"), "AliceFriend")).Delete()
 	require.NoError(t, err)
-	err = store.Query(datastore.Equal("Friend.Name", "BobFriendP")).Delete()
+	err = store.Query(datastore.Equal(datastore.Field("Friend.Name"), "BobFriendP")).Delete()
 	require.NoError(t, err)
-	err = store.Query(datastore.Equal("Friend.Name", "CharlieFriend")).Delete()
+	err = store.Query(datastore.Equal(datastore.Field("Friend.Name"), "CharlieFriend")).Delete()
 	require.NoError(t, err)
 }
 
@@ -629,21 +663,21 @@ func ReverseInClause(t *testing.T, store datastore.DataStore[TestObject]) {
 	require.NoError(t, err)
 
 	results, err := store.Query(
-		datastore.Equal("NickNames", "A1"),
+		datastore.Equal(datastore.Field("NickNames"), "A1"),
 	).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Contains(t, results, obj1)
 
 	results, err = store.Query(
-		datastore.Equal("NickNames", "A2"),
+		datastore.Equal(datastore.Field("NickNames"), "A2"),
 	).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Contains(t, results, obj1)
 
 	results, err = store.Query(
-		datastore.Equal("NickNames", "B1"),
+		datastore.Equal(datastore.Field("NickNames"), "B1"),
 	).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
@@ -663,21 +697,21 @@ func PointerReverseInClause(t *testing.T, store datastore.DataStore[*TestObject]
 	require.NoError(t, err)
 
 	results, err := store.Query(
-		datastore.Equal("NickNames", "A1"),
+		datastore.Equal(datastore.Field("NickNames"), "A1"),
 	).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Contains(t, results, obj1)
 
 	results, err = store.Query(
-		datastore.Equal("NickNames", "A2"),
+		datastore.Equal(datastore.Field("NickNames"), "A2"),
 	).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Contains(t, results, obj1)
 
 	results, err = store.Query(
-		datastore.Equal("NickNames", "B1"),
+		datastore.Equal(datastore.Field("NickNames"), "B1"),
 	).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
@@ -689,7 +723,7 @@ func CreateReadUpdateDelete(t *testing.T, store datastore.DataStore[TestObject])
 	err := store.Create(obj)
 	require.NoError(t, err)
 
-	results, err := store.Query(datastore.Equal("Name", "test")).Find()
+	results, err := store.Query(datastore.Equal(datastore.Field("Name"), "test")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	readObj := results[0]
@@ -697,22 +731,22 @@ func CreateReadUpdateDelete(t *testing.T, store datastore.DataStore[TestObject])
 	require.Equal(t, obj, readObj)
 
 	obj.Value = 20
-	err = store.Query(datastore.Equal("Name", "test")).UpdateFields(map[string]interface{}{
+	err = store.Query(datastore.Equal(datastore.Field("Name"), "test")).UpdateFields(map[string]interface{}{
 		"Value": obj.Value,
 	})
 	require.NoError(t, err)
 
-	results, err = store.Query(datastore.Equal("Name", "test")).Find()
+	results, err = store.Query(datastore.Equal(datastore.Field("Name"), "test")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	readObj = results[0]
 
 	require.Equal(t, obj, readObj)
 
-	err = store.Query(datastore.Equal("Name", "test")).Delete()
+	err = store.Query(datastore.Equal(datastore.Field("Name"), "test")).Delete()
 	require.NoError(t, err)
 
-	results, err = store.Query(datastore.Equal("Name", "test")).Find()
+	results, err = store.Query(datastore.Equal(datastore.Field("Name"), "test")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 0)
 }
@@ -722,7 +756,7 @@ func PointerCreateReadUpdateDelete(t *testing.T, store datastore.DataStore[*Test
 	err := store.Create(obj)
 	require.NoError(t, err)
 
-	results, err := store.Query(datastore.Equal("Name", "test")).Find()
+	results, err := store.Query(datastore.Equal(datastore.Field("Name"), "test")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	readObj := results[0]
@@ -730,22 +764,22 @@ func PointerCreateReadUpdateDelete(t *testing.T, store datastore.DataStore[*Test
 	require.Equal(t, obj, readObj)
 
 	obj.Value = 20
-	err = store.Query(datastore.Equal("Name", "test")).UpdateFields(map[string]interface{}{
+	err = store.Query(datastore.Equal(datastore.Field("Name"), "test")).UpdateFields(map[string]interface{}{
 		"Value": obj.Value,
 	})
 	require.NoError(t, err)
 
-	results, err = store.Query(datastore.Equal("Name", "test")).Find()
+	results, err = store.Query(datastore.Equal(datastore.Field("Name"), "test")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	readObj = results[0]
 
 	require.Equal(t, obj, readObj)
 
-	err = store.Query(datastore.Equal("Name", "test")).Delete()
+	err = store.Query(datastore.Equal(datastore.Field("Name"), "test")).Delete()
 	require.NoError(t, err)
 
-	results, err = store.Query(datastore.Equal("Name", "test")).Find()
+	results, err = store.Query(datastore.Equal(datastore.Field("Name"), "test")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 0)
 }
@@ -759,47 +793,47 @@ func CreateManyUpdateDelete(t *testing.T, store datastore.DataStore[TestObject])
 	err := store.CreateMany(objs)
 	require.NoError(t, err)
 
-	results, err := store.Query(datastore.Equal("Name", "test1")).Find()
+	results, err := store.Query(datastore.Equal(datastore.Field("Name"), "test1")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Equal(t, objs[0], results[0])
 
-	results, err = store.Query(datastore.Equal("Name", "test2")).Find()
+	results, err = store.Query(datastore.Equal(datastore.Field("Name"), "test2")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Equal(t, objs[1], results[0])
 
-	err = store.Query(datastore.Equal("Name", "test1")).UpdateFields(map[string]interface{}{
+	err = store.Query(datastore.Equal(datastore.Field("Name"), "test1")).UpdateFields(map[string]interface{}{
 		"Value": 30,
 	})
 	require.NoError(t, err)
 
-	err = store.Query(datastore.Equal("Name", "test2")).UpdateFields(map[string]interface{}{
+	err = store.Query(datastore.Equal(datastore.Field("Name"), "test2")).UpdateFields(map[string]interface{}{
 		"Value": 40,
 	})
 	require.NoError(t, err)
 
-	results, err = store.Query(datastore.Equal("Name", "test1")).Find()
+	results, err = store.Query(datastore.Equal(datastore.Field("Name"), "test1")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Equal(t, 30, results[0].Value)
 
-	results, err = store.Query(datastore.Equal("Name", "test2")).Find()
+	results, err = store.Query(datastore.Equal(datastore.Field("Name"), "test2")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Equal(t, 40, results[0].Value)
 
-	err = store.Query(datastore.Equal("Name", "test1")).Delete()
+	err = store.Query(datastore.Equal(datastore.Field("Name"), "test1")).Delete()
 	require.NoError(t, err)
 
-	err = store.Query(datastore.Equal("Name", "test2")).Delete()
+	err = store.Query(datastore.Equal(datastore.Field("Name"), "test2")).Delete()
 	require.NoError(t, err)
 
-	results, err = store.Query(datastore.Equal("Name", "test1")).Find()
+	results, err = store.Query(datastore.Equal(datastore.Field("Name"), "test1")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 0)
 
-	results, err = store.Query(datastore.Equal("Name", "test2")).Find()
+	results, err = store.Query(datastore.Equal(datastore.Field("Name"), "test2")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 0)
 }
@@ -813,47 +847,47 @@ func PointerCreateManyUpdateDelete(t *testing.T, store datastore.DataStore[*Test
 	err := store.CreateMany(objs)
 	require.NoError(t, err)
 
-	results, err := store.Query(datastore.Equal("Name", "test1")).Find()
+	results, err := store.Query(datastore.Equal(datastore.Field("Name"), "test1")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Equal(t, objs[0], results[0])
 
-	results, err = store.Query(datastore.Equal("Name", "test2")).Find()
+	results, err = store.Query(datastore.Equal(datastore.Field("Name"), "test2")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Equal(t, objs[1], results[0])
 
-	err = store.Query(datastore.Equal("Name", "test1")).UpdateFields(map[string]interface{}{
+	err = store.Query(datastore.Equal(datastore.Field("Name"), "test1")).UpdateFields(map[string]interface{}{
 		"Value": 30,
 	})
 	require.NoError(t, err)
 
-	err = store.Query(datastore.Equal("Name", "test2")).UpdateFields(map[string]interface{}{
+	err = store.Query(datastore.Equal(datastore.Field("Name"), "test2")).UpdateFields(map[string]interface{}{
 		"Value": 40,
 	})
 	require.NoError(t, err)
 
-	results, err = store.Query(datastore.Equal("Name", "test1")).Find()
+	results, err = store.Query(datastore.Equal(datastore.Field("Name"), "test1")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Equal(t, 30, results[0].Value)
 
-	results, err = store.Query(datastore.Equal("Name", "test2")).Find()
+	results, err = store.Query(datastore.Equal(datastore.Field("Name"), "test2")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Equal(t, 40, results[0].Value)
 
-	err = store.Query(datastore.Equal("Name", "test1")).Delete()
+	err = store.Query(datastore.Equal(datastore.Field("Name"), "test1")).Delete()
 	require.NoError(t, err)
 
-	err = store.Query(datastore.Equal("Name", "test2")).Delete()
+	err = store.Query(datastore.Equal(datastore.Field("Name"), "test2")).Delete()
 	require.NoError(t, err)
 
-	results, err = store.Query(datastore.Equal("Name", "test1")).Find()
+	results, err = store.Query(datastore.Equal(datastore.Field("Name"), "test1")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 0)
 
-	results, err = store.Query(datastore.Equal("Name", "test2")).Find()
+	results, err = store.Query(datastore.Equal(datastore.Field("Name"), "test2")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 0)
 }
@@ -868,7 +902,7 @@ func Query(t *testing.T, store datastore.DataStore[TestObject]) {
 	err := store.CreateMany(objs)
 	require.NoError(t, err)
 
-	results, err := store.Query(datastore.Equal("Value", 20)).Find()
+	results, err := store.Query(datastore.Equal(datastore.Field("Value"), 20)).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Equal(t, objs[1], results[0])
@@ -894,24 +928,24 @@ func Query(t *testing.T, store datastore.DataStore[TestObject]) {
 	// require.Equal(t, objs[1], results[0])
 	// require.Equal(t, objs[2], results[1])
 
-	count, err := store.Query(datastore.Equal("Value", 10)).Count()
+	count, err := store.Query(datastore.Equal(datastore.Field("Value"), 10)).Count()
 	require.NoError(t, err)
 	require.Equal(t, int64(1), count)
 
-	err = store.Query(datastore.Equal("Value", 10)).UpdateFields(map[string]interface{}{
+	err = store.Query(datastore.Equal(datastore.Field("Value"), 10)).UpdateFields(map[string]interface{}{
 		"Value": 100,
 	})
 	require.NoError(t, err)
 
-	results, err = store.Query(datastore.Equal("Value", 100)).Find()
+	results, err = store.Query(datastore.Equal(datastore.Field("Value"), 100)).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Equal(t, 100, results[0].Value)
 
-	err = store.Query(datastore.Equal("Value", 100)).Delete()
+	err = store.Query(datastore.Equal(datastore.Field("Value"), 100)).Delete()
 	require.NoError(t, err)
 
-	results, err = store.Query(datastore.Equal("Value", 100)).Find()
+	results, err = store.Query(datastore.Equal(datastore.Field("Value"), 100)).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 0)
 }
@@ -926,7 +960,7 @@ func PointerQuery(t *testing.T, store datastore.DataStore[*TestObject]) {
 	err := store.CreateMany(objs)
 	require.NoError(t, err)
 
-	results, err := store.Query(datastore.Equal("Value", 20)).Find()
+	results, err := store.Query(datastore.Equal(datastore.Field("Value"), 20)).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Equal(t, objs[1], results[0])
@@ -952,24 +986,24 @@ func PointerQuery(t *testing.T, store datastore.DataStore[*TestObject]) {
 	// require.Equal(t, objs[1], results[0])
 	// require.Equal(t, objs[2], results[1])
 
-	count, err := store.Query(datastore.Equal("Value", 10)).Count()
+	count, err := store.Query(datastore.Equal(datastore.Field("Value"), 10)).Count()
 	require.NoError(t, err)
 	require.Equal(t, int64(1), count)
 
-	err = store.Query(datastore.Equal("Value", 10)).UpdateFields(map[string]interface{}{
+	err = store.Query(datastore.Equal(datastore.Field("Value"), 10)).UpdateFields(map[string]interface{}{
 		"Value": 100,
 	})
 	require.NoError(t, err)
 
-	results, err = store.Query(datastore.Equal("Value", 100)).Find()
+	results, err = store.Query(datastore.Equal(datastore.Field("Value"), 100)).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Equal(t, 100, results[0].Value)
 
-	err = store.Query(datastore.Equal("Value", 100)).Delete()
+	err = store.Query(datastore.Equal(datastore.Field("Value"), 100)).Delete()
 	require.NoError(t, err)
 
-	results, err = store.Query(datastore.Equal("Value", 100)).Find()
+	results, err = store.Query(datastore.Equal(datastore.Field("Value"), 100)).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 0)
 }
@@ -982,14 +1016,14 @@ func Transactions(t *testing.T, store datastore.DataStore[TestObject]) {
 	err = tx.Create(obj)
 	require.NoError(t, err)
 
-	results, err := store.Query(datastore.Equal("Name", "test")).Find()
+	results, err := store.Query(datastore.Equal(datastore.Field("Name"), "test")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 0)
 
 	err = tx.Commit()
 	require.NoError(t, err)
 
-	results, err = store.Query(datastore.Equal("Name", "test")).Find()
+	results, err = store.Query(datastore.Equal(datastore.Field("Name"), "test")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	readObj := results[0]
@@ -1004,14 +1038,14 @@ func PointerTransactions(t *testing.T, store datastore.DataStore[*TestObject]) {
 	err = tx.Create(obj)
 	require.NoError(t, err)
 
-	results, err := store.Query(datastore.Equal("Name", "test")).Find()
+	results, err := store.Query(datastore.Equal(datastore.Field("Name"), "test")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 0)
 
 	err = tx.Commit()
 	require.NoError(t, err)
 
-	results, err = store.Query(datastore.Equal("Name", "test")).Find()
+	results, err = store.Query(datastore.Equal(datastore.Field("Name"), "test")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	readObj := results[0]

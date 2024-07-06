@@ -19,7 +19,7 @@ import (
 
 func (s *UserService) ReadUserByToken(token string) (*usertypes.User, error) {
 	authToken, found, err := s.authTokensStore.Query(
-		datastore.Equal("token", token),
+		datastore.Equal(datastore.Field("token"), token),
 	).FindOne()
 	if err != nil {
 		return nil, err
@@ -30,7 +30,7 @@ func (s *UserService) ReadUserByToken(token string) (*usertypes.User, error) {
 	}
 
 	user, found, err := s.usersStore.Query(
-		datastore.Equal("id", authToken.UserId),
+		datastore.Equal(datastore.Field("id"), authToken.UserId),
 	).FindOne()
 	if err != nil {
 		return nil, err

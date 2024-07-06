@@ -1,0 +1,56 @@
+<!--
+ * @license
+ * Copyright (c) The Authors (see the AUTHORS file)
+ *
+ * This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3) for personal, non-commercial use.
+ * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
+ *
+ * For commercial use, a separate license must be obtained by purchasing from The Authors.
+ * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
+ -->
+<app-page title="Users" [menuWidth]="'3rem'" [columnWidths]="['3rem']">
+	<ng-template #columnContent>
+		<div>
+			<app-icon-menu></app-icon-menu>
+		</div>
+	</ng-template>
+	<ng-template #mainContent>
+		<app-centered [headerHeight]="'56px'" [vertical]="true">
+			<div>
+				<h1>
+					Prompts.
+					<span *ngIf="count > 0" style="font-size: 1rem; color: #444"
+						>Total: {{ count }}.
+						<span>Page {{ afters.length || 1 }}/{{ pageCount() }}</span></span
+					>
+				</h1>
+			</div>
+			<div class="prompt-wrapper" *ngFor="let prompt of prompts">
+				<app-prompt [prompt]="prompt"></app-prompt>
+			</div>
+			<ion-row *ngIf="prompts?.length">
+				<ion-col class="ion-text-center">
+					<ion-button (click)="prev()" [disabled]="afters.length < 2"
+						><span style="color: white">Previous</span></ion-button
+					>
+					<span
+						*ngIf="count > 0"
+						style="
+							position: relative;
+							top: 0.3rem;
+							padding-left: 1rem;
+							padding-right: 1rem;
+							font-size: 1rem;
+							color: #444;
+						"
+						>Total: {{ count }}.
+						<span>Page {{ afters.length || 1 }}/{{ pageCount() }}</span></span
+					>
+					<ion-button (click)="next()" [disabled]="done"
+						><span style="color: white">Next</span></ion-button
+					>
+				</ion-col>
+			</ion-row>
+		</app-centered>
+	</ng-template>
+</app-page>

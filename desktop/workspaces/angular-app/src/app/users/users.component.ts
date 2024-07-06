@@ -26,6 +26,7 @@ import { CenteredComponent } from '../components/centered/centered.component';
 import { ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { PageComponent } from '../components/page/page.component';
 import { IconMenuComponent } from '../components/icon-menu/icon-menu.component';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 
 interface UserVisible extends User {
 	visible?: boolean;
@@ -60,7 +61,9 @@ export class UsersComponent implements OnInit {
 		private fb: FormBuilder,
 		private userService: UserService,
 		private toast: ToastController,
-		private cd: ChangeDetectorRef
+		private cd: ChangeDetectorRef,
+		private router: Router,
+		private route: ActivatedRoute
 	) {
 		this.userForms = new Map();
 		this.userService.user$.pipe(first()).subscribe(() => {
@@ -69,6 +72,14 @@ export class UsersComponent implements OnInit {
 	}
 
 	async ngOnInit() {
+		this.route.queryParams.subscribe((parameters: Params) => {
+			if (parameters['search']) {
+				this.searchText = parameters['search'];
+				this.filterUsers(this.searchText);
+			} else {
+				this.filteredUsers = [...this.users];
+			}
+		});
 		await this.loggedInInit();
 	}
 
@@ -126,7 +137,7 @@ export class UsersComponent implements OnInit {
 
 			if (password) {
 				toastMessage += ' and password changed';
-				await this.userService.changePasswordAdmin(email,  password);
+				await this.userService.changePasswordAdmin(email, password);
 			}
 
 			const toast = await this.toast.create({
@@ -162,6 +173,11 @@ export class UsersComponent implements OnInit {
 			return;
 		}
 		this.searchText = searchText.trim().toLowerCase();
+		this.router.navigate([], {
+			relativeTo: this.route,
+			queryParams: { search: this.searchText },
+			queryParamsHandling: 'merge',
+		});
 		this.filteredUsers = this.users.filter(
 			(user) =>
 				user.name?.toLowerCase().includes(this.searchText) ||

@@ -39,7 +39,7 @@ export class PromptService {
 				case 'promptProcessingStarted':
 				case 'promptProcessingFinished':
 				case 'promptAdded': {
-					const rsp = await this.promptList();
+					const rsp = await this.promptList({});
 					this.onPromptListUpdateSubject.next(rsp.prompts);
 					break;
 				}
@@ -48,7 +48,7 @@ export class PromptService {
 		});
 
 		try {
-			const rsp = await this.promptList();
+			const rsp = await this.promptList({});
 
 			this.onPromptListUpdateSubject.next(rsp.prompts);
 		} catch (error) {
@@ -71,8 +71,8 @@ export class PromptService {
 		return this.localtron.call('/prompt/remove', request);
 	}
 
-	async promptList(): Promise<ListPromptsResponse> {
-		return this.localtron.call('/prompt/list', {});
+	async promptList(request: ListPromptsRequest): Promise<ListPromptsResponse> {
+		return this.localtron.call('/prompt/list', request);
 	}
 
 	private resubCount = 0;
@@ -140,7 +140,7 @@ export class PromptService {
 													trimmedLine === 'data: [DONE]'
 												) {
 													// Skip empty lines, lines containing only 'data: ', or "[DONE]" markers
-													continue
+													continue;
 												}
 
 												const cleanedText = trimmedLine
@@ -256,11 +256,20 @@ export interface RemovePromptRequest {
 	prompt: Prompt;
 }
 
-// eslint-disable-next-line
-export interface ListPromptsRequest {}
+export interface ListPromptsRequest {
+	createdAfter?: string;
+	statuses?: string[];
+	lastRunAfter?: string;
+	desc?: boolean;
+	after?: string;
+	// Return count?
+	count?: boolean;
+}
 
 export interface ListPromptsResponse {
 	prompts: Prompt[];
+	after: string;
+	count?: number;
 }
 
 export interface PromptRequest {

@@ -17,7 +17,7 @@ import (
 
 func (s *UserService) UpsertPermission(id, name, description string) (*usertypes.Permission, error) {
 	query := s.permissionsStore.Query(
-		datastore.Equal("id", id),
+		datastore.Equal(datastore.Field("id"), id),
 	)
 
 	perm, found, err := query.FindOne()

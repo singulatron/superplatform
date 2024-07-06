@@ -90,26 +90,80 @@ export class GenericService {
 	}
 }
 
+export interface FieldSelector {
+	field?: string;
+	oneOf?: string[];
+	any?: boolean;
+}
+
+export function field(fieldName: string): FieldSelector {
+	return {
+		field: fieldName,
+	};
+}
+
+export function fields(fieldNames: string[]): FieldSelector {
+	return {
+		oneOf: fieldNames,
+	};
+}
+
+export function anyField(): FieldSelector {
+	return {
+		any: true,
+	};
+}
+
 // this could be a sumtype, eg. EqualCondition | AllCondition
 // but it's defined as a product type here to match the backend Go structure
 // for easier understanding
-interface Condition {
+export interface Condition {
 	equal?: EqualCondition;
 	all?: AllCondition;
+	startsWith?: StartsWithCondition;
+	contains?: ContainsCondition;
 }
 
-interface EqualCondition {
-	fieldName: string;
+export interface EqualCondition {
+	selector: FieldSelector;
+	value: any;
+}
+
+export interface StartsWithCondition {
+	selector: FieldSelector;
+	value: any;
+}
+
+export interface ContainsCondition {
+	selector: FieldSelector;
 	value: any;
 }
 
 // eslint-disable-next-line
-interface AllCondition {}
+export interface AllCondition {}
 
-export function equal(fieldName: string, value: any): Condition {
+export function equal(selector: FieldSelector, value: any): Condition {
 	return {
 		equal: {
-			fieldName,
+			selector,
+			value,
+		},
+	};
+}
+
+export function startsWith(selector: FieldSelector, value: any): Condition {
+	return {
+		startsWith: {
+			selector,
+			value,
+		},
+	};
+}
+
+export function contains(selector: FieldSelector, value: any): Condition {
+	return {
+		contains: {
+			selector,
 			value,
 		},
 	};
@@ -122,21 +176,11 @@ export function all(): Condition {
 }
 
 export function id(id: string): Condition {
-	return {
-		equal: {
-			fieldName: 'id',
-			value: id,
-		},
-	};
+	return equal(field('id'), id);
 }
 
 export function userId(id: string): Condition {
-	return {
-		equal: {
-			fieldName: 'userId',
-			value: id,
-		},
-	};
+	return equal(field('userId'), id);
 }
 
 export interface GenericObject {

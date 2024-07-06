@@ -22,10 +22,33 @@ type ListPromptOptions struct {
 	// or relationship
 	Statuses     []prompttypes.PromptStatus
 	LastRunAfter time.Time
+	Desc         bool
+	After        time.Time
+	Count        bool
 }
 
-func (p *PromptService) ListPrompts(options *ListPromptOptions) ([]*prompttypes.Prompt, error) {
-	return p.promptsStore.Query(
-		datastore.Equal("status", options.Statuses),
-	).OrderBy("createdAt", false).Find()
+func (p *PromptService) ListPrompts(options *ListPromptOptions) ([]*prompttypes.Prompt, int64, error) {
+	q := p.promptsStore.Query(
+		datastore.Equal(datastore.Field("status"), options.Statuses),
+	).Limit(20).OrderBy("createdAt", options.Desc)
+
+	if !options.After.IsZero() {
+		q = q.After(options.After)
+	}
+
+	var count int64
+	if options.Count {
+		var err error
+		count, err = q.Count()
+		if err != nil {
+			return nil, 0, err
+		}
+	}
+
+	res, err := q.Find()
+	if err != nil {
+		return nil, 0, err
+	}
+
+	return res, count, nil
 }

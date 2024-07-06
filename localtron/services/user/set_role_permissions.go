@@ -29,7 +29,7 @@ func (s *UserService) SetRolePermissions(roleId string, permissionIds []string) 
 	}
 
 	perms, err := s.permissionsStore.Query(
-		datastore.Equal("id", permissionIds),
+		datastore.Equal(datastore.Field("id"), permissionIds),
 	).Find()
 	if err != nil {
 		return err

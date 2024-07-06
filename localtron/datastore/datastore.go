@@ -64,24 +64,60 @@ type QueryBuilder[T Row] interface {
 	Delete() error
 }
 
+type FieldSelector struct {
+	Field string   `json:"field,omitempty"`
+	OneOf []string `json:"oneOf,omitempty"`
+	Any   bool     `json:"any,omitempty"`
+}
+
 type Condition struct {
-	Equal *EqualCondition `json:"equal,omitempty"`
-	All   *AllCondition   `json:"all,omitempty"`
+	Equal      *EqualCondition      `json:"equal,omitempty"`
+	All        *AllCondition        `json:"all,omitempty"`
+	StartsWith *StartsWithCondition `json:"startsWith,omitempty"`
+	Contains   *ContainsCondition   `json:"contains,omitempty"`
 }
 
 type EqualCondition struct {
-	FieldName string `json:"fieldName,omitempty"`
-	Value     any    `json:"value,omitempty"`
+	Selector *FieldSelector `json:"fieldSelector,omitempty"`
+	Value    any            `json:"value,omitempty"`
+}
+
+type StartsWithCondition struct {
+	Selector *FieldSelector `json:"fieldSelector,omitempty"`
+	Value    any            `json:"value,omitempty"`
+}
+
+type ContainsCondition struct {
+	Selector *FieldSelector `json:"fieldSelector,omitempty"`
+	Value    any            `json:"value,omitempty"`
 }
 
 type AllCondition struct {
 }
 
-func Equal(fieldName string, value any) Condition {
+func Equal(selector *FieldSelector, value any) Condition {
 	return Condition{
 		Equal: &EqualCondition{
-			FieldName: fieldName,
-			Value:     value,
+			Selector: selector,
+			Value:    value,
+		},
+	}
+}
+
+func StartsWith(selector *FieldSelector, value any) Condition {
+	return Condition{
+		StartsWith: &StartsWithCondition{
+			Selector: selector,
+			Value:    value,
+		},
+	}
+}
+
+func Contains(selector *FieldSelector, value any) Condition {
+	return Condition{
+		Contains: &ContainsCondition{
+			Selector: selector,
+			Value:    value,
 		},
 	}
 }
@@ -92,11 +128,29 @@ func All() Condition {
 	}
 }
 
-func Id(id string) Condition {
+func Id(id any) Condition {
 	return Condition{
 		Equal: &EqualCondition{
-			FieldName: "id",
-			Value:     id,
+			Selector: Field("id"),
+			Value:    id,
 		},
+	}
+}
+
+func Field(fieldName string) *FieldSelector {
+	return &FieldSelector{
+		Field: fieldName,
+	}
+}
+
+func Fields(fieldNames []string) *FieldSelector {
+	return &FieldSelector{
+		OneOf: fieldNames,
+	}
+}
+
+func AnyField() *FieldSelector {
+	return &FieldSelector{
+		Any: true,
 	}
 }

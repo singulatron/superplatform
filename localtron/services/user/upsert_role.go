@@ -20,7 +20,7 @@ import (
 
 func (s *UserService) UpsertRole(id, name, description string, permissionIds []string) (*usertypes.Role, error) {
 	permissions, err := s.permissionsStore.Query(
-		datastore.Equal("id", permissionIds),
+		datastore.Equal(datastore.Field("id"), permissionIds),
 	).Find()
 	if err != nil {
 		return nil, err
@@ -31,7 +31,7 @@ func (s *UserService) UpsertRole(id, name, description string, permissionIds []s
 	}
 
 	role, found, err := s.rolesStore.Query(
-		datastore.Equal("id", id),
+		datastore.Equal(datastore.Field("id"), id),
 	).FindOne()
 	if err != nil {
 		return nil, err
@@ -61,6 +61,6 @@ func (s *UserService) UpsertRole(id, name, description string, permissionIds []s
 	}
 
 	return role, s.rolesStore.Query(
-		datastore.Equal("id", id),
+		datastore.Equal(datastore.Field("id"), id),
 	).Update(role)
 }

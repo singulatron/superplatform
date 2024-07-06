@@ -31,6 +31,16 @@ func List(
 		return
 	}
 
+	user, found, err := userService.GetUserFromRequest(r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	if !found {
+		http.Error(w, "unauthorized", http.StatusUnauthorized)
+		return
+	}
+
 	req := prompttypes.ListPromptsRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
@@ -39,19 +49,45 @@ func List(
 	}
 	defer r.Body.Close()
 
-	prompts, err := promptService.ListPrompts(&promptservice.ListPromptOptions{
-		Statuses: []prompttypes.PromptStatus{
+	options := &promptservice.ListPromptOptions{
+		CreatedAfter: req.CreatedAfter,
+		Statuses:     req.Statuses,
+		LastRunAfter: req.LastRunAfter,
+		After:        req.After,
+		Desc:         req.Desc,
+		Count:        req.Count,
+	}
+
+	if len(options.Statuses) == 0 {
+		options.Statuses = []prompttypes.PromptStatus{
 			prompttypes.PromptStatusRunning,
 			prompttypes.PromptStatusScheduled,
-		},
-	})
+		}
+	}
+
+	prompts, count, err := promptService.ListPrompts(options)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	bs, _ := json.Marshal(prompttypes.ListPromptsResponse{
+	for i := range prompts {
+		if prompts[i].UserId != user.Id {
+			// do not let users see other peoples promtps,
+			// not even if they are admins
+			// eg. imagine a sysadmin looking at the CEO's prompt
+			prompts[i].Prompt = ""
+		}
+	}
+
+	response := prompttypes.ListPromptsResponse{
 		Prompts: prompts,
-	})
+		Count:   count,
+	}
+	if len(prompts) >= 20 {
+		response.After = prompts[len(prompts)-1].CreatedAt
+	}
+
+	bs, _ := json.Marshal(response)
 	w.Write(bs)
 }
