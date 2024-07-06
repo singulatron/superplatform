@@ -12,6 +12,9 @@ ENV CHROME_BIN=/usr/bin/google-chrome
 WORKDIR /app
 COPY . .
 
+
+ENV CHROME_NO_SANDBOX=true
+
 RUN npm i && \
     cd workspaces/angular-app && \
     npm run lint && \
