@@ -1,5 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Condition, equal, contains, startsWith, field } from './generic.service';
+import {
+	Condition,
+	equal,
+	contains,
+	startsWith,
+	field,
+} from './generic.service';
 
 @Injectable({
 	providedIn: 'root',
@@ -12,8 +18,7 @@ export class QueryParser {
 	parse(queryString: string): Query {
 		const query: Query = {};
 
-		// Match and parse fields
-		const fieldRegex = /(\w+):([~^]?[\w\d\-..]+)/g;
+		const fieldRegex = /(\w+):([^~]?[\w.\-]+)/g;
 		let match;
 		while ((match = fieldRegex.exec(queryString)) !== null) {
 			const field = match[1];
@@ -35,7 +40,7 @@ export class QueryParser {
 		const limitRegex = /limit:(\d+)/;
 		const limitMatch = limitRegex.exec(queryString);
 		if (limitMatch) {
-			query.limit = parseInt(limitMatch[1], 10);
+			query.limit = Number.parseInt(limitMatch[1], 10);
 		}
 
 		const afterRegex = /after:([\w,]+)/;
@@ -49,18 +54,21 @@ export class QueryParser {
 
 	private createCondition(fieldName: string, value: string): Condition {
 		if (value.startsWith('~')) {
-			return contains(field(fieldName), value.substring(1));
+			return contains(field(fieldName), value.slice(1));
 		} else if (value.startsWith('^')) {
-			return startsWith(field(fieldName), value.substring(1));
+			return startsWith(field(fieldName), value.slice(1));
 		} else {
-			return equal(field(fieldName), isNaN(value as any) ? value : parseFloat(value));
+			return equal(
+				field(fieldName),
+				Number.isNaN(value as any) ? value : Number.parseFloat(value)
+			);
 		}
 	}
 }
 
 interface Query {
 	conditions?: Condition[];
-	orderBy?: { field: string, desc: boolean }[];
+	orderBy?: { field: string; desc: boolean }[];
 	limit?: number;
 	after?: string[];
 }
