@@ -168,29 +168,10 @@ export interface PlatformImages {
 	cuda?: string;
 }
 
-export interface Model {
-	/** id is the download url of the model */
-	id: string;
-	name: string;
-	parameters?: string;
-	flavour?: string;
-	version?: string;
-	quality?: string;
-	extension?: string;
-	fullName?: string;
-	tags?: string[];
-	mirrors?: string[];
-	size?: number;
-	uncensored?: boolean;
-	maxRam?: number;
-	description?: string;
-	promptTemplate?: string;
-	quantComment?: string;
-}
 
 export interface Model {
 	id: string;
-	platform: Platform;
+	platformId: string;
 	name: string;
 	parameters?: string;
 	flavour?: string;

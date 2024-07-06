@@ -10,12 +10,12 @@ module.exports = function (config) {
 			require('@angular-devkit/build-angular/plugins/karma'),
 		],
 		browsers: ['ChromeHeadlessNoSandbox'],
-    customLaunchers: {
-      ChromeHeadlessNoSandbox: {
-        base: 'ChromeHeadless',
-        flags: ['--no-sandbox']
-      }
-    },
+		customLaunchers: {
+			ChromeHeadlessNoSandbox: {
+				base: 'ChromeHeadless',
+				flags: ['--no-sandbox'],
+			},
+		},
 		client: {
 			jasmine: {},
 			clearContext: false,
