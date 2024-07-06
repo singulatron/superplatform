@@ -19,7 +19,7 @@ export class QueryParser {
 		const query: Query = {};
 
 		// Extract and remove 'orderBy', 'limit', and 'after' parts from the query string first
-		const orderByRegex = /orderBy:([\w:,-]+)/;
+		const orderByRegex = /orderBy:([\w,:-]+)/;
 		const limitRegex = /limit:(\d+)/;
 		const afterRegex = /after:([\w,]+)/;
 
@@ -77,7 +77,7 @@ export class QueryParser {
 			const numericValue = Number(value);
 			return equal(
 				field(fieldName),
-				isNaN(numericValue) ? value : numericValue
+				Number.isNaN(numericValue) ? value : numericValue
 			);
 		}
 	}
