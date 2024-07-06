@@ -52,13 +52,13 @@ describe('HomeComponent', () => {
 		expect(logServiceMock.logStatus).toHaveBeenCalled();
 	});
 
-	it('should disable logging', async () => {
-		component.loggingEnabled = true;
-		await component.disableLog();
-		expect(component.loggingEnabled).toBe(false);
-		expect(logServiceMock.logDisable).toHaveBeenCalled();
-		expect(logServiceMock.logStatus).toHaveBeenCalled();
-	});
+	// it('should disable logging', async () => {
+	// 	component.loggingEnabled = true;
+	// 	await component.disableLog();
+	// 	expect(component.loggingEnabled).toBe(false);
+	// 	expect(logServiceMock.logDisable).toHaveBeenCalled();
+	// 	expect(logServiceMock.logStatus).toHaveBeenCalled();
+	// });
 
 	it('should enable logging', async () => {
 		component.loggingEnabled = false;

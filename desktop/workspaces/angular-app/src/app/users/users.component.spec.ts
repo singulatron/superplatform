@@ -19,7 +19,6 @@ describe('UsersComponent', () => {
 	let changeDetectorRefMock: any;
 
 	beforeEach(async () => {
-		// Create mock implementations of the services
 		userServiceMock = {
 			user$: new ReplaySubject<User>(1).asObservable(),
 			getUsers: jasmine.createSpy('getUsers').and.returnValue(
