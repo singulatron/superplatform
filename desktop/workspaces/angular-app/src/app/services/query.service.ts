@@ -18,6 +18,37 @@ export class QueryParser {
 	parse(queryString: string): Query {
 		const query: Query = {};
 
+		// Extract and remove 'orderBy', 'limit', and 'after' parts from the query string first
+		const orderByRegex = /orderBy:([\w:,-]+)/;
+		const limitRegex = /limit:(\d+)/;
+		const afterRegex = /after:([\w,]+)/;
+
+		const orderByMatch = orderByRegex.exec(queryString);
+		const limitMatch = limitRegex.exec(queryString);
+		const afterMatch = afterRegex.exec(queryString);
+
+		// Remove these parts from the query string
+		queryString = queryString
+			.replace(orderByRegex, '')
+			.replace(limitRegex, '')
+			.replace(afterRegex, '')
+			.trim();
+
+		if (orderByMatch) {
+			query.orderBy = orderByMatch[1].split(',').map((field) => {
+				const [fieldName, order] = field.split(':');
+				return { field: fieldName, desc: order === 'desc' };
+			});
+		}
+
+		if (limitMatch) {
+			query.limit = Number.parseInt(limitMatch[1], 10);
+		}
+
+		if (afterMatch) {
+			query.after = afterMatch[1].split(',');
+		}
+
 		// Regex to match field:value pairs including quoted values with spaces
 		const fieldRegex = /(\w+):(".*?"|[^ ]+)/g;
 		let match;
@@ -34,28 +65,6 @@ export class QueryParser {
 			query.conditions.push(this.createCondition(field, value));
 		}
 
-		const orderByRegex = /orderBy:([\w:,-]+)/;
-		const orderByMatch = orderByRegex.exec(queryString);
-
-		if (orderByMatch) {
-			query.orderBy = orderByMatch[1].split(',').map((field) => {
-				const [fieldName, order] = field.split(':');
-				return { field: fieldName, desc: order === 'desc' };
-			});
-		}
-
-		const limitRegex = /limit:(\d+)/;
-		const limitMatch = limitRegex.exec(queryString);
-		if (limitMatch) {
-			query.limit = Number.parseInt(limitMatch[1], 10);
-		}
-
-		const afterRegex = /after:([\w,]+)/;
-		const afterMatch = afterRegex.exec(queryString);
-		if (afterMatch) {
-			query.after = afterMatch[1].split(',');
-		}
-
 		return query;
 	}
 
@@ -65,9 +74,10 @@ export class QueryParser {
 		} else if (value.startsWith('^')) {
 			return startsWith(field(fieldName), value.slice(1));
 		} else {
+			const numericValue = Number(value);
 			return equal(
 				field(fieldName),
-				Number.isNaN(value as any) ? value : Number.parseFloat(value)
+				isNaN(numericValue) ? value : numericValue
 			);
 		}
 	}
