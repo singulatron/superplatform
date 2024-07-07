@@ -54,8 +54,8 @@ import {
 })
 export class PromptsComponent {
 	prompts: Prompt[] = [];
-	afters: any[] = [];
 	done = false;
+	after: any;
 	request = {
 		statuses: [
 			'scheduled',
@@ -81,17 +81,16 @@ export class PromptsComponent {
 	}
 
 	async loggedInInit() {
-		this.afters.push(undefined);
 		this.search('');
 	}
 
 	async search(value: string) {
 		this.searchTerm = value;
-		this.afters = [undefined]
+		this.done = false;
 		this.q();
 	}
 
-	async q(after?: any[]) {
+	async q(after?: any) {
 		let query = new QueryParser().parse(this.searchTerm);
 		if (!query.conditions) {
 			query.conditions = [];
@@ -115,37 +114,27 @@ export class PromptsComponent {
 
 		const rsp = await this.promptService.promptList(request);
 
-		this.prompts = rsp.prompts;
+		if (rsp.prompts) {
+			this.prompts = [...this.prompts, ...rsp.prompts];
+		} else {
+			this.prompts = [];
+		}
 		this.count = rsp.count || 0;
 
 		if (rsp.after) {
-			this.afters.push(rsp.after);
+			this.after = rsp.after;
 		} else {
 			this.done = true;
 		}
 
-		console.log('afters', rsp.after, this.afters);
-
 		this.cd.markForCheck();
 	}
 
-	async prev() {
-		let after;
-		if (this.afters.length > 1) {
-			this.afters.pop();
-			this.afters.pop();
-			after = this.afters.at(-1);
+	async loadMoreData() {
+		if (this.done) {
+			console.log('No more prompts to load');
+			return;
 		}
-		this.q(after);
-	}
-
-	async next() {
-		if (!this.done) {
-			this.q(this.afters.at(-1));
-		}
-	}
-
-	pageCount(): number {
-		return Math.ceil(this.count / 20);
+		await this.q(this.after);
 	}
 }
