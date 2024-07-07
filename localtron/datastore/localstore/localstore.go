@@ -223,6 +223,16 @@ func (q *QueryBuilder[T]) Limit(limit int) datastore.QueryBuilder[T] {
 
 func (q *QueryBuilder[T]) After(value ...any) datastore.QueryBuilder[T] {
 	q.after = value
+	for i := range q.after {
+		str, ok := q.after[i].(string)
+		if !ok {
+			continue
+		}
+		t, err := datastore.ParseAnyDate(str)
+		if err == nil {
+			q.after[i] = t
+		}
+	}
 	return q
 }
 

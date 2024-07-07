@@ -13,7 +13,6 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 } from '@angular/core';
-
 import { NgFor, NgIf, NgStyle } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
@@ -51,7 +50,7 @@ import {
 	],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	templateUrl: './prompts.component.html',
-	styleUrl: './prompts.component.scss',
+	styleUrls: ['./prompts.component.scss'],
 })
 export class PromptsComponent {
 	prompts: Prompt[] = [];
@@ -82,43 +81,68 @@ export class PromptsComponent {
 	}
 
 	async loggedInInit() {
+		this.afters.push(undefined);
 		this.search('');
 	}
 
 	async search(value: string) {
-		this.searchTerm = value!;
-		let query = new QueryParser().parse(value);
+		this.searchTerm = value;
+		this.q();
+	}
+
+	async q(after?: any[]) {
+		let query = new QueryParser().parse(this.searchTerm);
 		if (!query.conditions) {
 			query.conditions = [];
 		}
-		query.count = true
+		query.count = true;
 
 		let request: ListPromptsRequest = {
 			query: query,
 		};
+		if (!request.query) {
+			request.query = {};
+		}
+
+		if (after) {
+			request.query.after = [after];
+		}
+
 		if (!queryHasFieldCondition(query, 'status')) {
 			query.conditions.push(equal(field('status'), this.request.statuses));
-		}
-		if (this.afters?.length > 0) {
-			request.query!.after = [this.afters.at(-1)];
 		}
 
 		const rsp = await this.promptService.promptList(request);
 
 		this.prompts = rsp.prompts;
 		this.count = rsp.count || 0;
+
 		if (rsp.after) {
 			this.afters.push(rsp.after);
 		} else {
 			this.done = true;
 		}
 
+		console.log('afters', rsp.after, this.afters);
+
 		this.cd.markForCheck();
 	}
 
-	async prev() {}
+	async prev() {
+		let after;
+		if (this.afters.length > 1) {
+			this.afters.pop();
+			this.afters.pop();
+			after = this.afters.at(-1);
+		}
+		this.q(after);
+	}
 
-	async next() {}
+	async next() {
+		if (!this.done) {
+			this.q(this.afters.at(-1));
+		}
+	}
 
 	pageCount(): number {
 		return Math.ceil(this.count / 20);

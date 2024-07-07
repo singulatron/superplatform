@@ -21,7 +21,7 @@
 					Prompts.
 					<span *ngIf="count > 0" style="font-size: 1rem; color: #444"
 						>Total: {{ count }}.
-						<span>Page {{ afters.length || 1 }}/{{ pageCount() }}</span></span
+						<span>Page {{ afters.length -1 || 1 }}/{{ pageCount() }}</span></span
 					>
 				</h1>
 			</div>
@@ -49,7 +49,7 @@
 							color: #444;
 						"
 						>Total: {{ count }}.
-						<span>Page {{ afters.length || 1 }}/{{ pageCount() }}</span></span
+						<span>Page {{ afters.length -1 || 1 }}/{{ pageCount() }}</span></span
 					>
 					<ion-button (click)="next()" [disabled]="done"
 						><span style="color: white">Next</span></ion-button

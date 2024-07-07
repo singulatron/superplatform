@@ -12,6 +12,8 @@ package datastore
 
 import (
 	"errors"
+	"fmt"
+	"time"
 )
 
 type Row interface {
@@ -197,4 +199,42 @@ func AnyField() *FieldSelector {
 	return &FieldSelector{
 		Any: true,
 	}
+}
+
+var dateFormats = []string{
+	time.RFC3339,
+	time.RFC1123,
+	"2006-01-02 15:04:05",
+	"2006-01-02 15:04",
+	"2006-01-02",
+	"2006/01/02 15:04:05",
+	"2006/01/02 15:04",
+	"2006/01/02",
+	"02-Jan-2006 15:04:05",
+	"02-Jan-2006 15:04",
+	"02-Jan-2006",
+	"02/01/2006 15:04:05",
+	"02/01/2006 15:04",
+	"02/01/2006",
+	"01/02/2006 15:04:05",
+	"01/02/2006 15:04",
+	"01/02/2006",
+	"2006-1-2 15:04:05",
+	"2006-1-2 15:04",
+	"2006-1-2",
+	"1/2/2006 15:04:05",
+	"1/2/2006 15:04",
+	"1/2/2006",
+}
+
+func ParseAnyDate(input string) (time.Time, error) {
+	var t time.Time
+	var err error
+	for _, format := range dateFormats {
+		t, err = time.Parse(format, input)
+		if err == nil {
+			return t, nil
+		}
+	}
+	return time.Time{}, fmt.Errorf("could not parse date: %v", input)
 }
