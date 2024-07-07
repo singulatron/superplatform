@@ -75,6 +75,8 @@ func (q *SQLQueryBuilder[T]) buildConditions(start ...int) ([]string, []interfac
 			} else {
 				conditions = append(conditions, fmt.Sprintf("(%s)", strings.Join(orConditions, " OR ")))
 			}
+		} else {
+			panic(fmt.Sprintf("unkown condition %v", cond))
 		}
 
 		if err != nil {

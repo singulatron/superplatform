@@ -388,30 +388,32 @@ func (q *QueryBuilder[T]) Delete() error {
 func (q *QueryBuilder[T]) match(obj T) bool {
 	for _, cond := range q.conditions {
 		if cond.Equal != nil || cond.Contains != nil || cond.StartsWith != nil {
-			var matchFunc func(test, subjecft any) bool
+			var matchFunc func(subject, test any) bool
 			var selector *datastore.FieldSelector
 			var value any
 
 			switch {
 			case cond.Equal != nil:
-				matchFunc = func(test, subject any) bool {
+				matchFunc = func(subject, test any) bool {
 					return reflect.DeepEqual(test, subject)
 				}
 				selector = cond.Equal.Selector
 				value = cond.Equal.Value
 			case cond.Contains != nil:
-				matchFunc = func(test, subject any) bool {
+				matchFunc = func(subject, test any) bool {
 					testStr, testOk := test.(string)
 					subjectStr, subjectOk := subject.(string)
-					if !testOk || subjectOk {
+					if !testOk || !subjectOk {
 						return false
 					}
+
 					return strings.Contains(subjectStr, testStr)
 				}
+
 				selector = cond.Contains.Selector
 				value = cond.Contains.Value
 			case cond.StartsWith != nil:
-				matchFunc = func(test, subject any) bool {
+				matchFunc = func(subject, test any) bool {
 					testStr, testOk := test.(string)
 					subjectStr, subjectOk := subject.(string)
 					if !testOk || subjectOk {
