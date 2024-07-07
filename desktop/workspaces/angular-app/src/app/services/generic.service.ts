@@ -119,6 +119,7 @@ export interface Query {
 	after?: any[];
 	limit?: number;
 	orderBys?: OrderBy[];
+	count?: boolean;
 }
 
 export interface OrderBy {
@@ -134,6 +135,42 @@ export interface Condition {
 	all?: AllCondition;
 	startsWith?: StartsWithCondition;
 	contains?: ContainsCondition;
+}
+
+export function conditionFieldIs(
+	condition: Condition,
+	fieldName: string
+): boolean {
+	if (condition.equal && condition.equal.selector.field == fieldName) {
+		return true;
+	}
+	if (condition.contains && condition.contains.selector.field == fieldName) {
+		return true;
+	}
+	if (
+		condition.startsWith &&
+		condition.startsWith.selector.field == fieldName
+	) {
+		return true;
+	}
+
+	return false;
+}
+
+export function queryHasFieldCondition(
+	query: Query,
+	fieldName: string
+): boolean {
+	if (!query.conditions) {
+		return false;
+	}
+	for (const condition of query.conditions) {
+		if (conditionFieldIs(condition, fieldName)) {
+			return true;
+		}
+	}
+
+	return false;
 }
 
 export interface EqualCondition {

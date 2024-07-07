@@ -10,7 +10,9 @@
  */
 package datastore
 
-import "errors"
+import (
+	"errors"
+)
 
 type Row interface {
 	GetId() string
@@ -78,13 +80,13 @@ type Condition struct {
 }
 
 func (c Condition) FieldIs(fieldName string) bool {
-	if c.Equal != nil && c.Equal.Selector.Field == fieldName {
+	if c.Equal != nil && c.Equal.Selector != nil && c.Equal.Selector.Field == fieldName {
 		return true
 	}
-	if c.StartsWith != nil && c.StartsWith.Selector.Field == fieldName {
+	if c.StartsWith != nil && c.StartsWith.Selector != nil && c.StartsWith.Selector.Field == fieldName {
 		return true
 	}
-	if c.Contains != nil && c.Contains.Selector.Field == fieldName {
+	if c.Contains != nil && c.Contains.Selector != nil && c.Contains.Selector.Field == fieldName {
 		return true
 	}
 
@@ -92,17 +94,17 @@ func (c Condition) FieldIs(fieldName string) bool {
 }
 
 type EqualCondition struct {
-	Selector *FieldSelector `json:"fieldSelector,omitempty"`
+	Selector *FieldSelector `json:"selector,omitempty"`
 	Value    any            `json:"value,omitempty"`
 }
 
 type StartsWithCondition struct {
-	Selector *FieldSelector `json:"fieldSelector,omitempty"`
+	Selector *FieldSelector `json:"selector,omitempty"`
 	Value    any            `json:"value,omitempty"`
 }
 
 type ContainsCondition struct {
-	Selector *FieldSelector `json:"fieldSelector,omitempty"`
+	Selector *FieldSelector `json:"selector,omitempty"`
 	Value    any            `json:"value,omitempty"`
 }
 

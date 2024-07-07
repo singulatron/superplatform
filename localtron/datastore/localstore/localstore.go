@@ -395,6 +395,9 @@ func (q *QueryBuilder[T]) match(obj T) bool {
 			switch {
 			case cond.Equal != nil:
 				matchFunc = func(subject, test any) bool {
+					subject = toBaseType(subject)
+					test = toBaseType(test)
+
 					return reflect.DeepEqual(test, subject)
 				}
 				selector = cond.Equal.Selector
@@ -546,4 +549,30 @@ func compare(vi, vj interface{}, desc bool) bool {
 		}
 	}
 	return false
+}
+
+func toBaseType(input interface{}) interface{} {
+	val := reflect.ValueOf(input)
+	if val.Kind() == reflect.Ptr {
+		val = val.Elem()
+	}
+
+	// Recursively decompose until we reach the base type
+	for val.Kind() == reflect.Interface || val.Kind() == reflect.Ptr {
+		val = val.Elem()
+	}
+
+	if val.Kind() == reflect.String {
+		return val.String()
+	} else if val.Kind() == reflect.Int || val.Kind() == reflect.Int8 || val.Kind() == reflect.Int16 || val.Kind() == reflect.Int32 || val.Kind() == reflect.Int64 {
+		return val.Int()
+	} else if val.Kind() == reflect.Uint || val.Kind() == reflect.Uint8 || val.Kind() == reflect.Uint16 || val.Kind() == reflect.Uint32 || val.Kind() == reflect.Uint64 {
+		return val.Uint()
+	} else if val.Kind() == reflect.Float32 || val.Kind() == reflect.Float64 {
+		return val.Float()
+	} else if val.Kind() == reflect.Bool {
+		return val.Bool()
+	}
+
+	return val.Interface()
 }

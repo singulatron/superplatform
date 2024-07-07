@@ -6,6 +6,7 @@ import {
 	startsWith,
 	field,
 	fields,
+	Query,
 } from './generic.service';
 
 @Injectable({
@@ -38,7 +39,7 @@ export class QueryParser {
 			.trim();
 
 		if (orderByMatch) {
-			query.orderBy = orderByMatch[1].split(',').map((field) => {
+			query.orderBys = orderByMatch[1].split(',').map((field) => {
 				const [fieldName, order] = field.split(':');
 				return { field: fieldName, desc: order === 'desc' };
 			});
@@ -108,11 +109,4 @@ export class QueryParser {
 			);
 		}
 	}
-}
-
-interface Query {
-	conditions?: Condition[];
-	orderBy?: { field: string; desc: boolean }[];
-	limit?: number;
-	after?: string[];
 }

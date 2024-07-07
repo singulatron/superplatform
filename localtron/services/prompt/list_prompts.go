@@ -16,7 +16,7 @@ import (
 )
 
 type ListPromptOptions struct {
-	Query *datastore.Query
+	Query *datastore.Query `json:"query"`
 }
 
 func (p *PromptService) ListPrompts(options *ListPromptOptions) ([]*prompttypes.Prompt, int64, error) {
@@ -29,7 +29,7 @@ func (p *PromptService) ListPrompts(options *ListPromptOptions) ([]*prompttypes.
 	}
 
 	if options.Query.After != nil {
-		q = q.After(options.Query.After...)
+		//q = q.After(options.Query.After...)
 	}
 
 	res, err := q.Find()

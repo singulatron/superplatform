@@ -29,6 +29,11 @@ import { IconMenuComponent } from '../components/icon-menu/icon-menu.component';
 import { CenteredComponent } from '../components/centered/centered.component';
 import { PromptComponent } from './prompt/prompt.component';
 import { QueryParser } from '../services/query.service';
+import {
+	queryHasFieldCondition,
+	field,
+	equal,
+} from '../services/generic.service';
 
 @Component({
 	selector: 'app-prompts',
@@ -83,13 +88,21 @@ export class PromptsComponent {
 	async search(value: string) {
 		this.searchTerm = value!;
 		let query = new QueryParser().parse(value);
+		if (!query.conditions) {
+			query.conditions = [];
+		}
+		query.count = true
 
 		let request: ListPromptsRequest = {
 			query: query,
 		};
+		if (!queryHasFieldCondition(query, 'status')) {
+			query.conditions.push(equal(field('status'), this.request.statuses));
+		}
 		if (this.afters?.length > 0) {
 			request.query!.after = [this.afters.at(-1)];
 		}
+
 		const rsp = await this.promptService.promptList(request);
 
 		this.prompts = rsp.prompts;
