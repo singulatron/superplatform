@@ -74,10 +74,10 @@ export class QueryParser {
 				value = value.slice(1, -1);
 			}
 
-			fields.forEach((field) => {
+			for (const field of fields) {
 				if (!query.conditions) query.conditions = [];
 				query.conditions.push(this.createCondition(field, value));
-			});
+			};
 		}
 
 		return query;

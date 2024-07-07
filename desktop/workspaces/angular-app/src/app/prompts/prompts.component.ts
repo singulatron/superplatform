@@ -91,13 +91,13 @@ export class PromptsComponent {
 	}
 
 	async q(after?: any) {
-		let query = new QueryParser().parse(this.searchTerm);
+		const query = new QueryParser().parse(this.searchTerm);
 		if (!query.conditions) {
 			query.conditions = [];
 		}
 		query.count = true;
 
-		let request: ListPromptsRequest = {
+		const request: ListPromptsRequest = {
 			query: query,
 		};
 		if (!request.query) {
@@ -114,6 +114,7 @@ export class PromptsComponent {
 
 		const rsp = await this.promptService.promptList(request);
 
+		// eslint-disable-next-line
 		if (rsp.prompts) {
 			this.prompts = [...this.prompts, ...rsp.prompts];
 		} else {
