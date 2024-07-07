@@ -13,6 +13,8 @@ package prompttypes
 import (
 	"sync"
 	"time"
+
+	"github.com/singulatron/singulatron/localtron/datastore"
 )
 
 type PromptStatus string
@@ -68,14 +70,7 @@ type AddPromptRequest struct {
 }
 
 type ListPromptsRequest struct {
-	CreatedAfter time.Time `json:"createdAfter"`
-	// or relationship
-	Statuses     []PromptStatus `json:"statuses"`
-	LastRunAfter time.Time      `json:"lastRunAfter"`
-	Desc         bool           `json:"desc"`
-	After        time.Time      `json:"after"`
-	// Return count?
-	Count bool `json:"count"`
+	Query *datastore.Query `json:"query"`
 }
 
 type ListPromptsResponse struct {

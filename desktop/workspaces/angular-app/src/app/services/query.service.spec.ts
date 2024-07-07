@@ -88,4 +88,21 @@ describe('QueryParser', () => {
 		expect(query.limit).toBe(10);
 		expect(query.after).toEqual(['id1', 'id2']);
 	});
+
+	it('should parse default query correctly', () => {
+		const queryString = 'keyword';
+		const query = parser.parse(queryString);
+
+		expect(query.conditions).toEqual([contains(field('name'), 'keyword')]);
+	});
+
+	it('should parse multifield query correctly', () => {
+		const queryString = 'email,name:~ASD';
+		const query = parser.parse(queryString);
+
+		expect(query.conditions).toEqual([
+			contains(field('email'), 'ASD'),
+			contains(field('name'), 'ASD'),
+		]);
+	});
 });

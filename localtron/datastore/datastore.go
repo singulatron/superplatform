@@ -92,6 +92,24 @@ type ContainsCondition struct {
 	Value    any            `json:"value,omitempty"`
 }
 
+// Query as a type is not used in the DataStore interface but mostly to accept
+// a DataStore query through a HTTP API
+type Query struct {
+	Conditions []Condition `json:"conditions,omitempty"`
+	After      []any       `json:"after,omitempty"`
+	Limit      int64       `json:"limit,omitempty"`
+	OrderBys   []OrderBy   `json:"orderBys,omitempty"`
+	// Count true means return the count of the dataset filtered by Conditions
+	// without after or limit
+	Count bool `json:"count,omitempty"`
+}
+
+// OrderBy is only used in HTTP requests
+type OrderBy struct {
+	Field string `json:"field,omitempty"`
+	Desc  bool   `json:"desc,omitempty"`
+}
+
 type AllCondition struct {
 }
 

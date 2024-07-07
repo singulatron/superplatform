@@ -5,6 +5,7 @@ import {
 	contains,
 	startsWith,
 	field,
+	fields,
 } from './generic.service';
 
 @Injectable({
@@ -15,6 +16,8 @@ export class QueryService {
 }
 
 export class QueryParser {
+	defaultFields = ['name'];
+
 	parse(queryString: string): Query {
 		const query: Query = {};
 
@@ -49,11 +52,20 @@ export class QueryParser {
 			query.after = afterMatch[1].split(',');
 		}
 
+		if (!queryString) {
+			return query;
+		}
+
+		if (!queryString.includes(':')) {
+			this.addDefaultConditions(query, this.defaultFields, queryString);
+			return query;
+		}
+
 		// Regex to match field:value pairs including quoted values with spaces
-		const fieldRegex = /(\w+):(".*?"|[^ ]+)/g;
+		const fieldRegex = /(\w+(?:,\w+)*):(".*?"|[^ ]+)/g;
 		let match;
 		while ((match = fieldRegex.exec(queryString)) !== null) {
-			const field = match[1];
+			const fields = match[1].split(',');
 			let value = match[2];
 
 			// Remove surrounding quotes from the value if they exist
@@ -61,11 +73,26 @@ export class QueryParser {
 				value = value.slice(1, -1);
 			}
 
-			if (!query.conditions) query.conditions = [];
-			query.conditions.push(this.createCondition(field, value));
+			fields.forEach((field) => {
+				if (!query.conditions) query.conditions = [];
+				query.conditions.push(this.createCondition(field, value));
+			});
 		}
 
 		return query;
+	}
+
+	private addDefaultConditions(
+		query: Query,
+		fieldNames: string[],
+		value: string
+	) {
+		if (!query.conditions) query.conditions = [];
+		if (fieldNames?.length > 1) {
+			query.conditions?.push(contains(fields(fieldNames), value));
+		} else {
+			query.conditions?.push(contains(field(fieldNames[0]), value));
+		}
 	}
 
 	private createCondition(fieldName: string, value: string): Condition {

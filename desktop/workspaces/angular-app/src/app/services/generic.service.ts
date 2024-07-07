@@ -114,6 +114,18 @@ export function anyField(): FieldSelector {
 	};
 }
 
+export interface Query {
+	conditions: Condition[];
+	after: any[];
+	limit: number;
+	orderBys: OrderBy[];
+}
+
+export interface OrderBy {
+	field: string;
+	desc: boolean;
+}
+
 // this could be a sumtype, eg. EqualCondition | AllCondition
 // but it's defined as a product type here to match the backend Go structure
 // for easier understanding
