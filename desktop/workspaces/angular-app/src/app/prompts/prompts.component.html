@@ -25,6 +25,11 @@
 					>
 				</h1>
 			</div>
+			<ion-searchbar
+				debounce="200"
+				(ionInput)="search($event.target.value!)"
+				placeholder="Search prompts"
+			></ion-searchbar>
 			<div class="prompt-wrapper" *ngFor="let prompt of prompts">
 				<app-prompt [prompt]="prompt"></app-prompt>
 			</div>

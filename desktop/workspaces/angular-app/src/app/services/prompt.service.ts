@@ -14,6 +14,7 @@ import { ReplaySubject, Observable, catchError } from 'rxjs';
 import { FirehoseService } from './firehose.service';
 import { first } from 'rxjs';
 import { UserService } from './user.service';
+import { Query } from './generic.service';
 
 @Injectable({
 	providedIn: 'root',
@@ -257,13 +258,7 @@ export interface RemovePromptRequest {
 }
 
 export interface ListPromptsRequest {
-	createdAfter?: string;
-	statuses?: string[];
-	lastRunAfter?: string;
-	desc?: boolean;
-	after?: string;
-	// Return count?
-	count?: boolean;
+	query?: Query;
 }
 
 export interface ListPromptsResponse {

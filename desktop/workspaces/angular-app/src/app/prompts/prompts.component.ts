@@ -17,13 +17,18 @@ import {
 import { NgFor, NgIf, NgStyle } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { Prompt, PromptService } from '../services/prompt.service';
+import {
+	ListPromptsRequest,
+	Prompt,
+	PromptService,
+} from '../services/prompt.service';
 import { UserService } from '../services/user.service';
 import { first } from 'rxjs';
 import { PageComponent } from '../components/page/page.component';
 import { IconMenuComponent } from '../components/icon-menu/icon-menu.component';
 import { CenteredComponent } from '../components/centered/centered.component';
 import { PromptComponent } from './prompt/prompt.component';
+import { QueryParser } from '../services/query.service';
 
 @Component({
 	selector: 'app-prompts',
@@ -59,6 +64,7 @@ export class PromptsComponent {
 		desc: true,
 	};
 	count = 0;
+	searchTerm = '';
 
 	constructor(
 		private cd: ChangeDetectorRef,
@@ -71,36 +77,20 @@ export class PromptsComponent {
 	}
 
 	async loggedInInit() {
-		const rsp = await this.promptService.promptList({
-			...this.request,
-			count: true,
-		});
-		this.prompts = rsp.prompts;
-		this.count = rsp.count || 0;
-		this.afters.push(rsp.after);
-		this.cd.markForCheck();
+		this.search('');
 	}
 
-	async prev() {
-		if (this.afters.length >= 2) {
-			const rsp = await this.promptService.promptList({
-				...this.request,
-				after: this.afters.at(-1),
-				count: true,
-			});
-			this.prompts = rsp.prompts;
-			this.count = rsp.count || 0;
-			this.afters.pop();
-			this.cd.markForCheck();
+	async search(value: string) {
+		this.searchTerm = value!;
+		let query = new QueryParser().parse(value);
+
+		let request: ListPromptsRequest = {
+			query: query,
+		};
+		if (this.afters?.length > 0) {
+			request.query!.after = [this.afters.at(-1)];
 		}
-	}
-
-	async next() {
-		const rsp = await this.promptService.promptList({
-			...this.request,
-			after: this.afters.at(-1),
-			count: true,
-		});
+		const rsp = await this.promptService.promptList(request);
 
 		this.prompts = rsp.prompts;
 		this.count = rsp.count || 0;
@@ -112,6 +102,10 @@ export class PromptsComponent {
 
 		this.cd.markForCheck();
 	}
+
+	async prev() {}
+
+	async next() {}
 
 	pageCount(): number {
 		return Math.ceil(this.count / 20);

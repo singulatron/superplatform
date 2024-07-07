@@ -13,6 +13,7 @@ package localstore
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"reflect"
 	"sort"
@@ -386,22 +387,57 @@ func (q *QueryBuilder[T]) Delete() error {
 
 func (q *QueryBuilder[T]) match(obj T) bool {
 	for _, cond := range q.conditions {
-		if cond.Equal != nil {
+		if cond.Equal != nil || cond.Contains != nil || cond.StartsWith != nil {
+			var matchFunc func(test, subjecft any) bool
+			var selector *datastore.FieldSelector
+			var value any
+
+			switch {
+			case cond.Equal != nil:
+				matchFunc = func(test, subject any) bool {
+					return reflect.DeepEqual(test, subject)
+				}
+				selector = cond.Equal.Selector
+				value = cond.Equal.Value
+			case cond.Contains != nil:
+				matchFunc = func(test, subject any) bool {
+					testStr, testOk := test.(string)
+					subjectStr, subjectOk := subject.(string)
+					if !testOk || subjectOk {
+						return false
+					}
+					return strings.Contains(subjectStr, testStr)
+				}
+				selector = cond.Contains.Selector
+				value = cond.Contains.Value
+			case cond.StartsWith != nil:
+				matchFunc = func(test, subject any) bool {
+					testStr, testOk := test.(string)
+					subjectStr, subjectOk := subject.(string)
+					if !testOk || subjectOk {
+						return false
+					}
+					return strings.HasPrefix(subjectStr, testStr)
+				}
+				selector = cond.StartsWith.Selector
+				value = cond.StartsWith.Value
+			}
+
 			fieldNames := []string{}
-			if cond.Equal.Selector.Field != "" {
-				fieldNames = append(fieldNames, cond.Equal.Selector.Field)
-			} else if cond.Equal.Selector.OneOf != nil {
-				fieldNames = cond.Equal.Selector.OneOf
+			if selector.Field != "" {
+				fieldNames = append(fieldNames, selector.Field)
+			} else if selector.OneOf != nil {
+				fieldNames = selector.OneOf
 			}
 
 			matched := false
 			for _, fieldName := range fieldNames {
 				fieldValue := getField(obj, fieldName)
 
-				condValue := reflect.ValueOf(cond.Equal.Value)
+				condValue := reflect.ValueOf(value)
 				if fieldV := reflect.ValueOf(fieldValue); fieldV.Kind() == reflect.Slice {
 					for i := 0; i < fieldV.Len(); i++ {
-						if reflect.DeepEqual(fieldV.Index(i).Interface(), condValue.Interface()) {
+						if matchFunc(fieldV.Index(i).Interface(), condValue.Interface()) {
 							matched = true
 							continue
 						}
@@ -409,13 +445,13 @@ func (q *QueryBuilder[T]) match(obj T) bool {
 
 				} else if condValue.Kind() == reflect.Slice {
 					for i := 0; i < condValue.Len(); i++ {
-						if reflect.DeepEqual(fieldValue, condValue.Index(i).Interface()) {
+						if matchFunc(fieldValue, condValue.Index(i).Interface()) {
 							matched = true
 							continue
 						}
 					}
 				} else {
-					if reflect.DeepEqual(fieldValue, cond.Equal.Value) {
+					if matchFunc(fieldValue, value) {
 						matched = true
 					}
 				}
@@ -425,6 +461,8 @@ func (q *QueryBuilder[T]) match(obj T) bool {
 			}
 		} else if cond.All != nil {
 			continue
+		} else {
+			panic(fmt.Sprintf("unkown condition %v", cond))
 		}
 	}
 	return true

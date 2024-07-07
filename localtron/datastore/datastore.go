@@ -77,6 +77,20 @@ type Condition struct {
 	Contains   *ContainsCondition   `json:"contains,omitempty"`
 }
 
+func (c Condition) FieldIs(fieldName string) bool {
+	if c.Equal != nil && c.Equal.Selector.Field == fieldName {
+		return true
+	}
+	if c.StartsWith != nil && c.StartsWith.Selector.Field == fieldName {
+		return true
+	}
+	if c.Contains != nil && c.Contains.Selector.Field == fieldName {
+		return true
+	}
+
+	return false
+}
+
 type EqualCondition struct {
 	Selector *FieldSelector `json:"fieldSelector,omitempty"`
 	Value    any            `json:"value,omitempty"`
@@ -102,6 +116,16 @@ type Query struct {
 	// Count true means return the count of the dataset filtered by Conditions
 	// without after or limit
 	Count bool `json:"count,omitempty"`
+}
+
+func (q *Query) HasFieldCondition(fieldName string) bool {
+	for _, v := range q.Conditions {
+		if v.FieldIs(fieldName) {
+			return true
+		}
+	}
+
+	return false
 }
 
 // OrderBy is only used in HTTP requests

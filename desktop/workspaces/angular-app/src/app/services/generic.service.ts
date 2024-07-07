@@ -115,10 +115,10 @@ export function anyField(): FieldSelector {
 }
 
 export interface Query {
-	conditions: Condition[];
-	after: any[];
-	limit: number;
-	orderBys: OrderBy[];
+	conditions?: Condition[];
+	after?: any[];
+	limit?: number;
+	orderBys?: OrderBy[];
 }
 
 export interface OrderBy {

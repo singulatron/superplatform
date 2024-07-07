@@ -90,10 +90,10 @@ describe('QueryParser', () => {
 	});
 
 	it('should parse default query correctly', () => {
-		const queryString = 'keyword';
+		const queryString = 'ASD';
 		const query = parser.parse(queryString);
 
-		expect(query.conditions).toEqual([contains(field('name'), 'keyword')]);
+		expect(query.conditions).toEqual([contains(field('name'), 'ASD')]);
 	});
 
 	it('should parse multifield query correctly', () => {

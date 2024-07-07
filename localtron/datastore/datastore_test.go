@@ -28,6 +28,14 @@ type Friend struct {
 	Age  int    `json:"age"`
 }
 
+type NamedString string
+
+const (
+	NamedStringOne   = "one"
+	NamedStringTwo   = "two"
+	NamedStringThree = "three"
+)
+
 type TestObject struct {
 	Name              string                  `json:"name"`
 	Value             int                     `json:"value"`
@@ -40,6 +48,7 @@ type TestObject struct {
 	AmapStringPointer *map[string]string      `json:"amapStringPointer"`
 	FriendPointer     *Friend                 `json:"friendPointer"`
 	CreatedAt         time.Time               `json:"createdAt"`
+	NamedType         NamedString             `json:"namedType"`
 }
 
 func (t TestObject) GetId() string {
@@ -96,6 +105,7 @@ func TestAll(t *testing.T) {
 		"FindOne":                FindOne,
 		"Update":                 Update,
 		"Map":                    Map,
+		"Contains":               Contains,
 	}
 	pointerTests := map[string]func(t *testing.T, store datastore.DataStore[*TestObject]){
 		"PointerCreate":                 PointerCreate,
@@ -133,6 +143,27 @@ func TestAll(t *testing.T) {
 
 	}
 
+}
+
+func Contains(t *testing.T, store datastore.DataStore[TestObject]) {
+	obj1 := TestObject{Name: "HelloThere"}
+	obj2 := TestObject{Name: "HiWhatsUp"}
+
+	err := store.Create(obj1)
+	require.NoError(t, err)
+
+	err = store.Create(obj2)
+	require.NoError(t, err)
+
+	res, err := store.Query(datastore.Contains(datastore.Field("Name"), "lo")).Find()
+	require.NoError(t, err)
+	require.Equal(t, 1, len(res))
+	require.Equal(t, "HelloThere", res[0].Name)
+
+	res, err = store.Query(datastore.Contains(datastore.Field("Name"), "What")).Find()
+	require.NoError(t, err)
+	require.Equal(t, 1, len(res))
+	require.Equal(t, "HiWhatsUp", res[0].Name)
 }
 
 func Map(t *testing.T, store datastore.DataStore[TestObject]) {
@@ -407,9 +438,9 @@ func PointerUpdate(t *testing.T, store datastore.DataStore[*TestObject]) {
 }
 
 func InClause(t *testing.T, store datastore.DataStore[TestObject]) {
-	obj1 := TestObject{Name: "Alice", Value: 10, Age: 25}
-	obj2 := TestObject{Name: "Bob", Value: 20, Age: 30}
-	obj3 := TestObject{Name: "Charlie", Value: 30, Age: 35}
+	obj1 := TestObject{Name: "Alice", Value: 10, Age: 25, NamedType: NamedStringOne}
+	obj2 := TestObject{Name: "Bob", Value: 20, Age: 30, NamedType: NamedStringTwo}
+	obj3 := TestObject{Name: "Charlie", Value: 30, Age: 35, NamedType: NamedStringThree}
 
 	err := store.Create(obj1)
 	require.NoError(t, err)
@@ -443,6 +474,11 @@ func InClause(t *testing.T, store datastore.DataStore[TestObject]) {
 	require.Len(t, results, 1)
 	require.Contains(t, results, obj2)
 
+	results, err = store.Query(datastore.Equal(datastore.Field("NamedType"), []NamedString{NamedStringTwo})).Find()
+	require.NoError(t, err)
+	require.Len(t, results, 1)
+	require.Contains(t, results, obj2)
+
 	// Clean up
 	err = store.Query(datastore.Equal(datastore.Field("Name"), "Alice")).Delete()
 	require.NoError(t, err)
@@ -453,9 +489,9 @@ func InClause(t *testing.T, store datastore.DataStore[TestObject]) {
 }
 
 func PointerInClause(t *testing.T, store datastore.DataStore[*TestObject]) {
-	obj1 := &TestObject{Name: "Alice", Value: 10, Age: 25}
-	obj2 := &TestObject{Name: "Bob", Value: 20, Age: 30}
-	obj3 := &TestObject{Name: "Charlie", Value: 30, Age: 35}
+	obj1 := &TestObject{Name: "Alice", Value: 10, Age: 25, NamedType: NamedStringOne}
+	obj2 := &TestObject{Name: "Bob", Value: 20, Age: 30, NamedType: NamedStringTwo}
+	obj3 := &TestObject{Name: "Charlie", Value: 30, Age: 35, NamedType: NamedStringThree}
 
 	err := store.Create(obj1)
 	require.NoError(t, err)
@@ -485,6 +521,11 @@ func PointerInClause(t *testing.T, store datastore.DataStore[*TestObject]) {
 
 	// Test IN clause with one element slice
 	results, err = store.Query(datastore.Equal(datastore.Field("Age"), []int{30})).Find()
+	require.NoError(t, err)
+	require.Len(t, results, 1)
+	require.Contains(t, results, obj2)
+
+	results, err = store.Query(datastore.Equal(datastore.Field("NamedType"), []NamedString{NamedStringTwo})).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Contains(t, results, obj2)

@@ -57,7 +57,7 @@ func List(
 		options.Query = &datastore.Query{}
 	}
 
-	if len(options.Query.Conditions) == 0 {
+	if !options.Query.HasFieldCondition("status") {
 		options.Query.Conditions = append(options.Query.Conditions, datastore.Equal(datastore.Field("status"), []prompttypes.PromptStatus{
 			prompttypes.PromptStatusRunning,
 			prompttypes.PromptStatusScheduled,
