@@ -14,6 +14,8 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
+
+	"github.com/singulatron/singulatron/localtron/datastore"
 )
 
 func (s *SQLStore[T]) placeholder(counter int) string {
@@ -36,18 +38,11 @@ func (q *SQLQueryBuilder[T]) buildConditions(start ...int) ([]string, []interfac
 	var conditions []string
 
 	for _, cond := range q.conditions {
-
 		var param any
 		var err error
 
 		if cond.Equal != nil {
-			fieldNames := []string{}
-			if cond.Equal.Selector.Field != "" {
-				fieldNames = append(fieldNames, cond.Equal.Selector.Field)
-			} else if len(cond.Equal.Selector.OneOf) > 0 {
-				fieldNames = cond.Equal.Selector.OneOf
-			}
-
+			fieldNames := getFieldNames(cond.Equal.Selector)
 			orConditions := []string{}
 
 			for _, field := range fieldNames {
@@ -75,14 +70,54 @@ func (q *SQLQueryBuilder[T]) buildConditions(start ...int) ([]string, []interfac
 			} else {
 				conditions = append(conditions, fmt.Sprintf("(%s)", strings.Join(orConditions, " OR ")))
 			}
+		} else if cond.Contains != nil {
+			fieldNames := getFieldNames(cond.Contains.Selector)
+			orConditions := []string{}
+
+			for _, field := range fieldNames {
+				fieldName := q.store.fieldName(field)
+				placeHolder := q.store.placeholder(paramCounter)
+
+				orConditions = append(orConditions, fmt.Sprintf("%s ILIKE %s", fieldName, placeHolder))
+				param, err = q.store.convertParam(fmt.Sprintf("%%%s%%", cond.Contains.Value))
+
+				params = append(params, param)
+				paramCounter++
+			}
+
+			if len(orConditions) == 1 {
+				conditions = append(conditions, orConditions...)
+			} else {
+				conditions = append(conditions, fmt.Sprintf("(%s)", strings.Join(orConditions, " OR ")))
+			}
+		} else if cond.StartsWith != nil {
+			fieldNames := getFieldNames(cond.StartsWith.Selector)
+			orConditions := []string{}
+
+			for _, field := range fieldNames {
+				fieldName := q.store.fieldName(field)
+				placeHolder := q.store.placeholder(paramCounter)
+
+				orConditions = append(orConditions, fmt.Sprintf("%s ILIKE %s", fieldName, placeHolder))
+				param, err = q.store.convertParam(fmt.Sprintf("%s%%", cond.StartsWith.Value))
+
+				params = append(params, param)
+				paramCounter++
+			}
+
+			if len(orConditions) == 1 {
+				conditions = append(conditions, orConditions...)
+			} else {
+				conditions = append(conditions, fmt.Sprintf("(%s)", strings.Join(orConditions, " OR ")))
+			}
+		} else if cond.All != nil {
 		} else {
-			panic(fmt.Sprintf("unkown condition %v", cond))
+			panic(fmt.Sprintf("unknown condition %v", cond))
 		}
 
 		if err != nil {
 			return nil, nil, err
 		}
-
 	}
 
 	if len(q.after) > 0 {
@@ -100,4 +135,15 @@ func (q *SQLQueryBuilder[T]) buildConditions(start ...int) ([]string, []interfac
 	}
 
 	return conditions, params, nil
+}
+
+// Helper function to get field names from a selector
+func getFieldNames(selector *datastore.FieldSelector) []string {
+	fieldNames := []string{}
+	if selector.Field != "" {
+		fieldNames = append(fieldNames, selector.Field)
+	} else if selector.OneOf != nil {
+		fieldNames = selector.OneOf
+	}
+	return fieldNames
 }
