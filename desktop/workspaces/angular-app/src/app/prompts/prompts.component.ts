@@ -87,6 +87,7 @@ export class PromptsComponent {
 
 	async search(value: string) {
 		this.searchTerm = value;
+		this.afters = [undefined]
 		this.q();
 	}
 
