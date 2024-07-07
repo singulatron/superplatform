@@ -13,17 +13,26 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 } from '@angular/core';
-
 import { NgFor, NgIf, NgStyle } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { Prompt, PromptService } from '../services/prompt.service';
+import {
+	ListPromptsRequest,
+	Prompt,
+	PromptService,
+} from '../services/prompt.service';
 import { UserService } from '../services/user.service';
 import { first } from 'rxjs';
 import { PageComponent } from '../components/page/page.component';
 import { IconMenuComponent } from '../components/icon-menu/icon-menu.component';
 import { CenteredComponent } from '../components/centered/centered.component';
 import { PromptComponent } from './prompt/prompt.component';
+import { QueryParser } from '../services/query.service';
+import {
+	queryHasFieldCondition,
+	field,
+	equal,
+} from '../services/generic.service';
 
 @Component({
 	selector: 'app-prompts',
@@ -41,12 +50,12 @@ import { PromptComponent } from './prompt/prompt.component';
 	],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	templateUrl: './prompts.component.html',
-	styleUrl: './prompts.component.scss',
+	styleUrls: ['./prompts.component.scss'],
 })
 export class PromptsComponent {
 	prompts: Prompt[] = [];
-	afters: any[] = [];
 	done = false;
+	after: any;
 	request = {
 		statuses: [
 			'scheduled',
@@ -59,6 +68,7 @@ export class PromptsComponent {
 		desc: true,
 	};
 	count = 0;
+	searchTerm = '';
 
 	constructor(
 		private cd: ChangeDetectorRef,
@@ -71,41 +81,49 @@ export class PromptsComponent {
 	}
 
 	async loggedInInit() {
-		const rsp = await this.promptService.promptList({
-			...this.request,
-			count: true,
-		});
-		this.prompts = rsp.prompts;
-		this.count = rsp.count || 0;
-		this.afters.push(rsp.after);
-		this.cd.markForCheck();
+		this.search('');
 	}
 
-	async prev() {
-		if (this.afters.length >= 2) {
-			const rsp = await this.promptService.promptList({
-				...this.request,
-				after: this.afters.at(-1),
-				count: true,
-			});
-			this.prompts = rsp.prompts;
-			this.count = rsp.count || 0;
-			this.afters.pop();
-			this.cd.markForCheck();
+	async search(value: string) {
+		this.searchTerm = value;
+		this.done = false;
+		this.q();
+	}
+
+	async q(after?: any) {
+		const query = new QueryParser().parse(this.searchTerm);
+		if (!query.conditions) {
+			query.conditions = [];
 		}
-	}
+		query.count = true;
 
-	async next() {
-		const rsp = await this.promptService.promptList({
-			...this.request,
-			after: this.afters.at(-1),
-			count: true,
-		});
+		const request: ListPromptsRequest = {
+			query: query,
+		};
+		if (!request.query) {
+			request.query = {};
+		}
 
-		this.prompts = rsp.prompts;
+		if (after) {
+			request.query.after = [after];
+		}
+
+		if (!queryHasFieldCondition(query, 'status')) {
+			query.conditions.push(equal(field('status'), this.request.statuses));
+		}
+
+		const rsp = await this.promptService.promptList(request);
+
+		// eslint-disable-next-line
+		if (rsp.prompts) {
+			this.prompts = [...this.prompts, ...rsp.prompts];
+		} else {
+			this.prompts = [];
+		}
 		this.count = rsp.count || 0;
+
 		if (rsp.after) {
-			this.afters.push(rsp.after);
+			this.after = rsp.after;
 		} else {
 			this.done = true;
 		}
@@ -113,7 +131,11 @@ export class PromptsComponent {
 		this.cd.markForCheck();
 	}
 
-	pageCount(): number {
-		return Math.ceil(this.count / 20);
+	async loadMoreData() {
+		if (this.done) {
+			console.log('No more prompts to load');
+			return;
+		}
+		await this.q(this.after);
 	}
 }

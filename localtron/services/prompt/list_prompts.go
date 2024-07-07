@@ -11,43 +11,43 @@
 package promptservice
 
 import (
-	"time"
-
 	"github.com/singulatron/singulatron/localtron/datastore"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
 )
 
 type ListPromptOptions struct {
-	CreatedAfter time.Time
-	// or relationship
-	Statuses     []prompttypes.PromptStatus
-	LastRunAfter time.Time
-	Desc         bool
-	After        time.Time
-	Count        bool
+	Query *datastore.Query `json:"query"`
 }
 
 func (p *PromptService) ListPrompts(options *ListPromptOptions) ([]*prompttypes.Prompt, int64, error) {
 	q := p.promptsStore.Query(
-		datastore.Equal(datastore.Field("status"), options.Statuses),
-	).Limit(20).OrderBy("createdAt", options.Desc)
+		options.Query.Conditions[0], options.Query.Conditions[1:]...,
+	).Limit(int(options.Query.Limit))
 
-	if !options.After.IsZero() {
-		q = q.After(options.After)
+	if len(options.Query.OrderBys) > 0 {
+		for _, orderBy := range options.Query.OrderBys {
+			q = q.OrderBy(orderBy.Field, orderBy.Desc)
+		}
+	} else {
+		q = q.OrderBy("createdAt", true)
 	}
 
-	var count int64
-	if options.Count {
-		var err error
-		count, err = q.Count()
-		if err != nil {
-			return nil, 0, err
-		}
+	if options.Query.After != nil {
+		q = q.After(options.Query.After...)
 	}
 
 	res, err := q.Find()
 	if err != nil {
 		return nil, 0, err
+	}
+
+	var count int64
+	if options.Query.Count {
+		var err error
+		count, err = q.Count()
+		if err != nil {
+			return nil, 0, err
+		}
 	}
 
 	return res, count, nil

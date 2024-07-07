@@ -10,7 +10,11 @@
  */
 package datastore
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+	"time"
+)
 
 type Row interface {
 	GetId() string
@@ -77,19 +81,61 @@ type Condition struct {
 	Contains   *ContainsCondition   `json:"contains,omitempty"`
 }
 
+func (c Condition) FieldIs(fieldName string) bool {
+	if c.Equal != nil && c.Equal.Selector != nil && c.Equal.Selector.Field == fieldName {
+		return true
+	}
+	if c.StartsWith != nil && c.StartsWith.Selector != nil && c.StartsWith.Selector.Field == fieldName {
+		return true
+	}
+	if c.Contains != nil && c.Contains.Selector != nil && c.Contains.Selector.Field == fieldName {
+		return true
+	}
+
+	return false
+}
+
 type EqualCondition struct {
-	Selector *FieldSelector `json:"fieldSelector,omitempty"`
+	Selector *FieldSelector `json:"selector,omitempty"`
 	Value    any            `json:"value,omitempty"`
 }
 
 type StartsWithCondition struct {
-	Selector *FieldSelector `json:"fieldSelector,omitempty"`
+	Selector *FieldSelector `json:"selector,omitempty"`
 	Value    any            `json:"value,omitempty"`
 }
 
 type ContainsCondition struct {
-	Selector *FieldSelector `json:"fieldSelector,omitempty"`
+	Selector *FieldSelector `json:"selector,omitempty"`
 	Value    any            `json:"value,omitempty"`
+}
+
+// Query as a type is not used in the DataStore interface but mostly to accept
+// a DataStore query through a HTTP API
+type Query struct {
+	Conditions []Condition `json:"conditions,omitempty"`
+	After      []any       `json:"after,omitempty"`
+	Limit      int64       `json:"limit,omitempty"`
+	OrderBys   []OrderBy   `json:"orderBys,omitempty"`
+	// Count true means return the count of the dataset filtered by Conditions
+	// without after or limit
+	Count bool `json:"count,omitempty"`
+}
+
+func (q *Query) HasFieldCondition(fieldName string) bool {
+	for _, v := range q.Conditions {
+		if v.FieldIs(fieldName) {
+			return true
+		}
+	}
+
+	return false
+}
+
+// OrderBy is only used in HTTP requests
+type OrderBy struct {
+	Field string `json:"field,omitempty"`
+	Desc  bool   `json:"desc,omitempty"`
 }
 
 type AllCondition struct {
@@ -153,4 +199,42 @@ func AnyField() *FieldSelector {
 	return &FieldSelector{
 		Any: true,
 	}
+}
+
+var dateFormats = []string{
+	time.RFC3339,
+	time.RFC1123,
+	"2006-01-02 15:04:05",
+	"2006-01-02 15:04",
+	"2006-01-02",
+	"2006/01/02 15:04:05",
+	"2006/01/02 15:04",
+	"2006/01/02",
+	"02-Jan-2006 15:04:05",
+	"02-Jan-2006 15:04",
+	"02-Jan-2006",
+	"02/01/2006 15:04:05",
+	"02/01/2006 15:04",
+	"02/01/2006",
+	"01/02/2006 15:04:05",
+	"01/02/2006 15:04",
+	"01/02/2006",
+	"2006-1-2 15:04:05",
+	"2006-1-2 15:04",
+	"2006-1-2",
+	"1/2/2006 15:04:05",
+	"1/2/2006 15:04",
+	"1/2/2006",
+}
+
+func ParseAnyDate(input string) (time.Time, error) {
+	var t time.Time
+	var err error
+	for _, format := range dateFormats {
+		t, err = time.Parse(format, input)
+		if err == nil {
+			return t, nil
+		}
+	}
+	return time.Time{}, fmt.Errorf("could not parse date: %v", input)
 }

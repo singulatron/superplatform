@@ -14,6 +14,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/singulatron/singulatron/localtron/datastore"
 	promptservice "github.com/singulatron/singulatron/localtron/services/prompt"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
@@ -50,19 +51,20 @@ func List(
 	defer r.Body.Close()
 
 	options := &promptservice.ListPromptOptions{
-		CreatedAfter: req.CreatedAfter,
-		Statuses:     req.Statuses,
-		LastRunAfter: req.LastRunAfter,
-		After:        req.After,
-		Desc:         req.Desc,
-		Count:        req.Count,
+		Query: req.Query,
+	}
+	if options.Query == nil {
+		options.Query = &datastore.Query{}
 	}
 
-	if len(options.Statuses) == 0 {
-		options.Statuses = []prompttypes.PromptStatus{
+	if !options.Query.HasFieldCondition("status") {
+		options.Query.Conditions = append(options.Query.Conditions, datastore.Equal(datastore.Field("status"), []prompttypes.PromptStatus{
 			prompttypes.PromptStatusRunning,
 			prompttypes.PromptStatusScheduled,
-		}
+		}))
+	}
+	if options.Query.Limit == 0 {
+		options.Query.Limit = 20
 	}
 
 	prompts, count, err := promptService.ListPrompts(options)

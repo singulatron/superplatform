@@ -13,6 +13,7 @@ package localstore
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"reflect"
 	"sort"
@@ -222,6 +223,16 @@ func (q *QueryBuilder[T]) Limit(limit int) datastore.QueryBuilder[T] {
 
 func (q *QueryBuilder[T]) After(value ...any) datastore.QueryBuilder[T] {
 	q.after = value
+	for i := range q.after {
+		str, ok := q.after[i].(string)
+		if !ok {
+			continue
+		}
+		t, err := datastore.ParseAnyDate(str)
+		if err == nil {
+			q.after[i] = t
+		}
+	}
 	return q
 }
 
@@ -386,22 +397,62 @@ func (q *QueryBuilder[T]) Delete() error {
 
 func (q *QueryBuilder[T]) match(obj T) bool {
 	for _, cond := range q.conditions {
-		if cond.Equal != nil {
+		if cond.Equal != nil || cond.Contains != nil || cond.StartsWith != nil {
+			var matchFunc func(subject, test any) bool
+			var selector *datastore.FieldSelector
+			var value any
+
+			switch {
+			case cond.Equal != nil:
+				matchFunc = func(subject, test any) bool {
+					subject = toBaseType(subject)
+					test = toBaseType(test)
+
+					return reflect.DeepEqual(test, subject)
+				}
+				selector = cond.Equal.Selector
+				value = cond.Equal.Value
+			case cond.Contains != nil:
+				matchFunc = func(subject, test any) bool {
+					testStr, testOk := test.(string)
+					subjectStr, subjectOk := subject.(string)
+					if !testOk || !subjectOk {
+						return false
+					}
+
+					return strings.Contains(subjectStr, testStr)
+				}
+
+				selector = cond.Contains.Selector
+				value = cond.Contains.Value
+			case cond.StartsWith != nil:
+				matchFunc = func(subject, test any) bool {
+					testStr, testOk := test.(string)
+					subjectStr, subjectOk := subject.(string)
+					if !testOk || subjectOk {
+						return false
+					}
+					return strings.HasPrefix(subjectStr, testStr)
+				}
+				selector = cond.StartsWith.Selector
+				value = cond.StartsWith.Value
+			}
+
 			fieldNames := []string{}
-			if cond.Equal.Selector.Field != "" {
-				fieldNames = append(fieldNames, cond.Equal.Selector.Field)
-			} else if cond.Equal.Selector.OneOf != nil {
-				fieldNames = cond.Equal.Selector.OneOf
+			if selector.Field != "" {
+				fieldNames = append(fieldNames, selector.Field)
+			} else if selector.OneOf != nil {
+				fieldNames = selector.OneOf
 			}
 
 			matched := false
 			for _, fieldName := range fieldNames {
 				fieldValue := getField(obj, fieldName)
 
-				condValue := reflect.ValueOf(cond.Equal.Value)
+				condValue := reflect.ValueOf(value)
 				if fieldV := reflect.ValueOf(fieldValue); fieldV.Kind() == reflect.Slice {
 					for i := 0; i < fieldV.Len(); i++ {
-						if reflect.DeepEqual(fieldV.Index(i).Interface(), condValue.Interface()) {
+						if matchFunc(fieldV.Index(i).Interface(), condValue.Interface()) {
 							matched = true
 							continue
 						}
@@ -409,13 +460,13 @@ func (q *QueryBuilder[T]) match(obj T) bool {
 
 				} else if condValue.Kind() == reflect.Slice {
 					for i := 0; i < condValue.Len(); i++ {
-						if reflect.DeepEqual(fieldValue, condValue.Index(i).Interface()) {
+						if matchFunc(fieldValue, condValue.Index(i).Interface()) {
 							matched = true
 							continue
 						}
 					}
 				} else {
-					if reflect.DeepEqual(fieldValue, cond.Equal.Value) {
+					if matchFunc(fieldValue, value) {
 						matched = true
 					}
 				}
@@ -425,6 +476,8 @@ func (q *QueryBuilder[T]) match(obj T) bool {
 			}
 		} else if cond.All != nil {
 			continue
+		} else {
+			panic(fmt.Sprintf("unkown condition %v", cond))
 		}
 	}
 	return true
@@ -506,4 +559,30 @@ func compare(vi, vj interface{}, desc bool) bool {
 		}
 	}
 	return false
+}
+
+func toBaseType(input interface{}) interface{} {
+	val := reflect.ValueOf(input)
+	if val.Kind() == reflect.Ptr {
+		val = val.Elem()
+	}
+
+	// Recursively decompose until we reach the base type
+	for val.Kind() == reflect.Interface || val.Kind() == reflect.Ptr {
+		val = val.Elem()
+	}
+
+	if val.Kind() == reflect.String {
+		return val.String()
+	} else if val.Kind() == reflect.Int || val.Kind() == reflect.Int8 || val.Kind() == reflect.Int16 || val.Kind() == reflect.Int32 || val.Kind() == reflect.Int64 {
+		return val.Int()
+	} else if val.Kind() == reflect.Uint || val.Kind() == reflect.Uint8 || val.Kind() == reflect.Uint16 || val.Kind() == reflect.Uint32 || val.Kind() == reflect.Uint64 {
+		return val.Uint()
+	} else if val.Kind() == reflect.Float32 || val.Kind() == reflect.Float64 {
+		return val.Float()
+	} else if val.Kind() == reflect.Bool {
+		return val.Bool()
+	}
+
+	return val.Interface()
 }
