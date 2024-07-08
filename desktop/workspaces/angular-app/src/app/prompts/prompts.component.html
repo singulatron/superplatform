@@ -28,13 +28,14 @@
 				debounce="200"
 				(ionInput)="search($event.target.value!)"
 				placeholder="Search prompts"
+				[(ngModel)]="searchTerm"
 			></ion-searchbar>
 			<div class="prompt-wrapper" *ngFor="let prompt of prompts">
 				<app-prompt [prompt]="prompt"></app-prompt>
 			</div>
 
 			<ion-button
-			*ngIf="!done"
+				*ngIf="!done"
 				(click)="loadMoreData()"
 				style="color: white; margin-left: 1rem; margin-bottom: 1rem"
 			>

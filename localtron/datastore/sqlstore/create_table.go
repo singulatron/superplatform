@@ -64,6 +64,13 @@ func (s *SQLStore[T]) sqlType(t reflect.Type) string {
 		return "REAL"
 	case reflect.Bool:
 		return "BOOLEAN"
+	case reflect.Map:
+		switch s.driverName {
+		case DriverPostGRES:
+			return "JSONB"
+		case DriverMySQL:
+			return "JSON"
+		}
 	case reflect.Struct:
 		if t == reflect.TypeOf(time.Time{}) {
 			return "TIMESTAMP"

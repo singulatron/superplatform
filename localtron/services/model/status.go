@@ -53,6 +53,7 @@ func (ms *ModelService) Status(modelId string) (*modeltypes.ModelStatus, error) 
 	for _, assetUrl := range model.Assets {
 
 		downl, exists := ms.downloadService.GetDownload(assetUrl)
+
 		if !exists || downl.Status != downloadtypes.DownloadStatusCompleted {
 			return &modeltypes.ModelStatus{
 				AssetsReady: false,

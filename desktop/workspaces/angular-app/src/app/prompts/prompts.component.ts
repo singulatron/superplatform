@@ -33,6 +33,7 @@ import {
 	field,
 	equal,
 } from '../services/generic.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
 	selector: 'app-prompts',
@@ -73,7 +74,8 @@ export class PromptsComponent {
 	constructor(
 		private cd: ChangeDetectorRef,
 		private userService: UserService,
-		private promptService: PromptService
+		private promptService: PromptService,
+		private activatedRoute: ActivatedRoute
 	) {
 		this.userService.user$.pipe(first()).subscribe(() => {
 			this.loggedInInit();
@@ -81,7 +83,14 @@ export class PromptsComponent {
 	}
 
 	async loggedInInit() {
-		this.search('');
+		this.activatedRoute.queryParams.subscribe((parameters) => {
+			const search = Object.entries(parameters)
+				.map(([key, value]) => `${key}:${value}`)
+				.join(' ');
+
+			this.search(search);
+			this.cd.markForCheck();
+		});
 	}
 
 	async search(value: string) {
