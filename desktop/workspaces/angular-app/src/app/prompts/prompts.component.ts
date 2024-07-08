@@ -99,7 +99,6 @@ export class PromptsComponent {
 				this.queryParser.convertQueryParamsToSearchTerm(parameters);
 			this.searchTerm = search;
 			this.fetchPrompts();
-			this.prompts = [];
 			this.cd.markForCheck();
 		});
 	}
@@ -107,19 +106,30 @@ export class PromptsComponent {
 	public redirect() {
 		const query = this.queryParser.parse(this.searchTerm);
 		const kv = conditionsToKeyValue(
-			query.conditions!.filter((v) => {
-				return !conditionFieldIs(v, 'modelId');
-			})
+			query.conditions
+				? query.conditions.filter((v) => {
+						return !conditionFieldIs(v, 'modelId');
+					})
+				: []
 		);
 
+		console.log('NAVI', kv);
 		if (Object.keys(kv)?.length) {
 			this.router.navigate([], {
 				queryParams: kv,
 			});
 			return;
 		}
+
+		if (this.searchTerm) {
+			this.router.navigate([], {
+				queryParams: { search: this.searchTerm },
+			});
+			return;
+		}
+
 		this.router.navigate([], {
-			queryParams: { search: this.searchTerm },
+			queryParams: {},
 		});
 	}
 
@@ -142,15 +152,20 @@ export class PromptsComponent {
 
 		const response = await this.promptService.promptList(request);
 
-		if (response.prompts) {
+		// eslint-disable-next-line
+		if (response.prompts && this.after) {
 			this.prompts = [...this.prompts, ...response.prompts];
+		} else if (response.prompts) {
+			this.prompts = response.prompts
 		} else {
 			this.prompts = [];
 		}
 
 		this.count = response.count || 0;
+
+		// eslint-disable-next-line
 		if (response.after && response.after != `0001-01-01T00:00:00Z`) {
-			this.after = response.after || null;
+			this.after = response.after;
 		} else {
 			this.after = undefined;
 		}

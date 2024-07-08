@@ -177,13 +177,13 @@ export function conditionsToKeyValue(conditions: Condition[]): {
 	if (!conditions) {
 		return {};
 	}
-	const obj: { [key: string]: any } = {};
+	const object: { [key: string]: any } = {};
 
 	for (const condition of conditions) {
-		obj[conditionField(condition)] = conditionValue(condition);
+		object[conditionField(condition)] = conditionValue(condition);
 	}
 
-	return obj;
+	return object;
 }
 
 export function conditionValue(condition: Condition): any {
@@ -253,9 +253,9 @@ export function startsWith(selector: FieldSelector, value: any): Condition {
 }
 
 /* contains creates a Condition for the given fields specifed by the selector
-* eg. 'field1:~something' can be acquired by contains(field("field1"), "something")
-* 'field1,field2:~something' can be acquired by contains(fields("field1", "field2"), "something")
-*/
+ * eg. 'field1:~something' can be acquired by contains(field("field1"), "something")
+ * 'field1,field2:~something' can be acquired by contains(fields("field1", "field2"), "something")
+ */
 export function contains(selector: FieldSelector, value: any): Condition {
 	return {
 		contains: {
