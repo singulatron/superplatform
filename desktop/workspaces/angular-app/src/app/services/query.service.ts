@@ -5,7 +5,6 @@ import {
 	contains,
 	startsWith,
 	field,
-	fields,
 	Query,
 } from './generic.service';
 
@@ -17,7 +16,7 @@ export class QueryService {
 }
 
 export class QueryParser {
-	defaultFields = ['name'];
+	defaultConditionFunc!: (value: any) => Condition;
 
 	parse(queryString: string): Query {
 		const query: Query = {};
@@ -58,7 +57,10 @@ export class QueryParser {
 		}
 
 		if (!queryString.includes(':')) {
-			this.addDefaultConditions(query, this.defaultFields, queryString);
+			if (this.defaultConditionFunc) {
+				query.conditions = [this.defaultConditionFunc(queryString)]
+			}
+
 			return query;
 		}
 
@@ -77,24 +79,25 @@ export class QueryParser {
 			for (const field of fields) {
 				if (!query.conditions) query.conditions = [];
 				query.conditions.push(this.createCondition(field, value));
-			};
+			}
 		}
 
 		return query;
 	}
 
-	private addDefaultConditions(
-		query: Query,
-		fieldNames: string[],
-		value: string
-	) {
-		if (!query.conditions) query.conditions = [];
-		if (fieldNames?.length > 1) {
-			query.conditions?.push(contains(fields(fieldNames), value));
-		} else {
-			query.conditions?.push(contains(field(fieldNames[0]), value));
+	public convertQueryParamsToSearchTerm(parameters: any): string {
+		if (Object.keys(parameters)?.length == 1 && parameters['search']) {
+			return parameters['search'];
 		}
+
+		return Object.entries(parameters)
+			.filter((v) => {
+				return v[0] !== 'search';
+			})
+			.map(([key, value]) => `${key}:${value}`)
+			.join(' ');
 	}
+
 
 	private createCondition(fieldName: string, value: string): Condition {
 		if (value.startsWith('~')) {

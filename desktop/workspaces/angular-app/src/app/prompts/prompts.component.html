@@ -25,8 +25,7 @@
 				</h1>
 			</div>
 			<ion-searchbar
-				debounce="200"
-				(ionInput)="search($event.target.value!)"
+				(ionInput)="redirect()"
 				placeholder="Search prompts"
 				[(ngModel)]="searchTerm"
 			></ion-searchbar>
@@ -35,7 +34,7 @@
 			</div>
 
 			<ion-button
-				*ngIf="!done"
+				*ngIf="after"
 				(click)="loadMoreData()"
 				style="color: white; margin-left: 1rem; margin-bottom: 1rem"
 			>
