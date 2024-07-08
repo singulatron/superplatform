@@ -505,7 +505,8 @@ func (q *SQLQueryBuilder[T]) Find() ([]T, error) {
 			case fieldType == reflect.TypeOf(time.Time{}):
 				fields[i] = new(sql.NullTime)
 			case fieldType.Kind() == reflect.Map:
-				fields[i] = new(sql.NullString)
+				var str sql.NullString
+				fields[i] = &str
 			default:
 				fields[i] = field.Addr().Interface()
 			}
@@ -552,7 +553,7 @@ func (q *SQLQueryBuilder[T]) Find() ([]T, error) {
 						field.Set(reflect.Zero(fieldType))
 					}
 				}
-			case fieldType.Kind() == reflect.Struct && fieldType != reflect.TypeOf(time.Time{}):
+			case (fieldType.Kind() == reflect.Struct && fieldType != reflect.TypeOf(time.Time{})) || fieldType.Kind() == reflect.Map:
 				str, ok := fields[i].(*sql.NullString)
 				if ok && str.Valid {
 					newField := reflect.New(fieldType).Interface()
@@ -562,6 +563,7 @@ func (q *SQLQueryBuilder[T]) Find() ([]T, error) {
 					}
 					field.Set(reflect.ValueOf(newField).Elem())
 				} else {
+
 					// Handle JSONB binary data
 					bin, ok := fields[i].(*[]uint8)
 					if ok && bin != nil {
@@ -723,6 +725,9 @@ func (q *SQLQueryBuilder[T]) buildUpdateQuery(obj T) (string, []any, error) {
 	for i := 0; i < val.NumField(); i++ {
 		field := typ.Field(i)
 		if !field.IsExported() {
+			continue
+		}
+		if field.Name == q.store.idFieldName {
 			continue
 		}
 		fieldName := q.store.fieldName(field.Name)

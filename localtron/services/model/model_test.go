@@ -10,13 +10,19 @@ import (
 	configservice "github.com/singulatron/singulatron/localtron/services/config"
 )
 
-func TestRegistration(t *testing.T) {
+func TestModel(t *testing.T) {
 	univ, err := di.MakeUniverse(di.UniverseOptions{
 		Test: true,
 	})
 	require.NoError(t, err)
 	ms := univ.ModelService
 	cs := univ.ConfigService
+
+	t.Run("get models", func(t *testing.T) {
+		models, err := ms.GetModels()
+		require.NoError(t, err)
+		require.Equal(t, 1, len(models[0].Assets))
+	})
 
 	t.Run("model status", func(t *testing.T) {
 		stat, err := ms.Status("huggingface/TheBloke/mistral-7b-instruct-v0.2.Q2_K.gguf")

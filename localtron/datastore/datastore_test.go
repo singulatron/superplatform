@@ -168,9 +168,9 @@ func Contains(t *testing.T, store datastore.DataStore[TestObject]) {
 
 func Map(t *testing.T, store datastore.DataStore[TestObject]) {
 	obj := TestObject{Name: "A", Amap: map[string]interface{}{
-		"name:": "A",
+		"name": "A",
 	}, AmapPointer: &map[string]interface{}{
-		"name:": "A",
+		"namePointer": "AP",
 	}}
 	err := store.Create(obj)
 	require.NoError(t, err)
@@ -178,20 +178,23 @@ func Map(t *testing.T, store datastore.DataStore[TestObject]) {
 	res, err := store.Query(datastore.All()).Find()
 	require.NoError(t, err)
 	require.Equal(t, 1, len(res))
+	require.Equal(t, "A", res[0].Amap["name"])
 }
 
 func MapPointer(t *testing.T, store datastore.DataStore[*TestObject]) {
 	obj := &TestObject{Name: "A", Amap: map[string]interface{}{
-		"name:": "A",
+		"name": "A",
 	}, AmapPointer: &map[string]interface{}{
-		"name:": "A",
+		"namePointer": "AP",
 	}}
 	err := store.Create(obj)
 	require.NoError(t, err)
 
 	res, err := store.Query(datastore.All()).Find()
+
 	require.NoError(t, err)
 	require.Equal(t, 1, len(res))
+	require.Equal(t, "A", res[0].Amap["name"])
 }
 
 func Pagination(t *testing.T, store datastore.DataStore[TestObject]) {
