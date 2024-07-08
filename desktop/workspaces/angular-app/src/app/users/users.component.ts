@@ -8,7 +8,7 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {
 	FormBuilder,
 	FormGroup,
@@ -16,7 +16,7 @@ import {
 	FormsModule,
 	ReactiveFormsModule,
 } from '@angular/forms';
-import { User, UserService } from '../services/user.service';
+import { User, UserService, GetUsersRequest } from '../services/user.service';
 import { first } from 'rxjs';
 import { ToastController, IonicModule } from '@ionic/angular';
 import { TranslatePipe } from '../translate.pipe';
@@ -26,7 +26,15 @@ import { CenteredComponent } from '../components/centered/centered.component';
 import { ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { PageComponent } from '../components/page/page.component';
 import { IconMenuComponent } from '../components/icon-menu/icon-menu.component';
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { QueryParser } from '../services/query.service';
+import {
+	fields,
+	conditionsToKeyValue,
+	contains,
+	Condition,
+	conditionFieldIs,
+} from '../services/generic.service';
 
 interface UserVisible extends User {
 	visible?: boolean;
@@ -51,11 +59,14 @@ interface UserVisible extends User {
 	],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UsersComponent implements OnInit {
+export class UsersComponent {
 	users: UserVisible[] = [];
-	filteredUsers: UserVisible[] = [];
+	after: any;
 	private userForms: Map<string, FormGroup> = new Map();
-	searchText = '';
+
+	count = 0;
+	searchTerm = '';
+	queryParser: QueryParser;
 
 	constructor(
 		private fb: FormBuilder,
@@ -63,35 +74,100 @@ export class UsersComponent implements OnInit {
 		private toast: ToastController,
 		private cd: ChangeDetectorRef,
 		private router: Router,
-		private route: ActivatedRoute
+		private activatedRoute: ActivatedRoute
 	) {
 		this.userForms = new Map();
+
+		this.queryParser = new QueryParser();
+		this.queryParser.defaultConditionFunc = (value: any): Condition => {
+			return contains(fields(['name', 'email']), value);
+		};
+
 		this.userService.user$.pipe(first()).subscribe(() => {
-			this.loggedInInit();
+			this.initializeOnLogin();
 		});
 	}
 
-	async ngOnInit() {
-		this.route.queryParams.subscribe((parameters: Params) => {
-			if (parameters['search']) {
-				this.searchText = parameters['search'];
-				this.filterUsers(this.searchText);
-			} else {
-				this.filteredUsers = [...this.users];
+	private initializeOnLogin() {
+		this.activatedRoute.queryParams.subscribe((parameters) => {
+			const search =
+				this.queryParser.convertQueryParamsToSearchTerm(parameters);
+			this.searchTerm = search;
+			this.fetchUsers();
+			this.cd.markForCheck();
+
+			this.userForms?.clear();
+
+			for (const user of this.users) {
+				this.userForms.set(user.id!, this.createUserForm(user));
 			}
 		});
-		await this.loggedInInit();
 	}
 
-	async loggedInInit() {
-		const rsp = await this.userService.getUsers();
-		this.users = rsp.users;
-		this.filteredUsers = [...this.users];
-		this.userForms?.clear();
+	public redirect() {
+		const query = this.queryParser.parse(this.searchTerm);
+		const kv = conditionsToKeyValue(
+			query.conditions
+				? query.conditions.filter((v) => {
+						return (
+							!conditionFieldIs(v, 'name') && !conditionFieldIs(v, 'email')
+						);
+					})
+				: []
+		);
 
-		for (const user of this.users) {
-			this.userForms.set(user.id!, this.createUserForm(user));
+		if (Object.keys(kv)?.length) {
+			this.router.navigate([], {
+				queryParams: kv,
+			});
+			return;
 		}
+
+		if (this.searchTerm) {
+			this.router.navigate([], {
+				queryParams: { search: this.searchTerm },
+			});
+			return;
+		}
+
+		this.router.navigate([], {
+			queryParams: {},
+		});
+	}
+
+	public async fetchUsers() {
+		const query = this.queryParser.parse(this.searchTerm);
+		query.count = true;
+		query.conditions = query.conditions || [];
+
+		const request: GetUsersRequest = {
+			query: query,
+		};
+
+		if (this.after) {
+			request.query!.after = [this.after];
+		}
+
+		const response = await this.userService.getUsers(request);
+
+		// eslint-disable-next-line
+		if (response.users && this.after) {
+			this.users = [...this.users, ...response.users];
+		} else if (response.users) {
+			this.users = response.users;
+		} else {
+			this.users = [];
+		}
+
+		this.count = response.count || 0;
+
+		// eslint-disable-next-line
+		if (response.after && response.after != `0001-01-01T00:00:00Z`) {
+			this.after = response.after;
+		} else {
+			this.after = undefined;
+		}
+
 		this.cd.markForCheck();
 	}
 
@@ -148,7 +224,7 @@ export class UsersComponent implements OnInit {
 			});
 			toast.present();
 
-			this.loggedInInit();
+			this.initializeOnLogin();
 		} catch (error) {
 			let errorMessage = 'An unexpected error occurred';
 			try {
@@ -164,27 +240,6 @@ export class UsersComponent implements OnInit {
 			});
 			toast.present();
 		}
-	}
-
-	filterUsers(searchText: string | null | undefined) {
-		if (!searchText) {
-			this.filteredUsers = this.users;
-			this.cd.markForCheck();
-			return;
-		}
-		this.searchText = searchText.trim().toLowerCase();
-		this.router.navigate([], {
-			relativeTo: this.route,
-			queryParams: { search: this.searchText },
-			queryParamsHandling: 'merge',
-		});
-		this.filteredUsers = this.users.filter(
-			(user) =>
-				user.name?.toLowerCase().includes(this.searchText) ||
-				user.email?.toLowerCase().includes(this.searchText)
-		);
-
-		this.cd.markForCheck();
 	}
 
 	async deleteUser($event: any, userId: string) {
@@ -203,7 +258,7 @@ export class UsersComponent implements OnInit {
 			});
 			toast.present();
 
-			this.loggedInInit();
+			this.initializeOnLogin();
 		} catch (error) {
 			let errorMessage = 'An unexpected error occurred';
 			try {
@@ -223,5 +278,13 @@ export class UsersComponent implements OnInit {
 
 	trackById(_: number, message: { id?: string }): string {
 		return message.id || '';
+	}
+
+	async loadMoreData() {
+		if (!this.after) {
+			console.log('No more users to load');
+			return;
+		}
+		await this.fetchUsers();
 	}
 }

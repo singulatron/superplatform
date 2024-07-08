@@ -59,7 +59,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class PromptsComponent {
 	prompts: Prompt[] = [];
-	done = false;
 	after: any;
 	request = {
 		statuses: [
@@ -113,7 +112,6 @@ export class PromptsComponent {
 				: []
 		);
 
-		console.log('NAVI', kv);
 		if (Object.keys(kv)?.length) {
 			this.router.navigate([], {
 				queryParams: kv,
@@ -156,7 +154,7 @@ export class PromptsComponent {
 		if (response.prompts && this.after) {
 			this.prompts = [...this.prompts, ...response.prompts];
 		} else if (response.prompts) {
-			this.prompts = response.prompts
+			this.prompts = response.prompts;
 		} else {
 			this.prompts = [];
 		}

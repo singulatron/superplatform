@@ -10,7 +10,11 @@
  */
 package usertypes
 
-import "time"
+import (
+	"time"
+
+	"github.com/singulatron/singulatron/localtron/datastore"
+)
 
 type User struct {
 	Id        string    `json:"id,omitempty"`
@@ -82,10 +86,14 @@ type ChangePasswordAdminRequest struct {
 
 type ChangePasswordAdminResponse struct{}
 
-type GetUsersRequest struct{}
+type GetUsersRequest struct {
+	Query *datastore.Query `json:"query"`
+}
 
 type GetUsersResponse struct {
-	Users []*User `json:"users,omitempty"`
+	Users []*User   `json:"users,omitempty"`
+	After time.Time `json:"after,omitempty"`
+	Count int64     `json:"count"`
 }
 
 type CreateUserRequest struct {

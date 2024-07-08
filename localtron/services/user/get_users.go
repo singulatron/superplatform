@@ -15,8 +15,40 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func (s *UserService) GetUsers() ([]*usertypes.User, error) {
-	return s.usersStore.Query(
-		datastore.All(),
-	).OrderBy("createdAt", true).Find()
+type GetUsersOptions struct {
+	Query *datastore.Query `json:"query"`
+}
+
+func (s *UserService) GetUsers(options *GetUsersOptions) ([]*usertypes.User, int64, error) {
+	q := s.usersStore.Query(
+		options.Query.Conditions[0], options.Query.Conditions[1:]...,
+	).Limit(int(options.Query.Limit))
+
+	if len(options.Query.OrderBys) > 0 {
+		for _, orderBy := range options.Query.OrderBys {
+			q = q.OrderBy(orderBy.Field, orderBy.Desc)
+		}
+	} else {
+		q = q.OrderBy("createdAt", true)
+	}
+
+	if options.Query.After != nil {
+		q = q.After(options.Query.After...)
+	}
+
+	res, err := q.Find()
+	if err != nil {
+		return nil, 0, err
+	}
+
+	var count int64
+	if options.Query.Count {
+		var err error
+		count, err = q.Count()
+		if err != nil {
+			return nil, 0, err
+		}
+	}
+
+	return res, count, nil
 }

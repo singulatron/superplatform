@@ -13,6 +13,7 @@ import { LocaltronService } from './localtron.service';
 import { CookieService } from 'ngx-cookie-service';
 import { ReplaySubject, firstValueFrom, first } from 'rxjs';
 import { Router } from '@angular/router';
+import { Query } from './generic.service';
 
 @Injectable({
 	providedIn: 'root',
@@ -109,8 +110,8 @@ export class UserService {
 		});
 	}
 
-	getUsers(): Promise<GetUsersResponse> {
-		return this.localtron.call('/user/get-users', {});
+	getUsers(request: GetUsersRequest): Promise<GetUsersResponse> {
+		return this.localtron.call('/user/get-users', request);
 	}
 
 	/** Save profile on behalf of a user */
@@ -335,10 +336,14 @@ export interface ReadUserByTokenResponse {
 }
 
 // eslint-disable-next-line
-export interface GetUsersRequest {}
+export interface GetUsersRequest {
+	query: Query;
+}
 
 export interface GetUsersResponse {
 	users: User[];
+	after: string;
+	count?: number;
 }
 
 export interface CreateUserRequest {
