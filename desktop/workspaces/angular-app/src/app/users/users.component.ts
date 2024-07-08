@@ -90,6 +90,7 @@ export class UsersComponent {
 
 	private async initializeOnLogin() {
 		this.activatedRoute.queryParams.subscribe(async (parameters) => {
+			console.log("hello")
 			this.searchTerm =
 				this.queryParser.convertQueryParamsToSearchTerm(parameters);
 

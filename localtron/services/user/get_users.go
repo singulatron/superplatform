@@ -20,8 +20,16 @@ type GetUsersOptions struct {
 }
 
 func (s *UserService) GetUsers(options *GetUsersOptions) ([]*usertypes.User, int64, error) {
+	if len(options.Query.Conditions) == 0 {
+		options.Query.Conditions = append(options.Query.Conditions, datastore.All())
+	}
+
+	additional := []datastore.Condition{}
+	if len(options.Query.Conditions) > 1 {
+		additional = options.Query.Conditions[1:]
+	}
 	q := s.usersStore.Query(
-		options.Query.Conditions[0], options.Query.Conditions[1:]...,
+		options.Query.Conditions[0], additional...,
 	).Limit(int(options.Query.Limit))
 
 	if len(options.Query.OrderBys) > 0 {
