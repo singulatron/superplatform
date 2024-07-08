@@ -157,6 +157,49 @@ export function conditionFieldIs(
 	return false;
 }
 
+export function conditionField(condition: Condition): string {
+	if (condition.equal) {
+		return condition.equal.selector.field!;
+	}
+	if (condition.contains) {
+		return condition.contains.selector.field!;
+	}
+	if (condition.startsWith) {
+		return condition.startsWith.selector.field!;
+	}
+
+	return '';
+}
+
+export function conditionsToKeyValue(conditions: Condition[]): {
+	[key: string]: any;
+} {
+	if (!conditions) {
+		return {};
+	}
+	const object: { [key: string]: any } = {};
+
+	for (const condition of conditions) {
+		object[conditionField(condition)] = conditionValue(condition);
+	}
+
+	return object;
+}
+
+export function conditionValue(condition: Condition): any {
+	if (condition.equal) {
+		return condition.equal.value;
+	}
+	if (condition.contains) {
+		return condition.contains.value;
+	}
+	if (condition.startsWith) {
+		return condition.startsWith.value;
+	}
+
+	return '';
+}
+
 export function queryHasFieldCondition(
 	query: Query,
 	fieldName: string
@@ -209,6 +252,10 @@ export function startsWith(selector: FieldSelector, value: any): Condition {
 	};
 }
 
+/* contains creates a Condition for the given fields specifed by the selector
+ * eg. 'field1:~something' can be acquired by contains(field("field1"), "something")
+ * 'field1,field2:~something' can be acquired by contains(fields("field1", "field2"), "something")
+ */
 export function contains(selector: FieldSelector, value: any): Condition {
 	return {
 		contains: {

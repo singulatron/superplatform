@@ -32,8 +32,12 @@ import {
 	queryHasFieldCondition,
 	field,
 	equal,
+	conditionsToKeyValue,
+	contains,
+	Condition,
+	conditionFieldIs,
 } from '../services/generic.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
 	selector: 'app-prompts',
@@ -70,81 +74,110 @@ export class PromptsComponent {
 	};
 	count = 0;
 	searchTerm = '';
+	queryParser: QueryParser;
 
 	constructor(
 		private cd: ChangeDetectorRef,
 		private userService: UserService,
 		private promptService: PromptService,
-		private activatedRoute: ActivatedRoute
+		private activatedRoute: ActivatedRoute,
+		private router: Router
 	) {
+		this.queryParser = new QueryParser();
+		this.queryParser.defaultConditionFunc = (value: any): Condition => {
+			return contains(field('modelId'), value);
+		};
+
 		this.userService.user$.pipe(first()).subscribe(() => {
-			this.loggedInInit();
+			this.initializeOnLogin();
 		});
 	}
 
-	async loggedInInit() {
+	private initializeOnLogin() {
 		this.activatedRoute.queryParams.subscribe((parameters) => {
-			const search = Object.entries(parameters)
-				.map(([key, value]) => `${key}:${value}`)
-				.join(' ');
-
-			this.search(search);
+			const search =
+				this.queryParser.convertQueryParamsToSearchTerm(parameters);
+			this.searchTerm = search;
+			this.fetchPrompts();
 			this.cd.markForCheck();
 		});
 	}
 
-	async search(value: string) {
-		this.searchTerm = value;
-		this.done = false;
-		this.q();
+	public redirect() {
+		const query = this.queryParser.parse(this.searchTerm);
+		const kv = conditionsToKeyValue(
+			query.conditions
+				? query.conditions.filter((v) => {
+						return !conditionFieldIs(v, 'modelId');
+					})
+				: []
+		);
+
+		console.log('NAVI', kv);
+		if (Object.keys(kv)?.length) {
+			this.router.navigate([], {
+				queryParams: kv,
+			});
+			return;
+		}
+
+		if (this.searchTerm) {
+			this.router.navigate([], {
+				queryParams: { search: this.searchTerm },
+			});
+			return;
+		}
+
+		this.router.navigate([], {
+			queryParams: {},
+		});
 	}
 
-	async q(after?: any) {
-		const query = new QueryParser().parse(this.searchTerm);
-		if (!query.conditions) {
-			query.conditions = [];
-		}
+	public async fetchPrompts() {
+		const query = this.queryParser.parse(this.searchTerm);
 		query.count = true;
-
-		const request: ListPromptsRequest = {
-			query: query,
-		};
-		if (!request.query) {
-			request.query = {};
-		}
-
-		if (after) {
-			request.query.after = [after];
-		}
+		query.conditions = query.conditions || [];
 
 		if (!queryHasFieldCondition(query, 'status')) {
 			query.conditions.push(equal(field('status'), this.request.statuses));
 		}
 
-		const rsp = await this.promptService.promptList(request);
+		const request: ListPromptsRequest = {
+			query: query,
+		};
+
+		if (this.after) {
+			request.query!.after = [this.after];
+		}
+
+		const response = await this.promptService.promptList(request);
 
 		// eslint-disable-next-line
-		if (rsp.prompts) {
-			this.prompts = [...this.prompts, ...rsp.prompts];
+		if (response.prompts && this.after) {
+			this.prompts = [...this.prompts, ...response.prompts];
+		} else if (response.prompts) {
+			this.prompts = response.prompts
 		} else {
 			this.prompts = [];
 		}
-		this.count = rsp.count || 0;
 
-		if (rsp.after) {
-			this.after = rsp.after;
+		this.count = response.count || 0;
+
+		// eslint-disable-next-line
+		if (response.after && response.after != `0001-01-01T00:00:00Z`) {
+			this.after = response.after;
 		} else {
-			this.done = true;
+			this.after = undefined;
 		}
 
 		this.cd.markForCheck();
 	}
 
 	async loadMoreData() {
-		if (this.done) {
+		if (!this.after) {
 			console.log('No more prompts to load');
 			return;
 		}
-		await this.q(this.after);
+		await this.fetchPrompts();
 	}
 }
