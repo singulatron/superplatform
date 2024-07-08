@@ -17,7 +17,9 @@
 	<ng-template #mainContent>
 		<app-centered [headerHeight]="'56px'" [vertical]="true">
 			<div style="padding: 0rem 2rem">
-				<h2 style="margin-bottom: 2rem">{{ 'Users' | translate }}</h2>
+				<h2 style="margin-bottom: 2rem">{{ 'Users' | translate }} 					<span *ngIf="count > 0" style="font-size: 1rem; color: #444"
+					>Total: {{ count }}.
+				</span></h2>
 				<ion-searchbar
 					(ionInput)="redirect()"
 					placeholder="Search users by name or email"
@@ -25,11 +27,7 @@
 				></ion-searchbar>
 				<ion-list>
 					<ng-container
-						*ngFor="
-							let user of users;
-							let i = index;
-							trackBy: trackById
-						"
+						*ngFor="let user of users; let i = index; trackBy: trackById"
 					>
 						<form [formGroup]="getUserForm(user.id!)">
 							<ion-item
@@ -40,9 +38,7 @@
 							>
 								<ion-label>
 									{{ users[i].name }}
-									<span style="color: #666"
-										>({{ users[i].email }})</span
-									>
+									<span style="color: #666">({{ users[i].email }})</span>
 								</ion-label>
 								<ion-icon
 									(click)="deleteUser($event, users[i].id || '')"
@@ -53,11 +49,7 @@
 								<ion-icon
 									slot="end"
 									style="color: #bdbdbd; font-size: 1.25rem"
-									[name]="
-										users[i].visible
-											? 'chevron-down'
-											: 'chevron-forward'
-									"
+									[name]="users[i].visible ? 'chevron-down' : 'chevron-forward'"
 								></ion-icon>
 							</ion-item>
 

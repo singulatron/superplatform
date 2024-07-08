@@ -94,9 +94,9 @@ export class PromptsComponent {
 
 	private initializeOnLogin() {
 		this.activatedRoute.queryParams.subscribe((parameters) => {
-			const search =
+			this.searchTerm =
 				this.queryParser.convertQueryParamsToSearchTerm(parameters);
-			this.searchTerm = search;
+
 			this.fetchPrompts();
 			this.cd.markForCheck();
 		});

@@ -88,12 +88,12 @@ export class UsersComponent {
 		});
 	}
 
-	private initializeOnLogin() {
-		this.activatedRoute.queryParams.subscribe((parameters) => {
-			const search =
+	private async initializeOnLogin() {
+		this.activatedRoute.queryParams.subscribe(async (parameters) => {
+			this.searchTerm =
 				this.queryParser.convertQueryParamsToSearchTerm(parameters);
-			this.searchTerm = search;
-			this.fetchUsers();
+
+			await this.fetchUsers();
 			this.cd.markForCheck();
 
 			this.userForms?.clear();
@@ -106,6 +106,7 @@ export class UsersComponent {
 
 	public redirect() {
 		const query = this.queryParser.parse(this.searchTerm);
+
 		const kv = conditionsToKeyValue(
 			query.conditions
 				? query.conditions.filter((v) => {

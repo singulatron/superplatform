@@ -141,15 +141,24 @@ export function conditionFieldIs(
 	condition: Condition,
 	fieldName: string
 ): boolean {
-	if (condition.equal && condition.equal.selector.field == fieldName) {
+	if (
+		condition.equal &&
+		(condition.equal.selector.field == fieldName ||
+			condition.equal.selector.oneOf?.includes(fieldName))
+	) {
 		return true;
 	}
-	if (condition.contains && condition.contains.selector.field == fieldName) {
+	if (
+		condition.contains &&
+		(condition.contains.selector.field == fieldName ||
+			condition.contains.selector.oneOf?.includes(fieldName))
+	) {
 		return true;
 	}
 	if (
 		condition.startsWith &&
-		condition.startsWith.selector.field == fieldName
+		(condition.startsWith.selector.field == fieldName ||
+			condition.startsWith.selector.oneOf?.includes(fieldName))
 	) {
 		return true;
 	}
@@ -159,13 +168,25 @@ export function conditionFieldIs(
 
 export function conditionField(condition: Condition): string {
 	if (condition.equal) {
-		return condition.equal.selector.field!;
+		return (
+			condition.equal.selector.field! ||
+			condition.equal.selector.oneOf?.join(',') ||
+			''
+		);
 	}
 	if (condition.contains) {
-		return condition.contains.selector.field!;
+		return (
+			condition.contains.selector.field ||
+			condition.contains.selector.oneOf?.join(',') ||
+			''
+		);
 	}
 	if (condition.startsWith) {
-		return condition.startsWith.selector.field!;
+		return (
+			condition.startsWith.selector.field! ||
+			condition.startsWith.selector.oneOf?.join(',') ||
+			''
+		);
 	}
 
 	return '';
