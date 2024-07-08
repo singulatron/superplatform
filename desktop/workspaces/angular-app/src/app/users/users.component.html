@@ -17,9 +17,12 @@
 	<ng-template #mainContent>
 		<app-centered [headerHeight]="'56px'" [vertical]="true">
 			<div style="padding: 0rem 2rem">
-				<h2 style="margin-bottom: 2rem">{{ 'Users' | translate }} 					<span *ngIf="count > 0" style="font-size: 1rem; color: #444"
-					>Total: {{ count }}.
-				</span></h2>
+				<h2 style="margin-bottom: 2rem">
+					{{ 'Users' | translate }}
+					<span *ngIf="count > 0" style="font-size: 1rem; color: #444"
+						>Total: {{ count }}.
+					</span>
+				</h2>
 				<ion-searchbar
 					(ionInput)="redirect()"
 					placeholder="Search users by name or email"

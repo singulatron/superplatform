@@ -48,7 +48,7 @@ func GetUsers(
 		options.Query.Limit = 20
 	}
 
-	users, err := userService.GetUsers(options)
+	users, count, err := userService.GetUsers(options)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -61,6 +61,7 @@ func GetUsers(
 
 	bs, _ := json.Marshal(usertypes.GetUsersResponse{
 		Users: users,
+		Count: count,
 	})
 	w.Write(bs)
 }
