@@ -76,9 +76,7 @@ type ListPromptsRequest struct {
 type ListPromptsResponse struct {
 	Prompts []*Prompt `json:"prompts"`
 	After   time.Time `json:"after,omitempty"`
-	// Count of all records, only returned when
-	// `ListPromptsRequest.Count` is set to true
-	Count int64 `json:"count"`
+	Count   int64     `json:"count"`
 }
 
 type RemovePromptRequest struct {

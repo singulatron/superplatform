@@ -14,6 +14,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/singulatron/singulatron/localtron/datastore"
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
@@ -37,7 +38,17 @@ func GetUsers(
 	}
 	defer r.Body.Close()
 
-	users, err := userService.GetUsers()
+	options := &userservice.GetUsersOptions{
+		Query: req.Query,
+	}
+	if options.Query == nil {
+		options.Query = &datastore.Query{}
+	}
+	if options.Query.Limit == 0 {
+		options.Query.Limit = 20
+	}
+
+	users, count, err := userService.GetUsers(options)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -50,6 +61,7 @@ func GetUsers(
 
 	bs, _ := json.Marshal(usertypes.GetUsersResponse{
 		Users: users,
+		Count: count,
 	})
 	w.Write(bs)
 }
