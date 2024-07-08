@@ -1,5 +1,5 @@
 ---
-title: Home
+title: Singulatron
 ---
 
 <p align="center">
@@ -9,14 +9,19 @@ title: Home
       <h1>Singulatron</h1>
     </span>
     <div>
-      The Self-Hosted AI Superplatform
+      The AI Superplatform.
+    </div>
+    <di>Have your own distributed internal AI network that runs on any stack.</di>
+    <div>
+      <a href="https://superplatform.ai">superplatform.ai</a>
     </div>
   </div>
 <p>
 <br />
 
-Singulatron is the AI Superplatform that runs on your computer(s) and server(s).
-It uses no third party APIs, and you have compelte control over your data and privacy.
+Singulatron runs AIs on your servers. It works with any database (just write shims for your favourite ones, or ask for it). It's source-available, private, and uses no third party APIs.
+A tool for AI consumption and AI app development.
+
 
 ## Roadmap
 
