@@ -172,7 +172,7 @@ export class ChatInputComponent implements OnInit, AfterViewInit {
 			this.cd.markForCheck();
 			return this.typeQuestion(question, index + 1);
 		}
-		return Promise.resolve();
+		return;
 	}
 }
 
