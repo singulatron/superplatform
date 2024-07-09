@@ -123,6 +123,10 @@ export class ChatInputComponent implements OnInit, AfterViewInit {
 	}
 
 	async send() {
+		if (this.message == 'demo') {
+			this.demo();
+			return;
+		}
 		const message = this.message;
 		this.message = '';
 
@@ -151,4 +155,36 @@ export class ChatInputComponent implements OnInit, AfterViewInit {
 		const selectedCharacter = this.getSelectedCharacter();
 		return selectedCharacter.data.name || 'None';
 	}
+
+	async demo() {
+		this.message = '';
+		for (const question of demoQuestions) {
+			await this.typeQuestion(question, 0);
+			await this.send();
+			await new Promise((resolve) => setTimeout(resolve, 300));
+		}
+	}
+
+	async typeQuestion(question: string, index: number): Promise<void> {
+		if (index < question.length) {
+			this.message = this.message + question.charAt(index);
+			await new Promise((resolve) => setTimeout(resolve, 30));
+			this.cd.markForCheck();
+			return this.typeQuestion(question, index + 1);
+		}
+		return Promise.resolve();
+	}
 }
+
+const demoQuestions = [
+	'When do experts predict the technological singularity will occur, and what might its implications be?',
+	'How could quantum computing revolutionize industries like cryptography and pharmaceuticals?',
+	'What are the main ethical concerns surrounding the deployment of AI in society?',
+	'What are the goals and timelines of current missions to Mars and other planets?',
+	'What are some of the most promising technologies being developed to combat climate change?',
+	'How will the rollout of 5G technology impact the Internet of Things (IoT) and smart cities?',
+	'What are the potential benefits and risks associated with the widespread adoption of blockchain technology?',
+	'What advancements are being made in autonomous vehicle technology, and when might we see fully self-driving cars on the roads?',
+	'How might CRISPR and other gene-editing technologies transform medicine and agriculture?',
+	'What are the latest developments in virtual and augmented reality, and how might they change entertainment and education?',
+];
