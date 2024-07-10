@@ -1,0 +1,32 @@
+FROM golang:1.22.4 as build
+
+WORKDIR /app
+
+COPY go.mod go.sum ./
+RUN go mod download
+
+COPY . .
+
+RUN go build -o main .
+
+FROM ubuntu:latest
+
+# Install necessary dependencies
+RUN apt-get update && apt-get install -y \
+    ca-certificates \
+    wget \
+    gnupg2
+
+# Install nvidia-smi
+RUN wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/cuda-repo-ubuntu1804_10.2.89-1_amd64.deb && \
+    dpkg -i cuda-repo-ubuntu1804_10.2.89-1_amd64.deb && \
+    apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/7fa2af80.pub && \
+    apt-get update && \
+    apt-get install -y nvidia-utils-450
+
+WORKDIR /app
+COPY --from=build /app/main .
+
+EXPOSE 58231
+
+CMD ["./main"]
