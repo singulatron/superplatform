@@ -23,39 +23,39 @@ export class NodeService {
 }
 
 export interface GPU {
-	Id: string;
-	IntraNodeId: number;
-	Name: string;
-	BusId: string;
-	Temperature: number;
-	PerformanceState: string;
-	PowerUsage: number;
-	PowerCap: number;
-	MemoryUsage: number;
-	MemoryTotal: number;
-	GPUUtilization: number;
-	ComputeMode: string;
-	ProcessDetails: Process[];
+	id: string;
+	intraNodeId: number;
+	name: string;
+	busId: string;
+	temperature: number;
+	performanceState: string;
+	powerUsage: number;
+	powerCap: number;
+	memoryUsage: number;
+	memoryTotal: number;
+	gpuUtilization: number;
+	computeMode: string;
+	processDetails: Process[];
 }
 
 export interface Process {
-	Pid: number;
-	ProcessName: string;
-	MemoryUsage: number;
+	pid: number;
+	processName: string;
+	nemoryUsage: number;
 }
 
 export interface Node {
-	Hostname: string;
-	GPUs: GPU[];
+	hostname: string;
+	gpus: GPU[];
 }
 
 export interface Cluster {
-	Nodes: Node[];
+	nodes: Node[];
 }
 
+// eslint-disable-next-line
 export interface ListNodesRequest {}
 
-// eslint-disable-next-line
 export interface ListNodesResponse {
 	nodes: Node[];
 }

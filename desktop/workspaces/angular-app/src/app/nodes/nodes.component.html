@@ -21,60 +21,60 @@
 
 				<ion-list>
 					<ng-container *ngFor="let node of nodes; let i = index">
-						<ng-container *ngFor="let gpu of node.GPUs; let i = index">
+						<ng-container *ngFor="let gpu of node.gpus; let i = index">
 							<ion-card>
 								<ion-card-header>
-									<ion-card-title>{{ gpu.Id }}</ion-card-title>
+									<ion-card-title>{{ gpu.id }}</ion-card-title>
 								</ion-card-header>
 								<ion-card-content>
 									<ion-item>
 										<ion-label><strong>Intra Node ID:</strong></ion-label>
-										<ion-text>{{ gpu.IntraNodeId }}</ion-text>
+										<ion-text>{{ gpu.intraNodeId }}</ion-text>
 									</ion-item>
 									<ion-item>
 										<ion-label><strong>Name:</strong></ion-label>
-										<ion-text>{{ gpu.Name }}</ion-text>
+										<ion-text>{{ gpu.name }}</ion-text>
 									</ion-item>
 									<ion-item>
 										<ion-label><strong>Bus ID:</strong></ion-label>
-										<ion-text>{{ gpu.BusId }}</ion-text>
+										<ion-text>{{ gpu.busId }}</ion-text>
 									</ion-item>
 									<ion-item>
 										<ion-label><strong>Temperature:</strong></ion-label>
-										<ion-text>{{ gpu.Temperature }}°C</ion-text>
+										<ion-text>{{ gpu.temperature }}°C</ion-text>
 									</ion-item>
 									<ion-item>
 										<ion-label><strong>Performance State:</strong></ion-label>
-										<ion-text>{{ gpu.PerformanceState }}</ion-text>
+										<ion-text>{{ gpu.performanceState }}</ion-text>
 									</ion-item>
 									<ion-item>
 										<ion-label><strong>Power Usage:</strong></ion-label>
-										<ion-text>{{ gpu.PowerUsage }} W</ion-text>
+										<ion-text>{{ gpu.powerUsage }} W</ion-text>
 									</ion-item>
 									<ion-item>
 										<ion-label><strong>Power Cap:</strong></ion-label>
-										<ion-text>{{ gpu.PowerCap }} W</ion-text>
+										<ion-text>{{ gpu.powerCap }} W</ion-text>
 									</ion-item>
 									<ion-item>
 										<ion-label><strong>Memory Usage:</strong></ion-label>
-										<ion-text>{{ gpu.MemoryUsage }} MB</ion-text>
+										<ion-text>{{ gpu.memoryUsage }} MB</ion-text>
 									</ion-item>
 									<ion-item>
 										<ion-label><strong>Memory Total:</strong></ion-label>
-										<ion-text>{{ gpu.MemoryTotal }} MB</ion-text>
+										<ion-text>{{ gpu.memoryTotal }} MB</ion-text>
 									</ion-item>
 									<ion-item>
 										<ion-label><strong>GPU Utilization:</strong></ion-label>
-										<ion-text>{{ gpu.GPUUtilization }}%</ion-text>
+										<ion-text>{{ gpu.gpuUtilization }}%</ion-text>
 									</ion-item>
 									<ion-item>
 										<ion-label><strong>Compute Mode:</strong></ion-label>
-										<ion-text>{{ gpu.ComputeMode }}</ion-text>
+										<ion-text>{{ gpu.computeMode }}</ion-text>
 									</ion-item>
 									<ion-item>
 										<ion-label><strong>Process Details:</strong></ion-label>
 										<ion-list>
-											<ion-item *ngFor="let process of gpu.ProcessDetails">
+											<ion-item *ngFor="let process of gpu.processDetails">
 												<ion-label>{{ process }}</ion-label>
 											</ion-item>
 										</ion-list>
