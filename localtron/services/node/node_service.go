@@ -36,7 +36,8 @@ func NewNodeService(userService *userservice.UserService) (*NodeService, error) 
 		return nil, err
 	}
 	service := &NodeService{
-		Hostname: hostname,
+		Hostname:    hostname,
+		userService: userService,
 	}
 
 	err = service.registerPermissions()
