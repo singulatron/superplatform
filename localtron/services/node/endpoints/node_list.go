@@ -31,16 +31,6 @@ func List(
 		return
 	}
 
-	user, found, err := userService.GetUserFromRequest(r)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
-		return
-	}
-	if !found {
-		http.Error(w, "unauthorized", http.StatusUnauthorized)
-		return
-	}
-
 	req := nodetypes.ListNodesRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
@@ -49,27 +39,14 @@ func List(
 	}
 	defer r.Body.Close()
 
-	nodes, count, err := nodeService.List()
+	nodes, err := nodeService.ListNodes()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	for i := range nodes {
-		if nodes[i].UserId != user.Id {
-			// do not let users see other peoples promtps,
-			// not even if they are admins
-			// eg. imagine a sysadmin looking at the CEO's node
-			nodes[i].Prompt = ""
-		}
-	}
-
-	response := nodetypes.ListPromptsResponse{
-		Prompts: nodes,
-		Count:   count,
-	}
-	if len(nodes) >= 20 {
-		response.After = nodes[len(nodes)-1].CreatedAt
+	response := nodetypes.ListNodesResponse{
+		Nodes: nodes,
 	}
 
 	bs, _ := json.Marshal(response)

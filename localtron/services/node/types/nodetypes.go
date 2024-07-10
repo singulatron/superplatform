@@ -6,7 +6,7 @@ type Cluster struct {
 
 type Node struct {
 	Hostname string `json:"hostname"`
-	GPUs     []GPU  `json:"gpus"`
+	GPUs     []*GPU `json:"gpus"`
 }
 
 type GPU struct {

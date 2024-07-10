@@ -39,6 +39,24 @@ func NewNodeService() (*NodeService, error) {
 	return service, nil
 }
 
+func (ns *NodeService) ListNodes() ([]*nodetypes.Node, error) {
+	outp, err := ns.GetNvidiaSmiOutput()
+	if err != nil {
+		return nil, err
+	}
+	gpus, err := ns.ParseNvidiaSmiOutput(outp)
+	if err != nil {
+		return nil, err
+	}
+
+	return []*nodetypes.Node{
+		{
+			Hostname: ns.Hostname,
+			GPUs:     gpus,
+		},
+	}, nil
+}
+
 func (ns *NodeService) ParseNvidiaSmiOutput(output string) ([]*nodetypes.GPU, error) {
 	reader := csv.NewReader(strings.NewReader(output))
 	reader.TrimLeadingSpace = true
