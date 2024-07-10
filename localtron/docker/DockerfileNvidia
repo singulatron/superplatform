@@ -1,3 +1,4 @@
+# Build stage
 FROM golang:1.22.4 as build
 
 WORKDIR /app
@@ -9,20 +10,24 @@ COPY . .
 
 RUN go build -o main .
 
+# Final stage
 FROM ubuntu:latest
 
 # Install necessary dependencies
 RUN apt-get update && apt-get install -y \
     ca-certificates \
     wget \
-    gnupg2
+    gnupg2 \
+    curl
 
-# Install nvidia-smi
-RUN wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/cuda-repo-ubuntu1804_10.2.89-1_amd64.deb && \
-    dpkg -i cuda-repo-ubuntu1804_10.2.89-1_amd64.deb && \
-    apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/7fa2af80.pub && \
-    apt-get update && \
-    apt-get install -y nvidia-utils-450
+# Add NVIDIA package repositories
+RUN wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/cuda-ubuntu1804.pin -O /etc/apt/preferences.d/cuda-repository-pin-600 && \
+    curl -fsSL https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/7fa2af80.pub | gpg --dearmor -o /usr/share/keyrings/cuda-archive-keyring.gpg && \
+    echo "deb [signed-by=/usr/share/keyrings/cuda-archive-keyring.gpg] http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64 /" > /etc/apt/sources.list.d/cuda.list
+
+# Install nvidia-utils without drivers
+RUN apt-get update && apt-get install -y nvidia-utils-450 && \
+    rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 COPY --from=build /app/main .
