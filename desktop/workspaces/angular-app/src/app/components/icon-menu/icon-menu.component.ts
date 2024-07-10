@@ -55,9 +55,7 @@ export class IconMenuComponent {
 			return 'users-group';
 		}
 
-		if (
-			this.currentPath === 'node'
-		) {
+		if (this.currentPath === 'nodes') {
 			return 'cluster';
 		}
 
