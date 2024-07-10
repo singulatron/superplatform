@@ -20,10 +20,6 @@ RUN apt-get update && apt-get install -y \
     curl \
     gnupg
 
-# Disable the nouveau driver
-RUN echo -e "blacklist nouveau\noptions nouveau modeset=0" > /etc/modprobe.d/blacklist-nouveau.conf
-RUN update-initramfs -u
-
 # Install Nvidia drivers
 RUN add-apt-repository ppa:graphics-drivers/ppa
 RUN apt-get update
