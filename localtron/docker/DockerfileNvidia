@@ -11,12 +11,26 @@ COPY . .
 RUN go build -o main .
 
 # Final stage
-FROM nvidia/cuda:12.5.0-devel-ubuntu22.04
+FROM ubuntu:latest
 
+# Install necessary dependencies
 RUN apt-get update && apt-get install -y \
-    ca-certificates
+    ca-certificates \
+    software-properties-common \
+    curl \
+    gnupg
 
-RUN which nvidia-smi
+# Disable the nouveau driver
+RUN echo -e "blacklist nouveau\noptions nouveau modeset=0" > /etc/modprobe.d/blacklist-nouveau.conf
+RUN update-initramfs -u
+
+# Install Nvidia drivers
+RUN add-apt-repository ppa:graphics-drivers/ppa
+RUN apt-get update
+RUN ubuntu-drivers autoinstall
+
+# Install Nvidia SMI
+RUN apt-get install -y nvidia-utils-535
 
 WORKDIR /app
 COPY --from=build /app/main .
