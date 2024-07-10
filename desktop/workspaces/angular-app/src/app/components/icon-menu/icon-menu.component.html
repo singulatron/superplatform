@@ -123,4 +123,18 @@
 			name="power-outline"
 		></ion-icon>
 	</div>
+
+	<div
+		*ngIf="group() === 'cluster'"
+		class="menu-entry"
+		title="Nodes"
+		routerLink="/nodes"
+	>
+		<ion-icon
+			[ngStyle]="{
+				color: currentPath === 'ndes' ? 'gold' : '',
+			}"
+			name="server-outline"
+		></ion-icon>
+	</div>
 </div>

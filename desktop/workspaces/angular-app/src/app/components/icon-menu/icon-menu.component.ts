@@ -8,7 +8,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { NgStyle, NgIf } from '@angular/common';
 
-type appGroup = 'ai-group' | 'users-group' | '';
+type appGroup = 'ai-group' | 'users-group' | 'cluster' | '';
 
 @Component({
 	selector: 'app-icon-menu',
@@ -53,6 +53,12 @@ export class IconMenuComponent {
 			this.currentPath === 'logout'
 		) {
 			return 'users-group';
+		}
+
+		if (
+			this.currentPath === 'node'
+		) {
+			return 'cluster';
 		}
 
 		return '';
