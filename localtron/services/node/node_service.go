@@ -131,7 +131,7 @@ func (ns *NodeService) GetNvidiaSmiOutput() (string, error) {
 	cmd := exec.Command("nvidia-smi", "--query-gpu=timestamp,name,temperature.gpu,utilization.gpu,memory.total,memory.used,power.draw,power.limit,driver_version,pci.bus_id,compute_mode,pstate", "--format=csv,noheader,nounits")
 	output, err := cmd.Output()
 	if err != nil {
-		return "", errors.Wrap(err, "executing nvidia-smi command")
+		return "", errors.Wrap(err, fmt.Sprintf("executing nvidia-smi command: %v", string(output)))
 	}
 	return string(output), nil
 }
