@@ -11,22 +11,13 @@ COPY . .
 RUN go build -o main .
 
 # Final stage
-FROM ubuntu:latest
+FROM nvidia/cuda:12.5.0-devel-ubuntu22.04
 
-# Install necessary dependencies
 RUN apt-get update && apt-get install -y \
-    ca-certificates \
-    software-properties-common \
-    curl \
-    gnupg
+    ca-certificates
 
-# Install Nvidia drivers
-RUN add-apt-repository ppa:graphics-drivers/ppa
-RUN apt-get update
-RUN ubuntu-drivers autoinstall
-
-# Install Nvidia SMI
 RUN apt-get install -y nvidia-utils-535
+RUN which nvidia-smi
 
 WORKDIR /app
 COPY --from=build /app/main .
