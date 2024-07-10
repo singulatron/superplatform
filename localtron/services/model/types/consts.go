@@ -853,7 +853,7 @@ var Models = []*Model{
 	{
 		Id: "huggingface/QuantFactory/Meta-Llama-3-70B-Instruct.Q2_K.gguf",
 		Assets: map[string]string{
-			"MODEL": "https://huggingface.co/QuantFactory/Meta-Llama-3-70B-Instruct-GGUF/blob/main/Meta-Llama-3-70B-Instruct.Q2_K.gguf",
+			"MODEL": "https://huggingface.co/QuantFactory/Meta-Llama-3-70B-Instruct-GGUF/resolve/main/Meta-Llama-3-70B-Instruct.Q2_K.gguf",
 		},
 		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "Llama 3",
@@ -872,7 +872,7 @@ var Models = []*Model{
 	{
 		Id: "huggingface/QuantFactory/Meta-Llama-3-70B-Instruct.Q4_K_M.gguf",
 		Assets: map[string]string{
-			"MODEL": "https://huggingface.co/QuantFactory/Meta-Llama-3-70B-Instruct-GGUF/blob/main/Meta-Llama-3-70B-Instruct.Q4_K_M.gguf",
+			"MODEL": "https://huggingface.co/QuantFactory/Meta-Llama-3-70B-Instruct-GGUF/resolve/main/Meta-Llama-3-70B-Instruct.Q4_K_M.gguf",
 		},
 		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "Llama 3",
