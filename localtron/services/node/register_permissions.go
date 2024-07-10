@@ -32,7 +32,10 @@ func (ns *NodeService) registerPermissions() error {
 		// nodetypes.RoleUser,
 	} {
 		for _, permission := range nodetypes.NodePermissions {
-			ns.userService.AddPermissionToRole(role.Id, permission.Id)
+			err := ns.userService.AddPermissionToRole(role.Id, permission.Id)
+			if err != nil {
+				return err
+			}
 		}
 	}
 
