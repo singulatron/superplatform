@@ -10,7 +10,7 @@ COPY . .
 RUN go build -o main .
 
 FROM ubuntu:latest
-
+RUN apt-get update && apt-get install -y ca-certificates
 
 WORKDIR /app
 COPY --from=build /app/main .
