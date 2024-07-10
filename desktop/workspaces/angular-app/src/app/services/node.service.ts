@@ -10,23 +10,16 @@
  */
 import { Injectable } from '@angular/core';
 import { LocaltronService } from './localtron.service';
-import { ReplaySubject, Observable, catchError } from 'rxjs';
-import { FirehoseService } from './firehose.service';
-import { first } from 'rxjs';
-import { UserService } from './user.service';
-import { Query } from './generic.service';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class NodeService {
-	constructor(	private localtron: LocaltronService,) {}
+	constructor(private localtron: LocaltronService) {}
 
-  async promptRemove(prompt: Prompt): Promise<void> {
-		const request: RemovePromptRequest = { prompt: prompt };
-		return this.localtron.call('/prompt/remove', request);
+	async nodesList(request: ListNodesRequest): Promise<ListNodesResponse> {
+		return this.localtron.call('/node/list', request);
 	}
-
 }
 
 export interface GPU {
@@ -58,4 +51,11 @@ export interface Node {
 
 export interface Cluster {
 	Nodes: Node[];
+}
+
+export interface ListNodesRequest {}
+
+// eslint-disable-next-line
+export interface ListNodesResponse {
+	nodes: Node[];
 }
