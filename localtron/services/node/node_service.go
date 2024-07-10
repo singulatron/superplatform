@@ -21,19 +21,27 @@ import (
 	"github.com/pkg/errors"
 
 	nodetypes "github.com/singulatron/singulatron/localtron/services/node/types"
+	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
 
 type NodeService struct {
 	Hostname string
+
+	userService *userservice.UserService
 }
 
-func NewNodeService() (*NodeService, error) {
+func NewNodeService(userService *userservice.UserService) (*NodeService, error) {
 	hostname, err := os.Hostname()
 	if err != nil {
 		return nil, err
 	}
 	service := &NodeService{
 		Hostname: hostname,
+	}
+
+	err = service.registerPermissions()
+	if err != nil {
+		return nil, err
 	}
 
 	return service, nil

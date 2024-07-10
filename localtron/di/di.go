@@ -186,7 +186,7 @@ func MakeUniverse(options UniverseOptions) (*Universe, error) {
 		os.Exit(1)
 	}
 
-	nodeService, err := nodeservice.NewNodeService()
+	nodeService, err := nodeservice.NewNodeService(userService)
 	if err != nil {
 		logger.Error("Node service creation failed", slog.String("error", err.Error()))
 		os.Exit(1)

@@ -3,7 +3,7 @@ package nodeservice_test
 import (
 	"testing"
 
-	nodeservice "github.com/singulatron/singulatron/localtron/services/node"
+	"github.com/singulatron/singulatron/localtron/di"
 
 	"github.com/stretchr/testify/require"
 )
@@ -16,8 +16,11 @@ NVIDIA GeForce RTX 3090, 52, 0, 24576, 2600, 26.85, 350.00, 535.183.01, 00000000
 `
 
 func TestNvidiaSmiOutput(t *testing.T) {
-	ns, err := nodeservice.NewNodeService()
+	univ, err := di.MakeUniverse(di.UniverseOptions{
+		Test: true,
+	})
 	require.NoError(t, err)
+	ns := univ.NodeService
 	ns.Hostname = "testhost"
 
 	gpus, err := ns.ParseNvidiaSmiOutput(nvidiaSmiOutput)
