@@ -15,6 +15,7 @@ import (
 	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
 	genericservice "github.com/singulatron/singulatron/localtron/services/generic"
 	modelservice "github.com/singulatron/singulatron/localtron/services/model"
+	nodeservice "github.com/singulatron/singulatron/localtron/services/node"
 	promptservice "github.com/singulatron/singulatron/localtron/services/prompt"
 	storefactoryservice "github.com/singulatron/singulatron/localtron/services/store_factory"
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
@@ -33,6 +34,7 @@ type Universe struct {
 	DownloadService *downloadservice.DownloadService
 	AppService      *appservice.AppService
 	DockerService   *dockerservice.DockerService
+	NodeService     *nodeservice.NodeService
 }
 
 type UniverseOptions struct {
@@ -184,6 +186,12 @@ func MakeUniverse(options UniverseOptions) (*Universe, error) {
 		os.Exit(1)
 	}
 
+	nodeService, err := nodeservice.NewNodeService(userService)
+	if err != nil {
+		logger.Error("Node service creation failed", slog.String("error", err.Error()))
+		os.Exit(1)
+	}
+
 	return &Universe{
 		ConfigService:   configService,
 		PromptService:   promptService,
@@ -195,5 +203,6 @@ func MakeUniverse(options UniverseOptions) (*Universe, error) {
 		AppService:      appService,
 		DockerService:   dockerService,
 		ModelService:    modelService,
+		NodeService:     nodeService,
 	}, nil
 }

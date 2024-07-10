@@ -32,4 +32,7 @@ jobs:
         run: |
           DOCKER_BUILDKIT=1 docker build -f ./docker/Dockerfile -t ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest .
           docker push ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
+
+          DOCKER_BUILDKIT=1 docker build -f ./docker/DockerfileNvidia -t ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:nvidia-latest .
+          docker push ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:nvidia-latest
         working-directory: ./localtron

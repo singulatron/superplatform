@@ -29,6 +29,7 @@ import (
 	firehoseendpoints "github.com/singulatron/singulatron/localtron/services/firehose/endpoints"
 	genericendpoints "github.com/singulatron/singulatron/localtron/services/generic/endpoints"
 	modelendpoints "github.com/singulatron/singulatron/localtron/services/model/endpoints"
+	nodeendpoints "github.com/singulatron/singulatron/localtron/services/node/endpoints"
 	promptendpoints "github.com/singulatron/singulatron/localtron/services/prompt/endpoints"
 	userendpoints "github.com/singulatron/singulatron/localtron/services/user/endpoints"
 )
@@ -212,6 +213,10 @@ func main() {
 	}))
 	router.HandleFunc("/generic/upsert", appl(func(w http.ResponseWriter, r *http.Request) {
 		genericendpoints.Upsert(w, r, univ.UserService, univ.GenericService)
+	}))
+
+	router.HandleFunc("/node/list", appl(func(w http.ResponseWriter, r *http.Request) {
+		nodeendpoints.List(w, r, univ.UserService, univ.NodeService)
 	}))
 
 	srv := &http.Server{

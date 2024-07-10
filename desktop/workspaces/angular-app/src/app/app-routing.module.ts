@@ -20,6 +20,7 @@ import { AddUserComponent } from './users/add-user/add-user.component';
 import { RolesComponent } from './users/roles/roles.component';
 import { LogoutComponent } from './users/logout/logout.component';
 import { PromptsComponent } from './prompts/prompts.component';
+import { NodesComponent } from './nodes/nodes.component';
 
 const routes: Routes = [
 	{
@@ -61,6 +62,10 @@ const routes: Routes = [
 	{
 		path: 'prompts',
 		component: PromptsComponent
+	},
+	{
+		path: 'nodes',
+		component: NodesComponent
 	}
 ];
 
