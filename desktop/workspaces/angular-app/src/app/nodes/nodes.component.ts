@@ -42,6 +42,7 @@ import { UserService } from '../services/user.service';
 })
 export class NodesComponent {
 	nodes: Node[] = [];
+	error: string = '';
 
 	constructor(
 		private userService: UserService,
@@ -54,8 +55,12 @@ export class NodesComponent {
 	}
 
 	private async initializeOnLogin() {
-		const rsp = await this.nodeService.nodesList({});
-		this.nodes = rsp.nodes;
+		try {
+			const rsp = await this.nodeService.nodesList({});
+			this.nodes = rsp.nodes;
+		} catch (error) {
+			this.error = JSON.parse(error as string)?.error;
+		}
 		this.cd.markForCheck();
 	}
 }

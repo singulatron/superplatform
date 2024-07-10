@@ -19,7 +19,11 @@
 			<div style="padding: 0rem 2rem">
 				<h2 style="margin-bottom: 2rem">Nodes</h2>
 
-				<ion-list>
+				<div *ngIf="error" style="color: var(--ion-color-danger)">
+					{{ error }}
+				</div>
+
+				<ion-list *ngIf="!error">
 					<ng-container *ngFor="let node of nodes; let i = index">
 						<ng-container *ngFor="let gpu of node.gpus; let i = index">
 							<ion-card>
