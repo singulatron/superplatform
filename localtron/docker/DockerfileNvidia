@@ -16,7 +16,6 @@ FROM nvidia/cuda:12.2.2-base-ubuntu22.04
 RUN apt-get update && apt-get install -y \
     ca-certificates
 
-RUN apt-get install -y nvidia-utils-535
 RUN which nvidia-smi
 
 WORKDIR /app
