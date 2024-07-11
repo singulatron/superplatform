@@ -33,6 +33,7 @@ import {
 import { CharacterComponent } from '../../character/character.component';
 import { ModelService, Model } from '../../../services/model.service';
 import { ConfigService } from '../../../services/config.service';
+import { ChatService } from '../../../services/chat.service';
 
 export interface SendOutput {
 	message: string;
@@ -65,6 +66,7 @@ export class ChatInputComponent implements OnInit, AfterViewInit {
 		private characterService: CharacterService,
 		private configService: ConfigService,
 		private cd: ChangeDetectorRef,
+		private chatService: ChatService,
 		private resolver: ComponentFactoryResolver
 	) {}
 
@@ -123,8 +125,8 @@ export class ChatInputComponent implements OnInit, AfterViewInit {
 	}
 
 	async send() {
-		if (this.message == 'demo') {
-			this.demo();
+		if (this.message == 'demo' || this.message == 'demothreads') {
+			this.demo(this.message);
 			return;
 		}
 		const message = this.message;
@@ -156,11 +158,14 @@ export class ChatInputComponent implements OnInit, AfterViewInit {
 		return selectedCharacter.data.name || 'None';
 	}
 
-	async demo() {
+	async demo(message: string) {
 		this.message = '';
 		for (const question of demoQuestions) {
 			await this.typeQuestion(question, 0);
 			await this.send();
+			if (message == 'demothreads') {
+				this.chatService.onStartNewThreadSubject.next();
+			}
 			await new Promise((resolve) => setTimeout(resolve, 300));
 		}
 	}
