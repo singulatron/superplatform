@@ -52,10 +52,15 @@
 	<ion-content id="main-content-{{ id }}">
 		<div class="flex-container">
 			<ng-container *ngIf="!(mobile.isMobile$ | async)">
+				<!-- [ngClass]="{ column: i > 0 }" here is a hack to not affect styling if icon-menu with the column class,
+					fix icon-menu instead! -->
 				<div
 					*ngFor="let column of columns; let i = index"
-					class="column"
-					[ngStyle]="{ flex: '0 0 ' + getColumnWidth(i), 							'max-width': getColumnWidth(i), }"
+					[ngClass]="{ column: i > 0 }"
+					[ngStyle]="{
+						flex: '0 0 ' + getColumnWidth(i),
+						'max-width': getColumnWidth(i),
+					}"
 				>
 					<ng-container [ngTemplateOutlet]="column"></ng-container>
 				</div>

@@ -2,8 +2,9 @@
 	display: flex;
 }
 
-.column,
-.main-content {
+.column {
+	height: 100vh;
+	overflow-y: scroll;
 }
 
 /** On desktop we have at least one column on the left - the icon menu bar

@@ -143,10 +143,6 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 		slog.String("promptId", currentPrompt.Id),
 	)
 
-	p.firehoseService.Publish(prompttypes.EventPromptProcessingStarted{
-		PromptId: currentPrompt.Id,
-	})
-
 	defer p.firehoseService.Publish(prompttypes.EventPromptProcessingFinished{
 		PromptId: currentPrompt.Id,
 		Error:    errToString(err),
@@ -156,6 +152,15 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 	currentPrompt.Error = ""
 	currentPrompt.Status = prompttypes.PromptStatusRunning
 	currentPrompt.RunCount++
+
+	err = p.promptsStore.Upsert(currentPrompt)
+	if err != nil {
+		return errors.Wrap(err, "error updating currently running prompt")
+	}
+
+	p.firehoseService.Publish(prompttypes.EventPromptProcessingStarted{
+		PromptId: currentPrompt.Id,
+	})
 
 	err = p.appService.AddMessage(&apptypes.Message{
 		// not a fan of taking the prompt id but at least it makes this idempotent

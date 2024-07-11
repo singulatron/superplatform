@@ -29,7 +29,7 @@ func (p *PromptService) ListPrompts(options *ListPromptOptions) ([]*prompttypes.
 			q = q.OrderBy(orderBy.Field, orderBy.Desc)
 		}
 	} else {
-		q = q.OrderBy("createdAt", true)
+		q = q.OrderBy("createdAt", false)
 	}
 
 	if options.Query.After != nil {
