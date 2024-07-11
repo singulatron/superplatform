@@ -125,7 +125,7 @@ export class ChatInputComponent implements OnInit, AfterViewInit {
 	}
 
 	async send() {
-		if (this.message == 'demo' || this.message == 'demothreads') {
+		if (/^demo\w*$/.test(this.message)) {
 			this.demo(this.message);
 			return;
 		}

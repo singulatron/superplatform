@@ -77,14 +77,13 @@ export class ChatComponent implements OnInit {
 			}),
 			this.chatService.onThreadAdded$.subscribe(() => {
 				this.refreshThreadList();
-			})
-		);
-
-		this.subscriptions.push(
+			}),
 			this.chatService.onStartNewThread$.subscribe(() => {
 				this.openNewThread();
 			})
 		);
+
+	
 
 		const activeThreadId = this.chatService.getActiveThreadId();
 		if (activeThreadId) {
