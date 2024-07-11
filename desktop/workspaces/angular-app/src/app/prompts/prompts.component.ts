@@ -139,6 +139,7 @@ export class PromptsComponent {
 		if (!queryHasFieldCondition(query, 'status')) {
 			query.conditions.push(equal(field('status'), this.request.statuses));
 		}
+		query.orderBys = [{ field: 'createdAt', desc: true }];
 
 		const request: ListPromptsRequest = {
 			query: query,
