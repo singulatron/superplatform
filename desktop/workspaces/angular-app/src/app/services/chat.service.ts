@@ -10,7 +10,7 @@
  */
 import { Injectable } from '@angular/core';
 import { LocaltronService } from './localtron.service';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, Subject } from 'rxjs';
 import { FirehoseService } from './firehose.service';
 
 @Injectable({
@@ -27,6 +27,10 @@ export class ChatService {
 
 	onThreadUpdateSubject = new ReplaySubject<MessageAddedEvent>(1);
 	onThreadUpdate$ = this.onMessageAddedSubject.asObservable();
+
+	onStartNewThreadSubject = new Subject<void>();
+	// emitted when a new thread should be started
+	onStartNewThread$ = this.onStartNewThreadSubject.asObservable()
 
 	constructor(
 		private localtron: LocaltronService,
