@@ -35,7 +35,7 @@ export interface GPU {
 	memoryTotal: number;
 	gpuUtilization: number;
 	computeMode: string;
-	processDetails: Process[];
+	processDetails?: Process[];
 }
 
 export interface Process {

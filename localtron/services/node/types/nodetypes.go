@@ -23,7 +23,7 @@ type GPU struct {
 	MemoryTotal      int       `json:"memoryTotal"`
 	GPUUtilization   float64   `json:"gpuUtilization"`
 	ComputeMode      string    `json:"computeMode"`
-	ProcessDetails   []Process `json:"processDetails"`
+	ProcessDetails   []Process `json:"processDetails,omitempty"`
 }
 
 type Process struct {

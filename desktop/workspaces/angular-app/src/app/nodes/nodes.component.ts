@@ -57,10 +57,51 @@ export class NodesComponent {
 	private async initializeOnLogin() {
 		try {
 			const rsp = await this.nodeService.nodesList({});
+			// const rsp = fixture
+
 			this.nodes = rsp.nodes;
+			await this.nodeService.nodesList({});
 		} catch (error) {
 			this.error = JSON.parse(error as string)?.error;
 		}
 		this.cd.markForCheck();
 	}
 }
+
+export const fixture = {
+	nodes: [
+		{
+			hostname: 'a77916f6b8cd',
+			gpus: [
+				{
+					id: 'a77916f6b8cd:0',
+					intraNodeId: 0,
+					name: 'NVIDIA GeForce RTX 3090',
+					busId: '00000000:04:00.0',
+					temperature: 46,
+					performanceState: 'P8',
+					powerUsage: 22.72,
+					powerCap: 350,
+					memoryUsage: 2328,
+					memoryTotal: 24_576,
+					gpuUtilization: 0,
+					computeMode: 'Default',
+				},
+				{
+					id: 'a77916f6b8cd:1',
+					intraNodeId: 1,
+					name: 'NVIDIA GeForce RTX 3090',
+					busId: '00000000:2B:00.0',
+					temperature: 50,
+					performanceState: 'P8',
+					powerUsage: 26.54,
+					powerCap: 350,
+					memoryUsage: 2200,
+					memoryTotal: 24_576,
+					gpuUtilization: 0,
+					computeMode: 'Default',
+				},
+			],
+		},
+	],
+};
