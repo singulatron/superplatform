@@ -11,9 +11,15 @@
 import { Injectable } from '@angular/core';
 import { LocaltronService } from './localtron.service';
 import { CookieService } from 'ngx-cookie-service';
-import { ReplaySubject, firstValueFrom, first } from 'rxjs';
+import {
+	ReplaySubject,
+	Observable,
+	firstValueFrom,
+	first,
+	BehaviorSubject,
+} from 'rxjs';
 import { Router } from '@angular/router';
-import { Query } from './generic.service';
+import { Query, equal, field } from './generic.service';
 
 @Injectable({
 	providedIn: 'root',
@@ -22,7 +28,10 @@ export class UserService {
 	private token: string = '';
 
 	private userSubject = new ReplaySubject<User>(1);
+	/** Current logged in user */
 	public user$ = this.userSubject.asObservable();
+
+	private userCache: { [id: string]: BehaviorSubject<User | undefined> } = {};
 
 	constructor(
 		private localtron: LocaltronService,
@@ -204,13 +213,30 @@ export class UserService {
 			throw error;
 		}
 	}
+
+	getUser(id: string): Observable<User | undefined> {
+		if (!this.userCache[id]) {
+			this.userCache[id] = new BehaviorSubject<User | undefined>(undefined);
+			this.getUsers({
+				query: {
+					conditions: [equal(field('id'), id)],
+				},
+			})
+				.then((rsp) => {
+					this.userCache[id].next(rsp.users[0]);
+				})
+		
+		}
+
+		return this.userCache[id].asObservable();
+	}
 }
 
 export interface User {
 	id?: string;
 	createdAt?: Date;
 	updatedAt?: Date;
-	deletedAt?: Date | null;
+	deletedAt?: Date | undefined;
 	name?: string;
 	email?: string;
 	passwordHash?: string;
@@ -326,7 +352,7 @@ export interface AuthToken {
 	id?: string;
 	createdAt?: Date;
 	updatedAt?: Date;
-	deletedAt?: Date | null;
+	deletedAt?: Date | undefined;
 	userId?: string;
 	token?: string;
 }
