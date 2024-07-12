@@ -15,17 +15,14 @@ import {
 	EventEmitter,
 	ChangeDetectionStrategy,
 } from '@angular/core';
-import {
-	ChatService,
-	Message,
-	Asset,
-} from '../../../services/chat.service';
+import { ChatService, Message, Asset } from '../../../services/chat.service';
 import { PromptService } from '../../../services/prompt.service';
 import { LocaltronService } from '../../../services/localtron.service';
 import { MarkdownComponent } from 'ngx-markdown';
 import { IonicModule } from '@ionic/angular';
 import { NgIf, DatePipe, AsyncPipe } from '@angular/common';
 import { MobileService } from '../../../services/mobile.service';
+import { UserService } from '../../../services/user.service';
 
 @Component({
 	selector: 'app-message',
@@ -39,6 +36,7 @@ export class MessageComponent {
 	constructor(
 		private chatService: ChatService,
 		private promptService: PromptService,
+		public userService: UserService,
 		private localtron: LocaltronService,
 		public mobile: MobileService
 	) {}
