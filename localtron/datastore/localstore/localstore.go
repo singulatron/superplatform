@@ -21,6 +21,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/flusflas/dipper"
 	"github.com/google/uuid"
 	"github.com/singulatron/singulatron/localtron/datastore"
@@ -117,6 +118,7 @@ func (s *LocalStore) createWithoutLock(obj datastore.Row) error {
 	}
 
 	s.data[id] = v
+
 	s.stateManager.MarkChanged()
 	return nil
 }
@@ -157,7 +159,17 @@ func (s *LocalStore) Upsert(obj datastore.Row) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	s.data[obj.GetId()] = obj
+	bs, err := json.Marshal(obj)
+	if err != nil {
+		return err
+	}
+	var v interface{}
+	err = json.Unmarshal(bs, &v)
+	if err != nil {
+		return err
+	}
+
+	s.data[obj.GetId()] = v
 	s.stateManager.MarkChanged()
 	return nil
 }
@@ -167,7 +179,17 @@ func (s *LocalStore) UpsertMany(objs []datastore.Row) error {
 	defer s.mu.Unlock()
 
 	for _, obj := range objs {
-		s.data[obj.GetId()] = obj
+		bs, err := json.Marshal(obj)
+		if err != nil {
+			return err
+		}
+		var v interface{}
+		err = json.Unmarshal(bs, &v)
+		if err != nil {
+			return err
+		}
+
+		s.data[obj.GetId()] = v
 	}
 	s.stateManager.MarkChanged()
 	return nil
@@ -472,7 +494,7 @@ func (q *QueryBuilder) Upsert(obj datastore.Row) error {
 				return err
 			}
 
-			q.store.data[id] = obj
+			q.store.data[id] = v
 		}
 	}
 
@@ -528,6 +550,9 @@ func (q *QueryBuilder) match(obj any) bool {
 				matchFunc = func(subject, test any) bool {
 					subject = toBaseType(subject)
 					test = toBaseType(test)
+					if subject == "dipper: field not found" {
+						panic("dipper")
+					}
 
 					return reflect.DeepEqual(test, subject)
 				}
@@ -569,6 +594,10 @@ func (q *QueryBuilder) match(obj any) bool {
 			matched := false
 			for _, fieldName := range fieldNames {
 				fieldValue := getField(obj, fieldName)
+
+				if fmt.Sprintf("%v", fieldValue) == "dipper: field not found" {
+					panic(fmt.Sprintf("field '%v' not found in object %v", fieldName, spew.Sdump(obj)))
+				}
 				condValue := reflect.ValueOf(value)
 				if fieldV := reflect.ValueOf(fieldValue); fieldV.Kind() == reflect.Slice {
 					for i := 0; i < fieldV.Len(); i++ {

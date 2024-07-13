@@ -75,6 +75,13 @@ func TestCreate(t *testing.T) {
 	err = service.Upsert(table1, userId, obj)
 	require.NoError(t, err)
 
+	res, err = service.Find(table1, userId, []datastore.Condition{
+		datastore.All(),
+	})
+	require.NoError(t, err)
+	require.Equal(t, 1, len(res))
+	require.Contains(t, res[0].Id, uuid1)
+
 	err = service.Delete(table1, otherUserId, []datastore.Condition{
 		datastore.Id(obj.Id),
 	})
