@@ -5,6 +5,8 @@ import (
 	"os"
 	"path"
 
+	"github.com/singulatron/singulatron/localtron/datastore"
+	"github.com/singulatron/singulatron/localtron/datastore/localstore"
 	"github.com/singulatron/singulatron/localtron/logger"
 	appservice "github.com/singulatron/singulatron/localtron/services/app"
 	chatservice "github.com/singulatron/singulatron/localtron/services/chat"
@@ -17,7 +19,6 @@ import (
 	modelservice "github.com/singulatron/singulatron/localtron/services/model"
 	nodeservice "github.com/singulatron/singulatron/localtron/services/node"
 	promptservice "github.com/singulatron/singulatron/localtron/services/prompt"
-	storefactoryservice "github.com/singulatron/singulatron/localtron/services/store_factory"
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
 
@@ -39,7 +40,7 @@ type Universe struct {
 
 type UniverseOptions struct {
 	Test             bool
-	DatastoreFactory func(tableName string) (any, error)
+	DatastoreFactory func(tableName string, instance any) (datastore.DataStore, error)
 }
 
 func BigBang(options UniverseOptions) (*Universe, error) {
@@ -74,12 +75,17 @@ func BigBang(options UniverseOptions) (*Universe, error) {
 		configService.ConfigDirectory = os.Getenv("SINGULATRON_CONFIG_PATH")
 	}
 
-	storefactoryservice.LocalStorePath = path.Join(configService.ConfigDirectory, "data")
+	if options.DatastoreFactory == nil {
+		localStorePath := path.Join(configService.ConfigDirectory, "data")
+		err = os.MkdirAll(localStorePath, 0755)
+		if err != nil {
+			logger.Error("Creating data folder failed", slog.String("error", err.Error()))
+			os.Exit(1)
+		}
 
-	err = os.MkdirAll(storefactoryservice.LocalStorePath, 0755)
-	if err != nil {
-		logger.Error("Creating data folder failed", slog.String("error", err.Error()))
-		os.Exit(1)
+		options.DatastoreFactory = func(tableName string, isntance any) (datastore.DataStore, error) {
+			return localstore.NewLocalStore(path.Join(localStorePath, tableName))
+		}
 	}
 
 	userService, err := userservice.NewUserService(

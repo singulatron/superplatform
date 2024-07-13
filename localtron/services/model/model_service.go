@@ -18,7 +18,6 @@ import (
 	configservice "github.com/singulatron/singulatron/localtron/services/config"
 	dockerservice "github.com/singulatron/singulatron/localtron/services/docker"
 	downloadservice "github.com/singulatron/singulatron/localtron/services/download"
-	storefactoryservice "github.com/singulatron/singulatron/localtron/services/store_factory"
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
 
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
@@ -28,8 +27,8 @@ type ModelService struct {
 	modelStateMutex sync.Mutex
 	modelPortMap    map[int]*modeltypes.ModelState
 
-	modelsStore    datastore.DataStore[*modeltypes.Model]
-	platformsStore datastore.DataStore[*modeltypes.Platform]
+	modelsStore    datastore.DataStore
+	platformsStore datastore.DataStore
 
 	userService     *userservice.UserService
 	downloadService *downloadservice.DownloadService
@@ -42,7 +41,7 @@ func NewModelService(
 	userService *userservice.UserService,
 	cs *configservice.ConfigService,
 	dockerService *dockerservice.DockerService,
-	datastoreFactory func(tableName string) (any, error),
+	datastoreFactory func(tableName string, insance any) (datastore.DataStore, error),
 ) (*ModelService, error) {
 	srv := &ModelService{
 		userService:     userService,
@@ -52,13 +51,13 @@ func NewModelService(
 
 		modelPortMap: map[int]*modeltypes.ModelState{},
 	}
-	modelStore, err := storefactoryservice.GetStore[*modeltypes.Model]("models", datastoreFactory)
+	modelStore, err := datastoreFactory("models", &modeltypes.Model{})
 	if err != nil {
 		return nil, err
 	}
 	srv.modelsStore = modelStore
 
-	platformsStore, err := storefactoryservice.GetStore[*modeltypes.Platform]("platforms", datastoreFactory)
+	platformsStore, err := datastoreFactory("platforms", &modeltypes.Platform{})
 	if err != nil {
 		return nil, err
 	}

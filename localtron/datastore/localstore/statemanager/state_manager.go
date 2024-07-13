@@ -28,19 +28,19 @@ import (
 	"github.com/singulatron/singulatron/localtron/logger"
 )
 
-type StateFile[T any] struct {
-	Rows []T `json:"rows"`
+type StateFile struct {
+	Rows []any `json:"rows"`
 }
 
-type StateManager[T any] struct {
+type StateManager struct {
 	lock        sync.Mutex
 	filePath    string
 	hasChanged  bool
-	stateGetter func() []T
+	stateGetter func() []any
 }
 
-func New[T any](stateGetter func() []T, filePath string) *StateManager[T] {
-	sm := &StateManager[T]{
+func New(stateGetter func() []any, filePath string) *StateManager {
+	sm := &StateManager{
 		filePath:    filePath + ".zip",
 		stateGetter: stateGetter,
 	}
@@ -48,7 +48,7 @@ func New[T any](stateGetter func() []T, filePath string) *StateManager[T] {
 	return sm
 }
 
-func (sm *StateManager[T]) LoadState() ([]T, error) {
+func (sm *StateManager) LoadState() ([]any, error) {
 	sm.lock.Lock()
 	defer sm.lock.Unlock()
 
@@ -81,7 +81,7 @@ func (sm *StateManager[T]) LoadState() ([]T, error) {
 		return nil, err
 	}
 
-	var stateFile StateFile[T]
+	var stateFile StateFile
 	if strings.TrimSpace(string(unzippedData)) == "" {
 		return nil, nil
 	}
@@ -93,11 +93,11 @@ func (sm *StateManager[T]) LoadState() ([]T, error) {
 	return stateFile.Rows, nil
 }
 
-func (sm *StateManager[T]) SaveState(shallowCopy []T) error {
+func (sm *StateManager) SaveState(shallowCopy []any) error {
 	sm.lock.Lock()
 	defer sm.lock.Unlock()
 
-	data, err := json.Marshal(&StateFile[T]{
+	data, err := json.Marshal(&StateFile{
 		Rows: shallowCopy,
 	})
 	if err != nil {
@@ -125,14 +125,14 @@ func (sm *StateManager[T]) SaveState(shallowCopy []T) error {
 	return nil
 }
 
-func (sm *StateManager[T]) MarkChanged() {
+func (sm *StateManager) MarkChanged() {
 	sm.lock.Lock()
 	defer sm.lock.Unlock()
 
 	sm.hasChanged = true
 }
 
-func (sm *StateManager[T]) PeriodicSaveState(interval time.Duration) {
+func (sm *StateManager) PeriodicSaveState(interval time.Duration) {
 	ticker := time.NewTicker(interval)
 	defer ticker.Stop()
 
@@ -151,7 +151,7 @@ func (sm *StateManager[T]) PeriodicSaveState(interval time.Duration) {
 	}
 }
 
-func (sm *StateManager[T]) setupSignalHandler() {
+func (sm *StateManager) setupSignalHandler() {
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 

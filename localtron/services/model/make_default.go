@@ -36,7 +36,7 @@ func (ms *ModelService) MakeDefault(modelId string) error {
 }
 
 func (ms *ModelService) GetPlatformByModelId(modelId string) (*modeltypes.Platform, error) {
-	model, found, err := ms.modelsStore.Query(
+	modelI, found, err := ms.modelsStore.Query(
 		datastore.Id(modelId),
 	).FindOne()
 	if err != nil {
@@ -45,8 +45,9 @@ func (ms *ModelService) GetPlatformByModelId(modelId string) (*modeltypes.Platfo
 	if !found {
 		return nil, errors.New("cannot find model")
 	}
+	model := modelI.(*modeltypes.Model)
 
-	platform, found, err := ms.platformsStore.Query(
+	platformI, found, err := ms.platformsStore.Query(
 		datastore.Id(model.PlatformId),
 	).FindOne()
 	if err != nil {
@@ -55,6 +56,7 @@ func (ms *ModelService) GetPlatformByModelId(modelId string) (*modeltypes.Platfo
 	if !found {
 		return nil, errors.New("cannot find platform")
 	}
+	platform := platformI.(*modeltypes.Platform)
 
 	return platform, nil
 }

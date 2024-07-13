@@ -17,10 +17,8 @@ import (
 	"time"
 )
 
-func (s *SQLStore[T]) createTable(db *DebugDB, tableName string) error {
-	var v T
-
-	typ := reflect.TypeOf(v)
+func (s *SQLStore) createTable(instance any, db *DebugDB, tableName string) error {
+	typ := reflect.TypeOf(instance)
 	if typ.Kind() == reflect.Pointer {
 		typ = typ.Elem()
 	}
@@ -52,7 +50,7 @@ func (s *SQLStore[T]) createTable(db *DebugDB, tableName string) error {
 	return nil
 }
 
-func (s *SQLStore[T]) sqlType(t reflect.Type) string {
+func (s *SQLStore) sqlType(t reflect.Type) string {
 	switch t.Kind() {
 	case reflect.String:
 		return "TEXT"

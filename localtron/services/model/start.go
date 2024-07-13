@@ -50,7 +50,7 @@ func (ms *ModelService) Start(modelId string) error {
 		modelId = conf.Model.CurrentModelId
 	}
 
-	model, found, err := ms.modelsStore.Query(
+	modelI, found, err := ms.modelsStore.Query(
 		datastore.Id(modelId),
 	).FindOne()
 	if err != nil {
@@ -59,6 +59,7 @@ func (ms *ModelService) Start(modelId string) error {
 	if !found {
 		return errors.New("model not found")
 	}
+	model := modelI.(*modeltypes.Model)
 
 	env := map[string]string{}
 	for envarName, assetURL := range model.Assets {
@@ -73,7 +74,7 @@ func (ms *ModelService) Start(modelId string) error {
 		env[envarName] = assetPath
 	}
 
-	platform, found, err := ms.platformsStore.Query(
+	platformI, found, err := ms.platformsStore.Query(
 		datastore.Id(model.PlatformId),
 	).FindOne()
 	if err != nil {
@@ -82,6 +83,7 @@ func (ms *ModelService) Start(modelId string) error {
 	if !found {
 		return errors.New("cannot find platform")
 	}
+	platform := platformI.(*modeltypes.Platform)
 
 	launchOptions := &dockerservice.LaunchOptions{
 		Name: platform.Id,

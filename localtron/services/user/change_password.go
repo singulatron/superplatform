@@ -15,19 +15,21 @@ import (
 	"time"
 
 	"github.com/singulatron/singulatron/localtron/datastore"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 func (s *UserService) ChangePassword(email, currentPassword, newPassword string) error {
 	q := s.usersStore.Query(
 		datastore.Equal(datastore.Field("email"), email),
 	)
-	user, found, err := q.FindOne()
+	userI, found, err := q.FindOne()
 	if err != nil {
 		return err
 	}
 	if !found {
 		return errors.New("user not found")
 	}
+	user := userI.(*usertypes.User)
 
 	if !checkPasswordHash(currentPassword, user.PasswordHash) {
 		return errors.New("current password is incorrect")
@@ -47,13 +49,14 @@ func (s *UserService) ChangePasswordAdmin(email, newPassword string) error {
 	q := s.usersStore.Query(
 		datastore.Equal(datastore.Field("email"), email),
 	)
-	user, found, err := q.FindOne()
+	userI, found, err := q.FindOne()
 	if err != nil {
 		return err
 	}
 	if !found {
 		return errors.New("user not found")
 	}
+	user := userI.(*usertypes.User)
 
 	newPasswordHash, err := hashPassword(newPassword)
 	if err != nil {

@@ -20,7 +20,6 @@ import (
 	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
 	modelservice "github.com/singulatron/singulatron/localtron/services/model"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
-	storefactoryservice "github.com/singulatron/singulatron/localtron/services/store_factory"
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
 
@@ -32,7 +31,7 @@ type PromptService struct {
 
 	StreamManager *StreamManager
 
-	promptsStore datastore.DataStore[*prompttypes.Prompt]
+	promptsStore datastore.DataStore
 
 	runMutex sync.Mutex
 	trigger  chan bool
@@ -44,9 +43,9 @@ func NewPromptService(
 	modelService *modelservice.ModelService,
 	appService *chatservice.ChatService,
 	firehoseService *firehoseservice.FirehoseService,
-	datastoreFactory func(tableName string) (any, error),
+	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error),
 ) (*PromptService, error) {
-	promptsStore, err := storefactoryservice.GetStore[*prompttypes.Prompt]("prompts", datastoreFactory)
+	promptsStore, err := datastoreFactory("prompts", &prompttypes.Prompt{})
 	if err != nil {
 		return nil, err
 	}
@@ -64,15 +63,15 @@ func NewPromptService(
 		trigger: make(chan bool, 1),
 	}
 
-	prompts, err := service.promptsStore.Query(
+	promptIs, err := service.promptsStore.Query(
 		datastore.Equal(datastore.Field("status"), prompttypes.PromptStatusRunning),
 	).Find()
 	if err != nil {
 		return nil, err
 	}
 	promptIds := []string{}
-	for _, prompt := range prompts {
-		promptIds = append(promptIds, prompt.Id)
+	for _, promptI := range promptIs {
+		promptIds = append(promptIds, promptI.(*prompttypes.Prompt).Id)
 	}
 
 	err = service.promptsStore.Query(

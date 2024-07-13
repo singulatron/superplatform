@@ -22,13 +22,14 @@ func (s *UserService) AddRole(userId string, role *usertypes.Role) error {
 	q := s.usersStore.Query(
 		datastore.Id(userId),
 	)
-	user, found, err := q.FindOne()
+	userI, found, err := q.FindOne()
 	if err != nil {
 		return nil
 	}
 	if !found {
 		return errors.New("user not found")
 	}
+	user := userI.(*usertypes.User)
 
 	alreadyHasRole := false
 	for _, v := range user.RoleIds {

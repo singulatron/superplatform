@@ -24,7 +24,7 @@ import (
 )
 
 func (s *UserService) Login(email, password string) (*usertypes.AuthToken, error) {
-	user, found, err := s.usersStore.Query(
+	userI, found, err := s.usersStore.Query(
 		datastore.Equal(datastore.Field("email"), email),
 	).FindOne()
 	if err != nil {
@@ -33,6 +33,7 @@ func (s *UserService) Login(email, password string) (*usertypes.AuthToken, error
 	if !found {
 		return nil, errors.New("unauthorized")
 	}
+	user := userI.(*usertypes.User)
 
 	if !checkPasswordHash(password, user.PasswordHash) {
 		return nil, errors.New("unauthorized")
@@ -46,7 +47,7 @@ func (s *UserService) Login(email, password string) (*usertypes.AuthToken, error
 	}
 
 	if len(tokens) > 0 {
-		return tokens[0], nil
+		return tokens[0].(*usertypes.AuthToken), nil
 	}
 
 	token := generateAuthToken(user.Id)

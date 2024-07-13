@@ -13,6 +13,7 @@ package chatservice
 import (
 	"time"
 
+	"github.com/singulatron/singulatron/localtron/datastore"
 	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
 )
 
@@ -23,5 +24,10 @@ func (a *ChatService) UpsertAssets(assets []*chattypes.Asset) error {
 			v.CreatedAt = now
 		}
 	}
-	return a.assetsStore.UpsertMany(assets)
+
+	assetIs := []datastore.Row{}
+	for _, v := range assets {
+		assetIs = append(assetIs, v)
+	}
+	return a.assetsStore.UpsertMany(assetIs)
 }

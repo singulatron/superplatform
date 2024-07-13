@@ -15,36 +15,35 @@ import (
 	"github.com/singulatron/singulatron/localtron/logger"
 
 	configservice "github.com/singulatron/singulatron/localtron/services/config"
-	storefactoryservice "github.com/singulatron/singulatron/localtron/services/store_factory"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 type UserService struct {
 	configService *configservice.ConfigService
 
-	usersStore       datastore.DataStore[*usertypes.User]
-	rolesStore       datastore.DataStore[*usertypes.Role]
-	permissionsStore datastore.DataStore[*usertypes.Permission]
-	authTokensStore  datastore.DataStore[*usertypes.AuthToken]
+	usersStore       datastore.DataStore
+	rolesStore       datastore.DataStore
+	permissionsStore datastore.DataStore
+	authTokensStore  datastore.DataStore
 }
 
 func NewUserService(
 	cs *configservice.ConfigService,
-	datastoreFactory func(tableName string) (any, error),
+	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error),
 ) (*UserService, error) {
-	usersStore, err := storefactoryservice.GetStore[*usertypes.User]("users", datastoreFactory)
+	usersStore, err := datastoreFactory("users", &usertypes.User{})
 	if err != nil {
 		return nil, err
 	}
-	rolesStore, err := storefactoryservice.GetStore[*usertypes.Role]("roles", datastoreFactory)
+	rolesStore, err := datastoreFactory("roles", &usertypes.Role{})
 	if err != nil {
 		return nil, err
 	}
-	authTokensStore, err := storefactoryservice.GetStore[*usertypes.AuthToken]("authTokens", datastoreFactory)
+	authTokensStore, err := datastoreFactory("authTokens", &usertypes.AuthToken{})
 	if err != nil {
 		return nil, err
 	}
-	permissionsStore, err := storefactoryservice.GetStore[*usertypes.Permission]("permissions", datastoreFactory)
+	permissionsStore, err := datastoreFactory("permissions", &usertypes.Permission{})
 	if err != nil {
 		return nil, err
 	}

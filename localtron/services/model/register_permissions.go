@@ -12,6 +12,7 @@
 package modelservice
 
 import (
+	"github.com/singulatron/singulatron/localtron/datastore"
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
@@ -41,9 +42,20 @@ func (p *ModelService) registerPermissions() error {
 }
 
 func (p *ModelService) bootstrapModels() error {
-	err := p.platformsStore.UpsertMany(modeltypes.Platforms)
+	platformRows := []datastore.Row{}
+	for _, v := range modeltypes.Platforms {
+		platformRows = append(platformRows, v)
+	}
+	err := p.platformsStore.UpsertMany(platformRows)
 	if err != nil {
 		return err
 	}
-	return p.modelsStore.UpsertMany(modeltypes.Models)
+
+	modelRows := []datastore.Row{}
+	for _, v := range modeltypes.Models {
+		modelRows = append(modelRows, v)
+	}
+
+	return p.modelsStore.UpsertMany(modelRows)
+
 }

@@ -15,7 +15,7 @@ import (
 	"strings"
 )
 
-func (s *SQLStore[T]) fieldName(fieldName string) string {
+func (s *SQLStore) fieldName(fieldName string) string {
 	if len(fieldName) == 0 {
 		return ""
 	}

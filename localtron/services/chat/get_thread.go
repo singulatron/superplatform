@@ -16,7 +16,15 @@ import (
 )
 
 func (a *ChatService) GetThread(threadId string) (*chattypes.Thread, bool, error) {
-	return a.threadsStore.Query(
+	threadI, found, err := a.threadsStore.Query(
 		datastore.Equal(datastore.Field("id"), threadId),
 	).FindOne()
+	if err != nil {
+		return nil, false, err
+	}
+	if !found {
+		return nil, false, nil
+	}
+
+	return threadI.(*chattypes.Thread), false, nil
 }

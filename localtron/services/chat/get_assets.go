@@ -16,7 +16,18 @@ import (
 )
 
 func (a *ChatService) GetAssets(assetIds []string) ([]*chattypes.Asset, error) {
-	return a.assetsStore.Query(
+	assetIs, err := a.assetsStore.Query(
 		datastore.Equal(datastore.Field("id"), assetIds),
 	).Find()
+
+	if err != nil {
+		return nil, err
+	}
+
+	assets := []*chattypes.Asset{}
+	for _, assetI := range assetIs {
+		assets = append(assets, assetI.(*chattypes.Asset))
+	}
+
+	return assets, nil
 }

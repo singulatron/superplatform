@@ -30,12 +30,13 @@ func (s *UserService) UpsertRole(id, name, description string, permissionIds []s
 		return nil, errors.New("nonexistent permissions")
 	}
 
-	role, found, err := s.rolesStore.Query(
+	roleI, found, err := s.rolesStore.Query(
 		datastore.Equal(datastore.Field("id"), id),
 	).FindOne()
 	if err != nil {
 		return nil, err
 	}
+	role := roleI.(*usertypes.Role)
 	if !found {
 		role = &usertypes.Role{
 			Id:            id,

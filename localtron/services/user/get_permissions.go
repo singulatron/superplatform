@@ -16,7 +16,18 @@ import (
 )
 
 func (s *UserService) GetPermissions() ([]*usertypes.Permission, error) {
-	return s.permissionsStore.Query(
+	permissionsI, err := s.permissionsStore.Query(
 		datastore.All(),
 	).OrderBy("name", false).Find()
+
+	if err != nil {
+		return nil, err
+	}
+
+	permissions := []*usertypes.Permission{}
+	for _, permissionI := range permissionsI {
+		permissions = append(permissions, permissionI.(*usertypes.Permission))
+	}
+
+	return permissions, nil
 }

@@ -21,13 +21,15 @@ func (s *UserService) DeleteRole(roleId string) error {
 	q := s.rolesStore.Query(
 		datastore.Id(roleId),
 	)
-	role, found, err := q.FindOne()
+	roleI, found, err := q.FindOne()
 	if err != nil {
 		return err
 	}
 	if !found {
 		return errors.New("user not found")
 	}
+	role := roleI.(*usertypes.Role)
+
 	if role.Id == usertypes.RoleAdmin.Id {
 		return errors.New("cannot delete default role")
 	}

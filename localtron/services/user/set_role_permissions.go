@@ -14,19 +14,21 @@ import (
 	"fmt"
 
 	"github.com/singulatron/singulatron/localtron/datastore"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 func (s *UserService) SetRolePermissions(roleId string, permissionIds []string) error {
 	q := s.rolesStore.Query(
 		datastore.Id(roleId),
 	)
-	role, found, err := q.FindOne()
+	roleI, found, err := q.FindOne()
 	if err != nil {
 		return err
 	}
 	if !found {
 		return fmt.Errorf("Cannot find role %v", roleId)
 	}
+	role := roleI.(*usertypes.Role)
 
 	perms, err := s.permissionsStore.Query(
 		datastore.Equal(datastore.Field("id"), permissionIds),

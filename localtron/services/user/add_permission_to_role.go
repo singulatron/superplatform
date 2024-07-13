@@ -14,19 +14,21 @@ import (
 	"fmt"
 
 	"github.com/singulatron/singulatron/localtron/datastore"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 func (s *UserService) AddPermissionToRole(roleId, permissionId string) error {
 	q := s.rolesStore.Query(
 		datastore.Id(roleId),
 	)
-	role, found, err := q.FindOne()
+	roleI, found, err := q.FindOne()
 	if err != nil {
 		return err
 	}
 	if !found {
-		return fmt.Errorf("Cannot find role %v", roleId)
+		return fmt.Errorf("cannot find role %v", roleId)
 	}
+	role := roleI.(*usertypes.Role)
 
 	exists := false
 	for _, v := range role.PermissionIds {
@@ -43,7 +45,7 @@ func (s *UserService) AddPermissionToRole(roleId, permissionId string) error {
 		datastore.Id(permissionId),
 	).FindOne()
 	if !found {
-		return fmt.Errorf("Cannot find permission %v", permissionId)
+		return fmt.Errorf("cannot find permission %v", permissionId)
 	}
 
 	role.PermissionIds = append(role.PermissionIds, permissionId)

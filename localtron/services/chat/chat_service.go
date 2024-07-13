@@ -17,8 +17,6 @@ import (
 	configservice "github.com/singulatron/singulatron/localtron/services/config"
 	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
-
-	storefactoryservice "github.com/singulatron/singulatron/localtron/services/store_factory"
 )
 
 type ChatService struct {
@@ -26,26 +24,26 @@ type ChatService struct {
 	userService     *userservice.UserService
 	firehoseService *firehoseservice.FirehoseService
 
-	messagesStore datastore.DataStore[*chattypes.Message]
-	threadsStore  datastore.DataStore[*chattypes.Thread]
-	assetsStore   datastore.DataStore[*chattypes.Asset]
+	messagesStore datastore.DataStore
+	threadsStore  datastore.DataStore
+	assetsStore   datastore.DataStore
 }
 
 func NewChatService(
 	cs *configservice.ConfigService,
 	fs *firehoseservice.FirehoseService,
 	userService *userservice.UserService,
-	datastoreFactory func(tableName string) (any, error),
+	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error),
 ) (*ChatService, error) {
-	threadsStore, err := storefactoryservice.GetStore[*chattypes.Thread]("threads", datastoreFactory)
+	threadsStore, err := datastoreFactory("threads", &chattypes.Thread{})
 	if err != nil {
 		return nil, err
 	}
-	messagesStore, err := storefactoryservice.GetStore[*chattypes.Message]("messages", datastoreFactory)
+	messagesStore, err := datastoreFactory("messages", &chattypes.Message{})
 	if err != nil {
 		return nil, err
 	}
-	assetsStore, err := storefactoryservice.GetStore[*chattypes.Asset]("assets", datastoreFactory)
+	assetsStore, err := datastoreFactory("assets", &chattypes.Asset{})
 	if err != nil {
 		return nil, err
 	}

@@ -24,13 +24,14 @@ func (s *UserService) DeleteUser(userId string) error {
 	q := s.usersStore.Query(
 		datastore.Id(userId),
 	)
-	user, found, err := q.FindOne()
+	userI, found, err := q.FindOne()
 	if err != nil {
 		return err
 	}
 	if !found {
 		return errors.New("user not found")
 	}
+	user := userI.(*usertypes.User)
 
 	isAdminUser := false
 	for _, roleId := range user.RoleIds {

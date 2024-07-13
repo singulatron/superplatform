@@ -18,7 +18,7 @@ import (
 	"github.com/singulatron/singulatron/localtron/datastore"
 )
 
-func (s *SQLStore[T]) placeholder(counter int) string {
+func (s *SQLStore) placeholder(counter int) string {
 	switch s.placeholderStyle {
 	case QuestionMarkPlaceholder:
 		return "?"
@@ -29,7 +29,7 @@ func (s *SQLStore[T]) placeholder(counter int) string {
 	}
 }
 
-func (q *SQLQueryBuilder[T]) buildConditions(start ...int) ([]string, []interface{}, error) {
+func (q *SQLQueryBuilder) buildConditions(start ...int) ([]string, []interface{}, error) {
 	var params []interface{}
 	paramCounter := 1
 	if len(start) > 0 {

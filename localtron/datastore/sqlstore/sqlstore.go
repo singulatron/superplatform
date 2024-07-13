@@ -45,7 +45,9 @@ const (
 	DriverPostGRES = "postgres"
 )
 
-type SQLStore[T datastore.Row] struct {
+type SQLStore struct {
+	// an instance of the object for the type information
+	instance         any
 	db               *DebugDB
 	mu               sync.RWMutex
 	inTransaction    bool
@@ -57,7 +59,7 @@ type SQLStore[T datastore.Row] struct {
 	idFieldName      string
 }
 
-func NewSQLStore[T datastore.Row](driverName, connStr string, tableName string, debug bool) (*SQLStore[T], error) {
+func NewSQLStore(instance any, driverName, connStr string, tableName string, debug bool) (*SQLStore, error) {
 	db, err := sql.Open(driverName, connStr)
 	if err != nil {
 		return nil, errors.Wrap(err, "error opening sql db")
@@ -69,10 +71,10 @@ func NewSQLStore[T datastore.Row](driverName, connStr string, tableName string, 
 	}
 
 	if tableName == "" {
-		tableName = reflect.TypeOf(new(T)).Elem().Name()
+		tableName = reflect.TypeOf(new(datastore.Row)).Elem().Name()
 	}
 
-	sstore := &SQLStore[T]{
+	sstore := &SQLStore{
 		driverName:       driverName,
 		tableName:        tableName,
 		placeholderStyle: placeholderStyle,
@@ -81,11 +83,11 @@ func NewSQLStore[T datastore.Row](driverName, connStr string, tableName string, 
 	}
 	sstore.db.Debug = debug
 
-	if err := sstore.createTable(sstore.db, tableName); err != nil {
+	if err := sstore.createTable(instance, sstore.db, tableName); err != nil {
 		return nil, errors.Wrap(err, "error creating table")
 	}
 
-	var v T
+	var v datastore.Row
 
 	typ := reflect.TypeOf(v)
 	if typ.Kind() == reflect.Pointer {
@@ -108,11 +110,11 @@ func NewSQLStore[T datastore.Row](driverName, connStr string, tableName string, 
 	return sstore, nil
 }
 
-func (s *SQLStore[T]) SetDebug(debug bool) {
+func (s *SQLStore) SetDebug(debug bool) {
 	s.db.Debug = true
 }
 
-func (s *SQLStore[T]) Create(obj T) error {
+func (s *SQLStore) Create(obj datastore.Row) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
@@ -136,7 +138,7 @@ func (s *SQLStore[T]) Create(obj T) error {
 	return nil
 }
 
-func (s *SQLStore[T]) CreateMany(objs []T) error {
+func (s *SQLStore) CreateMany(objs []datastore.Row) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
@@ -166,7 +168,7 @@ func (s *SQLStore[T]) CreateMany(objs []T) error {
 	return tx.Commit()
 }
 
-func (s *SQLStore[T]) Upsert(obj T) error {
+func (s *SQLStore) Upsert(obj datastore.Row) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
@@ -184,7 +186,7 @@ func (s *SQLStore[T]) Upsert(obj T) error {
 	return err
 }
 
-func (s *SQLStore[T]) UpsertMany(objs []T) error {
+func (s *SQLStore) UpsertMany(objs []datastore.Row) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
@@ -206,14 +208,14 @@ func (s *SQLStore[T]) UpsertMany(objs []T) error {
 	return tx.Commit()
 }
 
-func (s *SQLStore[T]) Query(condition datastore.Condition, conditions ...datastore.Condition) datastore.QueryBuilder[T] {
-	return &SQLQueryBuilder[T]{
+func (s *SQLStore) Query(condition datastore.Condition, conditions ...datastore.Condition) datastore.QueryBuilder {
+	return &SQLQueryBuilder{
 		store:      s,
 		conditions: append([]datastore.Condition{condition}, conditions...),
 	}
 }
 
-func (s *SQLStore[T]) BeginTransaction() (datastore.DataStore[T], error) {
+func (s *SQLStore) BeginTransaction() (datastore.DataStore, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
@@ -226,7 +228,7 @@ func (s *SQLStore[T]) BeginTransaction() (datastore.DataStore[T], error) {
 		return nil, errors.Wrap(err, "error beginning transaction")
 	}
 
-	return &SQLStore[T]{
+	return &SQLStore{
 		db:               s.db,
 		tableName:        s.tableName,
 		driverName:       s.driverName,
@@ -237,7 +239,7 @@ func (s *SQLStore[T]) BeginTransaction() (datastore.DataStore[T], error) {
 	}, nil
 }
 
-func (s *SQLStore[T]) Commit() error {
+func (s *SQLStore) Commit() error {
 	if !s.inTransaction {
 		return errors.New("not in a transaction")
 	}
@@ -251,7 +253,7 @@ func (s *SQLStore[T]) Commit() error {
 	return nil
 }
 
-func (s *SQLStore[T]) Rollback() error {
+func (s *SQLStore) Rollback() error {
 	defer func() {
 		s.inTransaction = false
 	}()
@@ -268,11 +270,11 @@ func (s *SQLStore[T]) Rollback() error {
 	return nil
 }
 
-func (s *SQLStore[T]) IsInTransaction() bool {
+func (s *SQLStore) IsInTransaction() bool {
 	return s.inTransaction
 }
 
-func (s *SQLStore[T]) convertParam(param any) (any, error) {
+func (s *SQLStore) convertParam(param any) (any, error) {
 	t := reflect.TypeOf(param)
 	v := reflect.ValueOf(param)
 
@@ -326,7 +328,7 @@ func (s *SQLStore[T]) convertParam(param any) (any, error) {
 	return param, nil
 }
 
-func (s *SQLStore[T]) buildInsertQuery(obj T) (string, []interface{}, error) {
+func (s *SQLStore) buildInsertQuery(obj datastore.Row) (string, []interface{}, error) {
 	val := reflect.ValueOf(obj)
 	typ := val.Type()
 
@@ -364,7 +366,7 @@ func (s *SQLStore[T]) buildInsertQuery(obj T) (string, []interface{}, error) {
 	return query, params, nil
 }
 
-func (s *SQLStore[T]) buildUpsertQuery(obj T) (string, []interface{}, error) {
+func (s *SQLStore) buildUpsertQuery(obj datastore.Row) (string, []interface{}, error) {
 	val := reflect.ValueOf(obj)
 	typ := val.Type()
 
@@ -408,8 +410,8 @@ func (s *SQLStore[T]) buildUpsertQuery(obj T) (string, []interface{}, error) {
 	return query, params, nil
 }
 
-type SQLQueryBuilder[T datastore.Row] struct {
-	store        *SQLStore[T]
+type SQLQueryBuilder struct {
+	store        *SQLStore
 	conditions   []datastore.Condition
 	orderFields  []string
 	orderDescs   []bool
@@ -418,23 +420,23 @@ type SQLQueryBuilder[T datastore.Row] struct {
 	selectFields []string
 }
 
-func (q *SQLQueryBuilder[T]) OrderBy(field string, desc bool) datastore.QueryBuilder[T] {
+func (q *SQLQueryBuilder) OrderBy(field string, desc bool) datastore.QueryBuilder {
 	q.orderFields = append(q.orderFields, field)
 	q.orderDescs = append(q.orderDescs, desc)
 	return q
 }
 
-func (q *SQLQueryBuilder[T]) Limit(limit int) datastore.QueryBuilder[T] {
+func (q *SQLQueryBuilder) Limit(limit int) datastore.QueryBuilder {
 	q.limit = limit
 	return q
 }
 
-func (q *SQLQueryBuilder[T]) After(value ...any) datastore.QueryBuilder[T] {
+func (q *SQLQueryBuilder) After(value ...any) datastore.QueryBuilder {
 	q.after = value
 	return q
 }
 
-func (q *SQLQueryBuilder[T]) Select(fields ...string) datastore.QueryBuilder[T] {
+func (q *SQLQueryBuilder) Select(fields ...string) datastore.QueryBuilder {
 	q.selectFields = fields
 	return q
 }
@@ -451,7 +453,7 @@ func (a *GenericArray) Value() (driver.Value, error) {
 	return pq.Array(a.Array).Value()
 }
 
-func (q *SQLQueryBuilder[T]) Find() ([]T, error) {
+func (q *SQLQueryBuilder) Find() ([]datastore.Row, error) {
 	query, params, err := q.buildSelectQuery()
 	if err != nil {
 		return nil, errors.Wrap(err, "error building select query")
@@ -463,9 +465,9 @@ func (q *SQLQueryBuilder[T]) Find() ([]T, error) {
 	}
 	defer rows.Close()
 
-	var result []T
+	var result []datastore.Row
 
-	var v T
+	var v datastore.Row
 	tType := reflect.TypeOf(v)
 	tIsPointer := tType.Kind() == reflect.Pointer
 
@@ -591,17 +593,17 @@ func (q *SQLQueryBuilder[T]) Find() ([]T, error) {
 			val := obj.Interface()
 			valPtr := reflect.New(reflect.TypeOf(val))
 			valPtr.Elem().Set(reflect.ValueOf(val))
-			result = append(result, valPtr.Interface().(T))
+			result = append(result, valPtr.Interface().(datastore.Row))
 		} else {
-			result = append(result, obj.Interface().(T))
+			result = append(result, obj.Interface().(datastore.Row))
 		}
 	}
 
 	return result, nil
 }
 
-func (q *SQLQueryBuilder[T]) FindOne() (T, bool, error) {
-	var def T
+func (q *SQLQueryBuilder) FindOne() (datastore.Row, bool, error) {
+	var def datastore.Row
 	res, err := q.Find()
 	if err != nil {
 		return def, false, err
@@ -614,7 +616,7 @@ func (q *SQLQueryBuilder[T]) FindOne() (T, bool, error) {
 	return res[0], true, nil
 }
 
-func (q *SQLQueryBuilder[T]) Count() (int64, error) {
+func (q *SQLQueryBuilder) Count() (int64, error) {
 	query, params, err := q.buildSelectQuery()
 	if err != nil {
 		return 0, err
@@ -630,7 +632,7 @@ func (q *SQLQueryBuilder[T]) Count() (int64, error) {
 	return count, nil
 }
 
-func (q *SQLQueryBuilder[T]) Update(obj T) error {
+func (q *SQLQueryBuilder) Update(obj datastore.Row) error {
 	query, params, err := q.buildUpdateQuery(obj)
 	if err != nil {
 		return err
@@ -639,7 +641,7 @@ func (q *SQLQueryBuilder[T]) Update(obj T) error {
 	return err
 }
 
-func (q *SQLQueryBuilder[T]) Upsert(obj T) error {
+func (q *SQLQueryBuilder) Upsert(obj datastore.Row) error {
 	query, values, err := q.store.buildUpsertQuery(obj)
 	if err != nil {
 		return err
@@ -648,7 +650,7 @@ func (q *SQLQueryBuilder[T]) Upsert(obj T) error {
 	return err
 }
 
-func (q *SQLQueryBuilder[T]) UpdateFields(fields map[string]interface{}) error {
+func (q *SQLQueryBuilder) UpdateFields(fields map[string]interface{}) error {
 	query, params, err := q.buildUpdateFieldsQuery(fields)
 	if err != nil {
 		return err
@@ -657,7 +659,7 @@ func (q *SQLQueryBuilder[T]) UpdateFields(fields map[string]interface{}) error {
 	return err
 }
 
-func (q *SQLQueryBuilder[T]) Delete() error {
+func (q *SQLQueryBuilder) Delete() error {
 	query, values, err := q.buildDeleteQuery()
 	if err != nil {
 		return err
@@ -666,7 +668,7 @@ func (q *SQLQueryBuilder[T]) Delete() error {
 	return err
 }
 
-func (q *SQLQueryBuilder[T]) buildSelectQuery() (string, []interface{}, error) {
+func (q *SQLQueryBuilder) buildSelectQuery() (string, []interface{}, error) {
 	conditions, params, err := q.buildConditions()
 	if err != nil {
 		return "", nil, err
@@ -706,7 +708,7 @@ func (q *SQLQueryBuilder[T]) buildSelectQuery() (string, []interface{}, error) {
 	return query, params, nil
 }
 
-func (q *SQLQueryBuilder[T]) buildUpdateQuery(obj T) (string, []any, error) {
+func (q *SQLQueryBuilder) buildUpdateQuery(obj datastore.Row) (string, []any, error) {
 	val := reflect.ValueOf(obj)
 	typ := val.Type()
 
@@ -757,7 +759,7 @@ func (q *SQLQueryBuilder[T]) buildUpdateQuery(obj T) (string, []any, error) {
 	return query, params, nil
 }
 
-func (q *SQLQueryBuilder[T]) buildUpdateFieldsQuery(fields map[string]interface{}) (string, []any, error) {
+func (q *SQLQueryBuilder) buildUpdateFieldsQuery(fields map[string]interface{}) (string, []any, error) {
 
 	var sets []string
 	var params []interface{}
@@ -789,7 +791,7 @@ func (q *SQLQueryBuilder[T]) buildUpdateFieldsQuery(fields map[string]interface{
 	return query, params, nil
 }
 
-func (q *SQLQueryBuilder[T]) buildDeleteQuery() (string, []interface{}, error) {
+func (q *SQLQueryBuilder) buildDeleteQuery() (string, []interface{}, error) {
 	conditions, params, err := q.buildConditions()
 	if err != nil {
 		return "", nil, err

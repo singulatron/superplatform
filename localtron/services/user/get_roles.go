@@ -16,7 +16,18 @@ import (
 )
 
 func (s *UserService) GetRoles() ([]*usertypes.Role, error) {
-	return s.rolesStore.Query(
+	rolesI, err := s.rolesStore.Query(
 		datastore.All(),
 	).OrderBy("name", false).Find()
+
+	if err != nil {
+		return nil, err
+	}
+
+	roles := []*usertypes.Role{}
+	for _, roleI := range rolesI {
+		roles = append(roles, roleI.(*usertypes.Role))
+	}
+
+	return roles, err
 }

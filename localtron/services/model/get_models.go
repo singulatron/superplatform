@@ -16,8 +16,17 @@ import (
 )
 
 func (ms *ModelService) GetModels() ([]*modeltypes.Model, error) {
-	return ms.modelsStore.Query(
+	modelIs, err := ms.modelsStore.Query(
 		datastore.All(),
 	).Find()
+	if err != nil {
+		return nil, err
+	}
 
+	models := []*modeltypes.Model{}
+	for _, modelI := range modelIs {
+		models = append(models, modelI.(*modeltypes.Model))
+	}
+
+	return models, nil
 }

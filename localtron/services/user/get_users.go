@@ -58,5 +58,10 @@ func (s *UserService) GetUsers(options *GetUsersOptions) ([]*usertypes.User, int
 		}
 	}
 
-	return res, count, nil
+	users := []*usertypes.User{}
+	for _, v := range res {
+		users = append(users, v.(*usertypes.User))
+	}
+
+	return users, count, nil
 }

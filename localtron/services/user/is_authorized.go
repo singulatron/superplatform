@@ -29,7 +29,7 @@ func (s *UserService) IsAuthorized(permissionId string, request *http.Request) e
 	}
 	authHeader = strings.Replace(authHeader, "Bearer ", "", 1)
 
-	token, found, err := s.authTokensStore.Query(
+	tokenI, found, err := s.authTokensStore.Query(
 		datastore.Equal(datastore.Field("token"), authHeader),
 	).FindOne()
 	if err != nil {
@@ -39,8 +39,9 @@ func (s *UserService) IsAuthorized(permissionId string, request *http.Request) e
 	if !found {
 		return errors.New("unauthorized")
 	}
+	token := tokenI.(*usertypes.AuthToken)
 
-	user, found, err := s.usersStore.Query(
+	userI, found, err := s.usersStore.Query(
 		datastore.Id(token.UserId),
 	).FindOne()
 	if err != nil {
@@ -53,6 +54,7 @@ func (s *UserService) IsAuthorized(permissionId string, request *http.Request) e
 		)
 		return errors.New("unauthorized")
 	}
+	user := userI.(*usertypes.User)
 
 	roles, err := s.rolesStore.Query(
 		datastore.Equal(datastore.Field("id"), user.RoleIds),
@@ -62,7 +64,7 @@ func (s *UserService) IsAuthorized(permissionId string, request *http.Request) e
 	}
 
 	for _, role := range roles {
-		for _, permId := range role.PermissionIds {
+		for _, permId := range role.(*usertypes.Role).PermissionIds {
 			if permId == permissionId {
 				return nil
 			}
@@ -79,7 +81,7 @@ func (s *UserService) GetUserFromRequest(request *http.Request) (*usertypes.User
 	}
 	authHeader = strings.Replace(authHeader, "Bearer ", "", 1)
 
-	token, found, err := s.authTokensStore.Query(
+	tokenI, found, err := s.authTokensStore.Query(
 		datastore.Equal(datastore.Field("token"), authHeader),
 	).FindOne()
 	if err != nil {
@@ -89,8 +91,18 @@ func (s *UserService) GetUserFromRequest(request *http.Request) (*usertypes.User
 	if !found {
 		return nil, false, errors.New("unauthorized")
 	}
+	token := tokenI.(*usertypes.AuthToken)
 
-	return s.usersStore.Query(
+	userI, found, err := s.usersStore.Query(
 		datastore.Id(token.UserId),
 	).FindOne()
+	if err != nil {
+		return nil, false, err
+	}
+	if !found {
+		return nil, false, nil
+	}
+
+	user := userI.(*usertypes.User)
+	return user, found, nil
 }

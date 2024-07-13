@@ -40,7 +40,7 @@ func (ms *ModelService) Status(modelId string) (*modeltypes.ModelStatus, error) 
 		modelId = conf.Model.CurrentModelId
 	}
 
-	model, found, err := ms.modelsStore.Query(
+	modelI, found, err := ms.modelsStore.Query(
 		datastore.Id(modelId),
 	).FindOne()
 	if err != nil {
@@ -49,6 +49,7 @@ func (ms *ModelService) Status(modelId string) (*modeltypes.ModelStatus, error) 
 	if !found {
 		return nil, errors.New("model not found")
 	}
+	model := modelI.(*modeltypes.Model)
 
 	for _, assetUrl := range model.Assets {
 
@@ -62,7 +63,7 @@ func (ms *ModelService) Status(modelId string) (*modeltypes.ModelStatus, error) 
 		}
 	}
 
-	platform, found, err := ms.platformsStore.Query(
+	platformI, found, err := ms.platformsStore.Query(
 		datastore.Id(model.PlatformId),
 	).FindOne()
 	if err != nil {
@@ -71,6 +72,7 @@ func (ms *ModelService) Status(modelId string) (*modeltypes.ModelStatus, error) 
 	if !found {
 		return nil, errors.New("cannot find platform")
 	}
+	platform := platformI.(*modeltypes.Platform)
 
 	hash, err := modelToHash(model, platform)
 	if err != nil {

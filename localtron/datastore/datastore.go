@@ -24,25 +24,25 @@ var (
 	ErrEntryAlreadyExists = errors.New("entry already exists")
 )
 
-type DataStore[T Row] interface {
+type DataStore interface {
 	/*
 	 * Create an object.
 	 * Returns ErrEntryAlreadyExists if the object already exists.
 	 */
-	Create(obj T) error
+	Create(obj Row) error
 	/* Create many objects
 	* Returns ErrEntryAlreadyExists if any of the objects are already in set,
 	* and no object will be created.
 	 */
-	CreateMany(objs []T) error
+	CreateMany(objs []Row) error
 	/* Create or Update an object */
-	Upsert(obj T) error
+	Upsert(obj Row) error
 	/* Create or Update many objects */
-	UpsertMany(objs []T) error
+	UpsertMany(objs []Row) error
 
-	Query(condition Condition, conditions ...Condition) QueryBuilder[T]
+	Query(condition Condition, conditions ...Condition) QueryBuilder
 
-	BeginTransaction() (DataStore[T], error)
+	BeginTransaction() (DataStore, error)
 	Commit() error
 	Rollback() error
 	IsInTransaction() bool
@@ -50,20 +50,20 @@ type DataStore[T Row] interface {
 	SetDebug(debug bool)
 }
 
-type QueryBuilder[T Row] interface {
-	OrderBy(field string, desc bool) QueryBuilder[T]
-	Limit(limit int) QueryBuilder[T]
-	After(value ...any) QueryBuilder[T]
+type QueryBuilder interface {
+	OrderBy(field string, desc bool) QueryBuilder
+	Limit(limit int) QueryBuilder
+	After(value ...any) QueryBuilder
 
-	Select(fields ...string) QueryBuilder[T]
-	Find() ([]T, error)
-	FindOne() (T, bool, error)
+	Select(fields ...string) QueryBuilder
+	Find() ([]Row, error)
+	FindOne() (Row, bool, error)
 	Count() (int64, error)
 
 	// Update by query. Errors if no update happens
-	Update(obj T) error
+	Update(obj Row) error
 	// Upsert tries to update by query, and if no update appened, calls create.
-	Upsert(obj T) error
+	Upsert(obj Row) error
 	UpdateFields(fields map[string]interface{}) error
 	Delete() error
 }
