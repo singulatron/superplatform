@@ -29,7 +29,7 @@ import (
 
 type LocalStore struct {
 	instance      any
-	data          map[string]datastore.Row
+	data          map[string]any
 	mu            sync.RWMutex
 	lastID        int
 	inTransaction bool
@@ -48,7 +48,7 @@ func NewLocalStore(instance any, filePath string) (*LocalStore, error) {
 
 	ls := &LocalStore{
 		instance: instance,
-		data:     make(map[string]datastore.Row),
+		data:     make(map[string]any),
 	}
 
 	sm := statemanager.New(instance, func() []any {
@@ -105,7 +105,18 @@ func (s *LocalStore) createWithoutLock(obj datastore.Row) error {
 	if ok {
 		return datastore.ErrEntryAlreadyExists
 	}
-	s.data[id] = obj
+
+	bs, err := json.Marshal(obj)
+	if err != nil {
+		return err
+	}
+	var v interface{}
+	err = json.Unmarshal(bs, &v)
+	if err != nil {
+		return err
+	}
+
+	s.data[id] = v
 	s.stateManager.MarkChanged()
 	return nil
 }
@@ -124,7 +135,18 @@ func (s *LocalStore) CreateMany(objs []datastore.Row) error {
 
 	for _, obj := range objs {
 		id := obj.GetId()
-		s.data[id] = obj
+
+		bs, err := json.Marshal(obj)
+		if err != nil {
+			return err
+		}
+		var v interface{}
+		err = json.Unmarshal(bs, &v)
+		if err != nil {
+			return err
+		}
+
+		s.data[id] = v
 	}
 
 	s.stateManager.MarkChanged()
@@ -168,7 +190,7 @@ func (s *LocalStore) BeginTransaction() (datastore.DataStore, error) {
 
 	// Create a copy of the current store data
 	newStore := &LocalStore{
-		data:          make(map[string]datastore.Row),
+		data:          make(map[string]any),
 		lastID:        s.lastID,
 		inTransaction: true,
 		originalStore: s,
@@ -265,7 +287,7 @@ func (q *QueryBuilder) Find() ([]datastore.Row, error) {
 	q.store.mu.RLock()
 	defer q.store.mu.RUnlock()
 
-	var result []datastore.Row
+	var result []any
 	for _, obj := range q.store.data {
 		if q.match(obj) {
 			result = append(result, obj)
@@ -283,7 +305,8 @@ func (q *QueryBuilder) Find() ([]datastore.Row, error) {
 		startIndex := -1
 		for i, obj := range result {
 			vi := getField(obj, q.orderField)
-			if reflect.DeepEqual(vi, q.after[0]) {
+
+			if reflect.DeepEqual(toBaseType(vi), toBaseType(q.after[0])) {
 				startIndex = i + 1
 				break
 			}
@@ -291,7 +314,7 @@ func (q *QueryBuilder) Find() ([]datastore.Row, error) {
 		if startIndex != -1 {
 			result = result[startIndex:]
 		} else {
-			result = []datastore.Row{} // No matching "after" value found
+			result = []any{} // No matching "after" value found
 		}
 	}
 
@@ -364,7 +387,12 @@ func (q *QueryBuilder) FindOne() (datastore.Row, bool, error) {
 				return empty, false, err
 			}
 
-			return cop.(datastore.Row), true, json.Unmarshal(bs, &cop)
+			err = json.Unmarshal(bs, &cop)
+			if err != nil {
+				return empty, false, err
+			}
+
+			return reflect.ValueOf(cop).Elem().Interface().(datastore.Row), true, nil
 		}
 	}
 
@@ -373,7 +401,7 @@ func (q *QueryBuilder) FindOne() (datastore.Row, bool, error) {
 
 func createNewElement(instance interface{}) interface{} {
 	instanceType := reflect.TypeOf(instance)
-	newElement := reflect.New(instanceType).Elem()
+	newElement := reflect.New(instanceType)
 
 	return newElement.Interface()
 }
@@ -399,7 +427,18 @@ func (q *QueryBuilder) Update(obj datastore.Row) error {
 	for id, existingObj := range q.store.data {
 		if q.match(existingObj) {
 			found = true
-			q.store.data[id] = obj
+
+			bs, err := json.Marshal(obj)
+			if err != nil {
+				return err
+			}
+			var v interface{}
+			err = json.Unmarshal(bs, &v)
+			if err != nil {
+				return err
+			}
+
+			q.store.data[id] = v
 		}
 	}
 
@@ -422,6 +461,17 @@ func (q *QueryBuilder) Upsert(obj datastore.Row) error {
 	for id, existingObj := range q.store.data {
 		if q.match(existingObj) {
 			found = true
+
+			bs, err := json.Marshal(obj)
+			if err != nil {
+				return err
+			}
+			var v interface{}
+			err = json.Unmarshal(bs, &v)
+			if err != nil {
+				return err
+			}
+
 			q.store.data[id] = obj
 		}
 	}
@@ -440,7 +490,11 @@ func (q *QueryBuilder) UpdateFields(fields map[string]interface{}) error {
 	for id, obj := range q.store.data {
 		if q.match(obj) {
 			for field, value := range fields {
-				setField(&obj, field, value)
+
+				err := setField(&obj, field, value)
+				if err != nil {
+					return err
+				}
 			}
 			q.store.data[id] = obj
 		}
@@ -462,7 +516,7 @@ func (q *QueryBuilder) Delete() error {
 	return nil
 }
 
-func (q *QueryBuilder) match(obj datastore.Row) bool {
+func (q *QueryBuilder) match(obj any) bool {
 	for _, cond := range q.conditions {
 		if cond.Equal != nil || cond.Contains != nil || cond.StartsWith != nil {
 			var matchFunc func(subject, test any) bool
@@ -515,7 +569,6 @@ func (q *QueryBuilder) match(obj datastore.Row) bool {
 			matched := false
 			for _, fieldName := range fieldNames {
 				fieldValue := getField(obj, fieldName)
-
 				condValue := reflect.ValueOf(value)
 				if fieldV := reflect.ValueOf(fieldValue); fieldV.Kind() == reflect.Slice {
 					for i := 0; i < fieldV.Len(); i++ {
@@ -553,20 +606,20 @@ func (q *QueryBuilder) match(obj datastore.Row) bool {
 func fixFieldName(s string) string {
 	parts := strings.Split(s, ".")
 	for i := range parts {
-		parts[i] = strings.Title(parts[i])
+		parts[i] = strings.ToLower(string(parts[i][0])) + parts[i][1:]
 	}
+
 	return strings.Join(parts, ".")
 }
 
-func getField(obj datastore.Row, field string) interface{} {
+func getField(obj any, field string) interface{} {
 	field = fixFieldName(field)
 
 	return dipper.Get(obj, field)
 }
 
-func setField(obj *datastore.Row, field string, value interface{}) error {
+func setField(obj any, field string, value interface{}) error {
 	field = fixFieldName(field)
-
 	return dipper.Set(obj, field, value)
 }
 
@@ -630,8 +683,13 @@ func compare(vi, vj interface{}, desc bool) bool {
 
 func toBaseType(input interface{}) interface{} {
 	val := reflect.ValueOf(input)
+
 	if val.Kind() == reflect.Ptr {
 		val = val.Elem()
+	}
+
+	if val.Kind() == reflect.Invalid {
+		return input
 	}
 
 	// Recursively decompose until we reach the base type
@@ -642,7 +700,7 @@ func toBaseType(input interface{}) interface{} {
 	if val.Kind() == reflect.String {
 		return val.String()
 	} else if val.Kind() == reflect.Int || val.Kind() == reflect.Int8 || val.Kind() == reflect.Int16 || val.Kind() == reflect.Int32 || val.Kind() == reflect.Int64 {
-		return val.Int()
+		return float64(val.Int())
 	} else if val.Kind() == reflect.Uint || val.Kind() == reflect.Uint8 || val.Kind() == reflect.Uint16 || val.Kind() == reflect.Uint32 || val.Kind() == reflect.Uint64 {
 		return val.Uint()
 	} else if val.Kind() == reflect.Float32 || val.Kind() == reflect.Float64 {
