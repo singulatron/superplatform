@@ -111,7 +111,13 @@ func TestSelectPrompt(t *testing.T) {
 			require.NoError(t, err)
 			actualPrompt, err := selectPrompt(memStore)
 			require.NoError(t, err)
-			require.Equal(t, tt.expectedPrompt, actualPrompt)
+
+			if tt.expectedPrompt == nil {
+				require.Nil(t, actualPrompt)
+			} else {
+				require.NotNil(t, actualPrompt)
+				require.Equal(t, tt.expectedPrompt, actualPrompt)
+			}
 		})
 	}
 }
