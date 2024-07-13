@@ -20,6 +20,7 @@ import (
 	"os"
 	"os/signal"
 	"path"
+	"reflect"
 	"strings"
 	"sync"
 	"syscall"
@@ -33,22 +34,24 @@ type StateFile struct {
 }
 
 type StateManager struct {
+	instance    any
 	lock        sync.Mutex
 	filePath    string
 	hasChanged  bool
 	stateGetter func() []any
 }
 
-func New(stateGetter func() []any, filePath string) *StateManager {
+func New(instance any, stateGetter func() []any, filePath string) *StateManager {
 	sm := &StateManager{
 		filePath:    filePath + ".zip",
 		stateGetter: stateGetter,
+		instance:    instance,
 	}
 	sm.setupSignalHandler()
 	return sm
 }
 
-func (sm *StateManager) LoadState() ([]any, error) {
+func (sm *StateManager) LoadState() (any, error) {
 	sm.lock.Lock()
 	defer sm.lock.Unlock()
 
@@ -81,16 +84,49 @@ func (sm *StateManager) LoadState() ([]any, error) {
 		return nil, err
 	}
 
+	elemType := reflect.TypeOf(sm.instance)
+	slice, err := unmarshalIntoSlice([]byte(unzippedData), elemType)
+
+	return slice, err
+}
+
+func unmarshalIntoSlice(unzippedData []byte, elemType reflect.Type) (interface{}, error) {
 	var stateFile StateFile
+
 	if strings.TrimSpace(string(unzippedData)) == "" {
 		return nil, nil
 	}
-	err = json.Unmarshal(unzippedData, &stateFile)
+
+	err := json.Unmarshal(unzippedData, &stateFile)
 	if err != nil {
 		return nil, err
 	}
 
-	return stateFile.Rows, nil
+	slice := createSliceOfType(elemType)
+	sliceValue := reflect.ValueOf(slice)
+
+	for _, row := range stateFile.Rows {
+		rowData, err := json.Marshal(row)
+		if err != nil {
+			return nil, err
+		}
+
+		elem := reflect.New(elemType).Interface()
+		err = json.Unmarshal(rowData, elem)
+		if err != nil {
+			return nil, err
+		}
+
+		sliceValue = reflect.Append(sliceValue, reflect.ValueOf(elem).Elem())
+	}
+
+	return sliceValue.Interface(), nil
+}
+
+func createSliceOfType(elemType reflect.Type) interface{} {
+	sliceType := reflect.SliceOf(elemType)
+	sliceValue := reflect.MakeSlice(sliceType, 0, 0)
+	return sliceValue.Interface()
 }
 
 func (sm *StateManager) SaveState(shallowCopy []any) error {

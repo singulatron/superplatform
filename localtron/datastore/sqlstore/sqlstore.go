@@ -75,6 +75,7 @@ func NewSQLStore(instance any, driverName, connStr string, tableName string, deb
 	}
 
 	sstore := &SQLStore{
+		instance:         instance,
 		driverName:       driverName,
 		tableName:        tableName,
 		placeholderStyle: placeholderStyle,
@@ -87,7 +88,7 @@ func NewSQLStore(instance any, driverName, connStr string, tableName string, deb
 		return nil, errors.Wrap(err, "error creating table")
 	}
 
-	var v datastore.Row
+	v := createNewElement(instance)
 
 	typ := reflect.TypeOf(v)
 	if typ.Kind() == reflect.Pointer {
@@ -108,6 +109,13 @@ func NewSQLStore(instance any, driverName, connStr string, tableName string, deb
 	}
 
 	return sstore, nil
+}
+
+func createNewElement(instance interface{}) interface{} {
+	instanceType := reflect.TypeOf(instance)
+	newElement := reflect.New(instanceType).Elem()
+
+	return newElement.Interface()
 }
 
 func (s *SQLStore) SetDebug(debug bool) {
@@ -467,7 +475,7 @@ func (q *SQLQueryBuilder) Find() ([]datastore.Row, error) {
 
 	var result []datastore.Row
 
-	var v datastore.Row
+	v := createNewElement(q.store.instance)
 	tType := reflect.TypeOf(v)
 	tIsPointer := tType.Kind() == reflect.Pointer
 

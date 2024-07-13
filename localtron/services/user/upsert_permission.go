@@ -24,8 +24,10 @@ func (s *UserService) UpsertPermission(id, name, description string) (*usertypes
 	if err != nil {
 		return nil, err
 	}
-	perm := permI.(*usertypes.Permission)
+
 	if found {
+		perm := permI.(*usertypes.Permission)
+
 		perm.Name = name
 		perm.Description = description
 		query.Update(perm)

@@ -257,6 +257,7 @@ func TestPointerFindOne(t *testing.T, store DataStore) {
 	).FindOne()
 	require.Equal(t, true, found)
 	require.NoError(t, err)
+	require.NotNil(t, res)
 	require.Equal(t, obj3.Name, res.(*TestObject).Name)
 }
 
@@ -497,16 +498,16 @@ func TestDotNotation(t *testing.T, store DataStore) {
 	results, err = store.Query(All()).OrderBy("Friend.Age", false).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 3)
-	require.Equal(t, "Alice", results[0].(*TestObject).Name)
-	require.Equal(t, "Bob", results[1].(*TestObject).Name)
-	require.Equal(t, "Charlie", results[2].(*TestObject).Name)
+	require.Equal(t, "Alice", results[0].(TestObject).Name)
+	require.Equal(t, "Bob", results[1].(TestObject).Name)
+	require.Equal(t, "Charlie", results[2].(TestObject).Name)
 
 	results, err = store.Query(All()).OrderBy("Friend.Age", true).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 3)
-	require.Equal(t, "Charlie", results[0].(*TestObject).Name)
-	require.Equal(t, "Bob", results[1].(*TestObject).Name)
-	require.Equal(t, "Alice", results[2].(*TestObject).Name)
+	require.Equal(t, "Charlie", results[0].(TestObject).Name)
+	require.Equal(t, "Bob", results[1].(TestObject).Name)
+	require.Equal(t, "Alice", results[2].(TestObject).Name)
 
 	// Test IN clause with one element slice
 	results, err = store.Query(Equal(Field("FriendPointer.Age"), []int{32})).Find()

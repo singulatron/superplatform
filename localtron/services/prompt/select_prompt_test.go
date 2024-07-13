@@ -104,7 +104,7 @@ func TestSelectPrompt(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			memStore, err := localstore.NewLocalStore("")
+			memStore, err := localstore.NewLocalStore(&prompttypes.Prompt{}, "")
 			require.NoError(t, err)
 
 			err = memStore.UpsertMany(tt.prompts)

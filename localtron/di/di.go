@@ -83,8 +83,8 @@ func BigBang(options UniverseOptions) (*Universe, error) {
 			os.Exit(1)
 		}
 
-		options.DatastoreFactory = func(tableName string, isntance any) (datastore.DataStore, error) {
-			return localstore.NewLocalStore(path.Join(localStorePath, tableName))
+		options.DatastoreFactory = func(tableName string, instance any) (datastore.DataStore, error) {
+			return localstore.NewLocalStore(instance, path.Join(localStorePath, tableName))
 		}
 	}
 

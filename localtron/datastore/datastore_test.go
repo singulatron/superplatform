@@ -25,7 +25,7 @@ import (
 func TestAll(t *testing.T) {
 	stores := map[string]func(instance any) datastore.DataStore{
 		"localStore": func(instance any) datastore.DataStore {
-			store, err := localstore.NewLocalStore("")
+			store, err := localstore.NewLocalStore(instance, "")
 			require.NoError(t, err)
 			return store
 		},
@@ -45,7 +45,7 @@ func TestAll(t *testing.T) {
 	}
 	pointerStores := map[string]func(instance any) datastore.DataStore{
 		"localStore": func(instance any) datastore.DataStore {
-			store, err := localstore.NewLocalStore("")
+			store, err := localstore.NewLocalStore(instance, "")
 			require.NoError(t, err)
 			return store
 		},

@@ -28,6 +28,7 @@ import (
 )
 
 type LocalStore struct {
+	instance      any
 	data          map[string]datastore.Row
 	mu            sync.RWMutex
 	lastID        int
@@ -36,7 +37,7 @@ type LocalStore struct {
 	stateManager  *statemanager.StateManager
 }
 
-func NewLocalStore(filePath string) (*LocalStore, error) {
+func NewLocalStore(instance any, filePath string) (*LocalStore, error) {
 	if filePath == "" {
 		tempFile, err := ioutil.TempFile("", uuid.NewString())
 		if err != nil {
@@ -46,10 +47,11 @@ func NewLocalStore(filePath string) (*LocalStore, error) {
 	}
 
 	ls := &LocalStore{
-		data: make(map[string]datastore.Row),
+		instance: instance,
+		data:     make(map[string]datastore.Row),
 	}
 
-	sm := statemanager.New(func() []any {
+	sm := statemanager.New(instance, func() []any {
 		vals, _ := ls.Query(datastore.All()).Find()
 		is := []any{}
 		for _, v := range vals {
@@ -64,8 +66,18 @@ func NewLocalStore(filePath string) (*LocalStore, error) {
 		return nil, err
 	}
 	rowSlice := []datastore.Row{}
-	for _, v := range data {
-		rowSlice = append(rowSlice, v.(datastore.Row))
+
+	if data != nil {
+		v := reflect.ValueOf(data)
+
+		if v.Kind() != reflect.Slice {
+			panic("not a slice")
+		}
+
+		for i := 0; i < v.Len(); i++ {
+			elem := v.Index(i).Interface()
+			rowSlice = append(rowSlice, elem.(datastore.Row))
+		}
 	}
 	err = ls.CreateMany(rowSlice)
 	if err != nil {
@@ -288,13 +300,53 @@ func (q *QueryBuilder) Find() ([]datastore.Row, error) {
 	}
 
 	// deep copy result before returning
-	var resultCopy []datastore.Row
+
 	bs, err := json.Marshal(result)
 	if err != nil {
 		return nil, err
 	}
 
-	return resultCopy, json.Unmarshal(bs, &resultCopy)
+	elemType := reflect.TypeOf(q.store.instance)
+
+	// Step 3: Create a Slice of Structs
+	sliceType := reflect.SliceOf(elemType)
+	slice := reflect.MakeSlice(sliceType, 0, 0)
+
+	// Step 4: Unmarshal JSON
+	slicePtr := reflect.New(sliceType) // Create a pointer to the slice
+	slicePtr.Elem().Set(slice)         // Set the value of the pointer to the slice
+
+	sliceI := slicePtr.Interface()
+
+	// Unmarshal the JSON data into the slice
+	err = json.Unmarshal(bs, sliceI)
+	if err != nil {
+		return nil, err
+	}
+
+	v := reflect.ValueOf(sliceI)
+
+	if v.Kind() == reflect.Ptr {
+		v = v.Elem()
+	}
+
+	if v.Kind() != reflect.Slice {
+		panic("not a slice")
+	}
+
+	ret := []datastore.Row{}
+	for i := 0; i < v.Len(); i++ {
+		elem := v.Index(i).Interface()
+		ret = append(ret, elem.(datastore.Row))
+	}
+
+	return ret, nil
+}
+
+func createSliceOfType(elemType reflect.Type) interface{} {
+	sliceType := reflect.SliceOf(elemType)
+	sliceValue := reflect.MakeSlice(sliceType, 0, 0)
+	return sliceValue.Interface()
 }
 
 func (q *QueryBuilder) FindOne() (datastore.Row, bool, error) {
@@ -305,18 +357,25 @@ func (q *QueryBuilder) FindOne() (datastore.Row, bool, error) {
 
 	for _, obj := range q.store.data {
 		if q.match(obj) {
-			var cop datastore.Row
+			cop := createNewElement(q.store.instance)
 			// deep copy result before returning
 			bs, err := json.Marshal(obj)
 			if err != nil {
 				return empty, false, err
 			}
 
-			return cop, true, json.Unmarshal(bs, &cop)
+			return cop.(datastore.Row), true, json.Unmarshal(bs, &cop)
 		}
 	}
 
 	return empty, false, nil
+}
+
+func createNewElement(instance interface{}) interface{} {
+	instanceType := reflect.TypeOf(instance)
+	newElement := reflect.New(instanceType).Elem()
+
+	return newElement.Interface()
 }
 
 func (q *QueryBuilder) Count() (int64, error) {
