@@ -17,7 +17,7 @@ import (
 	"strings"
 )
 
-func encodeURLtoFileName(url string) string {
+func EncodeURLtoFileName(url string) string {
 	hash := sha256.New()
 	hash.Write([]byte(url))
 	hashBytes := hash.Sum(nil)

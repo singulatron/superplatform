@@ -44,9 +44,9 @@ func NewPromptService(
 	modelService *modelservice.ModelService,
 	appService *chatservice.ChatService,
 	firehoseService *firehoseservice.FirehoseService,
-
+	datastoreFactory func(tableName string) (any, error),
 ) (*PromptService, error) {
-	promptsStore, err := storefactoryservice.GetStore[*prompttypes.Prompt]("prompts")
+	promptsStore, err := storefactoryservice.GetStore[*prompttypes.Prompt]("prompts", datastoreFactory)
 	if err != nil {
 		return nil, err
 	}

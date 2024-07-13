@@ -30,20 +30,21 @@ type UserService struct {
 
 func NewUserService(
 	cs *configservice.ConfigService,
+	datastoreFactory func(tableName string) (any, error),
 ) (*UserService, error) {
-	usersStore, err := storefactoryservice.GetStore[*usertypes.User]("users")
+	usersStore, err := storefactoryservice.GetStore[*usertypes.User]("users", datastoreFactory)
 	if err != nil {
 		return nil, err
 	}
-	rolesStore, err := storefactoryservice.GetStore[*usertypes.Role]("roles")
+	rolesStore, err := storefactoryservice.GetStore[*usertypes.Role]("roles", datastoreFactory)
 	if err != nil {
 		return nil, err
 	}
-	authTokensStore, err := storefactoryservice.GetStore[*usertypes.AuthToken]("authTokens")
+	authTokensStore, err := storefactoryservice.GetStore[*usertypes.AuthToken]("authTokens", datastoreFactory)
 	if err != nil {
 		return nil, err
 	}
-	permissionsStore, err := storefactoryservice.GetStore[*usertypes.Permission]("permissions")
+	permissionsStore, err := storefactoryservice.GetStore[*usertypes.Permission]("permissions", datastoreFactory)
 	if err != nil {
 		return nil, err
 	}

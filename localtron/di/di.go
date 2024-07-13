@@ -38,10 +38,11 @@ type Universe struct {
 }
 
 type UniverseOptions struct {
-	Test bool
+	Test             bool
+	DatastoreFactory func(tableName string) (any, error)
 }
 
-func MakeUniverse(options UniverseOptions) (*Universe, error) {
+func BigBang(options UniverseOptions) (*Universe, error) {
 	var homeDir string
 	var err error
 	if options.Test {
@@ -74,6 +75,7 @@ func MakeUniverse(options UniverseOptions) (*Universe, error) {
 	}
 
 	storefactoryservice.LocalStorePath = path.Join(configService.ConfigDirectory, "data")
+
 	err = os.MkdirAll(storefactoryservice.LocalStorePath, 0755)
 	if err != nil {
 		logger.Error("Creating data folder failed", slog.String("error", err.Error()))
@@ -82,6 +84,7 @@ func MakeUniverse(options UniverseOptions) (*Universe, error) {
 
 	userService, err := userservice.NewUserService(
 		configService,
+		options.DatastoreFactory,
 	)
 	if err != nil {
 		logger.Error("User service start failed", slog.String("error", err.Error()))
@@ -138,7 +141,13 @@ func MakeUniverse(options UniverseOptions) (*Universe, error) {
 		os.Exit(1)
 	}
 
-	modelService, err := modelservice.NewModelService(downloadService, userService, configService, dockerService)
+	modelService, err := modelservice.NewModelService(
+		downloadService,
+		userService,
+		configService,
+		dockerService,
+		options.DatastoreFactory,
+	)
 	if err != nil {
 		logger.Error("Model service creation failed", slog.String("error", err.Error()))
 		os.Exit(1)
@@ -158,6 +167,7 @@ func MakeUniverse(options UniverseOptions) (*Universe, error) {
 		configService,
 		firehoseService,
 		userService,
+		options.DatastoreFactory,
 	)
 	if err != nil {
 		logger.Error("Chat service creation failed", slog.String("error", err.Error()))
@@ -170,6 +180,7 @@ func MakeUniverse(options UniverseOptions) (*Universe, error) {
 		modelService,
 		chatService,
 		firehoseService,
+		options.DatastoreFactory,
 	)
 	if err != nil {
 		logger.Error("Prompt service creation failed", slog.String("error", err.Error()))
@@ -180,6 +191,7 @@ func MakeUniverse(options UniverseOptions) (*Universe, error) {
 		configService,
 		firehoseService,
 		userService,
+		options.DatastoreFactory,
 	)
 	if err != nil {
 		logger.Error("Generic service creation failed", slog.String("error", err.Error()))

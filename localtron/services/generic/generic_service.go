@@ -34,8 +34,9 @@ func NewGenericService(
 	cs *configservice.ConfigService,
 	fs *firehoseservice.FirehoseService,
 	userService *userservice.UserService,
+	datastoreFactory func(tableName string) (any, error),
 ) (*GenericService, error) {
-	store, err := storefactoryservice.GetStore[*generictypes.GenericObject]("generic")
+	store, err := storefactoryservice.GetStore[*generictypes.GenericObject]("generic", datastoreFactory)
 	if err != nil {
 		return nil, err
 	}

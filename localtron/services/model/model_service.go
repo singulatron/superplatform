@@ -41,7 +41,9 @@ func NewModelService(
 	ds *downloadservice.DownloadService,
 	userService *userservice.UserService,
 	cs *configservice.ConfigService,
-	dockerService *dockerservice.DockerService) (*ModelService, error) {
+	dockerService *dockerservice.DockerService,
+	datastoreFactory func(tableName string) (any, error),
+) (*ModelService, error) {
 	srv := &ModelService{
 		userService:     userService,
 		downloadService: ds,
@@ -50,13 +52,13 @@ func NewModelService(
 
 		modelPortMap: map[int]*modeltypes.ModelState{},
 	}
-	modelStore, err := storefactoryservice.GetStore[*modeltypes.Model]("models")
+	modelStore, err := storefactoryservice.GetStore[*modeltypes.Model]("models", datastoreFactory)
 	if err != nil {
 		return nil, err
 	}
 	srv.modelsStore = modelStore
 
-	platformsStore, err := storefactoryservice.GetStore[*modeltypes.Platform]("platforms")
+	platformsStore, err := storefactoryservice.GetStore[*modeltypes.Platform]("platforms", datastoreFactory)
 	if err != nil {
 		return nil, err
 	}

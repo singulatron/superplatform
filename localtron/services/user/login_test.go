@@ -10,7 +10,7 @@ import (
 )
 
 func TestRegistration(t *testing.T) {
-	univ, err := di.MakeUniverse(di.UniverseOptions{
+	univ, err := di.BigBang(di.UniverseOptions{
 		Test: true,
 	})
 	require.NoError(t, err)

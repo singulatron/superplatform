@@ -8,7 +8,7 @@
  * For commercial use, a separate license must be obtained by purchasing from The Authors.
  * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
-package downloadservice
+package downloadservice_test
 
 import (
 	"io"
@@ -20,10 +20,9 @@ import (
 	"testing"
 	"time"
 
-	configservice "github.com/singulatron/singulatron/localtron/services/config"
+	"github.com/singulatron/singulatron/localtron/di"
+	downloadservice "github.com/singulatron/singulatron/localtron/services/download"
 	types "github.com/singulatron/singulatron/localtron/services/download/types"
-	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
-	userservice "github.com/singulatron/singulatron/localtron/services/user"
 	"github.com/stretchr/testify/require"
 )
 
@@ -44,14 +43,11 @@ func TestDownloadFile(t *testing.T) {
 	dir := path.Join(os.TempDir(), "download_test")
 	require.NoError(t, os.MkdirAll(dir, 0755))
 
-	cs, err := configservice.NewConfigService()
+	universe, err := di.BigBang(di.UniverseOptions{
+		Test: true,
+	})
 	require.NoError(t, err)
-	us, err := userservice.NewUserService(cs)
-	require.NoError(t, err)
-	fs, err := firehoseservice.NewFirehoseService(us)
-	require.NoError(t, err)
-	dm, err := NewDownloadService(fs, us)
-	require.NoError(t, err)
+	dm := universe.DownloadService
 
 	dm.StateFilePath = path.Join(dir, "downloadFile.json")
 	require.NoError(t, dm.Do(server.URL, dir))
@@ -64,7 +60,7 @@ func TestDownloadFile(t *testing.T) {
 		}
 	}
 
-	expectedFilePath := filepath.Join(dir, encodeURLtoFileName(server.URL))
+	expectedFilePath := filepath.Join(dir, downloadservice.EncodeURLtoFileName(server.URL))
 	data, err := os.ReadFile(expectedFilePath)
 	require.NoError(t, err)
 	require.Equal(t, "Hello world", string(data))
@@ -87,19 +83,16 @@ func TestDownloadFileWithPartFile(t *testing.T) {
 	require.NoError(t, os.MkdirAll(dir, 0755))
 
 	downloadURL := server.URL + "/file"
-	partFilePath := filepath.Join(dir, encodeURLtoFileName(downloadURL)+".part")
+	partFilePath := filepath.Join(dir, downloadservice.EncodeURLtoFileName(downloadURL)+".part")
 	if err := os.WriteFile(partFilePath, []byte("Hello"), 0644); err != nil {
 		t.Fatalf("Failed to create part file: %s", err)
 	}
 
-	cs, err := configservice.NewConfigService()
+	universe, err := di.BigBang(di.UniverseOptions{
+		Test: true,
+	})
 	require.NoError(t, err)
-	us, err := userservice.NewUserService(cs)
-	require.NoError(t, err)
-	fs, err := firehoseservice.NewFirehoseService(us)
-	require.NoError(t, err)
-	dm, err := NewDownloadService(fs, us)
-	require.NoError(t, err)
+	dm := universe.DownloadService
 
 	dm.StateFilePath = path.Join(dir, "downloadFilePartial.json")
 
@@ -113,7 +106,7 @@ func TestDownloadFileWithPartFile(t *testing.T) {
 		}
 	}
 
-	expectedFilePath := filepath.Join(dir, encodeURLtoFileName(downloadURL))
+	expectedFilePath := filepath.Join(dir, downloadservice.EncodeURLtoFileName(downloadURL))
 	data, err := os.ReadFile(expectedFilePath)
 	require.NoError(t, err)
 	require.Equal(t, "Hello world", string(data))
@@ -124,17 +117,14 @@ func TestDownloadFileWithFullFile(t *testing.T) {
 	require.NoError(t, os.MkdirAll(dir, 0755))
 
 	downloadURL := "full-file"
-	fullFilePath := filepath.Join(dir, encodeURLtoFileName(downloadURL))
+	fullFilePath := filepath.Join(dir, downloadservice.EncodeURLtoFileName(downloadURL))
 	require.NoError(t, os.WriteFile(fullFilePath, []byte("Hello world"), 0644))
 
-	cs, err := configservice.NewConfigService()
+	universe, err := di.BigBang(di.UniverseOptions{
+		Test: true,
+	})
 	require.NoError(t, err)
-	us, err := userservice.NewUserService(cs)
-	require.NoError(t, err)
-	fs, err := firehoseservice.NewFirehoseService(us)
-	require.NoError(t, err)
-	dm, err := NewDownloadService(fs, us)
-	require.NoError(t, err)
+	dm := universe.DownloadService
 
 	dm.StateFilePath = path.Join(dir, "downloadFileFull.json")
 	require.NoError(t, dm.Do(downloadURL, dir))

@@ -15,8 +15,6 @@ import (
 	"path"
 
 	"github.com/singulatron/singulatron/localtron/datastore"
-	"github.com/singulatron/singulatron/localtron/datastore/localstore"
-	"github.com/singulatron/singulatron/localtron/datastore/sqlstore"
 )
 
 var LocalStorePath = ""
@@ -42,12 +40,20 @@ func init() {
 // and type safety when creating instances of datastores.
 //
 // Unfortunately this means globals must be utilized to configure this package.
-func GetStore[T datastore.Row](tableName string) (datastore.DataStore[T], error) {
-	db := os.Getenv("SINGULATRON_DB")
-	connStr := os.Getenv("SINGULATRON_DB_SQL_CONNECTION_STRING")
-	if db == "postgres" {
-		debug := os.Getenv("SINGULATRON_DB_DEBUG") == "true"
-		return sqlstore.NewSQLStore[T]("postgres", connStr, tableName, debug)
+func GetStore[T datastore.Row](tableName string, datastoreFactory func(tableName string) (any, error)) (datastore.DataStore[T], error) {
+	ds, err := datastoreFactory(tableName)
+	if err != nil {
+		return nil, err
 	}
-	return localstore.NewLocalStore[T](path.Join(LocalStorePath, tableName)), nil
+	return ds.(datastore.DataStore[T]), nil
 }
+
+// 	return localstore.NewLocalStore[T](path.Join(LocalStorePath, tableName)), nil
+
+// db := os.Getenv("SINGULATRON_DB")
+// connStr := os.Getenv("SINGULATRON_DB_SQL_CONNECTION_STRING")
+// if db == "postgres" {
+// 	debug := os.Getenv("SINGULATRON_DB_DEBUG") == "true"
+// 	return sqlstore.NewSQLStore[T]("postgres", connStr, tableName, debug)
+// }
+// return localstore.NewLocalStore[T](path.Join(LocalStorePath, tableName)), nil

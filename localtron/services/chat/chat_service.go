@@ -35,16 +35,17 @@ func NewChatService(
 	cs *configservice.ConfigService,
 	fs *firehoseservice.FirehoseService,
 	userService *userservice.UserService,
+	datastoreFactory func(tableName string) (any, error),
 ) (*ChatService, error) {
-	threadsStore, err := storefactoryservice.GetStore[*chattypes.Thread]("threads")
+	threadsStore, err := storefactoryservice.GetStore[*chattypes.Thread]("threads", datastoreFactory)
 	if err != nil {
 		return nil, err
 	}
-	messagesStore, err := storefactoryservice.GetStore[*chattypes.Message]("messages")
+	messagesStore, err := storefactoryservice.GetStore[*chattypes.Message]("messages", datastoreFactory)
 	if err != nil {
 		return nil, err
 	}
-	assetsStore, err := storefactoryservice.GetStore[*chattypes.Asset]("assets")
+	assetsStore, err := storefactoryservice.GetStore[*chattypes.Asset]("assets", datastoreFactory)
 	if err != nil {
 		return nil, err
 	}
