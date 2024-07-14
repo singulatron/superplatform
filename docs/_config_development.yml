@@ -1,0 +1,15 @@
+baseurl: ""
+url: ""
+markdown: kramdown
+kramdown:
+  input: GFM
+
+theme: just-the-docs
+title: "Singulatron"
+
+defaults:
+  -
+    scope:
+      path: "**/*.md"
+    values:
+      layout: "page"

@@ -1,9 +1,10 @@
 ---
-title: Server Setup
+title: Environment Variables
 nav_order: 2
+parent: Server Setup
 ---
 
-# Server Setup
+# Environment Variables
 
 ## Starting Up
 

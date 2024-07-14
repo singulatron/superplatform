@@ -17,7 +17,7 @@ nav_order: 1
       <a href="https://superplatform.ai">superplatform.ai</a>
     </div>
   </div>
-<p>
+</p>
 <br />
 
 Singulatron runs AIs on your servers. It works with any database (just write shims for your favourite ones, or ask for it). It's source-available, private, and uses no third party APIs.
