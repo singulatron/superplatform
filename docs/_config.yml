@@ -29,7 +29,7 @@ search:
 
   # Set the search token separator
   # This enables support for searching within words (intra-word search)
-  tokenizer_separator: /(?=[A-Z])|\b/
+  tokenizer_separator: tokenizer_separator: /[\s_\-/]+|(?=[A-Z])|(?<=\w)(?=\d)|(?<=\d)(?=\w)/
 
   # Display the relative url in search results
   # Supports true (default) or false
