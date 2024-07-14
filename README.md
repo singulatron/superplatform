@@ -7,7 +7,7 @@
     <div>
       The AI Superplatform.
     </div>
-    <di>Run AIs and AI apps on Singulatron. Simply install the agent on your servers and connect via the web.</di>
+    <di>Run and develop self-hosted AI apps.</di>
     <div>
       <a href="https://superplatform.ai">superplatform.ai</a>
     </div>
