@@ -11,7 +11,7 @@ title: Singulatron
     <div>
       The AI Superplatform.
     </div>
-    <di>Have your own distributed internal AI network that runs on any stack.</di>
+    <di>Run and develop self-hosted AI apps</di>
     <div>
       <a href="https://superplatform.ai">superplatform.ai</a>
     </div>
