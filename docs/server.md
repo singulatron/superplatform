@@ -1,3 +1,8 @@
+---
+title: Server Setup
+nav_order: 2
+---
+
 # Server Setup
 
 ## Starting Up

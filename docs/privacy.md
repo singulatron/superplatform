@@ -1,3 +1,8 @@
+---
+title: Privacy
+nav_order: 100
+---
+
 # Privacy
 
 This document aims to detail privacy considerations.
