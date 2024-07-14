@@ -1,5 +1,5 @@
 title: "Singulatron"
-remote_theme: pages-themes/leap-day@v0.2.0
+remote_theme: pmarsceill/just-the-docs
 plugins:
   - jekyll-remote-theme
 markdown: GFM
