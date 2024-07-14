@@ -11,7 +11,6 @@
 package localstore
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -26,6 +25,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/datastore/localstore/statemanager"
+	"github.com/singulatron/singulatron/localtron/reflector"
 )
 
 type LocalStore struct {
@@ -107,12 +107,7 @@ func (s *LocalStore) createWithoutLock(obj datastore.Row) error {
 		return datastore.ErrEntryAlreadyExists
 	}
 
-	bs, err := json.Marshal(obj)
-	if err != nil {
-		return err
-	}
-	var v interface{}
-	err = json.Unmarshal(bs, &v)
+	v, err := reflector.DeepCopyIntoMap(obj)
 	if err != nil {
 		return err
 	}
@@ -138,12 +133,7 @@ func (s *LocalStore) CreateMany(objs []datastore.Row) error {
 	for _, obj := range objs {
 		id := obj.GetId()
 
-		bs, err := json.Marshal(obj)
-		if err != nil {
-			return err
-		}
-		var v interface{}
-		err = json.Unmarshal(bs, &v)
+		v, err := reflector.DeepCopyIntoMap(obj)
 		if err != nil {
 			return err
 		}
@@ -159,12 +149,7 @@ func (s *LocalStore) Upsert(obj datastore.Row) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	bs, err := json.Marshal(obj)
-	if err != nil {
-		return err
-	}
-	var v interface{}
-	err = json.Unmarshal(bs, &v)
+	v, err := reflector.DeepCopyIntoMap(obj)
 	if err != nil {
 		return err
 	}
@@ -179,12 +164,7 @@ func (s *LocalStore) UpsertMany(objs []datastore.Row) error {
 	defer s.mu.Unlock()
 
 	for _, obj := range objs {
-		bs, err := json.Marshal(obj)
-		if err != nil {
-			return err
-		}
-		var v interface{}
-		err = json.Unmarshal(bs, &v)
+		v, err := reflector.DeepCopyIntoMap(obj)
 		if err != nil {
 			return err
 		}
@@ -344,54 +324,17 @@ func (q *QueryBuilder) Find() ([]datastore.Row, error) {
 		result = result[:q.limit]
 	}
 
-	// deep copy result before returning
-
-	bs, err := json.Marshal(result)
+	sliceCopy, err := reflector.DeepCopySliceIntoType(result, q.store.instance)
 	if err != nil {
 		return nil, err
-	}
-
-	elemType := reflect.TypeOf(q.store.instance)
-
-	// Step 3: Create a Slice of Structs
-	sliceType := reflect.SliceOf(elemType)
-	slice := reflect.MakeSlice(sliceType, 0, 0)
-
-	// Step 4: Unmarshal JSON
-	slicePtr := reflect.New(sliceType) // Create a pointer to the slice
-	slicePtr.Elem().Set(slice)         // Set the value of the pointer to the slice
-
-	sliceI := slicePtr.Interface()
-
-	// Unmarshal the JSON data into the slice
-	err = json.Unmarshal(bs, sliceI)
-	if err != nil {
-		return nil, err
-	}
-
-	v := reflect.ValueOf(sliceI)
-
-	if v.Kind() == reflect.Ptr {
-		v = v.Elem()
-	}
-
-	if v.Kind() != reflect.Slice {
-		panic("not a slice")
 	}
 
 	ret := []datastore.Row{}
-	for i := 0; i < v.Len(); i++ {
-		elem := v.Index(i).Interface()
-		ret = append(ret, elem.(datastore.Row))
+	for _, v := range sliceCopy {
+		ret = append(ret, v.(datastore.Row))
 	}
 
 	return ret, nil
-}
-
-func createSliceOfType(elemType reflect.Type) interface{} {
-	sliceType := reflect.SliceOf(elemType)
-	sliceValue := reflect.MakeSlice(sliceType, 0, 0)
-	return sliceValue.Interface()
 }
 
 func (q *QueryBuilder) FindOne() (datastore.Row, bool, error) {
@@ -402,30 +345,16 @@ func (q *QueryBuilder) FindOne() (datastore.Row, bool, error) {
 
 	for _, obj := range q.store.data {
 		if q.match(obj) {
-			cop := createNewElement(q.store.instance)
-			// deep copy result before returning
-			bs, err := json.Marshal(obj)
+			cop, err := reflector.DeepCopyIntoType(obj, q.store.instance)
 			if err != nil {
-				return empty, false, err
+				return nil, false, err
 			}
 
-			err = json.Unmarshal(bs, &cop)
-			if err != nil {
-				return empty, false, err
-			}
-
-			return reflect.ValueOf(cop).Elem().Interface().(datastore.Row), true, nil
+			return cop.(datastore.Row), true, nil
 		}
 	}
 
 	return empty, false, nil
-}
-
-func createNewElement(instance interface{}) interface{} {
-	instanceType := reflect.TypeOf(instance)
-	newElement := reflect.New(instanceType)
-
-	return newElement.Interface()
 }
 
 func (q *QueryBuilder) Count() (int64, error) {
@@ -450,12 +379,7 @@ func (q *QueryBuilder) Update(obj datastore.Row) error {
 		if q.match(existingObj) {
 			found = true
 
-			bs, err := json.Marshal(obj)
-			if err != nil {
-				return err
-			}
-			var v interface{}
-			err = json.Unmarshal(bs, &v)
+			v, err := reflector.DeepCopyIntoMap(obj)
 			if err != nil {
 				return err
 			}
@@ -484,12 +408,7 @@ func (q *QueryBuilder) Upsert(obj datastore.Row) error {
 		if q.match(existingObj) {
 			found = true
 
-			bs, err := json.Marshal(obj)
-			if err != nil {
-				return err
-			}
-			var v interface{}
-			err = json.Unmarshal(bs, &v)
+			v, err := reflector.DeepCopyIntoMap(obj)
 			if err != nil {
 				return err
 			}
