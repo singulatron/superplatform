@@ -3,7 +3,7 @@ title: Singulatron
 ---
 
 <p align="center">
-  <img width="150px" src="https://singulatron.com/assets/logo-lighter.png" />
+  <img width="150px" src="https://singulatron.com/assets/logo-lighter.svg" />
   <div align="center">
     <span>
       <h1>Singulatron</h1>

@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="150px" src="https://singulatron.com/assets/logo-lighter.png" />
+  <img width="150px" src="https://singulatron.com/assets/logo-lighter.svg" />
   <div align="center">
     <span>
       <h1>Singulatron</h1>
@@ -29,6 +29,7 @@ A tool for AI consumption and AI app development.
 - [ ] Improving this roadmap : )
 
 ![Run](https://singulatron.com/assets/chat.png?refresh=1)
+
 ## Run On Your Servers
 
 See [this document](./docs/server.md) to help you get started.
