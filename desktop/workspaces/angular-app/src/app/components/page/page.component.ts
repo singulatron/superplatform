@@ -22,9 +22,9 @@ import { CommonModule, NgFor } from '@angular/common';
 import { IonicModule, IonMenu } from '@ionic/angular';
 import { RouterLink } from '@angular/router';
 import { NgStyle, NgIf, NgClass } from '@angular/common';
-import { MobileService } from '../../services/mobile.service';
-import { FooterService } from '../../services/footer.service';
-import { LocaltronService } from '../../services/localtron.service';
+import { MobileService } from '../../services/mobile.service.js';
+import { FooterService } from '../../services/footer.service.js';
+import { LocaltronService } from '../../services/localtron.service.js';
 import { Router, NavigationStart } from '@angular/router';
 
 @Component({

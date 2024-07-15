@@ -6,9 +6,10 @@
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
 import { Injectable } from '@angular/core';
-import { LocaltronService } from './localtron.service';
+import { LocaltronService } from './localtron.service.js';
 import { ReplaySubject, Subject } from 'rxjs';
-import { FirehoseService } from './firehose.service';
+import { FirehoseService } from './firehose.service.js';
+import * as chat from '@singulatron/types/chat';
 
 @Injectable({
 	providedIn: 'root',
@@ -16,13 +17,13 @@ import { FirehoseService } from './firehose.service';
 export class ChatService {
 	public activeThreadId: string = '';
 
-	onMessageAddedSubject = new ReplaySubject<MessageAddedEvent>(1);
+	onMessageAddedSubject = new ReplaySubject<chat.MessageAddedEvent>(1);
 	onMessageAdded$ = this.onMessageAddedSubject.asObservable();
 
-	onThreadAddedSubject = new ReplaySubject<ThreadAddedEvent>(1);
+	onThreadAddedSubject = new ReplaySubject<chat.ThreadAddedEvent>(1);
 	onThreadAdded$ = this.onMessageAddedSubject.asObservable();
 
-	onThreadUpdateSubject = new ReplaySubject<MessageAddedEvent>(1);
+	onThreadUpdateSubject = new ReplaySubject<chat.MessageAddedEvent>(1);
 	onThreadUpdate$ = this.onMessageAddedSubject.asObservable();
 
 	onStartNewThreadSubject = new Subject<void>();
@@ -55,38 +56,40 @@ export class ChatService {
 		});
 	}
 
-	async chatMessageDelete(messageId: string): Promise<GetThreadResponse> {
-		const request: DeleteMessageRequest = { messageId: messageId };
+	async chatMessageDelete(messageId: string): Promise<chat.GetThreadResponse> {
+		const request: chat.DeleteMessageRequest = { messageId: messageId };
 		return this.localtron.call('/chat/message/delete', request);
 	}
 
-	async chatMessages(threadId: string): Promise<GetMessagesResponse> {
-		const request: GetMessagesRequest = { threadId: threadId };
+	async chatMessages(threadId: string): Promise<chat.GetMessagesResponse> {
+		const request: chat.GetMessagesRequest = { threadId: threadId };
 		return this.localtron.call('/chat/messages', request);
 	}
 
-	async chatThread(threadId: string): Promise<GetThreadResponse> {
-		const request: GetThreadRequest = { threadId: threadId };
+	async chatThread(threadId: string): Promise<chat.GetThreadResponse> {
+		const request: chat.GetThreadRequest = { threadId: threadId };
 		return this.localtron.call('/chat/thread', request);
 	}
 
-	async chatThreadAdd(thread: Thread): Promise<AddThreadResponse> {
-		const request: AddThreadRequest = { thread: thread };
+	async chatThreadAdd(thread: chat.Thread): Promise<chat.AddThreadResponse> {
+		const request: chat.AddThreadRequest = { thread: thread };
 		return this.localtron.call('/chat/thread/add', request);
 	}
 
-	async chatThreadUpdate(thread: Thread): Promise<UpdateThreadResponse> {
-		const request: UpdateThreadRequest = { thread: thread };
+	async chatThreadUpdate(
+		thread: chat.Thread
+	): Promise<chat.UpdateThreadResponse> {
+		const request: chat.UpdateThreadRequest = { thread: thread };
 		return this.localtron.call('/chat/thread/update', request);
 	}
 
 	async chatThreadDelete(threadId: string): Promise<void> {
-		const request: DeleteThreadRequest = { threadId: threadId };
+		const request: chat.DeleteThreadRequest = { threadId: threadId };
 		return this.localtron.call('/chat/thread/delete', request);
 	}
 
-	async chatThreads(): Promise<GetThreadsResponse> {
-		const request: GetThreadsRequest = {};
+	async chatThreads(): Promise<chat.GetThreadsResponse> {
+		const request: chat.GetThreadsRequest = {};
 		return this.localtron.call('/chat/threads', request);
 	}
 

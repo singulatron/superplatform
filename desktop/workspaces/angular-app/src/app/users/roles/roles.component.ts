@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
-import { UserService, Role, Permission } from '../../services/user.service';
+import { UserService } from '../../services/user.service.js';
+import { Role, Permission } from '@singulatron/types/user';
 import { first } from 'rxjs';
 import { NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
-import { PageComponent } from '../../components/page/page.component';
-import { IconMenuComponent } from '../../components/icon-menu/icon-menu.component';
+import { PageComponent } from '../../components/page/page.component.js';
+import { IconMenuComponent } from '../../components/icon-menu/icon-menu.component.js';
 
 @Component({
 	selector: 'app-roles',

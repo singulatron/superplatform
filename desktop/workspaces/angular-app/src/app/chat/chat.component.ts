@@ -11,21 +11,23 @@ import {
 	Component,
 	OnInit,
 } from '@angular/core';
-import { LocaltronService } from '../services/localtron.service';
+import { LocaltronService } from '../services/localtron.service.js';
 
-import { ElectronIpcService } from '../services/electron-ipc.service';
+import { ElectronIpcService } from '../services/electron-ipc.service.js';
 import { WindowApiConst } from 'shared-lib';
 import { Subscription } from 'rxjs';
-import { ChatService, Thread } from '../services/chat.service';
-import { Prompt, PromptService } from '../services/prompt.service';
-import { Model, ModelService } from '../services/model.service';
-import { ConfigService } from '../services/config.service';
-import { ChatBoxComponent } from './chat-box/chat-box.component';
-import { CenteredComponent } from '../components/centered/centered.component';
+import { ChatService } from '../services/chat.service.js';
+import {  PromptService } from '../services/prompt.service.js';
+import { Prompt } from '@singulatron/types/prompt';
+import { Thread } from '@singulatron/types/chat';
+import { Model, ModelService } from '../services/model.service.js';
+import { ConfigService } from '../services/config.service.js';
+import { ChatBoxComponent } from './chat-box/chat-box.component.js';
+import { CenteredComponent } from '../components/centered/centered.component.js';
 import { NgFor, NgIf, AsyncPipe, NgStyle } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
-import { PageComponent } from '../components/page/page.component';
-import { IconMenuComponent } from '../components/icon-menu/icon-menu.component';
+import { PageComponent } from '../components/page/page.component.js';
+import { IconMenuComponent } from '../components/icon-menu/icon-menu.component.js';
 
 @Component({
 	selector: 'app-chat',

@@ -13,25 +13,26 @@ import {
 	FormsModule,
 	ReactiveFormsModule,
 } from '@angular/forms';
-import { User, UserService, GetUsersRequest } from '../services/user.service';
+import { UserService } from '../services/user.service.js';
+import { User, GetUsersRequest } from '@singulatron/types/user';
 import { first } from 'rxjs';
 import { ToastController, IonicModule } from '@ionic/angular';
-import { TranslatePipe } from '../translate.pipe';
+import { TranslatePipe } from '../translate.pipe.js';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgFor, NgIf } from '@angular/common';
-import { CenteredComponent } from '../components/centered/centered.component';
+import { CenteredComponent } from '../components/centered/centered.component.js';
 import { ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
-import { PageComponent } from '../components/page/page.component';
-import { IconMenuComponent } from '../components/icon-menu/icon-menu.component';
+import { PageComponent } from '../components/page/page.component.js';
+import { IconMenuComponent } from '../components/icon-menu/icon-menu.component.js';
 import { Router, ActivatedRoute } from '@angular/router';
-import { QueryParser } from '../services/query.service';
+import { QueryParser } from '../services/query.service.js';
 import {
 	fields,
 	conditionsToKeyValue,
 	contains,
 	Condition,
 	conditionFieldIs,
-} from '../services/generic.service';
+} from '@singulatron/types/generic';
 
 interface UserVisible extends User {
 	visible?: boolean;

@@ -20,17 +20,17 @@ import {
 } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { Subscription } from 'rxjs';
-import { TranslatePipe } from '../../../translate.pipe';
+import { TranslatePipe } from '../../../translate.pipe.js';
 import { NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
 	CharacterService,
 	Character,
-} from '../../../services/character.service';
-import { CharacterComponent } from '../../character/character.component';
-import { ModelService, Model } from '../../../services/model.service';
-import { ConfigService } from '../../../services/config.service';
-import { ChatService } from '../../../services/chat.service';
+} from '../../../services/character.service.js';
+import { CharacterComponent } from '../../character/character.component.js';
+import { ModelService, Model } from '../../../services/model.service.js';
+import { ConfigService } from '../../../services/config.service.js';
+import { ChatService } from '../../../services/chat.service.js';
 
 export interface SendOutput {
 	message: string;

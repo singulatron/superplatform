@@ -22,28 +22,24 @@ import {
 } from '@angular/core';
 import { Subscription, filter } from 'rxjs';
 
-import { LocaltronService } from '../../services/localtron.service';
-import {
-	ChatService,
-	Thread,
-	Message,
-	Asset,
-} from '../../services/chat.service';
-import { Prompt, PromptService } from '../../services/prompt.service';
+import { LocaltronService } from '../../services/localtron.service.js';
+import { ChatService } from '../../services/chat.service.js';
+import { PromptService } from '../../services/prompt.service.js';
+import { Prompt } from '@singulatron/types/prompt';
+import { Thread, Message, Asset } from '@singulatron/types/chat';
+import { ElectronAppService } from '../../services/electron-app.service.js';
 
-import { ElectronAppService } from '../../services/electron-app.service';
-
-import { TranslatePipe } from '../../translate.pipe';
+import { TranslatePipe } from '../../translate.pipe.js';
 import { FormsModule } from '@angular/forms';
-import { MessageComponent } from './message/message.component';
+import { MessageComponent } from './message/message.component.js';
 import { NgFor, NgIf, AsyncPipe, NgStyle } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import {
 	ChatInputComponent,
 	SendOutput,
-} from './chat-input/chat-input.component';
-import { MobileService } from '../../services/mobile.service';
-import { FooterService } from '../../services/footer.service';
+} from './chat-input/chat-input.component.js';
+import { MobileService } from '../../services/mobile.service.js';
+import { FooterService } from '../../services/footer.service.js';
 import { Router, NavigationEnd } from '@angular/router';
 
 const defaultThreadName = 'New chat';

@@ -11,6 +11,7 @@ import { FirehoseService } from './firehose.service.js';
 import { ReplaySubject } from 'rxjs';
 import { UserService } from './user.service.js';
 import { first } from 'rxjs';
+import { Config, ConfigGetResponse } from '@singulatron/types/config';
 
 @Injectable({
 	providedIn: 'root',

@@ -13,18 +13,15 @@ import {
 import { NgFor, NgIf, NgStyle } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import {
-	ListPromptsRequest,
-	Prompt,
-	PromptService,
-} from '../services/prompt.service';
-import { UserService } from '../services/user.service';
+import { PromptService } from '../services/prompt.service.js';
+import { ListPromptsRequest, Prompt } from '@singulatron/types/prompt';
+import { UserService } from '../services/user.service.js';
 import { first } from 'rxjs';
-import { PageComponent } from '../components/page/page.component';
-import { IconMenuComponent } from '../components/icon-menu/icon-menu.component';
-import { CenteredComponent } from '../components/centered/centered.component';
-import { PromptComponent } from './prompt/prompt.component';
-import { QueryParser } from '../services/query.service';
+import { PageComponent } from '../components/page/page.component.js';
+import { IconMenuComponent } from '../components/icon-menu/icon-menu.component.js';
+import { CenteredComponent } from '../components/centered/centered.component.js';
+import { PromptComponent } from './prompt/prompt.component.js';
+import { QueryParser } from '../services/query.service.js';
 import {
 	queryHasFieldCondition,
 	field,
@@ -33,7 +30,7 @@ import {
 	contains,
 	Condition,
 	conditionFieldIs,
-} from '../services/generic.service';
+} from '@singulatron/types/generic';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({

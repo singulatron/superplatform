@@ -7,8 +7,9 @@
  */
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Subscription, throttleTime } from 'rxjs';
-import { DownloadService, DownloadDetails } from '../services/download.service';
-import { TranslatePipe } from '../translate.pipe';
+import { DownloadService} from '../services/download.service.js';
+import { DownloadDetails } from '@singulatron/types/download';
+import { TranslatePipe } from '../translate.pipe.js';
 import { TranslateModule } from '@ngx-translate/core';
 import { IonicModule } from '@ionic/angular';
 import { NgIf, DecimalPipe } from '@angular/common';
