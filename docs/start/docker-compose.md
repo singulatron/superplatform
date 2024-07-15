@@ -6,7 +6,7 @@ parent: Start
 
 # Docker Compose
 
-This snippet will give you a quick idea about how to deploy the the frontend and backend containers so they play nicely together:
+This snippet will give you a quick idea about how to deploy the frontend and backend containers so they play nicely together:
 
 ```yaml
 version: "3.8"
