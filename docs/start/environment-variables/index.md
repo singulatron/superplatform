@@ -1,8 +1,9 @@
 ---
 title: Environment Variables
 nav_order: 2
-parent: Server Setup
+parent: Start
 has_children: true
+has_toc: false
 ---
 
 # Environment Variables
