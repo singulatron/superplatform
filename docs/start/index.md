@@ -17,6 +17,8 @@ To configure the Singulatron backend, see the [Environment Variables](./environm
 
 ## Using Your Server
 
+### Default Credentials
+
 Unless you configured otherwise, you can log in with the following default credentials:
 
 ```sh
