@@ -12,24 +12,26 @@
 <p>
 <br />
 
-Singulatron runs AIs on your servers. It works with any database (just write shims for your favourite ones, or ask for it). It's source-available, private, and uses no third party APIs.
-A tool for AI consumption and AI app development.
+Singulatron is an open-source server daemon and web client that empowers you to self-host and interact with LLMs.
+
+It goes beyond chat functionality, enabling you to develop language-agnostic applications by harnessing Singulatron's AI infrastructure. Dive in and start building today!
 
 ## Roadmap
 
 - [x] AI functionality: prompting, prompt queues, threads, download manager
 - [x] Streaming, real time updates
 - [x] User management: multi-user support, role-based access control
-- [x] Supporting different database backends (local files, SQL and more is coming) and other distributed primitives
+- [x] Support different database backends (local files, SQL and more is coming) and other distributed primitives
 - [ ] Collaborate with other users in your organization
+- [ ] Publish clients for the daemon in different languages
 - [ ] Running, scheduling mini-(or not so mini)-apps built on top of Singulatron
-- [ ] Improving this roadmap : )
+- [ ] Many more
 
 ![Run](https://singulatron.com/assets/chat.png?refresh=1)
 
 ## Run On Your Servers
 
-See [this document](./docs/server.md) to help you get started.
+See [this document](./docs/start/index.md) to help you get started.
 
 ## Run On Your Laptop/PC
 
