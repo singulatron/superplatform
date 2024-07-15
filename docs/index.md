@@ -9,9 +9,6 @@ nav_order: 1
     <span>
       <h1>Singulatron</h1>
     </span>
-    <div>
-      The AI Superplatform.
-    </div>
     <di>Run and develop self-hosted AI apps</di>
     <div>
       <a href="https://superplatform.ai">superplatform.ai</a>
