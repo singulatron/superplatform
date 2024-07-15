@@ -10,8 +10,8 @@ has_toc: false
 
 ## Frontend
 
-To configure the frontend with envars, see [this doc](./frontend.html).
+To configure the frontend with envars, see [this doc](./frontend).
 
 ## Backend
 
-To configure the backend with envars, see [this doc](./backend.html).
+To configure the backend with envars, see [this doc](./backend).

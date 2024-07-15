@@ -1,10 +1,10 @@
 ---
-title: Contributing to the Docs
+title: Contribute to the Docs
 nav_order: 1
-parent: Contributing
+parent: Contribute
 ---
 
-# Contributing to the Docs
+# Contribute to the Docs
 
 ## Start
 
