@@ -1,20 +1,12 @@
 ---
-title: Environment Variables
-nav_order: 2
-parent: Server Setup
+title: Frontend Environment Variables
+nav_order: 1
+parent: Environment Variables
 ---
 
-# Environment Variables
+# Backend Environment Variables
 
-## Singulatron Frontend Environment Variables
-
-### `BACKEND_ADDRESS`
-
-In a publicly accessible setup should be something like `https://singulatron-api.yourdomain.com`. The point is that it must be accessible from the outside/browser.
-
-## Singulatron Environment Variables
-
-### `SINGULATRON_GPU_PLATFORM`
+## `SINGULATRON_GPU_PLATFORM`
 
 This envar is used to enabel GPU acceleration.
 Supported platforms:
@@ -23,7 +15,7 @@ Supported platforms:
 
 Do not set this if your card doesn't support the given architecture or things will break.
 
-### `SINGULATRON_HOST_FOLDER`
+## `SINGULATRON_HOST_FOLDER`
 
 This envar is needed when Singulatron runs as a container next to containers it starts:
 
@@ -43,7 +35,7 @@ So cycle goes like this:
 - Singulatron container writes to `/root/.singulatron`, which is mounted on host at `/var/lib/docker/volumes/singulatron-data/_data`
 - Assets (which are basically downloaded files) will be passed to containers created by Singulatron by mounting files in `/var/lib/docker/volumes/singulatron-data/_data`.
 
-### `SINGULATRON_LLM_HOST`
+## `SINGULATRON_LLM_HOST`
 
 When Singulatron is running in a container, it needs to know how to address its siblings (other containers it started):
 
@@ -69,7 +61,7 @@ Host With Singulatron
  |-> Container Launched By Singulatron
 ```
 
-### `SINGULATRON_DB`
+## `SINGULATRON_DB`
 
 You can use this envar to make Singulatron actually use a database instead of local file storage to store data.
 
@@ -82,15 +74,6 @@ SINGULATRON_DB_SQL_CONNECTION_STRING="postgres://postgres:mysecretpassword@local
 
 Naturally, you should change the details of the connection string to reflect your environment.
 
-### `SINGULARON_LOCAL_STORAGE_PATH`
+## `SINGULARON_LOCAL_STORAGE_PATH`
 
 By default the local file storage will place files into `~/.singulatron/data`, but this flag (and other config options) can override that.
-
-## Using Your Server
-
-Unless you configured otherwise, you can log in with the following default credentials:
-
-```sh
-username: singulatron
-password: changeme
-```

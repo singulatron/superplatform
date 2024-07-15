@@ -33,7 +33,7 @@ A tool for AI consumption and AI app development.
 
 ## Run On Your Servers
 
-See [this document](./server.md) to help you get started.
+See [this document](./server/) to help you get started.
 
 ## Run On Your Laptop/PC
 
