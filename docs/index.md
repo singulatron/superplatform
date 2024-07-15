@@ -21,13 +21,14 @@ Singulatron is an open-source server daemon and web client that empowers you to 
 
 It goes beyond chat functionality, enabling you to develop language-agnostic applications by harnessing Singulatron's AI infrastructure. Dive in and start building today!
 
-## Run On Your Servers
+## Start
 
-See [this document](./start/) to help you get started.
+To deploy Singulatron on your servers, or even to lauch on your own laptop, see [Start](./start/).
 
-## Run On Your Laptop/PC
+## Contribute
 
-Download as a binary for your laptop or PC for Windows or Linux from the website: https://singulatron.com/home  
-MacOS support is coming soon.
+If you want to join the work on Singulatron itself, look at [Contribute](./contribute/).
 
-**Note/Troubleshooting**: currently the focus is on server setups. If the app doesn't want to work on your machine, just make sure Docker is running on your system, as the Docker/VM installation is not entirely reliable on every machine yet.
+## Privacy
+
+Privacy is of prime importance to us. To learn more about the privcy aspects of this software, visit the [Privacy](./privacy) page.

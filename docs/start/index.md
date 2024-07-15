@@ -9,11 +9,11 @@ has_toc: false
 
 ## Docker Compose
 
-"Single click install" with [Docker Compose](./docker_compose.html).
+"Single click install" with [Docker Compose](./docker_compose).
 
 ## Environment Variables
 
-To configure the Singulatron backend, see the [Environment Variables](./environment-variables/)
+To configure the Singulatron backend, see the [Environment Variables](./environment-variables/).
 
 ## Using Your Server
 
