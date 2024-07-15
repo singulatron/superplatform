@@ -31,6 +31,9 @@ jobs:
           echo "npm_version=$NPM_VERSION" >> $GITHUB_ENV
         working-directory: ./clients/js/types
 
+      - name: Authenticate to npm
+        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+
       - name: Compare versions and publish if local version is greater
         run: |
           LOCAL_VERSION=$(node -p "require('./package.json').version")
