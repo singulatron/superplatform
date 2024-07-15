@@ -69,7 +69,9 @@ func (p *PromptService) processNextPrompt() error {
 
 	hasRunning := false
 	runningPromptId := ""
-	for _, runningPrompt := range runningPrompts {
+	for _, runningPromptI := range runningPrompts {
+		runningPrompt := runningPromptI.(*prompttypes.Prompt)
+
 		if runningPrompt.LastRun.Before(time.Now().Add(-promptTimeout)) {
 			logger.Info("Setting prompt as timed out",
 				slog.String("promptId", runningPrompt.Id),

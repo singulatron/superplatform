@@ -20,6 +20,7 @@ import (
 	"os"
 	"os/signal"
 	"path"
+	"reflect"
 	"strings"
 	"sync"
 	"syscall"
@@ -28,27 +29,29 @@ import (
 	"github.com/singulatron/singulatron/localtron/logger"
 )
 
-type StateFile[T any] struct {
-	Rows []T `json:"rows"`
+type StateFile struct {
+	Rows []any `json:"rows"`
 }
 
-type StateManager[T any] struct {
+type StateManager struct {
+	instance    any
 	lock        sync.Mutex
 	filePath    string
 	hasChanged  bool
-	stateGetter func() []T
+	stateGetter func() []any
 }
 
-func New[T any](stateGetter func() []T, filePath string) *StateManager[T] {
-	sm := &StateManager[T]{
+func New(instance any, stateGetter func() []any, filePath string) *StateManager {
+	sm := &StateManager{
 		filePath:    filePath + ".zip",
 		stateGetter: stateGetter,
+		instance:    instance,
 	}
 	sm.setupSignalHandler()
 	return sm
 }
 
-func (sm *StateManager[T]) LoadState() ([]T, error) {
+func (sm *StateManager) LoadState() (any, error) {
 	sm.lock.Lock()
 	defer sm.lock.Unlock()
 
@@ -81,23 +84,56 @@ func (sm *StateManager[T]) LoadState() ([]T, error) {
 		return nil, err
 	}
 
-	var stateFile StateFile[T]
+	elemType := reflect.TypeOf(sm.instance)
+	slice, err := unmarshalIntoSlice([]byte(unzippedData), elemType)
+
+	return slice, err
+}
+
+func unmarshalIntoSlice(unzippedData []byte, elemType reflect.Type) (interface{}, error) {
+	var stateFile StateFile
+
 	if strings.TrimSpace(string(unzippedData)) == "" {
 		return nil, nil
 	}
-	err = json.Unmarshal(unzippedData, &stateFile)
+
+	err := json.Unmarshal(unzippedData, &stateFile)
 	if err != nil {
 		return nil, err
 	}
 
-	return stateFile.Rows, nil
+	slice := createSliceOfType(elemType)
+	sliceValue := reflect.ValueOf(slice)
+
+	for _, row := range stateFile.Rows {
+		rowData, err := json.Marshal(row)
+		if err != nil {
+			return nil, err
+		}
+
+		elem := reflect.New(elemType).Interface()
+		err = json.Unmarshal(rowData, elem)
+		if err != nil {
+			return nil, err
+		}
+
+		sliceValue = reflect.Append(sliceValue, reflect.ValueOf(elem).Elem())
+	}
+
+	return sliceValue.Interface(), nil
 }
 
-func (sm *StateManager[T]) SaveState(shallowCopy []T) error {
+func createSliceOfType(elemType reflect.Type) interface{} {
+	sliceType := reflect.SliceOf(elemType)
+	sliceValue := reflect.MakeSlice(sliceType, 0, 0)
+	return sliceValue.Interface()
+}
+
+func (sm *StateManager) SaveState(shallowCopy []any) error {
 	sm.lock.Lock()
 	defer sm.lock.Unlock()
 
-	data, err := json.Marshal(&StateFile[T]{
+	data, err := json.Marshal(&StateFile{
 		Rows: shallowCopy,
 	})
 	if err != nil {
@@ -125,14 +161,14 @@ func (sm *StateManager[T]) SaveState(shallowCopy []T) error {
 	return nil
 }
 
-func (sm *StateManager[T]) MarkChanged() {
+func (sm *StateManager) MarkChanged() {
 	sm.lock.Lock()
 	defer sm.lock.Unlock()
 
 	sm.hasChanged = true
 }
 
-func (sm *StateManager[T]) PeriodicSaveState(interval time.Duration) {
+func (sm *StateManager) PeriodicSaveState(interval time.Duration) {
 	ticker := time.NewTicker(interval)
 	defer ticker.Stop()
 
@@ -151,7 +187,7 @@ func (sm *StateManager[T]) PeriodicSaveState(interval time.Duration) {
 	}
 }
 
-func (sm *StateManager[T]) setupSignalHandler() {
+func (sm *StateManager) setupSignalHandler() {
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 

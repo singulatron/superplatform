@@ -36,7 +36,7 @@ func (p *PromptService) ListPrompts(options *ListPromptOptions) ([]*prompttypes.
 		q = q.After(options.Query.After...)
 	}
 
-	res, err := q.Find()
+	resI, err := q.Find()
 	if err != nil {
 		return nil, 0, err
 	}
@@ -48,6 +48,11 @@ func (p *PromptService) ListPrompts(options *ListPromptOptions) ([]*prompttypes.
 		if err != nil {
 			return nil, 0, err
 		}
+	}
+
+	res := []*prompttypes.Prompt{}
+	for _, v := range resI {
+		res = append(res, v.(*prompttypes.Prompt))
 	}
 
 	return res, count, nil

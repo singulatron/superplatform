@@ -20,11 +20,14 @@ func (s *UserService) UpsertPermission(id, name, description string) (*usertypes
 		datastore.Equal(datastore.Field("id"), id),
 	)
 
-	perm, found, err := query.FindOne()
+	permI, found, err := query.FindOne()
 	if err != nil {
 		return nil, err
 	}
+
 	if found {
+		perm := permI.(*usertypes.Permission)
+
 		perm.Name = name
 		perm.Description = description
 		query.Update(perm)

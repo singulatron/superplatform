@@ -15,19 +15,21 @@ import (
 	"time"
 
 	"github.com/singulatron/singulatron/localtron/datastore"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 func (s *UserService) RemoveRole(userId string, roleId string) error {
 	query := s.usersStore.Query(
 		datastore.Equal(datastore.Field("id"), userId),
 	)
-	user, found, err := query.FindOne()
+	userI, found, err := query.FindOne()
 	if err != nil {
 		return err
 	}
 	if !found {
 		return errors.New("user not found")
 	}
+	user := userI.(*usertypes.User)
 
 	for i, existingRoleId := range user.RoleIds {
 		if existingRoleId == roleId {

@@ -34,7 +34,7 @@ func (dm *DownloadService) Do(url, downloadDir string) error {
 		downloadDir = dm.DefaultFolder
 	}
 
-	safeFileName := encodeURLtoFileName(url)
+	safeFileName := EncodeURLtoFileName(url)
 	safeFullFilePath := filepath.Join(downloadDir, safeFileName)
 	safePartialFilePath := filepath.Join(downloadDir, safeFileName+".part")
 

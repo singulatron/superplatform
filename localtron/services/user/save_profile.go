@@ -15,6 +15,7 @@ import (
 	"time"
 
 	"github.com/singulatron/singulatron/localtron/datastore"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 func (s *UserService) SaveProfile(email, newName string) error {
@@ -22,7 +23,7 @@ func (s *UserService) SaveProfile(email, newName string) error {
 		datastore.Equal(datastore.Field("email"), email),
 	)
 
-	user, found, err := query.FindOne()
+	userI, found, err := query.FindOne()
 	if err != nil {
 		return err
 	}
@@ -30,6 +31,7 @@ func (s *UserService) SaveProfile(email, newName string) error {
 	if !found {
 		return errors.New("user not found")
 	}
+	user := userI.(*usertypes.User)
 
 	user.Name = newName
 	user.UpdatedAt = time.Now()

@@ -5,6 +5,8 @@ import (
 	"os"
 	"path"
 
+	"github.com/singulatron/singulatron/localtron/datastore"
+	"github.com/singulatron/singulatron/localtron/datastore/localstore"
 	"github.com/singulatron/singulatron/localtron/logger"
 	appservice "github.com/singulatron/singulatron/localtron/services/app"
 	chatservice "github.com/singulatron/singulatron/localtron/services/chat"
@@ -17,7 +19,6 @@ import (
 	modelservice "github.com/singulatron/singulatron/localtron/services/model"
 	nodeservice "github.com/singulatron/singulatron/localtron/services/node"
 	promptservice "github.com/singulatron/singulatron/localtron/services/prompt"
-	storefactoryservice "github.com/singulatron/singulatron/localtron/services/store_factory"
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
 
@@ -38,10 +39,11 @@ type Universe struct {
 }
 
 type UniverseOptions struct {
-	Test bool
+	Test             bool
+	DatastoreFactory func(tableName string, instance any) (datastore.DataStore, error)
 }
 
-func MakeUniverse(options UniverseOptions) (*Universe, error) {
+func BigBang(options UniverseOptions) (*Universe, error) {
 	var homeDir string
 	var err error
 	if options.Test {
@@ -73,15 +75,22 @@ func MakeUniverse(options UniverseOptions) (*Universe, error) {
 		configService.ConfigDirectory = os.Getenv("SINGULATRON_CONFIG_PATH")
 	}
 
-	storefactoryservice.LocalStorePath = path.Join(configService.ConfigDirectory, "data")
-	err = os.MkdirAll(storefactoryservice.LocalStorePath, 0755)
-	if err != nil {
-		logger.Error("Creating data folder failed", slog.String("error", err.Error()))
-		os.Exit(1)
+	if options.DatastoreFactory == nil {
+		localStorePath := path.Join(configService.ConfigDirectory, "data")
+		err = os.MkdirAll(localStorePath, 0755)
+		if err != nil {
+			logger.Error("Creating data folder failed", slog.String("error", err.Error()))
+			os.Exit(1)
+		}
+
+		options.DatastoreFactory = func(tableName string, instance any) (datastore.DataStore, error) {
+			return localstore.NewLocalStore(instance, path.Join(localStorePath, tableName))
+		}
 	}
 
 	userService, err := userservice.NewUserService(
 		configService,
+		options.DatastoreFactory,
 	)
 	if err != nil {
 		logger.Error("User service start failed", slog.String("error", err.Error()))
@@ -138,7 +147,13 @@ func MakeUniverse(options UniverseOptions) (*Universe, error) {
 		os.Exit(1)
 	}
 
-	modelService, err := modelservice.NewModelService(downloadService, userService, configService, dockerService)
+	modelService, err := modelservice.NewModelService(
+		downloadService,
+		userService,
+		configService,
+		dockerService,
+		options.DatastoreFactory,
+	)
 	if err != nil {
 		logger.Error("Model service creation failed", slog.String("error", err.Error()))
 		os.Exit(1)
@@ -158,6 +173,7 @@ func MakeUniverse(options UniverseOptions) (*Universe, error) {
 		configService,
 		firehoseService,
 		userService,
+		options.DatastoreFactory,
 	)
 	if err != nil {
 		logger.Error("Chat service creation failed", slog.String("error", err.Error()))
@@ -170,6 +186,7 @@ func MakeUniverse(options UniverseOptions) (*Universe, error) {
 		modelService,
 		chatService,
 		firehoseService,
+		options.DatastoreFactory,
 	)
 	if err != nil {
 		logger.Error("Prompt service creation failed", slog.String("error", err.Error()))
@@ -180,6 +197,7 @@ func MakeUniverse(options UniverseOptions) (*Universe, error) {
 		configService,
 		firehoseService,
 		userService,
+		options.DatastoreFactory,
 	)
 	if err != nil {
 		logger.Error("Generic service creation failed", slog.String("error", err.Error()))

@@ -16,7 +16,6 @@ import (
 	"github.com/singulatron/singulatron/localtron/datastore"
 	configservice "github.com/singulatron/singulatron/localtron/services/config"
 	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
-	storefactoryservice "github.com/singulatron/singulatron/localtron/services/store_factory"
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
 
 	generictypes "github.com/singulatron/singulatron/localtron/services/generic/types"
@@ -27,15 +26,16 @@ type GenericService struct {
 	userService     *userservice.UserService
 	firehoseService *firehoseservice.FirehoseService
 
-	store datastore.DataStore[*generictypes.GenericObject]
+	store datastore.DataStore
 }
 
 func NewGenericService(
 	cs *configservice.ConfigService,
 	fs *firehoseservice.FirehoseService,
 	userService *userservice.UserService,
+	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error),
 ) (*GenericService, error) {
-	store, err := storefactoryservice.GetStore[*generictypes.GenericObject]("generic")
+	store, err := datastoreFactory("generic", &generictypes.GenericObject{})
 	if err != nil {
 		return nil, err
 	}
@@ -44,8 +44,7 @@ func NewGenericService(
 		configService:   cs,
 		firehoseService: fs,
 		userService:     userService,
-
-		store: store,
+		store:           store,
 	}
 
 	err = service.registerPermissions()
@@ -63,22 +62,29 @@ func (g *GenericService) Create(tableName string, userId string, object *generic
 }
 
 func (g *GenericService) CreateMany(tableName string, userId string, objects []*generictypes.GenericObject) error {
+	objectIs := []datastore.Row{}
 	for _, object := range objects {
 		object.Table = tableName
 		object.UserId = userId
+		objectIs = append(objectIs, object)
 	}
-	return g.store.CreateMany(objects)
+
+	return g.store.CreateMany(objectIs)
 }
 
 func (g *GenericService) Upsert(tableName string, userId string, object *generictypes.GenericObject) error {
-	v, found, err := g.store.Query(
+	vI, found, err := g.store.Query(
 		datastore.Id(object.Id),
 	).FindOne()
 	if err != nil {
 		return err
 	}
-	if found && v.UserId != userId {
-		return errors.New("unauthorized")
+
+	if found {
+		v := vI.(*generictypes.GenericObject)
+		if v.UserId != userId {
+			return errors.New("unauthorized")
+		}
 	}
 	object.Table = tableName
 	object.UserId = userId
@@ -86,10 +92,12 @@ func (g *GenericService) Upsert(tableName string, userId string, object *generic
 }
 
 func (g *GenericService) UpsertMany(tableName string, userId string, objects []*generictypes.GenericObject) error {
+	objectIs := []datastore.Row{}
 	for _, object := range objects {
 		object.Table = tableName
+		objectIs = append(objectIs, object)
 	}
-	return g.store.UpsertMany(objects)
+	return g.store.UpsertMany(objectIs)
 }
 
 func (g *GenericService) Find(tableName string, userId string, conditions []datastore.Condition) ([]*generictypes.GenericObject, error) {
@@ -99,9 +107,20 @@ func (g *GenericService) Find(tableName string, userId string, conditions []data
 
 	conditions = append(conditions, datastore.Equal(datastore.Field("table"), tableName))
 
-	return g.store.Query(
+	objectIs, err := g.store.Query(
 		conditions[0], conditions[1:]...,
 	).Find()
+
+	if err != nil {
+		return nil, err
+	}
+
+	objects := []*generictypes.GenericObject{}
+	for _, objectI := range objectIs {
+		objects = append(objects, objectI.(*generictypes.GenericObject))
+	}
+
+	return objects, nil
 }
 
 func (g *GenericService) Update(tableName string, userId string, conditions []datastore.Condition, object *generictypes.GenericObject) error {

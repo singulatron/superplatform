@@ -16,11 +16,16 @@ import (
 )
 
 func (a *ChatService) GetThreads(userId string) ([]*chattypes.Thread, error) {
-	threads, err := a.threadsStore.Query(
+	threadIs, err := a.threadsStore.Query(
 		datastore.Equal(datastore.Field("userIds"), userId),
 	).OrderBy("createdAt", true).Find()
 	if err != nil {
 		return nil, err
+	}
+
+	threads := []*chattypes.Thread{}
+	for _, threadI := range threadIs {
+		threads = append(threads, threadI.(*chattypes.Thread))
 	}
 
 	return threads, nil

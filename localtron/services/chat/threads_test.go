@@ -6,22 +6,16 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
 
-	chatservice "github.com/singulatron/singulatron/localtron/services/chat"
+	"github.com/singulatron/singulatron/localtron/di"
 	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
-	configservice "github.com/singulatron/singulatron/localtron/services/config"
-	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
-	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
 
 func TestMessageCreatesThread(t *testing.T) {
-	cs, err := configservice.NewConfigService()
+	universe, err := di.BigBang(di.UniverseOptions{
+		Test: true,
+	})
 	require.NoError(t, err)
-	us, err := userservice.NewUserService(cs)
-	require.NoError(t, err)
-	fs, err := firehoseservice.NewFirehoseService(us)
-	require.NoError(t, err)
-	as, err := chatservice.NewChatService(cs, fs, us)
-	require.NoError(t, err)
+	as := universe.ChatService
 
 	t.Run("no thread id", func(t *testing.T) {
 		err := as.AddMessage(&chattypes.Message{

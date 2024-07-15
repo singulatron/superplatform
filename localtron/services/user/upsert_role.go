@@ -30,14 +30,14 @@ func (s *UserService) UpsertRole(id, name, description string, permissionIds []s
 		return nil, errors.New("nonexistent permissions")
 	}
 
-	role, found, err := s.rolesStore.Query(
+	roleI, found, err := s.rolesStore.Query(
 		datastore.Equal(datastore.Field("id"), id),
 	).FindOne()
 	if err != nil {
 		return nil, err
 	}
 	if !found {
-		role = &usertypes.Role{
+		role := &usertypes.Role{
 			Id:            id,
 			CreatedAt:     time.Now(),
 			UpdatedAt:     time.Now(),
@@ -47,6 +47,8 @@ func (s *UserService) UpsertRole(id, name, description string, permissionIds []s
 		}
 		return role, s.rolesStore.Create(role)
 	}
+
+	role := roleI.(*usertypes.Role)
 
 	existingPermissionIdIndex := map[string]struct{}{}
 	for _, permissionId := range role.PermissionIds {

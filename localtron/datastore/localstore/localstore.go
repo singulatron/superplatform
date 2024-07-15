@@ -11,7 +11,6 @@
 package localstore
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -21,76 +20,105 @@ import (
 	"sync"
 	"time"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/flusflas/dipper"
 	"github.com/google/uuid"
 	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/datastore/localstore/statemanager"
+	"github.com/singulatron/singulatron/localtron/reflector"
 )
 
-type LocalStore[T datastore.Row] struct {
-	data          map[string]T
+type LocalStore struct {
+	instance      any
+	data          map[string]any
 	mu            sync.RWMutex
 	lastID        int
 	inTransaction bool
-	originalStore *LocalStore[T] // Reference to the original store in case of transaction
-	stateManager  *statemanager.StateManager[T]
+	originalStore *LocalStore // Reference to the original store in case of transaction
+	stateManager  *statemanager.StateManager
 }
 
-func NewLocalStore[T datastore.Row](filePath string) *LocalStore[T] {
+func NewLocalStore(instance any, filePath string) (*LocalStore, error) {
 	if filePath == "" {
 		tempFile, err := ioutil.TempFile("", uuid.NewString())
 		if err != nil {
-			panic(err)
+			return nil, err
 		}
 		filePath = tempFile.Name()
 	}
 
-	ls := &LocalStore[T]{
-		data: make(map[string]T),
+	ls := &LocalStore{
+		instance: instance,
+		data:     make(map[string]any),
 	}
 
-	sm := statemanager.New(func() []T {
+	sm := statemanager.New(instance, func() []any {
 		vals, _ := ls.Query(datastore.All()).Find()
-		return vals
+		is := []any{}
+		for _, v := range vals {
+			is = append(is, v)
+		}
+		return is
 	}, filePath)
 	ls.stateManager = sm
 
 	data, err := sm.LoadState()
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
-	err = ls.CreateMany(data)
+	rowSlice := []datastore.Row{}
+
+	if data != nil {
+		v := reflect.ValueOf(data)
+
+		if v.Kind() != reflect.Slice {
+			panic("not a slice")
+		}
+
+		for i := 0; i < v.Len(); i++ {
+			elem := v.Index(i).Interface()
+			rowSlice = append(rowSlice, elem.(datastore.Row))
+		}
+	}
+	err = ls.CreateMany(rowSlice)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	go sm.PeriodicSaveState(5 * time.Second)
 
-	return ls
+	return ls, nil
 }
 
-func (s *LocalStore[T]) SetDebug(debug bool) {
+func (s *LocalStore) SetDebug(debug bool) {
 }
 
-func (s *LocalStore[T]) Create(obj T) error {
+func (s *LocalStore) Create(obj datastore.Row) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
 	return s.createWithoutLock(obj)
 }
 
-func (s *LocalStore[T]) createWithoutLock(obj T) error {
+func (s *LocalStore) createWithoutLock(obj datastore.Row) error {
 	id := obj.GetId()
 	_, ok := s.data[id]
 	if ok {
 		return datastore.ErrEntryAlreadyExists
 	}
-	s.data[id] = obj
+
+	v, err := reflector.DeepCopyIntoMap(obj)
+	if err != nil {
+		return err
+	}
+
+	s.data[id] = v
+
 	s.stateManager.MarkChanged()
 	return nil
 }
 
-func (s *LocalStore[T]) CreateMany(objs []T) error {
+func (s *LocalStore) CreateMany(objs []datastore.Row) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
@@ -104,41 +132,57 @@ func (s *LocalStore[T]) CreateMany(objs []T) error {
 
 	for _, obj := range objs {
 		id := obj.GetId()
-		s.data[id] = obj
+
+		v, err := reflector.DeepCopyIntoMap(obj)
+		if err != nil {
+			return err
+		}
+
+		s.data[id] = v
 	}
 
 	s.stateManager.MarkChanged()
 	return nil
 }
 
-func (s *LocalStore[T]) Upsert(obj T) error {
+func (s *LocalStore) Upsert(obj datastore.Row) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	s.data[obj.GetId()] = obj
+	v, err := reflector.DeepCopyIntoMap(obj)
+	if err != nil {
+		return err
+	}
+
+	s.data[obj.GetId()] = v
 	s.stateManager.MarkChanged()
 	return nil
 }
 
-func (s *LocalStore[T]) UpsertMany(objs []T) error {
+func (s *LocalStore) UpsertMany(objs []datastore.Row) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
 	for _, obj := range objs {
-		s.data[obj.GetId()] = obj
+		v, err := reflector.DeepCopyIntoMap(obj)
+		if err != nil {
+			return err
+		}
+
+		s.data[obj.GetId()] = v
 	}
 	s.stateManager.MarkChanged()
 	return nil
 }
 
-func (s *LocalStore[T]) Query(condition datastore.Condition, conditions ...datastore.Condition) datastore.QueryBuilder[T] {
-	q := &QueryBuilder[T]{store: s}
+func (s *LocalStore) Query(condition datastore.Condition, conditions ...datastore.Condition) datastore.QueryBuilder {
+	q := &QueryBuilder{store: s}
 	q.conditions = append(q.conditions, condition)
 	q.conditions = append(q.conditions, conditions...)
 	return q
 }
 
-func (s *LocalStore[T]) BeginTransaction() (datastore.DataStore[T], error) {
+func (s *LocalStore) BeginTransaction() (datastore.DataStore, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
@@ -147,8 +191,8 @@ func (s *LocalStore[T]) BeginTransaction() (datastore.DataStore[T], error) {
 	}
 
 	// Create a copy of the current store data
-	newStore := &LocalStore[T]{
-		data:          make(map[string]T),
+	newStore := &LocalStore{
+		data:          make(map[string]any),
 		lastID:        s.lastID,
 		inTransaction: true,
 		originalStore: s,
@@ -162,7 +206,7 @@ func (s *LocalStore[T]) BeginTransaction() (datastore.DataStore[T], error) {
 	return newStore, nil
 }
 
-func (s *LocalStore[T]) Commit() error {
+func (s *LocalStore) Commit() error {
 	if !s.inTransaction || s.originalStore == nil {
 		return errors.New("not in a transaction")
 	}
@@ -183,7 +227,7 @@ func (s *LocalStore[T]) Commit() error {
 	return nil
 }
 
-func (s *LocalStore[T]) Rollback() error {
+func (s *LocalStore) Rollback() error {
 	if !s.inTransaction || s.originalStore == nil {
 		return errors.New("not in a transaction")
 	}
@@ -196,12 +240,12 @@ func (s *LocalStore[T]) Rollback() error {
 	return nil
 }
 
-func (s *LocalStore[T]) IsInTransaction() bool {
+func (s *LocalStore) IsInTransaction() bool {
 	return s.inTransaction
 }
 
-type QueryBuilder[T datastore.Row] struct {
-	store        *LocalStore[T]
+type QueryBuilder struct {
+	store        *LocalStore
 	conditions   []datastore.Condition
 	orderField   string
 	orderDesc    bool
@@ -210,18 +254,18 @@ type QueryBuilder[T datastore.Row] struct {
 	selectFields []string
 }
 
-func (q *QueryBuilder[T]) OrderBy(field string, desc bool) datastore.QueryBuilder[T] {
+func (q *QueryBuilder) OrderBy(field string, desc bool) datastore.QueryBuilder {
 	q.orderField = field
 	q.orderDesc = desc
 	return q
 }
 
-func (q *QueryBuilder[T]) Limit(limit int) datastore.QueryBuilder[T] {
+func (q *QueryBuilder) Limit(limit int) datastore.QueryBuilder {
 	q.limit = limit
 	return q
 }
 
-func (q *QueryBuilder[T]) After(value ...any) datastore.QueryBuilder[T] {
+func (q *QueryBuilder) After(value ...any) datastore.QueryBuilder {
 	q.after = value
 	for i := range q.after {
 		str, ok := q.after[i].(string)
@@ -236,16 +280,16 @@ func (q *QueryBuilder[T]) After(value ...any) datastore.QueryBuilder[T] {
 	return q
 }
 
-func (q *QueryBuilder[T]) Select(fields ...string) datastore.QueryBuilder[T] {
+func (q *QueryBuilder) Select(fields ...string) datastore.QueryBuilder {
 	q.selectFields = fields
 	return q
 }
 
-func (q *QueryBuilder[T]) Find() ([]T, error) {
+func (q *QueryBuilder) Find() ([]datastore.Row, error) {
 	q.store.mu.RLock()
 	defer q.store.mu.RUnlock()
 
-	var result []T
+	var result []any
 	for _, obj := range q.store.data {
 		if q.match(obj) {
 			result = append(result, obj)
@@ -263,7 +307,8 @@ func (q *QueryBuilder[T]) Find() ([]T, error) {
 		startIndex := -1
 		for i, obj := range result {
 			vi := getField(obj, q.orderField)
-			if reflect.DeepEqual(vi, q.after[0]) {
+
+			if reflect.DeepEqual(toBaseType(vi), toBaseType(q.after[0])) {
 				startIndex = i + 1
 				break
 			}
@@ -271,7 +316,7 @@ func (q *QueryBuilder[T]) Find() ([]T, error) {
 		if startIndex != -1 {
 			result = result[startIndex:]
 		} else {
-			result = []T{} // No matching "after" value found
+			result = []any{} // No matching "after" value found
 		}
 	}
 
@@ -279,39 +324,40 @@ func (q *QueryBuilder[T]) Find() ([]T, error) {
 		result = result[:q.limit]
 	}
 
-	// deep copy result before returning
-	var resultCopy []T
-	bs, err := json.Marshal(result)
+	sliceCopy, err := reflector.DeepCopySliceIntoType(result, q.store.instance)
 	if err != nil {
 		return nil, err
 	}
 
-	return resultCopy, json.Unmarshal(bs, &resultCopy)
+	ret := []datastore.Row{}
+	for _, v := range sliceCopy {
+		ret = append(ret, v.(datastore.Row))
+	}
+
+	return ret, nil
 }
 
-func (q *QueryBuilder[T]) FindOne() (T, bool, error) {
+func (q *QueryBuilder) FindOne() (datastore.Row, bool, error) {
 	q.store.mu.RLock()
 	defer q.store.mu.RUnlock()
 
-	var empty T
+	var empty datastore.Row
 
 	for _, obj := range q.store.data {
 		if q.match(obj) {
-			var cop T
-			// deep copy result before returning
-			bs, err := json.Marshal(obj)
+			cop, err := reflector.DeepCopyIntoType(obj, q.store.instance)
 			if err != nil {
-				return empty, false, err
+				return nil, false, err
 			}
 
-			return cop, true, json.Unmarshal(bs, &cop)
+			return cop.(datastore.Row), true, nil
 		}
 	}
 
 	return empty, false, nil
 }
 
-func (q *QueryBuilder[T]) Count() (int64, error) {
+func (q *QueryBuilder) Count() (int64, error) {
 	q.store.mu.RLock()
 	defer q.store.mu.RUnlock()
 
@@ -324,7 +370,7 @@ func (q *QueryBuilder[T]) Count() (int64, error) {
 	return count, nil
 }
 
-func (q *QueryBuilder[T]) Update(obj T) error {
+func (q *QueryBuilder) Update(obj datastore.Row) error {
 	q.store.mu.Lock()
 	defer q.store.mu.Unlock()
 
@@ -332,7 +378,13 @@ func (q *QueryBuilder[T]) Update(obj T) error {
 	for id, existingObj := range q.store.data {
 		if q.match(existingObj) {
 			found = true
-			q.store.data[id] = obj
+
+			v, err := reflector.DeepCopyIntoMap(obj)
+			if err != nil {
+				return err
+			}
+
+			q.store.data[id] = v
 		}
 	}
 
@@ -345,7 +397,7 @@ func (q *QueryBuilder[T]) Update(obj T) error {
 	return nil
 }
 
-func (q *QueryBuilder[T]) Upsert(obj T) error {
+func (q *QueryBuilder) Upsert(obj datastore.Row) error {
 	q.store.mu.Lock()
 	defer q.store.mu.Unlock()
 
@@ -355,7 +407,13 @@ func (q *QueryBuilder[T]) Upsert(obj T) error {
 	for id, existingObj := range q.store.data {
 		if q.match(existingObj) {
 			found = true
-			q.store.data[id] = obj
+
+			v, err := reflector.DeepCopyIntoMap(obj)
+			if err != nil {
+				return err
+			}
+
+			q.store.data[id] = v
 		}
 	}
 
@@ -366,14 +424,18 @@ func (q *QueryBuilder[T]) Upsert(obj T) error {
 	return nil
 }
 
-func (q *QueryBuilder[T]) UpdateFields(fields map[string]interface{}) error {
+func (q *QueryBuilder) UpdateFields(fields map[string]interface{}) error {
 	q.store.mu.Lock()
 	defer q.store.mu.Unlock()
 
 	for id, obj := range q.store.data {
 		if q.match(obj) {
 			for field, value := range fields {
-				setField(&obj, field, value)
+
+				err := setField(&obj, field, value)
+				if err != nil {
+					return err
+				}
 			}
 			q.store.data[id] = obj
 		}
@@ -382,7 +444,7 @@ func (q *QueryBuilder[T]) UpdateFields(fields map[string]interface{}) error {
 	return nil
 }
 
-func (q *QueryBuilder[T]) Delete() error {
+func (q *QueryBuilder) Delete() error {
 	q.store.mu.Lock()
 	defer q.store.mu.Unlock()
 
@@ -395,7 +457,7 @@ func (q *QueryBuilder[T]) Delete() error {
 	return nil
 }
 
-func (q *QueryBuilder[T]) match(obj T) bool {
+func (q *QueryBuilder) match(obj any) bool {
 	for _, cond := range q.conditions {
 		if cond.Equal != nil || cond.Contains != nil || cond.StartsWith != nil {
 			var matchFunc func(subject, test any) bool
@@ -407,6 +469,9 @@ func (q *QueryBuilder[T]) match(obj T) bool {
 				matchFunc = func(subject, test any) bool {
 					subject = toBaseType(subject)
 					test = toBaseType(test)
+					if subject == "dipper: field not found" {
+						panic("dipper")
+					}
 
 					return reflect.DeepEqual(test, subject)
 				}
@@ -449,6 +514,9 @@ func (q *QueryBuilder[T]) match(obj T) bool {
 			for _, fieldName := range fieldNames {
 				fieldValue := getField(obj, fieldName)
 
+				if fmt.Sprintf("%v", fieldValue) == "dipper: field not found" {
+					panic(fmt.Sprintf("field '%v' not found in object %v", fieldName, spew.Sdump(obj)))
+				}
 				condValue := reflect.ValueOf(value)
 				if fieldV := reflect.ValueOf(fieldValue); fieldV.Kind() == reflect.Slice {
 					for i := 0; i < fieldV.Len(); i++ {
@@ -486,20 +554,20 @@ func (q *QueryBuilder[T]) match(obj T) bool {
 func fixFieldName(s string) string {
 	parts := strings.Split(s, ".")
 	for i := range parts {
-		parts[i] = strings.Title(parts[i])
+		parts[i] = strings.ToLower(string(parts[i][0])) + parts[i][1:]
 	}
+
 	return strings.Join(parts, ".")
 }
 
-func getField[T any](obj T, field string) interface{} {
+func getField(obj any, field string) interface{} {
 	field = fixFieldName(field)
 
 	return dipper.Get(obj, field)
 }
 
-func setField[T any](obj *T, field string, value interface{}) error {
+func setField(obj any, field string, value interface{}) error {
 	field = fixFieldName(field)
-
 	return dipper.Set(obj, field, value)
 }
 
@@ -563,8 +631,13 @@ func compare(vi, vj interface{}, desc bool) bool {
 
 func toBaseType(input interface{}) interface{} {
 	val := reflect.ValueOf(input)
+
 	if val.Kind() == reflect.Ptr {
 		val = val.Elem()
+	}
+
+	if val.Kind() == reflect.Invalid {
+		return input
 	}
 
 	// Recursively decompose until we reach the base type
@@ -575,7 +648,7 @@ func toBaseType(input interface{}) interface{} {
 	if val.Kind() == reflect.String {
 		return val.String()
 	} else if val.Kind() == reflect.Int || val.Kind() == reflect.Int8 || val.Kind() == reflect.Int16 || val.Kind() == reflect.Int32 || val.Kind() == reflect.Int64 {
-		return val.Int()
+		return float64(val.Int())
 	} else if val.Kind() == reflect.Uint || val.Kind() == reflect.Uint8 || val.Kind() == reflect.Uint16 || val.Kind() == reflect.Uint32 || val.Kind() == reflect.Uint64 {
 		return val.Uint()
 	} else if val.Kind() == reflect.Float32 || val.Kind() == reflect.Float64 {

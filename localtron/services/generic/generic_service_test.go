@@ -7,11 +7,8 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/singulatron/singulatron/localtron/datastore"
-	configservice "github.com/singulatron/singulatron/localtron/services/config"
-	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
-	genericservice "github.com/singulatron/singulatron/localtron/services/generic"
+	"github.com/singulatron/singulatron/localtron/di"
 	generictypes "github.com/singulatron/singulatron/localtron/services/generic/types"
-	userservice "github.com/singulatron/singulatron/localtron/services/user"
 	"github.com/stretchr/testify/require"
 )
 
@@ -22,15 +19,11 @@ func TestCreate(t *testing.T) {
 	table1 := "test_table" + uniq
 	table2 := "test_table2" + uniq
 
-	cs, err := configservice.NewConfigService()
+	universe, err := di.BigBang(di.UniverseOptions{
+		Test: true,
+	})
 	require.NoError(t, err)
-	us, err := userservice.NewUserService(cs)
-	require.NoError(t, err)
-	fs, err := firehoseservice.NewFirehoseService(us)
-	require.NoError(t, err)
-
-	service, err := genericservice.NewGenericService(cs, fs, us)
-	require.NoError(t, err)
+	service := universe.GenericService
 
 	userId := "user_1"
 	otherUserId := "user_2"
@@ -81,6 +74,13 @@ func TestCreate(t *testing.T) {
 
 	err = service.Upsert(table1, userId, obj)
 	require.NoError(t, err)
+
+	res, err = service.Find(table1, userId, []datastore.Condition{
+		datastore.All(),
+	})
+	require.NoError(t, err)
+	require.Equal(t, 1, len(res))
+	require.Contains(t, res[0].Id, uuid1)
 
 	err = service.Delete(table1, otherUserId, []datastore.Condition{
 		datastore.Id(obj.Id),

@@ -21,15 +21,17 @@ import (
 
 var timeNow = time.Now
 
-func selectPrompt(promptsMem datastore.DataStore[*prompttypes.Prompt]) (*prompttypes.Prompt, error) {
-	prompts, err := promptsMem.Query(
+func selectPrompt(promptsMem datastore.DataStore) (*prompttypes.Prompt, error) {
+	promptIs, err := promptsMem.Query(
 		datastore.All(),
 	).OrderBy("createdAt", false).Find()
 	if err != nil {
 		return nil, err
 	}
 
-	for _, prompt := range prompts {
+	for _, promptI := range promptIs {
+		prompt := promptI.(*prompttypes.Prompt)
+
 		if prompt.Status == prompttypes.PromptStatusAbandoned ||
 			prompt.Status == prompttypes.PromptStatusCompleted ||
 			prompt.Status == prompttypes.PromptStatusCanceled {
