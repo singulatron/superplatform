@@ -1,8 +1,7 @@
-
-interface DockerInfo {
-	hasDocker: boolean;
-	dockerDaemonAddress?: string;
-	error?: string;
+export interface DockerInfo {
+  hasDocker: boolean;
+  dockerDaemonAddress?: string;
+  error?: string;
 }
 
 // {
@@ -10,6 +9,6 @@ interface DockerInfo {
 //     "hasDocker": true
 //   }
 // }
-interface DockerInfoResponse {
-	info: DockerInfo;
+export interface DockerInfoResponse {
+  info: DockerInfo;
 }

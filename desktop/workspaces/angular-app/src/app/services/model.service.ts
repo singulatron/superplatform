@@ -6,13 +6,13 @@
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
 import { Injectable } from '@angular/core';
-import { LocaltronService } from './localtron.service';
-import { DockerService } from './docker.service';
+import { LocaltronService } from './localtron.service.js';
+import { DockerService } from './docker.service.js';
 import { ReplaySubject, combineLatest } from 'rxjs';
 import {
 	OnModelLaunch,
 	OnModelCheck,
-} from 'shared-lib/models/event-request-response';
+} from 'shared-lib/models/event-request-response.js';
 
 @Injectable({
 	providedIn: 'root',

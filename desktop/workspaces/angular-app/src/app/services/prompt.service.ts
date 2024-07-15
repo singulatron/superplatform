@@ -6,12 +6,19 @@
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
 import { Injectable } from '@angular/core';
-import { LocaltronService } from './localtron.service';
+import { LocaltronService } from './localtron.service.js';
 import { ReplaySubject, Observable, catchError } from 'rxjs';
-import { FirehoseService } from './firehose.service';
+import { FirehoseService } from './firehose.service.js';
 import { first } from 'rxjs';
-import { UserService } from './user.service';
-import { Query } from './generic.service';
+import { UserService } from './user.service.js';
+import {
+	Prompt,
+	AddPromptRequest,
+	RemovePromptRequest,
+	ListPromptsRequest,
+	ListPromptsResponse,
+	CompletionResponse
+} from '@singulatron/types/prompt';
 
 @Injectable({
 	providedIn: 'root',
@@ -214,4 +221,3 @@ export class PromptService {
 function sleep(ms: number) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 }
-

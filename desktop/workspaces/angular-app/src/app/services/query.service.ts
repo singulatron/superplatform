@@ -13,7 +13,7 @@ import {
 	startsWith,
 	field,
 	Query,
-} from './generic.service';
+} from '@singulatron/types/generic';
 
 @Injectable({
 	providedIn: 'root',
