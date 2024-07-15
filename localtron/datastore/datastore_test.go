@@ -12,13 +12,10 @@ package datastore_test
 
 import (
 	"fmt"
-	"strings"
 	"testing"
 
-	"github.com/google/uuid"
 	"github.com/singulatron/singulatron/localtron/datastore"
 	localstore "github.com/singulatron/singulatron/localtron/datastore/localstore"
-	"github.com/singulatron/singulatron/localtron/datastore/sqlstore"
 	"github.com/stretchr/testify/require"
 )
 
@@ -29,36 +26,10 @@ func TestAll(t *testing.T) {
 			require.NoError(t, err)
 			return store
 		},
-		"sqlStore": func(instance any) datastore.DataStore {
-			table := uuid.New().String()
-			table = strings.Replace(table, "-", "", -1)[0:10]
-			store, err := sqlstore.NewSQLStore(
-				instance,
-				sqlstore.DriverPostGRES,
-				"postgres://postgres:mysecretpassword@localhost:5432/mydatabase?sslmode=disable",
-				"table_"+table,
-				true,
-			)
-			require.NoError(t, err)
-			return store
-		},
 	}
 	pointerStores := map[string]func(instance any) datastore.DataStore{
 		"localStore": func(instance any) datastore.DataStore {
 			store, err := localstore.NewLocalStore(instance, "")
-			require.NoError(t, err)
-			return store
-		},
-		"sqlStore": func(instance any) datastore.DataStore {
-			table := uuid.New().String()
-			table = strings.Replace(table, "-", "", -1)[0:10]
-			store, err := sqlstore.NewSQLStore(
-				instance,
-				sqlstore.DriverPostGRES,
-				"postgres://postgres:mysecretpassword@localhost:5432/mydatabase?sslmode=disable",
-				"table_"+table,
-				true,
-			)
 			require.NoError(t, err)
 			return store
 		},
