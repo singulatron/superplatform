@@ -52,7 +52,7 @@ export class LoginComponent {
 			const toast = await this.toast.create({
 				cssClass: 'white-text',
 				color: 'danger',
-				message: ,
+				message: JSON.parse(error as string)?.error,
 				duration: 5000,
 				position: 'middle',
 			});
