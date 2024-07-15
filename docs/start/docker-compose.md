@@ -6,7 +6,7 @@ parent: Start
 
 # Docker Compose
 
-This snippet will give you a quick idea about how to deploy the the frontend and backend containers so they play nicely together:
+This snippet will give you a quick idea about how to deploy the frontend and backend containers so they play nicely together:
 
 ```yaml
 version: "3.8"
@@ -42,12 +42,13 @@ singulatron-backend:
     - SINGULATRON_LLM_HOST=172.17.0.1
     #
     # GPU Acceleration for NVIDIA GPUs
-    # Uncomment for non-NVIDIA GPUs.
+    # Remove this envar for non-NVIDIA GPUs.
     #
     - SINGULATRON_GPU_PLATFORM=cuda
 ```
 
+After the containers successfully start, you can go to `127.0.0.1:3901` and log in with the [Default Credentials](/start/#default-credentials).
+
 Please keep in mind that this will store data locally on your machine in as gzipped JSON because Singulatron defaults to local file storage.
 
 See the [Environment Variables](./environment-variables/)
-
