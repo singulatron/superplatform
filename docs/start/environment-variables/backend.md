@@ -1,6 +1,6 @@
 ---
 title: Frontend Environment Variables
-nav_order: 1
+nav_order: 2
 parent: Environment Variables
 ---
 

@@ -1,7 +1,7 @@
 ---
 title: Docker Compose
 nav_order: 1
-parent: Server Setup
+parent: Start
 ---
 
 # Docker Compose
@@ -49,13 +49,5 @@ singulatron-backend:
 
 Please keep in mind that this will store data locally on your machine in as gzipped JSON because Singulatron defaults to local file storage.
 
-See the [Environment Variables](./environment_variables.html)
+See the [Environment Variables](./environment-variables/)
 
-## Using Your Server
-
-Unless you configured otherwise, you can log in with the following default credentials:
-
-```sh
-username: singulatron
-password: changeme
-```

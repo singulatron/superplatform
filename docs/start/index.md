@@ -1,10 +1,11 @@
 ---
-title: Server Setup
+title: Start
 nav_order: 2
 has_children: true
+has_toc: false
 ---
 
-# Server Setup
+# Start
 
 ## Docker Compose
 
