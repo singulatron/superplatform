@@ -9,7 +9,7 @@ has_toc: false
 
 ## Docker Compose
 
-"Single click install" with [Docker Compose](./docker_compose).
+"Single click install" with [Docker Compose](./docker-compose).
 
 ## Environment Variables
 

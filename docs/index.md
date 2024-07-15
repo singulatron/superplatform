@@ -29,6 +29,6 @@ To deploy Singulatron on your servers, or even to lauch on your own laptop, see 
 
 If you want to join the work on Singulatron itself, look at [Contribute](./contribute/).
 
-## Privacy
+## Privacy Notice
 
-Privacy is of prime importance to us. To learn more about the privcy aspects of this software, visit the [Privacy](./privacy) page.
+Privacy is of prime importance to us. To learn more about the privcy aspects of this software, visit the [Privacy Notice](./privacy-notice) page.
