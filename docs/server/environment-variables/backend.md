@@ -65,7 +65,7 @@ Host With Singulatron
 
 You can use this envar to make Singulatron actually use a database instead of local file storage to store data.
 
-## PostgreSQL
+### PostgreSQL
 
 ```sh
 SINGULATRON_DB=postgres

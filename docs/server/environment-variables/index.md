@@ -9,9 +9,8 @@ has_children: true
 
 ## Frontend
 
-To configure the frontend with envars, see [this doc](./frontend.md).
+To configure the frontend with envars, see [this doc](./frontend.html).
 
 ## Backend
 
-To configure the backend with envars, see [this doc](./backend.md).
-
+To configure the backend with envars, see [this doc](./backend.html).
