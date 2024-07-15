@@ -39,7 +39,8 @@ jobs:
           echo "Published npm version: $NPM_VERSION"
           if [ "$(printf '%s\n' "$NPM_VERSION" "$LOCAL_VERSION" | sort -V | head -n1)" != "$LOCAL_VERSION" ]; then
             echo "Publishing new version $LOCAL_VERSION"
-            npm publish
+            npm run build
+            npm publish --access public
           else
             echo "No need to publish. Local version is not greater than published version."
           fi
