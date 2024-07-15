@@ -1,6 +1,6 @@
 {
   "name": "@singulatron/types",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -19,7 +19,12 @@
   "type": "module",
   "exports": {
     ".": "./dist/index.js",
-    "./user": "./dist/user.js",
-    "./chat": "./dist/chat.js"
+    "./chat": "./dist/chat.js",
+    "./config": "./dist/config.js",
+    "./docker": "./dist/docker.js",
+    "./download": "./dist/download.js",
+    "./generic": "./dist/generic.js",
+    "./prompt": "./dist/prompt.js",
+    "./user": "./dist/user.js"
   }
 }

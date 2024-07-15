@@ -16,7 +16,7 @@ import {
 	BehaviorSubject,
 } from 'rxjs';
 import { Router } from '@angular/router';
-import { Query, equal, field } from './generic.service';
+import { Query, equal, field } from '@singulatron/types/generic';
 
 @Injectable({
 	providedIn: 'root',
@@ -226,4 +226,3 @@ export class UserService {
 		return this.userCache[id].asObservable();
 	}
 }
-
