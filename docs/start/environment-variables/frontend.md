@@ -2,6 +2,7 @@
 title: Frontend Environment Variables
 nav_order: 1
 parent: Environment Variables
+grand_parent: Start
 ---
 
 # Frontend Environment Variables
