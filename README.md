@@ -8,9 +8,13 @@
     <div>
       <a href="https://superplatform.ai">superplatform.ai</a>
     </div>
+    <div>
+    </div>
   </div>
-<p>
+</p>
 <br />
+
+[![](https://dcbadge.limes.pink/api/server/https://discord.gg/pDz73vzr)](https://discord.gg/pDz73vzr)
 
 Singulatron is an open-source server daemon and web client that empowers you to self-host and interact with LLMs.
 
