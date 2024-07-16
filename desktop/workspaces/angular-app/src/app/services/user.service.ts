@@ -16,7 +16,8 @@ import {
 	BehaviorSubject,
 } from 'rxjs';
 import { Router } from '@angular/router';
-import { Query, equal, field } from './generic.service';
+import { equal, field } from '@singulatron/types';
+import * as user from '@singulatron/types';
 
 @Injectable({
 	providedIn: 'root',
@@ -24,11 +25,12 @@ import { Query, equal, field } from './generic.service';
 export class UserService {
 	private token: string = '';
 
-	private userSubject = new ReplaySubject<User>(1);
+	private userSubject = new ReplaySubject<user.User>(1);
 	/** Current logged in user */
 	public user$ = this.userSubject.asObservable();
 
-	private userCache: { [id: string]: BehaviorSubject<User | undefined> } = {};
+	private userCache: { [id: string]: BehaviorSubject<user.User | undefined> } =
+		{};
 
 	constructor(
 		private localtron: LocaltronService,
@@ -103,26 +105,26 @@ export class UserService {
 		return !!t;
 	}
 
-	login(email: string, password: string): Promise<LoginResponse> {
+	login(email: string, password: string): Promise<user.LoginResponse> {
 		return this.localtron.call('/user/login', {
 			email: email,
 			password: password,
 		});
 	}
 
-	readUserByToken(token: string): Promise<ReadUserByTokenResponse> {
+	readUserByToken(token: string): Promise<user.ReadUserByTokenResponse> {
 		return this.localtron.call('/user/read-user-by-token', {
 			token: token,
 		});
 	}
 
-	getUsers(request: GetUsersRequest): Promise<GetUsersResponse> {
+	getUsers(request: user.GetUsersRequest): Promise<user.GetUsersResponse> {
 		return this.localtron.call('/user/get-users', request);
 	}
 
 	/** Save profile on behalf of a user */
-	saveProfile(email: string, name: string): Promise<SaveProfileResponse> {
-		const request: SaveProfileRequest = {
+	saveProfile(email: string, name: string): Promise<user.SaveProfileResponse> {
+		const request: user.SaveProfileRequest = {
 			email: email,
 			name: name,
 		};
@@ -133,8 +135,8 @@ export class UserService {
 		email: string,
 		currentPassword: string,
 		newPassword: string
-	): Promise<ChangePasswordResponse> {
-		const request: ChangePasswordRequest = {
+	): Promise<user.ChangePasswordResponse> {
+		const request: user.ChangePasswordRequest = {
 			email: email,
 			currentPassword: currentPassword,
 			newPassword: newPassword,
@@ -145,8 +147,8 @@ export class UserService {
 	changePasswordAdmin(
 		email: string,
 		newPassword: string
-	): Promise<ChangePasswordAdminResponse> {
-		const request: ChangePasswordAdminRequest = {
+	): Promise<user.ChangePasswordAdminResponse> {
+		const request: user.ChangePasswordAdminRequest = {
 			email: email,
 			newPassword: newPassword,
 		};
@@ -156,11 +158,11 @@ export class UserService {
 	/** Create a user - alternative to registration
 	 */
 	createUser(
-		user: User,
+		user: user.User,
 		password: string,
 		roleIds: string[]
-	): Promise<CreateUserResponse> {
-		const request: CreateUserRequest = {
+	): Promise<user.CreateUserResponse> {
+		const request: user.CreateUserRequest = {
 			user: user,
 			password: password,
 			roleIds: roleIds,
@@ -168,34 +170,34 @@ export class UserService {
 		return this.localtron.call('/user/create-user', request);
 	}
 
-	getRoles(): Promise<GetRolesResposne> {
+	getRoles(): Promise<user.GetRolesResposne> {
 		return this.localtron.call('/user/get-roles', {});
 	}
 
-	getPermissions(): Promise<GetPermissionsResposne> {
+	getPermissions(): Promise<user.GetPermissionsResposne> {
 		return this.localtron.call('/user/get-permissions', {});
 	}
 
 	setRolePermissions(
 		roleId: string,
 		permissionIds: string[]
-	): Promise<SetRolePermissionsResponse> {
-		const request: SetRolePermissionsRequest = {
+	): Promise<user.SetRolePermissionsResponse> {
+		const request: user.SetRolePermissionsRequest = {
 			roleId: roleId,
 			permissionIds: permissionIds,
 		};
 		return this.localtron.call('/user/set-role-permissions', request);
 	}
 
-	deleteRole(roleId: string): Promise<DeleteRoleResponse> {
-		const request: DeleteRoleRequest = {
+	deleteRole(roleId: string): Promise<user.DeleteRoleResponse> {
+		const request: user.DeleteRoleRequest = {
 			roleId: roleId,
 		};
 		return this.localtron.call('/user/delete-role', request);
 	}
 
-	deleteUser(userId: string): Promise<DeleteUserResponse> {
-		const request: DeleteUserRequest = {
+	deleteUser(userId: string): Promise<user.DeleteUserResponse> {
+		const request: user.DeleteUserRequest = {
 			userId: userId,
 		};
 		return this.localtron.call('/user/delete-user', request);
@@ -211,9 +213,11 @@ export class UserService {
 		}
 	}
 
-	getUser(id: string): Observable<User | undefined> {
+	getUser(id: string): Observable<user.User | undefined> {
 		if (!this.userCache[id]) {
-			this.userCache[id] = new BehaviorSubject<User | undefined>(undefined);
+			this.userCache[id] = new BehaviorSubject<user.User | undefined>(
+				undefined
+			);
 			this.getUsers({
 				query: {
 					conditions: [equal(field('id'), id)],
@@ -226,178 +230,3 @@ export class UserService {
 		return this.userCache[id].asObservable();
 	}
 }
-
-export interface User {
-	id?: string;
-	createdAt?: Date;
-	updatedAt?: Date;
-	deletedAt?: Date | undefined;
-	name?: string;
-	email?: string;
-	passwordHash?: string;
-	roleIds?: string[];
-	authTokenIds?: string[];
-}
-
-export interface RegisterRequest {
-	name?: string;
-	email?: string;
-}
-
-// eslint-disable-next-line
-export interface RegisterResponse {}
-
-export interface LoginRequest {
-	name?: string;
-	email?: string;
-}
-
-export interface LoginResponse {
-	token: AuthToken;
-}
-
-export interface SaveProfileRequest {
-	name?: string;
-	email?: string;
-}
-
-// eslint-disable-next-line
-export interface SaveProfileResponse {}
-
-export interface ChangePasswordRequest {
-	email?: string;
-	currentPassword?: string;
-	newPassword?: string;
-}
-
-// eslint-disable-next-line
-export interface ChangePasswordResponse {}
-
-export interface ChangePasswordAdminRequest {
-	email?: string;
-	newPassword?: string;
-}
-
-// eslint-disable-next-line
-export interface ChangePasswordAdminResponse {}
-
-export const RoleAdmin: Role = {
-	id: 'role.admin',
-	name: 'Admin Role',
-	permissionIds: [],
-};
-
-export const RoleUser: Role = {
-	id: 'role.user',
-	name: 'User Role',
-	permissionIds: [],
-};
-
-export interface Role {
-	id?: string;
-	createdAt?: Date;
-	updatedAt?: Date;
-	name: string;
-	description?: string;
-	permissionIds: string[];
-}
-
-export interface CreateRoleRequest {
-	name: string;
-	description: string;
-	permissionIds: string[];
-}
-
-export interface CreateRoleResponse {
-	role?: Role;
-}
-
-export interface DeleteRoleRequest {
-	roleId?: string;
-}
-
-// eslint-disable-next-line
-export interface DeleteRoleResponse {}
-
-export interface RemoveRoleRequest {
-	userId?: string;
-	roleId?: string;
-}
-
-// eslint-disable-next-line
-export interface RemoveRoleResponse {}
-
-export interface Permission {
-	id?: string;
-	createdAt?: Date;
-	updatedAt?: Date;
-	name: string;
-	description: string;
-}
-
-export interface CreatePermissionRequest {
-	name: string;
-	description: string;
-}
-
-// eslint-disable-next-line
-export interface CreatePermissionResponse {}
-
-export interface AuthToken {
-	id?: string;
-	createdAt?: Date;
-	updatedAt?: Date;
-	deletedAt?: Date | undefined;
-	userId?: string;
-	token?: string;
-}
-
-export interface ReadUserByTokenResponse {
-	user: User;
-}
-
-// eslint-disable-next-line
-export interface GetUsersRequest {
-	query: Query;
-}
-
-export interface GetUsersResponse {
-	users: User[];
-	after: string;
-	count?: number;
-}
-
-export interface CreateUserRequest {
-	user: User;
-	password: string;
-	roleIds: string[];
-}
-
-// eslint-disable-next-line
-export interface CreateUserResponse {}
-
-// eslint-disable-next-line
-export interface GetRolesRequest {}
-
-export interface GetRolesResposne {
-	roles: Role[];
-}
-
-// eslint-disable-next-line
-export interface GetPermissionsRequest {}
-
-export interface GetPermissionsResposne {
-	permissions: Permission[];
-}
-
-// eslint-disable-next-line
-export interface SetRolePermissionsRequest {}
-
-// eslint-disable-next-line
-export interface SetRolePermissionsResponse {}
-
-export interface DeleteUserRequest {
-	userId: string;
-}
-// eslint-disable-next-line
-export interface DeleteUserResponse {}

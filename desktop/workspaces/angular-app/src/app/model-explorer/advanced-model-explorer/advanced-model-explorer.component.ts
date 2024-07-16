@@ -13,10 +13,8 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ModelService, Model } from '../../services/model.service';
-import {
-	DownloadService,
-	DownloadStatusChangeEvent,
-} from '../../services/download.service';
+import { DownloadService } from '../../services/download.service';
+import { DownloadStatusChangeEvent } from '@singulatron/types';
 import { ConfigService } from '../../services/config.service';
 import { IonicModule } from '@ionic/angular';
 import { TranslatePipe } from '../../translate.pipe';

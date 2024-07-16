@@ -13,11 +13,8 @@ import {
 import { NgFor, NgIf, NgStyle } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import {
-	ListPromptsRequest,
-	Prompt,
-	PromptService,
-} from '../services/prompt.service';
+import { PromptService } from '../services/prompt.service';
+import { ListPromptsRequest, Prompt } from '@singulatron/types';
 import { UserService } from '../services/user.service';
 import { first } from 'rxjs';
 import { PageComponent } from '../components/page/page.component';
@@ -33,7 +30,7 @@ import {
 	contains,
 	Condition,
 	conditionFieldIs,
-} from '../services/generic.service';
+} from '@singulatron/types';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({

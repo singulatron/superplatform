@@ -8,11 +8,11 @@
 import { Injectable } from '@angular/core';
 import {
 	GenericObject,
-	GenericService,
 	all,
 	id as idCondition,
 	userId as userIdCondition,
-} from './generic.service';
+} from '@singulatron/types';
+import { GenericService } from './generic.service';
 import { LocaltronService } from './localtron.service';
 import { UserService } from './user.service';
 import { first } from 'rxjs';

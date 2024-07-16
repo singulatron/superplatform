@@ -10,6 +10,11 @@ import { LocaltronService } from './localtron.service';
 import { FirehoseService } from './firehose.service';
 import { ReplaySubject, first } from 'rxjs';
 import { UserService } from './user.service';
+import {
+	DownloadStatusChangeEvent,
+	DownloadDetails,
+	DownloadsResponse,
+} from '@singulatron/types';
 
 @Injectable({
 	providedIn: 'root',
@@ -67,27 +72,4 @@ export class DownloadService {
 	async downloadList(): Promise<DownloadsResponse> {
 		return this.localtron.call('/download/list', {});
 	}
-}
-
-export interface DownloadDetails {
-	id: string;
-	url: string;
-	fileName: string;
-	dir?: string;
-	progress?: number;
-	downloadedBytes: number;
-	fullFileSize?: number;
-	status: 'inProgress' | 'completed' | 'paused' | 'cancelled' | 'failed';
-	filePath?: string;
-	paused?: boolean;
-	cancelled?: boolean;
-	error?: string;
-}
-
-type DownloadsResponse = {
-	downloads: DownloadDetails[];
-};
-
-export interface DownloadStatusChangeEvent {
-	allDownloads: DownloadDetails[];
 }

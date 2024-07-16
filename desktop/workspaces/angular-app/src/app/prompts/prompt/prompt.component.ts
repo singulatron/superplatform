@@ -10,7 +10,7 @@ import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 import { NgFor, NgIf, NgStyle } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { Prompt } from '../../services/prompt.service';
+import { Prompt } from '@singulatron/types';
 import { PageComponent } from '../../components/page/page.component';
 import { IconMenuComponent } from '../../components/icon-menu/icon-menu.component';
 import { CenteredComponent } from '../../components/centered/centered.component';

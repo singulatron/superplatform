@@ -6,7 +6,8 @@
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { UserService, LoginResponse } from '../services/user.service';
+import { UserService } from '../services/user.service';
+import { LoginResponse } from '@singulatron/types';
 import { ToastController, IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';

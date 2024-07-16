@@ -13,7 +13,8 @@ import {
 	FormsModule,
 	ReactiveFormsModule,
 } from '@angular/forms';
-import { User, UserService, Role } from '../../services/user.service';
+import { UserService } from '../../services/user.service';
+import { User, Role } from '@singulatron/types';
 import { first } from 'rxjs';
 import { ToastController, IonicModule } from '@ionic/angular';
 import { TranslatePipe } from '../../translate.pipe';

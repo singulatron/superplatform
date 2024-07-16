@@ -9,6 +9,7 @@ import { Injectable } from '@angular/core';
 import { LocaltronService } from './localtron.service';
 import { ReplaySubject, Subject } from 'rxjs';
 import { FirehoseService } from './firehose.service';
+import * as chat from '@singulatron/types';
 
 @Injectable({
 	providedIn: 'root',
@@ -16,13 +17,13 @@ import { FirehoseService } from './firehose.service';
 export class ChatService {
 	public activeThreadId: string = '';
 
-	onMessageAddedSubject = new ReplaySubject<MessageAddedEvent>(1);
+	onMessageAddedSubject = new ReplaySubject<chat.MessageAddedEvent>(1);
 	onMessageAdded$ = this.onMessageAddedSubject.asObservable();
 
-	onThreadAddedSubject = new ReplaySubject<ThreadAddedEvent>(1);
+	onThreadAddedSubject = new ReplaySubject<chat.ThreadAddedEvent>(1);
 	onThreadAdded$ = this.onMessageAddedSubject.asObservable();
 
-	onThreadUpdateSubject = new ReplaySubject<MessageAddedEvent>(1);
+	onThreadUpdateSubject = new ReplaySubject<chat.MessageAddedEvent>(1);
 	onThreadUpdate$ = this.onMessageAddedSubject.asObservable();
 
 	onStartNewThreadSubject = new Subject<void>();
@@ -55,38 +56,40 @@ export class ChatService {
 		});
 	}
 
-	async chatMessageDelete(messageId: string): Promise<GetThreadResponse> {
-		const request: DeleteMessageRequest = { messageId: messageId };
+	async chatMessageDelete(messageId: string): Promise<chat.GetThreadResponse> {
+		const request: chat.DeleteMessageRequest = { messageId: messageId };
 		return this.localtron.call('/chat/message/delete', request);
 	}
 
-	async chatMessages(threadId: string): Promise<GetMessagesResponse> {
-		const request: GetMessagesRequest = { threadId: threadId };
+	async chatMessages(threadId: string): Promise<chat.GetMessagesResponse> {
+		const request: chat.GetMessagesRequest = { threadId: threadId };
 		return this.localtron.call('/chat/messages', request);
 	}
 
-	async chatThread(threadId: string): Promise<GetThreadResponse> {
-		const request: GetThreadRequest = { threadId: threadId };
+	async chatThread(threadId: string): Promise<chat.GetThreadResponse> {
+		const request: chat.GetThreadRequest = { threadId: threadId };
 		return this.localtron.call('/chat/thread', request);
 	}
 
-	async chatThreadAdd(thread: Thread): Promise<AddThreadResponse> {
-		const request: AddThreadRequest = { thread: thread };
+	async chatThreadAdd(thread: chat.Thread): Promise<chat.AddThreadResponse> {
+		const request: chat.AddThreadRequest = { thread: thread };
 		return this.localtron.call('/chat/thread/add', request);
 	}
 
-	async chatThreadUpdate(thread: Thread): Promise<UpdateThreadResponse> {
-		const request: UpdateThreadRequest = { thread: thread };
+	async chatThreadUpdate(
+		thread: chat.Thread
+	): Promise<chat.UpdateThreadResponse> {
+		const request: chat.UpdateThreadRequest = { thread: thread };
 		return this.localtron.call('/chat/thread/update', request);
 	}
 
 	async chatThreadDelete(threadId: string): Promise<void> {
-		const request: DeleteThreadRequest = { threadId: threadId };
+		const request: chat.DeleteThreadRequest = { threadId: threadId };
 		return this.localtron.call('/chat/thread/delete', request);
 	}
 
-	async chatThreads(): Promise<GetThreadsResponse> {
-		const request: GetThreadsRequest = {};
+	async chatThreads(): Promise<chat.GetThreadsResponse> {
+		const request: chat.GetThreadsRequest = {};
 		return this.localtron.call('/chat/threads', request);
 	}
 
@@ -101,101 +104,4 @@ export class ChatService {
 		}
 		return activeThreadId;
 	}
-}
-
-export interface Thread {
-	id?: string;
-	createdAt?: string;
-	updatedAt?: string;
-
-	topicIds?: string;
-	userIds?: string[];
-
-	title?: string;
-}
-
-export interface Message {
-	id?: string;
-	createdAt?: string;
-	updatedAt?: string;
-
-	threadId: string;
-	userId?: string;
-	content: string;
-	assetIds: string[];
-}
-
-export interface Asset {
-	id: string;
-	url: string;
-	/* Some assets might have the content directly in them as base64
-	encoded strings */
-	content: string;
-	type: string;
-	decription: string;
-	createdAt: string;
-	updatedAt: string;
-}
-
-export interface AddMessageRequest {
-	message: Message;
-}
-
-export interface AddThreadRequest {
-	thread: Thread;
-}
-
-export interface AddThreadResponse {
-	thread: Thread;
-}
-
-export interface UpdateThreadRequest {
-	thread: Thread;
-}
-
-export interface UpdateThreadResponse {
-	thread: Thread;
-}
-
-export interface DeleteThreadRequest {
-	threadId: string;
-}
-
-export interface DeleteMessageRequest {
-	messageId: string;
-}
-
-export interface GetThreadRequest {
-	threadId: string;
-}
-
-type GetThreadResponse = {
-	thread: Thread;
-};
-
-// eslint-disable-next-line
-type GetThreadsRequest = {};
-
-type GetThreadsResponse = {
-	threads: Thread[];
-};
-
-// eslint-disable-next-line
-type GetMessagesRequest = {};
-
-type GetMessagesResponse = {
-	messages: Message[];
-	assets: Asset[];
-};
-
-export interface MessageAddedEvent {
-	threadId: string;
-}
-
-export interface ThreadAddedEvent {
-	threadId: string;
-}
-
-export interface ThreadUpdateEvent {
-	threadId: string;
 }

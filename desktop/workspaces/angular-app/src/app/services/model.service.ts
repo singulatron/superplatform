@@ -165,7 +165,6 @@ export interface PlatformImages {
 	cuda?: string;
 }
 
-
 export interface Model {
 	id: string;
 	platformId: string;

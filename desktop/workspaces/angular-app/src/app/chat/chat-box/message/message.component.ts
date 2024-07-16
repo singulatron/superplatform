@@ -12,7 +12,8 @@ import {
 	EventEmitter,
 	ChangeDetectionStrategy,
 } from '@angular/core';
-import { ChatService, Message, Asset } from '../../../services/chat.service';
+import { ChatService } from '../../../services/chat.service';
+import { Message, Asset } from '@singulatron/types';
 import { PromptService } from '../../../services/prompt.service';
 import { LocaltronService } from '../../../services/localtron.service';
 import { MarkdownComponent } from 'ngx-markdown';

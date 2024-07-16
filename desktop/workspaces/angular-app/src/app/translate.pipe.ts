@@ -13,9 +13,9 @@ export const TRANSLATE_OBJECT = new InjectionToken<string>('translateObject');
 export type TranslateObject = { [key: string]: { [key: string]: string } };
 
 @Pipe({
-    name: 'translate',
-    pure: true,
-    standalone: true,
+	name: 'translate',
+	pure: true,
+	standalone: true,
 })
 export class TranslatePipe implements PipeTransform {
 	constructor(

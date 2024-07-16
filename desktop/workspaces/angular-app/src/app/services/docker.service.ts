@@ -9,6 +9,7 @@ import { Injectable } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { OnDockerInfo } from 'shared-lib/models/event-request-response';
 import { LocaltronService } from './localtron.service';
+import { DockerInfoResponse } from '@singulatron/types';
 
 @Injectable({
 	providedIn: 'root',
@@ -50,19 +51,4 @@ export class DockerService {
 	async dockerInfo(): Promise<DockerInfoResponse> {
 		return this.localtron.call('/docker/info', {});
 	}
-}
-
-interface DockerInfo {
-	hasDocker: boolean;
-	dockerDaemonAddress?: string;
-	error?: string;
-}
-
-// {
-//   "info": {
-//     "hasDocker": true
-//   }
-// }
-interface DockerInfoResponse {
-	info: DockerInfo;
 }

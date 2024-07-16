@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { UserService, Role, Permission } from '../../services/user.service';
+import { UserService } from '../../services/user.service';
+import { Role, Permission } from '@singulatron/types';
 import { first } from 'rxjs';
 import { NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';

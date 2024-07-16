@@ -13,7 +13,8 @@ import {
 	FormsModule,
 	ReactiveFormsModule,
 } from '@angular/forms';
-import { User, UserService, GetUsersRequest } from '../services/user.service';
+import { UserService } from '../services/user.service';
+import { User, GetUsersRequest } from '@singulatron/types';
 import { first } from 'rxjs';
 import { ToastController, IonicModule } from '@ionic/angular';
 import { TranslatePipe } from '../translate.pipe';
@@ -31,7 +32,7 @@ import {
 	contains,
 	Condition,
 	conditionFieldIs,
-} from '../services/generic.service';
+} from '@singulatron/types';
 
 interface UserVisible extends User {
 	visible?: boolean;

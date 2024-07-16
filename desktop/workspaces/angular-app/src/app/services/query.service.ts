@@ -13,7 +13,7 @@ import {
 	startsWith,
 	field,
 	Query,
-} from './generic.service';
+} from '@singulatron/types';
 
 @Injectable({
 	providedIn: 'root',
@@ -65,7 +65,7 @@ export class QueryParser {
 
 		if (!queryString.includes(':')) {
 			if (this.defaultConditionFunc) {
-				query.conditions = [this.defaultConditionFunc(queryString)]
+				query.conditions = [this.defaultConditionFunc(queryString)];
 			}
 
 			return query;
@@ -104,7 +104,6 @@ export class QueryParser {
 			.map(([key, value]) => `${key}:${value}`)
 			.join(' ');
 	}
-
 
 	private createCondition(fieldName: string, value: string): Condition {
 		if (value.startsWith('~')) {

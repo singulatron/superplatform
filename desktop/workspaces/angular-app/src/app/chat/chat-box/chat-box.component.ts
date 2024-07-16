@@ -23,14 +23,10 @@ import {
 import { Subscription, filter } from 'rxjs';
 
 import { LocaltronService } from '../../services/localtron.service';
-import {
-	ChatService,
-	Thread,
-	Message,
-	Asset,
-} from '../../services/chat.service';
-import { Prompt, PromptService } from '../../services/prompt.service';
-
+import { ChatService } from '../../services/chat.service';
+import { PromptService } from '../../services/prompt.service';
+import { Prompt } from '@singulatron/types';
+import { Thread, Message, Asset } from '@singulatron/types';
 import { ElectronAppService } from '../../services/electron-app.service';
 
 import { TranslatePipe } from '../../translate.pipe';
