@@ -1,0 +1,80 @@
+{
+  "name": "@singulatron/types",
+  "version": "0.0.15",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc && rollup -c"
+  },
+  "files": [
+    "dist/**/*"
+  ],
+  "keywords": [
+    "typescript",
+    "library",
+    "module",
+    "commonjs",
+    "esm"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/singulatron/singulatron.git"
+  },
+  "author": "Janos Dobronszki",
+  "license": "AGPL-3.0-only",
+  "description": "TypeScript types for Singulatron. All javascript Singulatron clients (node, ng-client etc.) use these types.",
+  "devDependencies": {
+    "rollup": "^3.0.0",
+    "rollup-plugin-typescript2": "^0.31.1",
+    "typescript": "^5.5.3"
+  },
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./user": {
+      "import": "./dist/user.mjs",
+      "require": "./dist/user.js",
+      "types": "./dist/user.d.ts"
+    },
+    "./chat": {
+      "import": "./dist/chat.mjs",
+      "require": "./dist/chat.js",
+      "types": "./dist/chat.d.ts"
+    },
+    "./config": {
+      "import": "./dist/config.mjs",
+      "require": "./dist/config.js",
+      "types": "./dist/config.d.ts"
+    },
+    "./docker": {
+      "import": "./dist/docker.mjs",
+      "require": "./dist/docker.js",
+      "types": "./dist/docker.d.ts"
+    },
+    "./download": {
+      "import": "./dist/download.mjs",
+      "require": "./dist/download.js",
+      "types": "./dist/download.d.ts"
+    },
+    "./generic": {
+      "import": "./dist/generic.mjs",
+      "require": "./dist/generic.js",
+      "types": "./dist/generic.d.ts"
+    },
+    "./prompt": {
+      "import": "./dist/prompt.mjs",
+      "require": "./dist/prompt.js",
+      "types": "./dist/prompt.d.ts"
+    }
+  },
+  "dependencies": {
+    "@singulatron/types": "^0.0.15",
+    "axios": "^1.7.2",
+    "glob": "^11.0.0"
+  }
+}
