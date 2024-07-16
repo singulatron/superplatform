@@ -34,8 +34,8 @@ typeof SuppressedError === "function" ? SuppressedError : function (error, suppr
     return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
 };
 
-function call(address, apiKey, endpoint, method, data) {
-    return __awaiter(this, void 0, void 0, function* () {
+function call(address_1, apiKey_1, endpoint_1, data_1) {
+    return __awaiter(this, arguments, void 0, function* (address, apiKey, endpoint, data, method = "POST") {
         const url = `${address}${endpoint}`;
         const headers = {
             Authorization: `Bearer ${apiKey}`,
