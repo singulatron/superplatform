@@ -1,3 +1,3 @@
-import { sayHello } from "@singulatron/types/user";
+import { equal, field } from "@singulatron/types";
 
-sayHello("joe");
+console.log(equal(field("name"), "Joe"));
