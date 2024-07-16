@@ -1,10 +1,9 @@
-name: Publish @singulatron/types to npm
+name: Publish @singulatron/node to npm
 
 on:
   push:
     branches:
-      # - main
-      - "**"
+      - main
 
 jobs:
   publish:
@@ -21,7 +20,7 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        working-directory: ./clients/js/types
+        working-directory: ./clients/js/node
 
       - name: Get current version from npm
         id: get-npm-version
@@ -29,7 +28,7 @@ jobs:
           PACKAGE_NAME=$(node -p "require('./package.json').name")
           NPM_VERSION=$(npm view $PACKAGE_NAME version || echo "0.0.0")
           echo "npm_version=$NPM_VERSION" >> $GITHUB_ENV
-        working-directory: ./clients/js/types
+        working-directory: ./clients/js/node
 
       - name: Authenticate to npm
         run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
@@ -47,6 +46,6 @@ jobs:
           else
             echo "No need to publish. Local version is not greater than published version."
           fi
-        working-directory: ./clients/js/types
+        working-directory: ./clients/js/node
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

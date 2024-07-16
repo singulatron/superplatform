@@ -3,10 +3,12 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
-    "module": "esnext",
     "moduleResolution": "node",
+    "module": "esnext",
     "target": "es6",
-    "declaration": true
+    "declaration": true,
+    "lib": ["esnext"]
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
 }
