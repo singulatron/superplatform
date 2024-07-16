@@ -1,5 +1,3 @@
-'use strict';
-
 function field(fieldName) {
     return {
         field: fieldName,
@@ -126,17 +124,4 @@ function userId(id) {
     return equal(field("userId"), id);
 }
 
-exports.all = all;
-exports.anyField = anyField;
-exports.conditionField = conditionField;
-exports.conditionFieldIs = conditionFieldIs;
-exports.conditionValue = conditionValue;
-exports.conditionsToKeyValue = conditionsToKeyValue;
-exports.contains = contains;
-exports.equal = equal;
-exports.field = field;
-exports.fields = fields;
-exports.id = id;
-exports.queryHasFieldCondition = queryHasFieldCondition;
-exports.startsWith = startsWith;
-exports.userId = userId;
+export { all, anyField, conditionField, conditionFieldIs, conditionValue, conditionsToKeyValue, contains, equal, field, fields, id, queryHasFieldCondition, startsWith, userId };

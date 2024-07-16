@@ -14,7 +14,7 @@ import {
 	ReactiveFormsModule,
 } from '@angular/forms';
 import { UserService } from '../services/user.service.js';
-import { User, GetUsersRequest } from '@singulatron/types/user';
+import { User, GetUsersRequest } from '@singulatron/types';
 import { first } from 'rxjs';
 import { ToastController, IonicModule } from '@ionic/angular';
 import { TranslatePipe } from '../translate.pipe.js';

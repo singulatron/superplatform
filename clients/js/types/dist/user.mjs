@@ -1,5 +1,3 @@
-'use strict';
-
 const RoleAdmin = {
     id: "role.admin",
     name: "Admin Role",
@@ -11,5 +9,4 @@ const RoleUser = {
     permissionIds: [],
 };
 
-exports.RoleAdmin = RoleAdmin;
-exports.RoleUser = RoleUser;
+export { RoleAdmin, RoleUser };

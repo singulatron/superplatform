@@ -1,8 +1,8 @@
-interface DockerInfo {
+export interface DockerInfo {
     hasDocker: boolean;
     dockerDaemonAddress?: string;
     error?: string;
 }
-interface DockerInfoResponse {
+export interface DockerInfoResponse {
     info: DockerInfo;
 }
