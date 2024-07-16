@@ -1,6 +1,6 @@
 {
   "name": "@singulatron/node",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -23,7 +23,7 @@
   },
   "author": "Janos Dobronszki",
   "license": "AGPL-3.0-only",
-  "description": "TypeScript types for Singulatron. All javascript Singulatron clients (node, ng-client etc.) use these types.",
+  "description": "Node.js client for Singulatron. Use this package if you want to interact with the Singulatron API from your backend.",
   "devDependencies": {
     "rollup": "^3.0.0",
     "rollup-plugin-typescript2": "^0.31.1",
