@@ -6,25 +6,25 @@
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { ElectronIpcService } from '../services/electron-ipc.service.js';
+import { ElectronIpcService } from '../services/electron-ipc.service';
 import { WindowApiConst } from 'shared-lib';
-import { ElectronAppService } from '../services/electron-app.service.js';
+import { ElectronAppService } from '../services/electron-app.service';
 import { combineLatest, Subscription } from 'rxjs';
-import { DownloadService } from '../services/download.service.js';
-import { ModelService, Model } from '../services/model.service.js';
-import { DockerService } from '../services/docker.service.js';
-import { ConfigService } from '../services/config.service.js';
-import { Config } from '@singulatron/types/config';
-import { DownloadDetails } from '@singulatron/types/download';
-import { TranslatePipe } from '../translate.pipe.js';
+import { DownloadService } from '../services/download.service';
+import { ModelService, Model } from '../services/model.service';
+import { DockerService } from '../services/docker.service';
+import { ConfigService } from '../services/config.service';
+import { Config } from '@singulatron/types';
+import { DownloadDetails } from '@singulatron/types';
+import { TranslatePipe } from '../translate.pipe';
 import { TranslateModule } from '@ngx-translate/core';
-import { DownloadingComponent } from '../downloading/downloading.component.js';
+import { DownloadingComponent } from '../downloading/downloading.component';
 import { RouterLink } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { NgIf, NgStyle, AsyncPipe } from '@angular/common';
-import { CenteredComponent } from '../components/centered/centered.component.js';
-import { PageComponent } from '../components/page/page.component.js';
-import { IconMenuComponent } from '../components/icon-menu/icon-menu.component.js';
+import { CenteredComponent } from '../components/centered/centered.component';
+import { PageComponent } from '../components/page/page.component';
+import { IconMenuComponent } from '../components/icon-menu/icon-menu.component';
 
 @Component({
 	selector: 'app-startup',

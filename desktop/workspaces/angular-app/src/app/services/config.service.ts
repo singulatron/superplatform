@@ -6,12 +6,12 @@
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
 import { Injectable } from '@angular/core';
-import { LocaltronService } from './localtron.service.js';
-import { FirehoseService } from './firehose.service.js';
+import { LocaltronService } from './localtron.service';
+import { FirehoseService } from './firehose.service';
 import { ReplaySubject } from 'rxjs';
-import { UserService } from './user.service.js';
+import { UserService } from './user.service';
 import { first } from 'rxjs';
-import { Config, ConfigGetResponse } from '@singulatron/types/config';
+import { Config, ConfigGetResponse } from '@singulatron/types';
 
 @Injectable({
 	providedIn: 'root',

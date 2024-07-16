@@ -6,14 +6,14 @@
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { UserService } from '../services/user.service.js';
-import { LoginResponse } from '@singulatron/types/user';
+import { UserService } from '../services/user.service';
+import { LoginResponse } from '@singulatron/types';
 import { ToastController, IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
-import { CenteredComponent } from '../components/centered/centered.component.js';
-import { PageComponent } from '../components/page/page.component.js';
-import { IconMenuComponent } from '../components/icon-menu/icon-menu.component.js';
+import { CenteredComponent } from '../components/centered/centered.component';
+import { PageComponent } from '../components/page/page.component';
+import { IconMenuComponent } from '../components/icon-menu/icon-menu.component';
 
 @Component({
 	selector: 'app-login',

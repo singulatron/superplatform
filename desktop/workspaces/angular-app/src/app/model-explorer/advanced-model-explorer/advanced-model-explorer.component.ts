@@ -12,16 +12,14 @@ import {
 	ChangeDetectorRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ModelService, Model } from '../../services/model.service.js';
-import {
-	DownloadService,
-} from '../../services/download.service.js';
-import { DownloadStatusChangeEvent } from '@singulatron/types/download';
-import { ConfigService } from '../../services/config.service.js';
+import { ModelService, Model } from '../../services/model.service';
+import { DownloadService } from '../../services/download.service';
+import { DownloadStatusChangeEvent } from '@singulatron/types';
+import { ConfigService } from '../../services/config.service';
 import { IonicModule } from '@ionic/angular';
-import { TranslatePipe } from '../../translate.pipe.js';
+import { TranslatePipe } from '../../translate.pipe';
 import { DecimalPipe } from '@angular/common';
-import { DownloadingComponent } from '../../downloading/downloading.component.js';
+import { DownloadingComponent } from '../../downloading/downloading.component';
 import { FormsModule } from '@angular/forms';
 
 const veryLargeScreenWidth = 1900;

@@ -6,7 +6,7 @@
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
 import { Injectable } from '@angular/core';
-import { LocaltronService } from './localtron.service.js';
+import { LocaltronService } from './localtron.service';
 import { CookieService } from 'ngx-cookie-service';
 import {
 	ReplaySubject,
@@ -16,8 +16,8 @@ import {
 	BehaviorSubject,
 } from 'rxjs';
 import { Router } from '@angular/router';
-import { equal, field } from '@singulatron/types/generic';
-import * as user from '@singulatron/types/user';
+import { equal, field } from '@singulatron/types';
+import * as user from '@singulatron/types';
 
 @Injectable({
 	providedIn: 'root',
@@ -29,7 +29,8 @@ export class UserService {
 	/** Current logged in user */
 	public user$ = this.userSubject.asObservable();
 
-	private userCache: { [id: string]: BehaviorSubject<user.User | undefined> } = {};
+	private userCache: { [id: string]: BehaviorSubject<user.User | undefined> } =
+		{};
 
 	constructor(
 		private localtron: LocaltronService,
@@ -214,7 +215,9 @@ export class UserService {
 
 	getUser(id: string): Observable<user.User | undefined> {
 		if (!this.userCache[id]) {
-			this.userCache[id] = new BehaviorSubject<user.User | undefined>(undefined);
+			this.userCache[id] = new BehaviorSubject<user.User | undefined>(
+				undefined
+			);
 			this.getUsers({
 				query: {
 					conditions: [equal(field('id'), id)],

@@ -13,17 +13,17 @@ import {
 	FormsModule,
 	ReactiveFormsModule,
 } from '@angular/forms';
-import { UserService } from '../../services/user.service.js';
-import { User, Role } from '@singulatron/types/user';
+import { UserService } from '../../services/user.service';
+import { User, Role } from '@singulatron/types';
 import { first } from 'rxjs';
 import { ToastController, IonicModule } from '@ionic/angular';
-import { TranslatePipe } from '../../translate.pipe.js';
+import { TranslatePipe } from '../../translate.pipe';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgFor } from '@angular/common';
-import { CenteredComponent } from '../../components/centered/centered.component.js';
+import { CenteredComponent } from '../../components/centered/centered.component';
 import { ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
-import { PageComponent } from '../../components/page/page.component.js';
-import { IconMenuComponent } from '../../components/icon-menu/icon-menu.component.js';
+import { PageComponent } from '../../components/page/page.component';
+import { IconMenuComponent } from '../../components/icon-menu/icon-menu.component';
 
 @Component({
 	selector: 'app-add-user',

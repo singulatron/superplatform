@@ -7,9 +7,9 @@
  */
 import { Injectable } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
-import { OnDockerInfo } from 'shared-lib/models/event-request-response.js';
-import { LocaltronService } from './localtron.service.js';
-import { DockerInfoResponse } from '@singulatron/types/docker';
+import { OnDockerInfo } from 'shared-lib/models/event-request-response';
+import { LocaltronService } from './localtron.service';
+import { DockerInfoResponse } from '@singulatron/types';
 
 @Injectable({
 	providedIn: 'root',

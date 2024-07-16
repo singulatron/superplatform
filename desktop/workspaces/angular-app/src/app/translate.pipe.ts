@@ -6,7 +6,7 @@
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
 import { Pipe, PipeTransform, Inject, InjectionToken } from '@angular/core';
-import { ApiService } from './api.service.js';
+import { ApiService } from './api.service';
 
 export const TRANSLATE_OBJECT = new InjectionToken<string>('translateObject');
 // key to language to translation

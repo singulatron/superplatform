@@ -6,13 +6,13 @@
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
 import { Injectable } from '@angular/core';
-import { LocaltronService } from './localtron.service.js';
-import { DockerService } from './docker.service.js';
+import { LocaltronService } from './localtron.service';
+import { DockerService } from './docker.service';
 import { ReplaySubject, combineLatest } from 'rxjs';
 import {
 	OnModelLaunch,
 	OnModelCheck,
-} from 'shared-lib/models/event-request-response.js';
+} from 'shared-lib/models/event-request-response';
 
 @Injectable({
 	providedIn: 'root',
@@ -164,7 +164,6 @@ export interface PlatformImages {
 	default: string;
 	cuda?: string;
 }
-
 
 export interface Model {
 	id: string;

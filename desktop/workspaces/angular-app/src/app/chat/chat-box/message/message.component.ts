@@ -12,15 +12,15 @@ import {
 	EventEmitter,
 	ChangeDetectionStrategy,
 } from '@angular/core';
-import { ChatService } from '../../../services/chat.service.js';
-import { Message, Asset } from '@singulatron/types/chat';
-import { PromptService } from '../../../services/prompt.service.js';
-import { LocaltronService } from '../../../services/localtron.service.js';
+import { ChatService } from '../../../services/chat.service';
+import { Message, Asset } from '@singulatron/types';
+import { PromptService } from '../../../services/prompt.service';
+import { LocaltronService } from '../../../services/localtron.service';
 import { MarkdownComponent } from 'ngx-markdown';
 import { IonicModule } from '@ionic/angular';
 import { NgIf, DatePipe, AsyncPipe } from '@angular/common';
-import { MobileService } from '../../../services/mobile.service.js';
-import { UserService } from '../../../services/user.service.js';
+import { MobileService } from '../../../services/mobile.service';
+import { UserService } from '../../../services/user.service';
 
 @Component({
 	selector: 'app-message',

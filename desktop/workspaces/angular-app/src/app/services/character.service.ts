@@ -11,10 +11,10 @@ import {
 	all,
 	id as idCondition,
 	userId as userIdCondition,
-} from '@singulatron/types/generic';
-import { GenericService } from './generic.service.js';
-import { LocaltronService } from './localtron.service.js';
-import { UserService } from './user.service.js';
+} from '@singulatron/types';
+import { GenericService } from './generic.service';
+import { LocaltronService } from './localtron.service';
+import { UserService } from './user.service';
 import { first } from 'rxjs';
 
 const CHARACTERS_TABLE_NAME = 'characters';
