@@ -1,19 +1,8 @@
-export interface Config {
-    download?: {
-        downloadFolder?: string;
-    };
-    model?: {
-        currentModelId?: string;
-    };
-    /** This flag drives a minor UX feature:
-     * if the user has not installed the runtime we show an INSTALL
-     * button, but if the user has already installed the runtime we show
-     * we show a START runtime button.
-     * */
-    isRuntimeInstalled?: boolean;
-}
-export interface ConfigGetRequest {
-}
-export interface ConfigGetResponse {
-    config: Config;
+import { ClientOptions } from "./util";
+import * as config from "@singulatron/types";
+export declare class ConfigService {
+    private options;
+    constructor(options: ClientOptions);
+    call(endpoint: string, request: any): Promise<any>;
+    configGet(): Promise<config.ConfigGetResponse>;
 }

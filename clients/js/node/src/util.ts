@@ -1,11 +1,10 @@
 import axios, { AxiosRequestConfig, Method } from "axios";
 
 export interface ClientOptions {
-    address?: string;
-    apiKey?: string;
-  }
+  address?: string;
+  apiKey?: string;
+}
 
-  
 export async function call<T>(
   address: string,
   apiKey: string,
@@ -39,4 +38,24 @@ export async function call<T>(
     }
     throw error;
   }
+}
+
+export function uuid() {
+  return (
+    generateSegment(8) +
+    "-" +
+    generateSegment(4) +
+    "-" +
+    generateSegment(4) +
+    "-" +
+    generateSegment(4) +
+    "-" +
+    generateSegment(12)
+  );
+}
+
+function generateSegment(length: number) {
+  return Array.from({ length: length }, () =>
+    Math.floor(Math.random() * 16).toString(16)
+  ).join("");
 }

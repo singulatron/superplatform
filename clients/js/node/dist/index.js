@@ -1,23 +1,48 @@
 'use strict';
 
+var chat = require('./chat.js');
+var config = require('./config.js');
+var docker = require('./docker.js');
+var download = require('./download.js');
 var generic = require('./generic.js');
+var prompt = require('./prompt.js');
 var user = require('./user.js');
+require('./util2.js');
+require('axios');
+require('@singulatron/types');
 
+class Client {
+    constructor(options) {
+        this.options = options;
+    }
+    chatService() {
+        return new chat.ChatService(this.options);
+    }
+    configService() {
+        return new config.ConfigService(this.options);
+    }
+    dockerService() {
+        return new docker.DockerService(this.options);
+    }
+    downloadService() {
+        return new download.DownloadService(this.options);
+    }
+    genericService() {
+        return new generic.GenericService(this.options);
+    }
+    promptService() {
+        return new prompt.PromptService(this.options);
+    }
+    userService() {
+        return new user.UserService(this.options);
+    }
+}
 
-
-exports.all = generic.all;
-exports.anyField = generic.anyField;
-exports.conditionField = generic.conditionField;
-exports.conditionFieldIs = generic.conditionFieldIs;
-exports.conditionValue = generic.conditionValue;
-exports.conditionsToKeyValue = generic.conditionsToKeyValue;
-exports.contains = generic.contains;
-exports.equal = generic.equal;
-exports.field = generic.field;
-exports.fields = generic.fields;
-exports.id = generic.id;
-exports.queryHasFieldCondition = generic.queryHasFieldCondition;
-exports.startsWith = generic.startsWith;
-exports.userId = generic.userId;
-exports.RoleAdmin = user.RoleAdmin;
-exports.RoleUser = user.RoleUser;
+exports.ChatService = chat.ChatService;
+exports.ConfigService = config.ConfigService;
+exports.DockerService = docker.DockerService;
+exports.DownloadService = download.DownloadService;
+exports.GenericService = generic.GenericService;
+exports.PromptService = prompt.PromptService;
+exports.UserService = user.UserService;
+exports.Client = Client;

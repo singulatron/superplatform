@@ -1,20 +1,10 @@
-export interface DownloadDetails {
-    id: string;
-    url: string;
-    fileName: string;
-    dir?: string;
-    progress?: number;
-    downloadedBytes: number;
-    fullFileSize?: number;
-    status: "inProgress" | "completed" | "paused" | "cancelled" | "failed";
-    filePath?: string;
-    paused?: boolean;
-    cancelled?: boolean;
-    error?: string;
-}
-export type DownloadsResponse = {
-    downloads: DownloadDetails[];
-};
-export interface DownloadStatusChangeEvent {
-    allDownloads: DownloadDetails[];
+import { ClientOptions } from "./util";
+import * as download from "@singulatron/types";
+export declare class DownloadService {
+    private options;
+    constructor(options: ClientOptions);
+    call(endpoint: string, request: any): Promise<any>;
+    do(url: string): Promise<void>;
+    pause(url: string): Promise<void>;
+    list(): Promise<download.DownloadsResponse>;
 }
