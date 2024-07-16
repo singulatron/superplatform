@@ -43,7 +43,7 @@ services:
       - SINGULATRON_LLM_HOST=172.17.0.1
       #
       # GPU Acceleration for NVIDIA GPUs
-      # Uncomment this envar for non-NVIDIA GPUs.
+      # Uncomment this envar for NVIDIA GPUs.
       #
       # - SINGULATRON_GPU_PLATFORM=cuda
 ```
@@ -54,8 +54,12 @@ Put the above into a file called `docker-compose.yaml` in a folder on your compu
 docker compose up
 ```
 
+## Once it's running
+
 After the containers successfully start, you can go to `127.0.0.1:3901` and log in with the [Default Credentials](/start/#default-credentials).
 
 Please keep in mind that this will store data locally on your machine in as gzipped JSON because Singulatron defaults to local file storage.
+
+## Configuring
 
 See the [Environment Variables](./environment-variables/)
