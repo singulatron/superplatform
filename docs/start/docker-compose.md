@@ -16,35 +16,42 @@ volumes:
     name: singulatron-data
     driver: local
 
-singulatron-frontend:
-  image: crufter/singulatron-frontend
-  ports:
-    - "3901:80"
-  environment:
-    # The `BACKEND_ADDRESS` must be accessible from the browser.
-    # It is not an internal address, it's the address the browser will make API requests to.
-    - BACKEND_ADDRESS=http://127.0.0.1:58231
+services:
+  singulatron-frontend:
+    image: crufter/singulatron-frontend:latest
+    ports:
+      - "3901:80"
+    environment:
+      # The `BACKEND_ADDRESS` must be accessible from the   browser.
+      # It is not an internal address, it's the address the   browser will make API requests to.
+      - BACKEND_ADDRESS=http://127.0.0.1:58231
 
-singulatron-backend:
-  image: crufter/singulatron-backend
-  ports:
-    - "58231:58231"
-  volumes:
-    # We mount the docker socket so the backend can start containers
-    - /var/run/docker.sock:/var/run/docker.sock
-    # We mount a volume so data will be persisted
-    - singulatron-data:/root/.singulatron
-  environment:
-    # This folder will be mounted by the LLM containers to access the models
-    - SINGULATRON_HOST_FOLDER=/var/lib/docker/volumes/singulatron-data/_data
-    # Address of the host so we can access the containers running the LLMs from the backend container
-    # See "System Specific Settings" on this page for more information.
-    - SINGULATRON_LLM_HOST=172.17.0.1
-    #
-    # GPU Acceleration for NVIDIA GPUs
-    # Remove this envar for non-NVIDIA GPUs.
-    #
-    - SINGULATRON_GPU_PLATFORM=cuda
+  singulatron-backend:
+    image: crufter/singulatron-backend:latest
+    ports:
+      - "58231:58231"
+    volumes:
+      # We mount the docker socket so the backend can start   containers
+      - /var/run/docker.sock:/var/run/docker.sock
+      # We mount a volume so data will be persisted
+      - singulatron-data:/root/.singulatron
+    environment:
+      # This folder will be mounted by the LLM containers to  access the models
+      - SINGULATRON_HOST_FOLDER=/var/lib/docker/volumes/  singulatron-data/_data
+      # Address of the host so we can access the containers   running the LLMs from the backend container
+      # See "System Specific Settings" on this page for more  information.
+      - SINGULATRON_LLM_HOST=172.17.0.1
+      #
+      # GPU Acceleration for NVIDIA GPUs
+      # Uncomment this envar for non-NVIDIA GPUs.
+      #
+      # - SINGULATRON_GPU_PLATFORM=cuda
+```
+
+Put the above into a file called `docker-compose.yaml` in a folder on your computer and run it with the following command:
+
+```sh
+docker compose up
 ```
 
 After the containers successfully start, you can go to `127.0.0.1:3901` and log in with the [Default Credentials](/start/#default-credentials).
