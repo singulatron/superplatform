@@ -1,6 +1,6 @@
 {
   "name": "@singulatron/types",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -17,9 +17,13 @@
     "commonjs",
     "esm"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/singulatron/singulatron.git"
+  },
   "author": "Janos Dobronszki",
   "license": "AGPL-3.0-only",
-  "description": "Your package description",
+  "description": "TypeScript types for Singulatron. All javascript Singulatron clients (node, ng-client etc.) use these types.",
   "devDependencies": {
     "rollup": "^3.0.0",
     "rollup-plugin-typescript2": "^0.31.1",
