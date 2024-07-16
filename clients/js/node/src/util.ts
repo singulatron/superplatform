@@ -9,8 +9,8 @@ export async function call<T>(
   address: string,
   apiKey: string,
   endpoint: string,
-  method: Method,
-  data?: any
+  data?: any,
+  method: Method = "POST",
 ): Promise<T> {
   const url = `${address}${endpoint}`;
   const headers = {

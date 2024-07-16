@@ -1,6 +1,6 @@
 {
   "name": "@singulatron/node",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -25,6 +25,7 @@
   "license": "AGPL-3.0-only",
   "description": "Node.js client for Singulatron. Use this package if you want to interact with the Singulatron API from your backend.",
   "devDependencies": {
+    "@types/axios": "^0.14.0",
     "rollup": "^3.0.0",
     "rollup-plugin-typescript2": "^0.31.1",
     "typescript": "^5.5.3"
@@ -73,7 +74,7 @@
     }
   },
   "dependencies": {
-    "@singulatron/types": "^0.0.15",
+    "@singulatron/types": "^0.0.16",
     "axios": "^1.7.2",
     "glob": "^11.0.0"
   }
