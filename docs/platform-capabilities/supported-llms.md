@@ -1,7 +1,6 @@
 ---
 title: Supported LLMs
 nav_order: 4
-has_children: true
 parent: Platform Capabilities
 has_toc: false
 ---
