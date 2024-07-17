@@ -45,8 +45,9 @@ func Upsert(
 		return
 	}
 	defer r.Body.Close()
+	req.Object.UserId = user.Id
 
-	err = genericService.Upsert(req.Table, user.Id, req.Object)
+	err = genericService.Upsert(req.Object)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

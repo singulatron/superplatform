@@ -34,65 +34,109 @@ func TestCreate(t *testing.T) {
 	obj := &generictypes.GenericObject{
 		Id:        uuid1,
 		Table:     table1,
+		UserId:    userId,
 		CreatedAt: time.Now().String(),
 		Data:      map[string]interface{}{"key": "value"},
 	}
 
-	err = service.Create(table1, userId, obj)
+	err = service.Create(obj)
 	require.NoError(t, err)
+
+	t.Run("user 1 can find its own private record", func(t *testing.T) {
+		res, err := service.Find(table1, userId, false, []datastore.Condition{
+			datastore.All(),
+		})
+		require.NoError(t, err)
+		require.Equal(t, 1, len(res))
+		require.Contains(t, res[0].Id, uuid1)
+	})
 
 	obj2 := &generictypes.GenericObject{
 		Id:        uuid2,
 		Table:     table2,
+		UserId:    otherUserId,
 		CreatedAt: time.Now().String(),
 		Data:      map[string]interface{}{"key": "value"},
 	}
 
-	err = service.Create(table2, userId, obj2)
+	err = service.Create(obj2)
 	require.NoError(t, err)
 
-	res, err := service.Find(table1, userId, []datastore.Condition{
-		datastore.Id(uuid1),
+	t.Run("user 2 can find its own private record", func(t *testing.T) {
+		res, err := service.Find(table2, otherUserId, false, []datastore.Condition{
+			datastore.All(),
+		})
+		require.NoError(t, err)
+		require.Equal(t, 1, len(res))
+		require.Contains(t, res[0].Id, uuid2)
 	})
-	require.NoError(t, err)
-	require.Equal(t, 1, len(res))
-	require.Equal(t, res[0].Id, uuid1)
 
-	err = service.Create(table1, userId, obj)
-	// entry already exists
-	require.Error(t, err)
-
-	res, err = service.Find(table1, userId, []datastore.Condition{
-		datastore.Id(uuid2),
+	t.Run("find private for user 1", func(t *testing.T) {
+		res, err := service.Find(table1, userId, false, []datastore.Condition{
+			datastore.Id(uuid1),
+		})
+		require.NoError(t, err)
+		require.Equal(t, 1, len(res))
+		require.Equal(t, res[0].Id, uuid1)
 	})
-	require.NoError(t, err)
-	require.Equal(t, 0, len(res))
 
-	err = service.Upsert(table1, otherUserId, obj)
-	// unauthorized
-	require.Error(t, err)
-
-	err = service.Upsert(table1, userId, obj)
-	require.NoError(t, err)
-
-	res, err = service.Find(table1, userId, []datastore.Condition{
-		datastore.All(),
+	t.Run("find public for user 1", func(t *testing.T) {
+		res, err := service.Find(table1, userId, true, []datastore.Condition{
+			datastore.Id(uuid1),
+		})
+		require.NoError(t, err)
+		require.Equal(t, 0, len(res))
 	})
-	require.NoError(t, err)
-	require.Equal(t, 1, len(res))
-	require.Contains(t, res[0].Id, uuid1)
 
-	err = service.Delete(table1, otherUserId, []datastore.Condition{
-		datastore.Id(obj.Id),
+	t.Run("already exists", func(t *testing.T) {
+		err = service.Create(obj)
+		require.Error(t, err)
 	})
-	// no unauthorized but...
-	require.NoError(t, err)
+
+	t.Run("user 1 cant see record of user 2", func(t *testing.T) {
+		res, err := service.Find(table1, userId, false, []datastore.Condition{
+			datastore.Id(uuid2),
+		})
+		require.NoError(t, err)
+		require.Equal(t, 0, len(res))
+	})
+
+	t.Run("user 2 cant update record of user 1", func(t *testing.T) {
+		obj.UserId = otherUserId
+		err = service.Upsert(obj)
+		// unauthorized
+		require.Error(t, err)
+		obj.UserId = userId
+	})
+
+	t.Run("user 1 can upsert its own reord", func(t *testing.T) {
+		err = service.Upsert(obj)
+		require.NoError(t, err)
+	})
+
+	t.Run("user 1 can find its own reord", func(t *testing.T) {
+		res, err := service.Find(table1, userId, false, []datastore.Condition{
+			datastore.All(),
+		})
+		require.NoError(t, err)
+		require.Equal(t, 1, len(res))
+		require.Contains(t, res[0].Id, uuid1)
+	})
+
+	t.Run("user 2 cant delete user 1's record", func(t *testing.T) {
+		err = service.Delete(table1, otherUserId, []datastore.Condition{
+			datastore.Id(obj.Id),
+		})
+		// no unauthorized but no error either...
+		require.NoError(t, err)
+	})
 
 	// ...item wont be deleted
-	res, err = service.Find(table1, otherUserId, []datastore.Condition{
-		datastore.All(),
+	t.Run("user 2 will no see other tables", func(t *testing.T) {
+		res, err := service.Find(table1, otherUserId, false, []datastore.Condition{
+			datastore.All(),
+		})
+		require.NoError(t, err)
+		require.Equal(t, 0, len(res))
 	})
-	require.NoError(t, err)
-	require.Equal(t, 1, len(res))
-	require.Contains(t, res[0].Id, uuid1)
 }

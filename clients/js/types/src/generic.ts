@@ -218,7 +218,6 @@ export interface GenericObject {
 }
 
 export interface CreateRequest {
-  table: string;
   object: GenericObject;
 }
 
@@ -245,6 +244,7 @@ export interface DeleteResponse {}
 export interface FindRequest {
   table: string;
   conditions: Condition[];
+  public?: boolean;
 }
 
 export interface FindResponse {
@@ -252,7 +252,6 @@ export interface FindResponse {
 }
 
 export interface UpsertRequest {
-  table: string;
   object: GenericObject;
 }
 

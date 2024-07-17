@@ -23,7 +23,7 @@ import (
 type GenericObject struct {
 	Id        string `json:"id"`
 	Table     string `json:"table"`
-	CreatedAt string `json:"createdAt"`
+	CreatedAt string `json:"createdAt,omitempty"`
 	UpdatedAt string `json:"updatedAt,omitempty"`
 	UserId    string `json:"userId,omitempty"`
 	// Entry is visible to all users of the app
@@ -39,6 +39,9 @@ func (g GenericObject) GetId() string {
 type FindRequest struct {
 	Table      string                `json:"table"`
 	Conditions []datastore.Condition `json:"conditions"`
+	// Public true returns only public records of all users.
+	// If Public is false only the caller user's private records will be returned.
+	Public bool `json:"public"`
 }
 
 type FindResponse struct {
@@ -46,12 +49,10 @@ type FindResponse struct {
 }
 
 type CreateRequest struct {
-	Table  string         `json:"table,omitempty"`
 	Object *GenericObject `json:"object,omitempty"`
 }
 
 type UpsertRequest struct {
-	Table  string         `json:"table,omitempty"`
 	Object *GenericObject `json:"object,omitempty"`
 }
 

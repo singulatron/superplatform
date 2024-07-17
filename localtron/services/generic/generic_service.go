@@ -52,24 +52,20 @@ func NewGenericService(
 	return service, nil
 }
 
-func (g *GenericService) Create(tableName string, userId string, object *generictypes.GenericObject) error {
-	object.Table = tableName
-	object.UserId = userId
+func (g *GenericService) Create(object *generictypes.GenericObject) error {
 	return g.store.Create(object)
 }
 
-func (g *GenericService) CreateMany(tableName string, userId string, objects []*generictypes.GenericObject) error {
+func (g *GenericService) CreateMany(objects []*generictypes.GenericObject) error {
 	objectIs := []datastore.Row{}
 	for _, object := range objects {
-		object.Table = tableName
-		object.UserId = userId
 		objectIs = append(objectIs, object)
 	}
 
 	return g.store.CreateMany(objectIs)
 }
 
-func (g *GenericService) Upsert(tableName string, userId string, object *generictypes.GenericObject) error {
+func (g *GenericService) Upsert(object *generictypes.GenericObject) error {
 	vI, found, err := g.store.Query(
 		datastore.Id(object.Id),
 	).FindOne()
@@ -79,12 +75,11 @@ func (g *GenericService) Upsert(tableName string, userId string, object *generic
 
 	if found {
 		v := vI.(*generictypes.GenericObject)
-		if v.UserId != userId {
+		if v.UserId != object.UserId {
 			return errors.New("unauthorized")
 		}
 	}
-	object.Table = tableName
-	object.UserId = userId
+
 	return g.store.Upsert(object)
 }
 
@@ -97,12 +92,20 @@ func (g *GenericService) UpsertMany(tableName string, userId string, objects []*
 	return g.store.UpsertMany(objectIs)
 }
 
-func (g *GenericService) Find(tableName string, userId string, conditions []datastore.Condition) ([]*generictypes.GenericObject, error) {
-	if len(conditions) == 0 {
-		return nil, errors.New("no conditions")
-	}
+func (g *GenericService) Find(tableName string, userId string, public bool, conditions []datastore.Condition) ([]*generictypes.GenericObject, error) {
+	conditions = append(conditions,
+		datastore.Equal(datastore.Field("table"), tableName),
+	)
 
-	conditions = append(conditions, datastore.Equal(datastore.Field("table"), tableName))
+	if public {
+		conditions = append(conditions,
+			datastore.Equal(datastore.Field("public"), true),
+		)
+	} else {
+		conditions = append(conditions,
+			datastore.Equal(datastore.Field("userId"), userId),
+		)
+	}
 
 	objectIs, err := g.store.Query(
 		conditions[0], conditions[1:]...,
