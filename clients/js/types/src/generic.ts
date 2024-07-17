@@ -245,6 +245,7 @@ export interface DeleteResponse {}
 export interface FindRequest {
   table: string;
   conditions: Condition[];
+  public?: boolean;
 }
 
 export interface FindResponse {
