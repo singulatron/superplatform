@@ -41,7 +41,7 @@ type FindRequest struct {
 	Conditions []datastore.Condition `json:"conditions"`
 	// Public true returns only public records of all users.
 	// If Public is false only the caller user's private records will be returned.
-	Public bool `json:"table"`
+	Public bool `json:"public"`
 }
 
 type FindResponse struct {
