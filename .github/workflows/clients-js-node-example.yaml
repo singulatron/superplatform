@@ -25,15 +25,18 @@ jobs:
           npm link
         working-directory: ./clients/js/node
 
-      - name: Install dependencies
+      - name: Install dependencies & build
         run: |
           npm link @singulatron/node
           npm install
           npm run build
-          
+        working-directory: ./clients/js/node-example
+
+      - name: Run
+        run: |
           cp ../../../docs/start/docker-compose.yaml .
           docker compose up singulatron-backend -d
-          
+
           HOST="127.0.0.1"
           PORT=58231
 
