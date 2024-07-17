@@ -6,7 +6,7 @@ class ConfigService {
         this.options = options;
     }
     call(endpoint, request) {
-        return call(this.options.address, this.options.apiKey, endpoint, request);
+        return call(this.options, endpoint, request);
     }
     configGet() {
         return __awaiter(this, void 0, void 0, function* () {

@@ -1,4 +1,7 @@
-import axios, { AxiosRequestConfig, Method } from "axios";
+import axios, {
+  AxiosRequestConfig,
+  Method,
+} from "axios";
 
 export interface ClientOptions {
   address?: string;
@@ -12,12 +15,14 @@ export async function call<T>(
   method: Method = "POST"
 ): Promise<T> {
   if (!options.address) {
-    options.address = "127.0.0.1:58231";
+    options.address = "http://127.0.0.1:58231";
   }
   const url = `${options.address}${endpoint}`;
-  const headers = {
-    Authorization: `Bearer ${options.apiKey}`,
-  };
+  const headers: Record<string, string> = {};
+
+  if (!options.apiKey) {
+    headers.Authorization = `Bearer ${options.apiKey}`;
+  }
 
   const config: AxiosRequestConfig = {
     url,
