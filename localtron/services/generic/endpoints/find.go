@@ -45,6 +45,9 @@ func Find(
 		return
 	}
 	defer r.Body.Close()
+	if req.Public {
+		user.Id = ""
+	}
 
 	objects, err := genericService.Find(req.Table, user.Id, req.Conditions)
 	if err != nil {

@@ -97,12 +97,20 @@ func (g *GenericService) UpsertMany(tableName string, userId string, objects []*
 	return g.store.UpsertMany(objectIs)
 }
 
-func (g *GenericService) Find(tableName string, userId string, conditions []datastore.Condition) ([]*generictypes.GenericObject, error) {
-	if len(conditions) == 0 {
-		return nil, errors.New("no conditions")
-	}
+func (g *GenericService) Find(tableName string, userId string, public bool, conditions []datastore.Condition) ([]*generictypes.GenericObject, error) {
+	conditions = append(conditions,
+		datastore.Equal(datastore.Field("table"), tableName),
+	)
 
-	conditions = append(conditions, datastore.Equal(datastore.Field("table"), tableName))
+	if public {
+		conditions = append(conditions,
+			datastore.Equal(datastore.Field("public"), true),
+		)
+	} else {
+		conditions = append(conditions,
+			datastore.Equal(datastore.Field("userId"), true),
+		)
+	}
 
 	objectIs, err := g.store.Query(
 		conditions[0], conditions[1:]...,
