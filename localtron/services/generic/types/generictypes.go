@@ -52,8 +52,16 @@ type CreateRequest struct {
 	Object *GenericObject `json:"object,omitempty"`
 }
 
+type CreateManyRequest struct {
+	Objects []*GenericObject `json:"objects,omitempty"`
+}
+
 type UpsertRequest struct {
 	Object *GenericObject `json:"object,omitempty"`
+}
+
+type UpsertManyRequest struct {
+	Objects []*GenericObject `json:"objects,omitempty"`
 }
 
 type DeleteRequest struct {
