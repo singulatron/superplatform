@@ -83,10 +83,9 @@ func (g *GenericService) Upsert(object *generictypes.GenericObject) error {
 	return g.store.Upsert(object)
 }
 
-func (g *GenericService) UpsertMany(tableName string, userId string, objects []*generictypes.GenericObject) error {
+func (g *GenericService) UpsertMany(objects []*generictypes.GenericObject) error {
 	objectIs := []datastore.Row{}
 	for _, object := range objects {
-		object.Table = tableName
 		objectIs = append(objectIs, object)
 	}
 	return g.store.UpsertMany(objectIs)
