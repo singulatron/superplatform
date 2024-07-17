@@ -6,22 +6,22 @@ class GenericService {
         this.options = options;
     }
     call(endpoint, request) {
-        return call(this.options.address, this.options.apiKey, endpoint, request);
+        return call(this.options, endpoint, request);
     }
     create(table, object) {
         return __awaiter(this, void 0, void 0, function* () {
             const request = {
-                table: table,
                 object: object,
             };
             return this.call("/generic/create", request);
         });
     }
-    find(table, conditions) {
-        return __awaiter(this, void 0, void 0, function* () {
+    find(table_1, conditions_1) {
+        return __awaiter(this, arguments, void 0, function* (table, conditions, _public = false) {
             const request = {
                 table: table,
                 conditions: conditions,
+                public: _public,
             };
             return this.call("/generic/find", request);
         });
@@ -29,7 +29,6 @@ class GenericService {
     upsert(table, object) {
         return __awaiter(this, void 0, void 0, function* () {
             const request = {
-                table: table,
                 object: object,
             };
             return this.call("/generic/upsert", request);

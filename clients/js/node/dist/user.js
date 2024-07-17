@@ -9,7 +9,7 @@ class UserService {
         this.options = options;
     }
     call(endpoint, request) {
-        return util.call(this.options.address, this.options.apiKey, endpoint, request);
+        return util.call(this.options, endpoint, request);
     }
     login(email, password) {
         return this.call("/user/login", {

@@ -6,7 +6,7 @@ class DockerService {
         this.options = options;
     }
     call(endpoint, request) {
-        return call(this.options.address, this.options.apiKey, endpoint, request);
+        return call(this.options, endpoint, request);
     }
     dockerInfo() {
         return __awaiter(this, void 0, void 0, function* () {

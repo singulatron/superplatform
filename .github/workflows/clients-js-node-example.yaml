@@ -1,0 +1,49 @@
+name: Run node-example
+
+on:
+  push:
+    branches:
+      - "**"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Link node
+        run: |
+          npm install
+          npm run build
+          npm link
+        working-directory: ./clients/js/node
+
+      - name: Install dependencies & build
+        run: |
+          npm link @singulatron/node
+          npm install
+          npm run build
+        working-directory: ./clients/js/node-example
+
+      - name: Run
+        run: |
+          cp ../../../docs/start/docker-compose.yaml .
+          docker compose up singulatron-backend -d
+
+          HOST="127.0.0.1"
+          PORT=58231
+
+          while ! nc -z $HOST $PORT; do
+            echo "Waiting for $HOST:$PORT to come online..."
+            sleep 1
+          done
+
+          node ./dist/index.js
+        working-directory: ./clients/js/node-example
