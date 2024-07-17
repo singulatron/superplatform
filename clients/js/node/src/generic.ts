@@ -23,11 +23,13 @@ export class GenericService {
 
   async find(
     table: string,
-    conditions: generic.Condition[]
+    conditions: generic.Condition[],
+    _public: boolean = false
   ): Promise<generic.FindResponse> {
     const request: generic.FindRequest = {
       table: table,
       conditions: conditions,
+      public: _public,
     };
 
     return this.call("/generic/find", request);

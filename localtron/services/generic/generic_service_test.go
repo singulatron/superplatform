@@ -51,7 +51,7 @@ func TestCreate(t *testing.T) {
 	err = service.Create(table2, userId, obj2)
 	require.NoError(t, err)
 
-	res, err := service.Find(table1, userId, []datastore.Condition{
+	res, err := service.Find(table1, userId, false, []datastore.Condition{
 		datastore.Id(uuid1),
 	})
 	require.NoError(t, err)
@@ -62,7 +62,7 @@ func TestCreate(t *testing.T) {
 	// entry already exists
 	require.Error(t, err)
 
-	res, err = service.Find(table1, userId, []datastore.Condition{
+	res, err = service.Find(table1, userId, false, []datastore.Condition{
 		datastore.Id(uuid2),
 	})
 	require.NoError(t, err)
@@ -75,7 +75,7 @@ func TestCreate(t *testing.T) {
 	err = service.Upsert(table1, userId, obj)
 	require.NoError(t, err)
 
-	res, err = service.Find(table1, userId, []datastore.Condition{
+	res, err = service.Find(table1, userId, false, []datastore.Condition{
 		datastore.All(),
 	})
 	require.NoError(t, err)
@@ -89,7 +89,7 @@ func TestCreate(t *testing.T) {
 	require.NoError(t, err)
 
 	// ...item wont be deleted
-	res, err = service.Find(table1, otherUserId, []datastore.Condition{
+	res, err = service.Find(table1, otherUserId, false, []datastore.Condition{
 		datastore.All(),
 	})
 	require.NoError(t, err)
