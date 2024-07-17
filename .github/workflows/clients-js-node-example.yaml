@@ -33,7 +33,14 @@ jobs:
           
           cp ../../../docs/start/docker-compose.yaml .
           docker compose up singulatron-backend -d
-          sleep 5
+          
+          HOST="127.0.0.1"
+          PORT=58231
+
+          while ! nc -z $HOST $PORT; do
+            echo "Waiting for $HOST:$PORT to come online..."
+            sleep 1
+          done
 
           node ./dist/index.js
         working-directory: ./clients/js/node-example
