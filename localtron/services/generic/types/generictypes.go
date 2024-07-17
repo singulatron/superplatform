@@ -23,7 +23,7 @@ import (
 type GenericObject struct {
 	Id        string `json:"id"`
 	Table     string `json:"table"`
-	CreatedAt string `json:"createdAt"`
+	CreatedAt string `json:"createdAt,omitempty"`
 	UpdatedAt string `json:"updatedAt,omitempty"`
 	UserId    string `json:"userId,omitempty"`
 	// Entry is visible to all users of the app

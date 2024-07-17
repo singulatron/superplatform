@@ -17,7 +17,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/flusflas/dipper"
 	"github.com/google/uuid"
 	"github.com/singulatron/singulatron/localtron/datastore"
@@ -512,7 +511,7 @@ func (q *QueryBuilder) match(obj any) bool {
 				fieldValue := getField(obj, fieldName)
 
 				if fmt.Sprintf("%v", fieldValue) == "dipper: field not found" {
-					panic(fmt.Sprintf("field '%v' not found in object %v", fieldName, spew.Sdump(obj)))
+					continue
 				}
 				condValue := reflect.ValueOf(value)
 				if fieldV := reflect.ValueOf(fieldValue); fieldV.Kind() == reflect.Slice {
