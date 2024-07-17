@@ -218,7 +218,6 @@ export interface GenericObject {
 }
 
 export interface CreateRequest {
-  table: string;
   object: GenericObject;
 }
 
@@ -253,7 +252,6 @@ export interface FindResponse {
 }
 
 export interface UpsertRequest {
-  table: string;
   object: GenericObject;
 }
 
