@@ -10,7 +10,7 @@ export class UserService {
   }
 
   call(endpoint: string, request: any): Promise<any> {
-    return call(this.options.address!, this.options.apiKey!, endpoint, request);
+    return call(this.options, endpoint, request);
   }
 
   login(email: string, password: string): Promise<user.LoginResponse> {

@@ -9,7 +9,7 @@ export class GenericService {
   }
 
   call(endpoint: string, request: any): Promise<any> {
-    return call(this.options.address!, this.options.apiKey!, endpoint, request);
+    return call(this.options, endpoint, request);
   }
 
   async create(table: string, object: generic.GenericObject): Promise<void> {
