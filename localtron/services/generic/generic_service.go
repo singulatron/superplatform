@@ -108,7 +108,7 @@ func (g *GenericService) Find(tableName string, userId string, public bool, cond
 		)
 	} else {
 		conditions = append(conditions,
-			datastore.Equal(datastore.Field("userId"), true),
+			datastore.Equal(datastore.Field("userId"), userId),
 		)
 	}
 

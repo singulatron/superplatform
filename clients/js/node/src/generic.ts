@@ -14,7 +14,6 @@ export class GenericService {
 
   async create(table: string, object: generic.GenericObject): Promise<void> {
     const request: generic.CreateRequest = {
-      table: table,
       object: object,
     };
 
@@ -37,7 +36,6 @@ export class GenericService {
 
   async upsert(table: string, object: generic.GenericObject): Promise<void> {
     const request: generic.UpsertRequest = {
-      table: table,
       object: object,
     };
 

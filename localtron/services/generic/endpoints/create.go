@@ -46,7 +46,7 @@ func Create(
 	}
 	defer r.Body.Close()
 
-	err = genericService.Create(req.Table, user.Id, req.Object)
+	err = genericService.Create(req.Object.Table, user.Id, req.Object)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

@@ -49,12 +49,10 @@ type FindResponse struct {
 }
 
 type CreateRequest struct {
-	Table  string         `json:"table,omitempty"`
 	Object *GenericObject `json:"object,omitempty"`
 }
 
 type UpsertRequest struct {
-	Table  string         `json:"table,omitempty"`
 	Object *GenericObject `json:"object,omitempty"`
 }
 
