@@ -6,15 +6,17 @@ export interface ClientOptions {
 }
 
 export async function call<T>(
-  address: string,
-  apiKey: string,
+  options: ClientOptions,
   endpoint: string,
   data?: any,
-  method: Method = "POST",
+  method: Method = "POST"
 ): Promise<T> {
-  const url = `${address}${endpoint}`;
+  if (!options.address) {
+    options.address = "127.0.0.1:58231";
+  }
+  const url = `${options.address}${endpoint}`;
   const headers = {
-    Authorization: `Bearer ${apiKey}`,
+    Authorization: `Bearer ${options.apiKey}`,
   };
 
   const config: AxiosRequestConfig = {
