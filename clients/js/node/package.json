@@ -74,7 +74,7 @@
     }
   },
   "dependencies": {
-    "@singulatron/types": "^0.0.17",
+    "@singulatron/types": "^0.0.18",
     "axios": "^1.7.2",
     "glob": "^11.0.0"
   }

@@ -13,17 +13,17 @@ class GenericService {
     create(table, object) {
         return util.__awaiter(this, void 0, void 0, function* () {
             const request = {
-                table: table,
                 object: object,
             };
             return this.call("/generic/create", request);
         });
     }
-    find(table, conditions) {
-        return util.__awaiter(this, void 0, void 0, function* () {
+    find(table_1, conditions_1) {
+        return util.__awaiter(this, arguments, void 0, function* (table, conditions, _public = false) {
             const request = {
                 table: table,
                 conditions: conditions,
+                public: _public,
             };
             return this.call("/generic/find", request);
         });
@@ -31,7 +31,6 @@ class GenericService {
     upsert(table, object) {
         return util.__awaiter(this, void 0, void 0, function* () {
             const request = {
-                table: table,
                 object: object,
             };
             return this.call("/generic/upsert", request);
