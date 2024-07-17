@@ -18,12 +18,22 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Install dependencies
+      - name: Link node
         run: |
           npm install
           npm run build
+          npm link
+        working-directory: ./clients/js/node
+
+      - name: Install dependencies
+        run: |
+          npm link @singulatron/node
+          npm install
+          npm run build
+          
           cp ../../../docs/start/docker-compose.yaml .
           docker compose up singulatron-backend -d
           sleep 5
+
           node ./dist/index.js
         working-directory: ./clients/js/node-example
