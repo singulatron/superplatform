@@ -14,6 +14,7 @@ export interface Prompt {
     runCount?: number;
     error?: string;
     maxRetries?: number;
+    sync?: boolean;
 }
 export interface AddPromptRequest {
     prompt: Prompt;
