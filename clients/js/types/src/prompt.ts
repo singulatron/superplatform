@@ -29,6 +29,7 @@ export interface Prompt {
   runCount?: number; // How many times this was ran (retries are due to errors)
   error?: string;
   maxRetries?: number;
+  sync?: boolean;
 }
 
 export interface AddPromptRequest {

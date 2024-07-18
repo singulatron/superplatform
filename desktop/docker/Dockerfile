@@ -12,7 +12,6 @@ FROM node:22.4.1 as build
 WORKDIR /app
 COPY . .
 
-
 ENV CHROME_NO_SANDBOX=true
 
 RUN npm i && \

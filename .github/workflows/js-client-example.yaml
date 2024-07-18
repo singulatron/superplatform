@@ -1,4 +1,4 @@
-name: Run node-example
+name: Run client-example
 
 on:
   push:
@@ -23,14 +23,14 @@ jobs:
           npm install
           npm run build
           npm link
-        working-directory: ./clients/js/node
+        working-directory: ./clients/js/client
 
       - name: Install dependencies & build
         run: |
-          npm link @singulatron/node
+          npm link @singulatron/client
           npm install
           npm run build
-        working-directory: ./clients/js/node-example
+        working-directory: ./clients/js/client-example
 
       - name: Run
         run: |
@@ -46,4 +46,4 @@ jobs:
           done
 
           node ./dist/index.js
-        working-directory: ./clients/js/node-example
+        working-directory: ./clients/js/client-example

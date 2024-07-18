@@ -1,4 +1,4 @@
-import { UserService } from "@singulatron/node";
+import { UserService } from "@singulatron/client";
 
 async function start() {
   let userService = new UserService({});
