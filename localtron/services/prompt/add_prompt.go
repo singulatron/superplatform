@@ -8,10 +8,12 @@
 package promptservice
 
 import (
+	"context"
 	"log/slog"
 	"time"
 
 	"github.com/pkg/errors"
+	"github.com/singulatron/singulatron/localtron/clients/llm"
 	"github.com/singulatron/singulatron/localtron/logger"
 
 	apptypes "github.com/singulatron/singulatron/localtron/services/chat/types"
@@ -20,7 +22,7 @@ import (
 
 const maxThreadTitle = 100
 
-func (p *PromptService) AddPrompt(prompt *prompttypes.Prompt) error {
+func (p *PromptService) AddPrompt(ctx context.Context, prompt *prompttypes.Prompt) error {
 	prompt.Status = prompttypes.PromptStatusScheduled
 	now := timeNow()
 	prompt.CreatedAt = now
@@ -77,6 +79,21 @@ func (p *PromptService) AddPrompt(prompt *prompttypes.Prompt) error {
 	})
 
 	go p.triggerPromptProcessing()
+
+	if prompt.Sync {
+		subscriber := make(chan *llm.CompletionResponse)
+		p.StreamManager.Subscribe(threadId, subscriber)
+
+		go func() {
+			<-ctx.Done()
+			p.StreamManager.Unsubscribe(threadId, subscriber)
+		}()
+
+		for resp := range subscriber {
+			resp.Model = "" // Redact model from response
+			resp.Choices[0].FinishReason != ""
+		}
+	}
 	return nil
 }
 

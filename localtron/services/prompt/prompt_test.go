@@ -1,6 +1,7 @@
 package promptservice_test
 
 import (
+	"context"
 	"testing"
 
 	"github.com/google/uuid"
@@ -20,7 +21,7 @@ func TestMessageCreatesThread(t *testing.T) {
 	promptId := uuid.New().String()
 	threadId := uuid.New().String()
 	t.Run("add prompt", func(t *testing.T) {
-		err := ps.AddPrompt(&prompttypes.Prompt{
+		err := ps.AddPrompt(context.Background(), &prompttypes.Prompt{
 			Id:       promptId,
 			Prompt:   "hi",
 			ThreadId: threadId,
