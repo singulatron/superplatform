@@ -1,4 +1,4 @@
-FROM node:22 as build
+FROM node:22.4.1-slim as build
 
 # # Install dependencies
 # RUN apt-get update && apt-get install -y wget gnupg
@@ -17,8 +17,8 @@ ENV CHROME_NO_SANDBOX=true
 
 RUN npm i && \
     cd workspaces/angular-app && \
-    npm install -g @angular/cli@latest && \
     npm run lint && \
+    # npm install -g @angular/cli@latest && \
     # ng test && \
     cd ../.. && \
     npm run package:angular-app
