@@ -1,7 +1,4 @@
-import axios, {
-  AxiosRequestConfig,
-  Method,
-} from "axios";
+import axios, { AxiosRequestConfig, Method } from "axios";
 
 export interface ClientOptions {
   address?: string;
@@ -20,7 +17,7 @@ export async function call<T>(
   const url = `${options.address}${endpoint}`;
   const headers: Record<string, string> = {};
 
-  if (!options.apiKey) {
+  if (options.apiKey) {
     headers.Authorization = `Bearer ${options.apiKey}`;
   }
 

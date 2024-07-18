@@ -39,7 +39,7 @@ function call(options_1, endpoint_1, data_1) {
         }
         const url = `${options.address}${endpoint}`;
         const headers = {};
-        if (!options.apiKey) {
+        if (options.apiKey) {
             headers.Authorization = `Bearer ${options.apiKey}`;
         }
         const config = {
