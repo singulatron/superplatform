@@ -55,11 +55,11 @@ export interface GenericObject {
     createdAt: string;
     updatedAt: string;
     userId?: string;
+    table: string;
     data: any;
     public?: boolean;
 }
 export interface CreateRequest {
-    table: string;
     object: GenericObject;
 }
 export interface CreateResponse {
@@ -86,7 +86,6 @@ export interface FindResponse {
     objects: GenericObject[];
 }
 export interface UpsertRequest {
-    table: string;
     object: GenericObject;
 }
 export interface UpsertResponse {
