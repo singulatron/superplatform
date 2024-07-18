@@ -48,11 +48,12 @@ func Add(
 
 	req.Prompt.UserId = user.Id
 
-	err = promptService.AddPrompt(req.Prompt)
+	rsp, err := promptService.AddPrompt(r.Context(), req.Prompt)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	w.Write([]byte(`{}`))
+	bs, _ := json.Marshal(rsp)
+	w.Write(bs)
 }

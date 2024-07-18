@@ -8,10 +8,12 @@
 package promptservice
 
 import (
+	"context"
 	"log/slog"
 	"time"
 
 	"github.com/pkg/errors"
+	"github.com/singulatron/singulatron/localtron/clients/llm"
 	"github.com/singulatron/singulatron/localtron/logger"
 
 	apptypes "github.com/singulatron/singulatron/localtron/services/chat/types"
@@ -20,7 +22,7 @@ import (
 
 const maxThreadTitle = 100
 
-func (p *PromptService) AddPrompt(prompt *prompttypes.Prompt) error {
+func (p *PromptService) AddPrompt(ctx context.Context, prompt *prompttypes.Prompt) (*prompttypes.AddPromptResponse, error) {
 	prompt.Status = prompttypes.PromptStatusScheduled
 	now := timeNow()
 	prompt.CreatedAt = now
@@ -28,7 +30,7 @@ func (p *PromptService) AddPrompt(prompt *prompttypes.Prompt) error {
 
 	err := p.promptsStore.Create(prompt)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	logger.Info("Created prompt",
@@ -42,7 +44,7 @@ func (p *PromptService) AddPrompt(prompt *prompttypes.Prompt) error {
 
 	_, threadExists, err := p.appService.GetThread(threadId)
 	if err != nil {
-		return errors.Wrap(err, "cannot get thread")
+		return nil, errors.Wrap(err, "cannot get thread")
 	}
 
 	if !threadExists {
@@ -68,7 +70,7 @@ func (p *PromptService) AddPrompt(prompt *prompttypes.Prompt) error {
 
 		_, err := p.appService.AddThread(thread)
 		if err != nil {
-			return errors.Wrap(err, "failed to add thread")
+			return nil, errors.Wrap(err, "failed to add thread")
 		}
 	}
 
@@ -77,7 +79,24 @@ func (p *PromptService) AddPrompt(prompt *prompttypes.Prompt) error {
 	})
 
 	go p.triggerPromptProcessing()
-	return nil
+
+	rsp := &prompttypes.AddPromptResponse{}
+
+	if prompt.Sync {
+		subscriber := make(chan *llm.CompletionResponse)
+		p.StreamManager.Subscribe(threadId, subscriber)
+
+		go func() {
+			<-ctx.Done()
+			p.StreamManager.Unsubscribe(threadId, subscriber)
+		}()
+
+		for resp := range subscriber {
+			rsp.Answer += resp.Choices[0].Text
+		}
+	}
+
+	return rsp, nil
 }
 
 func (p *PromptService) triggerPromptProcessing() {

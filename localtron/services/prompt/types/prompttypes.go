@@ -8,7 +8,6 @@
 package prompttypes
 
 import (
-	"sync"
 	"time"
 
 	"github.com/singulatron/singulatron/localtron/datastore"
@@ -50,8 +49,7 @@ type Prompt struct {
 	RunCount   int    `json:"runCount,omitempty"`
 	Error      string `json:"error,omitempty"`
 	MaxRetries int    `json:"maxRetries,omitempty"`
-
-	mutex sync.Mutex
+	Sync       bool   `json:"sync"`
 }
 
 func (c *Prompt) GetId() string {
@@ -66,6 +64,11 @@ type AddPromptRequest struct {
 	Prompt *Prompt `json:"prompt"`
 }
 
+type AddPromptResponse struct {
+	Prompt *Prompt `json:"prompt"`
+	Answer string  `json:"answer"`
+}
+
 type ListPromptsRequest struct {
 	Query *datastore.Query `json:"query"`
 }
@@ -78,49 +81,4 @@ type ListPromptsResponse struct {
 
 type RemovePromptRequest struct {
 	Prompt *Prompt `json:"prompt"`
-}
-
-//
-// Events
-//
-
-const EventPromptAddedName = "promptAdded"
-
-type EventPromptAdded struct {
-	PromptId string `json:"promptId"`
-}
-
-func (e EventPromptAdded) Name() string {
-	return EventPromptAddedName
-}
-
-const EventPromptRemovedName = "promptRemoved"
-
-type EventPromptRemoved struct {
-	PromptId string `json:"promptId"`
-}
-
-func (e EventPromptRemoved) Name() string {
-	return EventPromptRemovedName
-}
-
-const EventPromptProcessingStartedName = "promptProcessingStarted"
-
-type EventPromptProcessingStarted struct {
-	PromptId string `json:"promptId"`
-}
-
-func (e EventPromptProcessingStarted) Name() string {
-	return EventPromptProcessingStartedName
-}
-
-const EventPromptProcessingFinishedName = "promptProcessingFinished"
-
-type EventPromptProcessingFinished struct {
-	PromptId string `json:"promptId"`
-	Error    string `json:"error,omitempty"`
-}
-
-func (e EventPromptProcessingFinished) Name() string {
-	return EventPromptProcessingFinishedName
 }
