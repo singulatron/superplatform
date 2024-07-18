@@ -21,7 +21,7 @@ func TestMessageCreatesThread(t *testing.T) {
 	promptId := uuid.New().String()
 	threadId := uuid.New().String()
 	t.Run("add prompt", func(t *testing.T) {
-		err := ps.AddPrompt(context.Background(), &prompttypes.Prompt{
+		_, err := ps.AddPrompt(context.Background(), &prompttypes.Prompt{
 			Id:       promptId,
 			Prompt:   "hi",
 			ThreadId: threadId,

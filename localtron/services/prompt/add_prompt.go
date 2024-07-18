@@ -22,7 +22,7 @@ import (
 
 const maxThreadTitle = 100
 
-func (p *PromptService) AddPrompt(ctx context.Context, prompt *prompttypes.Prompt) error {
+func (p *PromptService) AddPrompt(ctx context.Context, prompt *prompttypes.Prompt) (*prompttypes.AddPromptResponse, error) {
 	prompt.Status = prompttypes.PromptStatusScheduled
 	now := timeNow()
 	prompt.CreatedAt = now
@@ -30,7 +30,7 @@ func (p *PromptService) AddPrompt(ctx context.Context, prompt *prompttypes.Promp
 
 	err := p.promptsStore.Create(prompt)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	logger.Info("Created prompt",
@@ -44,7 +44,7 @@ func (p *PromptService) AddPrompt(ctx context.Context, prompt *prompttypes.Promp
 
 	_, threadExists, err := p.appService.GetThread(threadId)
 	if err != nil {
-		return errors.Wrap(err, "cannot get thread")
+		return nil, errors.Wrap(err, "cannot get thread")
 	}
 
 	if !threadExists {
@@ -70,7 +70,7 @@ func (p *PromptService) AddPrompt(ctx context.Context, prompt *prompttypes.Promp
 
 		_, err := p.appService.AddThread(thread)
 		if err != nil {
-			return errors.Wrap(err, "failed to add thread")
+			return nil, errors.Wrap(err, "failed to add thread")
 		}
 	}
 
@@ -79,6 +79,8 @@ func (p *PromptService) AddPrompt(ctx context.Context, prompt *prompttypes.Promp
 	})
 
 	go p.triggerPromptProcessing()
+
+	rsp := &prompttypes.AddPromptResponse{}
 
 	if prompt.Sync {
 		subscriber := make(chan *llm.CompletionResponse)
@@ -90,11 +92,11 @@ func (p *PromptService) AddPrompt(ctx context.Context, prompt *prompttypes.Promp
 		}()
 
 		for resp := range subscriber {
-			resp.Model = "" // Redact model from response
-			resp.Choices[0].FinishReason != ""
+			rsp.Answer += resp.Choices[0].Text
 		}
 	}
-	return nil
+
+	return rsp, nil
 }
 
 func (p *PromptService) triggerPromptProcessing() {

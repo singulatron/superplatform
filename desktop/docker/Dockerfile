@@ -17,8 +17,8 @@ ENV CHROME_NO_SANDBOX=true
 
 RUN npm i && \
     cd workspaces/angular-app && \
+    npm install -g @angular/cli@latest && \
     npm run lint && \
-    # npm install -g @angular/cli@latest && \
     # ng test && \
     cd ../.. && \
     npm run package:angular-app
