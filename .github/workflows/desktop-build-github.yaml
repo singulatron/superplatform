@@ -14,7 +14,8 @@ jobs:
     runs-on: windows-latest
     env:
       CGO_ENABLED: 0
-    if: ${{ !contains(github.event.head_commit.message, 'NOBUILD') }}
+    if: false
+    # if: ${{ !contains(github.event.head_commit.message, 'NOBUILD') }}
     steps:
       - uses: actions/checkout@v4
 
@@ -335,7 +336,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CGO_ENABLED: 0
-    if: ${{ !contains(github.event.head_commit.message, 'NOBUILD') }}
+    if: false
+    # if: ${{ !contains(github.event.head_commit.message, 'NOBUILD') }}
     steps:
       - uses: actions/checkout@v4
 
