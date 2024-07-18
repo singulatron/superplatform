@@ -10,7 +10,7 @@ class GenericService {
     call(endpoint, request) {
         return util.call(this.options, endpoint, request);
     }
-    create(table, object) {
+    create(object) {
         return util.__awaiter(this, void 0, void 0, function* () {
             const request = {
                 object: object,
@@ -28,7 +28,7 @@ class GenericService {
             return this.call("/generic/find", request);
         });
     }
-    upsert(table, object) {
+    upsert(object) {
         return util.__awaiter(this, void 0, void 0, function* () {
             const request = {
                 object: object,

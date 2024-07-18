@@ -213,6 +213,7 @@ export interface GenericObject {
   createdAt: string;
   updatedAt: string;
   userId?: string;
+  table: string;
   data: any;
   public?: boolean;
 }
