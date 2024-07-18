@@ -1,4 +1,4 @@
-name: Build @singulatron/node
+name: Build @singulatron/client
 
 on:
   push:

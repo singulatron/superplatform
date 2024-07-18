@@ -1,4 +1,4 @@
-name: Publish @singulatron/node to npm
+name: Publish @singulatron/client to npm
 
 on:
   push:
