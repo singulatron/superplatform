@@ -1,4 +1,4 @@
-FROM node:22.4.1-slim as build
+FROM node:22.4.1 as build
 
 # # Install dependencies
 # RUN apt-get update && apt-get install -y wget gnupg
