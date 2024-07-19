@@ -9,7 +9,6 @@ package datastore
 
 import (
 	"fmt"
-	"reflect"
 	"testing"
 	"time"
 
@@ -63,19 +62,22 @@ func TestRandomize(t *testing.T, store DataStore) {
 	err = store.Create(obj3)
 	require.NoError(t, err)
 
+	firstName := ""
+
 	// Query with randomization
 	res, err := store.Query(All()).OrderBy(OrderByRandom()).Find()
 	require.NoError(t, err)
 	require.Equal(t, 3, len(res))
+	firstName = res[0].(TestObject).Name
 
 	// Verify that the results are randomized
 	// Since the results are random, we need to check multiple times to ensure they are not always in the same order
 	isDifferent := false
-	for i := 0; i < 5; i++ {
+	for i := 0; i < 10; i++ {
 		newRes, err := store.Query(All()).OrderBy(OrderByRandom()).Find()
 		require.NoError(t, err)
 		require.Equal(t, 3, len(newRes))
-		if !reflect.DeepEqual(res, newRes) {
+		if newRes[0].(TestObject).Name != firstName {
 			isDifferent = true
 			break
 		}
@@ -99,19 +101,22 @@ func TestPointerRandomize(t *testing.T, store DataStore) {
 	err = store.Create(obj3)
 	require.NoError(t, err)
 
+	firstName := ""
+
 	// Query with randomization
 	res, err := store.Query(All()).OrderBy(OrderByRandom()).Find()
 	require.NoError(t, err)
 	require.Equal(t, 3, len(res))
+	firstName = res[0].(*TestObject).Name
 
 	// Verify that the results are randomized
 	// Since the results are random, we need to check multiple times to ensure they are not always in the same order
 	isDifferent := false
-	for i := 0; i < 5; i++ {
+	for i := 0; i < 10; i++ {
 		newRes, err := store.Query(All()).OrderBy(OrderByRandom()).Find()
 		require.NoError(t, err)
 		require.Equal(t, 3, len(newRes))
-		if !reflect.DeepEqual(res, newRes) {
+		if newRes[0].(*TestObject).Name != firstName {
 			isDifferent = true
 			break
 		}

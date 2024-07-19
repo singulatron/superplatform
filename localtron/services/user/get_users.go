@@ -29,10 +29,10 @@ func (s *UserService) GetUsers(options *GetUsersOptions) ([]*usertypes.User, int
 		options.Query.Conditions[0], additional...,
 	).Limit(int(options.Query.Limit))
 
-	if len(options.Query.OrderBys) > 0 {
-		for _, orderBy := range options.Query.OrderBys {
-			q = q.OrderBy(datastore.OrderByField(orderBy.Field, orderBy.Desc))
-		}
+	if len(options.Query.OrderBys) > 1 {
+		q = q.OrderBy(options.Query.OrderBys[0], options.Query.OrderBys[1:]...)
+	} else if len(options.Query.OrderBys) > 0 {
+		q = q.OrderBy(options.Query.OrderBys[0])
 	} else {
 		q = q.OrderBy(datastore.OrderByField("createdAt", true))
 	}
