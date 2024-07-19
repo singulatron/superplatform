@@ -31,8 +31,29 @@ export interface Query {
 }
 
 export interface OrderBy {
-  field: string;
-  desc: boolean;
+  /** The field by which to order the results */
+  field?: string;
+
+  /** Indicates whether the sorting should be in descending order. */
+  desc?: boolean;
+
+  /** When set to true, indicates that the results should be randomized instead of ordered by the Field and Desc criteria. */
+  randomize?: boolean;
+}
+
+// random order. not advised for large datasets due to its slow speed
+// in a distributed setting
+export function orderByRandom(): OrderBy {
+  return {
+    randomize: true,
+  };
+}
+
+export function orderByField(field: string, desc: boolean): OrderBy {
+  return {
+    field: field,
+    desc: desc,
+  };
 }
 
 // this could be a sumtype, eg. EqualCondition | AllCondition

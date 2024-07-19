@@ -1,6 +1,13 @@
 import { ClientOptions, call } from "./util";
 import * as generic from "@singulatron/types";
 
+export interface FindOptions {
+  table: string;
+  conditions: generic.Condition[];
+  public: boolean;
+  orderBys: generic.OrderBy[];
+}
+
 export class GenericService {
   private options: ClientOptions;
 
@@ -20,16 +27,8 @@ export class GenericService {
     return this.call("/generic/create", request);
   }
 
-  async find(
-    table: string,
-    conditions: generic.Condition[],
-    _public: boolean = false
-  ): Promise<generic.FindResponse> {
-    const request: generic.FindRequest = {
-      table: table,
-      conditions: conditions,
-      public: _public,
-    };
+  async find(options: FindOptions): Promise<generic.FindResponse> {
+    const request: generic.FindRequest = options;
 
     return this.call("/generic/find", request);
   }
