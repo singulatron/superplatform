@@ -48,7 +48,7 @@ type DataStore interface {
 }
 
 type QueryBuilder interface {
-	OrderBy(field string, desc bool) QueryBuilder
+	OrderBy(option OrderBy, options ...OrderBy) QueryBuilder
 	Limit(limit int) QueryBuilder
 	After(value ...any) QueryBuilder
 
@@ -131,8 +131,27 @@ func (q *Query) HasFieldCondition(fieldName string) bool {
 
 // OrderBy is only used in HTTP requests
 type OrderBy struct {
+	// The field by which to order the results
 	Field string `json:"field,omitempty"`
-	Desc  bool   `json:"desc,omitempty"`
+
+	// Indicates whether the sorting should be in descending order.
+	Desc bool `json:"desc,omitempty"`
+
+	// When set to true, indicates that the results should be randomized instead of ordered by the Field and Desc criteria
+	Randomize bool `json:"randomize,omitempty"`
+}
+
+func OrderByRandom() OrderBy {
+	return OrderBy{
+		Randomize: true,
+	}
+}
+
+func OrderByField(field string, desc bool) OrderBy {
+	return OrderBy{
+		Field: field,
+		Desc:  desc,
+	}
 }
 
 type AllCondition struct {

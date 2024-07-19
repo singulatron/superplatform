@@ -15,7 +15,7 @@ import (
 func (s *UserService) GetPermissions() ([]*usertypes.Permission, error) {
 	permissionsI, err := s.permissionsStore.Query(
 		datastore.All(),
-	).OrderBy("name", false).Find()
+	).OrderBy(datastore.OrderByField("name", false)).Find()
 
 	if err != nil {
 		return nil, err

@@ -47,6 +47,7 @@ func TestAll(t *testing.T) {
 		"Update":                 datastore.TestUpdate,
 		"Map":                    datastore.TestMap,
 		"Contains":               datastore.TestContains,
+		"Randomize":              datastore.TestRandomize,
 	}
 	pointerTests := map[string]func(t *testing.T, store datastore.DataStore){
 		"PointerCreate":                 datastore.TestPointerCreate,
@@ -63,6 +64,7 @@ func TestAll(t *testing.T) {
 		"PointerFindOne":                datastore.TestPointerFindOne,
 		"PointerUpdate":                 datastore.TestPointerUpdate,
 		"MapPointer":                    datastore.TestMapPointer,
+		"PointerRandomize":              datastore.TestPointerRandomize,
 	}
 
 	for testName, test := range tests {

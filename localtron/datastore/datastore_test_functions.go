@@ -47,6 +47,84 @@ func (t TestObject) GetId() string {
 	return t.Name
 }
 
+func TestRandomize(t *testing.T, store DataStore) {
+	obj1 := TestObject{Name: "FirstObject"}
+	obj2 := TestObject{Name: "SecondObject"}
+	obj3 := TestObject{Name: "ThirdObject"}
+
+	// Create objects in the store
+	err := store.Create(obj1)
+	require.NoError(t, err)
+
+	err = store.Create(obj2)
+	require.NoError(t, err)
+
+	err = store.Create(obj3)
+	require.NoError(t, err)
+
+	firstName := ""
+
+	// Query with randomization
+	res, err := store.Query(All()).OrderBy(OrderByRandom()).Find()
+	require.NoError(t, err)
+	require.Equal(t, 3, len(res))
+	firstName = res[0].(TestObject).Name
+
+	// Verify that the results are randomized
+	// Since the results are random, we need to check multiple times to ensure they are not always in the same order
+	isDifferent := false
+	for i := 0; i < 10; i++ {
+		newRes, err := store.Query(All()).OrderBy(OrderByRandom()).Find()
+		require.NoError(t, err)
+		require.Equal(t, 3, len(newRes))
+		if newRes[0].(TestObject).Name != firstName {
+			isDifferent = true
+			break
+		}
+	}
+
+	require.True(t, isDifferent, "Expected results to be randomized, but they were the same in multiple queries")
+}
+
+func TestPointerRandomize(t *testing.T, store DataStore) {
+	obj1 := &TestObject{Name: "FirstObject"}
+	obj2 := &TestObject{Name: "SecondObject"}
+	obj3 := &TestObject{Name: "ThirdObject"}
+
+	// Create objects in the store
+	err := store.Create(obj1)
+	require.NoError(t, err)
+
+	err = store.Create(obj2)
+	require.NoError(t, err)
+
+	err = store.Create(obj3)
+	require.NoError(t, err)
+
+	firstName := ""
+
+	// Query with randomization
+	res, err := store.Query(All()).OrderBy(OrderByRandom()).Find()
+	require.NoError(t, err)
+	require.Equal(t, 3, len(res))
+	firstName = res[0].(*TestObject).Name
+
+	// Verify that the results are randomized
+	// Since the results are random, we need to check multiple times to ensure they are not always in the same order
+	isDifferent := false
+	for i := 0; i < 10; i++ {
+		newRes, err := store.Query(All()).OrderBy(OrderByRandom()).Find()
+		require.NoError(t, err)
+		require.Equal(t, 3, len(newRes))
+		if newRes[0].(*TestObject).Name != firstName {
+			isDifferent = true
+			break
+		}
+	}
+
+	require.True(t, isDifferent, "Expected results to be randomized, but they were the same in multiple queries")
+}
+
 func TestContains(t *testing.T, store DataStore) {
 	obj1 := TestObject{Name: "HelloThere"}
 	obj2 := TestObject{Name: "HiWhatsUp"}
@@ -106,14 +184,14 @@ func TestPagination(t *testing.T, store DataStore) {
 		require.NoError(t, err)
 	}
 
-	results, err := store.Query(All()).OrderBy("Value", true).Limit(5).Find()
+	results, err := store.Query(All()).OrderBy(OrderByField("Value", true)).Limit(5).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 5)
 	require.Equal(t, "PaginationTest10", results[0].(TestObject).Name)
 	require.Equal(t, 10, results[0].(TestObject).Value)
 
 	lastValue := results[len(results)-1].(TestObject).Value
-	results, err = store.Query(All()).OrderBy("Value", true).Limit(5).After(lastValue).Find()
+	results, err = store.Query(All()).OrderBy(OrderByField("Value", true)).Limit(5).After(lastValue).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 5)
 	require.Equal(t, "PaginationTest5", results[0].(TestObject).Name)
@@ -127,14 +205,14 @@ func TestPointerPagination(t *testing.T, store DataStore) {
 		require.NoError(t, err)
 	}
 
-	results, err := store.Query(All()).OrderBy("Value", true).Limit(5).Find()
+	results, err := store.Query(All()).OrderBy(OrderByField("Value", true)).Limit(5).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 5)
 	require.Equal(t, "PaginationTest10", results[0].(*TestObject).Name)
 	require.Equal(t, 10, results[0].(*TestObject).Value)
 
 	lastValue := results[len(results)-1].(*TestObject).Value
-	results, err = store.Query(All()).OrderBy("Value", true).Limit(5).After(lastValue).Find()
+	results, err = store.Query(All()).OrderBy(OrderByField("Value", true)).Limit(5).After(lastValue).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 5)
 	require.Equal(t, "PaginationTest5", results[0].(*TestObject).Name)
@@ -156,14 +234,14 @@ func TestCreatedAt(t *testing.T, store DataStore) {
 	res, err := store.Query(
 		All(),
 		Equal(Field("Value"), 101),
-	).OrderBy("CreatedAt", false).Find()
+	).OrderBy(OrderByField("CreatedAt", false)).Find()
 	require.NoError(t, err)
 	require.Equal(t, 0, len(res))
 
 	res, err = store.Query(
 		All(),
 		Equal(Field("Value"), 10),
-	).OrderBy("CreatedAt", false).Find()
+	).OrderBy(OrderByField("CreatedAt", false)).Find()
 	require.NoError(t, err)
 	require.Equal(t, 2, len(res))
 	require.Equal(t, "A1", res[0].(TestObject).Name)
@@ -171,7 +249,7 @@ func TestCreatedAt(t *testing.T, store DataStore) {
 	res, err = store.Query(
 		All(),
 		Equal(Field("Value"), 10),
-	).OrderBy("CreatedAt", true).Find()
+	).OrderBy(OrderByField("CreatedAt", true)).Find()
 
 	require.NoError(t, err)
 	require.Equal(t, 2, len(res))
@@ -193,14 +271,14 @@ func TestPointerCreatedAt(t *testing.T, store DataStore) {
 	res, err := store.Query(
 		All(),
 		Equal(Field("Value"), 101),
-	).OrderBy("CreatedAt", false).Find()
+	).OrderBy(OrderByField("CreatedAt", false)).Find()
 	require.NoError(t, err)
 	require.Equal(t, 0, len(res))
 
 	res, err = store.Query(
 		All(),
 		Equal(Field("Value"), 10),
-	).OrderBy("CreatedAt", false).Find()
+	).OrderBy(OrderByField("CreatedAt", false)).Find()
 	require.NoError(t, err)
 	require.Equal(t, 2, len(res))
 	require.Equal(t, "A1", res[0].(*TestObject).Name)
@@ -208,7 +286,7 @@ func TestPointerCreatedAt(t *testing.T, store DataStore) {
 	res, err = store.Query(
 		All(),
 		Equal(Field("Value"), 10),
-	).OrderBy("CreatedAt", true).Find()
+	).OrderBy(OrderByField("CreatedAt", true)).Find()
 
 	require.NoError(t, err)
 	require.Equal(t, 2, len(res))
@@ -479,15 +557,6 @@ func TestDotNotation(t *testing.T, store DataStore) {
 	require.Contains(t, results, obj1)
 	require.Contains(t, results, obj2)
 
-	fmt.Println("hi")
-	fmt.Println("hi")
-	fmt.Println("hi")
-	fmt.Println("hi")
-
-	fmt.Println("hi")
-	fmt.Println("hi")
-	fmt.Println("hi")
-
 	// Test IN clause with int slice
 	results, err = store.Query(Equal(Field("Friend.Age"), []int{26, 36})).Find()
 	require.NoError(t, err)
@@ -501,14 +570,14 @@ func TestDotNotation(t *testing.T, store DataStore) {
 	require.Len(t, results, 0)
 
 	// Test Ordering
-	results, err = store.Query(All()).OrderBy("Friend.Age", false).Find()
+	results, err = store.Query(All()).OrderBy(OrderByField("Friend.Age", false)).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 3)
 	require.Equal(t, "Alice", results[0].(TestObject).Name)
 	require.Equal(t, "Bob", results[1].(TestObject).Name)
 	require.Equal(t, "Charlie", results[2].(TestObject).Name)
 
-	results, err = store.Query(All()).OrderBy("Friend.Age", true).Find()
+	results, err = store.Query(All()).OrderBy(OrderByField("Friend.Age", true)).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 3)
 	require.Equal(t, "Charlie", results[0].(TestObject).Name)
@@ -577,14 +646,14 @@ func TestPointerDotNotation(t *testing.T, store DataStore) {
 	require.Len(t, results, 0)
 
 	// Test Ordering
-	results, err = store.Query(All()).OrderBy("Friend.Age", false).Find()
+	results, err = store.Query(All()).OrderBy(OrderByField("Friend.Age", false)).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 3)
 	require.Equal(t, "Alice", results[0].(*TestObject).Name)
 	require.Equal(t, "Bob", results[1].(*TestObject).Name)
 	require.Equal(t, "Charlie", results[2].(*TestObject).Name)
 
-	results, err = store.Query(All()).OrderBy("Friend.Age", true).Find()
+	results, err = store.Query(All()).OrderBy(OrderByField("Friend.Age", true)).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 3)
 	require.Equal(t, "Charlie", results[0].(*TestObject).Name)
@@ -863,14 +932,14 @@ func TestQuery(t *testing.T, store DataStore) {
 	require.Len(t, results, 1)
 	require.Equal(t, objs[1], results[0])
 
-	results, err = store.Query(All()).OrderBy("Value", true).Find()
+	results, err = store.Query(All()).OrderBy(OrderByField("Value", true)).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 3)
 	require.Equal(t, objs[2], results[0])
 	require.Equal(t, objs[1], results[1])
 	require.Equal(t, objs[0], results[2])
 
-	results, err = store.Query(All()).OrderBy("Name", true).Find()
+	results, err = store.Query(All()).OrderBy(OrderByField("Name", true)).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 3)
 	require.Equal(t, objs[2], results[0])
@@ -921,14 +990,14 @@ func TestPointerQuery(t *testing.T, store DataStore) {
 	require.Len(t, results, 1)
 	require.Equal(t, objs[1], results[0])
 
-	results, err = store.Query(All()).OrderBy("Value", true).Find()
+	results, err = store.Query(All()).OrderBy(OrderByField("Value", true)).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 3)
 	require.Equal(t, objs[2], results[0])
 	require.Equal(t, objs[1], results[1])
 	require.Equal(t, objs[0], results[2])
 
-	results, err = store.Query(All()).OrderBy("Name", true).Find()
+	results, err = store.Query(All()).OrderBy(OrderByField("Name", true)).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 3)
 	require.Equal(t, objs[2], results[0])
