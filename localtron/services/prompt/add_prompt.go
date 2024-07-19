@@ -92,6 +92,9 @@ func (p *PromptService) AddPrompt(ctx context.Context, prompt *prompttypes.Promp
 		}()
 
 		for resp := range subscriber {
+			if resp.Choices[0].FinishReason != "" {
+				return rsp, nil
+			}
 			rsp.Answer += resp.Choices[0].Text
 		}
 	}
