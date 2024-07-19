@@ -21,12 +21,10 @@ func (p *PromptService) ListPrompts(options *ListPromptOptions) ([]*prompttypes.
 		options.Query.Conditions[0], options.Query.Conditions[1:]...,
 	).Limit(int(options.Query.Limit))
 
-	if len(options.Query.OrderBys) > 0 {
-		for _, orderBy := range options.Query.OrderBys {
-			q = q.OrderBy(orderBy.Field, orderBy.Desc)
-		}
-	} else {
-		q = q.OrderBy("createdAt", false)
+	if len(options.Query.OrderBys) > 1 {
+		q = q.OrderBy(options.Query.OrderBys[0], options.Query.OrderBys[1:]...)
+	} else if len(options.Query.OrderBys) > 0 {
+		q = q.OrderBy(options.Query.OrderBys[0])
 	}
 
 	if options.Query.After != nil {

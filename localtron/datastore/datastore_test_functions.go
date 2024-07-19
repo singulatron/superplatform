@@ -552,15 +552,6 @@ func TestDotNotation(t *testing.T, store DataStore) {
 	require.Contains(t, results, obj1)
 	require.Contains(t, results, obj2)
 
-	fmt.Println("hi")
-	fmt.Println("hi")
-	fmt.Println("hi")
-	fmt.Println("hi")
-
-	fmt.Println("hi")
-	fmt.Println("hi")
-	fmt.Println("hi")
-
 	// Test IN clause with int slice
 	results, err = store.Query(Equal(Field("Friend.Age"), []int{26, 36})).Find()
 	require.NoError(t, err)

@@ -38,7 +38,7 @@ func (s *UserService) Login(email, password string) (*usertypes.AuthToken, error
 
 	tokens, err := s.authTokensStore.Query(
 		datastore.Equal(datastore.Field("id"), user.AuthTokenIds),
-	).OrderBy("createdAt", true).Find()
+	).OrderBy(datastore.OrderByField("createdAt", true)).Find()
 	if err != nil {
 		return nil, err
 	}
