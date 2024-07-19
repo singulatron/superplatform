@@ -245,14 +245,20 @@ type QueryBuilder struct {
 	conditions   []datastore.Condition
 	orderField   string
 	orderDesc    bool
+	orderByRand  bool
 	limit        int
 	after        []any
 	selectFields []string
 }
 
-func (q *QueryBuilder) OrderBy(field string, desc bool) datastore.QueryBuilder {
-	q.orderField = field
-	q.orderDesc = desc
+func (q *QueryBuilder) OrderBy(option datastore.OrderBy, options ...datastore.OrderBy) datastore.QueryBuilder {
+	if option.Field != "" {
+		q.orderField = option.Field
+		q.orderDesc = option.Desc
+	} else {
+		q.orderByRand = true
+	}
+
 	return q
 }
 
