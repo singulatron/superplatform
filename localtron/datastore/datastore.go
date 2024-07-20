@@ -110,12 +110,22 @@ type ContainsCondition struct {
 // Query as a type is not used in the DataStore interface but mostly to accept
 // a DataStore query through a HTTP API
 type Query struct {
+	// Conditions are filtering options of a query.
 	Conditions []Condition `json:"conditions,omitempty"`
-	After      []any       `json:"after,omitempty"`
-	Limit      int64       `json:"limit,omitempty"`
-	OrderBys   []OrderBy   `json:"orderBys,omitempty"`
+
+	// After is used for paginations. Instead of offset-based pagination,
+	// we support cursor-based pagination because it works better in a scalable,
+	// distributed environment.
+	After []any `json:"after,omitempty"`
+
+	// Limit the number of records in the result set..
+	Limit int64 `json:"limit,omitempty"`
+
+	// OrderBys orders the result set.
+	OrderBys []OrderBy `json:"orderBys,omitempty"`
+
 	// Count true means return the count of the dataset filtered by Conditions
-	// without after or limit
+	// without after or limit.
 	Count bool `json:"count,omitempty"`
 }
 
@@ -133,10 +143,10 @@ type OrderBy struct {
 	// The field by which to order the results
 	Field string `json:"field,omitempty"`
 
-	// Indicates whether the sorting should be in descending order.
+	// Desc indicates whether the sorting should be in descending order.
 	Desc bool `json:"desc,omitempty"`
 
-	// When set to true, indicates that the results should be randomized instead of ordered by the Field and Desc criteria
+	// Randomize indicates that the results should be randomized instead of ordered by the `field` and `desc` criteria
 	Randomize bool `json:"randomize,omitempty"`
 }
 

@@ -20,6 +20,16 @@ import (
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
 
+// Subscribe subscribes to a firehose stream and streams events to the client
+// @Summary Subscribe to firehose events
+// @Description Establish a subscription to firehose events and stream them to the client in real-time.
+// @Tags firehose
+// @Accept json
+// @Produce text/event-stream
+// @Success 200 {string} string "Event data"
+// @Failure 401 {string} string "Unauthorized"
+// @Failure 500 {string} string "Internal Server Error"
+// @Router /firehose/subscribe [get]
 func Subscribe(
 	w http.ResponseWriter,
 	r *http.Request,

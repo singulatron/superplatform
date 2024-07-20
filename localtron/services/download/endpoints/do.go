@@ -13,10 +13,21 @@ import (
 
 	downloadservice "github.com/singulatron/singulatron/localtron/services/download"
 	downloadtypes "github.com/singulatron/singulatron/localtron/services/download/types"
-	types "github.com/singulatron/singulatron/localtron/services/download/types"
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
 
+// Do initiates a download request
+// @Summary Initiate a file download
+// @Description Start a download for a specified URL and folder path
+// @Tags download
+// @Accept json
+// @Produce json
+// @Param request body downloadtypes.DownloadRequest true "Download Request"
+// @Success 200 {object} map[string]any "Download initiated successfully"
+// @Failure 400 {string} string "Invalid JSON"
+// @Failure 401 {string} string "Unauthorized"
+// @Failure 500 {string} string "Internal Server Error"
+// @Router /download/do [post]
 func Do(
 	w http.ResponseWriter,
 	r *http.Request,
@@ -29,7 +40,7 @@ func Do(
 		return
 	}
 
-	req := types.DownloadRequest{}
+	req := downloadtypes.DownloadRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `invalid JSON`, http.StatusBadRequest)

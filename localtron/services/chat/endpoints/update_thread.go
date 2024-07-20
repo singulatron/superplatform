@@ -16,6 +16,18 @@ import (
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
 
+// UpdateThread updates the details of an existing chat thread
+// @Summary Update an existing chat thread
+// @Description Modify the details of a specific chat thread
+// @Tags chat
+// @Accept json
+// @Produce json
+// @Param request body types.UpdateThreadRequest true "Update Thread Request"
+// @Success 200 {object} types.AddThreadResponse "Thread successfully updated"
+// @Failure 400 {string} string "Invalid JSON"
+// @Failure 401 {string} string "Unauthorized"
+// @Failure 500 {string} string "Internal Server Error"
+// @Router /chat/thread/update [post]
 func UpdateThread(
 	w http.ResponseWriter,
 	r *http.Request,

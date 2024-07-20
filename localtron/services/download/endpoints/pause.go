@@ -17,6 +17,18 @@ import (
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
 
+// Pause pauses an ongoing download
+// @Summary Pause an ongoing download
+// @Description Pause a download that is currently in progress
+// @Tags download
+// @Accept json
+// @Produce json
+// @Param body body types.DownloadRequest true "Download request payload"
+// @Success 200 {object} map[string]any "Success response"
+// @Failure 400 {string} string "Invalid JSON"
+// @Failure 401 {string} string "Unauthorized"
+// @Failure 500 {string} string "Internal Server Error"
+// @Router /download/pause [post]
 func Pause(
 	w http.ResponseWriter,
 	r *http.Request,

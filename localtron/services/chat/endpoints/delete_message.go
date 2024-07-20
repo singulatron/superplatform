@@ -16,6 +16,18 @@ import (
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
 
+// DeleteMessage removes a message from a chat thread
+// @Summary Remove a message from a chat thread
+// @Description Delete a specific message from a chat thread by its ID
+// @Tags chat
+// @Accept json
+// @Produce json
+// @Param request body types.DeleteMessageRequest true "Delete Message Request"
+// @Success 200 {object} map[string]any "Message successfully deleted"
+// @Failure 400 {string} string "Invalid JSON"
+// @Failure 401 {string} string "Unauthorized"
+// @Failure 500 {string} string "Internal Server Error"
+// @Router /chat/message/delete [post]
 func DeleteMessage(
 	w http.ResponseWriter,
 	r *http.Request,

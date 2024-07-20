@@ -16,6 +16,18 @@ import (
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
 
+// DeleteThread removes a chat thread
+// @Summary Remove a chat thread
+// @Description Delete a specific chat thread by its ID
+// @Tags chat
+// @Accept json
+// @Produce json
+// @Param request body types.DeleteThreadRequest true "Delete Thread Request"
+// @Success 200 {object} map[string]any "Thread successfully deleted"
+// @Failure 400 {string} string "Invalid JSON"
+// @Failure 401 {string} string "Unauthorized"
+// @Failure 500 {string} string "Internal Server Error"
+// @Router /chat/thread/delete [post]
 func DeleteThread(
 	w http.ResponseWriter,
 	r *http.Request,

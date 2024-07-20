@@ -16,9 +16,14 @@ type Thread struct {
 	CreatedAt time.Time `json:"createdAt,omitempty"`
 	UpdatedAt time.Time `json:"updatedAt,omitempty"`
 
+	// TopicIds defines which topics the thread belongs to.
+	// Topics can roughly be thought of as tags for threads.
 	TopicIds []string `json:"topicIds,omitempty"`
-	UserIds  []string `json:"userIds,omitempty"`
 
+	// UserIds the ids of the users who can see this thread.
+	UserIds []string `json:"userIds,omitempty"`
+
+	// Title of the thread.
 	Title string `json:"title"`
 }
 

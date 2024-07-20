@@ -20,6 +20,15 @@ import (
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
 
+// Subscribe streams prompt responses to the client
+// @Summary Subscribe to prompt responses
+// @Description Subscribe to prompt responses via Server-Sent Events (SSE)
+// @Tags prompts
+// @Param threadId query string true "Thread ID"
+// @Success 200 {string} string "Streaming response"
+// @Failure 400 {object} prompttypes.ErrorResponse "Missing threadId parameter"
+// @Failure 401 {object} prompttypes.ErrorResponse "Unauthorized"
+// @Router /prompt/subscribe [get]
 func Subscribe(
 	w http.ResponseWriter,
 	r *http.Request,

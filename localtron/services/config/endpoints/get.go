@@ -17,6 +17,16 @@ import (
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
 
+// Get retrieves the current configuration
+// @Summary Retrieve the current configuration
+// @Description Fetch the current configuration from the server
+// @Tags config
+// @Accept json
+// @Produce json
+// @Success 200 {object} configtypes.ConfigGetResponse "Current configuration retrieved successfully"
+// @Failure 401 {string} string "Unauthorized"
+// @Failure 500 {string} string "Internal Server Error"
+// @Router /config/get [post]
 func Get(
 	w http.ResponseWriter,
 	r *http.Request,

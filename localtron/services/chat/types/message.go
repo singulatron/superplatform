@@ -12,23 +12,34 @@ import (
 )
 
 type Message struct {
-	Id       string `json:"id"`
+	Id string `json:"id"`
+
+	// ThreadId of the message.
 	ThreadId string `json:"threadId"`
-	Content  string `json:"content"`
-	// UserId is saved when the user is logged in to an account
-	// @todo not used yet
-	UserId    string    `json:"userId,omitempty"`
+
+	// Content of the message eg. "Hi, what's up?"
+	Content string `json:"content"`
+
+	// UserId is the id of the user who wrote the message.
+	// For AI messages this field is empty.
+	UserId string `json:"userId,omitempty"`
+
 	CreatedAt time.Time `json:"createdAt,omitempty"`
 	UpdatedAt time.Time `json:"updatedAt,omitempty"`
-	AssetIds  []string  `json:"assetIds,omitempty"`
+
+	// AssetIds defines the attachments the message has.
+	AssetIds []string `json:"assetIds,omitempty"`
 }
 
 type Asset struct {
-	Id  string `json:"id"`
+	Id string `json:"id"`
+
+	// Url of the asset where
 	Url string `json:"url,omitempty"`
-	/* Some assets might have the content directly in them as base64
-	encoded strings */
-	Content    string    `json:"content,omitempty"`
+
+	// Content is the base64 encoded binary file direcly embedded in the asset itself
+	Content string `json:"content,omitempty"`
+
 	Type       string    `json:"type,omitempty"`
 	Decription string    `json:"description,omitempty"`
 	CreatedAt  time.Time `json:"createdAt,omitempty"`
