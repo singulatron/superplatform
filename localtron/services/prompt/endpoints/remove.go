@@ -16,6 +16,18 @@ import (
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
 
+// Remove removes a prompt
+// @Summary Remove a prompt
+// @Description Remove a prompt
+// @Tags prompts
+// @Accept json
+// @Produce json
+// @Param request body prompttypes.RemovePromptRequest true "Remove Prompt Request"
+// @Success 200 {object} map[string]interface{} "{}"
+// @Failure 400 {object} prompttypes.ErrorResponse "Invalid JSON"
+// @Failure 401 {object} prompttypes.ErrorResponse "Unauthorized"
+// @Failure 500 {object} prompttypes.ErrorResponse "Internal Server Error"
+// @Router /prompt/remove [post]
 func Remove(
 	w http.ResponseWriter,
 	r *http.Request,

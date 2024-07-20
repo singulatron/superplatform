@@ -16,6 +16,18 @@ import (
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
 
+// GetMessages retrieves messages from a chat thread
+// @Summary Retrieve messages from a chat thread
+// @Description Fetch messages for a specific chat thread and associated assets
+// @Tags chat
+// @Accept json
+// @Produce json
+// @Param request body types.GetMessagesRequest true "Get Messages Request"
+// @Success 200 {object} types.GetMessagesResponse "Messages and assets successfully retrieved"
+// @Failure 400 {string} string "Invalid JSON"
+// @Failure 401 {string} string "Unauthorized"
+// @Failure 500 {string} string "Internal Server Error"
+// @Router /chat/messages [post]
 func GetMessages(
 	w http.ResponseWriter,
 	r *http.Request,

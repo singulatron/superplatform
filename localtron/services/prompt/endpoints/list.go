@@ -17,6 +17,18 @@ import (
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
 
+// List lists prompts
+// @Summary List prompts
+// @Description List prompts with specific criteria
+// @Tags prompts
+// @Accept json
+// @Produce json
+// @Param request body prompttypes.ListPromptsRequest true "List Prompts Request"
+// @Success 200 {object} prompttypes.ListPromptsResponse
+// @Failure 400 {object} prompttypes.ErrorResponse "Invalid JSON"
+// @Failure 401 {object} prompttypes.ErrorResponse "Unauthorized"
+// @Failure 500 {object} prompttypes.ErrorResponse "Internal Server Error"
+// @Router /prompt/list [post]
 func List(
 	w http.ResponseWriter,
 	r *http.Request,

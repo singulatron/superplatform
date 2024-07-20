@@ -14,10 +14,20 @@ import (
 	chatservice "github.com/singulatron/singulatron/localtron/services/chat"
 	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
-
-	types "github.com/singulatron/singulatron/localtron/services/chat/types"
 )
 
+// AddMessage sends a new message to a chat thread
+// @Summary Send a new message to a chat thread
+// @Description Add a new message to a specific chat thread
+// @Tags chat
+// @Accept json
+// @Produce json
+// @Param request body chattypes.AddMessageRequest true "Add Message Request"
+// @Success 200 {object} map[string]any "Message successfully added"
+// @Failure 400 {string} string "Invalid JSON"
+// @Failure 401 {string} string "Unauthorized"
+// @Failure 500 {string} string "Internal Server Error"
+// @Router /chat/message/add [post]
 func AddMessage(
 	w http.ResponseWriter,
 	r *http.Request,
@@ -30,7 +40,7 @@ func AddMessage(
 		return
 	}
 
-	req := types.AddMessageRequest{}
+	req := chattypes.AddMessageRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `invalid JSON`, http.StatusBadRequest)

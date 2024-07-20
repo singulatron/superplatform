@@ -16,6 +16,18 @@ import (
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
 
+// GetThread retrieves details of a specific chat thread
+// @Summary Retrieve details of a chat thread
+// @Description Fetch information about a specific chat thread by its ID
+// @Tags chat
+// @Accept json
+// @Produce json
+// @Param request body types.GetThreadRequest true "Get Thread Request"
+// @Success 200 {object} types.GetThreadResponse "Thread details successfully retrieved"
+// @Failure 400 {string} string "Invalid JSON"
+// @Failure 401 {string} string "Unauthorized"
+// @Failure 500 {string} string "Internal Server Error"
+// @Router /chat/thread [post]
 func GetThread(
 	w http.ResponseWriter,
 	r *http.Request,

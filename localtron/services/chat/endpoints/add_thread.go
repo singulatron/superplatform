@@ -17,6 +17,18 @@ import (
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
 
+// AddThread creates a new chat thread
+// @Summary Create a new chat thread
+// @Description Create a new chat thread and add the requesting user to it
+// @Tags chat
+// @Accept json
+// @Produce json
+// @Param request body types.AddThreadRequest true "Add Thread Request"
+// @Success 200 {object} types.AddThreadResponse "Thread successfully created"
+// @Failure 400 {string} string "Invalid JSON"
+// @Failure 401 {string} string "Unauthorized"
+// @Failure 500 {string} string "Internal Server Error"
+// @Router /chat/thread/add [post]
 func AddThread(
 	w http.ResponseWriter,
 	r *http.Request,

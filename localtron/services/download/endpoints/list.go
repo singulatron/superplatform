@@ -13,10 +13,19 @@ import (
 
 	downloadservice "github.com/singulatron/singulatron/localtron/services/download"
 	downloadtypes "github.com/singulatron/singulatron/localtron/services/download/types"
-	types "github.com/singulatron/singulatron/localtron/services/download/types"
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
 
+// List retrieves a list of download details
+// @Summary Retrieve download details
+// @Description Fetch a list of all download details
+// @Tags download
+// @Accept json
+// @Produce json
+// @Success 200 {object} downloadtypes.DownloadsResponse "List of downloads"
+// @Failure 401 {string} string "Unauthorized"
+// @Failure 500 {string} string "Internal Server Error"
+// @Router /download/list [post]
 func List(
 	w http.ResponseWriter,
 	r *http.Request,
@@ -35,7 +44,7 @@ func List(
 		return
 	}
 
-	jsonData, _ := json.Marshal(types.DownloadsResponse{
+	jsonData, _ := json.Marshal(downloadtypes.DownloadsResponse{
 		Downloads: details,
 	})
 	w.Write(jsonData)

@@ -16,6 +16,18 @@ import (
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
 
+// Create creates a new generic object
+// @Summary Create a new generic object
+// @Description Creates a new object with the provided details. Requires authorization and user authentication.
+// @Tags generic
+// @Accept json
+// @Produce json
+// @Param body body generictypes.CreateRequest true "Create request payload"
+// @Success 200 {object} map[string]interface{} "Success"
+// @Failure 400 {object} generictypes.ErrorResponse "Invalid JSON"
+// @Failure 401 {object} generictypes.ErrorResponse "Unauthorized"
+// @Failure 500 {object} generictypes.ErrorResponse "Internal Server Error"
+// @Router /generic/create [post]
 func Create(
 	w http.ResponseWriter,
 	r *http.Request,

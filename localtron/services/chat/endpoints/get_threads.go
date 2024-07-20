@@ -16,6 +16,18 @@ import (
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
 
+// GetThreads retrieves a list of chat threads for a user
+// @Summary Retrieve a list of chat threads for a user
+// @Description Fetch all chat threads associated with a specific user
+// @Tags chat
+// @Accept json
+// @Produce json
+// @Param request body types.GetThreadsRequest true "Get Threads Request"
+// @Success 200 {object} types.GetThreadsResponse "Threads successfully retrieved"
+// @Failure 400 {string} string "Invalid JSON"
+// @Failure 401 {string} string "Unauthorized"
+// @Failure 500 {string} string "Internal Server Error"
+// @Router /chat/threads [post]
 func GetThreads(
 	w http.ResponseWriter,
 	r *http.Request,

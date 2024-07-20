@@ -4,6 +4,10 @@ import (
 	"github.com/singulatron/singulatron/localtron/datastore"
 )
 
+type ErrorResponse struct {
+	Error string `json:"error"`
+}
+
 // GenericObject holds any kind of data, so
 // we don't have to implement simple CRUD for
 // any new simple entity.

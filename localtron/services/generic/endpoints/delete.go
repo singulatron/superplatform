@@ -16,6 +16,18 @@ import (
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
 
+// Delete removes a generic object based on the provided conditions
+// @Summary Delete a generic object
+// @Description Removes a generic object from the system based on the provided conditions. Requires authorization and user authentication.
+// @Tags generic
+// @Accept json
+// @Produce json
+// @Param body body generictypes.DeleteRequest true "Delete request payload"
+// @Success 200 {object} map[string]interface{} "Successful deletion of object"
+// @Failure 400 {object} generictypes.ErrorResponse "Invalid JSON"
+// @Failure 401 {object} generictypes.ErrorResponse "Unauthorized"
+// @Failure 500 {object} generictypes.ErrorResponse "Internal Server Error"
+// @Router /generic/delete [post]
 func Delete(
 	w http.ResponseWriter,
 	r *http.Request,

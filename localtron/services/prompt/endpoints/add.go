@@ -16,6 +16,18 @@ import (
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
 
+// Add adds a new prompt
+// @Summary Add a new prompt
+// @Description Add a new prompt for a user
+// @Tags prompts
+// @Accept json
+// @Produce json
+// @Param request body prompttypes.AddPromptRequest true "Add Prompt Request"
+// @Success 200 {object} prompttypes.AddPromptResponse
+// @Failure 400 {object} prompttypes.ErrorResponse "Invalid JSON"
+// @Failure 401 {object} prompttypes.ErrorResponse "Unauthorized"
+// @Failure 500 {object} prompttypes.ErrorResponse "Internal Server Error"
+// @Router /prompt/add [post]
 func Add(
 	w http.ResponseWriter,
 	r *http.Request,
