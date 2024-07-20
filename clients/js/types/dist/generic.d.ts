@@ -14,9 +14,15 @@ export interface Query {
     count?: boolean;
 }
 export interface OrderBy {
-    field: string;
-    desc: boolean;
+    /** The field by which to order the results */
+    field?: string;
+    /** Indicates whether the sorting should be in descending order. */
+    desc?: boolean;
+    /** When set to true, indicates that the results should be randomized instead of ordered by the Field and Desc criteria. */
+    randomize?: boolean;
 }
+export declare function orderByRandom(): OrderBy;
+export declare function orderByField(field: string, desc: boolean): OrderBy;
 export interface Condition {
     equal?: EqualCondition;
     all?: AllCondition;
