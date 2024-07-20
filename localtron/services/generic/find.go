@@ -29,6 +29,7 @@ func (g *GenericService) Find(options FindOptions) ([]*generictypes.GenericObjec
 	}
 
 	conditions := []datastore.Condition{}
+	conditions = append(conditions, options.Conditions...)
 
 	conditions = append(conditions,
 		datastore.Equal(datastore.Field("table"), options.Table),

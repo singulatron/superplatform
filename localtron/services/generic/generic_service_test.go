@@ -111,7 +111,7 @@ func TestCreate(t *testing.T) {
 		require.Error(t, err)
 	})
 
-	t.Run("user 1 cant see record of user 2", func(t *testing.T) {
+	t.Run("user 1 cannot see record of user 2", func(t *testing.T) {
 		res, err := service.Find(genericservice.FindOptions{
 			Table:  table1,
 			UserId: userId,
@@ -123,7 +123,7 @@ func TestCreate(t *testing.T) {
 		require.Equal(t, 0, len(res))
 	})
 
-	t.Run("user 2 cant update record of user 1", func(t *testing.T) {
+	t.Run("user 2 cannot update record of user 1", func(t *testing.T) {
 		obj.UserId = otherUserId
 		err = service.Upsert(obj)
 		// unauthorized
@@ -149,7 +149,7 @@ func TestCreate(t *testing.T) {
 		require.Contains(t, res[0].Id, uuid1)
 	})
 
-	t.Run("user 2 cant delete user 1's record", func(t *testing.T) {
+	t.Run("user 2 cannot delete user 1's record", func(t *testing.T) {
 		err = service.Delete(table1, otherUserId, []datastore.Condition{
 			datastore.Id(obj.Id),
 		})
