@@ -16,6 +16,9 @@ import (
 
 	"github.com/singulatron/singulatron/localtron/di"
 	"github.com/singulatron/singulatron/localtron/logger"
+
+	_ "github.com/singulatron/singulatron/localtron/docs"
+	httpSwagger "github.com/swaggo/http-swagger"
 )
 
 const port = "58231"
@@ -40,6 +43,8 @@ func main() {
 	}
 
 	router := di.HttpHandler(universe)
+
+	router.HandleFunc("/swagger/", httpSwagger.WrapHandler)
 
 	srv := &http.Server{
 		Handler: router,

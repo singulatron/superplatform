@@ -6,7 +6,7 @@ parent: Contribute
 
 # Contribute to the Docs
 
-## Start
+## Documentation site
 
 In repo root:
 
@@ -15,3 +15,13 @@ cd docs
 bundle install
 bundle exec jekyll serve --config _config_development.yml
 ```
+
+## Api documentation
+
+Go to the `localtron` folder and run:
+
+```sh
+swag init && swagger serve --host=localhost --port=8080 ./docs/swagger.yaml
+```
+
+Edit the Go Swagger annotations and restart the above command to see your changes reflected.

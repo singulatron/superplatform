@@ -647,6 +647,11 @@ const docTemplate = `{
         },
         "/generic/create": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Creates a new object with the provided details. Requires authorization and user authentication.",
                 "consumes": [
                     "application/json"
