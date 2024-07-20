@@ -42,6 +42,8 @@ type FindRequest struct {
 	// Public true returns only public records of all users.
 	// If Public is false only the caller user's private records will be returned.
 	Public bool `json:"public"`
+
+	OrderBys []datastore.OrderBy `json:"orderBys"`
 }
 
 type FindResponse struct {

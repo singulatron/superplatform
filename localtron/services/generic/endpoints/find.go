@@ -46,7 +46,13 @@ func Find(
 	}
 	defer r.Body.Close()
 
-	objects, err := genericService.Find(req.Table, user.Id, req.Public, req.Conditions)
+	objects, err := genericService.Find(genericservice.FindOptions{
+		Table:      req.Table,
+		UserId:     user.Id,
+		Public:     req.Public,
+		Conditions: req.Conditions,
+		OrderBys:   req.OrderBys,
+	})
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

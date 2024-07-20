@@ -16,13 +16,9 @@ class GenericService {
             return this.call("/generic/create", request);
         });
     }
-    find(table_1, conditions_1) {
-        return __awaiter(this, arguments, void 0, function* (table, conditions, _public = false) {
-            const request = {
-                table: table,
-                conditions: conditions,
-                public: _public,
-            };
+    find(options) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const request = options;
             return this.call("/generic/find", request);
         });
     }

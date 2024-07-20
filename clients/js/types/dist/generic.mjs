@@ -13,6 +13,19 @@ function anyField() {
         any: true,
     };
 }
+// random order. not advised for large datasets due to its slow speed
+// in a distributed setting
+function orderByRandom() {
+    return {
+        randomize: true,
+    };
+}
+function orderByField(field, desc) {
+    return {
+        field: field,
+        desc: desc,
+    };
+}
 function conditionFieldIs(condition, fieldName) {
     var _a, _b, _c;
     if (condition.equal &&
@@ -124,4 +137,4 @@ function userId(id) {
     return equal(field("userId"), id);
 }
 
-export { all, anyField, conditionField, conditionFieldIs, conditionValue, conditionsToKeyValue, contains, equal, field, fields, id, queryHasFieldCondition, startsWith, userId };
+export { all, anyField, conditionField, conditionFieldIs, conditionValue, conditionsToKeyValue, contains, equal, field, fields, id, orderByField, orderByRandom, queryHasFieldCondition, startsWith, userId };

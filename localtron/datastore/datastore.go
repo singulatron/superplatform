@@ -129,7 +129,6 @@ func (q *Query) HasFieldCondition(fieldName string) bool {
 	return false
 }
 
-// OrderBy is only used in HTTP requests
 type OrderBy struct {
 	// The field by which to order the results
 	Field string `json:"field,omitempty"`
@@ -141,6 +140,8 @@ type OrderBy struct {
 	Randomize bool `json:"randomize,omitempty"`
 }
 
+// random order. not advised for large datasets due to its slow speed
+// in a distributed setting
 func OrderByRandom() OrderBy {
 	return OrderBy{
 		Randomize: true,

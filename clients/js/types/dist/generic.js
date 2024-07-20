@@ -15,6 +15,19 @@ function anyField() {
         any: true,
     };
 }
+// random order. not advised for large datasets due to its slow speed
+// in a distributed setting
+function orderByRandom() {
+    return {
+        randomize: true,
+    };
+}
+function orderByField(field, desc) {
+    return {
+        field: field,
+        desc: desc,
+    };
+}
 function conditionFieldIs(condition, fieldName) {
     var _a, _b, _c;
     if (condition.equal &&
@@ -137,6 +150,8 @@ exports.equal = equal;
 exports.field = field;
 exports.fields = fields;
 exports.id = id;
+exports.orderByField = orderByField;
+exports.orderByRandom = orderByRandom;
 exports.queryHasFieldCondition = queryHasFieldCondition;
 exports.startsWith = startsWith;
 exports.userId = userId;

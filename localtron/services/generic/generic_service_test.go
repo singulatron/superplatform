@@ -8,6 +8,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/di"
+	genericservice "github.com/singulatron/singulatron/localtron/services/generic"
 	generictypes "github.com/singulatron/singulatron/localtron/services/generic/types"
 	"github.com/stretchr/testify/require"
 )
@@ -43,8 +44,13 @@ func TestCreate(t *testing.T) {
 	require.NoError(t, err)
 
 	t.Run("user 1 can find its own private record", func(t *testing.T) {
-		res, err := service.Find(table1, userId, false, []datastore.Condition{
-			datastore.All(),
+		res, err := service.Find(genericservice.FindOptions{
+			Table:  table1,
+			UserId: userId,
+			Public: false,
+			Conditions: []datastore.Condition{
+				datastore.All(),
+			},
 		})
 		require.NoError(t, err)
 		require.Equal(t, 1, len(res))
@@ -63,27 +69,39 @@ func TestCreate(t *testing.T) {
 	require.NoError(t, err)
 
 	t.Run("user 2 can find its own private record", func(t *testing.T) {
-		res, err := service.Find(table2, otherUserId, false, []datastore.Condition{
-			datastore.All(),
-		})
+		res, err := service.Find(genericservice.FindOptions{
+			Table:  table2,
+			UserId: otherUserId,
+			Public: false,
+			Conditions: []datastore.Condition{
+				datastore.All(),
+			}})
 		require.NoError(t, err)
 		require.Equal(t, 1, len(res))
 		require.Contains(t, res[0].Id, uuid2)
 	})
 
 	t.Run("find private for user 1", func(t *testing.T) {
-		res, err := service.Find(table1, userId, false, []datastore.Condition{
-			datastore.Id(uuid1),
-		})
+		res, err := service.Find(genericservice.FindOptions{
+			Table:  table1,
+			UserId: userId,
+			Public: false,
+			Conditions: []datastore.Condition{
+				datastore.Id(uuid1),
+			}})
 		require.NoError(t, err)
 		require.Equal(t, 1, len(res))
 		require.Equal(t, res[0].Id, uuid1)
 	})
 
 	t.Run("find public for user 1", func(t *testing.T) {
-		res, err := service.Find(table1, userId, true, []datastore.Condition{
-			datastore.Id(uuid1),
-		})
+		res, err := service.Find(genericservice.FindOptions{
+			Table:  table1,
+			UserId: userId,
+			Public: true,
+			Conditions: []datastore.Condition{
+				datastore.Id(uuid1),
+			}})
 		require.NoError(t, err)
 		require.Equal(t, 0, len(res))
 	})
@@ -93,15 +111,19 @@ func TestCreate(t *testing.T) {
 		require.Error(t, err)
 	})
 
-	t.Run("user 1 cant see record of user 2", func(t *testing.T) {
-		res, err := service.Find(table1, userId, false, []datastore.Condition{
-			datastore.Id(uuid2),
-		})
+	t.Run("user 1 cannot see record of user 2", func(t *testing.T) {
+		res, err := service.Find(genericservice.FindOptions{
+			Table:  table1,
+			UserId: userId,
+			Public: false,
+			Conditions: []datastore.Condition{
+				datastore.Id(uuid2),
+			}})
 		require.NoError(t, err)
 		require.Equal(t, 0, len(res))
 	})
 
-	t.Run("user 2 cant update record of user 1", func(t *testing.T) {
+	t.Run("user 2 cannot update record of user 1", func(t *testing.T) {
 		obj.UserId = otherUserId
 		err = service.Upsert(obj)
 		// unauthorized
@@ -115,15 +137,19 @@ func TestCreate(t *testing.T) {
 	})
 
 	t.Run("user 1 can find its own reord", func(t *testing.T) {
-		res, err := service.Find(table1, userId, false, []datastore.Condition{
-			datastore.All(),
-		})
+		res, err := service.Find(genericservice.FindOptions{
+			Table:  table1,
+			UserId: userId,
+			Public: false,
+			Conditions: []datastore.Condition{
+				datastore.All(),
+			}})
 		require.NoError(t, err)
 		require.Equal(t, 1, len(res))
 		require.Contains(t, res[0].Id, uuid1)
 	})
 
-	t.Run("user 2 cant delete user 1's record", func(t *testing.T) {
+	t.Run("user 2 cannot delete user 1's record", func(t *testing.T) {
 		err = service.Delete(table1, otherUserId, []datastore.Condition{
 			datastore.Id(obj.Id),
 		})
@@ -133,9 +159,13 @@ func TestCreate(t *testing.T) {
 
 	// ...item wont be deleted
 	t.Run("user 2 will no see other tables", func(t *testing.T) {
-		res, err := service.Find(table1, otherUserId, false, []datastore.Condition{
-			datastore.All(),
-		})
+		res, err := service.Find(genericservice.FindOptions{
+			Table:  table1,
+			UserId: otherUserId,
+			Public: false,
+			Conditions: []datastore.Condition{
+				datastore.All(),
+			}})
 		require.NoError(t, err)
 		require.Equal(t, 0, len(res))
 	})
