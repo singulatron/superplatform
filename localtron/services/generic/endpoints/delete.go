@@ -27,6 +27,7 @@ import (
 // @Failure 400 {object} generictypes.ErrorResponse "Invalid JSON"
 // @Failure 401 {object} generictypes.ErrorResponse "Unauthorized"
 // @Failure 500 {object} generictypes.ErrorResponse "Internal Server Error"
+// @Security BearerAuth
 // @Router /generic/delete [post]
 func Delete(
 	w http.ResponseWriter,

@@ -933,6 +933,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/generictypes.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Create a new generic object
       tags:
       - generic

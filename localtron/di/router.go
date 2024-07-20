@@ -25,7 +25,7 @@ import (
 	userendpoints "github.com/singulatron/singulatron/localtron/services/user/endpoints"
 )
 
-func HttpHandler(universe *Universe) http.Handler {
+func HttpHandler(universe *Universe) *http.ServeMux {
 	mws := []middlewares.Middleware{
 		middlewares.ThrottledLogger,
 		middlewares.Recover,
