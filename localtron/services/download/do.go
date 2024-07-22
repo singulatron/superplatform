@@ -105,15 +105,19 @@ func (dm *DownloadService) Do(url, downloadDir string) error {
 
 	dm.markChanged()
 
-	go func() {
-		err := dm.downloadFile(download)
-		if err != nil {
-			logger.Error("Error downlading file",
-				slog.String("url", download.URL),
-				slog.String("error", err.Error()),
-			)
-		}
-	}()
+	if dm.SyncDownloads {
+		return dm.downloadFile(download)
+	} else {
+		go func() {
+			err := dm.downloadFile(download)
+			if err != nil {
+				logger.Error("Error downlading file",
+					slog.String("url", download.URL),
+					slog.String("error", err.Error()),
+				)
+			}
+		}()
+	}
 
 	return nil
 }

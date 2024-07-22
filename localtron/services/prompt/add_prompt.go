@@ -24,7 +24,7 @@ const maxThreadTitle = 100
 
 func (p *PromptService) AddPrompt(ctx context.Context, prompt *prompttypes.Prompt) (*prompttypes.AddPromptResponse, error) {
 	prompt.Status = prompttypes.PromptStatusScheduled
-	now := timeNow()
+	now := TimeNow()
 	prompt.CreatedAt = now
 	prompt.UpdatedAt = now
 

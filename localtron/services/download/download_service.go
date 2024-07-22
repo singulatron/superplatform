@@ -30,6 +30,9 @@ type DownloadService struct {
 	StateFilePath string
 	DefaultFolder string
 	hasChanged    bool
+
+	// for testing purposes
+	SyncDownloads bool
 }
 
 func NewDownloadService(
