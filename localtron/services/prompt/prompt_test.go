@@ -11,7 +11,7 @@ import (
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
 )
 
-func TestMessageCreatesThread(t *testing.T) {
+func TestAddPromptCreatesThread(t *testing.T) {
 	univ, err := di.BigBang(di.UniverseOptions{
 		Test: true,
 	})

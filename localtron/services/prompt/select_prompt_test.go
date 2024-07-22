@@ -5,7 +5,7 @@
  * This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3).
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
-package promptservice
+package promptservice_test
 
 import (
 	"testing"
@@ -14,9 +14,12 @@ import (
 	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/datastore/localstore"
 
+	promptservice "github.com/singulatron/singulatron/localtron/services/prompt"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
 	"github.com/stretchr/testify/require"
 )
+
+var timeNow = time.Now
 
 func TestSelectPrompt(t *testing.T) {
 	fixedTime := time.Date(2023, 6, 1, 12, 0, 0, 0, time.UTC)
@@ -44,16 +47,16 @@ func TestSelectPrompt(t *testing.T) {
 		{
 			name: "Prompt not due yet",
 			prompts: []datastore.Row{
-				&prompttypes.Prompt{Status: prompttypes.PromptStatusScheduled, RunCount: 1, LastRun: fixedTime.Add(-baseDelay / 2)},
+				&prompttypes.Prompt{Status: prompttypes.PromptStatusScheduled, RunCount: 1, LastRun: fixedTime.Add(-promptservice.BaseDelay / 2)},
 			},
 			expectedPrompt: nil,
 		},
 		{
 			name: "Prompt due",
 			prompts: []datastore.Row{
-				&prompttypes.Prompt{Status: prompttypes.PromptStatusScheduled, RunCount: 1, LastRun: fixedTime.Add(-baseDelay)},
+				&prompttypes.Prompt{Status: prompttypes.PromptStatusScheduled, RunCount: 1, LastRun: fixedTime.Add(-promptservice.BaseDelay)},
 			},
-			expectedPrompt: &prompttypes.Prompt{Status: prompttypes.PromptStatusScheduled, RunCount: 1, LastRun: fixedTime.Add(-baseDelay)},
+			expectedPrompt: &prompttypes.Prompt{Status: prompttypes.PromptStatusScheduled, RunCount: 1, LastRun: fixedTime.Add(-promptservice.BaseDelay)},
 		},
 		{
 			name: "Abandoned prompt",
@@ -79,21 +82,21 @@ func TestSelectPrompt(t *testing.T) {
 		{
 			name: "Prompt with RunCount greater than 1, not due yet",
 			prompts: []datastore.Row{
-				&prompttypes.Prompt{Status: prompttypes.PromptStatusScheduled, RunCount: 2, LastRun: fixedTime.Add(-baseDelay)},
+				&prompttypes.Prompt{Status: prompttypes.PromptStatusScheduled, RunCount: 2, LastRun: fixedTime.Add(-promptservice.BaseDelay)},
 			},
 			expectedPrompt: nil,
 		},
 		{
 			name: "Prompt with RunCount greater than 1, due",
 			prompts: []datastore.Row{
-				&prompttypes.Prompt{Status: prompttypes.PromptStatusScheduled, RunCount: 2, LastRun: fixedTime.Add(-baseDelay * 2)},
+				&prompttypes.Prompt{Status: prompttypes.PromptStatusScheduled, RunCount: 2, LastRun: fixedTime.Add(-promptservice.BaseDelay * 2)},
 			},
-			expectedPrompt: &prompttypes.Prompt{Status: prompttypes.PromptStatusScheduled, RunCount: 2, LastRun: fixedTime.Add(-baseDelay * 2)},
+			expectedPrompt: &prompttypes.Prompt{Status: prompttypes.PromptStatusScheduled, RunCount: 2, LastRun: fixedTime.Add(-promptservice.BaseDelay * 2)},
 		},
 		{
 			name: "Prompt with RunCount greater than 1, off by one",
 			prompts: []datastore.Row{
-				&prompttypes.Prompt{Status: prompttypes.PromptStatusScheduled, RunCount: 2, LastRun: fixedTime.Add(-baseDelay*2 + time.Second)},
+				&prompttypes.Prompt{Status: prompttypes.PromptStatusScheduled, RunCount: 2, LastRun: fixedTime.Add(-promptservice.BaseDelay*2 + time.Second)},
 			},
 			expectedPrompt: nil,
 		},
@@ -106,7 +109,7 @@ func TestSelectPrompt(t *testing.T) {
 
 			err = memStore.UpsertMany(tt.prompts)
 			require.NoError(t, err)
-			actualPrompt, err := selectPrompt(memStore)
+			actualPrompt, err := promptservice.SelectPrompt(memStore)
 			require.NoError(t, err)
 
 			if tt.expectedPrompt == nil {

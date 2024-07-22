@@ -18,7 +18,7 @@ import (
 
 var timeNow = time.Now
 
-func selectPrompt(promptsMem datastore.DataStore) (*prompttypes.Prompt, error) {
+func SelectPrompt(promptsMem datastore.DataStore) (*prompttypes.Prompt, error) {
 	promptIs, err := promptsMem.Query(
 		datastore.All(),
 	).OrderBy(datastore.OrderByField("createdAt", false)).Find()
@@ -41,7 +41,7 @@ func selectPrompt(promptsMem datastore.DataStore) (*prompttypes.Prompt, error) {
 			runCount = 1
 		}
 		cappedRunCount := math.Min(float64(runCount), 10)
-		backoff := baseDelay * time.Duration(math.Pow(2, cappedRunCount-1))
+		backoff := BaseDelay * time.Duration(math.Pow(2, cappedRunCount-1))
 
 		if prompt.RunCount == 0 ||
 			timeNow().Sub(prompt.LastRun) >= backoff {

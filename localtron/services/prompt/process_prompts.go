@@ -29,7 +29,7 @@ import (
 
 const (
 	maxRetries    = 5
-	baseDelay     = 1 * time.Second
+	BaseDelay     = 1 * time.Second
 	promptTimeout = 1 * time.Minute
 )
 
@@ -95,7 +95,7 @@ func (p *PromptService) processNextPrompt() error {
 		return nil
 	}
 
-	currentPrompt, err := selectPrompt(p.promptsStore)
+	currentPrompt, err := SelectPrompt(p.promptsStore)
 	if err != nil {
 		return err
 	}

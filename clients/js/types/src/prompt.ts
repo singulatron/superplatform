@@ -36,6 +36,10 @@ export interface AddPromptRequest {
   prompt: Prompt;
 }
 
+export interface AddPromptResponse {
+  answer?: string;
+}
+
 export interface RemovePromptRequest {
   prompt: Prompt;
 }
