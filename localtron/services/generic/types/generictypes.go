@@ -41,13 +41,8 @@ func (g GenericObject) GetId() string {
 }
 
 type FindRequest struct {
-	Table      string                `json:"table"`
-	Conditions []datastore.Condition `json:"conditions"`
-	// Public true returns only public records of all users.
-	// If Public is false only the caller user's private records will be returned.
-	Public bool `json:"public"`
-
-	OrderBys []datastore.OrderBy `json:"orderBys"`
+	Table string           `json:"table"`
+	Query *datastore.Query `json:"query"`
 }
 
 type FindResponse struct {
