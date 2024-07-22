@@ -265,9 +265,8 @@ export interface DeleteResponse {}
 
 export interface FindRequest {
   table?: string;
-  conditions?: Condition[];
+  query?: Query;
   public?: boolean;
-  orderBys?: OrderBy[];
 }
 
 export interface FindResponse {

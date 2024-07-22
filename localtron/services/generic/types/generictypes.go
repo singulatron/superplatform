@@ -41,8 +41,9 @@ func (g GenericObject) GetId() string {
 }
 
 type FindRequest struct {
-	Table string           `json:"table"`
-	Query *datastore.Query `json:"query"`
+	Table  string           `json:"table"`
+	Query  *datastore.Query `json:"query"`
+	Public bool             `json:"public"`
 }
 
 type FindResponse struct {
