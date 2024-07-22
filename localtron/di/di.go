@@ -20,6 +20,7 @@ import (
 	nodeservice "github.com/singulatron/singulatron/localtron/services/node"
 	promptservice "github.com/singulatron/singulatron/localtron/services/prompt"
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 const singulatronFolder = ".singulatron"
@@ -27,8 +28,8 @@ const singulatronFolder = ".singulatron"
 type Universe struct {
 	ConfigService   *configservice.ConfigService
 	PromptService   *promptservice.PromptService
-	UserService     *userservice.UserService
-	FirehoseService *firehoseservice.FirehoseService
+	UserService     usertypes.UserServiceI
+	FirehoseService firehosetypes.FirehoseServiceI
 	ChatService     *chatservice.ChatService
 	GenericService  *genericservice.GenericService
 	ModelService    *modelservice.ModelService
@@ -40,6 +41,7 @@ type Universe struct {
 
 type UniverseOptions struct {
 	Test             bool
+	Pre              Universe
 	DatastoreFactory func(tableName string, instance any) (datastore.DataStore, error)
 }
 

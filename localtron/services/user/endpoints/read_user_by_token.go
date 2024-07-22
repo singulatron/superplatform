@@ -11,11 +11,10 @@ import (
 	"encoding/json"
 	"net/http"
 
-	userservice "github.com/singulatron/singulatron/localtron/services/user"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func ReadUserByToken(w http.ResponseWriter, r *http.Request, userService *userservice.UserService) {
+func ReadUserByToken(w http.ResponseWriter, r *http.Request, userService usertypes.UserServiceI) {
 	req := usertypes.ReadUserByTokenRequest{}
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {

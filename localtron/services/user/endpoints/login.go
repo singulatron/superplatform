@@ -11,11 +11,10 @@ import (
 	"encoding/json"
 	"net/http"
 
-	userservice "github.com/singulatron/singulatron/localtron/services/user"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func Login(w http.ResponseWriter, r *http.Request, userService *userservice.UserService) {
+func Login(w http.ResponseWriter, r *http.Request, userService usertypes.UserServiceI) {
 	req := usertypes.LoginRequest{}
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
