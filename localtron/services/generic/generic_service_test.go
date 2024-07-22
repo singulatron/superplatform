@@ -48,8 +48,10 @@ func TestCreate(t *testing.T) {
 			Table:  table1,
 			UserId: userId,
 			Public: false,
-			Conditions: []datastore.Condition{
-				datastore.All(),
+			Query: &datastore.Query{
+				Conditions: []datastore.Condition{
+					datastore.All(),
+				},
 			},
 		})
 		require.NoError(t, err)
@@ -73,9 +75,10 @@ func TestCreate(t *testing.T) {
 			Table:  table2,
 			UserId: otherUserId,
 			Public: false,
-			Conditions: []datastore.Condition{
-				datastore.All(),
-			}})
+			Query: &datastore.Query{
+				Conditions: []datastore.Condition{
+					datastore.All(),
+				}}})
 		require.NoError(t, err)
 		require.Equal(t, 1, len(res))
 		require.Contains(t, res[0].Id, uuid2)
@@ -86,9 +89,9 @@ func TestCreate(t *testing.T) {
 			Table:  table1,
 			UserId: userId,
 			Public: false,
-			Conditions: []datastore.Condition{
+			Query: &datastore.Query{Conditions: []datastore.Condition{
 				datastore.Id(uuid1),
-			}})
+			}}})
 		require.NoError(t, err)
 		require.Equal(t, 1, len(res))
 		require.Equal(t, res[0].Id, uuid1)
@@ -99,9 +102,9 @@ func TestCreate(t *testing.T) {
 			Table:  table1,
 			UserId: userId,
 			Public: true,
-			Conditions: []datastore.Condition{
+			Query: &datastore.Query{Conditions: []datastore.Condition{
 				datastore.Id(uuid1),
-			}})
+			}}})
 		require.NoError(t, err)
 		require.Equal(t, 0, len(res))
 	})
@@ -116,9 +119,9 @@ func TestCreate(t *testing.T) {
 			Table:  table1,
 			UserId: userId,
 			Public: false,
-			Conditions: []datastore.Condition{
+			Query: &datastore.Query{Conditions: []datastore.Condition{
 				datastore.Id(uuid2),
-			}})
+			}}})
 		require.NoError(t, err)
 		require.Equal(t, 0, len(res))
 	})
@@ -141,9 +144,9 @@ func TestCreate(t *testing.T) {
 			Table:  table1,
 			UserId: userId,
 			Public: false,
-			Conditions: []datastore.Condition{
+			Query: &datastore.Query{Conditions: []datastore.Condition{
 				datastore.All(),
-			}})
+			}}})
 		require.NoError(t, err)
 		require.Equal(t, 1, len(res))
 		require.Contains(t, res[0].Id, uuid1)
@@ -163,9 +166,9 @@ func TestCreate(t *testing.T) {
 			Table:  table1,
 			UserId: otherUserId,
 			Public: false,
-			Conditions: []datastore.Condition{
+			Query: &datastore.Query{Conditions: []datastore.Condition{
 				datastore.All(),
-			}})
+			}}})
 		require.NoError(t, err)
 		require.Equal(t, 0, len(res))
 	})

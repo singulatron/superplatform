@@ -1,6 +1,6 @@
 {
   "name": "@singulatron/client",
-  "version": "0.0.25",
+  "version": "0.0.26",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -74,7 +74,7 @@
     }
   },
   "dependencies": {
-    "@singulatron/types": "^0.0.22",
+    "@singulatron/types": "^0.0.23",
     "axios": "^1.7.2",
     "glob": "^11.0.0"
   }

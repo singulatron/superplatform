@@ -16,11 +16,10 @@ import (
 )
 
 type FindOptions struct {
-	Table      string
-	Conditions []datastore.Condition
-	UserId     string
-	Public     bool
-	OrderBys   []datastore.OrderBy
+	Table  string
+	Query  *datastore.Query
+	UserId string
+	Public bool
 }
 
 func (g *GenericService) Find(options FindOptions) ([]*generictypes.GenericObject, error) {
@@ -29,7 +28,9 @@ func (g *GenericService) Find(options FindOptions) ([]*generictypes.GenericObjec
 	}
 
 	conditions := []datastore.Condition{}
-	conditions = append(conditions, options.Conditions...)
+	if options.Query != nil {
+		conditions = append(conditions, options.Query.Conditions...)
+	}
 
 	conditions = append(conditions,
 		datastore.Equal(datastore.Field("table"), options.Table),
@@ -52,10 +53,12 @@ func (g *GenericService) Find(options FindOptions) ([]*generictypes.GenericObjec
 		conditions[0], conditions[1:]...,
 	)
 
-	if len(options.OrderBys) > 1 {
-		q.OrderBy(options.OrderBys[0], options.OrderBys...)
-	} else if len(options.OrderBys) > 0 {
-		q.OrderBy(options.OrderBys[0])
+	if options.Query != nil {
+		if len(options.Query.OrderBys) > 1 {
+			q.OrderBy(options.Query.OrderBys[0], options.Query.OrderBys...)
+		} else if len(options.Query.OrderBys) > 0 {
+			q.OrderBy(options.Query.OrderBys[0])
+		}
 	}
 
 	objectIs, err := q.Find()

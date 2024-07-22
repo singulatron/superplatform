@@ -313,19 +313,10 @@ definitions:
     type: object
   generictypes.FindRequest:
     properties:
-      conditions:
-        items:
-          $ref: '#/definitions/datastore.Condition'
-        type: array
-      orderBys:
-        items:
-          $ref: '#/definitions/datastore.OrderBy'
-        type: array
       public:
-        description: |-
-          Public true returns only public records of all users.
-          If Public is false only the caller user's private records will be returned.
         type: boolean
+      query:
+        $ref: '#/definitions/datastore.Query'
       table:
         type: string
     type: object
@@ -971,6 +962,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/generictypes.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Delete a generic object
       tags:
       - generic
@@ -1042,6 +1035,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/generictypes.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Update generic objects based on conditions
       tags:
       - generic

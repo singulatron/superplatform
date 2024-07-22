@@ -705,6 +705,11 @@ const docTemplate = `{
         },
         "/generic/delete": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Removes a generic object from the system based on the provided conditions. Requires authorization and user authentication.",
                 "consumes": [
                     "application/json"
@@ -810,6 +815,11 @@ const docTemplate = `{
         },
         "/generic/update": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Updates objects in a specified table based on provided conditions. Requires authorization and user authentication.",
                 "consumes": [
                     "application/json"
@@ -1566,21 +1576,11 @@ const docTemplate = `{
         "generictypes.FindRequest": {
             "type": "object",
             "properties": {
-                "conditions": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/datastore.Condition"
-                    }
-                },
-                "orderBys": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/datastore.OrderBy"
-                    }
-                },
                 "public": {
-                    "description": "Public true returns only public records of all users.\nIf Public is false only the caller user's private records will be returned.",
                     "type": "boolean"
+                },
+                "query": {
+                    "$ref": "#/definitions/datastore.Query"
                 },
                 "table": {
                     "type": "string"
