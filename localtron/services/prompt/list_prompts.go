@@ -19,7 +19,7 @@ type ListPromptOptions struct {
 func (p *PromptService) ListPrompts(options *ListPromptOptions) ([]*prompttypes.Prompt, int64, error) {
 	q := p.promptsStore.Query(
 		options.Query.Conditions[0], options.Query.Conditions[1:]...,
-	).Limit(int(options.Query.Limit))
+	).Limit(options.Query.Limit)
 
 	if len(options.Query.OrderBys) > 1 {
 		q = q.OrderBy(options.Query.OrderBys[0], options.Query.OrderBys[1:]...)

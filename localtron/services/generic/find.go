@@ -59,6 +59,10 @@ func (g *GenericService) Find(options FindOptions) ([]*generictypes.GenericObjec
 		} else if len(options.Query.OrderBys) > 0 {
 			q.OrderBy(options.Query.OrderBys[0])
 		}
+
+		if options.Query.Limit != 0 {
+			q.Limit(options.Query.Limit)
+		}
 	}
 
 	objectIs, err := q.Find()

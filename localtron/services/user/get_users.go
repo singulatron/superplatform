@@ -27,7 +27,7 @@ func (s *UserService) GetUsers(options *GetUsersOptions) ([]*usertypes.User, int
 	}
 	q := s.usersStore.Query(
 		options.Query.Conditions[0], additional...,
-	).Limit(int(options.Query.Limit))
+	).Limit(options.Query.Limit)
 
 	if len(options.Query.OrderBys) > 1 {
 		q = q.OrderBy(options.Query.OrderBys[0], options.Query.OrderBys[1:]...)

@@ -246,7 +246,7 @@ type QueryBuilder struct {
 	orderField   string
 	orderDesc    bool
 	orderByRand  bool
-	limit        int
+	limit        int64
 	after        []any
 	selectFields []string
 }
@@ -262,7 +262,7 @@ func (q *QueryBuilder) OrderBy(option datastore.OrderBy, options ...datastore.Or
 	return q
 }
 
-func (q *QueryBuilder) Limit(limit int) datastore.QueryBuilder {
+func (q *QueryBuilder) Limit(limit int64) datastore.QueryBuilder {
 	q.limit = limit
 	return q
 }
@@ -322,7 +322,7 @@ func (q *QueryBuilder) Find() ([]datastore.Row, error) {
 		}
 	}
 
-	if q.limit > 0 && q.limit < len(result) {
+	if q.limit > 0 && q.limit < int64(len(result)) {
 		result = result[:q.limit]
 	}
 
