@@ -49,7 +49,7 @@ type DataStore interface {
 
 type QueryBuilder interface {
 	OrderBy(option OrderBy, options ...OrderBy) QueryBuilder
-	Limit(limit int) QueryBuilder
+	Limit(limit int64) QueryBuilder
 	After(value ...any) QueryBuilder
 
 	Select(fields ...string) QueryBuilder
