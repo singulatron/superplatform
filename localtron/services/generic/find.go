@@ -63,6 +63,10 @@ func (g *GenericService) Find(options FindOptions) ([]*generictypes.GenericObjec
 		if options.Query.Limit != 0 {
 			q.Limit(options.Query.Limit)
 		}
+
+		if options.Query.After != nil {
+			q.After(options.Query.After...)
+		}
 	}
 
 	objectIs, err := q.Find()
