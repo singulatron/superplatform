@@ -13,13 +13,13 @@ import (
 
 	nodeservice "github.com/singulatron/singulatron/localtron/services/node"
 	nodetypes "github.com/singulatron/singulatron/localtron/services/node/types"
-	userservice "github.com/singulatron/singulatron/localtron/services/user"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 func List(
 	w http.ResponseWriter,
 	r *http.Request,
-	userService *userservice.UserService,
+	userService usertypes.UserServiceI,
 	nodeService *nodeservice.NodeService,
 ) {
 	err := userService.IsAuthorized(nodetypes.PermissionNodeView.Id, r)

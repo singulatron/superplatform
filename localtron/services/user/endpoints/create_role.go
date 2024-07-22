@@ -11,11 +11,10 @@ import (
 	"encoding/json"
 	"net/http"
 
-	userservice "github.com/singulatron/singulatron/localtron/services/user"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func CreateRole(w http.ResponseWriter, r *http.Request,  usertypes.UserServiceI) {
+func CreateRole(w http.ResponseWriter, r *http.Request, userService usertypes.UserServiceI) {
 	err := userService.IsAuthorized(usertypes.PermissionRoleCreate.Id, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)

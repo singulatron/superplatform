@@ -10,12 +10,15 @@ package prompttypes
 import (
 	"time"
 
+	"github.com/singulatron/singulatron/localtron/clients/llm"
 	"github.com/singulatron/singulatron/localtron/datastore"
 )
 
 type ErrorResponse struct {
 	Error string `json:"error"`
 }
+
+type SubscriberChan chan *llm.CompletionResponse
 
 type PromptStatus string
 
@@ -110,4 +113,8 @@ type ListPromptsResponse struct {
 
 type RemovePromptRequest struct {
 	Prompt *Prompt `json:"prompt"`
+}
+
+type ListPromptOptions struct {
+	Query *datastore.Query `json:"query"`
 }

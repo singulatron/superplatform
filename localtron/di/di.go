@@ -10,6 +10,7 @@ import (
 	"github.com/singulatron/singulatron/localtron/logger"
 	appservice "github.com/singulatron/singulatron/localtron/services/app"
 	chatservice "github.com/singulatron/singulatron/localtron/services/chat"
+	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
 	configservice "github.com/singulatron/singulatron/localtron/services/config"
 	dockerservice "github.com/singulatron/singulatron/localtron/services/docker"
 	downloadservice "github.com/singulatron/singulatron/localtron/services/download"
@@ -19,6 +20,7 @@ import (
 	modelservice "github.com/singulatron/singulatron/localtron/services/model"
 	nodeservice "github.com/singulatron/singulatron/localtron/services/node"
 	promptservice "github.com/singulatron/singulatron/localtron/services/prompt"
+	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
@@ -27,10 +29,10 @@ const singulatronFolder = ".singulatron"
 
 type Universe struct {
 	ConfigService   *configservice.ConfigService
-	PromptService   *promptservice.PromptService
+	PromptService   prompttypes.PromptServiceI
 	UserService     usertypes.UserServiceI
 	FirehoseService firehosetypes.FirehoseServiceI
-	ChatService     *chatservice.ChatService
+	ChatService     chattypes.ChatServiceI
 	GenericService  *genericservice.GenericService
 	ModelService    *modelservice.ModelService
 	DownloadService *downloadservice.DownloadService

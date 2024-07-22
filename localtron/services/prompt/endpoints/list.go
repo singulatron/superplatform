@@ -12,9 +12,8 @@ import (
 	"net/http"
 
 	"github.com/singulatron/singulatron/localtron/datastore"
-	promptservice "github.com/singulatron/singulatron/localtron/services/prompt"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
-	userservice "github.com/singulatron/singulatron/localtron/services/user"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // List lists prompts
@@ -32,8 +31,8 @@ import (
 func List(
 	w http.ResponseWriter,
 	r *http.Request,
-	userService *userservice.UserService,
-	promptService *promptservice.PromptService,
+	userService usertypes.UserServiceI,
+	promptService prompttypes.PromptServiceI,
 ) {
 	err := userService.IsAuthorized(prompttypes.PermissionPromptView.Id, r)
 	if err != nil {
@@ -59,7 +58,7 @@ func List(
 	}
 	defer r.Body.Close()
 
-	options := &promptservice.ListPromptOptions{
+	options := &prompttypes.ListPromptOptions{
 		Query: req.Query,
 	}
 	if options.Query == nil {

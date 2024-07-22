@@ -13,7 +13,7 @@ import (
 
 	genericservice "github.com/singulatron/singulatron/localtron/services/generic"
 	generictypes "github.com/singulatron/singulatron/localtron/services/generic/types"
-	userservice "github.com/singulatron/singulatron/localtron/services/user"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // Upsert creates or updates a generic object based on the provided data
@@ -31,7 +31,7 @@ import (
 func Upsert(
 	w http.ResponseWriter,
 	r *http.Request,
-	userService *userservice.UserService,
+	userService usertypes.UserServiceI,
 	genericService *genericservice.GenericService,
 ) {
 	err := userService.IsAuthorized(generictypes.PermissionGenericCreate.Id, r)

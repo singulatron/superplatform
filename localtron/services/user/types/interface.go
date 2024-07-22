@@ -40,4 +40,5 @@ type UserServiceI interface {
 	ChangePasswordAdmin(email, newPassword string) error
 	AddRole(userId string, role *Role) error
 	AddPermissionToRole(roleId, permissionId string) error
+	GetUserFromRequest(request *http.Request) (*User, bool, error)
 }

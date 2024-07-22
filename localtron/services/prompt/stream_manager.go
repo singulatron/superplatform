@@ -11,24 +11,23 @@ import (
 	"sync"
 
 	"github.com/singulatron/singulatron/localtron/clients/llm"
+	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
 )
 
-type SubscriberChan chan *llm.CompletionResponse
-
 type StreamManager struct {
-	streams map[string][]SubscriberChan
+	streams map[string][]prompttypes.SubscriberChan
 	history map[string][]*llm.CompletionResponse
 	lock    sync.RWMutex
 }
 
 func NewStreamManager() *StreamManager {
 	return &StreamManager{
-		streams: make(map[string][]SubscriberChan),
+		streams: make(map[string][]prompttypes.SubscriberChan),
 		history: make(map[string][]*llm.CompletionResponse),
 	}
 }
 
-func (sm *StreamManager) Subscribe(threadId string, subscriber SubscriberChan) {
+func (sm *StreamManager) Subscribe(threadId string, subscriber prompttypes.SubscriberChan) {
 	sm.lock.Lock()
 	defer sm.lock.Unlock()
 
@@ -45,7 +44,7 @@ func (sm *StreamManager) Subscribe(threadId string, subscriber SubscriberChan) {
 	}()
 }
 
-func (sm *StreamManager) Unsubscribe(threadId string, subscriber SubscriberChan) {
+func (sm *StreamManager) Unsubscribe(threadId string, subscriber prompttypes.SubscriberChan) {
 	sm.lock.Lock()
 	defer sm.lock.Unlock()
 	subs := sm.streams[threadId]
