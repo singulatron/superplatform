@@ -27,6 +27,8 @@ import (
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
 )
 
+var TimeNow = time.Now
+
 const (
 	maxRetries    = 5
 	BaseDelay     = 1 * time.Second

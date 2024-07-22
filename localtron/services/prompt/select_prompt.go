@@ -16,8 +16,6 @@ import (
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
 )
 
-var timeNow = time.Now
-
 func SelectPrompt(promptsMem datastore.DataStore) (*prompttypes.Prompt, error) {
 	promptIs, err := promptsMem.Query(
 		datastore.All(),
@@ -44,7 +42,7 @@ func SelectPrompt(promptsMem datastore.DataStore) (*prompttypes.Prompt, error) {
 		backoff := BaseDelay * time.Duration(math.Pow(2, cappedRunCount-1))
 
 		if prompt.RunCount == 0 ||
-			timeNow().Sub(prompt.LastRun) >= backoff {
+			TimeNow().Sub(prompt.LastRun) >= backoff {
 			return prompt, nil
 		}
 	}

@@ -19,11 +19,9 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-var timeNow = time.Now
-
 func TestSelectPrompt(t *testing.T) {
 	fixedTime := time.Date(2023, 6, 1, 12, 0, 0, 0, time.UTC)
-	timeNow = func() time.Time {
+	promptservice.TimeNow = func() time.Time {
 		return fixedTime
 	}
 
