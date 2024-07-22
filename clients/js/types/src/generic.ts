@@ -264,9 +264,10 @@ export interface DeleteRequest {
 export interface DeleteResponse {}
 
 export interface FindRequest {
-  table: string;
-  conditions: Condition[];
+  table?: string;
+  conditions?: Condition[];
   public?: boolean;
+  orderBys?: OrderBy[];
 }
 
 export interface FindResponse {
