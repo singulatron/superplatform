@@ -12,6 +12,7 @@ import (
 	"log/slog"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/pkg/errors"
 	"github.com/singulatron/singulatron/localtron/clients/llm"
 	"github.com/singulatron/singulatron/localtron/logger"
@@ -28,6 +29,14 @@ func (p *PromptService) AddPrompt(ctx context.Context, prompt *prompttypes.Promp
 	prompt.CreatedAt = now
 	prompt.UpdatedAt = now
 
+	if prompt.Id == "" {
+		prompt.Id = uuid.New().String()
+	}
+
+	if prompt.ThreadId == "" {
+		prompt.ThreadId = prompt.Id
+	}
+
 	err := p.promptsStore.Create(prompt)
 	if err != nil {
 		return nil, err
@@ -38,9 +47,6 @@ func (p *PromptService) AddPrompt(ctx context.Context, prompt *prompttypes.Promp
 	)
 
 	threadId := prompt.ThreadId
-	if threadId == "" {
-		threadId = prompt.Id
-	}
 
 	_, threadExists, err := p.chatService.GetThread(threadId)
 	if err != nil {
@@ -54,7 +60,7 @@ func (p *PromptService) AddPrompt(ctx context.Context, prompt *prompttypes.Promp
 		now := time.Now()
 
 		thread := &apptypes.Thread{
-			Id:        prompt.ThreadId,
+			Id:        threadId,
 			UserIds:   []string{prompt.UserId},
 			CreatedAt: now,
 			UpdatedAt: now,
@@ -92,10 +98,11 @@ func (p *PromptService) AddPrompt(ctx context.Context, prompt *prompttypes.Promp
 		}()
 
 		for resp := range subscriber {
+			rsp.Answer += resp.Choices[0].Text
+
 			if resp.Choices[0].FinishReason != "" {
 				return rsp, nil
 			}
-			rsp.Answer += resp.Choices[0].Text
 		}
 	}
 
