@@ -11,7 +11,6 @@ import (
 	"encoding/json"
 	"net/http"
 
-	genericservice "github.com/singulatron/singulatron/localtron/services/generic"
 	generictypes "github.com/singulatron/singulatron/localtron/services/generic/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
@@ -20,7 +19,7 @@ func UpsertMany(
 	w http.ResponseWriter,
 	r *http.Request,
 	userService usertypes.UserServiceI,
-	genericService *genericservice.GenericService,
+	genericService generictypes.GenericServiceI,
 ) {
 	err := userService.IsAuthorized(generictypes.PermissionGenericCreate.Id, r)
 	if err != nil {

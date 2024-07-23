@@ -46,6 +46,13 @@ type FindRequest struct {
 	Public bool             `json:"public"`
 }
 
+type FindOptions struct {
+	Table  string
+	Query  *datastore.Query
+	UserId string
+	Public bool
+}
+
 type FindResponse struct {
 	Objects []*GenericObject `json:"objects,omitempty"`
 }

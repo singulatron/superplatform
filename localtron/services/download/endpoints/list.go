@@ -13,7 +13,7 @@ import (
 
 	downloadservice "github.com/singulatron/singulatron/localtron/services/download"
 	downloadtypes "github.com/singulatron/singulatron/localtron/services/download/types"
-	userservice "github.com/singulatron/singulatron/localtron/services/user"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // List retrieves a list of download details
@@ -29,7 +29,7 @@ import (
 func List(
 	w http.ResponseWriter,
 	r *http.Request,
-	userService *userservice.UserService,
+	userService usertypes.UserServiceI,
 	ds *downloadservice.DownloadService,
 ) {
 	err := userService.IsAuthorized(downloadtypes.PermissionDownloadView.Id, r)

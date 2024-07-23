@@ -8,7 +8,6 @@ import (
 	"github.com/google/uuid"
 	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/di"
-	genericservice "github.com/singulatron/singulatron/localtron/services/generic"
 	generictypes "github.com/singulatron/singulatron/localtron/services/generic/types"
 	"github.com/stretchr/testify/require"
 )
@@ -44,7 +43,7 @@ func TestCreate(t *testing.T) {
 	require.NoError(t, err)
 
 	t.Run("user 1 can find its own private record", func(t *testing.T) {
-		res, err := service.Find(genericservice.FindOptions{
+		res, err := service.Find(generictypes.FindOptions{
 			Table:  table1,
 			UserId: userId,
 			Public: false,
@@ -71,7 +70,7 @@ func TestCreate(t *testing.T) {
 	require.NoError(t, err)
 
 	t.Run("user 2 can find its own private record", func(t *testing.T) {
-		res, err := service.Find(genericservice.FindOptions{
+		res, err := service.Find(generictypes.FindOptions{
 			Table:  table2,
 			UserId: otherUserId,
 			Public: false,
@@ -85,7 +84,7 @@ func TestCreate(t *testing.T) {
 	})
 
 	t.Run("find private for user 1", func(t *testing.T) {
-		res, err := service.Find(genericservice.FindOptions{
+		res, err := service.Find(generictypes.FindOptions{
 			Table:  table1,
 			UserId: userId,
 			Public: false,
@@ -98,7 +97,7 @@ func TestCreate(t *testing.T) {
 	})
 
 	t.Run("find public for user 1", func(t *testing.T) {
-		res, err := service.Find(genericservice.FindOptions{
+		res, err := service.Find(generictypes.FindOptions{
 			Table:  table1,
 			UserId: userId,
 			Public: true,
@@ -115,7 +114,7 @@ func TestCreate(t *testing.T) {
 	})
 
 	t.Run("user 1 cannot see record of user 2", func(t *testing.T) {
-		res, err := service.Find(genericservice.FindOptions{
+		res, err := service.Find(generictypes.FindOptions{
 			Table:  table1,
 			UserId: userId,
 			Public: false,
@@ -140,7 +139,7 @@ func TestCreate(t *testing.T) {
 	})
 
 	t.Run("user 1 can find its own reord", func(t *testing.T) {
-		res, err := service.Find(genericservice.FindOptions{
+		res, err := service.Find(generictypes.FindOptions{
 			Table:  table1,
 			UserId: userId,
 			Public: false,
@@ -162,7 +161,7 @@ func TestCreate(t *testing.T) {
 
 	// ...item wont be deleted
 	t.Run("user 2 will no see other tables", func(t *testing.T) {
-		res, err := service.Find(genericservice.FindOptions{
+		res, err := service.Find(generictypes.FindOptions{
 			Table:  table1,
 			UserId: otherUserId,
 			Public: false,

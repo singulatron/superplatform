@@ -13,8 +13,7 @@ import (
 
 	downloadservice "github.com/singulatron/singulatron/localtron/services/download"
 	types "github.com/singulatron/singulatron/localtron/services/download/types"
-
-	userservice "github.com/singulatron/singulatron/localtron/services/user"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // Pause pauses an ongoing download
@@ -32,7 +31,7 @@ import (
 func Pause(
 	w http.ResponseWriter,
 	r *http.Request,
-	userService *userservice.UserService,
+	userService usertypes.UserServiceI,
 	ds *downloadservice.DownloadService,
 ) {
 	err := userService.IsAuthorized(types.PermissionDownloadEdit.Id, r)
