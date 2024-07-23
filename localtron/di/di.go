@@ -5,6 +5,7 @@ import (
 	"os"
 	"path"
 
+	"github.com/singulatron/singulatron/localtron/clients/llm"
 	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/datastore/localstore"
 	"github.com/singulatron/singulatron/localtron/logger"
@@ -46,6 +47,8 @@ type Universe struct {
 	AppService      apptypes.AppServiceI
 	DockerService   dockertypes.DockerServiceI
 	NodeService     nodetypes.NodeServiceI
+
+	LLMClient llm.ClientI
 }
 
 type UniverseOptions struct {
@@ -197,6 +200,7 @@ func BigBang(options UniverseOptions) (*Universe, error) {
 		modelService,
 		chatService,
 		firehoseService,
+		options.Pre.LLMClient,
 		options.DatastoreFactory,
 	)
 	if err != nil {

@@ -13,4 +13,5 @@ type ModelServiceI interface {
 	Start(modelId string) error
 	MakeDefault(modelId string) error
 	GetModels() ([]*Model, error)
+	GetPlatformByModelId(modelId string) (*Platform, error)
 }

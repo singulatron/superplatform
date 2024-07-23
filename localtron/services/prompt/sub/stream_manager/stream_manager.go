@@ -5,7 +5,7 @@
  * This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3).
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
-package promptservice
+package streammanager
 
 import (
 	"sync"
@@ -16,14 +16,14 @@ import (
 
 type StreamManager struct {
 	streams map[string][]prompttypes.SubscriberChan
-	history map[string][]*llm.CompletionResponse
+	History map[string][]*llm.CompletionResponse
 	lock    sync.RWMutex
 }
 
 func NewStreamManager() *StreamManager {
 	return &StreamManager{
 		streams: make(map[string][]prompttypes.SubscriberChan),
-		history: make(map[string][]*llm.CompletionResponse),
+		History: make(map[string][]*llm.CompletionResponse),
 	}
 }
 
@@ -38,7 +38,7 @@ func (sm *StreamManager) Subscribe(threadId string, subscriber prompttypes.Subsc
 	go func() {
 		sm.lock.RLock()
 		defer sm.lock.RUnlock()
-		for _, msg := range sm.history[threadId] {
+		for _, msg := range sm.History[threadId] {
 			subscriber <- msg
 		}
 	}()
@@ -70,5 +70,5 @@ func (sm *StreamManager) Broadcast(threadId string, response *llm.CompletionResp
 		}
 	}
 	// Append the new response to the history
-	sm.history[threadId] = append(sm.history[threadId], response)
+	sm.History[threadId] = append(sm.History[threadId], response)
 }

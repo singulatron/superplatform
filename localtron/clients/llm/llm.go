@@ -19,6 +19,11 @@ import (
 	"github.com/singulatron/singulatron/localtron/logger"
 )
 
+type ClientI interface {
+	PostCompletions(prompt PostCompletionsRequest) (*CompletionResponse, error)
+	PostCompletionsStreamed(prompt PostCompletionsRequest, callback StreamCallback) error
+}
+
 type Client struct {
 	LLMAddress string
 }
