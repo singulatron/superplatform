@@ -11,7 +11,6 @@ import (
 	"encoding/json"
 	"net/http"
 
-	configservice "github.com/singulatron/singulatron/localtron/services/config"
 	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
@@ -30,7 +29,7 @@ func Get(
 	w http.ResponseWriter,
 	r *http.Request,
 	userService usertypes.UserServiceI,
-	cs *configservice.ConfigService,
+	cs configtypes.ConfigServiceI,
 ) {
 	err := userService.IsAuthorized(configtypes.PermissionConfigView.Id, r)
 	if err != nil {

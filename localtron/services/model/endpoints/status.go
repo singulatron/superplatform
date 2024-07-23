@@ -11,7 +11,6 @@ import (
 	"encoding/json"
 	"net/http"
 
-	modelservice "github.com/singulatron/singulatron/localtron/services/model"
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
@@ -20,7 +19,7 @@ func Status(
 	w http.ResponseWriter,
 	r *http.Request,
 	userService usertypes.UserServiceI,
-	ms *modelservice.ModelService,
+	ms modeltypes.ModelServiceI,
 ) {
 	err := userService.IsAuthorized(modeltypes.PermissionModelView.Id, r)
 	if err != nil {

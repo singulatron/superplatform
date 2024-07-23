@@ -9,16 +9,20 @@ import (
 	"github.com/singulatron/singulatron/localtron/datastore/localstore"
 	"github.com/singulatron/singulatron/localtron/logger"
 	appservice "github.com/singulatron/singulatron/localtron/services/app"
+	apptypes "github.com/singulatron/singulatron/localtron/services/app/types"
 	chatservice "github.com/singulatron/singulatron/localtron/services/chat"
 	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
 	configservice "github.com/singulatron/singulatron/localtron/services/config"
+	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
 	dockerservice "github.com/singulatron/singulatron/localtron/services/docker"
 	downloadservice "github.com/singulatron/singulatron/localtron/services/download"
+	downloadtypes "github.com/singulatron/singulatron/localtron/services/download/types"
 	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
 	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
 	genericservice "github.com/singulatron/singulatron/localtron/services/generic"
 	generictypes "github.com/singulatron/singulatron/localtron/services/generic/types"
 	modelservice "github.com/singulatron/singulatron/localtron/services/model"
+	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 	nodeservice "github.com/singulatron/singulatron/localtron/services/node"
 	promptservice "github.com/singulatron/singulatron/localtron/services/prompt"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
@@ -29,15 +33,15 @@ import (
 const singulatronFolder = ".singulatron"
 
 type Universe struct {
-	ConfigService   *configservice.ConfigService
+	ConfigService   configtypes.ConfigServiceI
 	PromptService   prompttypes.PromptServiceI
 	UserService     usertypes.UserServiceI
 	FirehoseService firehosetypes.FirehoseServiceI
 	ChatService     chattypes.ChatServiceI
 	GenericService  generictypes.GenericServiceI
-	ModelService    *modelservice.ModelService
-	DownloadService *downloadservice.DownloadService
-	AppService      *appservice.AppService
+	ModelService    modeltypes.ModelServiceI
+	DownloadService downloadtypes.DownloadServiceI
+	AppService      apptypes.AppServiceI
 	DockerService   *dockerservice.DockerService
 	NodeService     *nodeservice.NodeService
 }

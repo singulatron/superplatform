@@ -11,7 +11,6 @@ import (
 	"encoding/json"
 	"net/http"
 
-	downloadservice "github.com/singulatron/singulatron/localtron/services/download"
 	downloadtypes "github.com/singulatron/singulatron/localtron/services/download/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
@@ -30,7 +29,7 @@ func List(
 	w http.ResponseWriter,
 	r *http.Request,
 	userService usertypes.UserServiceI,
-	ds *downloadservice.DownloadService,
+	ds downloadtypes.DownloadServiceI,
 ) {
 	err := userService.IsAuthorized(downloadtypes.PermissionDownloadView.Id, r)
 	if err != nil {

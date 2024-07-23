@@ -46,7 +46,7 @@ func TestDownloadFile(t *testing.T) {
 	require.NoError(t, err)
 	dm := universe.DownloadService
 
-	dm.StateFilePath = path.Join(dir, "downloadFile.json")
+	dm.(*downloadservice.DownloadService).StateFilePath = path.Join(dir, "downloadFile.json")
 	require.NoError(t, dm.Do(server.URL, dir))
 
 	for {
@@ -91,7 +91,7 @@ func TestDownloadFileWithPartFile(t *testing.T) {
 	require.NoError(t, err)
 	dm := universe.DownloadService
 
-	dm.StateFilePath = path.Join(dir, "downloadFilePartial.json")
+	dm.(*downloadservice.DownloadService).StateFilePath = path.Join(dir, "downloadFilePartial.json")
 
 	require.NoError(t, dm.Do(downloadURL, dir))
 
@@ -123,7 +123,7 @@ func TestDownloadFileWithFullFile(t *testing.T) {
 	require.NoError(t, err)
 	dm := universe.DownloadService
 
-	dm.StateFilePath = path.Join(dir, "downloadFileFull.json")
+	dm.(*downloadservice.DownloadService).StateFilePath = path.Join(dir, "downloadFileFull.json")
 	require.NoError(t, dm.Do(downloadURL, dir))
 
 	var (

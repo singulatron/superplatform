@@ -11,7 +11,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	downloadservice "github.com/singulatron/singulatron/localtron/services/download"
+	downloadtypes "github.com/singulatron/singulatron/localtron/services/download/types"
 	types "github.com/singulatron/singulatron/localtron/services/download/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
@@ -32,7 +32,7 @@ func Pause(
 	w http.ResponseWriter,
 	r *http.Request,
 	userService usertypes.UserServiceI,
-	ds *downloadservice.DownloadService,
+	ds downloadtypes.DownloadServiceI,
 ) {
 	err := userService.IsAuthorized(types.PermissionDownloadEdit.Id, r)
 	if err != nil {
