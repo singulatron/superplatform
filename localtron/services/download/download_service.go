@@ -17,13 +17,13 @@ import (
 
 	"github.com/singulatron/singulatron/localtron/logger"
 	types "github.com/singulatron/singulatron/localtron/services/download/types"
-	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
-	userservice "github.com/singulatron/singulatron/localtron/services/user"
+	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 type DownloadService struct {
-	firehoseService *firehoseservice.FirehoseService
-	userService     *userservice.UserService
+	firehoseService firehosetypes.FirehoseServiceI
+	userService     usertypes.UserServiceI
 
 	downloads     map[string]*types.Download
 	lock          sync.Mutex
@@ -36,8 +36,8 @@ type DownloadService struct {
 }
 
 func NewDownloadService(
-	firehoseService *firehoseservice.FirehoseService,
-	userService *userservice.UserService,
+	firehoseService firehosetypes.FirehoseServiceI,
+	userService usertypes.UserServiceI,
 ) (*DownloadService, error) {
 	home, _ := os.UserHomeDir()
 	ret := &DownloadService{
@@ -53,6 +53,14 @@ func NewDownloadService(
 	}
 
 	return ret, nil
+}
+
+func (dm *DownloadService) SetDefaultFolder(s string) {
+	dm.DefaultFolder = s
+}
+
+func (dm *DownloadService) SetStateFilePath(s string) {
+	dm.StateFilePath = s
 }
 
 func (dm *DownloadService) Start() error {

@@ -7,7 +7,17 @@
  */
 package configtypes
 
+import (
+	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
+)
+
 type ConfigServiceI interface {
 	GetConfig() (Config, error)
+	GetConfigDirectory() string
+	SetEventCallback(f func(firehosetypes.Event))
+	Start() error
 	SaveConfig(config Config) error
+	SetUpsertPermissionFunc(f func(id, name, description string) (*usertypes.Permission, error))
+	SetAddPermissionToRoleFunc(f func(roleId, permissionId string) error)
 }

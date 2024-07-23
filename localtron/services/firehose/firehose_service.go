@@ -15,18 +15,18 @@ import (
 	"github.com/singulatron/singulatron/localtron/logger"
 
 	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
-	userservice "github.com/singulatron/singulatron/localtron/services/user"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 type FirehoseService struct {
-	userService *userservice.UserService
+	userService usertypes.UserServiceI
 
 	subscribers map[int]func(events []firehosetypes.Event)
 	mu          sync.Mutex
 	nextID      int
 }
 
-func NewFirehoseService(userService *userservice.UserService) (*FirehoseService, error) {
+func NewFirehoseService(userService usertypes.UserServiceI) (*FirehoseService, error) {
 	service := &FirehoseService{
 		userService: userService,
 		subscribers: make(map[int]func(events []firehosetypes.Event)),

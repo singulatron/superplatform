@@ -58,6 +58,8 @@ type UniverseOptions struct {
 }
 
 func BigBang(options UniverseOptions) (*Universe, error) {
+	universe := &Universe{}
+
 	var homeDir string
 	var err error
 	if options.Test {
@@ -74,23 +76,27 @@ func BigBang(options UniverseOptions) (*Universe, error) {
 		}
 	}
 
-	configService, err := configservice.NewConfigService()
-	if err != nil {
-		logger.Error("Config service creation failed", slog.String("error", err.Error()))
-		os.Exit(1)
-	}
-	configService.EventCallback = func(event firehosetypes.Event) {
-		logger.Debug("Received event from config before firehose is set up",
-			slog.String("eventName", event.Name()),
-		)
-	}
-	configService.ConfigDirectory = path.Join(homeDir, singulatronFolder)
-	if os.Getenv("SINGULATRON_CONFIG_PATH") != "" {
-		configService.ConfigDirectory = os.Getenv("SINGULATRON_CONFIG_PATH")
+	if options.Pre.ConfigService != nil {
+		universe.ConfigService = options.Pre.ConfigService
+	} else {
+		configService, err := configservice.NewConfigService()
+		if err != nil {
+			logger.Error("Config service creation failed", slog.String("error", err.Error()))
+			os.Exit(1)
+		}
+		configService.EventCallback = func(event firehosetypes.Event) {
+			logger.Debug("Received event from config before firehose is set up",
+				slog.String("eventName", event.Name()),
+			)
+		}
+		configService.ConfigDirectory = path.Join(homeDir, singulatronFolder)
+		if os.Getenv("SINGULATRON_CONFIG_PATH") != "" {
+			configService.ConfigDirectory = os.Getenv("SINGULATRON_CONFIG_PATH")
+		}
 	}
 
 	if options.DatastoreFactory == nil {
-		localStorePath := path.Join(configService.ConfigDirectory, "data")
+		localStorePath := path.Join(universe.ConfigService.GetConfigDirectory(), "data")
 		err = os.MkdirAll(localStorePath, 0755)
 		if err != nil {
 			logger.Error("Creating data folder failed", slog.String("error", err.Error()))
@@ -102,30 +108,42 @@ func BigBang(options UniverseOptions) (*Universe, error) {
 		}
 	}
 
-	userService, err := userservice.NewUserService(
-		configService,
-		options.DatastoreFactory,
-	)
-	if err != nil {
-		logger.Error("User service start failed", slog.String("error", err.Error()))
-		os.Exit(1)
+	if options.Pre.UserService != nil {
+		universe.UserService = options.Pre.UserService
+	} else {
+		userService, err := userservice.NewUserService(
+			universe.ConfigService,
+			options.DatastoreFactory,
+		)
+		if err != nil {
+			logger.Error("User service start failed", slog.String("error", err.Error()))
+			os.Exit(1)
+		}
+		universe.UserService = userService
 	}
-	// hacks to avoid import cycles
-	configService.UpsertPermission = userService.UpsertPermission
-	configService.AddPermissionToRole = userService.AddPermissionToRole
 
-	err = configService.Start()
+	// hacks to avoid import cycles
+	universe.ConfigService.SetUpsertPermissionFunc(universe.UserService.UpsertPermission)
+	universe.ConfigService.SetAddPermissionToRoleFunc(universe.UserService.AddPermissionToRole)
+
+	err = universe.ConfigService.Start()
 	if err != nil {
 		logger.Error("Config service start failed", slog.String("error", err.Error()))
 		os.Exit(1)
 	}
 
-	firehoseService, err := firehoseservice.NewFirehoseService(userService)
-	if err != nil {
-		logger.Error("Firehose service creation failed", slog.String("error", err.Error()))
-		os.Exit(1)
+	if options.Pre.FirehoseService != nil {
+		universe.FirehoseService = options.Pre.FirehoseService
+	} else {
+		firehoseService, err := firehoseservice.NewFirehoseService(universe.UserService)
+		if err != nil {
+			logger.Error("Firehose service creation failed", slog.String("error", err.Error()))
+			os.Exit(1)
+		}
+		universe.FirehoseService = firehoseService
 	}
-	configService.EventCallback = firehoseService.Publish
+
+	universe.ConfigService.SetEventCallback(universe.FirehoseService.Publish)
 
 	singulatronFolder := path.Join(homeDir, singulatronFolder)
 	err = os.MkdirAll(singulatronFolder, 0755)
@@ -141,31 +159,46 @@ func BigBang(options UniverseOptions) (*Universe, error) {
 		os.Exit(1)
 	}
 
-	downloadService, err := downloadservice.NewDownloadService(firehoseService, userService)
-	if err != nil {
-		logger.Error("Download service creation failed", slog.String("error", err.Error()))
-		os.Exit(1)
+	if options.Pre.DownloadService != nil {
+		universe.DownloadService = options.Pre.DownloadService
+	} else {
+		downloadService, err := downloadservice.NewDownloadService(universe.FirehoseService, universe.UserService)
+		if err != nil {
+			logger.Error("Download service creation failed", slog.String("error", err.Error()))
+			os.Exit(1)
+		}
+		universe.DownloadService = downloadService
 	}
 
-	downloadService.DefaultFolder = downloadFolder
-	downloadService.StateFilePath = path.Join(singulatronFolder, "downloads.json")
-	err = downloadService.Start()
+	universe.DownloadService.SetDefaultFolder(downloadFolder)
+	universe.DownloadService.SetStateFilePath(path.Join(singulatronFolder, "downloads.json"))
+
+	err = universe.DownloadService.Start()
 	if err != nil {
 		logger.Error("Download service start failed", slog.String("error", err.Error()))
 		os.Exit(1)
 	}
 
-	dockerService, err := dockerservice.NewDockerService(downloadService, userService, configService)
-	if err != nil {
-		logger.Error("Docker service creation failed", slog.String("error", err.Error()))
-		os.Exit(1)
+	if options.Pre.DockerService != nil {
+		universe.DockerService = options.Pre.DockerService
+	} else {
+		dockerService, err := dockerservice.NewDockerService(
+			universe.DownloadService,
+			universe.UserService,
+			universe.ConfigService,
+		)
+		if err != nil {
+			logger.Error("Docker service creation failed", slog.String("error", err.Error()))
+			os.Exit(1)
+		}
+		universe.DockerService = dockerService
 	}
 
 	modelService, err := modelservice.NewModelService(
-		downloadService,
-		userService,
-		configService,
-		dockerService,
+		universe.DownloadService,
+		universe.UserService,
+		universe.ConfigService,
+		universe.DockerService,
 		options.DatastoreFactory,
 	)
 	if err != nil {
@@ -225,17 +258,5 @@ func BigBang(options UniverseOptions) (*Universe, error) {
 		os.Exit(1)
 	}
 
-	return &Universe{
-		ConfigService:   configService,
-		PromptService:   promptService,
-		UserService:     userService,
-		FirehoseService: firehoseService,
-		ChatService:     chatService,
-		GenericService:  genericService,
-		DownloadService: downloadService,
-		AppService:      appService,
-		DockerService:   dockerService,
-		ModelService:    modelService,
-		NodeService:     nodeService,
-	}, nil
+	return universe, nil
 }

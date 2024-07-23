@@ -108,7 +108,7 @@ func (ms *ModelService) Start(modelId string) error {
 		}
 	}
 
-	configFolderPath := ms.configService.ConfigDirectory
+	configFolderPath := ms.configService.GetConfigDirectory()
 	// The SINGULATRON_HOST_FOLDER is a path on the host which is mounted
 	// by Singulatron to download models etc.
 	// (To persist the ~/.singulatron of the container basically).
