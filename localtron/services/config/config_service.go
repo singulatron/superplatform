@@ -52,6 +52,10 @@ func NewConfigService() (*ConfigService, error) {
 	return cs, nil
 }
 
+func (cs *ConfigService) GetConfigDirectory() string {
+	return cs.ConfigDirectory
+}
+
 func (cs *ConfigService) SetUpsertPermissionFunc(f func(id, name, description string) (*usertypes.Permission, error)) {
 	cs.UpsertPermission = f
 }

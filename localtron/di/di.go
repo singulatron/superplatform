@@ -93,6 +93,8 @@ func BigBang(options UniverseOptions) (*Universe, error) {
 		if os.Getenv("SINGULATRON_CONFIG_PATH") != "" {
 			configService.ConfigDirectory = os.Getenv("SINGULATRON_CONFIG_PATH")
 		}
+
+		universe.ConfigService = configService
 	}
 
 	if options.DatastoreFactory == nil {
