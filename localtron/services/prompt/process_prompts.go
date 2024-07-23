@@ -163,7 +163,7 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 		PromptId: currentPrompt.Id,
 	})
 
-	err = p.appService.AddMessage(&apptypes.Message{
+	err = p.chatService.AddMessage(&apptypes.Message{
 		// not a fan of taking the prompt id but at least it makes this idempotent
 		// in case prompts get retried over and over again
 		Id:        currentPrompt.Id,
@@ -269,14 +269,14 @@ func (p *PromptService) processStableDiffusion(address string, fullPrompt string
 		Id:      uuid.New().String(),
 		Content: base64String,
 	}
-	err = p.appService.UpsertAssets([]*apptypes.Asset{
+	err = p.chatService.UpsertAssets([]*apptypes.Asset{
 		asset,
 	})
 	if err != nil {
 		return err
 	}
 
-	err = p.appService.AddMessage(&apptypes.Message{
+	err = p.chatService.AddMessage(&apptypes.Message{
 		Id:       uuid.New().String(),
 		ThreadId: currentPrompt.ThreadId,
 		Content:  "Sure, here is your image",
@@ -292,8 +292,13 @@ func (p *PromptService) processStableDiffusion(address string, fullPrompt string
 }
 
 func (p *PromptService) processLlamaCpp(address string, fullPrompt string, currentPrompt *prompttypes.Prompt) error {
-	llmClient := llm.Client{
-		LLMAddress: address,
+	var llmClient llm.ClientI
+	if p.llmCLient != nil {
+		llmClient = p.llmCLient
+	} else {
+		llmClient = &llm.Client{
+			LLMAddress: address,
+		}
 	}
 
 	start := time.Now()
@@ -335,10 +340,10 @@ func (p *PromptService) processLlamaCpp(address string, fullPrompt string, curre
 		p.StreamManager.Broadcast(currentPrompt.ThreadId, resp)
 
 		if len(resp.Choices) > 0 && resp.Choices[0].FinishReason == "stop" {
-			err := p.appService.AddMessage(&apptypes.Message{
+			err := p.chatService.AddMessage(&apptypes.Message{
 				Id:       uuid.New().String(),
 				ThreadId: currentPrompt.ThreadId,
-				Content:  llmResponseToText(p.StreamManager.history[currentPrompt.ThreadId]),
+				Content:  llmResponseToText(p.StreamManager.History[currentPrompt.ThreadId]),
 			})
 			if err != nil {
 				logger.Error("Error when saving chat message after broadcast",
@@ -346,7 +351,7 @@ func (p *PromptService) processLlamaCpp(address string, fullPrompt string, curre
 				return
 			}
 
-			delete(p.StreamManager.history, currentPrompt.ThreadId)
+			delete(p.StreamManager.History, currentPrompt.ThreadId)
 		}
 	})
 

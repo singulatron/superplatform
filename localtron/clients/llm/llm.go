@@ -19,6 +19,12 @@ import (
 	"github.com/singulatron/singulatron/localtron/logger"
 )
 
+type ClientI interface {
+	PostCompletions(prompt PostCompletionsRequest) (*CompletionResponse, error)
+	SetAddress(address string) ClientI
+	PostCompletionsStreamed(prompt PostCompletionsRequest, callback StreamCallback) error
+}
+
 type Client struct {
 	LLMAddress string
 }
@@ -101,6 +107,12 @@ func (c *Client) PostCompletions(prompt PostCompletionsRequest) (*CompletionResp
 }
 
 type StreamCallback func(*CompletionResponse)
+
+func (c *Client) SetAddress(address string) ClientI {
+	return &Client{
+		LLMAddress: address,
+	}
+}
 
 // Must be only used by the prompt service
 func (c *Client) PostCompletionsStreamed(prompt PostCompletionsRequest, callback StreamCallback) error {

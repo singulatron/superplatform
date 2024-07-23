@@ -42,7 +42,7 @@ func (p *PromptService) AddPrompt(ctx context.Context, prompt *prompttypes.Promp
 		threadId = prompt.Id
 	}
 
-	_, threadExists, err := p.appService.GetThread(threadId)
+	_, threadExists, err := p.chatService.GetThread(threadId)
 	if err != nil {
 		return nil, errors.Wrap(err, "cannot get thread")
 	}
@@ -68,7 +68,7 @@ func (p *PromptService) AddPrompt(ctx context.Context, prompt *prompttypes.Promp
 			}
 		}
 
-		_, err := p.appService.AddThread(thread)
+		_, err := p.chatService.AddThread(thread)
 		if err != nil {
 			return nil, errors.Wrap(err, "failed to add thread")
 		}

@@ -10,23 +10,26 @@ package promptservice
 import (
 	"sync"
 
+	"github.com/singulatron/singulatron/localtron/clients/llm"
 	"github.com/singulatron/singulatron/localtron/datastore"
 
-	chatservice "github.com/singulatron/singulatron/localtron/services/chat"
-	configservice "github.com/singulatron/singulatron/localtron/services/config"
-	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
-	modelservice "github.com/singulatron/singulatron/localtron/services/model"
+	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
+	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
+	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
+	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
+	streammanager "github.com/singulatron/singulatron/localtron/services/prompt/sub/stream_manager"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
-	userservice "github.com/singulatron/singulatron/localtron/services/user"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 type PromptService struct {
-	userService     *userservice.UserService
-	modelService    *modelservice.ModelService
-	appService      *chatservice.ChatService
-	firehoseService *firehoseservice.FirehoseService
+	userService     usertypes.UserServiceI
+	modelService    modeltypes.ModelServiceI
+	chatService     chattypes.ChatServiceI
+	firehoseService firehosetypes.FirehoseServiceI
+	llmCLient       llm.ClientI
 
-	*StreamManager
+	*streammanager.StreamManager
 
 	promptsStore datastore.DataStore
 
@@ -35,11 +38,12 @@ type PromptService struct {
 }
 
 func NewPromptService(
-	cs *configservice.ConfigService,
-	userService *userservice.UserService,
-	modelService *modelservice.ModelService,
-	appService *chatservice.ChatService,
-	firehoseService *firehoseservice.FirehoseService,
+	cs configtypes.ConfigServiceI,
+	userService usertypes.UserServiceI,
+	modelService modeltypes.ModelServiceI,
+	chatService chattypes.ChatServiceI,
+	firehoseService firehosetypes.FirehoseServiceI,
+	llmClient llm.ClientI,
 	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error),
 ) (*PromptService, error) {
 	promptsStore, err := datastoreFactory("prompts", &prompttypes.Prompt{})
@@ -50,10 +54,11 @@ func NewPromptService(
 	service := &PromptService{
 		userService:     userService,
 		modelService:    modelService,
-		appService:      appService,
+		chatService:     chatService,
 		firehoseService: firehoseService,
+		llmCLient:       llmClient,
 
-		StreamManager: NewStreamManager(),
+		StreamManager: streammanager.NewStreamManager(),
 
 		promptsStore: promptsStore,
 

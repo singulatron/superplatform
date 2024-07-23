@@ -11,5 +11,6 @@ type DockerServiceI interface {
 	HashIsRunning(hash string) (bool, error)
 	LaunchContainer(image string, internalPort, hostPort int, options *LaunchOptions) (*LaunchInfo, error)
 	Info() (*OnDockerInfo, error)
+	GetDockerHost() string
 	GetContainerLogsAndStatus(singulatronHash string, logCount int) (string, error)
 }

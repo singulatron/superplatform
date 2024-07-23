@@ -12,10 +12,10 @@ import (
 
 	"github.com/singulatron/singulatron/localtron/datastore"
 
-	configservice "github.com/singulatron/singulatron/localtron/services/config"
-	dockerservice "github.com/singulatron/singulatron/localtron/services/docker"
-	downloadservice "github.com/singulatron/singulatron/localtron/services/download"
-	userservice "github.com/singulatron/singulatron/localtron/services/user"
+	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
+	dockertypes "github.com/singulatron/singulatron/localtron/services/docker/types"
+	downloadtypes "github.com/singulatron/singulatron/localtron/services/download/types"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 )
@@ -27,17 +27,17 @@ type ModelService struct {
 	modelsStore    datastore.DataStore
 	platformsStore datastore.DataStore
 
-	userService     *userservice.UserService
-	downloadService *downloadservice.DownloadService
-	configService   *configservice.ConfigService
-	dockerService   *dockerservice.DockerService
+	userService     usertypes.UserServiceI
+	downloadService downloadtypes.DownloadServiceI
+	configService   configtypes.ConfigServiceI
+	dockerService   dockertypes.DockerServiceI
 }
 
 func NewModelService(
-	ds *downloadservice.DownloadService,
-	userService *userservice.UserService,
-	cs *configservice.ConfigService,
-	dockerService *dockerservice.DockerService,
+	ds downloadtypes.DownloadServiceI,
+	userService usertypes.UserServiceI,
+	cs configtypes.ConfigServiceI,
+	dockerService dockertypes.DockerServiceI,
 	datastoreFactory func(tableName string, insance any) (datastore.DataStore, error),
 ) (*ModelService, error) {
 	srv := &ModelService{

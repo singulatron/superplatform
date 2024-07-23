@@ -12,4 +12,7 @@ type DownloadServiceI interface {
 	Pause(url string) error
 	GetDownload(url string) (*Download, bool)
 	List() ([]DownloadDetails, error)
+	SetDefaultFolder(string)
+	SetStateFilePath(string)
+	Start() error
 }

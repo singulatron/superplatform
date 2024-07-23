@@ -52,6 +52,22 @@ func NewConfigService() (*ConfigService, error) {
 	return cs, nil
 }
 
+func (cs *ConfigService) GetConfigDirectory() string {
+	return cs.ConfigDirectory
+}
+
+func (cs *ConfigService) SetUpsertPermissionFunc(f func(id, name, description string) (*usertypes.Permission, error)) {
+	cs.UpsertPermission = f
+}
+
+func (cs *ConfigService) SetAddPermissionToRoleFunc(f func(roleId, permissionId string) error) {
+	cs.AddPermissionToRole = f
+}
+
+func (cs *ConfigService) SetEventCallback(f func(firehosetypes.Event)) {
+	cs.EventCallback = f
+}
+
 func (cs *ConfigService) Start() error {
 	if cs.ConfigDirectory == "" {
 		return fmt.Errorf("config service is missing a config directory option")

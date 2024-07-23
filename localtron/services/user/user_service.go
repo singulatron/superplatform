@@ -11,12 +11,12 @@ import (
 	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/logger"
 
-	configservice "github.com/singulatron/singulatron/localtron/services/config"
+	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 type UserService struct {
-	configService *configservice.ConfigService
+	configService configtypes.ConfigServiceI
 
 	usersStore       datastore.DataStore
 	rolesStore       datastore.DataStore
@@ -25,7 +25,7 @@ type UserService struct {
 }
 
 func NewUserService(
-	cs *configservice.ConfigService,
+	cs configtypes.ConfigServiceI,
 	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error),
 ) (*UserService, error) {
 	usersStore, err := datastoreFactory("users", &usertypes.User{})
