@@ -15,6 +15,7 @@ import (
 	configservice "github.com/singulatron/singulatron/localtron/services/config"
 	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
 	dockerservice "github.com/singulatron/singulatron/localtron/services/docker"
+	dockertypes "github.com/singulatron/singulatron/localtron/services/docker/types"
 	downloadservice "github.com/singulatron/singulatron/localtron/services/download"
 	downloadtypes "github.com/singulatron/singulatron/localtron/services/download/types"
 	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
@@ -24,6 +25,7 @@ import (
 	modelservice "github.com/singulatron/singulatron/localtron/services/model"
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 	nodeservice "github.com/singulatron/singulatron/localtron/services/node"
+	nodetypes "github.com/singulatron/singulatron/localtron/services/node/types"
 	promptservice "github.com/singulatron/singulatron/localtron/services/prompt"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
@@ -42,8 +44,8 @@ type Universe struct {
 	ModelService    modeltypes.ModelServiceI
 	DownloadService downloadtypes.DownloadServiceI
 	AppService      apptypes.AppServiceI
-	DockerService   *dockerservice.DockerService
-	NodeService     *nodeservice.NodeService
+	DockerService   dockertypes.DockerServiceI
+	NodeService     nodetypes.NodeServiceI
 }
 
 type UniverseOptions struct {

@@ -25,7 +25,7 @@ import (
 	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/logger"
 
-	dockerservice "github.com/singulatron/singulatron/localtron/services/docker"
+	dockertypes "github.com/singulatron/singulatron/localtron/services/docker/types"
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 )
 
@@ -82,7 +82,7 @@ func (ms *ModelService) Start(modelId string) error {
 	}
 	platform := platformI.(*modeltypes.Platform)
 
-	launchOptions := &dockerservice.LaunchOptions{
+	launchOptions := &dockertypes.LaunchOptions{
 		Name: platform.Id,
 	}
 

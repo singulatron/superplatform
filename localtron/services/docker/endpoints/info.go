@@ -11,7 +11,6 @@ import (
 	"encoding/json"
 	"net/http"
 
-	dockerservice "github.com/singulatron/singulatron/localtron/services/docker"
 	dockertypes "github.com/singulatron/singulatron/localtron/services/docker/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
@@ -20,7 +19,7 @@ func Info(
 	w http.ResponseWriter,
 	req *http.Request,
 	userService usertypes.UserServiceI,
-	dm *dockerservice.DockerService,
+	dm dockertypes.DockerServiceI,
 ) {
 	err := userService.IsAuthorized(dockertypes.PermissionDockerView.Id, req)
 	if err != nil {

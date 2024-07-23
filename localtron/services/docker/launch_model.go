@@ -19,27 +19,15 @@ import (
 	"github.com/pkg/errors"
 
 	"github.com/singulatron/singulatron/localtron/logger"
+
+	dockertypes "github.com/singulatron/singulatron/localtron/services/docker/types"
 )
-
-type LaunchOptions struct {
-	Name       string
-	Envs       []string
-	Labels     map[string]string
-	HostBinds  []string
-	GPUEnabled bool
-	Hash       string
-}
-
-type LaunchInfo struct {
-	NewContainerStarted bool
-	PortNumber          int
-}
 
 /*
 A low level method for launching containers running models.
 For a higher level one use `ModelService.Start“.
 */
-func (d *DockerService) LaunchContainer(image string, internalPort, hostPort int, options *LaunchOptions) (*LaunchInfo, error) {
+func (d *DockerService) LaunchContainer(image string, internalPort, hostPort int, options *dockertypes.LaunchOptions) (*dockertypes.LaunchInfo, error) {
 	err := d.pullImage(image)
 	if err != nil {
 		return nil, errors.Wrap(err, "image pull failure")
@@ -49,7 +37,7 @@ func (d *DockerService) LaunchContainer(image string, internalPort, hostPort int
 	defer d.launchModelMutex.Unlock()
 
 	if options == nil {
-		options = &LaunchOptions{}
+		options = &dockertypes.LaunchOptions{}
 	}
 	if options.Name == "" {
 		options.Name = "the-singulatron"
@@ -117,7 +105,7 @@ func (d *DockerService) LaunchContainer(image string, internalPort, hostPort int
 				return nil, errors.Wrap(err, "error removing Docker container")
 			}
 		} else {
-			return &LaunchInfo{
+			return &dockertypes.LaunchInfo{
 				NewContainerStarted: false,
 				PortNumber:          hostPort,
 			}, nil
@@ -135,7 +123,7 @@ func (d *DockerService) LaunchContainer(image string, internalPort, hostPort int
 		return nil, errors.Wrap(err, "error starting Docker container")
 	}
 
-	return &LaunchInfo{
+	return &dockertypes.LaunchInfo{
 		NewContainerStarted: true,
 		PortNumber:          hostPort,
 	}, nil

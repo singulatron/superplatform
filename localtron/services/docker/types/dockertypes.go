@@ -7,6 +7,20 @@
  */
 package dockertypes
 
+type LaunchOptions struct {
+	Name       string
+	Envs       []string
+	Labels     map[string]string
+	HostBinds  []string
+	GPUEnabled bool
+	Hash       string
+}
+
+type LaunchInfo struct {
+	NewContainerStarted bool
+	PortNumber          int
+}
+
 type ModelLaunchRequest struct{}
 
 type OnModelLaunch struct {
