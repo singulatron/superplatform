@@ -109,20 +109,7 @@ func (p *PromptService) processNextPrompt() error {
 }
 
 func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err error) {
-	defer func() {
-		if r := recover(); r != nil {
-			currentPrompt.Error = fmt.Sprintf("%v", r)
-			currentPrompt.Status = prompttypes.PromptStatusErrored
-			return
-		}
-
-		if err != nil {
-			currentPrompt.Error = err.Error()
-			currentPrompt.Status = prompttypes.PromptStatusErrored
-		} else {
-			currentPrompt.Status = prompttypes.PromptStatusCompleted
-		}
-
+	updateCurr := func() {
 		logger.Info("Prompt finished",
 			slog.String("promptId", currentPrompt.Id),
 			slog.String("status", string(currentPrompt.Status)),
@@ -138,6 +125,34 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 				slog.String("error", err.Error()),
 			)
 		}
+
+		err = p.promptsStore.Query(
+			datastore.Id(currentPrompt.Id),
+		).Update(currentPrompt)
+		if err != nil {
+			logger.Error("Error updating prompt",
+				slog.String("promptId", currentPrompt.Id),
+				slog.String("error", err.Error()),
+			)
+		}
+	}
+
+	defer func() {
+		if r := recover(); r != nil {
+			currentPrompt.Error = fmt.Sprintf("%v", r)
+			currentPrompt.Status = prompttypes.PromptStatusErrored
+			updateCurr()
+			panic(r)
+		}
+
+		if err != nil {
+			currentPrompt.Error = err.Error()
+			currentPrompt.Status = prompttypes.PromptStatusErrored
+		} else {
+			currentPrompt.Status = prompttypes.PromptStatusCompleted
+		}
+
+		updateCurr()
 	}()
 
 	logger.Info("Picking up prompt from queue",
@@ -340,6 +355,7 @@ func (p *PromptService) processLlamaCpp(address string, fullPrompt string, curre
 		p.StreamManager.Broadcast(currentPrompt.ThreadId, resp)
 
 		if len(resp.Choices) > 0 && resp.Choices[0].FinishReason == "stop" {
+
 			err := p.chatService.AddMessage(&apptypes.Message{
 				Id:       uuid.New().String(),
 				ThreadId: currentPrompt.ThreadId,
