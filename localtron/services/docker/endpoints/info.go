@@ -13,13 +13,13 @@ import (
 
 	dockerservice "github.com/singulatron/singulatron/localtron/services/docker"
 	dockertypes "github.com/singulatron/singulatron/localtron/services/docker/types"
-	userservice "github.com/singulatron/singulatron/localtron/services/user"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 func Info(
 	w http.ResponseWriter,
 	req *http.Request,
-	userService *userservice.UserService,
+	userService usertypes.UserServiceI,
 	dm *dockerservice.DockerService,
 ) {
 	err := userService.IsAuthorized(dockertypes.PermissionDockerView.Id, req)

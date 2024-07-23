@@ -13,8 +13,7 @@ import (
 
 	configservice "github.com/singulatron/singulatron/localtron/services/config"
 	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
-
-	userservice "github.com/singulatron/singulatron/localtron/services/user"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // Get retrieves the current configuration
@@ -30,7 +29,7 @@ import (
 func Get(
 	w http.ResponseWriter,
 	r *http.Request,
-	userService *userservice.UserService,
+	userService usertypes.UserServiceI,
 	cs *configservice.ConfigService,
 ) {
 	err := userService.IsAuthorized(configtypes.PermissionConfigView.Id, r)

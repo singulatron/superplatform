@@ -17,6 +17,7 @@ import (
 	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
 	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
 	genericservice "github.com/singulatron/singulatron/localtron/services/generic"
+	generictypes "github.com/singulatron/singulatron/localtron/services/generic/types"
 	modelservice "github.com/singulatron/singulatron/localtron/services/model"
 	nodeservice "github.com/singulatron/singulatron/localtron/services/node"
 	promptservice "github.com/singulatron/singulatron/localtron/services/prompt"
@@ -33,7 +34,7 @@ type Universe struct {
 	UserService     usertypes.UserServiceI
 	FirehoseService firehosetypes.FirehoseServiceI
 	ChatService     chattypes.ChatServiceI
-	GenericService  *genericservice.GenericService
+	GenericService  generictypes.GenericServiceI
 	ModelService    *modelservice.ModelService
 	DownloadService *downloadservice.DownloadService
 	AppService      *appservice.AppService
