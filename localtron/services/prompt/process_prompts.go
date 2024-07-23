@@ -341,8 +341,6 @@ func (p *PromptService) processLlamaCpp(address string, fullPrompt string, curre
 		}
 	}()
 
-	done <- true
-
 	err := llmClient.PostCompletionsStreamed(llm.PostCompletionsRequest{
 		Prompt:    fullPrompt,
 		Stream:    true,
@@ -368,6 +366,8 @@ func (p *PromptService) processLlamaCpp(address string, fullPrompt string, curre
 			}
 
 			delete(p.StreamManager.History, currentPrompt.ThreadId)
+
+			done <- true
 		}
 	})
 
