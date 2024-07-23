@@ -11,16 +11,15 @@ import (
 	"encoding/json"
 	"net/http"
 
-	modelservice "github.com/singulatron/singulatron/localtron/services/model"
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
-	userservice "github.com/singulatron/singulatron/localtron/services/user"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 func GetModels(
 	w http.ResponseWriter,
 	r *http.Request,
-	userService *userservice.UserService,
-	ms *modelservice.ModelService,
+	userService usertypes.UserServiceI,
+	ms modeltypes.ModelServiceI,
 ) {
 	err := userService.IsAuthorized(modeltypes.PermissionModelView.Id, r)
 	if err != nil {

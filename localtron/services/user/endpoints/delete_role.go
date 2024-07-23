@@ -11,11 +11,10 @@ import (
 	"encoding/json"
 	"net/http"
 
-	userservice "github.com/singulatron/singulatron/localtron/services/user"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func DeleteRole(w http.ResponseWriter, r *http.Request, userService *userservice.UserService) {
+func DeleteRole(w http.ResponseWriter, r *http.Request, userService usertypes.UserServiceI) {
 	err := userService.IsAuthorized(usertypes.PermissionRoleDelete.Id, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)

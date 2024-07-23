@@ -11,10 +11,10 @@ import (
 	"encoding/json"
 	"net/http"
 
-	appservice "github.com/singulatron/singulatron/localtron/services/app"
+	apptypes "github.com/singulatron/singulatron/localtron/services/app/types"
 )
 
-func EnableLogging(w http.ResponseWriter, r *http.Request, ds *appservice.AppService) {
+func EnableLogging(w http.ResponseWriter, r *http.Request, ds apptypes.AppServiceI) {
 	err := ds.EnableLogging()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

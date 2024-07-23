@@ -14,10 +14,8 @@ import (
 
 	"github.com/singulatron/singulatron/localtron/logger"
 
-	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
 	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
-
-	userservice "github.com/singulatron/singulatron/localtron/services/user"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // Subscribe subscribes to a firehose stream and streams events to the client
@@ -33,8 +31,8 @@ import (
 func Subscribe(
 	w http.ResponseWriter,
 	r *http.Request,
-	userService *userservice.UserService,
-	fs *firehoseservice.FirehoseService,
+	userService usertypes.UserServiceI,
+	fs firehosetypes.FirehoseServiceI,
 ) {
 	err := userService.IsAuthorized(firehosetypes.PermissionFirehoseView.Id, r)
 	if err != nil {

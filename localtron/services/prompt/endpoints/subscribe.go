@@ -15,9 +15,8 @@ import (
 	"github.com/singulatron/singulatron/localtron/clients/llm"
 	"github.com/singulatron/singulatron/localtron/logger"
 
-	promptservice "github.com/singulatron/singulatron/localtron/services/prompt"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
-	userservice "github.com/singulatron/singulatron/localtron/services/user"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // Subscribe streams prompt responses to the client
@@ -32,8 +31,8 @@ import (
 func Subscribe(
 	w http.ResponseWriter,
 	r *http.Request,
-	userService *userservice.UserService,
-	promptService *promptservice.PromptService,
+	userService usertypes.UserServiceI,
+	promptService prompttypes.PromptServiceI,
 ) {
 	err := userService.IsAuthorized(prompttypes.PermissionPromptStream.Id, r)
 	if err != nil {
@@ -51,14 +50,14 @@ func Subscribe(
 	w.Header().Set("Content-Type", "text/event-stream")
 
 	subscriber := make(chan *llm.CompletionResponse)
-	promptService.StreamManager.Subscribe(threadId, subscriber)
-	defer promptService.StreamManager.Unsubscribe(threadId, subscriber)
+	promptService.Subscribe(threadId, subscriber)
+	defer promptService.Unsubscribe(threadId, subscriber)
 
 	// Use context to handle client disconnection
 	ctx := r.Context()
 	go func() {
 		<-ctx.Done()
-		promptService.StreamManager.Unsubscribe(threadId, subscriber)
+		promptService.Unsubscribe(threadId, subscriber)
 	}()
 
 	for resp := range subscriber {

@@ -11,9 +11,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	promptservice "github.com/singulatron/singulatron/localtron/services/prompt"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
-	userservice "github.com/singulatron/singulatron/localtron/services/user"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // Remove removes a prompt
@@ -31,8 +30,8 @@ import (
 func Remove(
 	w http.ResponseWriter,
 	r *http.Request,
-	userService *userservice.UserService,
-	promptService *promptservice.PromptService,
+	userService usertypes.UserServiceI,
+	promptService prompttypes.PromptServiceI,
 ) {
 	err := userService.IsAuthorized(prompttypes.PermissionPromptCreate.Id, r)
 	if err != nil {

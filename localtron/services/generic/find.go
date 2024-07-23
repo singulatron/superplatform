@@ -15,14 +15,7 @@ import (
 	generictypes "github.com/singulatron/singulatron/localtron/services/generic/types"
 )
 
-type FindOptions struct {
-	Table  string
-	Query  *datastore.Query
-	UserId string
-	Public bool
-}
-
-func (g *GenericService) Find(options FindOptions) ([]*generictypes.GenericObject, error) {
+func (g *GenericService) Find(options generictypes.FindOptions) ([]*generictypes.GenericObject, error) {
 	if options.Table == "" {
 		return nil, errors.New("no table name")
 	}

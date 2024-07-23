@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/singulatron/singulatron/localtron/di"
+	nodeservice "github.com/singulatron/singulatron/localtron/services/node"
 
 	"github.com/stretchr/testify/require"
 )
@@ -21,9 +22,9 @@ func TestNvidiaSmiOutput(t *testing.T) {
 	})
 	require.NoError(t, err)
 	ns := univ.NodeService
-	ns.Hostname = "testhost"
+	ns.(*nodeservice.NodeService).Hostname = "testhost"
 
-	gpus, err := ns.ParseNvidiaSmiOutput(nvidiaSmiOutput)
+	gpus, err := ns.(*nodeservice.NodeService).ParseNvidiaSmiOutput(nvidiaSmiOutput)
 	require.NoError(t, err)
 
 	require.Equal(t, 2, len(gpus))

@@ -12,14 +12,13 @@ import (
 	"net/http"
 
 	"github.com/singulatron/singulatron/localtron/datastore"
-	userservice "github.com/singulatron/singulatron/localtron/services/user"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 func GetUsers(
 	w http.ResponseWriter,
 	r *http.Request,
-	userService *userservice.UserService,
+	userService usertypes.UserServiceI,
 ) {
 	err := userService.IsAuthorized(usertypes.PermissionUserView.Id, r)
 	if err != nil {
@@ -35,7 +34,7 @@ func GetUsers(
 	}
 	defer r.Body.Close()
 
-	options := &userservice.GetUsersOptions{
+	options := &usertypes.GetUsersOptions{
 		Query: req.Query,
 	}
 	if options.Query == nil {

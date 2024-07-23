@@ -11,9 +11,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	genericservice "github.com/singulatron/singulatron/localtron/services/generic"
 	generictypes "github.com/singulatron/singulatron/localtron/services/generic/types"
-	userservice "github.com/singulatron/singulatron/localtron/services/user"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // Delete removes a generic object based on the provided conditions
@@ -32,8 +31,8 @@ import (
 func Delete(
 	w http.ResponseWriter,
 	r *http.Request,
-	userService *userservice.UserService,
-	genericService *genericservice.GenericService,
+	userService usertypes.UserServiceI,
+	genericService generictypes.GenericServiceI,
 ) {
 	err := userService.IsAuthorized(generictypes.PermissionGenericDelete.Id, r)
 	if err != nil {

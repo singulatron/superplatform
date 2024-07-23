@@ -25,3 +25,9 @@ type LogRequest struct {
 type LoggingStatus struct {
 	Enabled bool `json:"enabled"`
 }
+
+type AppServiceI interface {
+	LoggingStatus() (LoggingStatus, error)
+	EnableLogging() error
+	DisableLogging() error
+}

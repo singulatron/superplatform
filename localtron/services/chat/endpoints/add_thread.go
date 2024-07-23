@@ -11,10 +11,9 @@ import (
 	"encoding/json"
 	"net/http"
 
-	chatservice "github.com/singulatron/singulatron/localtron/services/chat"
-
+	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
 	types "github.com/singulatron/singulatron/localtron/services/chat/types"
-	userservice "github.com/singulatron/singulatron/localtron/services/user"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // AddThread creates a new chat thread
@@ -32,8 +31,8 @@ import (
 func AddThread(
 	w http.ResponseWriter,
 	r *http.Request,
-	userService *userservice.UserService,
-	ds *chatservice.ChatService,
+	userService usertypes.UserServiceI,
+	ds chattypes.ChatServiceI,
 ) {
 	err := userService.IsAuthorized(types.PermissionThreadCreate.Id, r)
 	if err != nil {

@@ -11,9 +11,9 @@ import (
 	"encoding/json"
 	"net/http"
 
-	chatservice "github.com/singulatron/singulatron/localtron/services/chat"
+	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
 	types "github.com/singulatron/singulatron/localtron/services/chat/types"
-	userservice "github.com/singulatron/singulatron/localtron/services/user"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // DeleteMessage removes a message from a chat thread
@@ -31,8 +31,8 @@ import (
 func DeleteMessage(
 	w http.ResponseWriter,
 	r *http.Request,
-	userService *userservice.UserService,
-	ds *chatservice.ChatService,
+	userService usertypes.UserServiceI,
+	ds chattypes.ChatServiceI,
 ) {
 	err := userService.IsAuthorized(types.PermissionMessageDelete.Id, r)
 	if err != nil {

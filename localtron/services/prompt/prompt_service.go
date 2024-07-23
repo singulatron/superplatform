@@ -26,7 +26,7 @@ type PromptService struct {
 	appService      *chatservice.ChatService
 	firehoseService *firehoseservice.FirehoseService
 
-	StreamManager *StreamManager
+	*StreamManager
 
 	promptsStore datastore.DataStore
 

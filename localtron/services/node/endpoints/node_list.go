@@ -11,16 +11,15 @@ import (
 	"encoding/json"
 	"net/http"
 
-	nodeservice "github.com/singulatron/singulatron/localtron/services/node"
 	nodetypes "github.com/singulatron/singulatron/localtron/services/node/types"
-	userservice "github.com/singulatron/singulatron/localtron/services/user"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 func List(
 	w http.ResponseWriter,
 	r *http.Request,
-	userService *userservice.UserService,
-	nodeService *nodeservice.NodeService,
+	userService usertypes.UserServiceI,
+	nodeService nodetypes.NodeServiceI,
 ) {
 	err := userService.IsAuthorized(nodetypes.PermissionNodeView.Id, r)
 	if err != nil {

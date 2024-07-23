@@ -11,16 +11,15 @@ import (
 	"encoding/json"
 	"net/http"
 
-	dockerservice "github.com/singulatron/singulatron/localtron/services/docker"
 	dockertypes "github.com/singulatron/singulatron/localtron/services/docker/types"
-	userservice "github.com/singulatron/singulatron/localtron/services/user"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 func Info(
 	w http.ResponseWriter,
 	req *http.Request,
-	userService *userservice.UserService,
-	dm *dockerservice.DockerService,
+	userService usertypes.UserServiceI,
+	dm dockertypes.DockerServiceI,
 ) {
 	err := userService.IsAuthorized(dockertypes.PermissionDockerView.Id, req)
 	if err != nil {
