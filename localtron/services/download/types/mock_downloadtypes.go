@@ -95,3 +95,41 @@ func (mr *MockDownloadServiceIMockRecorder) Pause(url any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Pause", reflect.TypeOf((*MockDownloadServiceI)(nil).Pause), url)
 }
+
+// SetDefaultFolder mocks base method.
+func (m *MockDownloadServiceI) SetDefaultFolder(arg0 string) {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "SetDefaultFolder", arg0)
+}
+
+// SetDefaultFolder indicates an expected call of SetDefaultFolder.
+func (mr *MockDownloadServiceIMockRecorder) SetDefaultFolder(arg0 any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetDefaultFolder", reflect.TypeOf((*MockDownloadServiceI)(nil).SetDefaultFolder), arg0)
+}
+
+// SetStateFilePath mocks base method.
+func (m *MockDownloadServiceI) SetStateFilePath(arg0 string) {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "SetStateFilePath", arg0)
+}
+
+// SetStateFilePath indicates an expected call of SetStateFilePath.
+func (mr *MockDownloadServiceIMockRecorder) SetStateFilePath(arg0 any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetStateFilePath", reflect.TypeOf((*MockDownloadServiceI)(nil).SetStateFilePath), arg0)
+}
+
+// Start mocks base method.
+func (m *MockDownloadServiceI) Start() error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Start")
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Start indicates an expected call of Start.
+func (mr *MockDownloadServiceIMockRecorder) Start() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Start", reflect.TypeOf((*MockDownloadServiceI)(nil).Start))
+}

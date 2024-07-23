@@ -12,6 +12,8 @@ package configtypes
 import (
 	reflect "reflect"
 
+	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 	gomock "go.uber.org/mock/gomock"
 )
 
@@ -79,4 +81,54 @@ func (m *MockConfigServiceI) SaveConfig(config Config) error {
 func (mr *MockConfigServiceIMockRecorder) SaveConfig(config any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SaveConfig", reflect.TypeOf((*MockConfigServiceI)(nil).SaveConfig), config)
+}
+
+// SetAddPermissionToRoleFunc mocks base method.
+func (m *MockConfigServiceI) SetAddPermissionToRoleFunc(f func(string, string) error) {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "SetAddPermissionToRoleFunc", f)
+}
+
+// SetAddPermissionToRoleFunc indicates an expected call of SetAddPermissionToRoleFunc.
+func (mr *MockConfigServiceIMockRecorder) SetAddPermissionToRoleFunc(f any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetAddPermissionToRoleFunc", reflect.TypeOf((*MockConfigServiceI)(nil).SetAddPermissionToRoleFunc), f)
+}
+
+// SetEventCallback mocks base method.
+func (m *MockConfigServiceI) SetEventCallback(f func(firehosetypes.Event)) {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "SetEventCallback", f)
+}
+
+// SetEventCallback indicates an expected call of SetEventCallback.
+func (mr *MockConfigServiceIMockRecorder) SetEventCallback(f any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetEventCallback", reflect.TypeOf((*MockConfigServiceI)(nil).SetEventCallback), f)
+}
+
+// SetUpsertPermissionFunc mocks base method.
+func (m *MockConfigServiceI) SetUpsertPermissionFunc(f func(string, string, string) (*usertypes.Permission, error)) {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "SetUpsertPermissionFunc", f)
+}
+
+// SetUpsertPermissionFunc indicates an expected call of SetUpsertPermissionFunc.
+func (mr *MockConfigServiceIMockRecorder) SetUpsertPermissionFunc(f any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetUpsertPermissionFunc", reflect.TypeOf((*MockConfigServiceI)(nil).SetUpsertPermissionFunc), f)
+}
+
+// Start mocks base method.
+func (m *MockConfigServiceI) Start() error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Start")
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Start indicates an expected call of Start.
+func (mr *MockConfigServiceIMockRecorder) Start() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Start", reflect.TypeOf((*MockConfigServiceI)(nil).Start))
 }

@@ -53,6 +53,20 @@ func (mr *MockDockerServiceIMockRecorder) GetContainerLogsAndStatus(singulatronH
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetContainerLogsAndStatus", reflect.TypeOf((*MockDockerServiceI)(nil).GetContainerLogsAndStatus), singulatronHash, logCount)
 }
 
+// GetDockerHost mocks base method.
+func (m *MockDockerServiceI) GetDockerHost() string {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetDockerHost")
+	ret0, _ := ret[0].(string)
+	return ret0
+}
+
+// GetDockerHost indicates an expected call of GetDockerHost.
+func (mr *MockDockerServiceIMockRecorder) GetDockerHost() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetDockerHost", reflect.TypeOf((*MockDockerServiceI)(nil).GetDockerHost))
+}
+
 // HashIsRunning mocks base method.
 func (m *MockDockerServiceI) HashIsRunning(hash string) (bool, error) {
 	m.ctrl.T.Helper()
