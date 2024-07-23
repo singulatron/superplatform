@@ -11,25 +11,25 @@ import (
 	"errors"
 
 	"github.com/singulatron/singulatron/localtron/datastore"
-	configservice "github.com/singulatron/singulatron/localtron/services/config"
-	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
-	userservice "github.com/singulatron/singulatron/localtron/services/user"
+	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
+	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 
 	generictypes "github.com/singulatron/singulatron/localtron/services/generic/types"
 )
 
 type GenericService struct {
-	configService   *configservice.ConfigService
-	userService     *userservice.UserService
-	firehoseService *firehoseservice.FirehoseService
+	configService   configtypes.ConfigServiceI
+	userService     usertypes.UserServiceI
+	firehoseService firehosetypes.FirehoseServiceI
 
 	store datastore.DataStore
 }
 
 func NewGenericService(
-	cs *configservice.ConfigService,
-	fs *firehoseservice.FirehoseService,
-	userService *userservice.UserService,
+	cs configtypes.ConfigServiceI,
+	fs firehosetypes.FirehoseServiceI,
+	userService usertypes.UserServiceI,
 	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error),
 ) (*GenericService, error) {
 	store, err := datastoreFactory("generic", &generictypes.GenericObject{})

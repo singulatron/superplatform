@@ -194,68 +194,98 @@ func BigBang(options UniverseOptions) (*Universe, error) {
 		universe.DockerService = dockerService
 	}
 
-	modelService, err := modelservice.NewModelService(
-		universe.DownloadService,
-		universe.UserService,
-		universe.ConfigService,
-		universe.DockerService,
-		options.DatastoreFactory,
-	)
-	if err != nil {
-		logger.Error("Model service creation failed", slog.String("error", err.Error()))
-		os.Exit(1)
+	if options.Pre.ModelService != nil {
+		universe.ModelService = options.Pre.ModelService
+	} else {
+		modelService, err := modelservice.NewModelService(
+			universe.DownloadService,
+			universe.UserService,
+			universe.ConfigService,
+			universe.DockerService,
+			options.DatastoreFactory,
+		)
+		if err != nil {
+			logger.Error("Model service creation failed", slog.String("error", err.Error()))
+			os.Exit(1)
+		}
+		universe.ModelService = modelService
 	}
 
-	appService, err := appservice.NewAppService(
-		configService,
-		firehoseService,
-		userService,
-	)
-	if err != nil {
-		logger.Error("App service creation failed", slog.String("error", err.Error()))
-		os.Exit(1)
+	if options.Pre.AppService != nil {
+		universe.AppService = options.Pre.AppService
+	} else {
+		appService, err := appservice.NewAppService(
+			universe.ConfigService,
+			universe.FirehoseService,
+			universe.UserService,
+		)
+		if err != nil {
+			logger.Error("App service creation failed", slog.String("error", err.Error()))
+			os.Exit(1)
+		}
+		universe.AppService = appService
 	}
 
-	chatService, err := chatservice.NewChatService(
-		configService,
-		firehoseService,
-		userService,
-		options.DatastoreFactory,
-	)
-	if err != nil {
-		logger.Error("Chat service creation failed", slog.String("error", err.Error()))
-		os.Exit(1)
+	if options.Pre.ChatService != nil {
+		universe.ChatService = options.Pre.ChatService
+	} else {
+		chatService, err := chatservice.NewChatService(
+			universe.ConfigService,
+			universe.FirehoseService,
+			universe.UserService,
+			options.DatastoreFactory,
+		)
+		if err != nil {
+			logger.Error("Chat service creation failed", slog.String("error", err.Error()))
+			os.Exit(1)
+		}
+		universe.ChatService = chatService
 	}
 
-	promptService, err := promptservice.NewPromptService(
-		configService,
-		userService,
-		modelService,
-		chatService,
-		firehoseService,
-		options.Pre.LLMClient,
-		options.DatastoreFactory,
-	)
-	if err != nil {
-		logger.Error("Prompt service creation failed", slog.String("error", err.Error()))
-		os.Exit(1)
+	if options.Pre.PromptService != nil {
+		universe.PromptService = options.Pre.PromptService
+	} else {
+		promptService, err := promptservice.NewPromptService(
+			universe.ConfigService,
+			universe.UserService,
+			universe.ModelService,
+			universe.ChatService,
+			universe.FirehoseService,
+			options.Pre.LLMClient,
+			options.DatastoreFactory,
+		)
+		if err != nil {
+			logger.Error("Prompt service creation failed", slog.String("error", err.Error()))
+			os.Exit(1)
+		}
+		universe.PromptService = promptService
 	}
 
-	genericService, err := genericservice.NewGenericService(
-		configService,
-		firehoseService,
-		userService,
-		options.DatastoreFactory,
-	)
-	if err != nil {
-		logger.Error("Generic service creation failed", slog.String("error", err.Error()))
-		os.Exit(1)
+	if options.Pre.GenericService != nil {
+		universe.GenericService = options.Pre.GenericService
+	} else {
+		genericService, err := genericservice.NewGenericService(
+			universe.ConfigService,
+			universe.FirehoseService,
+			universe.UserService,
+			options.DatastoreFactory,
+		)
+		if err != nil {
+			logger.Error("Generic service creation failed", slog.String("error", err.Error()))
+			os.Exit(1)
+		}
+		universe.GenericService = genericService
 	}
 
-	nodeService, err := nodeservice.NewNodeService(userService)
-	if err != nil {
-		logger.Error("Node service creation failed", slog.String("error", err.Error()))
-		os.Exit(1)
+	if options.Pre.NodeService != nil {
+		universe.NodeService = options.Pre.NodeService
+	} else {
+		nodeService, err := nodeservice.NewNodeService(universe.UserService)
+		if err != nil {
+			logger.Error("Node service creation failed", slog.String("error", err.Error()))
+			os.Exit(1)
+		}
+		universe.NodeService = nodeService
 	}
 
 	return universe, nil

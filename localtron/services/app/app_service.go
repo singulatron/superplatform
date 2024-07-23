@@ -8,41 +8,27 @@
 package appservice
 
 import (
-	"sync"
-
-	"github.com/pkg/errors"
-
-	configservice "github.com/singulatron/singulatron/localtron/services/config"
-	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
-	userservice "github.com/singulatron/singulatron/localtron/services/user"
+	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
+	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 type AppService struct {
-	configService   *configservice.ConfigService
-	userService     *userservice.UserService
-	firehoseService *firehoseservice.FirehoseService
-
-	clientId string
-
-	logMutex sync.Mutex
+	configService   configtypes.ConfigServiceI
+	userService     usertypes.UserServiceI
+	firehoseService firehosetypes.FirehoseServiceI
 }
 
 func NewAppService(
-	cs *configservice.ConfigService,
-	fs *firehoseservice.FirehoseService,
-	userService *userservice.UserService,
+	cs configtypes.ConfigServiceI,
+	fs firehosetypes.FirehoseServiceI,
+	userService usertypes.UserServiceI,
 ) (*AppService, error) {
-	ci, err := cs.GetClientId()
-	if err != nil {
-		return nil, errors.Wrap(err, "app service canno get client id")
-	}
 
 	service := &AppService{
 		configService:   cs,
 		firehoseService: fs,
 		userService:     userService,
-
-		clientId: ci,
 	}
 
 	return service, nil

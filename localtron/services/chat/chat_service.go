@@ -11,15 +11,15 @@ import (
 	"github.com/singulatron/singulatron/localtron/datastore"
 
 	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
-	configservice "github.com/singulatron/singulatron/localtron/services/config"
-	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
-	userservice "github.com/singulatron/singulatron/localtron/services/user"
+	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
+	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 type ChatService struct {
-	configService   *configservice.ConfigService
-	userService     *userservice.UserService
-	firehoseService *firehoseservice.FirehoseService
+	configService   configtypes.ConfigServiceI
+	userService     usertypes.UserServiceI
+	firehoseService firehosetypes.FirehoseServiceI
 
 	messagesStore datastore.DataStore
 	threadsStore  datastore.DataStore
@@ -27,9 +27,9 @@ type ChatService struct {
 }
 
 func NewChatService(
-	cs *configservice.ConfigService,
-	fs *firehoseservice.FirehoseService,
-	userService *userservice.UserService,
+	cs configtypes.ConfigServiceI,
+	fs firehosetypes.FirehoseServiceI,
+	userService usertypes.UserServiceI,
 	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error),
 ) (*ChatService, error) {
 	threadsStore, err := datastoreFactory("threads", &chattypes.Thread{})

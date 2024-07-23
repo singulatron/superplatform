@@ -18,16 +18,16 @@ import (
 	"github.com/pkg/errors"
 
 	nodetypes "github.com/singulatron/singulatron/localtron/services/node/types"
-	userservice "github.com/singulatron/singulatron/localtron/services/user"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 type NodeService struct {
 	Hostname string
 
-	userService *userservice.UserService
+	userService usertypes.UserServiceI
 }
 
-func NewNodeService(userService *userservice.UserService) (*NodeService, error) {
+func NewNodeService(userService usertypes.UserServiceI) (*NodeService, error) {
 	hostname, err := os.Hostname()
 	if err != nil {
 		return nil, err
