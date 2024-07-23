@@ -14,6 +14,7 @@
 [![](https://dcbadge.limes.pink/api/server/https://discord.gg/eRXyzeXEvM)](https://discord.gg/eRXyzeXEvM)
 
 Singulatron is an open-source server daemon and web client that empowers you to self-host and interact with LLMs.
+It's also a framework and ecosystem that lets you build AI based apps quickly.
 
 It goes beyond chat functionality, enabling you to develop language-agnostic applications by harnessing Singulatron's AI infrastructure. Dive in and start building today!
 
