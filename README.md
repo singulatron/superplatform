@@ -12,6 +12,7 @@
 </p>
 
 [![](https://dcbadge.limes.pink/api/server/https://discord.gg/eRXyzeXEvM)](https://discord.gg/eRXyzeXEvM)
+![example workflow](https://github.com/singulatron/singulatron/actions/workflows/backend-build-github.yaml/badge.svg)
 
 Singulatron is an open-source server daemon and web client that empowers you to self-host and interact with LLMs.
 It's also a framework and ecosystem that lets you build AI based apps quickly.
