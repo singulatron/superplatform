@@ -20,7 +20,7 @@ Singulatron is a rapid prototyping environment for the AI age. It aims to serve 
 During his 20+ years of building hundreds of different projects, the author was always drawn to building development platforms ([1backend](https://github.com/1backend/1backend), [micro](https://github.com/micro/micro)), ORMs ([gocassa](https://github.com/gocassa/gocassa)) and various other productivity tools ([ok-borg](https://github.com/ok-borg/borg)).
 Singulatron is a bit of all of those.
 
-It's an open-source server daemon and web client that empowers you to self-host and interact with LLMs and more; it's also a framework and ecosystem that lets you build AI based apps quickly.
+It's an open-source server daemon and web client that lets you self-host and interact with LLMs, as well as a framework and ecosystem for swiftly creating AI-based applications.
 
 ## Roadmap
 
