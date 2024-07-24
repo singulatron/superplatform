@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunksingulatron_api_docs=self.webpackChunksingulatron_api_docs||[]).push([[9067],{19187:s=>{s.exports=JSON.parse('{"tags":[{"label":"test","permalink":"/docs/tags/test","count":6}]}')}}]);
