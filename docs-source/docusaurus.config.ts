@@ -87,6 +87,11 @@ const config: Config = {
           to: "/docs/intro",
         },
         {
+          label: "API",
+          position: "left",
+          to: "/docs/category/singulatron-api",
+        },
+        {
           href: "https://github.com/singulatron/singulatron",
           label: "GitHub",
           position: "right",
