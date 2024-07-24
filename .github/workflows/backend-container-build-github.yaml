@@ -1,4 +1,4 @@
-name: "Localtron container build and push to DockerHub"
+name: "Backend container build and push to DockerHub"
 
 on:
   push:

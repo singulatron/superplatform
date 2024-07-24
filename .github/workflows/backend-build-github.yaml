@@ -1,4 +1,4 @@
-name: "[GH] Localtron build"
+name: "Backend build"
 # .
 on:
   push:
