@@ -51,15 +51,13 @@ type Prompt struct {
 	UserId string `json:"userId"`
 
 	// Prompt is the message itself eg.
-	//    "What's a banana?"
-	Prompt string `json:"prompt"`
+	Prompt string `json:"prompt" example:"What's a banana?" binding:"required"`
 
 	// Template of the prompt. Optional. Might be derived from ModelId
-	//    [INST]{prompt}[/INST]
-	Template string `json:"template"`
+	Template string `json:"template" example:"[INST]{prompt}[/INST]"`
 
 	// ModelId is just the Singulatron internal ID of the model.
-	ModelId string `json:"modelId,omitempty"`
+	ModelId string `json:"modelId,omitempty" example:"huggingface/TheBloke/mistral-7b-instruct-v0.2.Q3_K_S.gguf"`
 
 	// Status of the prompt.
 	Status PromptStatus `json:"status,omitempty"`
@@ -74,7 +72,7 @@ type Prompt struct {
 	Error string `json:"error,omitempty"`
 
 	// MaxRetries specified how many times the system should retry a prompt when it keeps erroring.
-	MaxRetries int `json:"maxRetries,omitempty"`
+	MaxRetries int `json:"maxRetries,omitempty" example:"10"`
 
 	// Sync drives whether prompt add request should wait and hang until
 	// the prompt is done executing. By default the prompt just gets put on a queue

@@ -926,7 +926,7 @@ const docTemplate = `{
         },
         "/prompt/add": {
             "post": {
-                "description": "Add a new prompt for a user",
+                "description": "Adds a new prompt to the prompt queue and either waits for the response (if ` + "`" + `sync` + "`" + ` is set to true), or returns immediately.",
                 "consumes": [
                     "application/json"
                 ],
@@ -936,7 +936,7 @@ const docTemplate = `{
                 "tags": [
                     "prompts"
                 ],
-                "summary": "Add a new prompt",
+                "summary": "Add Prompt",
                 "parameters": [
                     {
                         "description": "Add Prompt Request",
@@ -1700,6 +1700,9 @@ const docTemplate = `{
         },
         "prompttypes.Prompt": {
             "type": "object",
+            "required": [
+                "prompt"
+            ],
             "properties": {
                 "createdAt": {
                     "description": "CreatedAt is the time of the prompt creation.",
@@ -1726,8 +1729,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "prompt": {
-                    "description": "Prompt is the message itself eg.\n   \"What's a banana?\"",
-                    "type": "string"
+                    "description": "Prompt is the message itself eg.",
+                    "type": "string",
+                    "example": "What's a banana?"
                 },
                 "runCount": {
                     "description": "RunCount is the number of times the prompt was retried due to errors",
@@ -1746,8 +1750,9 @@ const docTemplate = `{
                     "type": "boolean"
                 },
                 "template": {
-                    "description": "Template of the prompt. Optional. Might be derived from ModelId\n   [INST]{prompt}[/INST]",
-                    "type": "string"
+                    "description": "Template of the prompt. Optional. Might be derived from ModelId",
+                    "type": "string",
+                    "example": "[INST]{prompt}[/INST]"
                 },
                 "threadId": {
                     "description": "ThreadId is the ID of the thread a prompt belongs to.\nClients subscribe to Thread Streams to see the answer to a prompt,\nor set ` + "`" + `prompt.sync` + "`" + ` to true for a blocking answer.",

@@ -16,8 +16,8 @@ import (
 )
 
 // Add adds a new prompt
-// @Summary Add a new prompt
-// @Description Add a new prompt for a user
+// @Summary Add Prompt
+// @Description Adds a new prompt to the prompt queue and either waits for the response (if `sync` is set to true), or returns immediately.
 // @Tags prompts
 // @Accept json
 // @Produce json

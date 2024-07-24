@@ -146,8 +146,8 @@ const sidebar: SidebarsConfig = {
       items: [
         {
           type: "doc",
-          id: "singulatron/add-a-new-prompt",
-          label: "Add a new prompt",
+          id: "singulatron/add-prompt",
+          label: "Add Prompt",
           className: "api-method post",
         },
         {

@@ -1,11 +1,11 @@
 ---
-id: add-a-new-prompt
-title: "Add a new prompt"
-description: "Add a new prompt for a user"
-sidebar_label: "Add a new prompt"
+id: add-prompt
+title: "Add Prompt"
+description: "Adds a new prompt to the prompt queue and either waits for the response (if `sync` is set to true), or returns immediately."
+sidebar_label: "Add Prompt"
 hide_title: true
 hide_table_of_contents: true
-api: eJztWE2P2zYQ/SsDXnpxdrdFe/GlSLYpsG2TDdYb9GAvkLE4lpiVSC05XK9r+L8XQ0mWbCsJkENO9okakjOPbzgf5lZpCpk3NRtn1VS91hoQLK2h9q6qGVbOA0IM5NVEeXqKFPiN0xs13arMWSbLMsS6Lk2GouXycxBVWxWygiqUUe1dTZ4NhfarqvlUnnlCJv06TR3Cuu6mwATggoBNReBWadwiTduNsxdqonhTk5qqwN7YXO0mirx3/lTvWxEDF8iA3gUCHWVHp5JeKIuydAJmBWg3o7qNPlV8ozuk0ZqnSHDzxyHcUU0lBr6L9lTdP83E2OllT4fXx/HTV/hyR+xbng9Vv9vPQagpMytDGgq3hgrtJllqbIZNYKogFC6WGjyx3wB2htcFWTAMj0R1gES2sfkAi7FMOfkExmkqb0Y4e9dMyCE/x8DJ6szYPJbI3lkQHd5iOeAy6Ro9cn/JDo18aAC3RFYUAuYEhgOVK6D8YmEBYKH+LZB/CoCwRIsWf1+oMSM+2msX7YiZu3amM2RjtSSfYO8Z7bjDkOgU3nUkYNcQGEbZC4wckxuxLG9XajrfKrKxUtN5CjgdS9IqQbOCcqIyV9UlcZImxWmES7Ta2TTO0GYk2x6OzzhRL69E+6tn9BYruT/zlsJZAjIbmBzK7/bmh9LrAZSh/O0e1lD6egDxQMse7u5hcsR7s+I41IS3jc1O3TTb2Ay0N88U5A5zQb5zC2q55SnfdZd+jYYBrYYCbQ7RsikXduBJE0DwdmnD5hfwZgOaVhhLHro8Xe+cOEAdGZwFhKdIkRZWtMvCrDRkGdamLJvVIS4F+DLdD4T7whNqmLEnrC4W9k/n4Sma7DHh08bzBtqD2lzCmZ7Jg5E77VZMtr2GhMGQF5XaARfG5gGEKe+si6HcXCzsjQUuJDVmGCRHEENijR2wjzQIvqVzJaEVtpmqukSmU8bv25kjF8FtWoDlBbwzecGwJNAkjtGw8q6CNjmk8JzfvJ/dP2ybrbv5Zfoci09OLI3lmvt2povPPqU0e/rUtqTSCS3sLhb2OrklHHrjwBeyEAJR0oU2rBt6O3WThXU+kfipPbnQ/aljsy23y9Jlj+K4RsFogou1/lK1/NhNdadLNSIVjaO80yoZNxDIj1H3MclBij8ae0yf7IJ14YSiyjCT/nrR2+0lbvmZMh6V7I7DXNqUNpPfNTHadidG0shUqJT0TKF2NjRV75erq9Oz3P6dEuR3tTGNb2T0leJz7nDOHc65wzl3OOcO59zhnDucc4fzxQ5nN1G/jnUoN/YZS6Phr9nt++/vVfbNwbexNUh+HmHFYuTCefNfk1J/CJLfxjlpy+SMvAR9Sq4/CJIIMU9VovF4kJpSERdOq6mqXWpFa+RCTdVls+QStTAmOO76F7S3Lyi14vBFbNAh9hWqBdgLpB/rv/Y9VS8atkNXg4akX9GZ7CV9qb/qi/BBxW0qjETxMP/1Gvpk1MsGQTwQtoE3pNrYleseFTETMoRqw8KQtCbP5EPj/tT8uMAVJrdK1R55uVRHhXPwXPmNV87W6UwvfFmXaFK+j75MnkqO7XwvXYZOTUUhfp/O1Xa7xEAffbnbifgpkt+o6fxhop7RG1zKaeYPu4kqCLX8e5hv1SNt5A9Ag+7VvViX5WUUFCcXeTfpdrzOMkoYvrx2eDU/3M7u1UQt28dbuRNqqjyuxfe4blh2ia0UFkm2VSXaPGIuaxud8vsfl0nUNg==
+api: eJztWEtv20YQ/iuDvbQFGNst2osuheOmgNsmDiwHPcgGMuKOyI2Xu/Q+LLOC/nsxS1KkJCaHFEgv0omc3Z359punuBGSfO5UHZQ1YiYupfSAYGgNtbNVHSBYCCX1b0+RIgEaCaRCSQ7WqIKHlXVplyNfW+MJvlcr+Ogbk38E5cFTq8dF+iED68BRiM54UFVFUmEg3ZyJTDh6iuTDaysbMduI3JpAJvAj1rVWOTLK80+eoW6Ez0uqkJ9qZ2tyQZHv3qo6HMtzRxhIXqal/Wtf9UuMli8SVEVgV+Orp+PKGgYamprETPjglCnENhPknHXHet+wGEKJAdBZTyAjn+hV0gvlkbdmoFaAppnUreSx4mvZI41GPUWC69/24U5q0ujDbTTH6v5qF6Zuz2d6vC5O377Cl1sKruN5X/Xb3Rr4mnK1UiShtGuo0DTJUmvTNz5QBb60UUsOENcA9obXJRlQAR6Jag+JbGWKERZlAhXkEhgrSV9PcPa2XeBLfoo+JKtzZYqoMThrgHU4g3rEZdI1eeUhyPaNvG8Bd0RW5D0WBCp40iugBJlesKo1q/u7xPAd59sSDRr8dcqQi+bKRjNh6rZb6Y2ZWC3JJeg7Vnv+0CdKmXsZiZMxkegnGfQBQ0yuRK1vVmK22AgysRKzRUo6GTVJkaAZRpmJ3PKNQpImxekJl2ikNek5R5MTH3s4vGMmXl6x9lfP6AxWHEOLjsZ5AjIfmRzLb3fmx9KrEZSx/M0O1lh6OYK4p2UHd/uQHfDe7jhMN+atMfmxm+aNyUE69Uye4zhVzc4tKDnSU83rA5/raaqvJZoCoglK35uRJ5UHxtuXDlOcwesGJK0w6jB2eQrxgoKHOgawBrAt3veGtfPGXCsyAdZK63a3j0sGvkzxgXBXOkIJ8+AIq7N787t18BRV/pjwSeVCA91FTcEpTc/kQHFE21Ug04UhoVfkWKXkVqJM4YGZctbY6HVzdm+uDYSSy2OOntp2kVjresYoAZfWakLDbAeqao2Bjhm/61YOXAQ3aQPqM3irijLAkkASO0bCytkKugKxl6KL63fzu4dNq2K7OE+vU3kaEltTdeeuW+nzdCgv7ZmhzC1JW6Yn2LN7c5Xc4/e9sucT3gieKOlC49ctzb267N5Yl8j82DHQNuSO1dS0EZba5o/swFbBZLGLtfxc5/zQL/W3S/0iNZCD+tMpmTbgyU1R9yHJgQcBVOaQPj4F69IyRZUKgeSXG+C2nTAUl4HZoi/hQ0Gyy0+Uh7TvULI9LAKXUkJX62/bDBZj7UxwMtfOQ6mY/nRxcXzDmz9T+fyqQaf1GD99oT2dZqDTDHSagU4z0GkGOs1ApxnoNAP9hxlom4mfp2aYa/OMWkn4Y37z7uunmd34cIx4GsmPE1wZjKG0Tv3TFtxvguSXaU66RjonxyUhld5vBImFWPjBv54dXFEorRQzUds0rNYYSjET5+2Wc5TMGOO4Hb7CvelrwPir2miGHPpXB3AQ8MQ2vO2mrkE0HpguRiPLsKM3OTUjDCPBxdCs9zpz24k4y8d18vPFbFe7BgCjnB8Juzwd+0CZle2/WGLOLLEPVEjlU2TimZxv4yLNTdaHCpO/udnv/ZsQB5129BX0f/4428VZoJdwXmtUqQFFp1NwpFjalZNMcDQ9ZKLkUJstxGazRE8fnN5uWfwUyTVitnjIxDM6hUvmafGwzURJKPkvzWIjHqnhfyXt7V/dsXXeriOjOMqdbdafuMxzShg+v3ecDe9v5nciE8vumzOHoZgJh2sOMly3/rPJGykTk2wjNJoiYsF7W538+xeG8Thy
 sidebar_class_name: "post api-method"
 custom_edit_url: null
 ---
@@ -27,7 +27,7 @@ import TabItem from "@theme/TabItem";
 <Heading
   as={"h1"}
   className={"openapi__heading"}
-  children={"Add a new prompt"}
+  children={"Add Prompt"}
 >
 </Heading>
 
@@ -40,7 +40,7 @@ import TabItem from "@theme/TabItem";
 
 
 
-Add a new prompt for a user
+Adds a new prompt to the prompt queue and either waits for the response (if `sync` is set to true), or returns immediately.
 
 <Heading
   id={"request"}
@@ -175,10 +175,10 @@ Add a new prompt for a user
               </SchemaItem><SchemaItem
                 collapsible={false}
                 name={"prompt"}
-                required={false}
+                required={true}
                 schemaName={"string"}
                 qualifierMessage={undefined}
-                schema={{"description":"Prompt is the message itself eg.\n   \"What's a banana?\"","type":"string"}}
+                schema={{"description":"Prompt is the message itself eg.","example":"What's a banana?","type":"string"}}
               >
                 
               </SchemaItem><SchemaItem
@@ -214,7 +214,7 @@ Add a new prompt for a user
                 required={false}
                 schemaName={"string"}
                 qualifierMessage={undefined}
-                schema={{"description":"Template of the prompt. Optional. Might be derived from ModelId\n   [INST]{prompt}[/INST]","type":"string"}}
+                schema={{"description":"Template of the prompt. Optional. Might be derived from ModelId","example":"[INST]{prompt}[/INST]","type":"string"}}
               >
                 
               </SchemaItem><SchemaItem
@@ -396,10 +396,10 @@ Add a new prompt for a user
                             </SchemaItem><SchemaItem
                               collapsible={false}
                               name={"prompt"}
-                              required={false}
+                              required={true}
                               schemaName={"string"}
                               qualifierMessage={undefined}
-                              schema={{"description":"Prompt is the message itself eg.\n   \"What's a banana?\"","type":"string"}}
+                              schema={{"description":"Prompt is the message itself eg.","example":"What's a banana?","type":"string"}}
                             >
                               
                             </SchemaItem><SchemaItem
@@ -435,7 +435,7 @@ Add a new prompt for a user
                               required={false}
                               schemaName={"string"}
                               qualifierMessage={undefined}
-                              schema={{"description":"Template of the prompt. Optional. Might be derived from ModelId\n   [INST]{prompt}[/INST]","type":"string"}}
+                              schema={{"description":"Template of the prompt. Optional. Might be derived from ModelId","example":"[INST]{prompt}[/INST]","type":"string"}}
                             >
                               
                             </SchemaItem><SchemaItem
@@ -476,7 +476,7 @@ Add a new prompt for a user
                   value={"Example (from schema)"}
                 >
                   <ResponseSamples
-                    responseExample={"{\n  \"answer\": \"string\",\n  \"prompt\": {\n    \"createdAt\": \"string\",\n    \"error\": \"string\",\n    \"id\": \"string\",\n    \"lastRun\": \"string\",\n    \"maxRetries\": 0,\n    \"modelId\": \"string\",\n    \"prompt\": \"string\",\n    \"runCount\": 0,\n    \"status\": \"scheduled\",\n    \"sync\": true,\n    \"template\": \"string\",\n    \"threadId\": \"string\",\n    \"updatedAt\": \"string\",\n    \"userId\": \"string\"\n  }\n}"}
+                    responseExample={"{\n  \"answer\": \"string\",\n  \"prompt\": {\n    \"createdAt\": \"string\",\n    \"error\": \"string\",\n    \"id\": \"string\",\n    \"lastRun\": \"string\",\n    \"maxRetries\": 0,\n    \"modelId\": \"string\",\n    \"prompt\": \"What's a banana?\",\n    \"runCount\": 0,\n    \"status\": \"scheduled\",\n    \"sync\": true,\n    \"template\": \"[INST]{prompt}[/INST]\",\n    \"threadId\": \"string\",\n    \"updatedAt\": \"string\",\n    \"userId\": \"string\"\n  }\n}"}
                     language={"json"}
                   >
                     

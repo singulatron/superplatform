@@ -414,9 +414,8 @@ definitions:
         description: ModelId is just the Singulatron internal ID of the model.
         type: string
       prompt:
-        description: |-
-          Prompt is the message itself eg.
-             "What's a banana?"
+        description: Prompt is the message itself eg.
+        example: What's a banana?
         type: string
       runCount:
         description: RunCount is the number of times the prompt was retried due to
@@ -435,9 +434,8 @@ definitions:
           In those cases set Sync to true.
         type: boolean
       template:
-        description: |-
-          Template of the prompt. Optional. Might be derived from ModelId
-             [INST]{prompt}[/INST]
+        description: Template of the prompt. Optional. Might be derived from ModelId
+        example: '[INST]{prompt}[/INST]'
         type: string
       threadId:
         description: |-
@@ -451,6 +449,8 @@ definitions:
       userId:
         description: UserId contains the ID of the user who submitted the prompt.
         type: string
+    required:
+    - prompt
     type: object
   prompttypes.PromptStatus:
     enum:
@@ -1080,7 +1080,8 @@ paths:
     post:
       consumes:
       - application/json
-      description: Add a new prompt for a user
+      description: Adds a new prompt to the prompt queue and either waits for the
+        response (if `sync` is set to true), or returns immediately.
       parameters:
       - description: Add Prompt Request
         in: body
@@ -1107,7 +1108,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/prompttypes.ErrorResponse'
-      summary: Add a new prompt
+      summary: Add Prompt
       tags:
       - prompts
   /prompt/list:
