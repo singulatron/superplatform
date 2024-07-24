@@ -1,0 +1,1207 @@
+definitions:
+  chattypes.AddMessageRequest:
+    properties:
+      message:
+        $ref: '#/definitions/chattypes.Message'
+    type: object
+  chattypes.AddThreadRequest:
+    properties:
+      thread:
+        $ref: '#/definitions/chattypes.Thread'
+    type: object
+  chattypes.AddThreadResponse:
+    properties:
+      thread:
+        $ref: '#/definitions/chattypes.Thread'
+    type: object
+  chattypes.Asset:
+    properties:
+      content:
+        description: Content is the base64 encoded binary file direcly embedded in
+          the asset itself
+        type: string
+      createdAt:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      type:
+        type: string
+      updatedAt:
+        type: string
+      url:
+        description: Url of the asset where
+        type: string
+    type: object
+  chattypes.DeleteMessageRequest:
+    properties:
+      messageId:
+        type: string
+    type: object
+  chattypes.DeleteThreadRequest:
+    properties:
+      threadId:
+        type: string
+    type: object
+  chattypes.GetMessagesRequest:
+    properties:
+      threadId:
+        type: string
+    type: object
+  chattypes.GetMessagesResponse:
+    properties:
+      assets:
+        items:
+          $ref: '#/definitions/chattypes.Asset'
+        type: array
+      messages:
+        items:
+          $ref: '#/definitions/chattypes.Message'
+        type: array
+    type: object
+  chattypes.GetThreadRequest:
+    properties:
+      threadId:
+        type: string
+    type: object
+  chattypes.GetThreadResponse:
+    properties:
+      thread:
+        $ref: '#/definitions/chattypes.Thread'
+    type: object
+  chattypes.GetThreadsRequest:
+    type: object
+  chattypes.GetThreadsResponse:
+    properties:
+      threads:
+        items:
+          $ref: '#/definitions/chattypes.Thread'
+        type: array
+    type: object
+  chattypes.Message:
+    properties:
+      assetIds:
+        description: AssetIds defines the attachments the message has.
+        items:
+          type: string
+        type: array
+      content:
+        description: Content of the message eg. "Hi, what's up?"
+        type: string
+      createdAt:
+        type: string
+      id:
+        type: string
+      threadId:
+        description: ThreadId of the message.
+        type: string
+      updatedAt:
+        type: string
+      userId:
+        description: |-
+          UserId is the id of the user who wrote the message.
+          For AI messages this field is empty.
+        type: string
+    type: object
+  chattypes.Thread:
+    properties:
+      createdAt:
+        type: string
+      id:
+        type: string
+      title:
+        description: Title of the thread.
+        type: string
+      topicIds:
+        description: |-
+          TopicIds defines which topics the thread belongs to.
+          Topics can roughly be thought of as tags for threads.
+        items:
+          type: string
+        type: array
+      updatedAt:
+        type: string
+      userIds:
+        description: UserIds the ids of the users who can see this thread.
+        items:
+          type: string
+        type: array
+    type: object
+  chattypes.UpdateThreadRequest:
+    properties:
+      thread:
+        $ref: '#/definitions/chattypes.Thread'
+    type: object
+  configtypes.AppServiceConfig:
+    properties:
+      loggingDisabled:
+        type: boolean
+    type: object
+  configtypes.Config:
+    properties:
+      app:
+        $ref: '#/definitions/configtypes.AppServiceConfig'
+      download:
+        $ref: '#/definitions/configtypes.DownloadServiceConfig'
+      isRuntimeInstalled:
+        description: "* This flag drives a minor UX feature:\n\t * if the user has
+          not installed the runtime we show an INSTALL\n\t * button, but if the user
+          has already installed the runtime we show\n\t * we show a START runtime
+          button.\n\t *"
+        type: boolean
+      model:
+        $ref: '#/definitions/configtypes.ModelServiceConfig'
+    type: object
+  configtypes.ConfigGetResponse:
+    properties:
+      config:
+        $ref: '#/definitions/configtypes.Config'
+    type: object
+  configtypes.DownloadServiceConfig:
+    properties:
+      downloadFolder:
+        type: string
+    type: object
+  configtypes.ModelServiceConfig:
+    properties:
+      currentModelId:
+        type: string
+    type: object
+  datastore.AllCondition:
+    type: object
+  datastore.Condition:
+    properties:
+      all:
+        $ref: '#/definitions/datastore.AllCondition'
+      contains:
+        $ref: '#/definitions/datastore.ContainsCondition'
+      equal:
+        $ref: '#/definitions/datastore.EqualCondition'
+      startsWith:
+        $ref: '#/definitions/datastore.StartsWithCondition'
+    type: object
+  datastore.ContainsCondition:
+    properties:
+      selector:
+        $ref: '#/definitions/datastore.FieldSelector'
+      value: {}
+    type: object
+  datastore.EqualCondition:
+    properties:
+      selector:
+        $ref: '#/definitions/datastore.FieldSelector'
+      value: {}
+    type: object
+  datastore.FieldSelector:
+    properties:
+      any:
+        type: boolean
+      field:
+        type: string
+      oneOf:
+        items:
+          type: string
+        type: array
+    type: object
+  datastore.OrderBy:
+    properties:
+      desc:
+        description: Desc indicates whether the sorting should be in descending order.
+        type: boolean
+      field:
+        description: The field by which to order the results
+        type: string
+      randomize:
+        description: Randomize indicates that the results should be randomized instead
+          of ordered by the `field` and `desc` criteria
+        type: boolean
+    type: object
+  datastore.Query:
+    properties:
+      after:
+        description: |-
+          After is used for paginations. Instead of offset-based pagination,
+          we support cursor-based pagination because it works better in a scalable,
+          distributed environment.
+        items: {}
+        type: array
+      conditions:
+        description: Conditions are filtering options of a query.
+        items:
+          $ref: '#/definitions/datastore.Condition'
+        type: array
+      count:
+        description: |-
+          Count true means return the count of the dataset filtered by Conditions
+          without after or limit.
+        type: boolean
+      limit:
+        description: Limit the number of records in the result set..
+        type: integer
+      orderBys:
+        description: OrderBys orders the result set.
+        items:
+          $ref: '#/definitions/datastore.OrderBy'
+        type: array
+    type: object
+  datastore.StartsWithCondition:
+    properties:
+      selector:
+        $ref: '#/definitions/datastore.FieldSelector'
+      value: {}
+    type: object
+  downloadtypes.DownloadDetails:
+    properties:
+      cancelled:
+        type: boolean
+      dir:
+        type: string
+      downloadedBytes:
+        type: integer
+      error:
+        type: string
+      fileName:
+        type: string
+      filePath:
+        type: string
+      fullFileSize:
+        type: integer
+      id:
+        type: string
+      paused:
+        type: boolean
+      progress:
+        type: number
+      status:
+        type: string
+      url:
+        type: string
+    type: object
+  downloadtypes.DownloadRequest:
+    properties:
+      folderPath:
+        type: string
+      url:
+        type: string
+    type: object
+  downloadtypes.DownloadsResponse:
+    properties:
+      downloads:
+        items:
+          $ref: '#/definitions/downloadtypes.DownloadDetails'
+        type: array
+    type: object
+  generictypes.CreateRequest:
+    properties:
+      object:
+        $ref: '#/definitions/generictypes.GenericObject'
+    type: object
+  generictypes.DeleteRequest:
+    properties:
+      conditions:
+        items:
+          $ref: '#/definitions/datastore.Condition'
+        type: array
+      table:
+        type: string
+    type: object
+  generictypes.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  generictypes.FindRequest:
+    properties:
+      public:
+        type: boolean
+      query:
+        $ref: '#/definitions/datastore.Query'
+      table:
+        type: string
+    type: object
+  generictypes.FindResponse:
+    properties:
+      objects:
+        items:
+          $ref: '#/definitions/generictypes.GenericObject'
+        type: array
+    type: object
+  generictypes.GenericObject:
+    properties:
+      createdAt:
+        type: string
+      data: {}
+      id:
+        type: string
+      public:
+        description: Entry is visible to all users of the app
+        type: boolean
+      table:
+        type: string
+      updatedAt:
+        type: string
+      userId:
+        type: string
+    type: object
+  generictypes.UpdateRequest:
+    properties:
+      conditions:
+        items:
+          $ref: '#/definitions/datastore.Condition'
+        type: array
+      object:
+        $ref: '#/definitions/generictypes.GenericObject'
+      table:
+        type: string
+    type: object
+  generictypes.UpsertRequest:
+    properties:
+      object:
+        $ref: '#/definitions/generictypes.GenericObject'
+    type: object
+  prompttypes.AddPromptRequest:
+    properties:
+      prompt:
+        $ref: '#/definitions/prompttypes.Prompt'
+    type: object
+  prompttypes.AddPromptResponse:
+    properties:
+      answer:
+        type: string
+      prompt:
+        $ref: '#/definitions/prompttypes.Prompt'
+    type: object
+  prompttypes.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  prompttypes.ListPromptsRequest:
+    properties:
+      query:
+        $ref: '#/definitions/datastore.Query'
+    type: object
+  prompttypes.ListPromptsResponse:
+    properties:
+      after: {}
+      count:
+        type: integer
+      prompts:
+        items:
+          $ref: '#/definitions/prompttypes.Prompt'
+        type: array
+    type: object
+  prompttypes.Prompt:
+    properties:
+      createdAt:
+        description: CreatedAt is the time of the prompt creation.
+        type: string
+      error:
+        description: Error that arose during prompt execution, if any.
+        type: string
+      id:
+        description: Id is the unique ID of the prompt.
+        type: string
+      lastRun:
+        description: LastRun is the time of the last prompt run.
+        type: string
+      maxRetries:
+        description: MaxRetries specified how many times the system should retry a
+          prompt when it keeps erroring.
+        type: integer
+      modelId:
+        description: ModelId is just the Singulatron internal ID of the model.
+        type: string
+      prompt:
+        description: |-
+          Prompt is the message itself eg.
+             "What's a banana?"
+        type: string
+      runCount:
+        description: RunCount is the number of times the prompt was retried due to
+          errors
+        type: integer
+      status:
+        allOf:
+        - $ref: '#/definitions/prompttypes.PromptStatus'
+        description: Status of the prompt.
+      sync:
+        description: |-
+          Sync drives whether prompt add request should wait and hang until
+          the prompt is done executing. By default the prompt just gets put on a queue
+          and the client will just subscribe to a Thread Stream.
+          For quick and dirty scripting however it's often times easier to do things syncronously.
+          In those cases set Sync to true.
+        type: boolean
+      template:
+        description: |-
+          Template of the prompt. Optional. Might be derived from ModelId
+             [INST]{prompt}[/INST]
+        type: string
+      threadId:
+        description: |-
+          ThreadId is the ID of the thread a prompt belongs to.
+          Clients subscribe to Thread Streams to see the answer to a prompt,
+          or set `prompt.sync` to true for a blocking answer.
+        type: string
+      updatedAt:
+        description: UpdatedAt is the last time the prompt was updated.
+        type: string
+      userId:
+        description: UserId contains the ID of the user who submitted the prompt.
+        type: string
+    type: object
+  prompttypes.PromptStatus:
+    enum:
+    - scheduled
+    - running
+    - completed
+    - errored
+    - abandoned
+    - canceled
+    type: string
+    x-enum-varnames:
+    - PromptStatusScheduled
+    - PromptStatusRunning
+    - PromptStatusCompleted
+    - PromptStatusErrored
+    - PromptStatusAbandoned
+    - PromptStatusCanceled
+  prompttypes.RemovePromptRequest:
+    properties:
+      prompt:
+        $ref: '#/definitions/prompttypes.Prompt'
+    type: object
+info:
+  contact: {}
+paths:
+  /chat/message/add:
+    post:
+      consumes:
+      - application/json
+      description: Add a new message to a specific chat thread
+      parameters:
+      - description: Add Message Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/chattypes.AddMessageRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Message successfully added
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid JSON
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Send a new message to a chat thread
+      tags:
+      - chat
+  /chat/message/delete:
+    post:
+      consumes:
+      - application/json
+      description: Delete a specific message from a chat thread by its ID
+      parameters:
+      - description: Delete Message Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/chattypes.DeleteMessageRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Message successfully deleted
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid JSON
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Remove a message from a chat thread
+      tags:
+      - chat
+  /chat/messages:
+    post:
+      consumes:
+      - application/json
+      description: Fetch messages for a specific chat thread and associated assets
+      parameters:
+      - description: Get Messages Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/chattypes.GetMessagesRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Messages and assets successfully retrieved
+          schema:
+            $ref: '#/definitions/chattypes.GetMessagesResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Retrieve messages from a chat thread
+      tags:
+      - chat
+  /chat/thread:
+    post:
+      consumes:
+      - application/json
+      description: Fetch information about a specific chat thread by its ID
+      parameters:
+      - description: Get Thread Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/chattypes.GetThreadRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Thread details successfully retrieved
+          schema:
+            $ref: '#/definitions/chattypes.GetThreadResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Retrieve details of a chat thread
+      tags:
+      - chat
+  /chat/thread/add:
+    post:
+      consumes:
+      - application/json
+      description: Create a new chat thread and add the requesting user to it
+      parameters:
+      - description: Add Thread Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/chattypes.AddThreadRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Thread successfully created
+          schema:
+            $ref: '#/definitions/chattypes.AddThreadResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Create a new chat thread
+      tags:
+      - chat
+  /chat/thread/delete:
+    post:
+      consumes:
+      - application/json
+      description: Delete a specific chat thread by its ID
+      parameters:
+      - description: Delete Thread Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/chattypes.DeleteThreadRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Thread successfully deleted
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid JSON
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Remove a chat thread
+      tags:
+      - chat
+  /chat/thread/update:
+    post:
+      consumes:
+      - application/json
+      description: Modify the details of a specific chat thread
+      parameters:
+      - description: Update Thread Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/chattypes.UpdateThreadRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Thread successfully updated
+          schema:
+            $ref: '#/definitions/chattypes.AddThreadResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Update an existing chat thread
+      tags:
+      - chat
+  /chat/threads:
+    post:
+      consumes:
+      - application/json
+      description: Fetch all chat threads associated with a specific user
+      parameters:
+      - description: Get Threads Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/chattypes.GetThreadsRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Threads successfully retrieved
+          schema:
+            $ref: '#/definitions/chattypes.GetThreadsResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Retrieve a list of chat threads for a user
+      tags:
+      - chat
+  /config/get:
+    post:
+      consumes:
+      - application/json
+      description: Fetch the current configuration from the server
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Current configuration retrieved successfully
+          schema:
+            $ref: '#/definitions/configtypes.ConfigGetResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Retrieve the current configuration
+      tags:
+      - config
+  /download/do:
+    post:
+      consumes:
+      - application/json
+      description: Start a download for a specified URL and folder path
+      parameters:
+      - description: Download Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/downloadtypes.DownloadRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Download initiated successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid JSON
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Initiate a file download
+      tags:
+      - download
+  /download/list:
+    post:
+      consumes:
+      - application/json
+      description: Fetch a list of all download details
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of downloads
+          schema:
+            $ref: '#/definitions/downloadtypes.DownloadsResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Retrieve download details
+      tags:
+      - download
+  /download/pause:
+    post:
+      consumes:
+      - application/json
+      description: Pause a download that is currently in progress
+      parameters:
+      - description: Download request payload
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/downloadtypes.DownloadRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid JSON
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Pause an ongoing download
+      tags:
+      - download
+  /firehose/subscribe:
+    get:
+      consumes:
+      - application/json
+      description: Establish a subscription to firehose events and stream them to
+        the client in real-time.
+      produces:
+      - text/event-stream
+      responses:
+        "200":
+          description: Event data
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Subscribe to firehose events
+      tags:
+      - firehose
+  /generic/create:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new object with the provided details. Requires authorization
+        and user authentication.
+      parameters:
+      - description: Create request payload
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/generictypes.CreateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/generictypes.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/generictypes.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/generictypes.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create a new generic object
+      tags:
+      - generic
+  /generic/delete:
+    post:
+      consumes:
+      - application/json
+      description: Removes a generic object from the system based on the provided
+        conditions. Requires authorization and user authentication.
+      parameters:
+      - description: Delete request payload
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/generictypes.DeleteRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful deletion of object
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/generictypes.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/generictypes.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/generictypes.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete a generic object
+      tags:
+      - generic
+  /generic/find:
+    post:
+      consumes:
+      - application/json
+      description: Retrieves objects from a specified table based on search criteria.
+        Requires authorization and user authentication.
+      parameters:
+      - description: Find request payload
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/generictypes.FindRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful retrieval of objects
+          schema:
+            $ref: '#/definitions/generictypes.FindResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/generictypes.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/generictypes.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/generictypes.ErrorResponse'
+      summary: Retrieve generic objects based on criteria
+      tags:
+      - generic
+  /generic/update:
+    post:
+      consumes:
+      - application/json
+      description: Updates objects in a specified table based on provided conditions.
+        Requires authorization and user authentication.
+      parameters:
+      - description: Update request payload
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/generictypes.UpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful update of objects
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/generictypes.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/generictypes.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/generictypes.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update generic objects based on conditions
+      tags:
+      - generic
+  /generic/upsert:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new generic object or updates an existing one based on
+        the provided data. Requires authorization and user authentication.
+      parameters:
+      - description: Upsert request payload
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/generictypes.UpsertRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful creation or update of object
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/generictypes.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/generictypes.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/generictypes.ErrorResponse'
+      summary: Create or update a generic object
+      tags:
+      - generic
+  /prompt/add:
+    post:
+      consumes:
+      - application/json
+      description: Add a new prompt for a user
+      parameters:
+      - description: Add Prompt Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/prompttypes.AddPromptRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/prompttypes.AddPromptResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/prompttypes.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/prompttypes.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/prompttypes.ErrorResponse'
+      summary: Add a new prompt
+      tags:
+      - prompts
+  /prompt/list:
+    post:
+      consumes:
+      - application/json
+      description: List prompts with specific criteria
+      parameters:
+      - description: List Prompts Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/prompttypes.ListPromptsRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/prompttypes.ListPromptsResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/prompttypes.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/prompttypes.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/prompttypes.ErrorResponse'
+      summary: List prompts
+      tags:
+      - prompts
+  /prompt/remove:
+    post:
+      consumes:
+      - application/json
+      description: Remove a prompt
+      parameters:
+      - description: Remove Prompt Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/prompttypes.RemovePromptRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{}'
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/prompttypes.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/prompttypes.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/prompttypes.ErrorResponse'
+      summary: Remove a prompt
+      tags:
+      - prompts
+  /prompt/subscribe:
+    get:
+      description: Subscribe to prompt responses via Server-Sent Events (SSE)
+      parameters:
+      - description: Thread ID
+        in: query
+        name: threadId
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Streaming response
+          schema:
+            type: string
+        "400":
+          description: Missing threadId parameter
+          schema:
+            $ref: '#/definitions/prompttypes.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/prompttypes.ErrorResponse'
+      summary: Subscribe to prompt responses
+      tags:
+      - prompts
+swagger: "2.0"
