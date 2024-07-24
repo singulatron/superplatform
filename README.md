@@ -15,10 +15,12 @@
 ![backend build](https://github.com/singulatron/singulatron/actions/workflows/backend-build-github.yaml/badge.svg)
 ![frontend build](https://github.com/singulatron/singulatron/actions/workflows/frontend-container-build-github.yaml/badge.svg)
 
-Singulatron is an open-source server daemon and web client that empowers you to self-host and interact with LLMs.
-It's also a framework and ecosystem that lets you build AI based apps quickly.
+Singulatron is a rapid prototyping environment for the AI age. It aims to serve the hackers (or at least the author(s)) who embark on AIifying the world over the next decade.
 
-It goes beyond chat functionality, enabling you to develop language-agnostic applications by harnessing Singulatron's AI infrastructure. Dive in and start building today!
+During his 20+ years of building hundreds of different projects, the author was always drawn to building development platforms ([1backend](https://github.com/1backend/1backend), [micro](https://github.com/micro/micro)), ORMs ([gocassa](https://github.com/gocassa/gocassa)) and various other productivity tools ([ok-borg](https://github.com/ok-borg/borg)).
+Singulatron is a bit of all of the above.
+
+It's an open-source server daemon and web client that empowers you to self-host and interact with LLMs and more; it's also a framework and ecosystem that lets you build AI based apps quickly.
 
 ## Roadmap
 
