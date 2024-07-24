@@ -893,7 +893,7 @@ var Models = []*Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/Mixtral-8x7B-v0.1-GGUF/resolve/main/mixtral-8x7b-v0.1.Q2_K.gguf?download=true",
 		},
-		PlatformId:     "PlatformLlamaCpp.Id",
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "Mixtral",
 		Parameters:     "8x7B",
 		Flavour:        "Instruct",
@@ -912,7 +912,7 @@ var Models = []*Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/Mixtral-8x7B-v0.1-GGUF/resolve/main/mixtral-8x7b-v0.1.Q3_K_M.gguf?download=true",
 		},
-		PlatformId:     "PlatformLlamaCpp.Id",
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "Mixtral",
 		Parameters:     "8x7B",
 		Flavour:        "Instruct",
@@ -931,7 +931,7 @@ var Models = []*Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/Mixtral-8x7B-v0.1-GGUF/resolve/main/mixtral-8x7b-v0.1.Q4_0.gguf?download=true",
 		},
-		PlatformId:     "PlatformLlamaCpp.Id",
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "Mixtral",
 		Parameters:     "8x7B",
 		Flavour:        "Instruct",
@@ -950,7 +950,7 @@ var Models = []*Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/Mixtral-8x7B-v0.1-GGUF/resolve/main/mixtral-8x7b-v0.1.Q4_K_M.gguf?download=true",
 		},
-		PlatformId:     "PlatformLlamaCpp.Id",
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "Mixtral",
 		Parameters:     "8x7B",
 		Flavour:        "Instruct",
@@ -969,7 +969,7 @@ var Models = []*Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/Mixtral-8x7B-v0.1-GGUF/resolve/main/mixtral-8x7b-v0.1.Q5_0.gguf?download=true",
 		},
-		PlatformId:     "PlatformLlamaCpp.Id",
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "Mixtral",
 		Parameters:     "8x7B",
 		Flavour:        "Instruct",
@@ -988,7 +988,7 @@ var Models = []*Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/Mixtral-8x7B-v0.1-GGUF/resolve/main/mixtral-8x7b-v0.1.Q5_K_M.gguf?download=true",
 		},
-		PlatformId:     "PlatformLlamaCpp.Id",
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "Mixtral",
 		Parameters:     "8x7B",
 		Flavour:        "Instruct",
@@ -1007,7 +1007,7 @@ var Models = []*Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/Mixtral-8x7B-v0.1-GGUF/resolve/main/mixtral-8x7b-v0.1.Q6_K.gguf?download=true",
 		},
-		PlatformId:     "PlatformLlamaCpp.Id",
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "Mixtral",
 		Parameters:     "8x7B",
 		Flavour:        "Instruct",
@@ -1026,7 +1026,7 @@ var Models = []*Model{
 		Assets: map[string]string{
 			"MODEL": "https://huggingface.co/TheBloke/Mixtral-8x7B-v0.1-GGUF/resolve/main/mixtral-8x7b-v0.1.Q8_0.gguf?download=true",
 		},
-		PlatformId:     "PlatformLlamaCpp.Id",
+		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "Mixtral",
 		Parameters:     "8x7B",
 		Flavour:        "Instruct",
