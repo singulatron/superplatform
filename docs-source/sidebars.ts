@@ -23,7 +23,7 @@ const sidebars: SidebarsConfig = {
         type: "generated-index",
         title: "Singulatron API",
         description: "Singuatron API sidebar",
-        slug: "/category/petstore-api",
+        slug: "/category/singulatron-api",
       },
       // @ts-ignore
       items: require("./docs/singulatron/sidebar.js"),
