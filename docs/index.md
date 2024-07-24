@@ -23,11 +23,7 @@ It goes beyond chat functionality, enabling you to develop language-agnostic app
 
 ## Start
 
-To deploy Singulatron on your servers, or even to lauch on your own laptop, see [Start](./start/).
-
-## Contribute
-
-If you want to join the work on Singulatron itself, look at [Contribute](./contribute/).
+To deploy Singulatron on your servers, or even to lauch on your own laptop, see [Start](./category/start/).
 
 ## Privacy Notice
 
