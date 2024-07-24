@@ -5,7 +5,7 @@ on:
     branches:
       - "**"
     paths:
-      - ".github/workflows/localtron-container-build-github.yaml"
+      - ".github/workflows/backend-container-build-github.yaml"
       - "localtron/**"
 
 env:

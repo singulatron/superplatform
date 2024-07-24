@@ -5,7 +5,7 @@ on:
     paths:
       - "dapper/**"
       - "localtron/**"
-      - ".github/workflows/localtron-build-github.yaml"
+      - ".github/workflows/backend-build-github.yaml"
 
 jobs:
   test:
