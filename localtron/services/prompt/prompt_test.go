@@ -21,10 +21,12 @@ func TestAddPromptCreatesThread(t *testing.T) {
 	promptId := uuid.New().String()
 	threadId := uuid.New().String()
 	t.Run("add prompt", func(t *testing.T) {
-		_, err := ps.AddPrompt(context.Background(), &prompttypes.Prompt{
-			Id:       promptId,
-			Prompt:   "hi",
-			ThreadId: threadId,
+		_, err := ps.AddPrompt(context.Background(), &prompttypes.AddPromptRequest{
+			PromptCreateFields: prompttypes.PromptCreateFields{
+				Id:       promptId,
+				Prompt:   "hi",
+				ThreadId: threadId,
+			},
 		})
 		require.NoError(t, err)
 	})

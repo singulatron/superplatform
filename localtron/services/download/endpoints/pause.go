@@ -12,12 +12,11 @@ import (
 	"net/http"
 
 	downloadtypes "github.com/singulatron/singulatron/localtron/services/download/types"
-	types "github.com/singulatron/singulatron/localtron/services/download/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // Pause pauses an ongoing download
-// @Summary Pause an ongoing download
+// @Summary Pause
 // @Description Pause a download that is currently in progress
 // @Tags download
 // @Accept json
@@ -34,13 +33,13 @@ func Pause(
 	userService usertypes.UserServiceI,
 	ds downloadtypes.DownloadServiceI,
 ) {
-	err := userService.IsAuthorized(types.PermissionDownloadEdit.Id, r)
+	err := userService.IsAuthorized(downloadtypes.PermissionDownloadEdit.Id, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 
-	req := types.DownloadRequest{}
+	req := downloadtypes.DownloadRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `invalid JSON`, http.StatusBadRequest)

@@ -136,9 +136,11 @@ func TestAddPrompt(t *testing.T) {
 
 	ps := universe.PromptService
 
-	prompt, err := ps.AddPrompt(context.Background(), &prompttypes.Prompt{
-		Sync:   true,
-		Prompt: "Hi there, how are you?",
+	prompt, err := ps.AddPrompt(context.Background(), &prompttypes.AddPromptRequest{
+		PromptCreateFields: prompttypes.PromptCreateFields{
+			Sync:   true,
+			Prompt: "Hi there, how are you?",
+		},
 	})
 
 	require.NoError(t, err)

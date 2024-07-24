@@ -122,7 +122,7 @@ func HttpHandler(universe *Universe) *http.ServeMux {
 	}))
 
 	router.HandleFunc("/prompt/remove", appl(func(w http.ResponseWriter, r *http.Request) {
-		promptendpoints.Remove(w, r, universe.UserService, universe.PromptService)
+		promptendpoints.RemovePrompt(w, r, universe.UserService, universe.PromptService)
 	}))
 
 	router.HandleFunc("/prompt/subscribe", appl(func(w http.ResponseWriter, r *http.Request) {

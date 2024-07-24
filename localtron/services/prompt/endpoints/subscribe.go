@@ -20,7 +20,7 @@ import (
 )
 
 // Subscribe streams prompt responses to the client
-// @Summary Subscribe to prompt responses
+// @Summary Subscribe to Prompt
 // @Description Subscribe to prompt responses via Server-Sent Events (SSE)
 // @Tags prompts
 // @Param threadId query string true "Thread ID"

@@ -15,9 +15,9 @@ import (
 )
 
 type PromptServiceI interface {
-	AddPrompt(ctx context.Context, prompt *Prompt) (*AddPromptResponse, error)
+	AddPrompt(ctx context.Context, prompt *AddPromptRequest) (*AddPromptResponse, error)
 	ListPrompts(options *ListPromptOptions) ([]*Prompt, int64, error)
-	Remove(prompt *Prompt) error
+	RemovePrompt(promptId string) error
 	Subscribe(threadId string, subscriber SubscriberChan)
 	Unsubscribe(threadId string, subscriber SubscriberChan)
 	Broadcast(threadId string, response *llm.CompletionResponse)

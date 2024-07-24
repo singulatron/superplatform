@@ -12,17 +12,16 @@ import (
 	"net/http"
 
 	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
-	types "github.com/singulatron/singulatron/localtron/services/chat/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // DeleteMessage removes a message from a chat thread
-// @Summary Remove a message from a chat thread
+// @Summary Delete Message
 // @Description Delete a specific message from a chat thread by its ID
 // @Tags chat
 // @Accept json
 // @Produce json
-// @Param request body types.DeleteMessageRequest true "Delete Message Request"
+// @Param request body chattypes.DeleteMessageRequest true "Delete Message Request"
 // @Success 200 {object} map[string]any "Message successfully deleted"
 // @Failure 400 {string} string "Invalid JSON"
 // @Failure 401 {string} string "Unauthorized"
@@ -34,13 +33,13 @@ func DeleteMessage(
 	userService usertypes.UserServiceI,
 	ds chattypes.ChatServiceI,
 ) {
-	err := userService.IsAuthorized(types.PermissionMessageDelete.Id, r)
+	err := userService.IsAuthorized(chattypes.PermissionMessageDelete.Id, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 
-	req := types.DeleteMessageRequest{}
+	req := chattypes.DeleteMessageRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `invalid JSON`, http.StatusBadRequest)

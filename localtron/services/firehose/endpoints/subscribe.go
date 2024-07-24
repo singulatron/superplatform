@@ -19,7 +19,7 @@ import (
 )
 
 // Subscribe subscribes to a firehose stream and streams events to the client
-// @Summary Subscribe to firehose events
+// @Summary Subscribe
 // @Description Establish a subscription to firehose events and stream them to the client in real-time.
 // @Tags firehose
 // @Accept json

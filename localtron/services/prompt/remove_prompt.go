@@ -16,17 +16,13 @@ import (
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
 )
 
-func (p *PromptService) Remove(prompt *prompttypes.Prompt) error {
-	if prompt.Status != prompttypes.PromptStatusScheduled {
-		return nil
-	}
-
+func (p *PromptService) RemovePrompt(promptId string) error {
 	logger.Info("Removing prompt",
-		slog.String("promptId", prompt.Id),
+		slog.String("promptId", promptId),
 	)
 
 	err := p.promptsStore.Query(
-		datastore.Id(prompt.Id),
+		datastore.Id(promptId),
 	).Delete()
 
 	if err != nil {
@@ -34,7 +30,7 @@ func (p *PromptService) Remove(prompt *prompttypes.Prompt) error {
 	}
 
 	p.firehoseService.Publish(prompttypes.EventPromptRemoved{
-		PromptId: prompt.Id,
+		PromptId: promptId,
 	})
 
 	return nil

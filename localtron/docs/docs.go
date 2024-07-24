@@ -662,7 +662,7 @@ const docTemplate = `{
                 "tags": [
                     "generic"
                 ],
-                "summary": "Create a new generic object",
+                "summary": "Create",
                 "parameters": [
                     {
                         "description": "Create request payload",
@@ -720,7 +720,7 @@ const docTemplate = `{
                 "tags": [
                     "generic"
                 ],
-                "summary": "Delete a generic object",
+                "summary": "Delete",
                 "parameters": [
                     {
                         "description": "Delete request payload",
@@ -773,7 +773,7 @@ const docTemplate = `{
                 "tags": [
                     "generic"
                 ],
-                "summary": "Retrieve generic objects based on criteria",
+                "summary": "Find",
                 "parameters": [
                     {
                         "description": "Find request payload",
@@ -830,7 +830,7 @@ const docTemplate = `{
                 "tags": [
                     "generic"
                 ],
-                "summary": "Update generic objects based on conditions",
+                "summary": "Update",
                 "parameters": [
                     {
                         "description": "Update request payload",
@@ -883,7 +883,7 @@ const docTemplate = `{
                 "tags": [
                     "generic"
                 ],
-                "summary": "Create or update a generic object",
+                "summary": "Upsert",
                 "parameters": [
                     {
                         "description": "Upsert request payload",
@@ -926,7 +926,7 @@ const docTemplate = `{
         },
         "/prompt/add": {
             "post": {
-                "description": "Add a new prompt for a user",
+                "description": "Adds a new prompt to the prompt queue and either waits for the response (if ` + "`" + `sync` + "`" + ` is set to true), or returns immediately.",
                 "consumes": [
                     "application/json"
                 ],
@@ -936,7 +936,7 @@ const docTemplate = `{
                 "tags": [
                     "prompts"
                 ],
-                "summary": "Add a new prompt",
+                "summary": "Add Prompt",
                 "parameters": [
                     {
                         "description": "Add Prompt Request",
@@ -978,7 +978,7 @@ const docTemplate = `{
         },
         "/prompt/list": {
             "post": {
-                "description": "List prompts with specific criteria",
+                "description": "List prompts that satisfy a query.",
                 "consumes": [
                     "application/json"
                 ],
@@ -988,7 +988,7 @@ const docTemplate = `{
                 "tags": [
                     "prompts"
                 ],
-                "summary": "List prompts",
+                "summary": "List Prompts",
                 "parameters": [
                     {
                         "description": "List Prompts Request",
@@ -1030,7 +1030,7 @@ const docTemplate = `{
         },
         "/prompt/remove": {
             "post": {
-                "description": "Remove a prompt",
+                "description": "Remove a prompt by ID.",
                 "consumes": [
                     "application/json"
                 ],
@@ -1040,7 +1040,7 @@ const docTemplate = `{
                 "tags": [
                     "prompts"
                 ],
-                "summary": "Remove a prompt",
+                "summary": "Remove Prompt",
                 "parameters": [
                     {
                         "description": "Remove Prompt Request",
@@ -1087,7 +1087,7 @@ const docTemplate = `{
                 "tags": [
                     "prompts"
                 ],
-                "summary": "Subscribe to prompt responses",
+                "summary": "Subscribe to Prompt",
                 "parameters": [
                     {
                         "type": "string",
@@ -1600,11 +1600,18 @@ const docTemplate = `{
         },
         "generictypes.GenericObject": {
             "type": "object",
+            "required": [
+                "data",
+                "table"
+            ],
             "properties": {
                 "createdAt": {
                     "type": "string"
                 },
-                "data": {},
+                "data": {
+                    "type": "object",
+                    "additionalProperties": {}
+                },
                 "id": {
                     "type": "string"
                 },
@@ -1650,9 +1657,45 @@ const docTemplate = `{
         },
         "prompttypes.AddPromptRequest": {
             "type": "object",
+            "required": [
+                "prompt"
+            ],
             "properties": {
+                "id": {
+                    "description": "Id is the unique ID of the prompt.",
+                    "type": "string"
+                },
+                "maxRetries": {
+                    "description": "MaxRetries specified how many times the system should retry a prompt when it keeps erroring.",
+                    "type": "integer",
+                    "example": 10
+                },
+                "modelId": {
+                    "description": "ModelId is just the Singulatron internal ID of the model.",
+                    "type": "string",
+                    "example": "huggingface/TheBloke/mistral-7b-instruct-v0.2.Q3_K_S.gguf"
+                },
                 "prompt": {
-                    "$ref": "#/definitions/prompttypes.Prompt"
+                    "description": "Prompt is the message itself eg.",
+                    "type": "string",
+                    "example": "What's a banana?"
+                },
+                "sync": {
+                    "description": "Sync drives whether prompt add request should wait and hang until\nthe prompt is done executing. By default the prompt just gets put on a queue\nand the client will just subscribe to a Thread Stream.\nFor quick and dirty scripting however it's often times easier to do things syncronously.\nIn those cases set Sync to true.",
+                    "type": "boolean"
+                },
+                "template": {
+                    "description": "Template of the prompt. Optional. Might be derived from ModelId",
+                    "type": "string",
+                    "example": "[INST]{prompt}[/INST]"
+                },
+                "threadId": {
+                    "description": "ThreadId is the ID of the thread a prompt belongs to.\nClients subscribe to Thread Streams to see the answer to a prompt,\nor set ` + "`" + `prompt.sync` + "`" + ` to true for a blocking answer.",
+                    "type": "string"
+                },
+                "userId": {
+                    "description": "UserId contains the ID of the user who submitted the prompt.",
+                    "type": "string"
                 }
             }
         },
@@ -1700,6 +1743,9 @@ const docTemplate = `{
         },
         "prompttypes.Prompt": {
             "type": "object",
+            "required": [
+                "prompt"
+            ],
             "properties": {
                 "createdAt": {
                     "description": "CreatedAt is the time of the prompt creation.",
@@ -1719,15 +1765,18 @@ const docTemplate = `{
                 },
                 "maxRetries": {
                     "description": "MaxRetries specified how many times the system should retry a prompt when it keeps erroring.",
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 10
                 },
                 "modelId": {
                     "description": "ModelId is just the Singulatron internal ID of the model.",
-                    "type": "string"
+                    "type": "string",
+                    "example": "huggingface/TheBloke/mistral-7b-instruct-v0.2.Q3_K_S.gguf"
                 },
                 "prompt": {
-                    "description": "Prompt is the message itself eg.\n   \"What's a banana?\"",
-                    "type": "string"
+                    "description": "Prompt is the message itself eg.",
+                    "type": "string",
+                    "example": "What's a banana?"
                 },
                 "runCount": {
                     "description": "RunCount is the number of times the prompt was retried due to errors",
@@ -1746,8 +1795,9 @@ const docTemplate = `{
                     "type": "boolean"
                 },
                 "template": {
-                    "description": "Template of the prompt. Optional. Might be derived from ModelId\n   [INST]{prompt}[/INST]",
-                    "type": "string"
+                    "description": "Template of the prompt. Optional. Might be derived from ModelId",
+                    "type": "string",
+                    "example": "[INST]{prompt}[/INST]"
                 },
                 "threadId": {
                     "description": "ThreadId is the ID of the thread a prompt belongs to.\nClients subscribe to Thread Streams to see the answer to a prompt,\nor set ` + "`" + `prompt.sync` + "`" + ` to true for a blocking answer.",
@@ -1785,8 +1835,8 @@ const docTemplate = `{
         "prompttypes.RemovePromptRequest": {
             "type": "object",
             "properties": {
-                "prompt": {
-                    "$ref": "#/definitions/prompttypes.Prompt"
+                "promptId": {
+                    "type": "string"
                 }
             }
         }

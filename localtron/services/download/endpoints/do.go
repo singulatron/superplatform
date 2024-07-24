@@ -16,7 +16,7 @@ import (
 )
 
 // Do initiates a download request
-// @Summary Initiate a file download
+// @Summary Do
 // @Description Start a download for a specified URL and folder path
 // @Tags download
 // @Accept json
