@@ -891,7 +891,7 @@ var Models = []*Model{
 	{
 		Id: "huggingface/TheBloke/mixtral-8x7b-instruct-v0.1.Q2_K.gguf",
 		Assets: map[string]string{
-			"MODEL": "https://huggingface.co/TheBloke/Mixtral-8x7B-v0.1-GGUF/resolve/main/mixtral-8x7b-v0.1.Q2_K.gguf?download=true",
+			"MODEL": "https://huggingface.co/TheBloke/Mixtral-8x7B-Instruct-v0.1-GGUF/resolve/main/mixtral-8x7b-instruct-v0.1.Q2_K.gguf?download=true",
 		},
 		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "Mixtral",
@@ -910,7 +910,7 @@ var Models = []*Model{
 	{
 		Id: "huggingface/TheBloke/mixtral-8x7b-instruct-v0.1.Q3_K_M.gguf",
 		Assets: map[string]string{
-			"MODEL": "https://huggingface.co/TheBloke/Mixtral-8x7B-v0.1-GGUF/resolve/main/mixtral-8x7b-v0.1.Q3_K_M.gguf?download=true",
+			"MODEL": "https://huggingface.co/TheBloke/Mixtral-8x7B-Instruct-v0.1-GGUF/resolve/main/mixtral-8x7b-instruct-v0.1.Q3_K_M.gguf?download=true",
 		},
 		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "Mixtral",
@@ -929,7 +929,7 @@ var Models = []*Model{
 	{
 		Id: "huggingface/TheBloke/mixtral-8x7b-instruct-v0.1.Q4_0.gguf",
 		Assets: map[string]string{
-			"MODEL": "https://huggingface.co/TheBloke/Mixtral-8x7B-v0.1-GGUF/resolve/main/mixtral-8x7b-v0.1.Q4_0.gguf?download=true",
+			"MODEL": "https://huggingface.co/TheBloke/Mixtral-8x7B-Instruct-v0.1-GGUF/resolve/main/mixtral-8x7b-instruct-v0.1.Q4_0.gguf?download=true",
 		},
 		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "Mixtral",
@@ -948,7 +948,7 @@ var Models = []*Model{
 	{
 		Id: "huggingface/TheBloke/mixtral-8x7b-instruct-v0.1.Q4_K_M.gguf",
 		Assets: map[string]string{
-			"MODEL": "https://huggingface.co/TheBloke/Mixtral-8x7B-v0.1-GGUF/resolve/main/mixtral-8x7b-v0.1.Q4_K_M.gguf?download=true",
+			"MODEL": "https://huggingface.co/TheBloke/Mixtral-8x7B-Instruct-v0.1-GGUF/resolve/main/mixtral-8x7b-instruct-v0.1.Q4_K_M.gguf?download=true",
 		},
 		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "Mixtral",
@@ -967,7 +967,7 @@ var Models = []*Model{
 	{
 		Id: "huggingface/TheBloke/mixtral-8x7b-instruct-v0.1.Q5_0.gguf",
 		Assets: map[string]string{
-			"MODEL": "https://huggingface.co/TheBloke/Mixtral-8x7B-v0.1-GGUF/resolve/main/mixtral-8x7b-v0.1.Q5_0.gguf?download=true",
+			"MODEL": "https://huggingface.co/TheBloke/Mixtral-8x7B-Instruct-v0.1-GGUF/resolve/main/mixtral-8x7b-instruct-v0.1.Q5_0.gguf?download=true",
 		},
 		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "Mixtral",
@@ -986,7 +986,7 @@ var Models = []*Model{
 	{
 		Id: "huggingface/TheBloke/mixtral-8x7b-instruct-v0.1.Q5_K_M.gguf",
 		Assets: map[string]string{
-			"MODEL": "https://huggingface.co/TheBloke/Mixtral-8x7B-v0.1-GGUF/resolve/main/mixtral-8x7b-v0.1.Q5_K_M.gguf?download=true",
+			"MODEL": "https://huggingface.co/TheBloke/Mixtral-8x7B-Instruct-v0.1-GGUF/resolve/main/mixtral-8x7b-instruct-v0.1.Q5_K_M.gguf?download=true",
 		},
 		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "Mixtral",
@@ -1005,7 +1005,7 @@ var Models = []*Model{
 	{
 		Id: "huggingface/TheBloke/mixtral-8x7b-instruct-v0.1.Q6_K.gguf",
 		Assets: map[string]string{
-			"MODEL": "https://huggingface.co/TheBloke/Mixtral-8x7B-v0.1-GGUF/resolve/main/mixtral-8x7b-v0.1.Q6_K.gguf?download=true",
+			"MODEL": "https://huggingface.co/TheBloke/Mixtral-8x7B-Instruct-v0.1-GGUF/resolve/main/mixtral-8x7b-instruct-v0.1.Q6_K.gguf?download=true",
 		},
 		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "Mixtral",
@@ -1024,7 +1024,7 @@ var Models = []*Model{
 	{
 		Id: "huggingface/TheBloke/mixtral-8x7b-instruct-v0.1.Q8_0.gguf",
 		Assets: map[string]string{
-			"MODEL": "https://huggingface.co/TheBloke/Mixtral-8x7B-v0.1-GGUF/resolve/main/mixtral-8x7b-v0.1.Q8_0.gguf?download=true",
+			"MODEL": "https://huggingface.co/TheBloke/Mixtral-8x7B-Instruct-v0.1-GGUF/resolve/main/mixtral-8x7b-instruct-v0.1.Q8_0.gguf?download=true",
 		},
 		PlatformId:     PlatformLlamaCpp.Id,
 		Name:           "Mixtral",
