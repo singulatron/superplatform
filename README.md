@@ -15,7 +15,7 @@
 ![backend build](https://github.com/singulatron/singulatron/actions/workflows/backend-build-github.yaml/badge.svg)
 ![frontend build](https://github.com/singulatron/singulatron/actions/workflows/frontend-container-build-github.yaml/badge.svg)
 
-Singulatron is a rapid prototyping environment for the AI age. It aims to serve the hackers (or at least the author(s)) who embark on AIifying the world over the next decade.
+Singulatron is a rapid prototyping environment for the AI age. It aims to serve the hackers (or at least the author(s)) who embark on transforming the world with AI over the next decade.
 
 During his 20+ years of building hundreds of different projects, the author was always drawn to building development platforms ([1backend](https://github.com/1backend/1backend), [micro](https://github.com/micro/micro)), ORMs ([gocassa](https://github.com/gocassa/gocassa)) and various other productivity tools ([ok-borg](https://github.com/ok-borg/borg)).
 Singulatron is a bit of all of those.
