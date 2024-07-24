@@ -552,7 +552,7 @@ paths:
           description: Internal Server Error
           schema:
             type: string
-      summary: Send a new message to a chat thread
+      summary: Add Message
       tags:
       - chat
   /chat/message/delete:
@@ -587,14 +587,14 @@ paths:
           description: Internal Server Error
           schema:
             type: string
-      summary: Remove a message from a chat thread
+      summary: Delete Message
       tags:
       - chat
   /chat/messages:
     post:
       consumes:
       - application/json
-      description: Fetch messages for a specific chat thread and associated assets
+      description: Fetch messages (and associated assets) for a specific chat thread.
       parameters:
       - description: Get Messages Request
         in: body
@@ -621,7 +621,7 @@ paths:
           description: Internal Server Error
           schema:
             type: string
-      summary: Retrieve messages from a chat thread
+      summary: Get Messages
       tags:
       - chat
   /chat/thread:
@@ -655,7 +655,7 @@ paths:
           description: Internal Server Error
           schema:
             type: string
-      summary: Retrieve details of a chat thread
+      summary: Get Thread
       tags:
       - chat
   /chat/thread/add:
@@ -689,7 +689,7 @@ paths:
           description: Internal Server Error
           schema:
             type: string
-      summary: Create a new chat thread
+      summary: Add Thread
       tags:
       - chat
   /chat/thread/delete:
@@ -724,7 +724,7 @@ paths:
           description: Internal Server Error
           schema:
             type: string
-      summary: Remove a chat thread
+      summary: Delete Thread
       tags:
       - chat
   /chat/thread/update:
@@ -758,7 +758,7 @@ paths:
           description: Internal Server Error
           schema:
             type: string
-      summary: Update an existing chat thread
+      summary: Update Thread
       tags:
       - chat
   /chat/threads:
@@ -792,7 +792,7 @@ paths:
           description: Internal Server Error
           schema:
             type: string
-      summary: Retrieve a list of chat threads for a user
+      summary: Get Threads
       tags:
       - chat
   /config/get:
@@ -815,7 +815,7 @@ paths:
           description: Internal Server Error
           schema:
             type: string
-      summary: Retrieve the current configuration
+      summary: Get
       tags:
       - config
   /download/do:
@@ -850,7 +850,7 @@ paths:
           description: Internal Server Error
           schema:
             type: string
-      summary: Initiate a file download
+      summary: Do
       tags:
       - download
   /download/list:
@@ -873,7 +873,7 @@ paths:
           description: Internal Server Error
           schema:
             type: string
-      summary: Retrieve download details
+      summary: List
       tags:
       - download
   /download/pause:
@@ -908,7 +908,7 @@ paths:
           description: Internal Server Error
           schema:
             type: string
-      summary: Pause an ongoing download
+      summary: Pause
       tags:
       - download
   /firehose/subscribe:
@@ -932,7 +932,7 @@ paths:
           description: Internal Server Error
           schema:
             type: string
-      summary: Subscribe to firehose events
+      summary: Subscribe
       tags:
       - firehose
   /generic/create:

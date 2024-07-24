@@ -1,3 +1,7 @@
+#!/bin/bash
+
+set -e
+
 cd ../localtron
 swag init
 cd ../docs-source

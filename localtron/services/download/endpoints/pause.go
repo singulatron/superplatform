@@ -21,7 +21,7 @@ import (
 // @Tags download
 // @Accept json
 // @Produce json
-// @Param body body types.DownloadRequest true "Download request payload"
+// @Param body body downloadtypes.DownloadRequest true "Download request payload"
 // @Success 200 {object} map[string]any "Success response"
 // @Failure 400 {string} string "Invalid JSON"
 // @Failure 401 {string} string "Unauthorized"

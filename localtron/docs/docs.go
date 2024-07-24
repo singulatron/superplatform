@@ -27,7 +27,7 @@ const docTemplate = `{
                 "tags": [
                     "chat"
                 ],
-                "summary": "Send a new message to a chat thread",
+                "summary": "Add Message",
                 "parameters": [
                     {
                         "description": "Add Message Request",
@@ -80,7 +80,7 @@ const docTemplate = `{
                 "tags": [
                     "chat"
                 ],
-                "summary": "Remove a message from a chat thread",
+                "summary": "Delete Message",
                 "parameters": [
                     {
                         "description": "Delete Message Request",
@@ -123,7 +123,7 @@ const docTemplate = `{
         },
         "/chat/messages": {
             "post": {
-                "description": "Fetch messages for a specific chat thread and associated assets",
+                "description": "Fetch messages (and associated assets) for a specific chat thread.",
                 "consumes": [
                     "application/json"
                 ],
@@ -133,7 +133,7 @@ const docTemplate = `{
                 "tags": [
                     "chat"
                 ],
-                "summary": "Retrieve messages from a chat thread",
+                "summary": "Get Messages",
                 "parameters": [
                     {
                         "description": "Get Messages Request",
@@ -185,7 +185,7 @@ const docTemplate = `{
                 "tags": [
                     "chat"
                 ],
-                "summary": "Retrieve details of a chat thread",
+                "summary": "Get Thread",
                 "parameters": [
                     {
                         "description": "Get Thread Request",
@@ -237,7 +237,7 @@ const docTemplate = `{
                 "tags": [
                     "chat"
                 ],
-                "summary": "Create a new chat thread",
+                "summary": "Add Thread",
                 "parameters": [
                     {
                         "description": "Add Thread Request",
@@ -289,7 +289,7 @@ const docTemplate = `{
                 "tags": [
                     "chat"
                 ],
-                "summary": "Remove a chat thread",
+                "summary": "Delete Thread",
                 "parameters": [
                     {
                         "description": "Delete Thread Request",
@@ -342,7 +342,7 @@ const docTemplate = `{
                 "tags": [
                     "chat"
                 ],
-                "summary": "Update an existing chat thread",
+                "summary": "Update Thread",
                 "parameters": [
                     {
                         "description": "Update Thread Request",
@@ -394,7 +394,7 @@ const docTemplate = `{
                 "tags": [
                     "chat"
                 ],
-                "summary": "Retrieve a list of chat threads for a user",
+                "summary": "Get Threads",
                 "parameters": [
                     {
                         "description": "Get Threads Request",
@@ -446,7 +446,7 @@ const docTemplate = `{
                 "tags": [
                     "config"
                 ],
-                "summary": "Retrieve the current configuration",
+                "summary": "Get",
                 "responses": {
                     "200": {
                         "description": "Current configuration retrieved successfully",
@@ -481,7 +481,7 @@ const docTemplate = `{
                 "tags": [
                     "download"
                 ],
-                "summary": "Initiate a file download",
+                "summary": "Do",
                 "parameters": [
                     {
                         "description": "Download Request",
@@ -534,7 +534,7 @@ const docTemplate = `{
                 "tags": [
                     "download"
                 ],
-                "summary": "Retrieve download details",
+                "summary": "List",
                 "responses": {
                     "200": {
                         "description": "List of downloads",
@@ -569,7 +569,7 @@ const docTemplate = `{
                 "tags": [
                     "download"
                 ],
-                "summary": "Pause an ongoing download",
+                "summary": "Pause",
                 "parameters": [
                     {
                         "description": "Download request payload",
@@ -622,7 +622,7 @@ const docTemplate = `{
                 "tags": [
                     "firehose"
                 ],
-                "summary": "Subscribe to firehose events",
+                "summary": "Subscribe",
                 "responses": {
                     "200": {
                         "description": "Event data",
