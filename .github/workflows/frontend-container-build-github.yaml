@@ -1,4 +1,4 @@
-name: "Frontend container build and push to DockerHub"
+name: "Frontend build"
 
 on:
   push:
