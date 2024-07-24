@@ -34,7 +34,7 @@ jobs:
 
       - name: Run
         run: |
-          cp ../../../docs/start/docker-compose.yaml .
+          cp ../../../docs-source/docs/start/docker-compose.yaml .
           docker compose up singulatron-backend -d
 
           HOST="127.0.0.1"

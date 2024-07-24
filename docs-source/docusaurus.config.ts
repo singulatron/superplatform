@@ -52,6 +52,22 @@ const config: Config = {
         hideable: true,
       },
     },
+    metadata: [
+      {
+        name: "keywords",
+        content:
+          "ai, llm, free gpt, gpt, open-source, open source, ai framework, ai server",
+      },
+      {
+        name: "title",
+        content: "Singulatron Documentation",
+      },
+      {
+        name: "description",
+        content: "Singulatron API, Tutorials, Snippets and more",
+      },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
     navbar: {
       title: "Singulatron",
       logo: {
