@@ -16,8 +16,8 @@ import (
 )
 
 // Remove removes a prompt
-// @Summary Remove a prompt
-// @Description Remove a prompt
+// @Summary Remove Prompt
+// @Description Remove a prompt by ID.
 // @Tags prompts
 // @Accept json
 // @Produce json
@@ -27,7 +27,7 @@ import (
 // @Failure 401 {object} prompttypes.ErrorResponse "Unauthorized"
 // @Failure 500 {object} prompttypes.ErrorResponse "Internal Server Error"
 // @Router /prompt/remove [post]
-func Remove(
+func RemovePrompt(
 	w http.ResponseWriter,
 	r *http.Request,
 	userService usertypes.UserServiceI,
@@ -39,7 +39,7 @@ func Remove(
 		return
 	}
 
-	user, found, err := userService.GetUserFromRequest(r)
+	_, found, err := userService.GetUserFromRequest(r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -57,9 +57,9 @@ func Remove(
 	}
 	defer r.Body.Close()
 
-	req.Prompt.UserId = user.Id
+	// req.Prompt.UserId = user.Id
 
-	err = promptService.Remove(req.Prompt)
+	err = promptService.RemovePrompt(req.PromptId)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

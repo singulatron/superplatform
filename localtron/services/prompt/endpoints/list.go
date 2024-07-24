@@ -17,8 +17,8 @@ import (
 )
 
 // List lists prompts
-// @Summary List prompts
-// @Description List prompts with specific criteria
+// @Summary List Prompts
+// @Description List prompts that satisfy a query.
 // @Tags prompts
 // @Accept json
 // @Produce json

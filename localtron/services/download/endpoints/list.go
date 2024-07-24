@@ -16,7 +16,7 @@ import (
 )
 
 // List retrieves a list of download details
-// @Summary Retrieve download details
+// @Summary List
 // @Description Fetch a list of all download details
 // @Tags download
 // @Accept json

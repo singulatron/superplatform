@@ -331,7 +331,9 @@ definitions:
     properties:
       createdAt:
         type: string
-      data: {}
+      data:
+        additionalProperties: {}
+        type: object
       id:
         type: string
       public:
@@ -343,6 +345,9 @@ definitions:
         type: string
       userId:
         type: string
+    required:
+    - data
+    - table
     type: object
   generictypes.UpdateRequest:
     properties:
@@ -362,8 +367,45 @@ definitions:
     type: object
   prompttypes.AddPromptRequest:
     properties:
+      id:
+        description: Id is the unique ID of the prompt.
+        type: string
+      maxRetries:
+        description: MaxRetries specified how many times the system should retry a
+          prompt when it keeps erroring.
+        example: 10
+        type: integer
+      modelId:
+        description: ModelId is just the Singulatron internal ID of the model.
+        example: huggingface/TheBloke/mistral-7b-instruct-v0.2.Q3_K_S.gguf
+        type: string
       prompt:
-        $ref: '#/definitions/prompttypes.Prompt'
+        description: Prompt is the message itself eg.
+        example: What's a banana?
+        type: string
+      sync:
+        description: |-
+          Sync drives whether prompt add request should wait and hang until
+          the prompt is done executing. By default the prompt just gets put on a queue
+          and the client will just subscribe to a Thread Stream.
+          For quick and dirty scripting however it's often times easier to do things syncronously.
+          In those cases set Sync to true.
+        type: boolean
+      template:
+        description: Template of the prompt. Optional. Might be derived from ModelId
+        example: '[INST]{prompt}[/INST]'
+        type: string
+      threadId:
+        description: |-
+          ThreadId is the ID of the thread a prompt belongs to.
+          Clients subscribe to Thread Streams to see the answer to a prompt,
+          or set `prompt.sync` to true for a blocking answer.
+        type: string
+      userId:
+        description: UserId contains the ID of the user who submitted the prompt.
+        type: string
+    required:
+    - prompt
     type: object
   prompttypes.AddPromptResponse:
     properties:
@@ -409,9 +451,11 @@ definitions:
       maxRetries:
         description: MaxRetries specified how many times the system should retry a
           prompt when it keeps erroring.
+        example: 10
         type: integer
       modelId:
         description: ModelId is just the Singulatron internal ID of the model.
+        example: huggingface/TheBloke/mistral-7b-instruct-v0.2.Q3_K_S.gguf
         type: string
       prompt:
         description: Prompt is the message itself eg.
@@ -470,8 +514,8 @@ definitions:
     - PromptStatusCanceled
   prompttypes.RemovePromptRequest:
     properties:
-      prompt:
-        $ref: '#/definitions/prompttypes.Prompt'
+      promptId:
+        type: string
     type: object
 info:
   contact: {}
@@ -926,7 +970,7 @@ paths:
             $ref: '#/definitions/generictypes.ErrorResponse'
       security:
       - BearerAuth: []
-      summary: Create a new generic object
+      summary: Create
       tags:
       - generic
   /generic/delete:
@@ -964,7 +1008,7 @@ paths:
             $ref: '#/definitions/generictypes.ErrorResponse'
       security:
       - BearerAuth: []
-      summary: Delete a generic object
+      summary: Delete
       tags:
       - generic
   /generic/find:
@@ -999,7 +1043,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/generictypes.ErrorResponse'
-      summary: Retrieve generic objects based on criteria
+      summary: Find
       tags:
       - generic
   /generic/update:
@@ -1037,7 +1081,7 @@ paths:
             $ref: '#/definitions/generictypes.ErrorResponse'
       security:
       - BearerAuth: []
-      summary: Update generic objects based on conditions
+      summary: Update
       tags:
       - generic
   /generic/upsert:
@@ -1073,7 +1117,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/generictypes.ErrorResponse'
-      summary: Create or update a generic object
+      summary: Upsert
       tags:
       - generic
   /prompt/add:
@@ -1115,7 +1159,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: List prompts with specific criteria
+      description: List prompts that satisfy a query.
       parameters:
       - description: List Prompts Request
         in: body
@@ -1142,14 +1186,14 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/prompttypes.ErrorResponse'
-      summary: List prompts
+      summary: List Prompts
       tags:
       - prompts
   /prompt/remove:
     post:
       consumes:
       - application/json
-      description: Remove a prompt
+      description: Remove a prompt by ID.
       parameters:
       - description: Remove Prompt Request
         in: body
@@ -1177,7 +1221,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/prompttypes.ErrorResponse'
-      summary: Remove a prompt
+      summary: Remove Prompt
       tags:
       - prompts
   /prompt/subscribe:
@@ -1202,7 +1246,7 @@ paths:
           description: Unauthorized
           schema:
             $ref: '#/definitions/prompttypes.ErrorResponse'
-      summary: Subscribe to prompt responses
+      summary: Subscribe to Prompt
       tags:
       - prompts
 swagger: "2.0"

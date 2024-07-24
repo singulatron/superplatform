@@ -17,7 +17,7 @@ import (
 )
 
 // Create creates a new generic object
-// @Summary Create a new generic object
+// @Summary Create
 // @Description Creates a new object with the provided details. Requires authorization and user authentication.
 // @Tags generic
 // @Accept json

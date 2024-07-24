@@ -26,14 +26,14 @@ type ErrorResponse struct {
 //	}
 type GenericObject struct {
 	Id        string `json:"id"`
-	Table     string `json:"table"`
+	Table     string `json:"table" binding:"required"`
 	CreatedAt string `json:"createdAt,omitempty"`
 	UpdatedAt string `json:"updatedAt,omitempty"`
 	UserId    string `json:"userId,omitempty"`
 	// Entry is visible to all users of the app
 	Public bool `json:"public,omitempty"`
 
-	Data any `json:"data,omitempty"`
+	Data map[string]any `json:"data,omitempty" binding:"required"`
 }
 
 func (g GenericObject) GetId() string {

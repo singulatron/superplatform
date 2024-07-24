@@ -8,7 +8,7 @@ export type PromptStatus =
   | "abandoned"
   | "canceled";
 
-export interface Prompt {
+export interface PromptCreateFields {
   id: string;
   threadId: string;
   userId?: string;
@@ -21,15 +21,21 @@ export interface Prompt {
 		Optional. Might be derived from/through the modelId
 	*/
   template?: string;
-  characterId?: string;
+
   modelId?: string;
+
+  maxRetries?: number;
+  sync?: boolean;
+}
+
+export interface Prompt extends PromptCreateFields {
+  characterId?: string;
+
   createdAt?: string;
   status?: PromptStatus;
   lastRun?: string;
   runCount?: number; // How many times this was ran (retries are due to errors)
   error?: string;
-  maxRetries?: number;
-  sync?: boolean;
 }
 
 export interface AddPromptRequest {
@@ -41,7 +47,7 @@ export interface AddPromptResponse {
 }
 
 export interface RemovePromptRequest {
-  prompt: Prompt;
+  promptId: string;
 }
 
 export interface ListPromptsRequest {

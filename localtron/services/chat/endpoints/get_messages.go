@@ -12,18 +12,17 @@ import (
 	"net/http"
 
 	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
-	types "github.com/singulatron/singulatron/localtron/services/chat/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // GetMessages retrieves messages from a chat thread
-// @Summary Retrieve messages from a chat thread
-// @Description Fetch messages for a specific chat thread and associated assets
+// @Summary Get Messages
+// @Description Fetch messages (and associated assets) for a specific chat thread.
 // @Tags chat
 // @Accept json
 // @Produce json
-// @Param request body types.GetMessagesRequest true "Get Messages Request"
-// @Success 200 {object} types.GetMessagesResponse "Messages and assets successfully retrieved"
+// @Param request body chattypes.GetMessagesRequest true "Get Messages Request"
+// @Success 200 {object} chattypes.GetMessagesResponse "Messages and assets successfully retrieved"
 // @Failure 400 {string} string "Invalid JSON"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
@@ -34,13 +33,13 @@ func GetMessages(
 	userService usertypes.UserServiceI,
 	ds chattypes.ChatServiceI,
 ) {
-	err := userService.IsAuthorized(types.PermissionMessageView.Id, r)
+	err := userService.IsAuthorized(chattypes.PermissionMessageView.Id, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 
-	req := types.GetMessagesRequest{}
+	req := chattypes.GetMessagesRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `invalid JSON`, http.StatusBadRequest)
@@ -64,7 +63,7 @@ func GetMessages(
 		return
 	}
 
-	jsonData, _ := json.Marshal(types.GetMessagesResponse{
+	jsonData, _ := json.Marshal(chattypes.GetMessagesResponse{
 		Messages: messages,
 		Assets:   assets,
 	})

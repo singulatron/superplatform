@@ -16,7 +16,7 @@ import (
 )
 
 // AddMessage sends a new message to a chat thread
-// @Summary Send a new message to a chat thread
+// @Summary Add Message
 // @Description Add a new message to a specific chat thread
 // @Tags chat
 // @Accept json

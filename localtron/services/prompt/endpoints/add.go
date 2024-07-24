@@ -57,9 +57,9 @@ func Add(
 	}
 	defer r.Body.Close()
 
-	req.Prompt.UserId = user.Id
+	req.UserId = user.Id
 
-	rsp, err := promptService.AddPrompt(r.Context(), req.Prompt)
+	rsp, err := promptService.AddPrompt(r.Context(), req)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

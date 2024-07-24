@@ -33,31 +33,13 @@ const (
 )
 
 type Prompt struct {
-	// Id is the unique ID of the prompt.
-	Id string `json:"id"`
+	PromptCreateFields
 
 	// CreatedAt is the time of the prompt creation.
 	CreatedAt time.Time `json:"createdAt"`
 
 	// UpdatedAt is the last time the prompt was updated.
 	UpdatedAt time.Time `json:"updatedAt"`
-
-	// ThreadId is the ID of the thread a prompt belongs to.
-	// Clients subscribe to Thread Streams to see the answer to a prompt,
-	// or set `prompt.sync` to true for a blocking answer.
-	ThreadId string `json:"threadId"`
-
-	// UserId contains the ID of the user who submitted the prompt.
-	UserId string `json:"userId"`
-
-	// Prompt is the message itself eg.
-	Prompt string `json:"prompt" example:"What's a banana?" binding:"required"`
-
-	// Template of the prompt. Optional. Might be derived from ModelId
-	Template string `json:"template" example:"[INST]{prompt}[/INST]"`
-
-	// ModelId is just the Singulatron internal ID of the model.
-	ModelId string `json:"modelId,omitempty" example:"huggingface/TheBloke/mistral-7b-instruct-v0.2.Q3_K_S.gguf"`
 
 	// Status of the prompt.
 	Status PromptStatus `json:"status,omitempty"`
@@ -70,16 +52,6 @@ type Prompt struct {
 
 	// Error that arose during prompt execution, if any.
 	Error string `json:"error,omitempty"`
-
-	// MaxRetries specified how many times the system should retry a prompt when it keeps erroring.
-	MaxRetries int `json:"maxRetries,omitempty" example:"10"`
-
-	// Sync drives whether prompt add request should wait and hang until
-	// the prompt is done executing. By default the prompt just gets put on a queue
-	// and the client will just subscribe to a Thread Stream.
-	// For quick and dirty scripting however it's often times easier to do things syncronously.
-	// In those cases set Sync to true.
-	Sync bool `json:"sync"`
 }
 
 func (c *Prompt) GetId() string {
@@ -90,8 +62,40 @@ func (c *Prompt) GetUpdatedAt() string {
 	return c.Id
 }
 
+type PromptCreateFields struct {
+	// Id is the unique ID of the prompt.
+	Id string `json:"id"`
+
+	// Prompt is the message itself eg.
+	Prompt string `json:"prompt" example:"What's a banana?" binding:"required"`
+
+	// Sync drives whether prompt add request should wait and hang until
+	// the prompt is done executing. By default the prompt just gets put on a queue
+	// and the client will just subscribe to a Thread Stream.
+	// For quick and dirty scripting however it's often times easier to do things syncronously.
+	// In those cases set Sync to true.
+	Sync bool `json:"sync"`
+
+	// ThreadId is the ID of the thread a prompt belongs to.
+	// Clients subscribe to Thread Streams to see the answer to a prompt,
+	// or set `prompt.sync` to true for a blocking answer.
+	ThreadId string `json:"threadId"`
+
+	// UserId contains the ID of the user who submitted the prompt.
+	UserId string `json:"userId"`
+
+	// Template of the prompt. Optional. Might be derived from ModelId
+	Template string `json:"template" example:"[INST]{prompt}[/INST]"`
+
+	// ModelId is just the Singulatron internal ID of the model.
+	ModelId string `json:"modelId,omitempty" example:"huggingface/TheBloke/mistral-7b-instruct-v0.2.Q3_K_S.gguf"`
+
+	// MaxRetries specified how many times the system should retry a prompt when it keeps erroring.
+	MaxRetries int `json:"maxRetries,omitempty" example:"10"`
+}
+
 type AddPromptRequest struct {
-	Prompt *Prompt `json:"prompt"`
+	PromptCreateFields
 }
 
 type AddPromptResponse struct {
@@ -110,7 +114,7 @@ type ListPromptsResponse struct {
 }
 
 type RemovePromptRequest struct {
-	Prompt *Prompt `json:"prompt"`
+	PromptId string `json:"promptId"`
 }
 
 type ListPromptOptions struct {
