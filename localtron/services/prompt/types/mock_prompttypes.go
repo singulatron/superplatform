@@ -41,7 +41,7 @@ func (m *MockPromptServiceI) EXPECT() *MockPromptServiceIMockRecorder {
 }
 
 // AddPrompt mocks base method.
-func (m *MockPromptServiceI) AddPrompt(ctx context.Context, prompt *Prompt) (*AddPromptResponse, error) {
+func (m *MockPromptServiceI) AddPrompt(ctx context.Context, prompt *AddPromptRequest) (*AddPromptResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "AddPrompt", ctx, prompt)
 	ret0, _ := ret[0].(*AddPromptResponse)
@@ -83,18 +83,18 @@ func (mr *MockPromptServiceIMockRecorder) ListPrompts(options any) *gomock.Call 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListPrompts", reflect.TypeOf((*MockPromptServiceI)(nil).ListPrompts), options)
 }
 
-// Remove mocks base method.
-func (m *MockPromptServiceI) Remove(prompt *Prompt) error {
+// RemovePrompt mocks base method.
+func (m *MockPromptServiceI) RemovePrompt(promptId string) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Remove", prompt)
+	ret := m.ctrl.Call(m, "RemovePrompt", promptId)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
-// Remove indicates an expected call of Remove.
-func (mr *MockPromptServiceIMockRecorder) Remove(prompt any) *gomock.Call {
+// RemovePrompt indicates an expected call of RemovePrompt.
+func (mr *MockPromptServiceIMockRecorder) RemovePrompt(promptId any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Remove", reflect.TypeOf((*MockPromptServiceI)(nil).Remove), prompt)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemovePrompt", reflect.TypeOf((*MockPromptServiceI)(nil).RemovePrompt), promptId)
 }
 
 // Subscribe mocks base method.

@@ -16,7 +16,7 @@ import (
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
 )
 
-func (p *PromptService) Remove(promptId string) error {
+func (p *PromptService) RemovePrompt(promptId string) error {
 	logger.Info("Removing prompt",
 		slog.String("promptId", promptId),
 	)

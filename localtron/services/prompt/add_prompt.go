@@ -23,7 +23,11 @@ import (
 
 const maxThreadTitle = 100
 
-func (p *PromptService) AddPrompt(ctx context.Context, prompt *prompttypes.Prompt) (*prompttypes.AddPromptResponse, error) {
+func (p *PromptService) AddPrompt(ctx context.Context, promptReq *prompttypes.AddPromptRequest) (*prompttypes.AddPromptResponse, error) {
+	prompt := &prompttypes.Prompt{
+		PromptCreateFields: promptReq.PromptCreateFields,
+	}
+
 	prompt.Status = prompttypes.PromptStatusScheduled
 	now := TimeNow()
 	prompt.CreatedAt = now
