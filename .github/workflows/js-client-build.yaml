@@ -18,8 +18,7 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Install dependencies
+      - name: Link and build
         run: |
-          npm install
-          npm run build
-        working-directory: ./clients/js/node
+          bash link_local.sh
+        working-directory: ./clients/js
