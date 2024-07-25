@@ -23,7 +23,9 @@ export async function genericTest(apiKey: string) {
     },
   });
 
-  let rsp = await genericService.find({});
+  let rsp = await genericService.find({
+    table: "uzerz",
+  });
 
   if (rsp.objects.length !== 2) {
     throw "expected find length to be 2";

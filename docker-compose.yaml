@@ -1,3 +1,6 @@
+# This yaml file builds the current code in this repo.
+# For production use the docker-compose.yaml found at ./docs-source/docs/start/docker-compose.yaml
+# or search for "Docker Compose" here https://superplatform.ai/
 version: "3.8"
 
 volumes:
