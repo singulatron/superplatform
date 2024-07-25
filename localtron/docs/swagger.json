@@ -1582,27 +1582,9 @@
         },
         "generictypes.CreateRequest": {
             "type": "object",
-            "required": [
-                "data",
-                "table"
-            ],
             "properties": {
-                "data": {
-                    "type": "object",
-                    "additionalProperties": {}
-                },
-                "id": {
-                    "type": "string"
-                },
-                "public": {
-                    "description": "Public determines if the object is visible to all users.\nWhen it's false the entry is only visible to the user who created it.\nWhen it's true the entry is visible to everyone.",
-                    "type": "boolean"
-                },
-                "table": {
-                    "type": "string"
-                },
-                "userId": {
-                    "type": "string"
+                "object": {
+                    "$ref": "#/definitions/generictypes.GenericObjectCreateFields"
                 }
             }
         },

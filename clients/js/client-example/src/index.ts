@@ -1,5 +1,5 @@
 import { UserService } from "@singulatron/client";
-import { genericTest } from "./generic_example";
+import { genericTest } from "./generic_example.js";
 
 async function start() {
   let userService = new UserService({});

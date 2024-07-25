@@ -317,24 +317,8 @@ definitions:
     type: object
   generictypes.CreateRequest:
     properties:
-      data:
-        additionalProperties: {}
-        type: object
-      id:
-        type: string
-      public:
-        description: |-
-          Public determines if the object is visible to all users.
-          When it's false the entry is only visible to the user who created it.
-          When it's true the entry is visible to everyone.
-        type: boolean
-      table:
-        type: string
-      userId:
-        type: string
-    required:
-    - data
-    - table
+      object:
+        $ref: '#/definitions/generictypes.GenericObjectCreateFields'
     type: object
   generictypes.CreateResponse:
     properties:
