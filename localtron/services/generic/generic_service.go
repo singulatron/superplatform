@@ -52,22 +52,22 @@ func NewGenericService(
 	return service, nil
 }
 
-func (g *GenericService) Create(object *generictypes.GenericObjectCreateFields) error {
-	return g.store.Create(object)
+func (g *GenericService) Create(request *generictypes.CreateRequest) error {
+	return g.store.Create(request.Object)
 }
 
-func (g *GenericService) CreateMany(objects []*generictypes.GenericObjectCreateFields) error {
+func (g *GenericService) CreateMany(request *generictypes.CreateManyRequest) error {
 	objectIs := []datastore.Row{}
-	for _, object := range objects {
+	for _, object := range request.Objects {
 		objectIs = append(objectIs, object)
 	}
 
 	return g.store.CreateMany(objectIs)
 }
 
-func (g *GenericService) Upsert(object *generictypes.GenericObjectCreateFields) error {
+func (g *GenericService) Upsert(request *generictypes.UpsertRequest) error {
 	vI, found, err := g.store.Query(
-		datastore.Id(object.Id),
+		datastore.Id(request.Object.Id),
 	).FindOne()
 	if err != nil {
 		return err
@@ -75,17 +75,17 @@ func (g *GenericService) Upsert(object *generictypes.GenericObjectCreateFields) 
 
 	if found {
 		v := vI.(*generictypes.GenericObject)
-		if v.UserId != object.UserId {
+		if v.UserId != request.Object.UserId {
 			return errors.New("unauthorized")
 		}
 	}
 
-	return g.store.Upsert(object)
+	return g.store.Upsert(request.Object)
 }
 
-func (g *GenericService) UpsertMany(objects []*generictypes.GenericObjectCreateFields) error {
+func (g *GenericService) UpsertMany(request *generictypes.UpsertManyRequest) error {
 	objectIs := []datastore.Row{}
-	for _, object := range objects {
+	for _, object := range request.Objects {
 		objectIs = append(objectIs, object)
 	}
 	return g.store.UpsertMany(objectIs)

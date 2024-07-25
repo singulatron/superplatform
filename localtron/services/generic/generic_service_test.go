@@ -41,7 +41,9 @@ func TestCreate(t *testing.T) {
 		CreatedAt: time.Now().String(),
 	}
 
-	err = service.Create(&obj.GenericObjectCreateFields)
+	err = service.Create(&generictypes.CreateRequest{
+		Object: &obj.GenericObjectCreateFields,
+	})
 	require.NoError(t, err)
 
 	t.Run("user 1 can find its own private record", func(t *testing.T) {
@@ -70,7 +72,9 @@ func TestCreate(t *testing.T) {
 		CreatedAt: time.Now().String(),
 	}
 
-	err = service.Create(&obj2.GenericObjectCreateFields)
+	err = service.Create(&generictypes.CreateRequest{
+		Object: &obj2.GenericObjectCreateFields,
+	})
 	require.NoError(t, err)
 
 	t.Run("user 2 can find its own private record", func(t *testing.T) {
@@ -113,7 +117,10 @@ func TestCreate(t *testing.T) {
 	})
 
 	t.Run("already exists", func(t *testing.T) {
-		err = service.Create(&obj.GenericObjectCreateFields)
+		err = service.Create(
+			&generictypes.CreateRequest{
+				Object: &obj.GenericObjectCreateFields,
+			})
 		require.Error(t, err)
 	})
 
@@ -131,14 +138,18 @@ func TestCreate(t *testing.T) {
 
 	t.Run("user 2 cannot update record of user 1", func(t *testing.T) {
 		obj.UserId = otherUserId
-		err = service.Upsert(&obj.GenericObjectCreateFields)
+		err = service.Upsert(&generictypes.UpsertRequest{
+			Object: &obj.GenericObjectCreateFields,
+		})
 		// unauthorized
 		require.Error(t, err)
 		obj.UserId = userId
 	})
 
 	t.Run("user 1 can upsert its own reord", func(t *testing.T) {
-		err = service.Upsert(&obj.GenericObjectCreateFields)
+		err = service.Upsert(&generictypes.UpsertRequest{
+			Object: &obj.GenericObjectCreateFields,
+		})
 		require.NoError(t, err)
 	})
 

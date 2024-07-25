@@ -48,7 +48,7 @@ func CreateMany(
 		req.Objects[i].UserId = user.Id
 	}
 
-	err = genericService.CreateMany(req.Objects)
+	err = genericService.CreateMany(req)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
