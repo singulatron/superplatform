@@ -23,12 +23,6 @@ jobs:
           bash link_local.sh
         working-directory: ./clients/js
 
-      - name: Install dependencies & build
-        run: |
-          npm install
-          npm run build
-        working-directory: ./clients/js/client-example
-
       - name: Run
         run: |
           cp ../../../docs-source/docs/start/docker-compose.yaml .

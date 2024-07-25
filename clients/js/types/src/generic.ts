@@ -261,12 +261,10 @@ export interface GenericObject extends GenericObjectCreateFields {
   userId?: string;
 }
 
-// eslint-disable-next-line
 export interface CreateRequest {
   object: GenericObjectCreateFields;
 }
 
-// eslint-disable-next-line
 export interface CreateResponse {
   object: GenericObject;
 }
