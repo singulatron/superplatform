@@ -12,16 +12,16 @@ export class PromptService {
     return call(this.options, endpoint, request);
   }
 
-  async promptAdd(prompt: prompt.Prompt): Promise<void> {
+  async promptAdd(prompt: prompt.AddPromptRequest): Promise<void> {
     if (!prompt.id) {
       prompt.id = uuid();
     }
-    const request: prompt.AddPromptRequest = { prompt: prompt };
-    return this.call("/prompt/add", request);
+
+    return this.call("/prompt/add", prompt);
   }
 
-  async promptRemove(prompt: prompt.Prompt): Promise<void> {
-    const request: prompt.RemovePromptRequest = { prompt: prompt };
+  async promptRemove(promptId: string): Promise<void> {
+    const request: prompt.RemovePromptRequest = { promptId: promptId };
     return this.call("/prompt/remove", request);
   }
 

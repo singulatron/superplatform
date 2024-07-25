@@ -15,13 +15,12 @@ class PromptService {
             if (!prompt.id) {
                 prompt.id = util.uuid();
             }
-            const request = { prompt: prompt };
-            return this.call("/prompt/add", request);
+            return this.call("/prompt/add", prompt);
         });
     }
-    promptRemove(prompt) {
+    promptRemove(promptId) {
         return util.__awaiter(this, void 0, void 0, function* () {
-            const request = { prompt: prompt };
+            const request = { promptId: promptId };
             return this.call("/prompt/remove", request);
         });
     }

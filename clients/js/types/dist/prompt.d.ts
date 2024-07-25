@@ -1,26 +1,31 @@
 import { Query } from "./generic";
 export type PromptStatus = "scheduled" | "running" | "completed" | "errored" | "abandoned" | "canceled";
-export interface Prompt {
+export interface PromptCreateFields {
     id: string;
     threadId: string;
     userId?: string;
     prompt: string;
     template?: string;
-    characterId?: string;
     modelId?: string;
+    maxRetries?: number;
+    sync?: boolean;
+}
+export interface Prompt extends PromptCreateFields {
+    characterId?: string;
     createdAt?: string;
     status?: PromptStatus;
     lastRun?: string;
     runCount?: number;
     error?: string;
-    maxRetries?: number;
-    sync?: boolean;
 }
-export interface AddPromptRequest {
-    prompt: Prompt;
+export interface AddPromptRequest extends PromptCreateFields {
+}
+export interface AddPromptResponse {
+    answer?: string;
+    prompt?: Prompt;
 }
 export interface RemovePromptRequest {
-    prompt: Prompt;
+    promptId: string;
 }
 export interface ListPromptsRequest {
     query?: Query;
