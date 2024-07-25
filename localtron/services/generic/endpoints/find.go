@@ -16,8 +16,12 @@ import (
 )
 
 // Find retrieves objects based on provided criteria
-// @Summary Find
-// @Description Retrieves objects from a specified table based on search criteria. Requires authorization and user authentication.
+// @Summary Find Generic Objects
+// @Description Retrieves objects from a specified table based on search criteria.
+// @Description Requires authorization and user authentication.
+// @Description
+// @Description
+// @Description Use helper functions in your respective client library such as condition constructors (`equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
 // @Tags generic
 // @Accept json
 // @Produce json

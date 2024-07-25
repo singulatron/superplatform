@@ -9,7 +9,16 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "contact": {},
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "API Support",
+            "url": "https://singulatron.com/home",
+            "email": "sales@singulatron.com"
+        },
+        "license": {
+            "name": "AGPL v3.0",
+            "url": "https://www.gnu.org/licenses/agpl-3.0.html"
+        },
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
@@ -662,7 +671,7 @@ const docTemplate = `{
                 "tags": [
                     "generic"
                 ],
-                "summary": "Create",
+                "summary": "Create a Generic Object",
                 "parameters": [
                     {
                         "description": "Create request payload",
@@ -678,8 +687,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Success",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": true
+                            "$ref": "#/definitions/generictypes.CreateResponse"
                         }
                     },
                     "400": {
@@ -720,7 +728,7 @@ const docTemplate = `{
                 "tags": [
                     "generic"
                 ],
-                "summary": "Delete",
+                "summary": "Delete a Generic Object",
                 "parameters": [
                     {
                         "description": "Delete request payload",
@@ -736,8 +744,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Successful deletion of object",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": true
+                            "$ref": "#/definitions/generictypes.DeleteResponse"
                         }
                     },
                     "400": {
@@ -763,7 +770,7 @@ const docTemplate = `{
         },
         "/generic/find": {
             "post": {
-                "description": "Retrieves objects from a specified table based on search criteria. Requires authorization and user authentication.",
+                "description": "Retrieves objects from a specified table based on search criteria.\nRequires authorization and user authentication.\n\n\nUse helper functions in your respective client library such as condition constructors (` + "`" + `equal` + "`" + `, ` + "`" + `contains` + "`" + `, ` + "`" + `startsWith` + "`" + `) and field selectors (` + "`" + `field` + "`" + `, ` + "`" + `fields` + "`" + `, ` + "`" + `id` + "`" + `) for easier access.",
                 "consumes": [
                     "application/json"
                 ],
@@ -773,7 +780,7 @@ const docTemplate = `{
                 "tags": [
                     "generic"
                 ],
-                "summary": "Find",
+                "summary": "Find Generic Objects",
                 "parameters": [
                     {
                         "description": "Find request payload",
@@ -830,7 +837,7 @@ const docTemplate = `{
                 "tags": [
                     "generic"
                 ],
-                "summary": "Update",
+                "summary": "Update Generic Objects",
                 "parameters": [
                     {
                         "description": "Update request payload",
@@ -846,8 +853,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Successful update of objects",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": true
+                            "$ref": "#/definitions/generictypes.UpdateResponse"
                         }
                     },
                     "400": {
@@ -883,7 +889,7 @@ const docTemplate = `{
                 "tags": [
                     "generic"
                 ],
-                "summary": "Upsert",
+                "summary": "Upsert a Generic Object",
                 "parameters": [
                     {
                         "description": "Upsert request payload",
@@ -899,8 +905,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Successful creation or update of object",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": true
+                            "$ref": "#/definitions/generictypes.UpsertResponse"
                         }
                     },
                     "400": {
@@ -1374,16 +1379,36 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "all": {
-                    "$ref": "#/definitions/datastore.AllCondition"
+                    "description": "All condition returns all objects.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/datastore.AllCondition"
+                        }
+                    ]
                 },
                 "contains": {
-                    "$ref": "#/definitions/datastore.ContainsCondition"
+                    "description": "Contains condition returns all objects where the field(s) values contain a particular string.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/datastore.ContainsCondition"
+                        }
+                    ]
                 },
                 "equal": {
-                    "$ref": "#/definitions/datastore.EqualCondition"
+                    "description": "Equal condition returns objects where value of a field equals (=) to the specified value in the query.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/datastore.EqualCondition"
+                        }
+                    ]
                 },
                 "startsWith": {
-                    "$ref": "#/definitions/datastore.StartsWithCondition"
+                    "description": "StartsWith condition returns all objects where the field(s) values start with a particular string.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/datastore.StartsWithCondition"
+                        }
+                    ]
                 }
             }
         },
@@ -1391,7 +1416,12 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "selector": {
-                    "$ref": "#/definitions/datastore.FieldSelector"
+                    "description": "Selector selects one, more or all fields",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/datastore.FieldSelector"
+                        }
+                    ]
                 },
                 "value": {}
             }
@@ -1400,7 +1430,12 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "selector": {
-                    "$ref": "#/definitions/datastore.FieldSelector"
+                    "description": "Selector selects one, more or all fields",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/datastore.FieldSelector"
+                        }
+                    ]
                 },
                 "value": {}
             }
@@ -1409,12 +1444,15 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "any": {
+                    "description": "Any matches any fields in the object",
                     "type": "boolean"
                 },
                 "field": {
+                    "description": "Field matchies a single field",
                     "type": "string"
                 },
                 "oneOf": {
+                    "description": "OneOf matches a number of fields",
                     "type": "array",
                     "items": {
                         "type": "string"
@@ -1448,7 +1486,7 @@ const docTemplate = `{
                     "items": {}
                 },
                 "conditions": {
-                    "description": "Conditions are filtering options of a query.",
+                    "description": "Conditions are filtering options of a query. It is advised to use\nIt's advised to use helper functions in your respective client library such as condition constructors (` + "`" + `all` + "`" + `, ` + "`" + `equal` + "`" + `, ` + "`" + `contains` + "`" + `, ` + "`" + `startsWith` + "`" + `) and field selectors (` + "`" + `field` + "`" + `, ` + "`" + `fields` + "`" + `, ` + "`" + `id` + "`" + `) for easier access.",
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/datastore.Condition"
@@ -1459,11 +1497,11 @@ const docTemplate = `{
                     "type": "boolean"
                 },
                 "limit": {
-                    "description": "Limit the number of records in the result set..",
+                    "description": "Limit the number of records in the result set.",
                     "type": "integer"
                 },
                 "orderBys": {
-                    "description": "OrderBys orders the result set.",
+                    "description": "OrderBys order the result set.",
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/datastore.OrderBy"
@@ -1475,7 +1513,12 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "selector": {
-                    "$ref": "#/definitions/datastore.FieldSelector"
+                    "description": "Selector selects one, more or all fields",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/datastore.FieldSelector"
+                        }
+                    ]
                 },
                 "value": {}
             }
@@ -1547,6 +1590,14 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "object": {
+                    "$ref": "#/definitions/generictypes.GenericObjectCreateFields"
+                }
+            }
+        },
+        "generictypes.CreateResponse": {
+            "type": "object",
+            "properties": {
+                "object": {
                     "$ref": "#/definitions/generictypes.GenericObject"
                 }
             }
@@ -1564,6 +1615,9 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        },
+        "generictypes.DeleteResponse": {
+            "type": "object"
         },
         "generictypes.ErrorResponse": {
             "type": "object",
@@ -1616,13 +1670,39 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "public": {
-                    "description": "Entry is visible to all users of the app",
+                    "description": "Public determines if the object is visible to all users.\nWhen it's false the entry is only visible to the user who created it.\nWhen it's true the entry is visible to everyone.",
                     "type": "boolean"
                 },
                 "table": {
                     "type": "string"
                 },
                 "updatedAt": {
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "string"
+                }
+            }
+        },
+        "generictypes.GenericObjectCreateFields": {
+            "type": "object",
+            "required": [
+                "data",
+                "table"
+            ],
+            "properties": {
+                "data": {
+                    "type": "object",
+                    "additionalProperties": {}
+                },
+                "id": {
+                    "type": "string"
+                },
+                "public": {
+                    "description": "Public determines if the object is visible to all users.\nWhen it's false the entry is only visible to the user who created it.\nWhen it's true the entry is visible to everyone.",
+                    "type": "boolean"
+                },
+                "table": {
                     "type": "string"
                 },
                 "userId": {
@@ -1647,7 +1727,18 @@ const docTemplate = `{
                 }
             }
         },
+        "generictypes.UpdateResponse": {
+            "type": "object"
+        },
         "generictypes.UpsertRequest": {
+            "type": "object",
+            "properties": {
+                "object": {
+                    "$ref": "#/definitions/generictypes.GenericObjectCreateFields"
+                }
+            }
+        },
+        "generictypes.UpsertResponse": {
             "type": "object",
             "properties": {
                 "object": {
@@ -1676,7 +1767,7 @@ const docTemplate = `{
                     "example": "huggingface/TheBloke/mistral-7b-instruct-v0.2.Q3_K_S.gguf"
                 },
                 "prompt": {
-                    "description": "Prompt is the message itself eg.",
+                    "description": "Prompt is the message itself eg. \"What's a banana?",
                     "type": "string",
                     "example": "What's a banana?"
                 },
@@ -1685,16 +1776,12 @@ const docTemplate = `{
                     "type": "boolean"
                 },
                 "template": {
-                    "description": "Template of the prompt. Optional. Might be derived from ModelId",
+                    "description": "Template of the prompt. Optional. If not present it's derived from ModelId.",
                     "type": "string",
                     "example": "[INST]{prompt}[/INST]"
                 },
                 "threadId": {
                     "description": "ThreadId is the ID of the thread a prompt belongs to.\nClients subscribe to Thread Streams to see the answer to a prompt,\nor set ` + "`" + `prompt.sync` + "`" + ` to true for a blocking answer.",
-                    "type": "string"
-                },
-                "userId": {
-                    "description": "UserId contains the ID of the user who submitted the prompt.",
                     "type": "string"
                 }
             }
@@ -1774,7 +1861,7 @@ const docTemplate = `{
                     "example": "huggingface/TheBloke/mistral-7b-instruct-v0.2.Q3_K_S.gguf"
                 },
                 "prompt": {
-                    "description": "Prompt is the message itself eg.",
+                    "description": "Prompt is the message itself eg. \"What's a banana?",
                     "type": "string",
                     "example": "What's a banana?"
                 },
@@ -1795,7 +1882,7 @@ const docTemplate = `{
                     "type": "boolean"
                 },
                 "template": {
-                    "description": "Template of the prompt. Optional. Might be derived from ModelId",
+                    "description": "Template of the prompt. Optional. If not present it's derived from ModelId.",
                     "type": "string",
                     "example": "[INST]{prompt}[/INST]"
                 },
@@ -1840,17 +1927,26 @@ const docTemplate = `{
                 }
             }
         }
+    },
+    "securityDefinitions": {
+        "BasicAuth": {
+            "type": "basic"
+        }
+    },
+    "externalDocs": {
+        "description": "Singulatron API",
+        "url": "https://superplatform.ai/docs/category/singulatron-api"
     }
 }`
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "",
-	Host:             "",
-	BasePath:         "",
+	Version:          "0.2",
+	Host:             "localhost:58231",
+	BasePath:         "/",
 	Schemes:          []string{},
-	Title:            "",
-	Description:      "",
+	Title:            "Singulatron Backend",
+	Description:      "Run and develop self-hosted AI apps.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

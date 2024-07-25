@@ -7,10 +7,20 @@ export declare function field(fieldName: string): FieldSelector;
 export declare function fields(fieldNames: string[]): FieldSelector;
 export declare function anyField(): FieldSelector;
 export interface Query {
+    /** Conditions are filtering options of a query. */
     conditions?: Condition[];
+    /** After is used for paginations. Instead of offset-based pagination,
+     * we support cursor-based pagination because it works better in a scalable,
+     * distributed environment.
+     */
     after?: any[];
+    /** Limit the number of records in the result set. */
     limit?: number;
+    /** OrderBys order the result set. */
     orderBys?: OrderBy[];
+    /** Count true means return the count of the dataset filtered by Conditions
+     * without after or limit.
+     */
     count?: boolean;
 }
 export interface OrderBy {
@@ -56,19 +66,26 @@ export declare function contains(selector: FieldSelector, value: any): Condition
 export declare function all(): Condition;
 export declare function id(id: string): Condition;
 export declare function userId(id: string): Condition;
-export interface GenericObject {
-    id: string;
+export interface GenericObjectCreateFields {
+    id?: string;
+    table: string;
+    data: any;
+    /** Public determines if the object is visible to all users.
+     * When it's false the entry is only visible to the user who created it.
+     * When it's true the entry is visible to everyone.
+     */
+    public?: boolean;
+}
+export interface GenericObject extends GenericObjectCreateFields {
     createdAt: string;
     updatedAt: string;
     userId?: string;
-    table: string;
-    data: any;
-    public?: boolean;
 }
 export interface CreateRequest {
-    object: GenericObject;
+    object: GenericObjectCreateFields;
 }
 export interface CreateResponse {
+    object: GenericObject;
 }
 export interface UpdateRequest {
     table: string;
@@ -92,7 +109,7 @@ export interface FindResponse {
     objects: GenericObject[];
 }
 export interface UpsertRequest {
-    object: GenericObject;
+    object: GenericObjectCreateFields;
 }
 export interface UpsertResponse {
 }

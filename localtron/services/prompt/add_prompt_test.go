@@ -141,7 +141,7 @@ func TestAddPrompt(t *testing.T) {
 			Sync:   true,
 			Prompt: "Hi there, how are you?",
 		},
-	})
+	}, "")
 
 	require.NoError(t, err)
 	require.Equal(t, true, strings.Contains(prompt.Answer, "how"))

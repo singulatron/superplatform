@@ -40,31 +40,31 @@ func (m *MockGenericServiceI) EXPECT() *MockGenericServiceIMockRecorder {
 }
 
 // Create mocks base method.
-func (m *MockGenericServiceI) Create(object *GenericObject) error {
+func (m *MockGenericServiceI) Create(request *CreateRequest) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Create", object)
+	ret := m.ctrl.Call(m, "Create", request)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // Create indicates an expected call of Create.
-func (mr *MockGenericServiceIMockRecorder) Create(object any) *gomock.Call {
+func (mr *MockGenericServiceIMockRecorder) Create(request any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockGenericServiceI)(nil).Create), object)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockGenericServiceI)(nil).Create), request)
 }
 
 // CreateMany mocks base method.
-func (m *MockGenericServiceI) CreateMany(objects []*GenericObject) error {
+func (m *MockGenericServiceI) CreateMany(request *CreateManyRequest) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreateMany", objects)
+	ret := m.ctrl.Call(m, "CreateMany", request)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // CreateMany indicates an expected call of CreateMany.
-func (mr *MockGenericServiceIMockRecorder) CreateMany(objects any) *gomock.Call {
+func (mr *MockGenericServiceIMockRecorder) CreateMany(request any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateMany", reflect.TypeOf((*MockGenericServiceI)(nil).CreateMany), objects)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateMany", reflect.TypeOf((*MockGenericServiceI)(nil).CreateMany), request)
 }
 
 // Delete mocks base method.
@@ -111,29 +111,29 @@ func (mr *MockGenericServiceIMockRecorder) Update(tableName, userId, conditions,
 }
 
 // Upsert mocks base method.
-func (m *MockGenericServiceI) Upsert(object *GenericObject) error {
+func (m *MockGenericServiceI) Upsert(request *UpsertRequest) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Upsert", object)
+	ret := m.ctrl.Call(m, "Upsert", request)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // Upsert indicates an expected call of Upsert.
-func (mr *MockGenericServiceIMockRecorder) Upsert(object any) *gomock.Call {
+func (mr *MockGenericServiceIMockRecorder) Upsert(request any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Upsert", reflect.TypeOf((*MockGenericServiceI)(nil).Upsert), object)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Upsert", reflect.TypeOf((*MockGenericServiceI)(nil).Upsert), request)
 }
 
 // UpsertMany mocks base method.
-func (m *MockGenericServiceI) UpsertMany(objects []*GenericObject) error {
+func (m *MockGenericServiceI) UpsertMany(request *UpsertManyRequest) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UpsertMany", objects)
+	ret := m.ctrl.Call(m, "UpsertMany", request)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // UpsertMany indicates an expected call of UpsertMany.
-func (mr *MockGenericServiceIMockRecorder) UpsertMany(objects any) *gomock.Call {
+func (mr *MockGenericServiceIMockRecorder) UpsertMany(request any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpsertMany", reflect.TypeOf((*MockGenericServiceI)(nil).UpsertMany), objects)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpsertMany", reflect.TypeOf((*MockGenericServiceI)(nil).UpsertMany), request)
 }

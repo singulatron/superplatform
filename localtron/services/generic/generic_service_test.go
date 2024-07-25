@@ -32,14 +32,18 @@ func TestCreate(t *testing.T) {
 	uuid2 := uuid.New().String()
 
 	obj := &generictypes.GenericObject{
-		Id:        uuid1,
-		Table:     table1,
-		UserId:    userId,
+		GenericObjectCreateFields: generictypes.GenericObjectCreateFields{
+			Id:     uuid1,
+			Table:  table1,
+			Data:   map[string]interface{}{"key": "value"},
+			UserId: userId,
+		},
 		CreatedAt: time.Now().String(),
-		Data:      map[string]interface{}{"key": "value"},
 	}
 
-	err = service.Create(obj)
+	err = service.Create(&generictypes.CreateRequest{
+		Object: &obj.GenericObjectCreateFields,
+	})
 	require.NoError(t, err)
 
 	t.Run("user 1 can find its own private record", func(t *testing.T) {
@@ -59,14 +63,18 @@ func TestCreate(t *testing.T) {
 	})
 
 	obj2 := &generictypes.GenericObject{
-		Id:        uuid2,
-		Table:     table2,
-		UserId:    otherUserId,
+		GenericObjectCreateFields: generictypes.GenericObjectCreateFields{
+			Id:     uuid2,
+			Table:  table2,
+			Data:   map[string]interface{}{"key": "value"},
+			UserId: otherUserId,
+		},
 		CreatedAt: time.Now().String(),
-		Data:      map[string]interface{}{"key": "value"},
 	}
 
-	err = service.Create(obj2)
+	err = service.Create(&generictypes.CreateRequest{
+		Object: &obj2.GenericObjectCreateFields,
+	})
 	require.NoError(t, err)
 
 	t.Run("user 2 can find its own private record", func(t *testing.T) {
@@ -109,7 +117,10 @@ func TestCreate(t *testing.T) {
 	})
 
 	t.Run("already exists", func(t *testing.T) {
-		err = service.Create(obj)
+		err = service.Create(
+			&generictypes.CreateRequest{
+				Object: &obj.GenericObjectCreateFields,
+			})
 		require.Error(t, err)
 	})
 
@@ -127,14 +138,18 @@ func TestCreate(t *testing.T) {
 
 	t.Run("user 2 cannot update record of user 1", func(t *testing.T) {
 		obj.UserId = otherUserId
-		err = service.Upsert(obj)
+		err = service.Upsert(&generictypes.UpsertRequest{
+			Object: &obj.GenericObjectCreateFields,
+		})
 		// unauthorized
 		require.Error(t, err)
 		obj.UserId = userId
 	})
 
 	t.Run("user 1 can upsert its own reord", func(t *testing.T) {
-		err = service.Upsert(obj)
+		err = service.Upsert(&generictypes.UpsertRequest{
+			Object: &obj.GenericObjectCreateFields,
+		})
 		require.NoError(t, err)
 	})
 

@@ -52,6 +52,9 @@ type Prompt struct {
 
 	// Error that arose during prompt execution, if any.
 	Error string `json:"error,omitempty"`
+
+	// UserId contains the ID of the user who submitted the prompt.
+	UserId string `json:"userId"`
 }
 
 func (c *Prompt) GetId() string {
@@ -66,7 +69,7 @@ type PromptCreateFields struct {
 	// Id is the unique ID of the prompt.
 	Id string `json:"id"`
 
-	// Prompt is the message itself eg.
+	// Prompt is the message itself eg. "What's a banana?
 	Prompt string `json:"prompt" example:"What's a banana?" binding:"required"`
 
 	// Sync drives whether prompt add request should wait and hang until
@@ -81,10 +84,7 @@ type PromptCreateFields struct {
 	// or set `prompt.sync` to true for a blocking answer.
 	ThreadId string `json:"threadId"`
 
-	// UserId contains the ID of the user who submitted the prompt.
-	UserId string `json:"userId"`
-
-	// Template of the prompt. Optional. Might be derived from ModelId
+	// Template of the prompt. Optional. If not present it's derived from ModelId.
 	Template string `json:"template" example:"[INST]{prompt}[/INST]"`
 
 	// ModelId is just the Singulatron internal ID of the model.

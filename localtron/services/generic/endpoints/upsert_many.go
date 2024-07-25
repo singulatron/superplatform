@@ -48,7 +48,7 @@ func UpsertMany(
 		req.Objects[i].UserId = user.Id
 	}
 
-	err = genericService.UpsertMany(req.Objects)
+	err = genericService.UpsertMany(req)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

@@ -16,13 +16,13 @@ import (
 )
 
 // Update modifies existing generic objects based on given conditions
-// @Summary Update
+// @Summary Update Generic Objects
 // @Description Updates objects in a specified table based on provided conditions. Requires authorization and user authentication.
 // @Tags generic
 // @Accept json
 // @Produce json
 // @Param body body generictypes.UpdateRequest true "Update request payload"
-// @Success 200 {object} map[string]interface{} "Successful update of objects"
+// @Success 200 {object} generictypes.UpdateResponse "Successful update of objects"
 // @Failure 400 {object} generictypes.ErrorResponse "Invalid JSON"
 // @Failure 401 {object} generictypes.ErrorResponse "Unauthorized"
 // @Failure 500 {object} generictypes.ErrorResponse "Internal Server Error"

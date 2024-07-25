@@ -3,6 +3,10 @@ import type { SidebarsConfig } from "@docusaurus/plugin-content-docs";
 const sidebar: SidebarsConfig = {
   apisidebar: [
     {
+      type: "doc",
+      id: "singulatron/singulatron-backend",
+    },
+    {
       type: "category",
       label: "chat",
       items: [
@@ -110,32 +114,32 @@ const sidebar: SidebarsConfig = {
       items: [
         {
           type: "doc",
-          id: "singulatron/create",
-          label: "Create",
+          id: "singulatron/create-a-generic-object",
+          label: "Create a Generic Object",
           className: "api-method post",
         },
         {
           type: "doc",
-          id: "singulatron/delete",
-          label: "Delete",
+          id: "singulatron/delete-a-generic-object",
+          label: "Delete a Generic Object",
           className: "api-method post",
         },
         {
           type: "doc",
-          id: "singulatron/find",
-          label: "Find",
+          id: "singulatron/find-generic-objects",
+          label: "Find Generic Objects",
           className: "api-method post",
         },
         {
           type: "doc",
-          id: "singulatron/update",
-          label: "Update",
+          id: "singulatron/update-generic-objects",
+          label: "Update Generic Objects",
           className: "api-method post",
         },
         {
           type: "doc",
-          id: "singulatron/upsert",
-          label: "Upsert",
+          id: "singulatron/upsert-a-generic-object",
+          label: "Upsert a Generic Object",
           className: "api-method post",
         },
       ],

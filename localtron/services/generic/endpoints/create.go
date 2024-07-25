@@ -17,13 +17,13 @@ import (
 )
 
 // Create creates a new generic object
-// @Summary Create
+// @Summary Create a Generic Object
 // @Description Creates a new object with the provided details. Requires authorization and user authentication.
 // @Tags generic
 // @Accept json
 // @Produce json
 // @Param body body generictypes.CreateRequest true "Create request payload"
-// @Success 200 {object} map[string]interface{} "Success"
+// @Success 200 {object} generictypes.CreateResponse "Success"
 // @Failure 400 {object} generictypes.ErrorResponse "Invalid JSON"
 // @Failure 401 {object} generictypes.ErrorResponse "Unauthorized"
 // @Failure 500 {object} generictypes.ErrorResponse "Internal Server Error"
@@ -60,7 +60,7 @@ func Create(
 	defer r.Body.Close()
 	req.Object.UserId = user.Id
 
-	err = genericService.Create(req.Object)
+	err = genericService.Create(req)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

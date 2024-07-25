@@ -12,11 +12,7 @@ export class GenericService {
     return call(this.options, endpoint, request);
   }
 
-  async create(object: generic.GenericObject): Promise<void> {
-    const request: generic.CreateRequest = {
-      object: object,
-    };
-
+  async create(request: generic.CreateRequest): Promise<void> {
     return this.call("/generic/create", request);
   }
 
@@ -26,7 +22,7 @@ export class GenericService {
     return this.call("/generic/find", request);
   }
 
-  async upsert(object: generic.GenericObject): Promise<void> {
+  async upsert(object: generic.GenericObjectCreateFields): Promise<void> {
     const request: generic.UpsertRequest = {
       object: object,
     };

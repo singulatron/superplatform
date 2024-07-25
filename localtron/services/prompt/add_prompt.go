@@ -23,7 +23,9 @@ import (
 
 const maxThreadTitle = 100
 
-func (p *PromptService) AddPrompt(ctx context.Context, promptReq *prompttypes.AddPromptRequest) (*prompttypes.AddPromptResponse, error) {
+func (p *PromptService) AddPrompt(ctx context.Context, promptReq *prompttypes.AddPromptRequest, userId string) (*prompttypes.AddPromptResponse, error) {
+	// @todo validate userId
+
 	prompt := &prompttypes.Prompt{
 		PromptCreateFields: promptReq.PromptCreateFields,
 	}
@@ -65,7 +67,7 @@ func (p *PromptService) AddPrompt(ctx context.Context, promptReq *prompttypes.Ad
 
 		thread := &apptypes.Thread{
 			Id:        threadId,
-			UserIds:   []string{prompt.UserId},
+			UserIds:   []string{userId},
 			CreatedAt: now,
 			UpdatedAt: now,
 		}
