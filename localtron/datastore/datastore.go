@@ -66,16 +66,28 @@ type QueryBuilder interface {
 }
 
 type FieldSelector struct {
-	Field string   `json:"field,omitempty"`
+	// Field matchies a single field
+	Field string `json:"field,omitempty"`
+
+	// OneOf matches a number of fields
 	OneOf []string `json:"oneOf,omitempty"`
-	Any   bool     `json:"any,omitempty"`
+
+	// Any matches any fields in the object
+	Any bool `json:"any,omitempty"`
 }
 
 type Condition struct {
-	Equal      *EqualCondition      `json:"equal,omitempty"`
-	All        *AllCondition        `json:"all,omitempty"`
+	// Equal condition returns objects where value of a field equals (=) to the specified value in the query.
+	Equal *EqualCondition `json:"equal,omitempty"`
+
+	// All condition returns all objects.
+	All *AllCondition `json:"all,omitempty"`
+
+	// StartsWith condition returns all objects where the field(s) values start with a particular string.
 	StartsWith *StartsWithCondition `json:"startsWith,omitempty"`
-	Contains   *ContainsCondition   `json:"contains,omitempty"`
+
+	// Contains condition returns all objects where the field(s) values contain a particular string.
+	Contains *ContainsCondition `json:"contains,omitempty"`
 }
 
 func (c Condition) FieldIs(fieldName string) bool {
@@ -93,16 +105,19 @@ func (c Condition) FieldIs(fieldName string) bool {
 }
 
 type EqualCondition struct {
+	// Selector selects one, more or all fields
 	Selector *FieldSelector `json:"selector,omitempty"`
 	Value    any            `json:"value,omitempty"`
 }
 
 type StartsWithCondition struct {
+	// Selector selects one, more or all fields
 	Selector *FieldSelector `json:"selector,omitempty"`
 	Value    any            `json:"value,omitempty"`
 }
 
 type ContainsCondition struct {
+	// Selector selects one, more or all fields
 	Selector *FieldSelector `json:"selector,omitempty"`
 	Value    any            `json:"value,omitempty"`
 }
@@ -110,7 +125,8 @@ type ContainsCondition struct {
 // Query as a type is not used in the DataStore interface but mostly to accept
 // a DataStore query through a HTTP API
 type Query struct {
-	// Conditions are filtering options of a query.
+	// Conditions are filtering options of a query. It is advised to use
+	// It's advised to use helper functions in your respective client library such as condition constructors (`all`, `equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
 	Conditions []Condition `json:"conditions,omitempty"`
 
 	// After is used for paginations. Instead of offset-based pagination,

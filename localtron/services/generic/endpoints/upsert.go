@@ -16,7 +16,7 @@ import (
 )
 
 // Upsert creates or updates a generic object based on the provided data
-// @Summary Upsert Generic Object
+// @Summary Upsert a Generic Object
 // @Description Creates a new generic object or updates an existing one based on the provided data. Requires authorization and user authentication.
 // @Tags generic
 // @Accept json

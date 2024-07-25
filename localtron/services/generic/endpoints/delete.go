@@ -16,7 +16,7 @@ import (
 )
 
 // Delete removes a generic object based on the provided conditions
-// @Summary Delete Generic Object
+// @Summary Delete a Generic Object
 // @Description Removes a generic object from the system based on the provided conditions. Requires authorization and user authentication.
 // @Tags generic
 // @Accept json

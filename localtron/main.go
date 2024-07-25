@@ -23,6 +23,25 @@ import (
 
 const port = "58231"
 
+// @title           Singulatron Backend
+// @version         0.2
+// @description     Run and develop self-hosted AI apps.
+// @termsOfService  http://swagger.io/terms/
+
+// @contact.name   API Support
+// @contact.url    https://singulatron.com/home
+// @contact.email  sales@singulatron.com
+
+// @license.name  AGPL v3.0
+// @license.url   https://www.gnu.org/licenses/agpl-3.0.html
+
+// @host      localhost:58231
+// @BasePath  /
+
+// @securityDefinitions.basic  BasicAuth
+
+// @externalDocs.description  Singulatron API
+// @externalDocs.url          https://superplatform.ai/docs/category/singulatron-api
 func main() {
 	defer func() {
 		if r := recover(); r != nil {

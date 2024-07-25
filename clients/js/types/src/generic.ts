@@ -248,8 +248,9 @@ export interface GenericObjectCreateFields {
   table: string;
   data: any;
 
-  /** Public is true when the object is visible to all users.
+  /** Public determines if the object is visible to all users.
    * When it's false the entry is only visible to the user who created it.
+   * When it's true the entry is visible to everyone.
    */
   public?: boolean;
 }

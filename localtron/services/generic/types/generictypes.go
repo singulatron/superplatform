@@ -12,8 +12,9 @@ type GenericObjectCreateFields struct {
 	Id    string `json:"id"`
 	Table string `json:"table" binding:"required"`
 
-	// Public is true when the object is visible to all users.
+	// Public determines if the object is visible to all users.
 	// When it's false the entry is only visible to the user who created it.
+	// When it's true the entry is visible to everyone.
 	Public bool `json:"public,omitempty"`
 
 	Data   map[string]any `json:"data,omitempty" binding:"required"`
