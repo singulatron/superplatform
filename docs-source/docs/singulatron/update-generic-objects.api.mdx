@@ -1,11 +1,11 @@
 ---
-id: delete
-title: "Delete"
-description: "Removes a generic object from the system based on the provided conditions. Requires authorization and user authentication."
-sidebar_label: "Delete"
+id: update-generic-objects
+title: "Update Generic Objects"
+description: "Updates objects in a specified table based on provided conditions. Requires authorization and user authentication."
+sidebar_label: "Update Generic Objects"
 hide_title: true
 hide_table_of_contents: true
-api: eJzVVsFu2zAM/RWBZ6/dhu3iW7v1sB3WommxQ5ADYzGJOllyKDmtZ/jfB9pO4iTG0AFFh+Zih6LoJ+q9J9WgKWRsimi8gxRuKfcbCgrVkhyxyZSfP1AW1YJ9ruKKVKhCpFzNMZBW3rWxgv3GaNIq804bKRXO1C2tS8NSq4wrz+Y3yoBCp1UZiNswuWiyNn4GCTCtSwrx0usK0hoy7yK5KK9YFLZPPH8IgrSGkK0oR3kr2BfE0VDop/UY5J+JlIfTJLRWHrEqCFLo1ghN0n4TjRuZEchSFj2P1HLVoNbce0vopNjCkNWDoRDZuKWMeEfXiwN4Jyl9AJmxgmYf2GPdoC0J0np0kNYl2je/ihCRY/hp4uqNL2Us/bBgAhHnlkY+PVKtSY50+5UsRVK9glSBlfWoe00ZJg1p5JIaCYTCu9B16uP79/I4rDUps4xCWJRWaSkrqvWL3gggeb4uUXdCRHsz2B/BMbKiJoFPY2i+uQ1ao9X3yfWPf/n4ISWIuWPKM3rbIvlwiuTebZ2M9Ksh+Tzek0js0KoJ8YZYXbU1XweSqJKykk2sIJ3WcEnIxBelSHQ6a2bC42WAdAr9CQKzBHKKK68hhcIHoVCBkg7nfcp5yzOCBATq7f4YuHrCvOhEMbT16dbAjxx7aAmtCXRc62W/XddO7dNtZHYk3p15vlTBQx97mapdq1vLGLiUcQu/PTwxi12PooltGiSwIQ4diSRbtiPHlhwOc9oZCRz5y+Aw/r9XhJ6PkZ7ieWHRtLZecnfStaTa807W0C5mlsBKeJdOoa4F1T3bppHwuiQWGs+ksWy6bk6lzytCTdxS7RdVkMKXrgHv7gTBbh9OddYk2xkXWUZF/GvuUBo315M7SGDe335yr2UO46O4OD522+eL3c2mjdVg0S1LXEpuV1N+fwB8kG+x
+api: eJzVVsGOGzcM/RWBl16mu2nRXua2CYIiPXQX2SxycPdAj2iPUlnSShxvpob/vaA04xnHkyIFghTxxTZFUo/S46MOoCk10QQ23kEND0EjU1J+/YEaTso4hSoFaszGkFaMa0tqjYm08k6F6PdGk1aNd9pIinSl3tJTZyIlhR23Ppq/URYUOq26RDGbybFpsv0KKoj01FHil173UB+g8Y7JsfzEEOzgeP0hCcIDpKalHcqvEH2gyIbSEDZgkH+GaZcundBa+eI+ENRQqoRjlfdE4xYiEllq2MeFXK6f5Vp7bwmdJNsYsnq2lDgat5UV7+h2cwbvwmUwYIzYw3EyTFj3aDuC+rC4SE8d2u++isQYOb033H7npSy5nyesxpVLQkdCJn3Di7A0cm4C1IX1aO/m0Usbm+UzCN3amkaWzrXgLtuVSYpjR+q5Jae4pUEbxL43yYggsFdobW7vdPWney+ehn9IaoM2UQ4ix7GXGO9sPw+UxawLz61XQ8nKsOjC5UVm/VksosvC9bnDkg3eLFV/LOpjImmoV+VQx20el+7uMwAWbl7uaEFb1aB2KmBvPWqYI5CDzpBS8C4VGvz84sXl3dx3TUMpbTqrSuXKb0bRhurLJXSZPQJjoaBjBb8sgXnj9miNVr/f3/7xXzY/pzvFWJr6C442I/npEsmDG4cO6W+G5NflM2GKDq26p7inqF7nnN8GkggoNV003EO9OsBLwkjxphM1XT0ehde4TcL3LTmKphGq74hbr6GG4BNDBQHFHa4Hl+tCM6hAoL6dJvbrj7gLpSfmE3g1ztpPhutcvbNeF64NCj3WdRLm1Wh5/ERnT3PuayU8HzlfJ6sc9aTuMz2fEgwyPqjzZB9FeWjFIjvT8kzuZsZB5ebD6zxQtnEbP76yMAMTN8PZDSrYU0yFwnk2+MQ7zNR0uKNJxX4rtFC3J8054//sFff/vCmHrmD6yNfBosnjo4vlaZSpPbF/PE5pg1bYX6/gcBBED9Eej2J+6ihKMz3K9UZTTnUlt90SaoqZ8H9RDzW8KoX/+E4QnNhw2e3Haoy4aRoK/K++8wa9u71/BxWsh+fyzmuJifgsowSfyzX6cHoKZ9sBLLpth1vxLTnl8w9ymi4x
 sidebar_class_name: "post api-method"
 custom_edit_url: null
 ---
@@ -27,20 +27,20 @@ import TabItem from "@theme/TabItem";
 <Heading
   as={"h1"}
   className={"openapi__heading"}
-  children={"Delete"}
+  children={"Update Generic Objects"}
 >
 </Heading>
 
 <MethodEndpoint
   method={"post"}
-  path={"/generic/delete"}
+  path={"/generic/update"}
 >
   
 </MethodEndpoint>
 
 
 
-Removes a generic object from the system based on the provided conditions. Requires authorization and user authentication.
+Updates objects in a specified table based on provided conditions. Requires authorization and user authentication.
 
 <Heading
   id={"request"}
@@ -84,7 +84,7 @@ Removes a generic object from the system based on the provided conditions. Requi
         >
           
           
-          Delete request payload
+          Update request payload
           
           
         </div>
@@ -431,6 +431,138 @@ Removes a generic object from the system based on the provided conditions. Requi
             </div>
           </details>
         </SchemaItem><SchemaItem
+          collapsible={true}
+          className={"schemaItem"}
+        >
+          <details
+            style={{}}
+            className={"openapi-markdown__details"}
+          >
+            <summary
+              style={{}}
+            >
+              <span
+                className={"openapi-schema__container"}
+              >
+                <strong
+                  className={"openapi-schema__property"}
+                >
+                  object
+                </strong><span
+                  className={"openapi-schema__name"}
+                >
+                   object
+                </span>
+              </span>
+            </summary><div
+              style={{"marginLeft":"1rem"}}
+            >
+              <SchemaItem
+                collapsible={false}
+                name={"createdAt"}
+                required={false}
+                schemaName={"string"}
+                qualifierMessage={undefined}
+                schema={{"type":"string"}}
+              >
+                
+              </SchemaItem><SchemaItem
+                collapsible={true}
+                className={"schemaItem"}
+              >
+                <details
+                  style={{}}
+                  className={"openapi-markdown__details"}
+                >
+                  <summary
+                    style={{}}
+                  >
+                    <span
+                      className={"openapi-schema__container"}
+                    >
+                      <strong
+                        className={"openapi-schema__property"}
+                      >
+                        data
+                      </strong><span
+                        className={"openapi-schema__name"}
+                      >
+                         object
+                      </span><span
+                        className={"openapi-schema__divider"}
+                      >
+                        
+                      </span><span
+                        className={"openapi-schema__required"}
+                      >
+                        required
+                      </span>
+                    </span>
+                  </summary><div
+                    style={{"marginLeft":"1rem"}}
+                  >
+                    <SchemaItem
+                      name={"property name*"}
+                      required={false}
+                      schemaName={"any"}
+                      qualifierMessage={undefined}
+                      schema={{"additionalProperties":{},"type":"object"}}
+                      collapsible={false}
+                      discriminator={false}
+                    >
+                      
+                    </SchemaItem>
+                  </div>
+                </details>
+              </SchemaItem><SchemaItem
+                collapsible={false}
+                name={"id"}
+                required={false}
+                schemaName={"string"}
+                qualifierMessage={undefined}
+                schema={{"type":"string"}}
+              >
+                
+              </SchemaItem><SchemaItem
+                collapsible={false}
+                name={"public"}
+                required={false}
+                schemaName={"boolean"}
+                qualifierMessage={undefined}
+                schema={{"description":"Public is true when the object is visible to all users.\nWhen it's false the entry is only visible to the user who created it.","type":"boolean"}}
+              >
+                
+              </SchemaItem><SchemaItem
+                collapsible={false}
+                name={"table"}
+                required={true}
+                schemaName={"string"}
+                qualifierMessage={undefined}
+                schema={{"type":"string"}}
+              >
+                
+              </SchemaItem><SchemaItem
+                collapsible={false}
+                name={"updatedAt"}
+                required={false}
+                schemaName={"string"}
+                qualifierMessage={undefined}
+                schema={{"type":"string"}}
+              >
+                
+              </SchemaItem><SchemaItem
+                collapsible={false}
+                name={"userId"}
+                required={false}
+                schemaName={"string"}
+                qualifierMessage={undefined}
+                schema={{"type":"string"}}
+              >
+                
+              </SchemaItem>
+            </div>
+          </details>
+        </SchemaItem><SchemaItem
           collapsible={false}
           name={"table"}
           required={false}
@@ -456,7 +588,7 @@ Removes a generic object from the system based on the provided conditions. Requi
         <div>
           
           
-          Successful deletion of object
+          Successful update of objects
           
           
         </div><div>

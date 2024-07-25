@@ -294,8 +294,23 @@ definitions:
     type: object
   generictypes.CreateRequest:
     properties:
-      object:
-        $ref: '#/definitions/generictypes.GenericObjectCreateFields'
+      data:
+        additionalProperties: {}
+        type: object
+      id:
+        type: string
+      public:
+        description: |-
+          Public is true when the object is visible to all users.
+          When it's false the entry is only visible to the user who created it.
+        type: boolean
+      table:
+        type: string
+      userId:
+        type: string
+    required:
+    - data
+    - table
     type: object
   generictypes.DeleteRequest:
     properties:
@@ -344,26 +359,6 @@ definitions:
       table:
         type: string
       updatedAt:
-        type: string
-      userId:
-        type: string
-    required:
-    - data
-    - table
-    type: object
-  generictypes.GenericObjectCreateFields:
-    properties:
-      data:
-        additionalProperties: {}
-        type: object
-      id:
-        type: string
-      public:
-        description: |-
-          Public is true when the object is visible to all users.
-          When it's false the entry is only visible to the user who created it.
-        type: boolean
-      table:
         type: string
       userId:
         type: string
@@ -991,7 +986,7 @@ paths:
             $ref: '#/definitions/generictypes.ErrorResponse'
       security:
       - BearerAuth: []
-      summary: Create
+      summary: Create Generic Object
       tags:
       - generic
   /generic/delete:
@@ -1029,7 +1024,7 @@ paths:
             $ref: '#/definitions/generictypes.ErrorResponse'
       security:
       - BearerAuth: []
-      summary: Delete
+      summary: Delete Generic Object
       tags:
       - generic
   /generic/find:
@@ -1064,7 +1059,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/generictypes.ErrorResponse'
-      summary: Find
+      summary: Find Generic Objects
       tags:
       - generic
   /generic/update:
@@ -1102,7 +1097,7 @@ paths:
             $ref: '#/definitions/generictypes.ErrorResponse'
       security:
       - BearerAuth: []
-      summary: Update
+      summary: Update Generic Objects
       tags:
       - generic
   /generic/upsert:
@@ -1138,7 +1133,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/generictypes.ErrorResponse'
-      summary: Upsert
+      summary: Upsert Generic Object
       tags:
       - generic
   /prompt/add:

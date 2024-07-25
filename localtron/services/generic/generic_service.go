@@ -56,7 +56,7 @@ func (g *GenericService) Create(object *generictypes.GenericObjectCreateFields) 
 	return g.store.Create(object)
 }
 
-func (g *GenericService) CreateMany(objects []*generictypes.GenericObject) error {
+func (g *GenericService) CreateMany(objects []*generictypes.GenericObjectCreateFields) error {
 	objectIs := []datastore.Row{}
 	for _, object := range objects {
 		objectIs = append(objectIs, object)
@@ -65,7 +65,7 @@ func (g *GenericService) CreateMany(objects []*generictypes.GenericObject) error
 	return g.store.CreateMany(objectIs)
 }
 
-func (g *GenericService) Upsert(object *generictypes.GenericObject) error {
+func (g *GenericService) Upsert(object *generictypes.GenericObjectCreateFields) error {
 	vI, found, err := g.store.Query(
 		datastore.Id(object.Id),
 	).FindOne()
@@ -83,7 +83,7 @@ func (g *GenericService) Upsert(object *generictypes.GenericObject) error {
 	return g.store.Upsert(object)
 }
 
-func (g *GenericService) UpsertMany(objects []*generictypes.GenericObject) error {
+func (g *GenericService) UpsertMany(objects []*generictypes.GenericObjectCreateFields) error {
 	objectIs := []datastore.Row{}
 	for _, object := range objects {
 		objectIs = append(objectIs, object)

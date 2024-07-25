@@ -54,7 +54,7 @@ func (mr *MockGenericServiceIMockRecorder) Create(object any) *gomock.Call {
 }
 
 // CreateMany mocks base method.
-func (m *MockGenericServiceI) CreateMany(objects []*GenericObject) error {
+func (m *MockGenericServiceI) CreateMany(objects []*GenericObjectCreateFields) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateMany", objects)
 	ret0, _ := ret[0].(error)
@@ -111,7 +111,7 @@ func (mr *MockGenericServiceIMockRecorder) Update(tableName, userId, conditions,
 }
 
 // Upsert mocks base method.
-func (m *MockGenericServiceI) Upsert(object *GenericObject) error {
+func (m *MockGenericServiceI) Upsert(object *GenericObjectCreateFields) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Upsert", object)
 	ret0, _ := ret[0].(error)
@@ -125,7 +125,7 @@ func (mr *MockGenericServiceIMockRecorder) Upsert(object any) *gomock.Call {
 }
 
 // UpsertMany mocks base method.
-func (m *MockGenericServiceI) UpsertMany(objects []*GenericObject) error {
+func (m *MockGenericServiceI) UpsertMany(objects []*GenericObjectCreateFields) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpsertMany", objects)
 	ret0, _ := ret[0].(error)

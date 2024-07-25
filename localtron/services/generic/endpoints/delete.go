@@ -16,13 +16,13 @@ import (
 )
 
 // Delete removes a generic object based on the provided conditions
-// @Summary Delete
+// @Summary Delete Generic Object
 // @Description Removes a generic object from the system based on the provided conditions. Requires authorization and user authentication.
 // @Tags generic
 // @Accept json
 // @Produce json
 // @Param body body generictypes.DeleteRequest true "Delete request payload"
-// @Success 200 {object} map[string]interface{} "Successful deletion of object"
+// @Success 200 {object} generictypes.DeleteResponse "Successful deletion of object"
 // @Failure 400 {object} generictypes.ErrorResponse "Invalid JSON"
 // @Failure 401 {object} generictypes.ErrorResponse "Unauthorized"
 // @Failure 500 {object} generictypes.ErrorResponse "Internal Server Error"

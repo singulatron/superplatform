@@ -651,7 +651,7 @@
                 "tags": [
                     "generic"
                 ],
-                "summary": "Create",
+                "summary": "Create Generic Object",
                 "parameters": [
                     {
                         "description": "Create request payload",
@@ -709,7 +709,7 @@
                 "tags": [
                     "generic"
                 ],
-                "summary": "Delete",
+                "summary": "Delete Generic Object",
                 "parameters": [
                     {
                         "description": "Delete request payload",
@@ -762,7 +762,7 @@
                 "tags": [
                     "generic"
                 ],
-                "summary": "Find",
+                "summary": "Find Generic Objects",
                 "parameters": [
                     {
                         "description": "Find request payload",
@@ -819,7 +819,7 @@
                 "tags": [
                     "generic"
                 ],
-                "summary": "Update",
+                "summary": "Update Generic Objects",
                 "parameters": [
                     {
                         "description": "Update request payload",
@@ -872,7 +872,7 @@
                 "tags": [
                     "generic"
                 ],
-                "summary": "Upsert",
+                "summary": "Upsert Generic Object",
                 "parameters": [
                     {
                         "description": "Upsert request payload",
@@ -1534,9 +1534,27 @@
         },
         "generictypes.CreateRequest": {
             "type": "object",
+            "required": [
+                "data",
+                "table"
+            ],
             "properties": {
-                "object": {
-                    "$ref": "#/definitions/generictypes.GenericObjectCreateFields"
+                "data": {
+                    "type": "object",
+                    "additionalProperties": {}
+                },
+                "id": {
+                    "type": "string"
+                },
+                "public": {
+                    "description": "Public is true when the object is visible to all users.\nWhen it's false the entry is only visible to the user who created it.",
+                    "type": "boolean"
+                },
+                "table": {
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "string"
                 }
             }
         },
@@ -1612,32 +1630,6 @@
                     "type": "string"
                 },
                 "updatedAt": {
-                    "type": "string"
-                },
-                "userId": {
-                    "type": "string"
-                }
-            }
-        },
-        "generictypes.GenericObjectCreateFields": {
-            "type": "object",
-            "required": [
-                "data",
-                "table"
-            ],
-            "properties": {
-                "data": {
-                    "type": "object",
-                    "additionalProperties": {}
-                },
-                "id": {
-                    "type": "string"
-                },
-                "public": {
-                    "description": "Public is true when the object is visible to all users.\nWhen it's false the entry is only visible to the user who created it.",
-                    "type": "boolean"
-                },
-                "table": {
                     "type": "string"
                 },
                 "userId": {

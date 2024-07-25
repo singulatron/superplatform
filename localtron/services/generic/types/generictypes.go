@@ -65,18 +65,30 @@ type FindResponse struct {
 }
 
 type CreateRequest struct {
-	GenericObjectCreateFields `json:"object,omitempty"`
+	GenericObjectCreateFields
+}
+
+type CreateResponse struct {
+	Object *GenericObject `json:"object,omitempty"`
 }
 
 type CreateManyRequest struct {
-	Objects []*GenericObject `json:"objects,omitempty"`
+	Objects []*GenericObjectCreateFields `json:"objects,omitempty"`
 }
 
 type UpsertRequest struct {
+	Object *GenericObjectCreateFields `json:"object,omitempty"`
+}
+
+type UpsertResponse struct {
 	Object *GenericObject `json:"object,omitempty"`
 }
 
 type UpsertManyRequest struct {
+	Objects []*GenericObjectCreateFields `json:"objects,omitempty"`
+}
+
+type UpsertManyResponse struct {
 	Objects []*GenericObject `json:"objects,omitempty"`
 }
 

@@ -13,9 +13,9 @@ import "github.com/singulatron/singulatron/localtron/datastore"
 type GenericServiceI interface {
 	Find(options FindOptions) ([]*GenericObject, error)
 	Create(object *GenericObjectCreateFields) error
-	CreateMany(objects []*GenericObject) error
-	Upsert(object *GenericObject) error
-	UpsertMany(objects []*GenericObject) error
+	CreateMany(objects []*GenericObjectCreateFields) error
+	Upsert(object *GenericObjectCreateFields) error
+	UpsertMany(objects []*GenericObjectCreateFields) error
 	Update(tableName string, userId string, conditions []datastore.Condition, object *GenericObject) error
 	Delete(tableName string, userId string, conditions []datastore.Condition) error
 }

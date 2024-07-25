@@ -16,7 +16,7 @@ import (
 )
 
 // Find retrieves objects based on provided criteria
-// @Summary Find
+// @Summary Find Generic Objects
 // @Description Retrieves objects from a specified table based on search criteria. Requires authorization and user authentication.
 // @Tags generic
 // @Accept json

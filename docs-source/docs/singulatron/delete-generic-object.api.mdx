@@ -1,11 +1,11 @@
 ---
-id: upsert
-title: "Upsert"
-description: "Creates a new generic object or updates an existing one based on the provided data. Requires authorization and user authentication."
-sidebar_label: "Upsert"
+id: delete-generic-object
+title: "Delete Generic Object"
+description: "Removes a generic object from the system based on the provided conditions. Requires authorization and user authentication."
+sidebar_label: "Delete Generic Object"
 hide_title: true
 hide_table_of_contents: true
-api: eJzNVbFy2zAM/RUcli5qnPbaRVvby5AOTS5OroPrARZhiylNMiRlx/Xp33ug5Fip1V675KpJAgHi4eEB2qPiWAXtk3YWS/wUmBJHILC8hRVbDroCt7jnKoEL0HjVnVvgRx2TtitwlmFBkRU4C6lm8MFttGIFihKdwQ0/NDpIUJNqF/QPkmRAVkETOWQz26SrbD/DAgM/NBzTR6d2WO6xcjaxTfJK3pvecXIfBfIeY1XzmuTNB+c5JM1RvjrUp/Yq16g+5KO084wlxhS0XWFboGDOmZTSkobM9TC6LQ4h/fVtgVqN3uSbhdGVHD3n+DrbQUdIoWHY1tzR1rOsI2x01AvDkByQMZmlePbNfhVPnV5FWJKJnIPYprCTGGfNbhgoh5nebe2gLxl0Enp7pAvnDJMVqIkWhkeL6Br+O7IkweVY9W3XRB1YYTnrSD2kmZ9QeEqqmJ6zducjhwS9NMDTzjhSOMwjdObE0Tsbu2a/PT8/7cC0qSqOcdmYjhmR45O4wS37VmDx99Ibl4sgGqmtLfDdGK5LuyGjFXyeXn35l+TP9c0huDDek3Ekb06R3NnDsLJ6MSTvxzlJHCwZmHLYcICLfOfLQMqTsYqi4H4VinjXnGqnsETvomjEU6qxxEnvMmmyUrFAwXJzXGUXj7T23ZgdV9NgGR2wPO2gfrUc7YeN0suqG9rj8WBWB8Z+RIeVart0h8VKGYdUqlO+DgvccIgd+3mPuZjWlFm1tOanWcRfRnSwqP+T/0jf0cSPaeIN6bzrmmCyLHLXjo0V+nJV8wJraWw5w/1e8NwF07Zifmg47LCczQvcUNAd/bN5W2DNpDhgOdvjd95J/R0Tr28FgbibRpCcKLUtDhEfqop9+qPvUHvXV9NbLHDR/yLXTklMoK1sRNp2fXS5M1n32bZHQ3bV0Ep8uzvl+QnoNs7d
+api: eJzVVsFu2zAM/RWBZ6/phu3iW7sVw3ZYiqbFDkEOjMUk6mTJoeS0XuB/H2g7idMYQwcUHZqLHYqin6j3nrQFTSFjU0TjHaRwQ7nfUFColuSITab8/J6yqBbscxVXpEIVIuVqjoG08q6JFew3RpNWmXfaSKlwpm5oXRqWWmVceTa/UQYUOq3KQNyEyUWTNfEzSIBpXVKIl15XkG4h8y6Si/KKRWG7xNF9EKRbCNmKcpS3gn1BHA2FblqHQf6ZSHk4TUJr5RGrgiCFdo1QJ8030biBGYEsZdHzQC1X9WrNvbeETootDFndGwqRjVvKiHc0XhzBO0npAsiMFdSHwAHrBm1JkG4HB2ldon3zqwgROYafJq7e+FKG0o8LJhBxbmng0wPV6uSJbr+QpUiqU5AqsLIedacpw6QhjVxSLYFQeBfaTn04P5fHca1JmWUUwqK0SktZUa1fdEYAyfN1iboVItrr3v4IjoEV1Ql8HELzzW3QGq2+T8Y//uXjx5Qg5pYpz+htg+T9KZI7t3My0q+G5NNwTyKxQ6smxBtiddXUfB1IokrKSjaxgnS6hUtCJr4oRaLTWT0THi8DpFPoThCYJZBTXHkNKRQ+CIUKlHQYdSmjhmcECQjUm8MxcPWIedGKom/r052BP3HsviU0JtByrZP9bl17tU93kdkT8e7N86UKHvvYy1RtW91YRs+ljFv43eGJWWx7FE1s0iCBDXFoSSTZsh05NuRwmNPBSL52p/94J/ojAvbO5v97Y+joGekxjgqLpnH5ktuDr+HYgYayhoZlswRWQsN0CtutoLpjW9cSXpfEwuqZ9JlN29yptH1FqIkb5v2iClL43Dbg3a0g2G/LqezqZDfjIsuoiH/N7Svlejy5hQTm3WUo91rmMD6IqeNDu5u+2F90mtgWLLpliUvJbWvK7w9sJ3UF
 sidebar_class_name: "post api-method"
 custom_edit_url: null
 ---
@@ -27,20 +27,20 @@ import TabItem from "@theme/TabItem";
 <Heading
   as={"h1"}
   className={"openapi__heading"}
-  children={"Upsert"}
+  children={"Delete Generic Object"}
 >
 </Heading>
 
 <MethodEndpoint
   method={"post"}
-  path={"/generic/upsert"}
+  path={"/generic/delete"}
 >
   
 </MethodEndpoint>
 
 
 
-Creates a new generic object or updates an existing one based on the provided data. Requires authorization and user authentication.
+Removes a generic object from the system based on the provided conditions. Requires authorization and user authentication.
 
 <Heading
   id={"request"}
@@ -84,7 +84,7 @@ Creates a new generic object or updates an existing one based on the provided da
         >
           
           
-          Upsert request payload
+          Delete request payload
           
           
         </div>
@@ -108,23 +108,29 @@ Creates a new generic object or updates an existing one based on the provided da
                 <strong
                   className={"openapi-schema__property"}
                 >
-                  object
+                  conditions
                 </strong><span
                   className={"openapi-schema__name"}
                 >
-                   object
+                   object[]
                 </span>
               </span>
             </summary><div
               style={{"marginLeft":"1rem"}}
             >
-              <SchemaItem
+              <li>
+                <div
+                  style={{"fontSize":"var(--ifm-code-font-size)","opacity":"0.6","marginLeft":"-.5rem","paddingBottom":".5rem"}}
+                >
+                  Array [
+                </div>
+              </li><SchemaItem
                 collapsible={false}
-                name={"createdAt"}
+                name={"all"}
                 required={false}
-                schemaName={"string"}
+                schemaName={"object"}
                 qualifierMessage={undefined}
-                schema={{"type":"string"}}
+                schema={{"type":"object"}}
               >
                 
               </SchemaItem><SchemaItem
@@ -144,85 +150,295 @@ Creates a new generic object or updates an existing one based on the provided da
                       <strong
                         className={"openapi-schema__property"}
                       >
-                        data
+                        contains
                       </strong><span
                         className={"openapi-schema__name"}
                       >
                          object
-                      </span><span
-                        className={"openapi-schema__divider"}
-                      >
-                        
-                      </span><span
-                        className={"openapi-schema__required"}
-                      >
-                        required
                       </span>
                     </span>
                   </summary><div
                     style={{"marginLeft":"1rem"}}
                   >
                     <SchemaItem
-                      name={"property name*"}
-                      required={false}
-                      schemaName={"any"}
-                      qualifierMessage={undefined}
-                      schema={{"additionalProperties":{},"type":"object"}}
+                      collapsible={true}
+                      className={"schemaItem"}
+                    >
+                      <details
+                        style={{}}
+                        className={"openapi-markdown__details"}
+                      >
+                        <summary
+                          style={{}}
+                        >
+                          <span
+                            className={"openapi-schema__container"}
+                          >
+                            <strong
+                              className={"openapi-schema__property"}
+                            >
+                              selector
+                            </strong><span
+                              className={"openapi-schema__name"}
+                            >
+                               object
+                            </span>
+                          </span>
+                        </summary><div
+                          style={{"marginLeft":"1rem"}}
+                        >
+                          <SchemaItem
+                            collapsible={false}
+                            name={"any"}
+                            required={false}
+                            schemaName={"boolean"}
+                            qualifierMessage={undefined}
+                            schema={{"type":"boolean"}}
+                          >
+                            
+                          </SchemaItem><SchemaItem
+                            collapsible={false}
+                            name={"field"}
+                            required={false}
+                            schemaName={"string"}
+                            qualifierMessage={undefined}
+                            schema={{"type":"string"}}
+                          >
+                            
+                          </SchemaItem><SchemaItem
+                            collapsible={false}
+                            name={"oneOf"}
+                            required={false}
+                            schemaName={"string[]"}
+                            qualifierMessage={undefined}
+                            schema={{"items":{"type":"string"},"type":"array"}}
+                          >
+                            
+                          </SchemaItem>
+                        </div>
+                      </details>
+                    </SchemaItem><SchemaItem
                       collapsible={false}
-                      discriminator={false}
+                      name={"value"}
+                      required={false}
+                      schemaName={""}
+                      qualifierMessage={undefined}
+                      schema={{}}
                     >
                       
                     </SchemaItem>
                   </div>
                 </details>
               </SchemaItem><SchemaItem
-                collapsible={false}
-                name={"id"}
-                required={false}
-                schemaName={"string"}
-                qualifierMessage={undefined}
-                schema={{"type":"string"}}
+                collapsible={true}
+                className={"schemaItem"}
               >
-                
+                <details
+                  style={{}}
+                  className={"openapi-markdown__details"}
+                >
+                  <summary
+                    style={{}}
+                  >
+                    <span
+                      className={"openapi-schema__container"}
+                    >
+                      <strong
+                        className={"openapi-schema__property"}
+                      >
+                        equal
+                      </strong><span
+                        className={"openapi-schema__name"}
+                      >
+                         object
+                      </span>
+                    </span>
+                  </summary><div
+                    style={{"marginLeft":"1rem"}}
+                  >
+                    <SchemaItem
+                      collapsible={true}
+                      className={"schemaItem"}
+                    >
+                      <details
+                        style={{}}
+                        className={"openapi-markdown__details"}
+                      >
+                        <summary
+                          style={{}}
+                        >
+                          <span
+                            className={"openapi-schema__container"}
+                          >
+                            <strong
+                              className={"openapi-schema__property"}
+                            >
+                              selector
+                            </strong><span
+                              className={"openapi-schema__name"}
+                            >
+                               object
+                            </span>
+                          </span>
+                        </summary><div
+                          style={{"marginLeft":"1rem"}}
+                        >
+                          <SchemaItem
+                            collapsible={false}
+                            name={"any"}
+                            required={false}
+                            schemaName={"boolean"}
+                            qualifierMessage={undefined}
+                            schema={{"type":"boolean"}}
+                          >
+                            
+                          </SchemaItem><SchemaItem
+                            collapsible={false}
+                            name={"field"}
+                            required={false}
+                            schemaName={"string"}
+                            qualifierMessage={undefined}
+                            schema={{"type":"string"}}
+                          >
+                            
+                          </SchemaItem><SchemaItem
+                            collapsible={false}
+                            name={"oneOf"}
+                            required={false}
+                            schemaName={"string[]"}
+                            qualifierMessage={undefined}
+                            schema={{"items":{"type":"string"},"type":"array"}}
+                          >
+                            
+                          </SchemaItem>
+                        </div>
+                      </details>
+                    </SchemaItem><SchemaItem
+                      collapsible={false}
+                      name={"value"}
+                      required={false}
+                      schemaName={""}
+                      qualifierMessage={undefined}
+                      schema={{}}
+                    >
+                      
+                    </SchemaItem>
+                  </div>
+                </details>
               </SchemaItem><SchemaItem
-                collapsible={false}
-                name={"public"}
-                required={false}
-                schemaName={"boolean"}
-                qualifierMessage={undefined}
-                schema={{"description":"Public is true when the object is visible to all users.\nWhen it's false the entry is only visible to the user who created it.","type":"boolean"}}
+                collapsible={true}
+                className={"schemaItem"}
               >
-                
-              </SchemaItem><SchemaItem
-                collapsible={false}
-                name={"table"}
-                required={true}
-                schemaName={"string"}
-                qualifierMessage={undefined}
-                schema={{"type":"string"}}
-              >
-                
-              </SchemaItem><SchemaItem
-                collapsible={false}
-                name={"updatedAt"}
-                required={false}
-                schemaName={"string"}
-                qualifierMessage={undefined}
-                schema={{"type":"string"}}
-              >
-                
-              </SchemaItem><SchemaItem
-                collapsible={false}
-                name={"userId"}
-                required={false}
-                schemaName={"string"}
-                qualifierMessage={undefined}
-                schema={{"type":"string"}}
-              >
-                
-              </SchemaItem>
+                <details
+                  style={{}}
+                  className={"openapi-markdown__details"}
+                >
+                  <summary
+                    style={{}}
+                  >
+                    <span
+                      className={"openapi-schema__container"}
+                    >
+                      <strong
+                        className={"openapi-schema__property"}
+                      >
+                        startsWith
+                      </strong><span
+                        className={"openapi-schema__name"}
+                      >
+                         object
+                      </span>
+                    </span>
+                  </summary><div
+                    style={{"marginLeft":"1rem"}}
+                  >
+                    <SchemaItem
+                      collapsible={true}
+                      className={"schemaItem"}
+                    >
+                      <details
+                        style={{}}
+                        className={"openapi-markdown__details"}
+                      >
+                        <summary
+                          style={{}}
+                        >
+                          <span
+                            className={"openapi-schema__container"}
+                          >
+                            <strong
+                              className={"openapi-schema__property"}
+                            >
+                              selector
+                            </strong><span
+                              className={"openapi-schema__name"}
+                            >
+                               object
+                            </span>
+                          </span>
+                        </summary><div
+                          style={{"marginLeft":"1rem"}}
+                        >
+                          <SchemaItem
+                            collapsible={false}
+                            name={"any"}
+                            required={false}
+                            schemaName={"boolean"}
+                            qualifierMessage={undefined}
+                            schema={{"type":"boolean"}}
+                          >
+                            
+                          </SchemaItem><SchemaItem
+                            collapsible={false}
+                            name={"field"}
+                            required={false}
+                            schemaName={"string"}
+                            qualifierMessage={undefined}
+                            schema={{"type":"string"}}
+                          >
+                            
+                          </SchemaItem><SchemaItem
+                            collapsible={false}
+                            name={"oneOf"}
+                            required={false}
+                            schemaName={"string[]"}
+                            qualifierMessage={undefined}
+                            schema={{"items":{"type":"string"},"type":"array"}}
+                          >
+                            
+                          </SchemaItem>
+                        </div>
+                      </details>
+                    </SchemaItem><SchemaItem
+                      collapsible={false}
+                      name={"value"}
+                      required={false}
+                      schemaName={""}
+                      qualifierMessage={undefined}
+                      schema={{}}
+                    >
+                      
+                    </SchemaItem>
+                  </div>
+                </details>
+              </SchemaItem><li>
+                <div
+                  style={{"fontSize":"var(--ifm-code-font-size)","opacity":"0.6","marginLeft":"-.5rem"}}
+                >
+                  ]
+                </div>
+              </li>
             </div>
           </details>
+        </SchemaItem><SchemaItem
+          collapsible={false}
+          name={"table"}
+          required={false}
+          schemaName={"string"}
+          qualifierMessage={undefined}
+          schema={{"type":"string"}}
+        >
+          
         </SchemaItem>
       </ul>
     </details>
@@ -240,7 +456,7 @@ Creates a new generic object or updates an existing one based on the provided da
         <div>
           
           
-          Successful creation or update of object
+          Successful deletion of object
           
           
         </div><div>

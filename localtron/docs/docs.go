@@ -662,7 +662,7 @@ const docTemplate = `{
                 "tags": [
                     "generic"
                 ],
-                "summary": "Create",
+                "summary": "Create Generic Object",
                 "parameters": [
                     {
                         "description": "Create request payload",
@@ -720,7 +720,7 @@ const docTemplate = `{
                 "tags": [
                     "generic"
                 ],
-                "summary": "Delete",
+                "summary": "Delete Generic Object",
                 "parameters": [
                     {
                         "description": "Delete request payload",
@@ -773,7 +773,7 @@ const docTemplate = `{
                 "tags": [
                     "generic"
                 ],
-                "summary": "Find",
+                "summary": "Find Generic Objects",
                 "parameters": [
                     {
                         "description": "Find request payload",
@@ -830,7 +830,7 @@ const docTemplate = `{
                 "tags": [
                     "generic"
                 ],
-                "summary": "Update",
+                "summary": "Update Generic Objects",
                 "parameters": [
                     {
                         "description": "Update request payload",
@@ -883,7 +883,7 @@ const docTemplate = `{
                 "tags": [
                     "generic"
                 ],
-                "summary": "Upsert",
+                "summary": "Upsert Generic Object",
                 "parameters": [
                     {
                         "description": "Upsert request payload",
@@ -1545,9 +1545,27 @@ const docTemplate = `{
         },
         "generictypes.CreateRequest": {
             "type": "object",
+            "required": [
+                "data",
+                "table"
+            ],
             "properties": {
-                "object": {
-                    "$ref": "#/definitions/generictypes.GenericObjectCreateFields"
+                "data": {
+                    "type": "object",
+                    "additionalProperties": {}
+                },
+                "id": {
+                    "type": "string"
+                },
+                "public": {
+                    "description": "Public is true when the object is visible to all users.\nWhen it's false the entry is only visible to the user who created it.",
+                    "type": "boolean"
+                },
+                "table": {
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "string"
                 }
             }
         },
@@ -1623,32 +1641,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "updatedAt": {
-                    "type": "string"
-                },
-                "userId": {
-                    "type": "string"
-                }
-            }
-        },
-        "generictypes.GenericObjectCreateFields": {
-            "type": "object",
-            "required": [
-                "data",
-                "table"
-            ],
-            "properties": {
-                "data": {
-                    "type": "object",
-                    "additionalProperties": {}
-                },
-                "id": {
-                    "type": "string"
-                },
-                "public": {
-                    "description": "Public is true when the object is visible to all users.\nWhen it's false the entry is only visible to the user who created it.",
-                    "type": "boolean"
-                },
-                "table": {
                     "type": "string"
                 },
                 "userId": {

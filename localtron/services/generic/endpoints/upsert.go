@@ -16,13 +16,13 @@ import (
 )
 
 // Upsert creates or updates a generic object based on the provided data
-// @Summary Upsert
+// @Summary Upsert Generic Object
 // @Description Creates a new generic object or updates an existing one based on the provided data. Requires authorization and user authentication.
 // @Tags generic
 // @Accept json
 // @Produce json
 // @Param body body generictypes.UpsertRequest true "Upsert request payload"
-// @Success 200 {object} map[string]interface{} "Successful creation or update of object"
+// @Success 200 {object} generictypes.UpsertResponse "Successful creation or update of object"
 // @Failure 400 {object} generictypes.ErrorResponse "Invalid JSON"
 // @Failure 401 {object} generictypes.ErrorResponse "Unauthorized"
 // @Failure 500 {object} generictypes.ErrorResponse "Internal Server Error"
