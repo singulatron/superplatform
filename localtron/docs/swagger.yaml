@@ -237,10 +237,10 @@ definitions:
           without after or limit.
         type: boolean
       limit:
-        description: Limit the number of records in the result set..
+        description: Limit the number of records in the result set.
         type: integer
       orderBys:
-        description: OrderBys orders the result set.
+        description: OrderBys order the result set.
         items:
           $ref: '#/definitions/datastore.OrderBy'
         type: array
@@ -295,7 +295,7 @@ definitions:
   generictypes.CreateRequest:
     properties:
       object:
-        $ref: '#/definitions/generictypes.GenericObject'
+        $ref: '#/definitions/generictypes.GenericObjectCreateFields'
     type: object
   generictypes.DeleteRequest:
     properties:
@@ -337,11 +337,33 @@ definitions:
       id:
         type: string
       public:
-        description: Entry is visible to all users of the app
+        description: |-
+          Public is true when the object is visible to all users.
+          When it's false the entry is only visible to the user who created it.
         type: boolean
       table:
         type: string
       updatedAt:
+        type: string
+      userId:
+        type: string
+    required:
+    - data
+    - table
+    type: object
+  generictypes.GenericObjectCreateFields:
+    properties:
+      data:
+        additionalProperties: {}
+        type: object
+      id:
+        type: string
+      public:
+        description: |-
+          Public is true when the object is visible to all users.
+          When it's false the entry is only visible to the user who created it.
+        type: boolean
+      table:
         type: string
       userId:
         type: string
@@ -380,7 +402,7 @@ definitions:
         example: huggingface/TheBloke/mistral-7b-instruct-v0.2.Q3_K_S.gguf
         type: string
       prompt:
-        description: Prompt is the message itself eg.
+        description: Prompt is the message itself eg. "What's a banana?
         example: What's a banana?
         type: string
       sync:
@@ -392,7 +414,8 @@ definitions:
           In those cases set Sync to true.
         type: boolean
       template:
-        description: Template of the prompt. Optional. Might be derived from ModelId
+        description: Template of the prompt. Optional. If not present it's derived
+          from ModelId.
         example: '[INST]{prompt}[/INST]'
         type: string
       threadId:
@@ -400,9 +423,6 @@ definitions:
           ThreadId is the ID of the thread a prompt belongs to.
           Clients subscribe to Thread Streams to see the answer to a prompt,
           or set `prompt.sync` to true for a blocking answer.
-        type: string
-      userId:
-        description: UserId contains the ID of the user who submitted the prompt.
         type: string
     required:
     - prompt
@@ -458,7 +478,7 @@ definitions:
         example: huggingface/TheBloke/mistral-7b-instruct-v0.2.Q3_K_S.gguf
         type: string
       prompt:
-        description: Prompt is the message itself eg.
+        description: Prompt is the message itself eg. "What's a banana?
         example: What's a banana?
         type: string
       runCount:
@@ -478,7 +498,8 @@ definitions:
           In those cases set Sync to true.
         type: boolean
       template:
-        description: Template of the prompt. Optional. Might be derived from ModelId
+        description: Template of the prompt. Optional. If not present it's derived
+          from ModelId.
         example: '[INST]{prompt}[/INST]'
         type: string
       threadId:

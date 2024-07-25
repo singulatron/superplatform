@@ -40,7 +40,7 @@ func (m *MockGenericServiceI) EXPECT() *MockGenericServiceIMockRecorder {
 }
 
 // Create mocks base method.
-func (m *MockGenericServiceI) Create(object *GenericObject) error {
+func (m *MockGenericServiceI) Create(object *GenericObjectCreateFields) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Create", object)
 	ret0, _ := ret[0].(error)

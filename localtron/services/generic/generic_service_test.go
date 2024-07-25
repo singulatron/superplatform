@@ -33,15 +33,15 @@ func TestCreate(t *testing.T) {
 
 	obj := &generictypes.GenericObject{
 		GenericObjectCreateFields: generictypes.GenericObjectCreateFields{
-			Id:    uuid1,
-			Table: table1,
-			Data:  map[string]interface{}{"key": "value"},
+			Id:     uuid1,
+			Table:  table1,
+			Data:   map[string]interface{}{"key": "value"},
+			UserId: userId,
 		},
-		UserId:    userId,
 		CreatedAt: time.Now().String(),
 	}
 
-	err = service.Create(obj)
+	err = service.Create(&obj.GenericObjectCreateFields)
 	require.NoError(t, err)
 
 	t.Run("user 1 can find its own private record", func(t *testing.T) {
@@ -62,15 +62,15 @@ func TestCreate(t *testing.T) {
 
 	obj2 := &generictypes.GenericObject{
 		GenericObjectCreateFields: generictypes.GenericObjectCreateFields{
-			Id:    uuid2,
-			Table: table2,
-			Data:  map[string]interface{}{"key": "value"},
+			Id:     uuid2,
+			Table:  table2,
+			Data:   map[string]interface{}{"key": "value"},
+			UserId: otherUserId,
 		},
-		UserId:    otherUserId,
 		CreatedAt: time.Now().String(),
 	}
 
-	err = service.Create(obj2)
+	err = service.Create(&obj2.GenericObjectCreateFields)
 	require.NoError(t, err)
 
 	t.Run("user 2 can find its own private record", func(t *testing.T) {
@@ -113,7 +113,7 @@ func TestCreate(t *testing.T) {
 	})
 
 	t.Run("already exists", func(t *testing.T) {
-		err = service.Create(obj)
+		err = service.Create(&obj.GenericObjectCreateFields)
 		require.Error(t, err)
 	})
 

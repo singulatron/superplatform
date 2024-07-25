@@ -23,10 +23,24 @@ export function anyField(): FieldSelector {
 }
 
 export interface Query {
+  /** Conditions are filtering options of a query. */
   conditions?: Condition[];
+
+  /** After is used for paginations. Instead of offset-based pagination,
+   * we support cursor-based pagination because it works better in a scalable,
+   * distributed environment.
+   */
   after?: any[];
+
+  /** Limit the number of records in the result set. */
   limit?: number;
+
+  /** OrderBys order the result set. */
   orderBys?: OrderBy[];
+
+  /** Count true means return the count of the dataset filtered by Conditions
+   * without after or limit.
+   */
   count?: boolean;
 }
 

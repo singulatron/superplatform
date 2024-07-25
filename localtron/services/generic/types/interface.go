@@ -12,7 +12,7 @@ import "github.com/singulatron/singulatron/localtron/datastore"
 
 type GenericServiceI interface {
 	Find(options FindOptions) ([]*GenericObject, error)
-	Create(object *GenericObject) error
+	Create(object *GenericObjectCreateFields) error
 	CreateMany(objects []*GenericObject) error
 	Upsert(object *GenericObject) error
 	UpsertMany(objects []*GenericObject) error

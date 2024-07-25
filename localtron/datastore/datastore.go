@@ -118,10 +118,10 @@ type Query struct {
 	// distributed environment.
 	After []any `json:"after,omitempty"`
 
-	// Limit the number of records in the result set..
+	// Limit the number of records in the result set.
 	Limit int64 `json:"limit,omitempty"`
 
-	// OrderBys orders the result set.
+	// OrderBys order the result set.
 	OrderBys []OrderBy `json:"orderBys,omitempty"`
 
 	// Count true means return the count of the dataset filtered by Conditions

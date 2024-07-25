@@ -52,7 +52,7 @@ func NewGenericService(
 	return service, nil
 }
 
-func (g *GenericService) Create(object *generictypes.GenericObject) error {
+func (g *GenericService) Create(object *generictypes.GenericObjectCreateFields) error {
 	return g.store.Create(object)
 }
 

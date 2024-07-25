@@ -1459,11 +1459,11 @@ const docTemplate = `{
                     "type": "boolean"
                 },
                 "limit": {
-                    "description": "Limit the number of records in the result set..",
+                    "description": "Limit the number of records in the result set.",
                     "type": "integer"
                 },
                 "orderBys": {
-                    "description": "OrderBys orders the result set.",
+                    "description": "OrderBys order the result set.",
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/datastore.OrderBy"
@@ -1547,7 +1547,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "object": {
-                    "$ref": "#/definitions/generictypes.GenericObject"
+                    "$ref": "#/definitions/generictypes.GenericObjectCreateFields"
                 }
             }
         },
@@ -1616,13 +1616,39 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "public": {
-                    "description": "Entry is visible to all users of the app",
+                    "description": "Public is true when the object is visible to all users.\nWhen it's false the entry is only visible to the user who created it.",
                     "type": "boolean"
                 },
                 "table": {
                     "type": "string"
                 },
                 "updatedAt": {
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "string"
+                }
+            }
+        },
+        "generictypes.GenericObjectCreateFields": {
+            "type": "object",
+            "required": [
+                "data",
+                "table"
+            ],
+            "properties": {
+                "data": {
+                    "type": "object",
+                    "additionalProperties": {}
+                },
+                "id": {
+                    "type": "string"
+                },
+                "public": {
+                    "description": "Public is true when the object is visible to all users.\nWhen it's false the entry is only visible to the user who created it.",
+                    "type": "boolean"
+                },
+                "table": {
                     "type": "string"
                 },
                 "userId": {
@@ -1676,7 +1702,7 @@ const docTemplate = `{
                     "example": "huggingface/TheBloke/mistral-7b-instruct-v0.2.Q3_K_S.gguf"
                 },
                 "prompt": {
-                    "description": "Prompt is the message itself eg.",
+                    "description": "Prompt is the message itself eg. \"What's a banana?",
                     "type": "string",
                     "example": "What's a banana?"
                 },
@@ -1685,16 +1711,12 @@ const docTemplate = `{
                     "type": "boolean"
                 },
                 "template": {
-                    "description": "Template of the prompt. Optional. Might be derived from ModelId",
+                    "description": "Template of the prompt. Optional. If not present it's derived from ModelId.",
                     "type": "string",
                     "example": "[INST]{prompt}[/INST]"
                 },
                 "threadId": {
                     "description": "ThreadId is the ID of the thread a prompt belongs to.\nClients subscribe to Thread Streams to see the answer to a prompt,\nor set ` + "`" + `prompt.sync` + "`" + ` to true for a blocking answer.",
-                    "type": "string"
-                },
-                "userId": {
-                    "description": "UserId contains the ID of the user who submitted the prompt.",
                     "type": "string"
                 }
             }
@@ -1774,7 +1796,7 @@ const docTemplate = `{
                     "example": "huggingface/TheBloke/mistral-7b-instruct-v0.2.Q3_K_S.gguf"
                 },
                 "prompt": {
-                    "description": "Prompt is the message itself eg.",
+                    "description": "Prompt is the message itself eg. \"What's a banana?",
                     "type": "string",
                     "example": "What's a banana?"
                 },
@@ -1795,7 +1817,7 @@ const docTemplate = `{
                     "type": "boolean"
                 },
                 "template": {
-                    "description": "Template of the prompt. Optional. Might be derived from ModelId",
+                    "description": "Template of the prompt. Optional. If not present it's derived from ModelId.",
                     "type": "string",
                     "example": "[INST]{prompt}[/INST]"
                 },

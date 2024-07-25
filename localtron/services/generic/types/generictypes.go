@@ -12,10 +12,16 @@ type GenericObjectCreateFields struct {
 	Id    string `json:"id"`
 	Table string `json:"table" binding:"required"`
 
-	// Entry is visible to all users of the app
+	// Public is true when the object is visible to all users.
+	// When it's false the entry is only visible to the user who created it.
 	Public bool `json:"public,omitempty"`
 
-	Data map[string]any `json:"data,omitempty" binding:"required"`
+	Data   map[string]any `json:"data,omitempty" binding:"required"`
+	UserId string         `json:"userId,omitempty"`
+}
+
+func (g GenericObjectCreateFields) GetId() string {
+	return g.Id
 }
 
 // GenericObject holds any kind of data, so
@@ -39,11 +45,6 @@ type GenericObject struct {
 
 	CreatedAt string `json:"createdAt,omitempty"`
 	UpdatedAt string `json:"updatedAt,omitempty"`
-	UserId    string `json:"userId,omitempty"`
-}
-
-func (g GenericObject) GetId() string {
-	return g.Id
 }
 
 type FindRequest struct {
@@ -64,7 +65,7 @@ type FindResponse struct {
 }
 
 type CreateRequest struct {
-	Object *GenericObject `json:"object,omitempty"`
+	GenericObjectCreateFields `json:"object,omitempty"`
 }
 
 type CreateManyRequest struct {
