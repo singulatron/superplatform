@@ -9,7 +9,7 @@ const FeatureList = [
     description: (
       <>
         Singulatron was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        used to get your projects up and running quickly.
       </>
     ),
   },

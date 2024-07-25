@@ -1,4 +1,5 @@
 import { UserService } from "@singulatron/client";
+import { genericTest } from "./generic_example";
 
 async function start() {
   let userService = new UserService({});
@@ -13,6 +14,8 @@ async function start() {
   if (readTokenResponse.user.email !== "singulatron") {
     process.exit(1);
   }
+
+  genericTest(token!);
 }
 
 start();

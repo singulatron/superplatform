@@ -244,7 +244,7 @@ export function userId(id: string): Condition {
 }
 
 export interface GenericObjectCreateFields {
-  id: string;
+  id?: string;
   table: string;
   data: any;
 
@@ -262,10 +262,14 @@ export interface GenericObject extends GenericObjectCreateFields {
 }
 
 // eslint-disable-next-line
-export interface CreateRequest extends GenericObjectCreateFields {}
+export interface CreateRequest {
+  object: GenericObjectCreateFields;
+}
 
 // eslint-disable-next-line
-export interface CreateResponse {}
+export interface CreateResponse {
+  object: GenericObject;
+}
 
 export interface UpdateRequest {
   table: string;
@@ -295,7 +299,7 @@ export interface FindResponse {
 }
 
 export interface UpsertRequest {
-  object: GenericObject;
+  object: GenericObjectCreateFields;
 }
 
 // eslint-disable-next-line

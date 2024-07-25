@@ -8,15 +8,11 @@ export class GenericService {
     this.options = options;
   }
 
-  call(endpoint: string, request: any): Promise<any> {
+  private call(endpoint: string, request: any): Promise<any> {
     return call(this.options, endpoint, request);
   }
 
-  async create(object: generic.GenericObject): Promise<void> {
-    const request: generic.CreateRequest = {
-      object: object,
-    };
-
+  async create(request: generic.CreateRequest): Promise<void> {
     return this.call("/generic/create", request);
   }
 
@@ -26,12 +22,8 @@ export class GenericService {
     return this.call("/generic/find", request);
   }
 
-  async upsert(object: generic.GenericObject): Promise<void> {
-    const request: generic.UpsertRequest = {
-      object: object,
-    };
-
-    return this.call("/generic/upsert", request);
+  async upsert(object: generic.GenericObjectCreateFields): Promise<void> {
+    return this.call("/generic/upsert", object);
   }
 
   async update(

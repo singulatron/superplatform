@@ -66,7 +66,7 @@ type FindResponse struct {
 }
 
 type CreateRequest struct {
-	GenericObjectCreateFields
+	Object *GenericObjectCreateFields `json:"object,omitempty"`
 }
 
 type CreateResponse struct {

@@ -8,11 +8,8 @@ class GenericService {
     call(endpoint, request) {
         return call(this.options, endpoint, request);
     }
-    create(object) {
+    create(request) {
         return __awaiter(this, void 0, void 0, function* () {
-            const request = {
-                object: object,
-            };
             return this.call("/generic/create", request);
         });
     }
@@ -24,10 +21,7 @@ class GenericService {
     }
     upsert(object) {
         return __awaiter(this, void 0, void 0, function* () {
-            const request = {
-                object: object,
-            };
-            return this.call("/generic/upsert", request);
+            return this.call("/generic/upsert", object);
         });
     }
     update(table, conditions, object) {

@@ -10,11 +10,8 @@ class GenericService {
     call(endpoint, request) {
         return util.call(this.options, endpoint, request);
     }
-    create(object) {
+    create(request) {
         return util.__awaiter(this, void 0, void 0, function* () {
-            const request = {
-                object: object,
-            };
             return this.call("/generic/create", request);
         });
     }

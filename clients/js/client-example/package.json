@@ -15,6 +15,7 @@
     "typescript": "^5.5.3"
   },
   "dependencies": {
-    "@singulatron/client": "^0.0.27"
+    "@singulatron/client": "^0.0.27",
+    "@singulatron/types": "^0.0.26"
   }
 }
