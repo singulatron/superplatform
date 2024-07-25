@@ -15,7 +15,7 @@ import (
 )
 
 type PromptServiceI interface {
-	AddPrompt(ctx context.Context, prompt *AddPromptRequest) (*AddPromptResponse, error)
+	AddPrompt(ctx context.Context, prompt *AddPromptRequest, userId string) (*AddPromptResponse, error)
 	ListPrompts(options *ListPromptOptions) ([]*Prompt, int64, error)
 	RemovePrompt(promptId string) error
 	Subscribe(threadId string, subscriber SubscriberChan)

@@ -27,7 +27,7 @@ func TestAddPromptCreatesThread(t *testing.T) {
 				Prompt:   "hi",
 				ThreadId: threadId,
 			},
-		})
+		}, "")
 		require.NoError(t, err)
 	})
 }

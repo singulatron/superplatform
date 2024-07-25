@@ -41,18 +41,18 @@ func (m *MockPromptServiceI) EXPECT() *MockPromptServiceIMockRecorder {
 }
 
 // AddPrompt mocks base method.
-func (m *MockPromptServiceI) AddPrompt(ctx context.Context, prompt *AddPromptRequest) (*AddPromptResponse, error) {
+func (m *MockPromptServiceI) AddPrompt(ctx context.Context, prompt *AddPromptRequest, userId string) (*AddPromptResponse, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "AddPrompt", ctx, prompt)
+	ret := m.ctrl.Call(m, "AddPrompt", ctx, prompt, userId)
 	ret0, _ := ret[0].(*AddPromptResponse)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // AddPrompt indicates an expected call of AddPrompt.
-func (mr *MockPromptServiceIMockRecorder) AddPrompt(ctx, prompt any) *gomock.Call {
+func (mr *MockPromptServiceIMockRecorder) AddPrompt(ctx, prompt, userId any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddPrompt", reflect.TypeOf((*MockPromptServiceI)(nil).AddPrompt), ctx, prompt)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddPrompt", reflect.TypeOf((*MockPromptServiceI)(nil).AddPrompt), ctx, prompt, userId)
 }
 
 // Broadcast mocks base method.
