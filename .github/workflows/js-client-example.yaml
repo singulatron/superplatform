@@ -18,16 +18,13 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Link node
+      - name: Link local packages
         run: |
-          npm install
-          npm run build
-          npm link
-        working-directory: ./clients/js/client
+          bash link_local.sh
+        working-directory: ./clients/js
 
       - name: Install dependencies & build
         run: |
-          npm link @singulatron/client
           npm install
           npm run build
         working-directory: ./clients/js/client-example
