@@ -10,6 +10,7 @@ package genericservice
 import (
 	"errors"
 
+	"github.com/google/uuid"
 	"github.com/singulatron/singulatron/localtron/datastore"
 	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
 	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
@@ -53,6 +54,9 @@ func NewGenericService(
 }
 
 func (g *GenericService) Create(request *generictypes.CreateRequest) error {
+	if request.Object.Id == "" {
+		request.Object.Id = uuid.NewString()
+	}
 	return g.store.Create(request.Object)
 }
 
