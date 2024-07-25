@@ -32,11 +32,13 @@ func TestCreate(t *testing.T) {
 	uuid2 := uuid.New().String()
 
 	obj := &generictypes.GenericObject{
-		Id:        uuid1,
-		Table:     table1,
+		GenericObjectCreateFields: generictypes.GenericObjectCreateFields{
+			Id:    uuid1,
+			Table: table1,
+			Data:  map[string]interface{}{"key": "value"},
+		},
 		UserId:    userId,
 		CreatedAt: time.Now().String(),
-		Data:      map[string]interface{}{"key": "value"},
 	}
 
 	err = service.Create(obj)
@@ -59,11 +61,13 @@ func TestCreate(t *testing.T) {
 	})
 
 	obj2 := &generictypes.GenericObject{
-		Id:        uuid2,
-		Table:     table2,
+		GenericObjectCreateFields: generictypes.GenericObjectCreateFields{
+			Id:    uuid2,
+			Table: table2,
+			Data:  map[string]interface{}{"key": "value"},
+		},
 		UserId:    otherUserId,
 		CreatedAt: time.Now().String(),
-		Data:      map[string]interface{}{"key": "value"},
 	}
 
 	err = service.Create(obj2)
