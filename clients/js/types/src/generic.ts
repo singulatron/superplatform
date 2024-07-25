@@ -229,19 +229,25 @@ export function userId(id: string): Condition {
   return equal(field("userId"), id);
 }
 
-export interface GenericObject {
+export interface GenericObjectCreateFields {
   id: string;
-  createdAt: string;
-  updatedAt: string;
-  userId?: string;
   table: string;
   data: any;
+
+  /** Public is true when the object is visible to all users.
+   * When it's false the entry is only visible to the user who created it.
+   */
   public?: boolean;
 }
 
-export interface CreateRequest {
-  object: GenericObject;
+export interface GenericObject extends GenericObjectCreateFields {
+  createdAt: string;
+  updatedAt: string;
+  userId?: string;
 }
+
+// eslint-disable-next-line
+export interface CreateRequest extends GenericObjectCreateFields {}
 
 // eslint-disable-next-line
 export interface CreateResponse {}

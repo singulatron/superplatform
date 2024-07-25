@@ -8,6 +8,16 @@ type ErrorResponse struct {
 	Error string `json:"error"`
 }
 
+type GenericObjectCreateFields struct {
+	Id    string `json:"id"`
+	Table string `json:"table" binding:"required"`
+
+	// Entry is visible to all users of the app
+	Public bool `json:"public,omitempty"`
+
+	Data map[string]any `json:"data,omitempty" binding:"required"`
+}
+
 // GenericObject holds any kind of data, so
 // we don't have to implement simple CRUD for
 // any new simple entity.
@@ -25,15 +35,11 @@ type ErrorResponse struct {
 //		}
 //	}
 type GenericObject struct {
-	Id        string `json:"id"`
-	Table     string `json:"table" binding:"required"`
+	GenericObjectCreateFields
+
 	CreatedAt string `json:"createdAt,omitempty"`
 	UpdatedAt string `json:"updatedAt,omitempty"`
 	UserId    string `json:"userId,omitempty"`
-	// Entry is visible to all users of the app
-	Public bool `json:"public,omitempty"`
-
-	Data map[string]any `json:"data,omitempty" binding:"required"`
 }
 
 func (g GenericObject) GetId() string {
