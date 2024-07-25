@@ -20,16 +20,8 @@ export class GenericService {
     return this.call("/generic/create", request);
   }
 
-  async find(
-    table: string,
-    conditions: generic.Condition[],
-    _public: boolean = false
-  ): Promise<generic.FindResponse> {
-    const request: generic.FindRequest = {
-      table: table,
-      conditions: conditions,
-      public: _public,
-    };
+  async find(options: generic.FindRequest): Promise<generic.FindResponse> {
+    const request: generic.FindRequest = options;
 
     return this.call("/generic/find", request);
   }

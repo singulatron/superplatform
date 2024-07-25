@@ -38,12 +38,11 @@ export interface Prompt extends PromptCreateFields {
   error?: string;
 }
 
-export interface AddPromptRequest {
-  prompt: Prompt;
-}
+export interface AddPromptRequest extends PromptCreateFields {}
 
 export interface AddPromptResponse {
   answer?: string;
+  prompt?: Prompt;
 }
 
 export interface RemovePromptRequest {
