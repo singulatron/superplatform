@@ -24,6 +24,12 @@ Singulatron is a bit of all of those.
 
 It's an open-source server daemon and web client that lets you self-host and interact with LLMs, as well as a framework and ecosystem for swiftly creating AI-based applications.
 
+## Main usecases
+
+- [x] Run AI models on a self-hosted Singulatron instance for privacy.
+- [x] Build backendless apps which have access to prompting, datastore etc. in Singulatron
+- [ ] Write and deploy backend and frontend apps on Singulatron (this is not ready yet)
+
 ## Roadmap
 
 - [x] AI functionality: prompting, prompt queues, threads, download manager
