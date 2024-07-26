@@ -52,20 +52,6 @@ MacOS support is coming soon.
 
 **Note/Troubleshooting**: currently the focus is on server setups. If the app doesn't want to work on your machine, just make sure Docker is running on your system, as the Docker/VM installation is not entirely reliable on every machine yet.
 
-## Why
-
-We bought quite a few beefy GPUs for our servers but realized we need good software to be able to experiment quickly.
-Singulatron aims to be both a desktop app for local usage and also to work as a distributed daemon to drive servers, with a web app frontend client that is the same as the local app.
-
-## Highlights
-
-- [Private](./docs/privacy.md): your chats never leave your computer. Works even without an internet connection
-- User management with role based access control: control who can do what in your self hosted installation
-- Real-time and fast: utilize your hardware and your time to their full extent
-- The prompt queue system lets you input many prompts at once - even across threads - they will be processed sensibly. You can leave threads and return - streaming won't be interrupted
-- A download manager makes sure your models are well kept
-- Run as a binary (exe, deb etc) locally, or on your servers
-
 ## Stack
 
 It is an Electron application, with Angular on the frontend and Go on the backend. It becomes a simple web app without electron when hosted over the network.
