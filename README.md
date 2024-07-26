@@ -39,7 +39,7 @@ It's an open-source server daemon and web client that lets you self-host and int
 - [ ] Running, scheduling mini-(or not so mini)-apps built on top of Singulatron
 - [ ] Many more
 
-![Run](https://singulatron.com/assets/chat.png?refresh=1)
+![Run](https://singulatron.com/assets/chat.png?refresh=2)
 
 ## Run On Your Servers
 
