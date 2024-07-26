@@ -1,8 +1,8 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "Run and develop self-hosted AI apps.",
-        "title": "Singulatron Backend",
+        "description": "Run and develop self-hosted AI apps. Your programmable in-house GPT. The Firebase for the AI age.",
+        "title": "Singulatron",
         "termsOfService": "http://swagger.io/terms/",
         "contact": {
             "name": "API Support",

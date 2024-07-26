@@ -4,7 +4,7 @@ const sidebar: SidebarsConfig = {
   apisidebar: [
     {
       type: "doc",
-      id: "singulatron/singulatron-backend",
+      id: "singulatron/singulatron",
     },
     {
       type: "category",

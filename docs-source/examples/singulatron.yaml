@@ -586,12 +586,13 @@ info:
     email: sales@singulatron.com
     name: API Support
     url: https://singulatron.com/home
-  description: Run and develop self-hosted AI apps.
+  description: Run and develop self-hosted AI apps. Your programmable in-house GPT.
+    The Firebase for the AI age.
   license:
     name: AGPL v3.0
     url: https://www.gnu.org/licenses/agpl-3.0.html
   termsOfService: http://swagger.io/terms/
-  title: Singulatron Backend
+  title: Singulatron
   version: "0.2"
 paths:
   /chat/message/add:

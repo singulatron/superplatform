@@ -23,9 +23,9 @@ import (
 
 const port = "58231"
 
-// @title           Singulatron Backend
+// @title           Singulatron
 // @version         0.2
-// @description     Run and develop self-hosted AI apps.
+// @description     Run and develop self-hosted AI apps. Your programmable in-house GPT. The Firebase for the AI age.
 // @termsOfService  http://swagger.io/terms/
 
 // @contact.name   API Support
