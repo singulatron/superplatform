@@ -30,8 +30,8 @@ export default function Home() {
   const { siteConfig } = useDocusaurusContext();
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />"
+      title={`Run and develop self-hosted AI apps`}
+      description="Your programmable in-house GPT. The Firebase for the AI age."
     >
       <HomepageHeader />
 
