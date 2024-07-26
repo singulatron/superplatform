@@ -27,7 +27,7 @@ It's an open-source server daemon and web client that lets you self-host and int
 ## Primary Use Cases
 - [x] Execute AI models on a self-hosted Singulatron instance to ensure privacy.
 - [x] Develop backendless applications with access to prompting, datastore, and other features in Singulatron (this is what the authors primarily use Singulatron for).
-- [ ] Create and deploy both backend and frontend applications on Singulatron (this feature is still in development).
+- [ ] Extend the Singulatron backend with custom endpoints written in any language - in other words deploy new apps on Singulatron (this feature is still in development).
 
 ## Roadmap
 
