@@ -22,7 +22,7 @@ import { DecimalPipe } from '@angular/common';
 import { DownloadingComponent } from '../../downloading/downloading.component';
 import { FormsModule } from '@angular/forms';
 
-const veryLargeScreenWidth = 1900;
+const veryLargeScreenWidth = 2400;
 
 @Component({
 	selector: 'app-advanced-model-explorer',
