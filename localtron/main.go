@@ -29,7 +29,7 @@ const port = "58231"
 // @termsOfService  http://swagger.io/terms/
 
 // @contact.name   API Support
-// @contact.url    https://singulatron.com/home
+// @contact.url    http://superplatform.ai/
 // @contact.email  sales@singulatron.com
 
 // @license.name  AGPL v3.0

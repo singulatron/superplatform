@@ -12,7 +12,7 @@ const docTemplate = `{
         "termsOfService": "http://swagger.io/terms/",
         "contact": {
             "name": "API Support",
-            "url": "https://singulatron.com/home",
+            "url": "http://superplatform.ai/",
             "email": "sales@singulatron.com"
         },
         "license": {
