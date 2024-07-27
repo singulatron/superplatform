@@ -16,12 +16,13 @@ import (
 
 	"github.com/singulatron/singulatron/localtron/di"
 	"github.com/singulatron/singulatron/localtron/logger"
+	"github.com/singulatron/singulatron/localtron/router"
 
 	_ "github.com/singulatron/singulatron/localtron/docs"
 	httpSwagger "github.com/swaggo/http-swagger"
 )
 
-const port = "58231"
+const port = router.DefaultPort
 
 // @title           Singulatron
 // @version         0.2
