@@ -22,9 +22,10 @@ Singulatron is a bit of all of those.
 
 ## Primary Use Cases
 
-- [x] Execute AI models on a self-hosted Singulatron instance to ensure privacy.
+- [x] Run AI models on a self-hosted Singulatron instance to ensure privacy.
 - [x] Develop backendless applications with access to prompting, datastore, and other features in Singulatron (this is what the authors primarily use Singulatron for).
 - [ ] Extend the Singulatron backend with custom endpoints written in any language - in other words deploy new apps on Singulatron (this feature is still in development).
+- [ ] Run apps written by others on your own instance.
 
 <p align="center">
   <a href="https://singulatron.com/assets/chat.png?refresh=3" target="_blank">
