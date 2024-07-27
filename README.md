@@ -27,16 +27,16 @@ Singulatron is a bit of all of those.
 - [ ] Extend the Singulatron backend with custom endpoints written in any language - in other words deploy new apps on Singulatron (this feature is still in development).
 
 <p align="center">
-  <a href="https://singulatron.com/assets/chat.png?refresh=3">
+  <a href="https://singulatron.com/assets/chat.png?refresh=3" target="_blank">
     <img width="200px" src="https://singulatron.com/assets/thumbnail/chat.png?refresh=3" />
   </a>
-  <a href="https://singulatron.com/assets/model-explorer.png?refresh=3">
+  <a href="https://singulatron.com/assets/model-explorer.png?refresh=3" target="_blank">
     <img width="200px" src="https://singulatron.com/assets/thumbnail/model-explorer.png?refresh=3" />
   </a>
-  <a href="https://singulatron.com/assets/permissions.png?refresh=3">
+  <a href="https://singulatron.com/assets/permissions.png?refresh=3" target="_blank">
     <img width="200px" src="https://singulatron.com/assets/thumbnail/permissions.png?refresh=3" />
   </a>
-  <a href="https://singulatron.com/assets/api.png?refresh=3">
+  <a href="https://singulatron.com/assets/api.png?refresh=3" target="_blank">
     <img width="200px" src="https://singulatron.com/assets/thumbnail/api.png?refresh=3" />
   </a>
 </p>
