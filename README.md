@@ -41,19 +41,9 @@ Singulatron is a bit of all of those.
   </a>
 </p>
 
-## Roadmap
-
-- [x] AI functionality: prompting, prompt queues, threads, download manager
-- [x] Streaming, real time updates
-- [x] User management: multi-user support, role-based access control
-- [x] Support different database backends (local files, SQL and more is coming) and other distributed primitives
-- [x] Publish clients for the daemon in different languages
-- [ ] Running, scheduling mini-(or not so mini)-apps built on top of Singulatron
-- [ ] Many more
-
 ## Run On Your Servers
 
-See [this document](./docs/start/index.md) to help you get started.
+See [this page](https://superplatform.ai/docs/category/start) to help you get started.
 
 ## Run On Your Laptop/PC
 
