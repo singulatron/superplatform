@@ -5,7 +5,7 @@
  * This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3).
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
-package appendpoints
+package chatservice
 
 import (
 	"encoding/json"
@@ -15,31 +15,31 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-// DeleteMessage removes a message from a chat thread
-// @Summary Delete Message
-// @Description Delete a specific message from a chat thread by its ID
+// GetThread retrieves details of a specific chat thread
+// @Summary Get Thread
+// @Description Fetch information about a specific chat thread by its ID
 // @Tags chat
 // @Accept json
 // @Produce json
-// @Param request body chattypes.DeleteMessageRequest true "Delete Message Request"
-// @Success 200 {object} map[string]any "Message successfully deleted"
+// @Param request body chattypes.GetThreadRequest true "Get Thread Request"
+// @Success 200 {object} chattypes.GetThreadResponse "Thread details successfully retrieved"
 // @Failure 400 {string} string "Invalid JSON"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
-// @Router /chat/message/delete [post]
-func DeleteMessage(
+// @Router /chat/thread [post]
+func (a *ChatService) GetThread(
 	w http.ResponseWriter,
 	r *http.Request,
 	userService usertypes.UserServiceI,
 	ds chattypes.ChatServiceI,
 ) {
-	err := userService.IsAuthorized(chattypes.PermissionMessageDelete.Id, r)
+	err := userService.IsAuthorized(chattypes.PermissionThreadCreate.Id, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 
-	req := chattypes.DeleteMessageRequest{}
+	req := chattypes.GetThreadRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `invalid JSON`, http.StatusBadRequest)
@@ -47,12 +47,14 @@ func DeleteMessage(
 	}
 	defer r.Body.Close()
 
-	err = ds.DeleteMessage(req.MessageId)
+	thread, _, err := ds.GetThread(req.ThreadId)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	jsonData, _ := json.Marshal(map[string]any{})
+	jsonData, _ := json.Marshal(chattypes.GetThreadResponse{
+		Thread: *thread,
+	})
 	w.Write(jsonData)
 }

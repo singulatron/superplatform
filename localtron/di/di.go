@@ -11,44 +11,22 @@ import (
 	"github.com/singulatron/singulatron/localtron/logger"
 	"github.com/singulatron/singulatron/localtron/router"
 	appservice "github.com/singulatron/singulatron/localtron/services/app"
-	apptypes "github.com/singulatron/singulatron/localtron/services/app/types"
 	chatservice "github.com/singulatron/singulatron/localtron/services/chat"
-	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
 	configservice "github.com/singulatron/singulatron/localtron/services/config"
-	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
 	dockerservice "github.com/singulatron/singulatron/localtron/services/docker"
-	dockertypes "github.com/singulatron/singulatron/localtron/services/docker/types"
 	downloadservice "github.com/singulatron/singulatron/localtron/services/download"
-	downloadtypes "github.com/singulatron/singulatron/localtron/services/download/types"
 	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
 	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
 	genericservice "github.com/singulatron/singulatron/localtron/services/generic"
-	generictypes "github.com/singulatron/singulatron/localtron/services/generic/types"
 	modelservice "github.com/singulatron/singulatron/localtron/services/model"
-	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 	nodeservice "github.com/singulatron/singulatron/localtron/services/node"
-	nodetypes "github.com/singulatron/singulatron/localtron/services/node/types"
 	promptservice "github.com/singulatron/singulatron/localtron/services/prompt"
-	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
-	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 const singulatronFolder = ".singulatron"
 
 type Universe struct {
-	ConfigService   configtypes.ConfigServiceI
-	PromptService   prompttypes.PromptServiceI
-	UserService     usertypes.UserServiceI
-	FirehoseService firehosetypes.FirehoseServiceI
-	ChatService     chattypes.ChatServiceI
-	GenericService  generictypes.GenericServiceI
-	ModelService    modeltypes.ModelServiceI
-	DownloadService downloadtypes.DownloadServiceI
-	AppService      apptypes.AppServiceI
-	DockerService   dockertypes.DockerServiceI
-	NodeService     nodetypes.NodeServiceI
-
 	LLMClient llm.ClientI
 	Router    *router.Router
 }

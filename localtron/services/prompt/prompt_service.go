@@ -14,22 +14,13 @@ import (
 	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/router"
 
-	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
-	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
-	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
-	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 	streammanager "github.com/singulatron/singulatron/localtron/services/prompt/sub/stream_manager"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
-	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 type PromptService struct {
-	userService     usertypes.UserServiceI
-	modelService    modeltypes.ModelServiceI
-	chatService     chattypes.ChatServiceI
-	firehoseService firehosetypes.FirehoseServiceI
-	llmCLient       llm.ClientI
-	router          *router.Router
+	llmCLient llm.ClientI
+	router    *router.Router
 
 	*streammanager.StreamManager
 
@@ -40,11 +31,6 @@ type PromptService struct {
 }
 
 func NewPromptService(
-	cs configtypes.ConfigServiceI,
-	userService usertypes.UserServiceI,
-	modelService modeltypes.ModelServiceI,
-	chatService chattypes.ChatServiceI,
-	firehoseService firehosetypes.FirehoseServiceI,
 	router *router.Router,
 	llmClient llm.ClientI,
 	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error),
@@ -55,12 +41,8 @@ func NewPromptService(
 	}
 
 	service := &PromptService{
-		userService:     userService,
-		modelService:    modelService,
-		chatService:     chatService,
-		firehoseService: firehoseService,
-		llmCLient:       llmClient,
-		router:          router,
+		llmCLient: llmClient,
+		router:    router,
 
 		StreamManager: streammanager.NewStreamManager(),
 

@@ -9,17 +9,13 @@ package chatservice
 
 import (
 	"github.com/singulatron/singulatron/localtron/datastore"
+	"github.com/singulatron/singulatron/localtron/router"
 
 	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
-	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
-	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
-	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 type ChatService struct {
-	configService   configtypes.ConfigServiceI
-	userService     usertypes.UserServiceI
-	firehoseService firehosetypes.FirehoseServiceI
+	router *router.Router
 
 	messagesStore datastore.DataStore
 	threadsStore  datastore.DataStore
@@ -27,9 +23,7 @@ type ChatService struct {
 }
 
 func NewChatService(
-	cs configtypes.ConfigServiceI,
-	fs firehosetypes.FirehoseServiceI,
-	userService usertypes.UserServiceI,
+	router *router.Router,
 	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error),
 ) (*ChatService, error) {
 	threadsStore, err := datastoreFactory("threads", &chattypes.Thread{})
@@ -46,10 +40,6 @@ func NewChatService(
 	}
 
 	service := &ChatService{
-		configService:   cs,
-		firehoseService: fs,
-		userService:     userService,
-
 		messagesStore: messagesStore,
 		threadsStore:  threadsStore,
 		assetsStore:   assetsStore,

@@ -5,7 +5,7 @@
  * This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3).
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
-package appendpoints
+package chatservice
 
 import (
 	"encoding/json"
@@ -27,7 +27,7 @@ import (
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
 // @Router /chat/message/add [post]
-func AddMessage(
+func (a *ChatService) AddMessage(
 	w http.ResponseWriter,
 	r *http.Request,
 	userService usertypes.UserServiceI,

@@ -5,7 +5,7 @@
  * This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3).
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
-package appendpoints
+package chatservice
 
 import (
 	"encoding/json"
@@ -15,19 +15,19 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-// UpdateThread updates the details of an existing chat thread
-// @Summary Update Thread
-// @Description Modify the details of a specific chat thread
+// AddThread creates a new chat thread
+// @Summary Add Thread
+// @Description Create a new chat thread and add the requesting user to it
 // @Tags chat
 // @Accept json
 // @Produce json
-// @Param request body chattypes.UpdateThreadRequest true "Update Thread Request"
-// @Success 200 {object} chattypes.AddThreadResponse "Thread successfully updated"
+// @Param request body chattypes.AddThreadRequest true "Add Thread Request"
+// @Success 200 {object} chattypes.AddThreadResponse "Thread successfully created"
 // @Failure 400 {string} string "Invalid JSON"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
-// @Router /chat/thread/update [post]
-func UpdateThread(
+// @Router /chat/thread/add [post]
+func (a *ChatService) AddThread(
 	w http.ResponseWriter,
 	r *http.Request,
 	userService usertypes.UserServiceI,
@@ -39,7 +39,17 @@ func UpdateThread(
 		return
 	}
 
-	req := chattypes.UpdateThreadRequest{}
+	user, found, err := userService.GetUserFromRequest(r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	if !found {
+		http.Error(w, "unauthorized", http.StatusUnauthorized)
+		return
+	}
+
+	req := chattypes.AddThreadRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `invalid JSON`, http.StatusBadRequest)
@@ -47,7 +57,9 @@ func UpdateThread(
 	}
 	defer r.Body.Close()
 
-	thread, err := ds.UpdateThread(req.Thread)
+	req.Thread.UserIds = append(req.Thread.UserIds, user.Id)
+
+	thread, err := ds.AddThread(req.Thread)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

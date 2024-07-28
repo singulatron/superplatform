@@ -11,7 +11,7 @@ import (
 	"github.com/singulatron/singulatron/localtron/datastore"
 )
 
-func (a *ChatService) DeleteMessage(id string) error {
+func (a *ChatService) deleteMessage(id string) error {
 	return a.messagesStore.Query(
 		datastore.Equal(datastore.Field("id"), id),
 	).Delete()

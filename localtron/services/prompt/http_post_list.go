@@ -31,13 +31,13 @@ func (p *PromptService) GetPrompts(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	err := userService.IsAuthorized(prompttypes.PermissionPromptView.Id, r)
+	err := p.userService.IsAuthorized(prompttypes.PermissionPromptView.Id, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 
-	user, found, err := userService.GetUserFromRequest(r)
+	user, found, err := p.userService.GetUserFromRequest(r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return

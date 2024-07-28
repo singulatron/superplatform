@@ -5,7 +5,7 @@
  * This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3).
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
-package appendpoints
+package chatservice
 
 import (
 	"encoding/json"
@@ -15,41 +15,31 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-// AddThread creates a new chat thread
-// @Summary Add Thread
-// @Description Create a new chat thread and add the requesting user to it
+// DeleteMessage removes a message from a chat thread
+// @Summary Delete Message
+// @Description Delete a specific message from a chat thread by its ID
 // @Tags chat
 // @Accept json
 // @Produce json
-// @Param request body chattypes.AddThreadRequest true "Add Thread Request"
-// @Success 200 {object} chattypes.AddThreadResponse "Thread successfully created"
+// @Param request body chattypes.DeleteMessageRequest true "Delete Message Request"
+// @Success 200 {object} map[string]any "Message successfully deleted"
 // @Failure 400 {string} string "Invalid JSON"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
-// @Router /chat/thread/add [post]
-func AddThread(
+// @Router /chat/message/delete [post]
+func (a *ChatService) DeleteMessage(
 	w http.ResponseWriter,
 	r *http.Request,
 	userService usertypes.UserServiceI,
 	ds chattypes.ChatServiceI,
 ) {
-	err := userService.IsAuthorized(chattypes.PermissionThreadCreate.Id, r)
+	err := userService.IsAuthorized(chattypes.PermissionMessageDelete.Id, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 
-	user, found, err := userService.GetUserFromRequest(r)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
-		return
-	}
-	if !found {
-		http.Error(w, "unauthorized", http.StatusUnauthorized)
-		return
-	}
-
-	req := chattypes.AddThreadRequest{}
+	req := chattypes.DeleteMessageRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `invalid JSON`, http.StatusBadRequest)
@@ -57,16 +47,12 @@ func AddThread(
 	}
 	defer r.Body.Close()
 
-	req.Thread.UserIds = append(req.Thread.UserIds, user.Id)
-
-	thread, err := ds.AddThread(req.Thread)
+	err = ds.DeleteMessage(req.MessageId)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	jsonData, _ := json.Marshal(chattypes.AddThreadResponse{
-		Thread: thread,
-	})
+	jsonData, _ := json.Marshal(map[string]any{})
 	w.Write(jsonData)
 }

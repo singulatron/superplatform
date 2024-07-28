@@ -28,6 +28,14 @@ func (c *Permission) GetUpdatedAt() string {
 	return c.Id
 }
 
+type IsAuthorizedRequest struct {
+	PermissionId string `json:"permissionId,omitempty"`
+}
+
+type IsAuthorizedResponse struct {
+	Authorized bool `json:"authorized,omitempty"`
+}
+
 type CreatePermissionRequest struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
@@ -48,6 +56,13 @@ type UpserPermissionRequest struct {
 
 type UpserPermissionResponse struct {
 }
+
+type AddPermissionToRoleRequest struct {
+	RoleId       string `json:"roleId"`
+	PermissionId string `json:"permissionId"`
+}
+
+type AddPermissionToRoleResponse struct{}
 
 var PermissionUserCreate = Permission{
 	Id:   "user.create",

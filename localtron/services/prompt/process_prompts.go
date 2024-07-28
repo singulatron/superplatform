@@ -159,7 +159,7 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 		slog.String("promptId", currentPrompt.Id),
 	)
 
-	defer p.firehoseService.Publish(prompttypes.EventPromptProcessingFinished{
+	defer p.router.Post("firehose", "/publish", prompttypes.EventPromptProcessingFinished{
 		PromptId: currentPrompt.Id,
 		Error:    errToString(err),
 	})

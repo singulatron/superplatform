@@ -7,13 +7,13 @@
  */
 package firehosetypes
 
-// Event is an interface that all events must implement
-type Event interface {
-	Name() string
-}
-
-// This is the event that is streamed to the frontend
-type FrontendEvent struct {
+type Event struct {
 	Name string `json:"name"`
 	Data any    `json:"data"`
 }
+
+type PublishRequest struct {
+	Event *Event `json:"event"`
+}
+
+type PublishResponse struct{}

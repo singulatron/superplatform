@@ -5,7 +5,7 @@
  * This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3).
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
-package appendpoints
+package chatservice
 
 import (
 	"encoding/json"
@@ -15,31 +15,31 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-// GetMessages retrieves messages from a chat thread
-// @Summary Get Messages
-// @Description Fetch messages (and associated assets) for a specific chat thread.
+// DeleteThread removes a chat thread
+// @Summary Delete Thread
+// @Description Delete a specific chat thread by its ID
 // @Tags chat
 // @Accept json
 // @Produce json
-// @Param request body chattypes.GetMessagesRequest true "Get Messages Request"
-// @Success 200 {object} chattypes.GetMessagesResponse "Messages and assets successfully retrieved"
+// @Param request body chattypes.DeleteThreadRequest true "Delete Thread Request"
+// @Success 200 {object} map[string]any "Thread successfully deleted"
 // @Failure 400 {string} string "Invalid JSON"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
-// @Router /chat/messages [post]
-func GetMessages(
+// @Router /chat/thread/delete [post]
+func (a *ChatService) DeleteThread(
 	w http.ResponseWriter,
 	r *http.Request,
 	userService usertypes.UserServiceI,
 	ds chattypes.ChatServiceI,
 ) {
-	err := userService.IsAuthorized(chattypes.PermissionMessageView.Id, r)
+	err := userService.IsAuthorized(chattypes.PermissionThreadCreate.Id, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 
-	req := chattypes.GetMessagesRequest{}
+	req := chattypes.DeleteThreadRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `invalid JSON`, http.StatusBadRequest)
@@ -47,25 +47,12 @@ func GetMessages(
 	}
 	defer r.Body.Close()
 
-	messages, err := ds.GetMessages(req.ThreadId)
+	err = ds.DeleteThread(req.ThreadId)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	assetIds := []string{}
-	for _, v := range messages {
-		assetIds = append(assetIds, v.AssetIds...)
-	}
-	assets, err := ds.GetAssets(assetIds)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	jsonData, _ := json.Marshal(chattypes.GetMessagesResponse{
-		Messages: messages,
-		Assets:   assets,
-	})
+	jsonData, _ := json.Marshal(map[string]any{})
 	w.Write(jsonData)
 }

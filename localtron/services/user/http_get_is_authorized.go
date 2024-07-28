@@ -9,6 +9,7 @@ package userservice
 
 import (
 	"errors"
+	"fmt"
 	"log/slog"
 	"net/http"
 	"strings"
@@ -19,12 +20,29 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func (s *UserService) isAuthorized(permissionId string, request *http.Request) error {
-	authHeader := request.Header.Get("Authorization")
-	if authHeader == "" {
-		return errors.New("unauthorized")
+func (s *UserService) IsAuthorized(
+	w http.ResponseWriter,
+	r *http.Request,
+) {
+	permissionId := r.URL.Query().Get("permissionId")
+	err := s.isAuthorized(permissionId, r)
+	if err != nil {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
 	}
+
+	return
+}
+
+func (s *UserService) isAuthorized(permissionId string,
+	r *http.Request) error {
+
+	authHeader := r.Header.Get("Authorization")
 	authHeader = strings.Replace(authHeader, "Bearer ", "", 1)
+
+	if authHeader == "" {
+		return fmt.Errorf("Unauthorized")
+	}
 
 	tokenI, found, err := s.authTokensStore.Query(
 		datastore.Equal(datastore.Field("token"), authHeader),

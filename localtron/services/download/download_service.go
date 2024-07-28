@@ -8,6 +8,7 @@
 package downloadservice
 
 import (
+	"context"
 	"encoding/json"
 	"log/slog"
 	"os"
@@ -16,14 +17,13 @@ import (
 	"time"
 
 	"github.com/singulatron/singulatron/localtron/logger"
+	"github.com/singulatron/singulatron/localtron/router"
 	types "github.com/singulatron/singulatron/localtron/services/download/types"
 	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
-	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 type DownloadService struct {
-	firehoseService firehosetypes.FirehoseServiceI
-	userService     usertypes.UserServiceI
+	router *router.Router
 
 	downloads     map[string]*types.Download
 	lock          sync.Mutex
@@ -36,13 +36,11 @@ type DownloadService struct {
 }
 
 func NewDownloadService(
-	firehoseService firehosetypes.FirehoseServiceI,
-	userService usertypes.UserServiceI,
+	router *router.Router,
 ) (*DownloadService, error) {
 	home, _ := os.UserHomeDir()
 	ret := &DownloadService{
-		firehoseService: firehoseService,
-		userService:     userService,
+		router: router,
 
 		StateFilePath: path.Join(home, "downloads.json"),
 		downloads:     make(map[string]*types.Download),
@@ -128,7 +126,11 @@ func (ds *DownloadService) saveState() error {
 	ds.hasChanged = false
 	ds.lock.Unlock()
 
-	ds.firehoseService.Publish(types.EventDownloadStatusChange{})
+	ds.router.Post(context.Background(), "firehose", "/publish", firehosetypes.PublishRequest{
+		Event: &firehosetypes.Event{
+			Name: types.EventDownloadStatusChangeName,
+		},
+	}, nil)
 
 	err = os.WriteFile(ds.StateFilePath, data, 0666)
 	if err != nil {

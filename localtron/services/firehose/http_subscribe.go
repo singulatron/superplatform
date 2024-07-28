@@ -5,7 +5,7 @@
  * This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3).
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
-package firehoseendpoints
+package firehoseservice
 
 import (
 	"encoding/json"
@@ -28,15 +28,20 @@ import (
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
 // @Router /firehose/subscribe [get]
-func Subscribe(
+func (p *FirehoseService) Subscribe(
 	w http.ResponseWriter,
 	r *http.Request,
-	userService usertypes.UserServiceI,
-	fs firehosetypes.FirehoseServiceI,
 ) {
-	err := userService.IsAuthorized(firehosetypes.PermissionFirehoseView.Id, r)
+	rsp := &usertypes.IsAuthorizedResponse{}
+	err := p.router.Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
+		PermissionId: firehosetypes.PermissionFirehoseView.Id,
+	}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	if !rsp.Authorized {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
 
@@ -44,11 +49,11 @@ func Subscribe(
 	w.Header().Set("Cache-Control", "no-cache")
 	w.Header().Set("Connection", "keep-alive")
 
-	eventsChannel := make(chan []firehosetypes.Event)
-	subscriberID := fs.Subscribe(func(events []firehosetypes.Event) {
+	eventsChannel := make(chan []*firehosetypes.Event)
+	subscriberID := p.subscribe(func(events []*firehosetypes.Event) {
 		eventsChannel <- events
 	})
-	defer fs.Unsubscribe(subscriberID)
+	defer p.unsubscribe(subscriberID)
 
 	ctx := r.Context()
 
@@ -57,7 +62,7 @@ func Subscribe(
 			recover()
 		}()
 		<-ctx.Done()
-		fs.Unsubscribe(subscriberID)
+		p.unsubscribe(subscriberID)
 		close(eventsChannel)
 	}()
 
@@ -72,12 +77,7 @@ func Subscribe(
 			}
 
 			for _, event := range events {
-				toFrontend := firehosetypes.FrontendEvent{
-					Name: event.Name(),
-					Data: event,
-				}
-
-				jsonResp, err := json.Marshal(toFrontend)
+				jsonResp, err := json.Marshal(event)
 				if err != nil {
 					log.Printf("Failed to marshal event: %v", err)
 					continue
