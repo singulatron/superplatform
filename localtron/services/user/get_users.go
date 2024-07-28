@@ -12,7 +12,7 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func (s *UserService) GetUsers(options *usertypes.GetUsersOptions) ([]*usertypes.User, int64, error) {
+func (s *UserService) getUsers(options *usertypes.GetUsersOptions) ([]*usertypes.User, int64, error) {
 	if len(options.Query.Conditions) == 0 {
 		options.Query.Conditions = append(options.Query.Conditions, datastore.All())
 	}

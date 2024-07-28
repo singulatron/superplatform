@@ -14,7 +14,7 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func (s *UserService) AddPermissionToRole(roleId, permissionId string) error {
+func (s *UserService) addPermissionToRole(roleId, permissionId string) error {
 	q := s.rolesStore.Query(
 		datastore.Id(roleId),
 	)

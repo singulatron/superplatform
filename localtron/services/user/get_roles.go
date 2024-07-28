@@ -12,7 +12,7 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func (s *UserService) GetRoles() ([]*usertypes.Role, error) {
+func (s *UserService) getRoles() ([]*usertypes.Role, error) {
 	rolesI, err := s.rolesStore.Query(
 		datastore.All(),
 	).OrderBy(datastore.OrderByField("name", false)).Find()

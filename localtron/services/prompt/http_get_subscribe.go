@@ -5,7 +5,7 @@
  * This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3).
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
-package promptendpoints
+package promptservice
 
 import (
 	"encoding/json"
@@ -16,7 +16,6 @@ import (
 	"github.com/singulatron/singulatron/localtron/logger"
 
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
-	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // Subscribe streams prompt responses to the client
@@ -28,13 +27,11 @@ import (
 // @Failure 400 {object} prompttypes.ErrorResponse "Missing threadId parameter"
 // @Failure 401 {object} prompttypes.ErrorResponse "Unauthorized"
 // @Router /prompt/subscribe [get]
-func Subscribe(
+func (p *PromptService) GetSubscribe(
 	w http.ResponseWriter,
 	r *http.Request,
-	userService usertypes.UserServiceI,
-	promptService prompttypes.PromptServiceI,
 ) {
-	err := userService.IsAuthorized(prompttypes.PermissionPromptStream.Id, r)
+	err := p.userService.IsAuthorized(prompttypes.PermissionPromptStream.Id, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -50,14 +47,14 @@ func Subscribe(
 	w.Header().Set("Content-Type", "text/event-stream")
 
 	subscriber := make(chan *llm.CompletionResponse)
-	promptService.Subscribe(threadId, subscriber)
-	defer promptService.Unsubscribe(threadId, subscriber)
+	p.Subscribe(threadId, subscriber)
+	defer p.Unsubscribe(threadId, subscriber)
 
 	// Use context to handle client disconnection
 	ctx := r.Context()
 	go func() {
 		<-ctx.Done()
-		promptService.Unsubscribe(threadId, subscriber)
+		p.Unsubscribe(threadId, subscriber)
 	}()
 
 	for resp := range subscriber {

@@ -5,7 +5,7 @@
  * This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3).
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
-package promptendpoints
+package promptservice
 
 import (
 	"encoding/json"
@@ -13,7 +13,6 @@ import (
 
 	"github.com/singulatron/singulatron/localtron/datastore"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
-	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // List lists prompts
@@ -28,11 +27,9 @@ import (
 // @Failure 401 {object} prompttypes.ErrorResponse "Unauthorized"
 // @Failure 500 {object} prompttypes.ErrorResponse "Internal Server Error"
 // @Router /prompt/list [post]
-func List(
+func (p *PromptService) GetPrompts(
 	w http.ResponseWriter,
 	r *http.Request,
-	userService usertypes.UserServiceI,
-	promptService prompttypes.PromptServiceI,
 ) {
 	err := userService.IsAuthorized(prompttypes.PermissionPromptView.Id, r)
 	if err != nil {

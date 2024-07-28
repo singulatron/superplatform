@@ -9,6 +9,7 @@ import (
 	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/datastore/localstore"
 	"github.com/singulatron/singulatron/localtron/logger"
+	"github.com/singulatron/singulatron/localtron/router"
 	appservice "github.com/singulatron/singulatron/localtron/services/app"
 	apptypes "github.com/singulatron/singulatron/localtron/services/app/types"
 	chatservice "github.com/singulatron/singulatron/localtron/services/chat"
@@ -49,12 +50,14 @@ type Universe struct {
 	NodeService     nodetypes.NodeServiceI
 
 	LLMClient llm.ClientI
+	Router    *router.Router
 }
 
 type UniverseOptions struct {
 	Test             bool
 	Pre              Universe
 	DatastoreFactory func(tableName string, instance any) (datastore.DataStore, error)
+	Router           *router.Router
 }
 
 func BigBang(options UniverseOptions) (*Universe, error) {
@@ -108,6 +111,17 @@ func BigBang(options UniverseOptions) (*Universe, error) {
 		options.DatastoreFactory = func(tableName string, instance any) (datastore.DataStore, error) {
 			return localstore.NewLocalStore(instance, path.Join(localStorePath, tableName))
 		}
+	}
+
+	if options.Pre.Router != nil {
+		universe.Router = options.Pre.Router
+	} else {
+		router, err := router.NewRouter(options.DatastoreFactory)
+		if err != nil {
+			logger.Error("Creating router failed", slog.String("error", err.Error()))
+			os.Exit(1)
+		}
+		universe.Router = router
 	}
 
 	if options.Pre.UserService != nil {
@@ -253,6 +267,7 @@ func BigBang(options UniverseOptions) (*Universe, error) {
 			universe.ModelService,
 			universe.ChatService,
 			universe.FirehoseService,
+			universe.Router,
 			options.Pre.LLMClient,
 			options.DatastoreFactory,
 		)

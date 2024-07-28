@@ -12,6 +12,7 @@ import (
 
 	"github.com/singulatron/singulatron/localtron/clients/llm"
 	"github.com/singulatron/singulatron/localtron/datastore"
+	"github.com/singulatron/singulatron/localtron/router"
 
 	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
 	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
@@ -28,6 +29,7 @@ type PromptService struct {
 	chatService     chattypes.ChatServiceI
 	firehoseService firehosetypes.FirehoseServiceI
 	llmCLient       llm.ClientI
+	router          *router.Router
 
 	*streammanager.StreamManager
 
@@ -43,6 +45,7 @@ func NewPromptService(
 	modelService modeltypes.ModelServiceI,
 	chatService chattypes.ChatServiceI,
 	firehoseService firehosetypes.FirehoseServiceI,
+	router *router.Router,
 	llmClient llm.ClientI,
 	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error),
 ) (*PromptService, error) {
@@ -57,6 +60,7 @@ func NewPromptService(
 		chatService:     chatService,
 		firehoseService: firehoseService,
 		llmCLient:       llmClient,
+		router:          router,
 
 		StreamManager: streammanager.NewStreamManager(),
 

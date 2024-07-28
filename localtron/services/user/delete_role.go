@@ -14,7 +14,7 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func (s *UserService) DeleteRole(roleId string) error {
+func (s *UserService) deleteRole(roleId string) error {
 	q := s.rolesStore.Query(
 		datastore.Id(roleId),
 	)

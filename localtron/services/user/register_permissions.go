@@ -13,7 +13,7 @@ import (
 
 func (us *UserService) registerPermissions() error {
 	for _, permission := range usertypes.UserPermissions {
-		_, err := us.UpsertPermission(
+		_, err := us.upsertPermission(
 			permission.Id,
 			permission.Name,
 			permission.Description,
@@ -28,7 +28,7 @@ func (us *UserService) registerPermissions() error {
 		// usertypes.RoleUser,
 	} {
 		for _, permission := range usertypes.UserPermissions {
-			us.AddPermissionToRole(role.Id, permission.Id)
+			us.addPermissionToRole(role.Id, permission.Id)
 		}
 	}
 

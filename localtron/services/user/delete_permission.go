@@ -11,7 +11,7 @@ import (
 	"github.com/singulatron/singulatron/localtron/datastore"
 )
 
-func (s *UserService) DeletePermission(permissionId string) error {
+func (s *UserService) deletePermission(permissionId string) error {
 	return s.permissionsStore.Query(
 		datastore.Id(permissionId),
 	).Delete()

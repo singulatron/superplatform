@@ -23,7 +23,10 @@ type Router struct {
 }
 
 func NewRouter(
-	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error)) {
+	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error)) (*Router, error) {
+	return &Router{
+		registry: map[string]string{},
+	}, nil
 }
 
 func (r *Router) Post(ctx context.Context, serviceName, path string, request, response any) error {
@@ -59,12 +62,12 @@ func (r *Router) Post(ctx context.Context, serviceName, path string, request, re
 	if resp.StatusCode != http.StatusOK {
 		var errResponse map[string]string
 		if err := json.Unmarshal(responseBody, &errResponse); err != nil {
-			return fmt.Errorf("received non-OK HTTP status: %s", resp.Status)
+			return fmt.Errorf("service '%s' %s returned non-OK HTTP status: %s, body: %v", serviceName, path, resp.Status, string(responseBody))
 		}
 		if errMsg, exists := errResponse["error"]; exists {
-			return fmt.Errorf("service error: %s", errMsg)
+			return fmt.Errorf("service '%s' %s error: %s", serviceName, path, errMsg)
 		}
-		return fmt.Errorf("received non-OK HTTP status: %s", resp.Status)
+		return fmt.Errorf("service '%s' %s returned non-OK HTTP status: %s, body: %v", serviceName, path, resp.Status, string(responseBody))
 	}
 
 	if response != nil {

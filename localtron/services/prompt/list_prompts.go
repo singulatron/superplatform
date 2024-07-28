@@ -12,7 +12,7 @@ import (
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
 )
 
-func (p *PromptService) ListPrompts(options *prompttypes.ListPromptOptions) ([]*prompttypes.Prompt, int64, error) {
+func (p *PromptService) listPrompts(options *prompttypes.ListPromptOptions) ([]*prompttypes.Prompt, int64, error) {
 	q := p.promptsStore.Query(
 		options.Query.Conditions[0], options.Query.Conditions[1:]...,
 	).Limit(options.Query.Limit)

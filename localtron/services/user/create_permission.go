@@ -11,7 +11,7 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func (s *UserService) CreatePermission(id, name, description string) (*usertypes.Permission, error) {
+func (s *UserService) createPermission(id, name, description string) (*usertypes.Permission, error) {
 	permission := &usertypes.Permission{
 		Id:          id,
 		Name:        name,

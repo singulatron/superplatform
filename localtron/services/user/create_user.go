@@ -16,7 +16,7 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func (s *UserService) CreateUser(user *usertypes.User, password string, roleIds []string) error {
+func (s *UserService) createUser(user *usertypes.User, password string, roleIds []string) error {
 	if user.Name == "" {
 		return errors.New("Username missing")
 	}

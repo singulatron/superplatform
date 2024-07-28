@@ -15,7 +15,7 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func (s *UserService) CreateRole(name, description string, permissionIds []string) (*usertypes.Role, error) {
+func (s *UserService) createRole(name, description string, permissionIds []string) (*usertypes.Role, error) {
 	permissions, err := s.permissionsStore.Query(
 		datastore.Equal(datastore.Field("id"), permissionIds),
 	).Find()

@@ -5,7 +5,7 @@
  * This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3).
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
-package userendpoints
+package userservice
 
 import (
 	"encoding/json"
@@ -14,14 +14,16 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func DeleteRole(w http.ResponseWriter, r *http.Request, userService usertypes.UserServiceI) {
-	err := userService.IsAuthorized(usertypes.PermissionRoleDelete.Id, r)
+func (s *UserService) SetRolePermissions(
+	w http.ResponseWriter,
+	r *http.Request) {
+	err := s.isAuthorized(usertypes.PermissionRoleEdit.Id, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 
-	req := usertypes.DeleteRoleRequest{}
+	req := usertypes.SetRolePermissionsRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `invalid JSON`, http.StatusBadRequest)
@@ -29,12 +31,12 @@ func DeleteRole(w http.ResponseWriter, r *http.Request, userService usertypes.Us
 	}
 	defer r.Body.Close()
 
-	err = userService.DeleteRole(req.RoleId)
+	err = s.setRolePermissions(req.RoleId, req.PermissionIds)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	bs, _ := json.Marshal(usertypes.DeleteRoleResponse{})
+	bs, _ := json.Marshal(usertypes.SetRolePermissionsResponse{})
 	w.Write(bs)
 }

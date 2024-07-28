@@ -5,33 +5,30 @@
  * This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3).
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
-package promptendpoints
+package promptservice
 
 import (
 	"encoding/json"
 	"net/http"
 
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
-	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-// Add adds a new prompt
-// @Summary Add Prompt
-// @Description Adds a new prompt to the prompt queue and either waits for the response (if `sync` is set to true), or returns immediately.
+// Remove removes a prompt
+// @Summary Remove Prompt
+// @Description Remove a prompt by ID.
 // @Tags prompts
 // @Accept json
 // @Produce json
-// @Param request body prompttypes.AddPromptRequest true "Add Prompt Request"
-// @Success 200 {object} prompttypes.AddPromptResponse
+// @Param request body prompttypes.RemovePromptRequest true "Remove Prompt Request"
+// @Success 200 {object} mprompttypes.RemovePromptResponse "{}"
 // @Failure 400 {object} prompttypes.ErrorResponse "Invalid JSON"
 // @Failure 401 {object} prompttypes.ErrorResponse "Unauthorized"
 // @Failure 500 {object} prompttypes.ErrorResponse "Internal Server Error"
-// @Router /prompt/add [post]
-func Add(
+// @Router /prompt/remove [post]
+func (p *PromptService) RemovePrompt(
 	w http.ResponseWriter,
 	r *http.Request,
-	userService usertypes.UserServiceI,
-	promptService prompttypes.PromptServiceI,
 ) {
 	err := userService.IsAuthorized(prompttypes.PermissionPromptCreate.Id, r)
 	if err != nil {
@@ -39,7 +36,7 @@ func Add(
 		return
 	}
 
-	user, found, err := userService.GetUserFromRequest(r)
+	_, found, err := userService.GetUserFromRequest(r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -49,7 +46,7 @@ func Add(
 		return
 	}
 
-	req := &prompttypes.AddPromptRequest{}
+	req := &prompttypes.RemovePromptRequest{}
 	err = json.NewDecoder(r.Body).Decode(req)
 	if err != nil {
 		http.Error(w, `invalid JSON`, http.StatusBadRequest)
@@ -57,12 +54,13 @@ func Add(
 	}
 	defer r.Body.Close()
 
-	rsp, err := promptService.AddPrompt(r.Context(), req, user.Id)
+	// req.Prompt.UserId = user.Id
+
+	err = promptService.RemovePrompt(req.PromptId)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	bs, _ := json.Marshal(rsp)
-	w.Write(bs)
+	w.Write([]byte(`{}`))
 }

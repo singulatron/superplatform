@@ -19,7 +19,7 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func (s *UserService) IsAuthorized(permissionId string, request *http.Request) error {
+func (s *UserService) isAuthorized(permissionId string, request *http.Request) error {
 	authHeader := request.Header.Get("Authorization")
 	if authHeader == "" {
 		return errors.New("unauthorized")

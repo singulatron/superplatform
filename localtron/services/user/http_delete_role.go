@@ -5,28 +5,23 @@
  * This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3).
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
-package userendpoints
+package userservice
 
 import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/singulatron/singulatron/localtron/datastore"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func GetUsers(
-	w http.ResponseWriter,
-	r *http.Request,
-	userService usertypes.UserServiceI,
-) {
-	err := userService.IsAuthorized(usertypes.PermissionUserView.Id, r)
+func (s *UserService) PostDeleteRole(w http.ResponseWriter, r *http.Request) {
+	err := s.isAuthorized(usertypes.PermissionRoleDelete.Id, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 
-	req := usertypes.GetUsersRequest{}
+	req := usertypes.DeleteRoleRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `invalid JSON`, http.StatusBadRequest)
@@ -34,30 +29,12 @@ func GetUsers(
 	}
 	defer r.Body.Close()
 
-	options := &usertypes.GetUsersOptions{
-		Query: req.Query,
-	}
-	if options.Query == nil {
-		options.Query = &datastore.Query{}
-	}
-	if options.Query.Limit == 0 {
-		options.Query.Limit = 20
-	}
-
-	users, count, err := userService.GetUsers(options)
+	err = s.deleteRole(req.RoleId)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	for i := range users {
-		users[i].PasswordHash = ""
-		users[i].AuthTokenIds = nil
-	}
-
-	bs, _ := json.Marshal(usertypes.GetUsersResponse{
-		Users: users,
-		Count: count,
-	})
+	bs, _ := json.Marshal(usertypes.DeleteRoleResponse{})
 	w.Write(bs)
 }
