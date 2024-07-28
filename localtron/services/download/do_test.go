@@ -40,7 +40,7 @@ func TestDownloadFile(t *testing.T) {
 	dir := path.Join(os.TempDir(), "download_test")
 	require.NoError(t, os.MkdirAll(dir, 0755))
 
-	universe, err := di.BigBang(di.UniverseOptions{
+	universe, err := di.BigBang(di.Options{
 		Test: true,
 	})
 	require.NoError(t, err)
@@ -85,7 +85,7 @@ func TestDownloadFileWithPartFile(t *testing.T) {
 		t.Fatalf("Failed to create part file: %s", err)
 	}
 
-	universe, err := di.BigBang(di.UniverseOptions{
+	universe, err := di.BigBang(di.Options{
 		Test: true,
 	})
 	require.NoError(t, err)
@@ -117,7 +117,7 @@ func TestDownloadFileWithFullFile(t *testing.T) {
 	fullFilePath := filepath.Join(dir, downloadservice.EncodeURLtoFileName(downloadURL))
 	require.NoError(t, os.WriteFile(fullFilePath, []byte("Hello world"), 0644))
 
-	universe, err := di.BigBang(di.UniverseOptions{
+	universe, err := di.BigBang(di.Options{
 		Test: true,
 	})
 	require.NoError(t, err)

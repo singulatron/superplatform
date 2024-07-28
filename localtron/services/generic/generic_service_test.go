@@ -19,7 +19,7 @@ func TestCreate(t *testing.T) {
 	table1 := "test_table" + uniq
 	table2 := "test_table2" + uniq
 
-	universe, err := di.BigBang(di.UniverseOptions{
+	universe, err := di.BigBang(di.Options{
 		Test: true,
 	})
 	require.NoError(t, err)

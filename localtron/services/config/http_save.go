@@ -5,35 +5,33 @@
  * This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3).
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
-package promptservice
+package configservice
 
 import (
 	"encoding/json"
 	"net/http"
 
-	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
+	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-// Remove removes a prompt
-// @Summary Remove Prompt
-// @Description Remove a prompt by ID.
-// @Tags prompts
+// Get retrieves the current configuration
+// @Summary Get
+// @Description Fetch the current configuration from the server
+// @Tags config
 // @Accept json
 // @Produce json
-// @Param request body prompttypes.RemovePromptRequest true "Remove Prompt Request"
-// @Success 200 {object} mprompttypes.RemovePromptResponse "{}"
-// @Failure 400 {object} prompttypes.ErrorResponse "Invalid JSON"
-// @Failure 401 {object} prompttypes.ErrorResponse "Unauthorized"
-// @Failure 500 {object} prompttypes.ErrorResponse "Internal Server Error"
-// @Router /prompt/remove [post]
-func (p *PromptService) RemovePrompt(
+// @Success 200 {object} configtypes.ConfigGetResponse "Current configuration retrieved successfully"
+// @Failure 401 {string} string "Unauthorized"
+// @Failure 500 {string} string "Internal Server Error"
+// @Router /config/get [post]
+func (cs *ConfigService) Save(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := p.router.Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
-		PermissionId: prompttypes.PermissionPromptCreate.Id,
+	err := cs.router.Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
+		PermissionId: configtypes.PermissionConfigEdit.Id,
 	}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
@@ -44,7 +42,7 @@ func (p *PromptService) RemovePrompt(
 		return
 	}
 
-	req := &prompttypes.RemovePromptRequest{}
+	req := &configtypes.SaveConfigRequest{}
 	err = json.NewDecoder(r.Body).Decode(req)
 	if err != nil {
 		http.Error(w, `invalid JSON`, http.StatusBadRequest)
@@ -52,11 +50,12 @@ func (p *PromptService) RemovePrompt(
 	}
 	defer r.Body.Close()
 
-	err = p.removePrompt(req.PromptId)
+	err = cs.saveConfig(*req.Config)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	w.Write([]byte(`{}`))
+	jsonData, _ := json.Marshal(configtypes.SaveConfigResponse{})
+	w.Write(jsonData)
 }

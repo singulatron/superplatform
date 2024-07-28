@@ -8,11 +8,14 @@
 package chatservice
 
 import (
+	"context"
+
 	"github.com/singulatron/singulatron/localtron/datastore"
 	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
+	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
 )
 
-func (a *ChatService) UpdateThread(chatThread *chattypes.Thread) (*chattypes.Thread, error) {
+func (a *ChatService) updateThread(chatThread *chattypes.Thread) (*chattypes.Thread, error) {
 	err := a.threadsStore.Query(
 		datastore.Equal(datastore.Field("id"), chatThread.Id),
 	).Update(chatThread)
@@ -21,9 +24,15 @@ func (a *ChatService) UpdateThread(chatThread *chattypes.Thread) (*chattypes.Thr
 		return nil, err
 	}
 
-	a.firehoseService.Publish(chattypes.EventThreadUpdate{
+	ev := chattypes.EventThreadUpdate{
 		ThreadId: chatThread.Id,
-	})
+	}
+	a.router.Post(context.Background(), "firehose", "/publish", firehosetypes.PublishRequest{
+		Event: &firehosetypes.Event{
+			Name: ev.Name(),
+			Data: ev,
+		},
+	}, nil)
 
 	return chatThread, nil
 }

@@ -18,9 +18,8 @@ import (
 	"github.com/pkg/errors"
 	"gopkg.in/yaml.v2"
 
+	"github.com/singulatron/singulatron/localtron/router"
 	types "github.com/singulatron/singulatron/localtron/services/config/types"
-	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
-	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 
 	"github.com/singulatron/singulatron/localtron/logger"
 )
@@ -28,25 +27,18 @@ import (
 const DefaultModelId = `huggingface/TheBloke/mistral-7b-instruct-v0.2.Q3_K_S.gguf`
 
 type ConfigService struct {
-	// import cycle doesn't alllow use to have
-	// the firehose service here
-	EventCallback func(firehosetypes.Event)
-	// defined like this to avoid passing in the user service
-	UpsertPermission func(id, name, description string) (*usertypes.Permission, error)
-	// defined like this to avoid passing in the user service
-	AddPermissionToRole func(roleId, permissionId string) error
+	router *router.Router
 
-	ConfigDirectory   string
-	ConfigFileName    string
-	config            types.Config
-	configFileMutex   sync.Mutex
-	clientIdFileMutex sync.Mutex
-	clientId          string
+	ConfigDirectory string
+	ConfigFileName  string
+	config          types.Config
+	configFileMutex sync.Mutex
 }
 
-func NewConfigService() (*ConfigService, error) {
+func NewConfigService(router *router.Router) (*ConfigService, error) {
 	cs := &ConfigService{
 		ConfigFileName: "config.yaml",
+		router:         router,
 	}
 
 	return cs, nil
@@ -54,18 +46,6 @@ func NewConfigService() (*ConfigService, error) {
 
 func (cs *ConfigService) GetConfigDirectory() string {
 	return cs.ConfigDirectory
-}
-
-func (cs *ConfigService) SetUpsertPermissionFunc(f func(id, name, description string) (*usertypes.Permission, error)) {
-	cs.UpsertPermission = f
-}
-
-func (cs *ConfigService) SetAddPermissionToRoleFunc(f func(roleId, permissionId string) error) {
-	cs.AddPermissionToRole = f
-}
-
-func (cs *ConfigService) SetEventCallback(f func(firehosetypes.Event)) {
-	cs.EventCallback = f
 }
 
 func (cs *ConfigService) Start() error {

@@ -13,6 +13,7 @@ import (
 
 	"github.com/singulatron/singulatron/localtron/datastore"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // List lists prompts
@@ -31,19 +32,16 @@ func (p *PromptService) GetPrompts(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	err := p.userService.IsAuthorized(prompttypes.PermissionPromptView.Id, r)
+	rsp := &usertypes.IsAuthorizedResponse{}
+	err := p.router.Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
+		PermissionId: prompttypes.PermissionPromptView.Id,
+	}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
-
-	user, found, err := p.userService.GetUserFromRequest(r)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
-		return
-	}
-	if !found {
-		http.Error(w, "unauthorized", http.StatusUnauthorized)
+	if !rsp.Authorized {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
 
@@ -72,14 +70,14 @@ func (p *PromptService) GetPrompts(
 		options.Query.Limit = 20
 	}
 
-	prompts, count, err := promptService.ListPrompts(options)
+	prompts, count, err := p.listPrompts(options)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	for i := range prompts {
-		if prompts[i].UserId != user.Id {
+		if prompts[i].UserId != rsp.User.Id {
 			// do not let users see other peoples promtps,
 			// not even if they are admins
 			// eg. imagine a sysadmin looking at the CEO's prompt

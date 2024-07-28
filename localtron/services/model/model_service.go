@@ -11,11 +11,7 @@ import (
 	"sync"
 
 	"github.com/singulatron/singulatron/localtron/datastore"
-
-	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
-	dockertypes "github.com/singulatron/singulatron/localtron/services/docker/types"
-	downloadtypes "github.com/singulatron/singulatron/localtron/services/download/types"
-	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
+	"github.com/singulatron/singulatron/localtron/router"
 
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 )
@@ -24,27 +20,17 @@ type ModelService struct {
 	modelStateMutex sync.Mutex
 	modelPortMap    map[int]*modeltypes.ModelState
 
+	router         *router.Router
 	modelsStore    datastore.DataStore
 	platformsStore datastore.DataStore
-
-	userService     usertypes.UserServiceI
-	downloadService downloadtypes.DownloadServiceI
-	configService   configtypes.ConfigServiceI
-	dockerService   dockertypes.DockerServiceI
 }
 
 func NewModelService(
-	ds downloadtypes.DownloadServiceI,
-	userService usertypes.UserServiceI,
-	cs configtypes.ConfigServiceI,
-	dockerService dockertypes.DockerServiceI,
+	router *router.Router,
 	datastoreFactory func(tableName string, insance any) (datastore.DataStore, error),
 ) (*ModelService, error) {
 	srv := &ModelService{
-		userService:     userService,
-		downloadService: ds,
-		configService:   cs,
-		dockerService:   dockerService,
+		router: router,
 
 		modelPortMap: map[int]*modeltypes.ModelState{},
 	}

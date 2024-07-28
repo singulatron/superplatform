@@ -32,11 +32,18 @@ type Config struct {
 	IsRuntimeInstalled bool `json:"isRuntimeInstalled" yaml:"isRuntimeInstalled"`
 }
 
-type ConfigGetRequest struct {
+type GetConfigRequest struct {
 }
 
-type ConfigGetResponse struct {
+type GetConfigResponse struct {
 	Config *Config `json:"config"`
+}
+
+type SaveConfigRequest struct {
+	Config *Config `json:"config"`
+}
+
+type SaveConfigResponse struct {
 }
 
 //

@@ -11,7 +11,7 @@ import (
 )
 
 func TestModel(t *testing.T) {
-	univ, err := di.BigBang(di.UniverseOptions{
+	univ, err := di.BigBang(di.Options{
 		Test: true,
 	})
 	require.NoError(t, err)

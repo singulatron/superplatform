@@ -8,6 +8,7 @@
 package promptservice
 
 import (
+	"context"
 	"fmt"
 	"log/slog"
 	"strings"
@@ -23,6 +24,7 @@ import (
 	"github.com/singulatron/singulatron/localtron/logger"
 
 	apptypes "github.com/singulatron/singulatron/localtron/services/chat/types"
+	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
 )
@@ -159,7 +161,7 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 		slog.String("promptId", currentPrompt.Id),
 	)
 
-	defer p.router.Post("firehose", "/publish", prompttypes.EventPromptProcessingFinished{
+	defer p.router.Post("firehose", prompttypes.EventPromptProcessingFinished{
 		PromptId: currentPrompt.Id,
 		Error:    errToString(err),
 	})
@@ -174,27 +176,43 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 		return errors.Wrap(err, "error updating currently running prompt")
 	}
 
-	p.firehoseService.Publish(prompttypes.EventPromptProcessingStarted{
+	ev := prompttypes.EventPromptProcessingStarted{
 		PromptId: currentPrompt.Id,
-	})
+	}
+	p.router.Post(context.Background(), "firehose", "/publish", firehosetypes.PublishRequest{
+		Event: &firehosetypes.Event{
+			Name: ev.Name(),
+			Data: ev,
+		},
+	}, nil)
 
-	err = p.chatService.AddMessage(&apptypes.Message{
-		// not a fan of taking the prompt id but at least it makes this idempotent
-		// in case prompts get retried over and over again
-		Id:        currentPrompt.Id,
-		ThreadId:  currentPrompt.ThreadId,
-		UserId:    currentPrompt.UserId,
-		Content:   currentPrompt.Prompt,
-		CreatedAt: time.Now(),
-	})
+	addMessageReq := &apptypes.AddMessageRequest{
+		Message: &apptypes.Message{
+			// not a fan of taking the prompt id but at least it makes this idempotent
+			// in case prompts get retried over and over again
+			Id:        currentPrompt.Id,
+			ThreadId:  currentPrompt.ThreadId,
+			UserId:    currentPrompt.UserId,
+			Content:   currentPrompt.Prompt,
+			CreatedAt: time.Now(),
+		},
+	}
+
+	err = p.router.Post(context.Background(), "chat", "/message/add", addMessageReq, nil)
 	if err != nil {
 		return err
 	}
 
-	stat, err := p.modelService.Status(currentPrompt.ModelId)
-	if err != nil {
-		return errors.Wrap(err, "error getting model status")
+	statusReq := modeltypes.StatusRequest{
+		ModelId: currentPrompt.ModelId,
 	}
+	statusRsp := modeltypes.StatusResponse{}
+	err = p.router.Post(context.Background(), "model", "/status", statusReq, &statusRsp)
+	if err != nil {
+		return err
+	}
+
+	stat := statusRsp.Status
 	if !stat.Running {
 		return fmt.Errorf("model '%v' is not running", currentPrompt.ModelId)
 	}

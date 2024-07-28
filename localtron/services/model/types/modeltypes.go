@@ -102,7 +102,7 @@ type ModelStatus struct {
 }
 
 type StatusRequest struct {
-	Url string `json:"url"`
+	ModelId string `json:"modelId"`
 }
 
 type StatusResponse struct {

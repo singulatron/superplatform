@@ -11,14 +11,11 @@ import (
 	"sync"
 
 	"github.com/docker/docker/client"
-	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
-	downloadtypes "github.com/singulatron/singulatron/localtron/services/download/types"
-	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
+	"github.com/singulatron/singulatron/localtron/router"
 )
 
 type DockerService struct {
-	userService          usertypes.UserServiceI
-	configService        configtypes.ConfigServiceI
+	router               *router.Router
 	imagesCache          map[string]bool
 	imagePullMutexes     map[string]*sync.Mutex
 	imagePullGlobalMutex sync.Mutex
@@ -27,22 +24,17 @@ type DockerService struct {
 	dockerPort           int
 	client               *client.Client
 	mutex                sync.Mutex
-	ds                   downloadtypes.DownloadServiceI
 }
 
 func NewDockerService(
-	downloadService downloadtypes.DownloadServiceI,
-	userService usertypes.UserServiceI,
-	configService configtypes.ConfigServiceI,
+	router *router.Router,
 ) (*DockerService, error) {
 	c, err := client.NewClientWithOpts(client.FromEnv, client.WithAPIVersionNegotiation())
 	if err != nil {
 		return nil, err
 	}
 	service := &DockerService{
-		userService:   userService,
-		configService: configService,
-		ds:            downloadService,
+		router: router,
 
 		client:           c,
 		imagePullMutexes: make(map[string]*sync.Mutex),

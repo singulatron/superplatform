@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 
 	"github.com/singulatron/singulatron/localtron/datastore"
 )
@@ -46,6 +47,60 @@ func (r *Router) Post(ctx context.Context, serviceName, path string, request, re
 		return err
 	}
 	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return err
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		var errResponse map[string]string
+		if err := json.Unmarshal(responseBody, &errResponse); err != nil {
+			return fmt.Errorf("service '%s' %s returned non-OK HTTP status: %s, body: %v", serviceName, path, resp.Status, string(responseBody))
+		}
+		if errMsg, exists := errResponse["error"]; exists {
+			return fmt.Errorf("service '%s' %s error: %s", serviceName, path, errMsg)
+		}
+		return fmt.Errorf("service '%s' %s returned non-OK HTTP status: %s, body: %v", serviceName, path, resp.Status, string(responseBody))
+	}
+
+	if response != nil {
+		err = json.Unmarshal(responseBody, response)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (r *Router) Get(ctx context.Context, serviceName, path string, queryParams map[string]string, response any) error {
+	address, ok := r.registry[serviceName]
+	if !ok {
+		address = "http://127.0.0.1:" + DefaultPort
+	}
+
+	// Construct URL with query parameters
+	ur := fmt.Sprintf("%v%v", address, path)
+	if len(queryParams) > 0 {
+		q := url.Values{}
+		for key, value := range queryParams {
+			q.Add(key, value)
+		}
+		ur += "?" + q.Encode()
+	}
+
+	req, err := http.NewRequestWithContext(ctx, "GET", ur, nil)
+	if err != nil {
+		return err
+	}
 
 	client := &http.Client{}
 	resp, err := client.Do(req)

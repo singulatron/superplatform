@@ -25,7 +25,6 @@ type UserService struct {
 }
 
 func NewUserService(
-	cs configtypes.ConfigServiceI,
 	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error),
 ) (*UserService, error) {
 	usersStore, err := datastoreFactory("users", &usertypes.User{})

@@ -101,7 +101,7 @@ func TestAddPrompt(t *testing.T) {
 			return nil
 		})
 
-	universe, err := di.BigBang(di.UniverseOptions{
+	universe, err := di.BigBang(di.Options{
 		Test: true,
 		Pre: di.Universe{
 			DownloadService: ds,

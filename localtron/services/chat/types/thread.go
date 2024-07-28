@@ -68,6 +68,7 @@ type GetThreadRequest struct {
 }
 
 type GetThreadResponse struct {
+	Exists bool   `json:"exists"`
 	Thread Thread `json:"thread"`
 }
 

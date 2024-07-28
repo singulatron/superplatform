@@ -54,7 +54,7 @@ func main() {
 		}
 	}()
 
-	universe, err := di.BigBang(di.UniverseOptions{
+	universe, err := di.BigBang(di.Options{
 		Test: false,
 	})
 	if err != nil {

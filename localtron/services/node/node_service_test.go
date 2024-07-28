@@ -17,7 +17,7 @@ NVIDIA GeForce RTX 3090, 52, 0, 24576, 2600, 26.85, 350.00, 535.183.01, 00000000
 `
 
 func TestNvidiaSmiOutput(t *testing.T) {
-	univ, err := di.BigBang(di.UniverseOptions{
+	univ, err := di.BigBang(di.Options{
 		Test: true,
 	})
 	require.NoError(t, err)

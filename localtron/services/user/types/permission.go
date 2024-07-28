@@ -33,7 +33,8 @@ type IsAuthorizedRequest struct {
 }
 
 type IsAuthorizedResponse struct {
-	Authorized bool `json:"authorized,omitempty"`
+	Authorized bool  `json:"authorized,omitempty"`
+	User       *User `json:"user,omitempty"`
 }
 
 type CreatePermissionRequest struct {

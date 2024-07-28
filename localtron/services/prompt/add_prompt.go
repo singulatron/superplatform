@@ -9,22 +9,22 @@ package promptservice
 
 import (
 	"context"
-	"fmt"
 	"log/slog"
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/pkg/errors"
 	"github.com/singulatron/singulatron/localtron/clients/llm"
 	"github.com/singulatron/singulatron/localtron/logger"
 
 	apptypes "github.com/singulatron/singulatron/localtron/services/chat/types"
+	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
+	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
 )
 
 const maxThreadTitle = 100
 
-func (p *PromptService) AddPrompt(ctx context.Context, promptReq *prompttypes.AddPromptRequest, userId string) (*prompttypes.AddPromptResponse, error) {
+func (p *PromptService) addPrompt(ctx context.Context, promptReq *prompttypes.AddPromptRequest, userId string) (*prompttypes.AddPromptResponse, error) {
 	// @todo validate userId
 
 	prompt := &prompttypes.Prompt{
@@ -62,14 +62,16 @@ func (p *PromptService) AddPrompt(ctx context.Context, promptReq *prompttypes.Ad
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println("get thread response", getThreadResp)
 
-	_, threadExists, err := p.chatService.GetThread(threadId)
+	getThreadRsp := &chattypes.GetThreadResponse{}
+	err = p.router.Post(context.Background(), "chat", "/thread", &chattypes.GetThreadRequest{
+		ThreadId: threadId,
+	}, getThreadRsp)
 	if err != nil {
-		return nil, errors.Wrap(err, "cannot get thread")
+		return nil, err
 	}
 
-	if !threadExists {
+	if !getThreadRsp.Exists {
 		logger.Info("Creating thread", slog.String("threadId", threadId))
 
 		// threads can be created when a message is sent
@@ -90,15 +92,24 @@ func (p *PromptService) AddPrompt(ctx context.Context, promptReq *prompttypes.Ad
 			}
 		}
 
-		_, err := p.chatService.AddThread(thread)
+		rsp := &chattypes.AddThreadResponse{}
+		err = p.router.Post(context.Background(), "chat", "/thread/add", &chattypes.AddThreadRequest{
+			Thread: thread,
+		}, rsp)
 		if err != nil {
-			return nil, errors.Wrap(err, "failed to add thread")
+			return nil, err
 		}
 	}
 
-	p.firehoseService.Publish(prompttypes.EventPromptAdded{
+	ev := prompttypes.EventPromptAdded{
 		PromptId: prompt.Id,
-	})
+	}
+	p.router.Post(context.Background(), "firehose", "/publish", firehosetypes.PublishRequest{
+		Event: &firehosetypes.Event{
+			Name: ev.Name(),
+			Data: ev,
+		},
+	}, nil)
 
 	go p.triggerPromptProcessing()
 

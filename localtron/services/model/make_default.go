@@ -8,10 +8,12 @@
 package modelservice
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/pkg/errors"
 	"github.com/singulatron/singulatron/localtron/datastore"
+	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 )
 
@@ -24,7 +26,8 @@ func (ms *ModelService) MakeDefault(modelId string) error {
 		return fmt.Errorf("cannot set model as it is not downloaded yet")
 	}
 
-	conf, err := ms.configService.GetConfig()
+	rsp := configtypes.ConfigGetResponse{}
+	err = ms.router.Get(context.Background(), "config", "/get", nil, &rsp)
 	if err != nil {
 		return err
 	}

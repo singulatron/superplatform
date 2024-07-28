@@ -12,6 +12,7 @@ import (
 	"net/http"
 
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // Add adds a new prompt
@@ -30,19 +31,16 @@ func (p *PromptService) PostAdd(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	err := p.userService.IsAuthorized(prompttypes.PermissionPromptCreate.Id, r)
+	rsp := &usertypes.IsAuthorizedResponse{}
+	err := p.router.Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
+		PermissionId: prompttypes.PermissionPromptCreate.Id,
+	}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
-
-	user, found, err := p.userService.GetUserFromRequest(r)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
-		return
-	}
-	if !found {
-		http.Error(w, "unauthorized", http.StatusUnauthorized)
+	if !rsp.Authorized {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
 
@@ -54,12 +52,12 @@ func (p *PromptService) PostAdd(
 	}
 	defer r.Body.Close()
 
-	rsp, err := p.AddPrompt(r.Context(), req, user.Id)
+	prsp, err := p.addPrompt(r.Context(), req, rsp.User.Id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	bs, _ := json.Marshal(rsp)
+	bs, _ := json.Marshal(prsp)
 	w.Write(bs)
 }

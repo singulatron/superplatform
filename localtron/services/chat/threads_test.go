@@ -11,7 +11,7 @@ import (
 )
 
 func TestMessageCreatesThread(t *testing.T) {
-	universe, err := di.BigBang(di.UniverseOptions{
+	universe, err := di.BigBang(di.Options{
 		Test: true,
 	})
 	require.NoError(t, err)

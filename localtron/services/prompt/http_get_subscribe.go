@@ -16,6 +16,7 @@ import (
 	"github.com/singulatron/singulatron/localtron/logger"
 
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // Subscribe streams prompt responses to the client
@@ -31,9 +32,16 @@ func (p *PromptService) GetSubscribe(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	err := p.userService.IsAuthorized(prompttypes.PermissionPromptStream.Id, r)
+	rsp := &usertypes.IsAuthorizedResponse{}
+	err := p.router.Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
+		PermissionId: prompttypes.PermissionPromptStream.Id,
+	}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	if !rsp.Authorized {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
 

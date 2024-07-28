@@ -8,15 +8,17 @@
 package configservice
 
 import (
+	"context"
 	"io/ioutil"
 	"path"
 
 	"github.com/pkg/errors"
 	types "github.com/singulatron/singulatron/localtron/services/config/types"
+	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
 	"gopkg.in/yaml.v2"
 )
 
-func (cs *ConfigService) SaveConfig(config types.Config) error {
+func (cs *ConfigService) saveConfig(config types.Config) error {
 	cs.configFileMutex.Lock()
 	defer cs.configFileMutex.Unlock()
 
@@ -30,7 +32,13 @@ func (cs *ConfigService) SaveConfig(config types.Config) error {
 		return errors.Wrap(err, "error writing config file")
 	}
 
-	cs.EventCallback(types.EventConfigUpdate{})
+	ev := types.EventConfigUpdate{}
+	cs.router.Post(context.Background(), "firehose", "/publish", firehosetypes.PublishRequest{
+		Event: &firehosetypes.Event{
+			Name: ev.Name(),
+			Data: ev,
+		},
+	}, nil)
 
 	return nil
 }
