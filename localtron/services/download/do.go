@@ -26,7 +26,7 @@ import (
 Starts or resumes a download.
 Can resume downloads not found in the JSON statefile.
 */
-func (dm *DownloadService) Do(url, downloadDir string) error {
+func (dm *DownloadService) do(url, downloadDir string) error {
 	if downloadDir == "" {
 		downloadDir = dm.DefaultFolder
 	}

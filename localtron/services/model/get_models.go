@@ -12,7 +12,7 @@ import (
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 )
 
-func (ms *ModelService) GetModels() ([]*modeltypes.Model, error) {
+func (ms *ModelService) getModels() ([]*modeltypes.Model, error) {
 	modelIs, err := ms.modelsStore.Query(
 		datastore.All(),
 	).Find()

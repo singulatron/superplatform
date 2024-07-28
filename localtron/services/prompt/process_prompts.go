@@ -24,6 +24,7 @@ import (
 	"github.com/singulatron/singulatron/localtron/logger"
 
 	apptypes "github.com/singulatron/singulatron/localtron/services/chat/types"
+	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
 	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
@@ -161,10 +162,10 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 		slog.String("promptId", currentPrompt.Id),
 	)
 
-	defer p.router.Post("firehose", prompttypes.EventPromptProcessingFinished{
+	defer p.router.Post(context.Background(), "firehose", "/publish", prompttypes.EventPromptProcessingFinished{
 		PromptId: currentPrompt.Id,
 		Error:    errToString(err),
-	})
+	}, nil)
 
 	currentPrompt.LastRun = time.Now()
 	currentPrompt.Error = ""
@@ -241,19 +242,23 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 }
 
 func (p *PromptService) processPlatform(address string, fullPrompt string, currentPrompt *prompttypes.Prompt) error {
-	platform, err := p.modelService.GetPlatformByModelId(currentPrompt.ModelId)
+	getModelReq := modeltypes.GetModelRequest{
+		Id: currentPrompt.ModelId,
+	}
+	getModelRsp := modeltypes.GetModelResponse{}
+	err := p.router.Post(context.Background(), "model", "/status", getModelReq, &getModelRsp)
 	if err != nil {
 		return err
 	}
 
-	switch platform.Id {
+	switch getModelRsp.Platform.Id {
 	case modeltypes.PlatformLlamaCpp.Id:
 		return p.processLlamaCpp(address, fullPrompt, currentPrompt)
 	case modeltypes.PlatformStableDiffusion.Id:
 		return p.processStableDiffusion(address, fullPrompt, currentPrompt)
 	}
 
-	return fmt.Errorf("cannot find platform %v", platform.Id)
+	return fmt.Errorf("cannot find platform %v", getModelRsp.Platform.Id)
 }
 
 func (p *PromptService) processStableDiffusion(address string, fullPrompt string, currentPrompt *prompttypes.Prompt) error {
@@ -302,19 +307,28 @@ func (p *PromptService) processStableDiffusion(address string, fullPrompt string
 		Id:      uuid.New().String(),
 		Content: base64String,
 	}
-	err = p.chatService.UpsertAssets([]*apptypes.Asset{
-		asset,
-	})
+
+	upsertReq := chattypes.UpsertAssetsRequest{
+		Assets: []*apptypes.Asset{
+			asset,
+		},
+	}
+	upsertRsp := chattypes.UpsertAssetsResponse{}
+	err = p.router.Post(context.Background(), "chat", "/upsert-assets", upsertReq, &upsertRsp)
 	if err != nil {
 		return err
 	}
 
-	err = p.chatService.AddMessage(&apptypes.Message{
-		Id:       uuid.New().String(),
-		ThreadId: currentPrompt.ThreadId,
-		Content:  "Sure, here is your image",
-		AssetIds: []string{asset.Id},
-	})
+	addMsgReq := chattypes.AddMessageRequest{
+		Message: &apptypes.Message{
+			Id:       uuid.New().String(),
+			ThreadId: currentPrompt.ThreadId,
+			Content:  "Sure, here is your image",
+			AssetIds: []string{asset.Id},
+		},
+	}
+	addMsgRsp := chattypes.AddMessageResponse{}
+	err = p.router.Post(context.Background(), "chat", "/message/add", addMsgReq, &addMsgRsp)
 	if err != nil {
 		logger.Error("Error when saving chat message after image generation",
 			slog.String("error", err.Error()))
@@ -371,12 +385,15 @@ func (p *PromptService) processLlamaCpp(address string, fullPrompt string, curre
 		p.StreamManager.Broadcast(currentPrompt.ThreadId, resp)
 
 		if len(resp.Choices) > 0 && resp.Choices[0].FinishReason == "stop" {
-
-			err := p.chatService.AddMessage(&apptypes.Message{
-				Id:       uuid.New().String(),
-				ThreadId: currentPrompt.ThreadId,
-				Content:  llmResponseToText(p.StreamManager.History[currentPrompt.ThreadId]),
-			})
+			addMsgReq := chattypes.AddMessageRequest{
+				Message: &apptypes.Message{
+					Id:       uuid.New().String(),
+					ThreadId: currentPrompt.ThreadId,
+					Content:  llmResponseToText(p.StreamManager.History[currentPrompt.ThreadId]),
+				},
+			}
+			addMsgRsp := chattypes.AddMessageResponse{}
+			err := p.router.Post(context.Background(), "chat", "/message/add", addMsgReq, &addMsgRsp)
 			if err != nil {
 				logger.Error("Error when saving chat message after broadcast",
 					slog.String("error", err.Error()))

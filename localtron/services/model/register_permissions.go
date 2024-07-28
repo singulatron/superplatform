@@ -9,6 +9,8 @@
 package modelservice
 
 import (
+	"context"
+
 	"github.com/singulatron/singulatron/localtron/datastore"
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
@@ -16,11 +18,14 @@ import (
 
 func (p *ModelService) registerPermissions() error {
 	for _, permission := range modeltypes.ModelPermissions {
-		_, err := p.userService.UpsertPermission(
-			permission.Id,
-			permission.Name,
-			permission.Description,
-		)
+		rsp := &usertypes.UpserPermissionResponse{}
+		err := p.router.Post(context.Background(), "user", "/upsert-permission", &usertypes.UpserPermissionRequest{
+			Permission: &usertypes.Permission{
+				Id:          permission.Id,
+				Name:        permission.Name,
+				Description: permission.Description,
+			},
+		}, rsp)
 		if err != nil {
 			return err
 		}
@@ -31,7 +36,14 @@ func (p *ModelService) registerPermissions() error {
 		usertypes.RoleUser,
 	} {
 		for _, permission := range modeltypes.ModelPermissions {
-			p.userService.AddPermissionToRole(role.Id, permission.Id)
+			rsp := &usertypes.AddPermissionToRoleResponse{}
+			err := p.router.Post(context.Background(), "user", "/add-permission-to-role", &usertypes.AddPermissionToRoleRequest{
+				RoleId:       role.Id,
+				PermissionId: permission.Id,
+			}, rsp)
+			if err != nil {
+				return err
+			}
 		}
 	}
 

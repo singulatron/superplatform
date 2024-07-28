@@ -17,7 +17,7 @@ import (
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 )
 
-func (ms *ModelService) Status(modelId string) (*modeltypes.ModelStatus, error) {
+func (ms *ModelService) status(modelId string) (*modeltypes.ModelStatus, error) {
 	dockerHost := ms.dockerService.GetDockerHost()
 	singulatronLLMHost := os.Getenv("SINGULATRON_LLM_HOST")
 	if singulatronLLMHost != "" {

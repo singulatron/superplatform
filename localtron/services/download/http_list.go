@@ -5,7 +5,7 @@
  * This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3).
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
-package downloadendpoints
+package downloadservice
 
 import (
 	"encoding/json"
@@ -15,44 +15,41 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-// Pause pauses an ongoing download
-// @Summary Pause
-// @Description Pause a download that is currently in progress
+// List retrieves a list of download details
+// @Summary List
+// @Description Fetch a list of all download details
 // @Tags download
 // @Accept json
 // @Produce json
-// @Param body body downloadtypes.DownloadRequest true "Download request payload"
-// @Success 200 {object} map[string]any "Success response"
-// @Failure 400 {string} string "Invalid JSON"
+// @Success 200 {object} downloadtypes.DownloadsResponse "List of downloads"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
-// @Router /download/pause [post]
-func Pause(
+// @Router /download/list [post]
+func (ds *DownloadService) List(
 	w http.ResponseWriter,
 	r *http.Request,
-	userService usertypes.UserServiceI,
-	ds downloadtypes.DownloadServiceI,
 ) {
-	err := userService.IsAuthorized(downloadtypes.PermissionDownloadEdit.Id, r)
+	rsp := &usertypes.IsAuthorizedResponse{}
+	err := ds.router.Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
+		PermissionId: downloadtypes.PermissionDownloadView.Id,
+	}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
-
-	req := downloadtypes.DownloadRequest{}
-	err = json.NewDecoder(r.Body).Decode(&req)
-	if err != nil {
-		http.Error(w, `invalid JSON`, http.StatusBadRequest)
+	if !rsp.Authorized {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
-	defer r.Body.Close()
 
-	err = ds.Pause(req.URL)
+	details, err := ds.list()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	jsonData, _ := json.Marshal(map[string]any{})
+	jsonData, _ := json.Marshal(downloadtypes.DownloadsResponse{
+		Downloads: details,
+	})
 	w.Write(jsonData)
 }

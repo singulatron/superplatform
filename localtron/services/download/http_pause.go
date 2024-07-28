@@ -5,7 +5,7 @@
  * This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3).
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
-package downloadendpoints
+package downloadservice
 
 import (
 	"encoding/json"
@@ -15,27 +15,33 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-// Do initiates a download request
-// @Summary Do
-// @Description Start a download for a specified URL and folder path
+// Pause pauses an ongoing download
+// @Summary Pause
+// @Description Pause a download that is currently in progress
 // @Tags download
 // @Accept json
 // @Produce json
-// @Param request body downloadtypes.DownloadRequest true "Download Request"
-// @Success 200 {object} map[string]any "Download initiated successfully"
+// @Param body body downloadtypes.DownloadRequest true "Download request payload"
+// @Success 200 {object} map[string]any "Success response"
 // @Failure 400 {string} string "Invalid JSON"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
-// @Router /download/do [post]
-func Do(
+// @Router /download/pause [post]
+func (ds *DownloadService) Pause(
 	w http.ResponseWriter,
 	r *http.Request,
-	userService usertypes.UserServiceI,
-	ds downloadtypes.DownloadServiceI,
+
 ) {
-	err := userService.IsAuthorized(downloadtypes.PermissionDownloadCreate.Id, r)
+	rsp := &usertypes.IsAuthorizedResponse{}
+	err := ds.router.Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
+		PermissionId: downloadtypes.PermissionDownloadEdit.Id,
+	}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	if !rsp.Authorized {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
 
@@ -47,7 +53,7 @@ func Do(
 	}
 	defer r.Body.Close()
 
-	err = ds.Do(req.URL, req.FolderPath)
+	err = ds.pause(req.URL)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

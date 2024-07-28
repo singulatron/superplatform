@@ -74,6 +74,8 @@ type AddMessageRequest struct {
 	Message *Message `json:"message"`
 }
 
+type AddMessageResponse struct{}
+
 type GetMessagesRequest struct {
 	ThreadId string `json:"threadId"`
 }
@@ -86,3 +88,9 @@ type GetMessagesResponse struct {
 type DeleteMessageRequest struct {
 	MessageId string `json:"messageId"`
 }
+
+type UpsertAssetsRequest struct {
+	Assets []*Asset `json:"assets,omitempty"`
+}
+
+type UpsertAssetsResponse struct{}

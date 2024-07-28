@@ -5,7 +5,7 @@
  * This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3).
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
-package modelendpoints
+package modelservice
 
 import (
 	"encoding/json"
@@ -15,19 +15,24 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func MakeDefault(
+func (ms *ModelService) Status(
 	w http.ResponseWriter,
 	r *http.Request,
-	userService usertypes.UserServiceI,
-	ms modeltypes.ModelServiceI,
 ) {
-	err := userService.IsAuthorized(modeltypes.PermissionModelEdit.Id, r)
+	rsp := &usertypes.IsAuthorizedResponse{}
+	err := ms.router.Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
+		PermissionId: modeltypes.PermissionModelView.Id,
+	}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
+	if !rsp.Authorized {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
-	req := modeltypes.MakeDefaultRequest{}
+	req := modeltypes.StatusRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `invalid JSON`, http.StatusBadRequest)
@@ -35,12 +40,14 @@ func MakeDefault(
 	}
 	defer r.Body.Close()
 
-	err = ms.MakeDefault(req.Url)
+	status, err := ms.status(req.ModelId)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	jsonData, _ := json.Marshal(modeltypes.MakeDefaultResponse{})
+	jsonData, _ := json.Marshal(modeltypes.StatusResponse{
+		Status: status,
+	})
 	w.Write(jsonData)
 }

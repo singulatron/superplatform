@@ -123,8 +123,19 @@ type MakeDefaultRequest struct {
 type MakeDefaultResponse struct {
 }
 
+type GetModelsRequest struct{}
+
 type GetModelsResponse struct {
 	Models []*Model `json:"models,omitempty"`
+}
+
+type GetModelRequest struct {
+	Id string `json:"id,omitempty"`
+}
+
+type GetModelResponse struct {
+	Model    *Model    `json:"model,omitempty"`
+	Platform *Platform `json:"platform,omitempty"`
 }
 
 //

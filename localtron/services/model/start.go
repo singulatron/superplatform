@@ -8,6 +8,7 @@
 package modelservice
 
 import (
+	"context"
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
@@ -25,6 +26,7 @@ import (
 	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/logger"
 
+	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
 	dockertypes "github.com/singulatron/singulatron/localtron/services/docker/types"
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 )
@@ -35,12 +37,14 @@ const hostPortNum = 8001
 Starts the model which has the supplied modelId or the currently activated one of
 the modelId is empty.
 */
-func (ms *ModelService) Start(modelId string) error {
+func (ms *ModelService) start(modelId string) error {
 	if modelId == "" {
-		conf, err := ms.configService.GetConfig()
+		rsp := configtypes.GetConfigResponse{}
+		err := ms.router.Get(context.Background(), "config", "/get", nil, &rsp)
 		if err != nil {
 			return err
 		}
+		conf := rsp.Config
 		if conf.Model.CurrentModelId == "" {
 			return errors.New("no model id specified and no default model")
 		}

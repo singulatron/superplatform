@@ -69,7 +69,7 @@ func (dm *DownloadService) Start() error {
 
 	for _, download := range dm.downloads {
 		if download.Status == types.DownloadStatusInProgress {
-			err = dm.Do(download.URL, path.Dir(download.FilePath))
+			err = dm.do(download.URL, path.Dir(download.FilePath))
 			if err != nil {
 				return err
 			}

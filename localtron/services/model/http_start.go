@@ -5,7 +5,7 @@
  * This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3).
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
-package modelendpoints
+package modelservice
 
 import (
 	"encoding/json"
@@ -15,15 +15,20 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func Start(
+func (ms *ModelService) Start(
 	w http.ResponseWriter,
 	r *http.Request,
-	userService usertypes.UserServiceI,
-	ms modeltypes.ModelServiceI,
 ) {
-	err := userService.IsAuthorized(modeltypes.PermissionModelCreate.Id, r)
+	rsp := &usertypes.IsAuthorizedResponse{}
+	err := ms.router.Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
+		PermissionId: modeltypes.PermissionModelCreate.Id,
+	}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	if !rsp.Authorized {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
 
@@ -35,7 +40,7 @@ func Start(
 	}
 	defer r.Body.Close()
 
-	err = ms.Start(req.ModelId)
+	err = ms.start(req.ModelId)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

@@ -13,7 +13,7 @@ import (
 	types "github.com/singulatron/singulatron/localtron/services/download/types"
 )
 
-func (ds *DownloadService) List() ([]types.DownloadDetails, error) {
+func (ds *DownloadService) list() ([]types.DownloadDetails, error) {
 	ds.lock.Lock()
 	defer ds.lock.Unlock()
 

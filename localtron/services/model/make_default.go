@@ -17,8 +17,8 @@ import (
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 )
 
-func (ms *ModelService) MakeDefault(modelId string) error {
-	stat, err := ms.Status(modelId)
+func (ms *ModelService) makeDefault(modelId string) error {
+	stat, err := ms.status(modelId)
 	if err != nil {
 		return err
 	}
@@ -26,16 +26,20 @@ func (ms *ModelService) MakeDefault(modelId string) error {
 		return fmt.Errorf("cannot set model as it is not downloaded yet")
 	}
 
-	rsp := configtypes.ConfigGetResponse{}
+	rsp := configtypes.GetConfigResponse{}
 	err = ms.router.Get(context.Background(), "config", "/get", nil, &rsp)
 	if err != nil {
 		return err
 	}
-	conf.Model.CurrentModelId = modelId
-	return ms.configService.SaveConfig(conf)
+
+	rsp.Config.Model.CurrentModelId = modelId
+
+	return ms.router.Post(context.Background(), "config", "/save", &configtypes.SaveConfigRequest{
+		Config: rsp.Config,
+	}, rsp)
 }
 
-func (ms *ModelService) GetPlatformByModelId(modelId string) (*modeltypes.Platform, error) {
+func (ms *ModelService) getPlatformByModelId(modelId string) (*modeltypes.Platform, error) {
 	modelI, found, err := ms.modelsStore.Query(
 		datastore.Id(modelId),
 	).FindOne()
