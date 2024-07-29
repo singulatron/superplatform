@@ -36,12 +36,11 @@ func NewGenericService(
 		store:  store,
 	}
 
-	err = service.registerPermissions()
-	if err != nil {
-		return nil, err
-	}
-
 	return service, nil
+}
+
+func (g *GenericService) Start() error {
+	return g.registerPermissions()
 }
 
 func (g *GenericService) create(request *generictypes.CreateRequest) error {

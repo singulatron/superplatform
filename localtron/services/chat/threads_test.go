@@ -13,7 +13,8 @@ import (
 )
 
 func TestMessageCreatesThread(t *testing.T) {
-	server := httptest.NewServer(nil)
+	hs := &di.HandlerSwitcher{}
+	server := httptest.NewServer(hs)
 	defer server.Close()
 
 	options := &di.Options{
@@ -23,7 +24,7 @@ func TestMessageCreatesThread(t *testing.T) {
 	universe, starterFunc, err := di.BigBang(options)
 	require.NoError(t, err)
 
-	server.Config.Handler = universe
+	hs.UpdateHandler(universe)
 	router := options.Router
 
 	err = starterFunc()

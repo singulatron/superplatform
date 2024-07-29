@@ -37,12 +37,11 @@ func NewNodeService(router *router.Router) (*NodeService, error) {
 		router:   router,
 	}
 
-	err = service.registerPermissions()
-	if err != nil {
-		return nil, err
-	}
-
 	return service, nil
+}
+
+func (ns *NodeService) Start() error {
+	return ns.registerPermissions()
 }
 
 func (ns *NodeService) listNodes() ([]*nodetypes.Node, error) {

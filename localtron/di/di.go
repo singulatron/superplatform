@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 	"path"
+	"sync"
 
 	"github.com/singulatron/singulatron/localtron/clients/llm"
 	"github.com/singulatron/singulatron/localtron/datastore"
@@ -355,6 +356,10 @@ func BigBang(options *Options) (*http.ServeMux, func() error, error) {
 		if err != nil {
 			return err
 		}
+		err = chatService.Start()
+		if err != nil {
+			return err
+		}
 
 		return nil
 	}, nil
@@ -368,4 +373,25 @@ func applicator(mws []middlewares.Middleware) func(http.HandlerFunc) http.Handle
 
 		return h
 	}
+}
+
+type HandlerSwitcher struct {
+	mu      sync.RWMutex
+	handler http.Handler
+}
+
+func (hs *HandlerSwitcher) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	hs.mu.RLock()
+	defer hs.mu.RUnlock()
+	if hs.handler != nil {
+		hs.handler.ServeHTTP(w, r)
+	} else {
+		http.NotFound(w, r)
+	}
+}
+
+func (hs *HandlerSwitcher) UpdateHandler(handler http.Handler) {
+	hs.mu.Lock()
+	defer hs.mu.Unlock()
+	hs.handler = handler
 }

@@ -46,10 +46,9 @@ func NewChatService(
 		assetsStore:   assetsStore,
 	}
 
-	err = service.registerPermissions()
-	if err != nil {
-		return nil, err
-	}
-
 	return service, nil
+}
+
+func (cs *ChatService) Start() error {
+	return cs.registerPermissions()
 }
