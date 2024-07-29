@@ -5,7 +5,7 @@
  * This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3).
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
-package genericendpoints
+package genericservice
 
 import (
 	"encoding/json"
@@ -15,50 +15,46 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-// Upsert creates or updates a generic object based on the provided data
-// @Summary Upsert a Generic Object
-// @Description Creates a new generic object or updates an existing one based on the provided data. Requires authorization and user authentication.
+// Create creates a new generic object
+// @Summary Create a Generic Object
+// @Description Creates a new object with the provided details. Requires authorization and user authentication.
 // @Tags generic
 // @Accept json
 // @Produce json
-// @Param body body generictypes.UpsertRequest true "Upsert request payload"
-// @Success 200 {object} generictypes.UpsertResponse "Successful creation or update of object"
+// @Param body body generictypes.CreateRequest true "Create request payload"
+// @Success 200 {object} generictypes.CreateResponse "Success"
 // @Failure 400 {object} generictypes.ErrorResponse "Invalid JSON"
 // @Failure 401 {object} generictypes.ErrorResponse "Unauthorized"
 // @Failure 500 {object} generictypes.ErrorResponse "Internal Server Error"
-// @Router /generic/upsert [post]
-func Upsert(
+// @Security BearerAuth
+// @Router /generic/create [post]
+func (g *GenericService) Create(
 	w http.ResponseWriter,
 	r *http.Request,
-	userService usertypes.UserServiceI,
-	genericService generictypes.GenericServiceI,
 ) {
-	err := userService.IsAuthorized(generictypes.PermissionGenericCreate.Id, r)
+
+	rsp := &usertypes.IsAuthorizedResponse{}
+	err := g.router.Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
+		PermissionId: generictypes.PermissionGenericCreate.Id,
+	}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
-
-	user, found, err := userService.GetUserFromRequest(r)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
+	if !rsp.Authorized {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
-	if !found {
-		http.Error(w, "unauthorized", http.StatusUnauthorized)
-		return
-	}
-
-	req := &generictypes.UpsertRequest{}
+	req := &generictypes.CreateRequest{}
 	err = json.NewDecoder(r.Body).Decode(req)
 	if err != nil {
 		http.Error(w, `invalid JSON`, http.StatusBadRequest)
 		return
 	}
 	defer r.Body.Close()
-	req.Object.UserId = user.Id
+	req.Object.UserId = rsp.User.Id
 
-	err = genericService.Upsert(req)
+	err = g.create(req)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

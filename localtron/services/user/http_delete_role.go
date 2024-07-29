@@ -14,7 +14,7 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func (s *UserService) PostDeleteRole(w http.ResponseWriter, r *http.Request) {
+func (s *UserService) DeleteRole(w http.ResponseWriter, r *http.Request) {
 	err := s.isAuthorized(usertypes.PermissionRoleDelete.Id, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)

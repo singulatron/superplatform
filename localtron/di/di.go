@@ -17,7 +17,6 @@ import (
 	dockerservice "github.com/singulatron/singulatron/localtron/services/docker"
 	downloadservice "github.com/singulatron/singulatron/localtron/services/download"
 	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
-	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
 	genericservice "github.com/singulatron/singulatron/localtron/services/generic"
 	modelservice "github.com/singulatron/singulatron/localtron/services/model"
 	nodeservice "github.com/singulatron/singulatron/localtron/services/node"
@@ -56,11 +55,7 @@ func BigBang(options Options) (*http.ServeMux, error) {
 		logger.Error("Config service creation failed", slog.String("error", err.Error()))
 		os.Exit(1)
 	}
-	configService.EventCallback = func(event firehosetypes.Event) {
-		logger.Debug("Received event from config before firehose is set up",
-			slog.String("eventName", event.Name),
-		)
-	}
+
 	configService.ConfigDirectory = path.Join(homeDir, singulatronFolder)
 	if os.Getenv("SINGULATRON_CONFIG_PATH") != "" {
 		configService.ConfigDirectory = os.Getenv("SINGULATRON_CONFIG_PATH")
@@ -88,7 +83,10 @@ func BigBang(options Options) (*http.ServeMux, error) {
 		options.Router = router
 	}
 
+	configService.SetRouter(options.Router)
+
 	userService, err := userservice.NewUserService(
+		options.Router,
 		options.DatastoreFactory,
 	)
 	if err != nil {
@@ -152,82 +150,38 @@ func BigBang(options Options) (*http.ServeMux, error) {
 		os.Exit(1)
 	}
 
-	if options.Pre.AppService != nil {
-		universe.AppService = options.Pre.AppService
-	} else {
-		appService, err := appservice.NewAppService(
-			universe.ConfigService,
-			universe.FirehoseService,
-			universe.UserService,
-		)
-		if err != nil {
-			logger.Error("App service creation failed", slog.String("error", err.Error()))
-			os.Exit(1)
-		}
-		universe.AppService = appService
+	chatService, err := chatservice.NewChatService(
+		options.Router,
+		options.DatastoreFactory,
+	)
+	if err != nil {
+		logger.Error("Chat service creation failed", slog.String("error", err.Error()))
+		os.Exit(1)
 	}
 
-	if options.Pre.ChatService != nil {
-		universe.ChatService = options.Pre.ChatService
-	} else {
-		chatService, err := chatservice.NewChatService(
-			universe.ConfigService,
-			universe.FirehoseService,
-			universe.UserService,
-			options.DatastoreFactory,
-		)
-		if err != nil {
-			logger.Error("Chat service creation failed", slog.String("error", err.Error()))
-			os.Exit(1)
-		}
-		universe.ChatService = chatService
+	promptService, err := promptservice.NewPromptService(
+		options.Router,
+		options.LLMClient,
+		options.DatastoreFactory,
+	)
+	if err != nil {
+		logger.Error("Prompt service creation failed", slog.String("error", err.Error()))
+		os.Exit(1)
 	}
 
-	if options.Pre.PromptService != nil {
-		universe.PromptService = options.Pre.PromptService
-	} else {
-		promptService, err := promptservice.NewPromptService(
-			universe.ConfigService,
-			universe.UserService,
-			universe.ModelService,
-			universe.ChatService,
-			universe.FirehoseService,
-			universe.Router,
-			options.Pre.LLMClient,
-			options.DatastoreFactory,
-		)
-		if err != nil {
-			logger.Error("Prompt service creation failed", slog.String("error", err.Error()))
-			os.Exit(1)
-		}
-		universe.PromptService = promptService
+	genericService, err := genericservice.NewGenericService(
+		options.Router,
+		options.DatastoreFactory,
+	)
+	if err != nil {
+		logger.Error("Generic service creation failed", slog.String("error", err.Error()))
+		os.Exit(1)
 	}
 
-	if options.Pre.GenericService != nil {
-		universe.GenericService = options.Pre.GenericService
-	} else {
-		genericService, err := genericservice.NewGenericService(
-			universe.ConfigService,
-			universe.FirehoseService,
-			universe.UserService,
-			options.DatastoreFactory,
-		)
-		if err != nil {
-			logger.Error("Generic service creation failed", slog.String("error", err.Error()))
-			os.Exit(1)
-		}
-		universe.GenericService = genericService
-	}
-
-	if options.Pre.NodeService != nil {
-		universe.NodeService = options.Pre.NodeService
-	} else {
-		nodeService, err := nodeservice.NewNodeService(universe.UserService)
-		if err != nil {
-			logger.Error("Node service creation failed", slog.String("error", err.Error()))
-			os.Exit(1)
-		}
-		universe.NodeService = nodeService
+	nodeService, err := nodeservice.NewNodeService(options.Router)
+	if err != nil {
+		logger.Error("Node service creation failed", slog.String("error", err.Error()))
+		os.Exit(1)
 	}
 
 	mws := []middlewares.Middleware{
@@ -241,160 +195,148 @@ func BigBang(options Options) (*http.ServeMux, error) {
 	router := http.NewServeMux()
 
 	router.HandleFunc("/firehose/subscribe", appl(func(w http.ResponseWriter, r *http.Request) {
-		firehoseendpoints.Subscribe(w, r, universe.UserService, universe.FirehoseService)
+		firehoseService.Subscribe(w, r)
 	}))
 
 	router.HandleFunc("/download/do", appl(func(w http.ResponseWriter, r *http.Request) {
-		downloadendpoints.Do(w, r, universe.UserService, universe.DownloadService)
+		downloadService.Do(w, r)
 	}))
 
 	router.HandleFunc("/download/pause", appl(func(w http.ResponseWriter, r *http.Request) {
-		downloadendpoints.Pause(w, r, universe.UserService, universe.DownloadService)
+		downloadService.Pause(w, r)
 	}))
 
 	router.HandleFunc("/download/list", appl(func(w http.ResponseWriter, r *http.Request) {
-		downloadendpoints.List(w, r, universe.UserService, universe.DownloadService)
+		downloadService.List(w, r)
 	}))
 
 	router.HandleFunc("/docker/info", appl(func(w http.ResponseWriter, r *http.Request) {
-		dockerendpoints.Info(w, r, universe.UserService, universe.DockerService)
+		dockerService.Info(w, r)
 	}))
 
 	router.HandleFunc("/model/status", appl(func(w http.ResponseWriter, r *http.Request) {
-		modelendpoints.Status(w, r, universe.UserService, universe.ModelService)
+		modelService.Status(w, r)
 	}))
 	router.HandleFunc("/model/get-models", appl(func(w http.ResponseWriter, r *http.Request) {
-		modelendpoints.GetModels(w, r, universe.UserService, universe.ModelService)
+		modelService.GetModels(w, r)
 	}))
 	router.HandleFunc("/model/start", appl(func(w http.ResponseWriter, r *http.Request) {
-		modelendpoints.Start(w, r, universe.UserService, universe.ModelService)
+		modelService.Start(w, r)
 	}))
 	router.HandleFunc("/model/make-default", appl(func(w http.ResponseWriter, r *http.Request) {
-		modelendpoints.MakeDefault(w, r, universe.UserService, universe.ModelService)
+		modelService.MakeDefault(w, r)
 	}))
 
 	router.HandleFunc("/config/get", appl(func(w http.ResponseWriter, r *http.Request) {
-		configendpoints.Get(w, r, universe.UserService, universe.ConfigService)
-	}))
-
-	router.HandleFunc("/app/log/disable", appl(func(w http.ResponseWriter, r *http.Request) {
-		appendpoints.DisableLogging(w, r, universe.AppService)
-	}))
-
-	router.HandleFunc("/app/log/enable", appl(func(w http.ResponseWriter, r *http.Request) {
-		appendpoints.EnableLogging(w, r, universe.AppService)
-	}))
-
-	router.HandleFunc("/app/log/status", appl(func(w http.ResponseWriter, r *http.Request) {
-		appendpoints.LoggingStatus(w, r, universe.AppService)
+		configService.Get(w, r)
 	}))
 
 	router.HandleFunc("/chat/message/add", appl(func(w http.ResponseWriter, r *http.Request) {
-		chatendpoints.AddMessage(w, r, universe.UserService, universe.ChatService)
+		chatService.AddMessage(w, r)
 	}))
 
 	router.HandleFunc("/chat/message/delete", appl(func(w http.ResponseWriter, r *http.Request) {
-		chatendpoints.DeleteMessage(w, r, universe.UserService, universe.ChatService)
+		chatService.DeleteMessage(w, r)
 	}))
 
 	router.HandleFunc("/chat/messages", appl(func(w http.ResponseWriter, r *http.Request) {
-		chatendpoints.GetMessages(w, r, universe.UserService, universe.ChatService)
+		chatService.GetMessages(w, r)
 	}))
 
 	router.HandleFunc("/chat/thread/add", appl(func(w http.ResponseWriter, r *http.Request) {
-		chatendpoints.AddThread(w, r, universe.UserService, universe.ChatService)
+		chatService.AddThread(w, r)
 	}))
 
 	router.HandleFunc("/chat/thread/delete", appl(func(w http.ResponseWriter, r *http.Request) {
-		chatendpoints.DeleteThread(w, r, universe.UserService, universe.ChatService)
+		chatService.DeleteThread(w, r)
 	}))
 
 	router.HandleFunc("/chat/threads", appl(func(w http.ResponseWriter, r *http.Request) {
-		chatendpoints.GetThreads(w, r, universe.UserService, universe.ChatService)
+		chatService.GetThreads(w, r)
 	}))
 
 	router.HandleFunc("/chat/thread", appl(func(w http.ResponseWriter, r *http.Request) {
-		chatendpoints.GetThread(w, r, universe.UserService, universe.ChatService)
+		chatService.GetThread(w, r)
 	}))
 
 	router.HandleFunc("/chat/thread/update", appl(func(w http.ResponseWriter, r *http.Request) {
-		chatendpoints.UpdateThread(w, r, universe.UserService, universe.ChatService)
+		chatService.UpdateThread(w, r)
 	}))
 
 	router.HandleFunc("/prompt/add", appl(func(w http.ResponseWriter, r *http.Request) {
-		promptendpoints.Add(w, r, universe.UserService, universe.PromptService)
+		promptService.PostAdd(w, r)
 	}))
 
 	router.HandleFunc("/prompt/remove", appl(func(w http.ResponseWriter, r *http.Request) {
-		promptendpoints.RemovePrompt(w, r, universe.UserService, universe.PromptService)
+		promptService.RemovePrompt(w, r)
 	}))
 
 	router.HandleFunc("/prompt/subscribe", appl(func(w http.ResponseWriter, r *http.Request) {
-		promptendpoints.Subscribe(w, r, universe.UserService, universe.PromptService)
+		promptService.GetSubscribe(w, r)
 	}))
 
 	router.HandleFunc("/prompt/list", appl(func(w http.ResponseWriter, r *http.Request) {
-		promptendpoints.List(w, r, universe.UserService, universe.PromptService)
+		promptService.GetPrompts(w, r)
 	}))
 
 	router.HandleFunc("/user/login", appl(func(w http.ResponseWriter, r *http.Request) {
-		userendpoints.Login(w, r, universe.UserService)
+		userService.Login(w, r)
 	}))
 	router.HandleFunc("/user/read-user-by-token", appl(func(w http.ResponseWriter, r *http.Request) {
-		userendpoints.ReadUserByToken(w, r, universe.UserService)
+		userService.ReadUserByToken(w, r)
 	}))
 	router.HandleFunc("/user/get-users", appl(func(w http.ResponseWriter, r *http.Request) {
-		userendpoints.GetUsers(w, r, universe.UserService)
+		userService.GetUsers(w, r)
 	}))
 	router.HandleFunc("/user/save-profile", appl(func(w http.ResponseWriter, r *http.Request) {
-		userendpoints.SaveProfile(w, r, universe.UserService)
+		userService.SaveProfile(w, r)
 	}))
 	router.HandleFunc("/user/change-password", appl(func(w http.ResponseWriter, r *http.Request) {
-		userendpoints.ChangePassword(w, r, universe.UserService)
+		userService.ChangePassword(w, r)
 	}))
 	router.HandleFunc("/user/change-password-admin", appl(func(w http.ResponseWriter, r *http.Request) {
-		userendpoints.ChangePasswordAdmin(w, r, universe.UserService)
+		userService.ChangePasswordAdmin(w, r)
 	}))
 	router.HandleFunc("/user/create-user", appl(func(w http.ResponseWriter, r *http.Request) {
-		userendpoints.CreateUser(w, r, universe.UserService)
+		userService.CreateUser(w, r)
 	}))
 	router.HandleFunc("/user/delete-user", appl(func(w http.ResponseWriter, r *http.Request) {
-		userendpoints.DeleteUser(w, r, universe.UserService)
+		userService.DeleteUser(w, r)
 	}))
 	router.HandleFunc("/user/get-roles", appl(func(w http.ResponseWriter, r *http.Request) {
-		userendpoints.GetRoles(w, r, universe.UserService)
+		userService.GetRoles(w, r)
 	}))
 	router.HandleFunc("/user/delete-role", appl(func(w http.ResponseWriter, r *http.Request) {
-		userendpoints.DeleteRole(w, r, universe.UserService)
+		userService.DeleteRole(w, r)
 	}))
 	router.HandleFunc("/user/get-permissions", appl(func(w http.ResponseWriter, r *http.Request) {
-		userendpoints.GetPermissions(w, r, universe.UserService)
+		userService.GetPermissions(w, r)
 	}))
 	router.HandleFunc("/user/set-role-permissions", appl(func(w http.ResponseWriter, r *http.Request) {
-		userendpoints.SetRolePermissions(w, r, universe.UserService)
+		userService.SetRolePermissions(w, r)
 	}))
 
 	router.HandleFunc("/generic/create", appl(func(w http.ResponseWriter, r *http.Request) {
-		genericendpoints.Create(w, r, universe.UserService, universe.GenericService)
+		genericService.Create(w, r)
 	}))
 	router.HandleFunc("/generic/update", appl(func(w http.ResponseWriter, r *http.Request) {
-		genericendpoints.Update(w, r, universe.UserService, universe.GenericService)
+		genericService.Update(w, r)
 	}))
 	router.HandleFunc("/generic/delete", appl(func(w http.ResponseWriter, r *http.Request) {
-		genericendpoints.Delete(w, r, universe.UserService, universe.GenericService)
+		genericService.Delete(w, r)
 	}))
 	router.HandleFunc("/generic/find", appl(func(w http.ResponseWriter, r *http.Request) {
-		genericendpoints.Find(w, r, universe.UserService, universe.GenericService)
+		genericService.Find(w, r)
 	}))
 	router.HandleFunc("/generic/upsert", appl(func(w http.ResponseWriter, r *http.Request) {
-		genericendpoints.Upsert(w, r, universe.UserService, universe.GenericService)
+		genericService.Upsert(w, r)
 	}))
 
 	router.HandleFunc("/node/list", appl(func(w http.ResponseWriter, r *http.Request) {
-		nodeendpoints.List(w, r, universe.UserService, universe.NodeService)
+		nodeService.List(w, r)
 	}))
 
-	return router
+	return router, nil
 }
 
 func applicator(mws []middlewares.Middleware) func(http.HandlerFunc) http.HandlerFunc {

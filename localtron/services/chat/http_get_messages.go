@@ -30,12 +30,17 @@ import (
 func (a *ChatService) GetMessages(
 	w http.ResponseWriter,
 	r *http.Request,
-	userService usertypes.UserServiceI,
-	ds chattypes.ChatServiceI,
 ) {
-	err := userService.IsAuthorized(chattypes.PermissionMessageView.Id, r)
+	rsp := &usertypes.IsAuthorizedResponse{}
+	err := a.router.Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
+		PermissionId: chattypes.PermissionMessageView.Id,
+	}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	if !rsp.Authorized {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
 
@@ -47,7 +52,7 @@ func (a *ChatService) GetMessages(
 	}
 	defer r.Body.Close()
 
-	messages, err := ds.GetMessages(req.ThreadId)
+	messages, err := a.getMessages(req.ThreadId)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -57,7 +62,7 @@ func (a *ChatService) GetMessages(
 	for _, v := range messages {
 		assetIds = append(assetIds, v.AssetIds...)
 	}
-	assets, err := ds.GetAssets(assetIds)
+	assets, err := a.getAssets(assetIds)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

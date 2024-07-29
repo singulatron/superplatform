@@ -16,11 +16,17 @@ import (
 
 func (s *UserService) GetRoles(
 	w http.ResponseWriter,
-	r *http.Request,
-	userService usertypes.UserServiceI) {
-	err := userService.IsAuthorized(usertypes.PermissionRoleView.Id, r)
+	r *http.Request) {
+	rsp := &usertypes.IsAuthorizedResponse{}
+	err := s.router.Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
+		PermissionId: usertypes.PermissionRoleView.Id,
+	}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	if !rsp.Authorized {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
 
@@ -32,7 +38,7 @@ func (s *UserService) GetRoles(
 	}
 	defer r.Body.Close()
 
-	roles, err := userService.GetRoles()
+	roles, err := s.getRoles()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

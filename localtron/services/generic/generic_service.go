@@ -44,14 +44,14 @@ func NewGenericService(
 	return service, nil
 }
 
-func (g *GenericService) Create(request *generictypes.CreateRequest) error {
+func (g *GenericService) create(request *generictypes.CreateRequest) error {
 	if request.Object.Id == "" {
 		request.Object.Id = uuid.NewString()
 	}
 	return g.store.Create(request.Object)
 }
 
-func (g *GenericService) CreateMany(request *generictypes.CreateManyRequest) error {
+func (g *GenericService) createMany(request *generictypes.CreateManyRequest) error {
 	objectIs := []datastore.Row{}
 	for _, object := range request.Objects {
 		objectIs = append(objectIs, object)
@@ -60,7 +60,7 @@ func (g *GenericService) CreateMany(request *generictypes.CreateManyRequest) err
 	return g.store.CreateMany(objectIs)
 }
 
-func (g *GenericService) Upsert(request *generictypes.UpsertRequest) error {
+func (g *GenericService) upsert(request *generictypes.UpsertRequest) error {
 	vI, found, err := g.store.Query(
 		datastore.Id(request.Object.Id),
 	).FindOne()
@@ -78,7 +78,7 @@ func (g *GenericService) Upsert(request *generictypes.UpsertRequest) error {
 	return g.store.Upsert(request.Object)
 }
 
-func (g *GenericService) UpsertMany(request *generictypes.UpsertManyRequest) error {
+func (g *GenericService) upsertMany(request *generictypes.UpsertManyRequest) error {
 	objectIs := []datastore.Row{}
 	for _, object := range request.Objects {
 		objectIs = append(objectIs, object)
@@ -86,7 +86,7 @@ func (g *GenericService) UpsertMany(request *generictypes.UpsertManyRequest) err
 	return g.store.UpsertMany(objectIs)
 }
 
-func (g *GenericService) Update(tableName string, userId string, conditions []datastore.Condition, object *generictypes.GenericObject) error {
+func (g *GenericService) update(tableName string, userId string, conditions []datastore.Condition, object *generictypes.GenericObject) error {
 	if len(conditions) == 0 {
 		return errors.New("no conditions")
 	}
@@ -102,7 +102,7 @@ func (g *GenericService) Update(tableName string, userId string, conditions []da
 	).Update(object)
 }
 
-func (g *GenericService) Delete(tableName string, userId string, conditions []datastore.Condition) error {
+func (g *GenericService) delete(tableName string, userId string, conditions []datastore.Condition) error {
 	if len(conditions) == 0 {
 		return errors.New("no conditions")
 	}

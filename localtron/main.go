@@ -54,15 +54,13 @@ func main() {
 		}
 	}()
 
-	universe, err := di.BigBang(di.Options{
+	router, err := di.BigBang(di.Options{
 		Test: false,
 	})
 	if err != nil {
 		logger.Error("Cannot make universe", slog.Any("error", err))
 		os.Exit(1)
 	}
-
-	router := di.HttpHandler(universe)
 
 	router.HandleFunc("/swagger/", httpSwagger.WrapHandler)
 

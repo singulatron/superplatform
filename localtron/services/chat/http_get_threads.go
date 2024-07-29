@@ -30,22 +30,17 @@ import (
 func (a *ChatService) GetThreads(
 	w http.ResponseWriter,
 	r *http.Request,
-	userService usertypes.UserServiceI,
-	ds chattypes.ChatServiceI,
 ) {
-	err := userService.IsAuthorized(chattypes.PermissionThreadView.Id, r)
+	rsp := &usertypes.IsAuthorizedResponse{}
+	err := a.router.Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
+		PermissionId: chattypes.PermissionThreadView.Id,
+	}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
-
-	user, found, err := userService.GetUserFromRequest(r)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
-		return
-	}
-	if !found {
-		http.Error(w, "unauthorized", http.StatusUnauthorized)
+	if !rsp.Authorized {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
 
@@ -57,7 +52,7 @@ func (a *ChatService) GetThreads(
 	}
 	defer r.Body.Close()
 
-	threads, err := ds.GetThreads(user.Id)
+	threads, err := a.getThreads(rsp.User.Id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

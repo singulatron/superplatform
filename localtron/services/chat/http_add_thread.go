@@ -30,22 +30,17 @@ import (
 func (a *ChatService) AddThread(
 	w http.ResponseWriter,
 	r *http.Request,
-	userService usertypes.UserServiceI,
-	ds chattypes.ChatServiceI,
 ) {
-	err := userService.IsAuthorized(chattypes.PermissionThreadCreate.Id, r)
+	rsp := &usertypes.IsAuthorizedResponse{}
+	err := a.router.Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
+		PermissionId: chattypes.PermissionThreadCreate.Id,
+	}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
-
-	user, found, err := userService.GetUserFromRequest(r)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
-		return
-	}
-	if !found {
-		http.Error(w, "unauthorized", http.StatusUnauthorized)
+	if !rsp.Authorized {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
 
@@ -57,9 +52,9 @@ func (a *ChatService) AddThread(
 	}
 	defer r.Body.Close()
 
-	req.Thread.UserIds = append(req.Thread.UserIds, user.Id)
+	req.Thread.UserIds = append(req.Thread.UserIds, rsp.User.Id)
 
-	thread, err := ds.AddThread(req.Thread)
+	thread, err := a.addThread(req.Thread)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

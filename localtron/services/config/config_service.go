@@ -35,10 +35,9 @@ type ConfigService struct {
 	configFileMutex sync.Mutex
 }
 
-func NewConfigService(router *router.Router) (*ConfigService, error) {
+func NewConfigService() (*ConfigService, error) {
 	cs := &ConfigService{
 		ConfigFileName: "config.yaml",
-		router:         router,
 	}
 
 	return cs, nil
@@ -46,6 +45,10 @@ func NewConfigService(router *router.Router) (*ConfigService, error) {
 
 func (cs *ConfigService) GetConfigDirectory() string {
 	return cs.ConfigDirectory
+}
+
+func (cs *ConfigService) SetRouter(router *router.Router) {
+	cs.router = router
 }
 
 func (cs *ConfigService) Start() error {

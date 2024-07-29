@@ -5,7 +5,7 @@
  * This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3).
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
-package genericendpoints
+package genericservice
 
 import (
 	"encoding/json"
@@ -15,25 +15,20 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func CreateMany(
+func (g *GenericService) CreateMany(
 	w http.ResponseWriter,
 	r *http.Request,
-	userService usertypes.UserServiceI,
-	genericService generictypes.GenericServiceI,
 ) {
-	err := userService.IsAuthorized(generictypes.PermissionGenericCreate.Id, r)
+	rsp := &usertypes.IsAuthorizedResponse{}
+	err := g.router.Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
+		PermissionId: generictypes.PermissionGenericCreate.Id,
+	}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
-
-	user, found, err := userService.GetUserFromRequest(r)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
-		return
-	}
-	if !found {
-		http.Error(w, "unauthorized", http.StatusUnauthorized)
+	if !rsp.Authorized {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
 
@@ -45,10 +40,10 @@ func CreateMany(
 	}
 	defer r.Body.Close()
 	for i := range req.Objects {
-		req.Objects[i].UserId = user.Id
+		req.Objects[i].UserId = rsp.User.Id
 	}
 
-	err = genericService.CreateMany(req)
+	err = g.createMany(req)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

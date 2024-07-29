@@ -30,12 +30,17 @@ import (
 func (a *ChatService) AddMessage(
 	w http.ResponseWriter,
 	r *http.Request,
-	userService usertypes.UserServiceI,
-	ds chattypes.ChatServiceI,
 ) {
-	err := userService.IsAuthorized(chattypes.PermissionMessageCreate.Id, r)
+	rsp := &usertypes.IsAuthorizedResponse{}
+	err := a.router.Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
+		PermissionId: chattypes.PermissionMessageCreate.Id,
+	}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	if !rsp.Authorized {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
 
@@ -47,7 +52,7 @@ func (a *ChatService) AddMessage(
 	}
 	defer r.Body.Close()
 
-	err = ds.AddMessage(req.Message)
+	err = a.addMessage(req.Message)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

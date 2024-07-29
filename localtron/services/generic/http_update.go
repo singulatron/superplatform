@@ -5,7 +5,7 @@
  * This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3).
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
-package genericendpoints
+package genericservice
 
 import (
 	"encoding/json"
@@ -28,25 +28,20 @@ import (
 // @Failure 500 {object} generictypes.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
 // @Router /generic/update [post]
-func Update(
+func (g *GenericService) Update(
 	w http.ResponseWriter,
 	r *http.Request,
-	userService usertypes.UserServiceI,
-	genericService generictypes.GenericServiceI,
 ) {
-	err := userService.IsAuthorized(generictypes.PermissionGenericEdit.Id, r)
+	rsp := &usertypes.IsAuthorizedResponse{}
+	err := g.router.Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
+		PermissionId: generictypes.PermissionGenericEdit.Id,
+	}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
-
-	user, found, err := userService.GetUserFromRequest(r)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
-		return
-	}
-	if !found {
-		http.Error(w, "unauthorized", http.StatusUnauthorized)
+	if !rsp.Authorized {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
 
@@ -58,7 +53,7 @@ func Update(
 	}
 	defer r.Body.Close()
 
-	err = genericService.Update(req.Table, user.Id, req.Conditions, req.Object)
+	err = g.update(req.Table, rsp.User.Id, req.Conditions, req.Object)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
