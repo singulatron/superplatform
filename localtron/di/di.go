@@ -27,13 +27,14 @@ import (
 const singulatronFolder = ".singulatron"
 
 type Options struct {
+	Url              string
 	Test             bool
 	LLMClient        llm.ClientI
 	Router           *router.Router
 	DatastoreFactory func(tableName string, instance any) (datastore.DataStore, error)
 }
 
-func BigBang(options Options) (*http.ServeMux, error) {
+func BigBang(options *Options) (*http.ServeMux, func() error, error) {
 	var homeDir string
 	var err error
 	if options.Test {
@@ -80,6 +81,7 @@ func BigBang(options Options) (*http.ServeMux, error) {
 			logger.Error("Creating router failed", slog.String("error", err.Error()))
 			os.Exit(1)
 		}
+		router.SetDefaultAddress(options.Url)
 		options.Router = router
 	}
 
@@ -94,7 +96,6 @@ func BigBang(options Options) (*http.ServeMux, error) {
 		os.Exit(1)
 	}
 
-	err = configService.Start()
 	if err != nil {
 		logger.Error("Config service start failed", slog.String("error", err.Error()))
 		os.Exit(1)
@@ -128,12 +129,6 @@ func BigBang(options Options) (*http.ServeMux, error) {
 
 	downloadService.SetDefaultFolder(downloadFolder)
 	downloadService.SetStateFilePath(path.Join(singulatronFolder, "downloads.json"))
-
-	downloadService.Start()
-	if err != nil {
-		logger.Error("Download service start failed", slog.String("error", err.Error()))
-		os.Exit(1)
-	}
 
 	dockerService, err := dockerservice.NewDockerService(options.Router)
 	if err != nil {
@@ -221,7 +216,7 @@ func BigBang(options Options) (*http.ServeMux, error) {
 		modelService.GetModels(w, r)
 	}))
 	router.HandleFunc("/model/start", appl(func(w http.ResponseWriter, r *http.Request) {
-		modelService.Start(w, r)
+		modelService.PostStart(w, r)
 	}))
 	router.HandleFunc("/model/make-default", appl(func(w http.ResponseWriter, r *http.Request) {
 		modelService.MakeDefault(w, r)
@@ -315,6 +310,9 @@ func BigBang(options Options) (*http.ServeMux, error) {
 	router.HandleFunc("/user/set-role-permissions", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.SetRolePermissions(w, r)
 	}))
+	router.HandleFunc("/user/upsert-permission", appl(func(w http.ResponseWriter, r *http.Request) {
+		userService.UpsertPermission(w, r)
+	}))
 
 	router.HandleFunc("/generic/create", appl(func(w http.ResponseWriter, r *http.Request) {
 		genericService.Create(w, r)
@@ -336,7 +334,30 @@ func BigBang(options Options) (*http.ServeMux, error) {
 		nodeService.List(w, r)
 	}))
 
-	return router, nil
+	return router, func() error {
+		err = configService.Start()
+		if err != nil {
+			return err
+		}
+		err = downloadService.Start()
+		if err != nil {
+			return err
+		}
+		err = firehoseService.Start()
+		if err != nil {
+			return err
+		}
+		err = dockerService.Start()
+		if err != nil {
+			return err
+		}
+		err = modelService.Start()
+		if err != nil {
+			return err
+		}
+
+		return nil
+	}, nil
 }
 
 func applicator(mws []middlewares.Middleware) func(http.HandlerFunc) http.HandlerFunc {

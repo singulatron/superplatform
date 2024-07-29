@@ -20,20 +20,26 @@ type RouteContext struct {
 }
 
 type Router struct {
-	registry map[string]string
+	registry       map[string]string
+	defaultAddress string
 }
 
 func NewRouter(
 	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error)) (*Router, error) {
 	return &Router{
-		registry: map[string]string{},
+		registry:       map[string]string{},
+		defaultAddress: "http://127.0.0.1:" + DefaultPort,
 	}, nil
+}
+
+func (r *Router) SetDefaultAddress(address string) {
+	r.defaultAddress = address
 }
 
 func (r *Router) Post(ctx context.Context, serviceName, path string, request, response any) error {
 	address, ok := r.registry[serviceName]
 	if !ok {
-		address = "http://127.0.0.1:" + DefaultPort
+		address = r.defaultAddress
 	}
 
 	requestJSON, err := json.Marshal(request)
@@ -41,7 +47,7 @@ func (r *Router) Post(ctx context.Context, serviceName, path string, request, re
 		return err
 	}
 
-	url := fmt.Sprintf("%v%v", address, path)
+	url := fmt.Sprintf("%v/%v%v", address, serviceName, path)
 	req, err := http.NewRequestWithContext(ctx, "POST", url, bytes.NewBuffer(requestJSON))
 	if err != nil {
 		return err
@@ -63,12 +69,12 @@ func (r *Router) Post(ctx context.Context, serviceName, path string, request, re
 	if resp.StatusCode != http.StatusOK {
 		var errResponse map[string]string
 		if err := json.Unmarshal(responseBody, &errResponse); err != nil {
-			return fmt.Errorf("service '%s' %s returned non-OK HTTP status: %s, body: %v", serviceName, path, resp.Status, string(responseBody))
+			return fmt.Errorf("POST %v returned status '%s' and body '%v'", url, resp.Status, string(responseBody))
 		}
 		if errMsg, exists := errResponse["error"]; exists {
-			return fmt.Errorf("service '%s' %s error: %s", serviceName, path, errMsg)
+			return fmt.Errorf("POST %v returned status '%s' and body '%v'", url, resp.Status, errMsg)
 		}
-		return fmt.Errorf("service '%s' %s returned non-OK HTTP status: %s, body: %v", serviceName, path, resp.Status, string(responseBody))
+		return fmt.Errorf("POST %v returned status '%s' and body '%v'", url, resp.Status, string(responseBody))
 	}
 
 	if response != nil {
@@ -84,7 +90,7 @@ func (r *Router) Post(ctx context.Context, serviceName, path string, request, re
 func (r *Router) Get(ctx context.Context, serviceName, path string, queryParams map[string]string, response any) error {
 	address, ok := r.registry[serviceName]
 	if !ok {
-		address = "http://127.0.0.1:" + DefaultPort
+		address = r.defaultAddress
 	}
 
 	// Construct URL with query parameters

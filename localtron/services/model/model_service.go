@@ -46,15 +46,14 @@ func NewModelService(
 	}
 	srv.platformsStore = platformsStore
 
-	err = srv.registerPermissions()
-	if err != nil {
-		return nil, err
-	}
-
 	err = srv.bootstrapModels()
 	if err != nil {
 		return nil, err
 	}
 
 	return srv, nil
+}
+
+func (ms *ModelService) Start() error {
+	return ms.registerPermissions()
 }

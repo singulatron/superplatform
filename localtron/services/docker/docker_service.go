@@ -40,12 +40,12 @@ func NewDockerService(
 		imagePullMutexes: make(map[string]*sync.Mutex),
 		imagesCache:      make(map[string]bool),
 	}
-	err = service.registerPermissions()
-	if err != nil {
-		return nil, err
-	}
 
 	return service, nil
+}
+
+func (ds *DockerService) Start() error {
+	return ds.registerPermissions()
 }
 
 func (ds *DockerService) GetDockerHost() string {

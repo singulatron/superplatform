@@ -40,6 +40,7 @@ func NewChatService(
 	}
 
 	service := &ChatService{
+		router:        router,
 		messagesStore: messagesStore,
 		threadsStore:  threadsStore,
 		assetsStore:   assetsStore,

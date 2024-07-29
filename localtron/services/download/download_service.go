@@ -45,10 +45,6 @@ func NewDownloadService(
 		StateFilePath: path.Join(home, "downloads.json"),
 		downloads:     make(map[string]*types.Download),
 	}
-	err := ret.registerPermissions()
-	if err != nil {
-		return nil, err
-	}
 
 	return ret, nil
 }
@@ -62,7 +58,12 @@ func (dm *DownloadService) SetStateFilePath(s string) {
 }
 
 func (dm *DownloadService) Start() error {
-	err := dm.loadState()
+	err := dm.registerPermissions()
+	if err != nil {
+		return err
+	}
+
+	err = dm.loadState()
 	if err != nil {
 		return err
 	}

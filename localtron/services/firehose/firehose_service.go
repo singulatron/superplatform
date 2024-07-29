@@ -31,12 +31,12 @@ func NewFirehoseService(r *router.Router) (*FirehoseService, error) {
 		router:      r,
 		subscribers: make(map[int]func(events []*firehosetypes.Event)),
 	}
-	err := service.registerPermissions()
-	if err != nil {
-		return nil, err
-	}
 
 	return service, nil
+}
+
+func (fs *FirehoseService) Start() error {
+	return fs.registerPermissions()
 }
 
 func (fs *FirehoseService) publishMany(events ...*firehosetypes.Event) {
