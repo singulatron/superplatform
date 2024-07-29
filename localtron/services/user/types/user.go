@@ -8,9 +8,14 @@
 package usertypes
 
 import (
+	"context"
+	"fmt"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/singulatron/singulatron/localtron/datastore"
+	"github.com/singulatron/singulatron/localtron/logger"
+	"github.com/singulatron/singulatron/localtron/router"
 )
 
 type User struct {
@@ -18,13 +23,18 @@ type User struct {
 	CreatedAt time.Time `json:"createdAt,omitempty"`
 	UpdatedAt time.Time `json:"updatedAt,omitempty"`
 
-	DeletedAt    *time.Time `json:"deletedAt,omitempty"`
-	Name         string     `json:"name,omitempty"`
-	Email        string     `json:"email,omitempty"`
-	PasswordHash string     `json:"passwordHash,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	Name      string     `json:"name,omitempty"`
+
+	// Email or username
+	Email string `json:"email,omitempty"`
+
+	PasswordHash string `json:"passwordHash,omitempty"`
 
 	RoleIds      []string `json:"roleIds,omitempty"`
 	AuthTokenIds []string `json:"authTokenIds,omitempty"`
+
+	IsService bool `json:"isService,omitempty"`
 }
 
 func (c *User) GetId() string {
@@ -44,8 +54,9 @@ type ReadUserByTokenResponse struct {
 }
 
 type RegisterRequest struct {
-	Name  string `json:"name,omitempty"`
-	Email string `json:"email,omitempty"`
+	Name     string `json:"name,omitempty"`
+	Email    string `json:"email,omitempty"`
+	Password string `json:"password,omitempty"`
 }
 
 type RegisterResponse struct {
@@ -107,3 +118,58 @@ type DeleteUserRequest struct {
 }
 
 type DeleteUserResponse struct{}
+
+type Credential struct {
+	Email    string `json:"email,omitempty"`
+	Password string `json:"password,omitempty"`
+}
+
+func (c *Credential) GetId() string {
+	return c.Email
+}
+
+func RegisterService(serviceEmail, serviceName string, router *router.Router, store datastore.DataStore) (string, error) {
+	res, err := store.Query(datastore.All()).Find()
+	if err != nil {
+		return "", err
+	}
+
+	email := serviceName
+	pw := ""
+
+	if len(res) > 0 {
+		cred := res[0].(*Credential)
+		email = cred.Email
+		pw = cred.Password
+	} else {
+		logger.Info(fmt.Sprintf("Registering the %v service", serviceEmail))
+
+		pw = uuid.New().String()
+		err = router.Post(context.Background(), "user", "/register", RegisterRequest{
+			Email:    email,
+			Name:     serviceName,
+			Password: pw,
+		}, nil)
+		if err != nil {
+			return "", err
+		}
+		err = store.Upsert(&Credential{
+			Email:    email,
+			Password: pw,
+		})
+		if err != nil {
+			return "", err
+		}
+	}
+
+	rsp := LoginResponse{}
+	err = router.Post(context.Background(), "user", "/login", LoginRequest{
+		Email:    email,
+		Password: pw,
+	}, &rsp)
+	if err != nil {
+		return "", err
+	}
+
+	return rsp.Token.Token, nil
+}

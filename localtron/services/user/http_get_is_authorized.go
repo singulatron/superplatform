@@ -30,8 +30,6 @@ func (s *UserService) IsAuthorized(
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
-
-	return
 }
 
 func (s *UserService) isAuthorized(permissionId string,

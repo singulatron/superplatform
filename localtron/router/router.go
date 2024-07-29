@@ -8,20 +8,17 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"runtime"
 
 	"github.com/singulatron/singulatron/localtron/datastore"
 )
 
 const DefaultPort = "58231"
 
-type RouteContext struct {
-	Context context.Context
-	Headers http.Header
-}
-
 type Router struct {
 	registry       map[string]string
 	defaultAddress string
+	bearerToken    string
 }
 
 func NewRouter(
@@ -34,6 +31,16 @@ func NewRouter(
 
 func (r *Router) SetDefaultAddress(address string) {
 	r.defaultAddress = address
+}
+
+func (r *Router) SetBearerToken(token string) *Router {
+	return &Router{
+		// @todo copy?
+		registry: r.registry,
+
+		defaultAddress: r.defaultAddress,
+		bearerToken:    token,
+	}
 }
 
 func (r *Router) Post(ctx context.Context, serviceName, path string, request, response any) error {
@@ -53,6 +60,7 @@ func (r *Router) Post(ctx context.Context, serviceName, path string, request, re
 		return err
 	}
 	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", "Bearer "+r.bearerToken)
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
@@ -69,12 +77,12 @@ func (r *Router) Post(ctx context.Context, serviceName, path string, request, re
 	if resp.StatusCode != http.StatusOK {
 		var errResponse map[string]string
 		if err := json.Unmarshal(responseBody, &errResponse); err != nil {
-			return fmt.Errorf("POST %v returned status '%s' and body '%v'", url, resp.Status, string(responseBody))
+			return formatError(fmt.Errorf("POST %v returned status '%s' and body '%v'", url, resp.Status, string(responseBody)))
 		}
 		if errMsg, exists := errResponse["error"]; exists {
-			return fmt.Errorf("POST %v returned status '%s' and body '%v'", url, resp.Status, errMsg)
+			return formatError(fmt.Errorf("POST %v returned status '%s' and body '%v'", url, resp.Status, errMsg))
 		}
-		return fmt.Errorf("POST %v returned status '%s' and body '%v'", url, resp.Status, string(responseBody))
+		return formatError(fmt.Errorf("POST %v returned status '%s' and body '%v'", url, resp.Status, string(responseBody)))
 	}
 
 	if response != nil {
@@ -123,12 +131,12 @@ func (r *Router) Get(ctx context.Context, serviceName, path string, queryParams 
 	if resp.StatusCode != http.StatusOK {
 		var errResponse map[string]string
 		if err := json.Unmarshal(responseBody, &errResponse); err != nil {
-			return fmt.Errorf("service '%s' %s returned non-OK HTTP status: %s, body: %v", serviceName, path, resp.Status, string(responseBody))
+			return formatError(fmt.Errorf("service '%s' %s returned non-OK HTTP status: %s, body: %v", serviceName, path, resp.Status, string(responseBody)))
 		}
 		if errMsg, exists := errResponse["error"]; exists {
-			return fmt.Errorf("service '%s' %s error: %s", serviceName, path, errMsg)
+			return formatError(fmt.Errorf("service '%s' %s error: %s", serviceName, path, errMsg))
 		}
-		return fmt.Errorf("service '%s' %s returned non-OK HTTP status: %s, body: %v", serviceName, path, resp.Status, string(responseBody))
+		return formatError(fmt.Errorf("service '%s' %s returned non-OK HTTP status: %s, body: %v", serviceName, path, resp.Status, string(responseBody)))
 	}
 
 	if response != nil {
@@ -139,4 +147,12 @@ func (r *Router) Get(ctx context.Context, serviceName, path string, queryParams 
 	}
 
 	return nil
+}
+
+func formatError(err error) error {
+	_, file, line, ok := runtime.Caller(3)
+	if !ok {
+		return fmt.Errorf("error: %w", err)
+	}
+	return fmt.Errorf("%s:%d: %w", file, line, err)
 }

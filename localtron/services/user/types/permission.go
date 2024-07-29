@@ -18,6 +18,9 @@ type Permission struct {
 	// eg. "User Viewer"
 	Name        string `json:"name,omitempty"`
 	Description string `json:"description,omitempty"`
+
+	// Service who owns the permission
+	OwnerId string `json:"ownerId,omitempty"`
 }
 
 func (c *Permission) GetId() string {
@@ -110,7 +113,22 @@ var PermissionRoleDelete = Permission{
 	Name: "Role Delete",
 }
 
+var PermissionPermissionCreate = Permission{
+	Id:   "permission.create",
+	Name: "Permission Create",
+}
+
+var PermissionPermissionEdit = Permission{
+	Id:   "permission.edit",
+	Name: "Permission Edit",
+}
+
 var UserPermissions = []Permission{
+	PermissionPermissionCreate,
+	PermissionPermissionEdit,
+}
+
+var AdminPermissions = []Permission{
 	PermissionUserCreate,
 	PermissionUserView,
 	PermissionUserEdit,
@@ -120,4 +138,6 @@ var UserPermissions = []Permission{
 	PermissionRoleEdit,
 	PermissionRoleView,
 	PermissionRoleDelete,
+	PermissionPermissionCreate,
+	PermissionPermissionEdit,
 }

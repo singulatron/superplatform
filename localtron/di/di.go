@@ -75,6 +75,7 @@ func BigBang(options *Options) (*http.ServeMux, func() error, error) {
 			return localstore.NewLocalStore(instance, path.Join(localStorePath, tableName))
 		}
 	}
+	configService.SetDatastoreFactory(options.DatastoreFactory)
 
 	if options.Router == nil {
 		router, err := router.NewRouter(options.DatastoreFactory)
@@ -313,6 +314,9 @@ func BigBang(options *Options) (*http.ServeMux, func() error, error) {
 	}))
 	router.HandleFunc("/user/upsert-permission", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.UpsertPermission(w, r)
+	}))
+	router.HandleFunc("/user/register", appl(func(w http.ResponseWriter, r *http.Request) {
+		userService.Register(w, r)
 	}))
 
 	router.HandleFunc("/generic/create", appl(func(w http.ResponseWriter, r *http.Request) {

@@ -12,7 +12,7 @@ import (
 )
 
 func (us *UserService) registerPermissions() error {
-	for _, permission := range usertypes.UserPermissions {
+	for _, permission := range append(usertypes.UserPermissions, usertypes.AdminPermissions...) {
 		_, err := us.upsertPermission(
 			permission.Id,
 			permission.Name,
@@ -25,7 +25,14 @@ func (us *UserService) registerPermissions() error {
 
 	for _, role := range []*usertypes.Role{
 		usertypes.RoleAdmin,
-		// usertypes.RoleUser,
+	} {
+		for _, permission := range usertypes.AdminPermissions {
+			us.addPermissionToRole(role.Id, permission.Id)
+		}
+	}
+
+	for _, role := range []*usertypes.Role{
+		usertypes.RoleUser,
 	} {
 		for _, permission := range usertypes.UserPermissions {
 			us.addPermissionToRole(role.Id, permission.Id)

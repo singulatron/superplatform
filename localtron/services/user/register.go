@@ -19,7 +19,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func (s *UserService) Register(email, password, name string, roleIds []string) (*usertypes.AuthToken, error) {
+func (s *UserService) register(email, password, name string, roleIds []string) (*usertypes.AuthToken, error) {
 	logger.Info("Registering user", slog.String("name", name))
 
 	_, alreadyExists, err := s.usersStore.Query(

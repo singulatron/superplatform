@@ -14,31 +14,24 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func (s *UserService) UpsertPermission(
-	w http.ResponseWriter,
-	r *http.Request,
-) {
-	// @todo add proper permission here
-	err := s.isAuthorized(usertypes.PermissionPermissionCreate.Id, r)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
-		return
-	}
-
-	req := usertypes.UpserPermissionRequest{}
-	err = json.NewDecoder(r.Body).Decode(&req)
+func (s *UserService) Register(w http.ResponseWriter, r *http.Request) {
+	req := usertypes.RegisterRequest{}
+	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `invalid JSON`, http.StatusBadRequest)
 		return
 	}
 	defer r.Body.Close()
 
-	_, err = s.upsertPermission(req.Permission.Id, req.Permission.Name, req.Permission.Description)
+	err = s.createUser(&usertypes.User{
+		Name:  req.Name,
+		Email: req.Email,
+	}, req.Password, []string{usertypes.RoleUser.Id})
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	bs, _ := json.Marshal(usertypes.CreateUserResponse{})
+	bs, _ := json.Marshal(usertypes.RegisterResponse{})
 	w.Write(bs)
 }

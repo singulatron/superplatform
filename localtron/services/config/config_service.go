@@ -18,8 +18,10 @@ import (
 	"github.com/pkg/errors"
 	"gopkg.in/yaml.v2"
 
+	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/router"
 	types "github.com/singulatron/singulatron/localtron/services/config/types"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 
 	"github.com/singulatron/singulatron/localtron/logger"
 )
@@ -33,6 +35,9 @@ type ConfigService struct {
 	ConfigFileName  string
 	config          types.Config
 	configFileMutex sync.Mutex
+
+	credentialStore  datastore.DataStore
+	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error)
 }
 
 func NewConfigService() (*ConfigService, error) {
@@ -51,11 +56,30 @@ func (cs *ConfigService) SetRouter(router *router.Router) {
 	cs.router = router
 }
 
+func (cs *ConfigService) SetDatastoreFactory(datastoreFactory func(tableName string, instance any) (datastore.DataStore, error)) {
+	cs.datastoreFactory = datastoreFactory
+}
+
 func (cs *ConfigService) Start() error {
+	if cs.datastoreFactory == nil {
+		return errors.New("no datastore factory")
+	}
+	credentialStore, err := cs.datastoreFactory("config_credentials", &usertypes.Credential{})
+	if err != nil {
+		return err
+	}
+	cs.credentialStore = credentialStore
+
+	token, err := usertypes.RegisterService("config", "Config Service", cs.router, cs.credentialStore)
+	if err != nil {
+		return err
+	}
+	cs.router = cs.router.SetBearerToken(token)
+
 	if cs.ConfigDirectory == "" {
 		return fmt.Errorf("config service is missing a config directory option")
 	}
-	err := cs.registerPermissions()
+	err = cs.registerPermissions()
 	if err != nil {
 		return err
 	}

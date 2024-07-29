@@ -12,14 +12,16 @@ import (
 	"github.com/singulatron/singulatron/localtron/router"
 
 	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 type ChatService struct {
 	router *router.Router
 
-	messagesStore datastore.DataStore
-	threadsStore  datastore.DataStore
-	assetsStore   datastore.DataStore
+	messagesStore   datastore.DataStore
+	threadsStore    datastore.DataStore
+	assetsStore     datastore.DataStore
+	credentialStore datastore.DataStore
 }
 
 func NewChatService(
@@ -38,17 +40,28 @@ func NewChatService(
 	if err != nil {
 		return nil, err
 	}
+	credentialStore, err := datastoreFactory("chat_credentials", &usertypes.Credential{})
+	if err != nil {
+		return nil, err
+	}
 
 	service := &ChatService{
-		router:        router,
-		messagesStore: messagesStore,
-		threadsStore:  threadsStore,
-		assetsStore:   assetsStore,
+		router:          router,
+		messagesStore:   messagesStore,
+		threadsStore:    threadsStore,
+		assetsStore:     assetsStore,
+		credentialStore: credentialStore,
 	}
 
 	return service, nil
 }
 
 func (cs *ChatService) Start() error {
+	token, err := usertypes.RegisterService("chat", "Chat Service", cs.router, cs.credentialStore)
+	if err != nil {
+		return err
+	}
+	cs.router = cs.router.SetBearerToken(token)
+
 	return cs.registerPermissions()
 }
