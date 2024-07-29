@@ -47,3 +47,37 @@ type EventDockerInfoUpdated struct {
 func (e EventDockerInfoUpdated) Name() string {
 	return EventDockerInfoUpdatedName
 }
+
+type LaunchContainerRequest struct {
+	Image    string         `json:"image"`
+	Port     int            `json:"port"`
+	HostPort int            `json:"hostPort"`
+	Options  *LaunchOptions `json:"options"`
+}
+
+type LaunchContainerResponse struct {
+	Info *LaunchInfo `json:"info"`
+}
+
+type GetContainerSummaryRequest struct {
+	Hash  string `json:"hash"`
+	Lines int    `json:"lines"`
+}
+
+type GetContainerSummaryResponse struct {
+	Summary string `json:"summary"`
+}
+
+type HashIsRunningRequest struct {
+	Hash string `json:"hash"`
+}
+
+type HashIsRunningResponse struct {
+	IsRunning bool `json:"isRunning"`
+}
+
+type GetDockerHostRequest struct{}
+
+type GetDockerHostResponse struct {
+	Host string `json:"host"`
+}

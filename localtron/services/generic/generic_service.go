@@ -12,25 +12,18 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/singulatron/singulatron/localtron/datastore"
-	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
-	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
-	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
+	"github.com/singulatron/singulatron/localtron/router"
 
 	generictypes "github.com/singulatron/singulatron/localtron/services/generic/types"
 )
 
 type GenericService struct {
-	configService   configtypes.ConfigServiceI
-	userService     usertypes.UserServiceI
-	firehoseService firehosetypes.FirehoseServiceI
-
-	store datastore.DataStore
+	router *router.Router
+	store  datastore.DataStore
 }
 
 func NewGenericService(
-	cs configtypes.ConfigServiceI,
-	fs firehosetypes.FirehoseServiceI,
-	userService usertypes.UserServiceI,
+	router *router.Router,
 	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error),
 ) (*GenericService, error) {
 	store, err := datastoreFactory("generic", &generictypes.GenericObject{})
@@ -39,10 +32,8 @@ func NewGenericService(
 	}
 
 	service := &GenericService{
-		configService:   cs,
-		firehoseService: fs,
-		userService:     userService,
-		store:           store,
+		router: router,
+		store:  store,
 	}
 
 	err = service.registerPermissions()

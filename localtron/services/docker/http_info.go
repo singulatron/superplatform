@@ -5,7 +5,7 @@
  * This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3).
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
-package dockerendpoints
+package dockerservice
 
 import (
 	"encoding/json"
@@ -15,19 +15,24 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func Info(
+func (dm *DockerService) Info(
 	w http.ResponseWriter,
 	req *http.Request,
-	userService usertypes.UserServiceI,
-	dm dockertypes.DockerServiceI,
 ) {
-	err := userService.IsAuthorized(dockertypes.PermissionDockerView.Id, req)
+	rsp := &usertypes.IsAuthorizedResponse{}
+	err := dm.router.Post(req.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
+		PermissionId: dockertypes.PermissionDockerView.Id,
+	}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
+	if !rsp.Authorized {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
-	di, err := dm.Info()
+	di, err := dm.info()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

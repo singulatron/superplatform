@@ -51,6 +51,15 @@ type DownloadRequest struct {
 	// FileName   *string `json:"fileName,omitempty"`
 }
 
+type GetDownloadRequest struct {
+	Url string `json:"url"`
+}
+
+type GetDownloadResponse struct {
+	Exists   bool             `json:"exists"`
+	Download *DownloadDetails `json:"download"`
+}
+
 type DownloadResponse struct{}
 
 type DownloadsRequest struct{}

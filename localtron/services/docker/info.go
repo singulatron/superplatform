@@ -28,7 +28,7 @@ import (
 	"github.com/singulatron/singulatron/localtron/logger"
 )
 
-func (d *DockerService) Info() (*ts.OnDockerInfo, error) {
+func (d *DockerService) info() (*ts.OnDockerInfo, error) {
 	d.mutex.Lock()
 	defer d.mutex.Unlock()
 

@@ -107,9 +107,3 @@ type DeleteUserRequest struct {
 }
 
 type DeleteUserResponse struct{}
-
-type IsAuthorizedRequest struct{}
-
-type IsAuthorizedResponse struct {
-	Authorized bool `json:"authorized,omitempty"`
-}
