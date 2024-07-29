@@ -34,40 +34,10 @@ func (s *UserService) IsAuthorized(
 
 func (s *UserService) isAuthorized(permissionId string,
 	r *http.Request) error {
-
-	authHeader := r.Header.Get("Authorization")
-	authHeader = strings.Replace(authHeader, "Bearer ", "", 1)
-
-	if authHeader == "" {
-		return fmt.Errorf("Unauthorized")
-	}
-
-	tokenI, found, err := s.authTokensStore.Query(
-		datastore.Equal(datastore.Field("token"), authHeader),
-	).FindOne()
+	user, err := s.getUserFromRequest(r)
 	if err != nil {
 		return err
 	}
-
-	if !found {
-		return errors.New("unauthorized")
-	}
-	token := tokenI.(*usertypes.AuthToken)
-
-	userI, found, err := s.usersStore.Query(
-		datastore.Id(token.UserId),
-	).FindOne()
-	if err != nil {
-		return err
-	}
-	if !found {
-		logger.Error("Token refers to nonexistent user",
-			slog.String("userId", token.UserId),
-			slog.String("tokenId", token.Id),
-		)
-		return errors.New("unauthorized")
-	}
-	user := userI.(*usertypes.User)
 
 	roles, err := s.rolesStore.Query(
 		datastore.Equal(datastore.Field("id"), user.RoleIds),
@@ -85,6 +55,43 @@ func (s *UserService) isAuthorized(permissionId string,
 	}
 
 	return errors.New("unauthorized")
+}
+
+func (s *UserService) getUserFromRequest(r *http.Request) (*usertypes.User, error) {
+	authHeader := r.Header.Get("Authorization")
+	authHeader = strings.Replace(authHeader, "Bearer ", "", 1)
+
+	if authHeader == "" {
+		return nil, fmt.Errorf("Unauthorized")
+	}
+
+	tokenI, found, err := s.authTokensStore.Query(
+		datastore.Equal(datastore.Field("token"), authHeader),
+	).FindOne()
+	if err != nil {
+		return nil, err
+	}
+
+	if !found {
+		return nil, errors.New("unauthorized")
+	}
+	token := tokenI.(*usertypes.AuthToken)
+
+	userI, found, err := s.usersStore.Query(
+		datastore.Id(token.UserId),
+	).FindOne()
+	if err != nil {
+		return nil, err
+	}
+	if !found {
+		logger.Error("Token refers to nonexistent user",
+			slog.String("userId", token.UserId),
+			slog.String("tokenId", token.Id),
+		)
+		return nil, errors.New("unauthorized")
+	}
+	user := userI.(*usertypes.User)
+	return user, nil
 }
 
 func (s *UserService) GetUserFromRequest(request *http.Request) (*usertypes.User, bool, error) {

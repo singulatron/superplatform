@@ -318,6 +318,9 @@ func BigBang(options *Options) (*http.ServeMux, func() error, error) {
 	router.HandleFunc("/user/register", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.Register(w, r)
 	}))
+	router.HandleFunc("/user/add-permission-to-role", appl(func(w http.ResponseWriter, r *http.Request) {
+		userService.AddPermissionToRole(w, r)
+	}))
 
 	router.HandleFunc("/generic/create", appl(func(w http.ResponseWriter, r *http.Request) {
 		genericService.Create(w, r)

@@ -123,9 +123,15 @@ var PermissionPermissionEdit = Permission{
 	Name: "Permission Edit",
 }
 
+var PermissionPermissionAssign = Permission{
+	Id:   "permission.assign",
+	Name: "Permission Assign",
+}
+
 var UserPermissions = []Permission{
 	PermissionPermissionCreate,
 	PermissionPermissionEdit,
+	PermissionPermissionAssign,
 }
 
 var AdminPermissions = []Permission{
@@ -140,4 +146,5 @@ var AdminPermissions = []Permission{
 	PermissionRoleDelete,
 	PermissionPermissionCreate,
 	PermissionPermissionEdit,
+	PermissionPermissionAssign,
 }
