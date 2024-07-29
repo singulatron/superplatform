@@ -55,13 +55,6 @@ func (s *UserService) addPermissionToRole(userId, roleId, permissionId string) e
 		return nil
 	}
 
-	_, found, err = s.permissionsStore.Query(
-		datastore.Id(permissionId),
-	).FindOne()
-	if !found {
-		return fmt.Errorf("cannot find permission %v", permissionId)
-	}
-
 	role.PermissionIds = append(role.PermissionIds, permissionId)
 
 	return q.Update(role)

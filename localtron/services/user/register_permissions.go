@@ -27,7 +27,10 @@ func (us *UserService) registerPermissions() error {
 		usertypes.RoleAdmin,
 	} {
 		for _, permission := range usertypes.AdminPermissions {
-			us.addPermissionToRole(role.Id, permission.Id)
+			err := us.addPermissionToRole("", role.Id, permission.Id)
+			if err != nil {
+				return err
+			}
 		}
 	}
 
@@ -35,7 +38,10 @@ func (us *UserService) registerPermissions() error {
 		usertypes.RoleUser,
 	} {
 		for _, permission := range usertypes.UserPermissions {
-			us.addPermissionToRole(role.Id, permission.Id)
+			err := us.addPermissionToRole("", role.Id, permission.Id)
+			if err != nil {
+				return err
+			}
 		}
 	}
 

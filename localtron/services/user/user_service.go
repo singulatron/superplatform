@@ -22,6 +22,8 @@ type UserService struct {
 	rolesStore       datastore.DataStore
 	permissionsStore datastore.DataStore
 	authTokensStore  datastore.DataStore
+
+	userId string
 }
 
 func NewUserService(
