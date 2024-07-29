@@ -16,10 +16,10 @@ import (
 )
 
 func (s *UserService) addPermissionToRole(userId, roleId, permissionId string) error {
-	q := s.rolesStore.Query(
+	roleQ := s.rolesStore.Query(
 		datastore.Id(roleId),
 	)
-	roleI, found, err := q.FindOne()
+	roleI, found, err := roleQ.FindOne()
 	if err != nil {
 		return err
 	}
@@ -28,10 +28,10 @@ func (s *UserService) addPermissionToRole(userId, roleId, permissionId string) e
 	}
 	role := roleI.(*usertypes.Role)
 
-	q = s.permissionsStore.Query(
+	permQ := s.permissionsStore.Query(
 		datastore.Id(permissionId),
 	)
-	permissionI, found, err := q.FindOne()
+	permissionI, found, err := permQ.FindOne()
 	if err != nil {
 		return err
 	}
@@ -57,5 +57,5 @@ func (s *UserService) addPermissionToRole(userId, roleId, permissionId string) e
 
 	role.PermissionIds = append(role.PermissionIds, permissionId)
 
-	return q.Update(role)
+	return roleQ.Update(role)
 }
