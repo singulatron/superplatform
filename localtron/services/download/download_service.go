@@ -174,7 +174,7 @@ func (ds *DownloadService) periodicSaveState() {
 	}
 }
 
-func (dm *DownloadService) GetDownload(url string) (*types.Download, bool) {
+func (dm *DownloadService) getDownload(url string) (*types.Download, bool) {
 	dm.lock.Lock()
 	defer dm.lock.Unlock()
 

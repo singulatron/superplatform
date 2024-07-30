@@ -202,6 +202,9 @@ func BigBang(options *Options) (*http.ServeMux, func() error, error) {
 	router.HandleFunc("/download/pause", appl(func(w http.ResponseWriter, r *http.Request) {
 		downloadService.Pause(w, r)
 	}))
+	router.HandleFunc("/download/get", appl(func(w http.ResponseWriter, r *http.Request) {
+		downloadService.Get(w, r)
+	}))
 
 	router.HandleFunc("/download/list", appl(func(w http.ResponseWriter, r *http.Request) {
 		downloadService.List(w, r)
@@ -210,18 +213,21 @@ func BigBang(options *Options) (*http.ServeMux, func() error, error) {
 	router.HandleFunc("/docker/info", appl(func(w http.ResponseWriter, r *http.Request) {
 		dockerService.Info(w, r)
 	}))
+	router.HandleFunc("/docker/host", appl(func(w http.ResponseWriter, r *http.Request) {
+		dockerService.Info(w, r)
+	}))
 
 	router.HandleFunc("/model/status", appl(func(w http.ResponseWriter, r *http.Request) {
 		modelService.Status(w, r)
 	}))
-	router.HandleFunc("/model/get-models", appl(func(w http.ResponseWriter, r *http.Request) {
-		modelService.GetModels(w, r)
+	router.HandleFunc("/model/list", appl(func(w http.ResponseWriter, r *http.Request) {
+		modelService.List(w, r)
 	}))
-	router.HandleFunc("/model/get-model", appl(func(w http.ResponseWriter, r *http.Request) {
-		modelService.GetModel(w, r)
+	router.HandleFunc("/model/get", appl(func(w http.ResponseWriter, r *http.Request) {
+		modelService.Get(w, r)
 	}))
 	router.HandleFunc("/model/start", appl(func(w http.ResponseWriter, r *http.Request) {
-		modelService.PostStart(w, r)
+		modelService.Start_(w, r)
 	}))
 	router.HandleFunc("/model/make-default", appl(func(w http.ResponseWriter, r *http.Request) {
 		modelService.MakeDefault(w, r)

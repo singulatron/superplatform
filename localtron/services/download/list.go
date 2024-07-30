@@ -19,45 +19,54 @@ func (ds *DownloadService) list() ([]types.DownloadDetails, error) {
 
 	var downloadDetailsList []types.DownloadDetails
 	for id, download := range ds.downloads {
-		fileName := filepath.Base(download.FilePath)
-
-		var progress *float64
-		if download.TotalSize > 0 {
-			computedProgress := float64((download.DownloadedSize * 100)) / float64(download.TotalSize)
-			progress = &computedProgress
-		}
-
-		var fullFileSize *int
-		if download.TotalSize > 0 {
-			totalSize := int(download.TotalSize)
-			fullFileSize = &totalSize
-		}
-
-		var dir *string
-		if download.FilePath != "" {
-			directory := filepath.Dir(download.FilePath)
-			dir = &directory
-		}
-
-		var paused, cancelled *bool
-		var errorString *string
-
-		downloadDetail := types.DownloadDetails{
-			Id:              id,
-			URL:             download.URL,
-			FileName:        fileName,
-			Dir:             dir,
-			Progress:        progress,
-			DownloadedBytes: int(download.DownloadedSize),
-			FullFileSize:    fullFileSize,
-			Status:          string(download.Status),
-			FilePath:        &download.FilePath,
-			Paused:          paused,
-			Cancelled:       cancelled,
-			Error:           errorString,
-		}
-		downloadDetailsList = append(downloadDetailsList, downloadDetail)
+		downloadDetail := downloadToDownloadDetails(id, download)
+		downloadDetailsList = append(downloadDetailsList, *downloadDetail)
 	}
 
 	return downloadDetailsList, nil
+}
+
+func downloadToDownloadDetails(id string, download *types.Download) *types.DownloadDetails {
+	if download == nil {
+		return nil
+	}
+	fileName := filepath.Base(download.FilePath)
+
+	var progress *float64
+	if download.TotalSize > 0 {
+		computedProgress := float64((download.DownloadedSize * 100)) / float64(download.TotalSize)
+		progress = &computedProgress
+	}
+
+	var fullFileSize *int
+	if download.TotalSize > 0 {
+		totalSize := int(download.TotalSize)
+		fullFileSize = &totalSize
+	}
+
+	var dir *string
+	if download.FilePath != "" {
+		directory := filepath.Dir(download.FilePath)
+		dir = &directory
+	}
+
+	var paused, cancelled *bool
+	var errorString *string
+
+	downloadDetail := types.DownloadDetails{
+		Id:              id,
+		URL:             download.URL,
+		FileName:        fileName,
+		Dir:             dir,
+		Progress:        progress,
+		DownloadedBytes: int(download.DownloadedSize),
+		FullFileSize:    fullFileSize,
+		Status:          string(download.Status),
+		FilePath:        &download.FilePath,
+		Paused:          paused,
+		Cancelled:       cancelled,
+		Error:           errorString,
+	}
+
+	return &downloadDetail
 }

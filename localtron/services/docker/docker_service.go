@@ -67,7 +67,7 @@ func (ds *DockerService) Start() error {
 	return ds.registerPermissions()
 }
 
-func (ds *DockerService) GetDockerHost() string {
+func (ds *DockerService) getDockerHost() string {
 	if ds.dockerHost == "" {
 		return "127.0.0.1"
 	}

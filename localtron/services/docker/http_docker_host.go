@@ -15,7 +15,7 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func (dm *DockerService) Info(
+func (dm *DockerService) DockerHost(
 	w http.ResponseWriter,
 	req *http.Request,
 ) {
@@ -32,14 +32,10 @@ func (dm *DockerService) Info(
 		return
 	}
 
-	di, err := dm.info()
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
+	host := dm.getDockerHost()
 
-	jsonData, _ := json.Marshal(map[string]any{
-		"info": di,
+	jsonData, _ := json.Marshal(dockertypes.GetDockerHostResponse{
+		Host: host,
 	})
 	w.Write(jsonData)
 }

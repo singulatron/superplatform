@@ -117,7 +117,7 @@ type StartResponse struct {
 }
 
 type MakeDefaultRequest struct {
-	Url string `json:"url"`
+	Id string `json:"id"`
 }
 
 type MakeDefaultResponse struct {

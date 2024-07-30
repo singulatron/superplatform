@@ -15,7 +15,7 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func (ms *ModelService) PostStart(
+func (ms *ModelService) Start_(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {

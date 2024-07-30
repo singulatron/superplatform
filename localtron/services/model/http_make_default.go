@@ -40,7 +40,7 @@ func (ms *ModelService) MakeDefault(
 	}
 	defer r.Body.Close()
 
-	err = ms.makeDefault(req.Url)
+	err = ms.makeDefault(req.Id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

@@ -15,7 +15,7 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func (ms *ModelService) GetModel(
+func (ms *ModelService) Get(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {

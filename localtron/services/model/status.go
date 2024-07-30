@@ -23,7 +23,7 @@ import (
 func (ms *ModelService) status(modelId string) (*modeltypes.ModelStatus, error) {
 	hostReq := dockertypes.GetDockerHostRequest{}
 	hostRsp := dockertypes.GetDockerHostResponse{}
-	err := ms.router.Post(context.Background(), "docker", "/docker-host", hostReq, &hostRsp)
+	err := ms.router.Post(context.Background(), "docker", "/host", hostReq, &hostRsp)
 	if err != nil {
 		return nil, err
 	}
@@ -62,7 +62,7 @@ func (ms *ModelService) status(modelId string) (*modeltypes.ModelStatus, error) 
 
 	for _, assetUrl := range model.Assets {
 		rsp := downloadtypes.GetDownloadResponse{}
-		err := ms.router.Post(context.Background(), "download", "/get-download", &downloadtypes.GetDownloadRequest{
+		err := ms.router.Post(context.Background(), "download", "/get", &downloadtypes.GetDownloadRequest{
 			Url: assetUrl,
 		}, &rsp)
 		if err != nil {

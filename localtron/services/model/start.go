@@ -69,7 +69,7 @@ func (ms *ModelService) start(modelId string) error {
 	env := map[string]string{}
 	for envarName, assetURL := range model.Assets {
 		rsp := downloadtypes.GetDownloadResponse{}
-		err := ms.router.Post(context.Background(), "download", "/get-download", &downloadtypes.GetDownloadRequest{
+		err := ms.router.Post(context.Background(), "download", "/get", &downloadtypes.GetDownloadRequest{
 			Url: assetURL,
 		}, &rsp)
 		if err != nil {
@@ -300,7 +300,7 @@ func (ms *ModelService) checkIfAnswers(
 
 		hostReq := dockertypes.GetDockerHostRequest{}
 		hostRsp := dockertypes.GetDockerHostResponse{}
-		err = ms.router.Post(context.Background(), "docker", "/docker-host", hostReq, &hostRsp)
+		err = ms.router.Post(context.Background(), "docker", "/host", hostReq, &hostRsp)
 		if err != nil {
 			logger.Warn("Docker host error",
 				slog.String("error", err.Error()),
