@@ -15,7 +15,7 @@ import (
 )
 
 func (s *UserService) SaveProfile(w http.ResponseWriter, r *http.Request) {
-	err := s.isAuthorized(usertypes.PermissionUserEdit.Id, r)
+	_, err := s.isAuthorized(usertypes.PermissionUserEdit.Id, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return

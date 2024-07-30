@@ -68,29 +68,39 @@ func TestMessageCreatesThread(t *testing.T) {
 		require.Error(t, err)
 	})
 
-	//userId := "usr-1"
-	//var threadId string
-	//
-	//t.Run("create thread", func(t *testing.T) {
-	//	tid := uuid.New().String()
-	//	title := "Test Thread Title"
-	//	thread, err := as.AddThread(&chattypes.Thread{
-	//		Id:      tid,
-	//		Title:   title,
-	//		UserIds: []string{userId},
-	//	})
-	//	require.NoError(t, err)
-	//	require.Equal(t, tid, thread.Id)
-	//	require.Equal(t, title, thread.Title)
-	//	threadId = thread.Id
-	//})
-	//
-	//t.Run("no user id", func(t *testing.T) {
-	//	err := as.AddMessage(&chattypes.Message{
-	//		Id:       uuid.New().String(),
-	//		ThreadId: threadId,
-	//		Content:  "hi there",
-	//	})
-	//	require.NoError(t, err)
-	//})
+	userId := "usr-1"
+	var threadId string
+
+	t.Run("create thread", func(t *testing.T) {
+		tid := uuid.New().String()
+		title := "Test Thread Title"
+
+		req := &chattypes.AddThreadRequest{
+			Thread: &chattypes.Thread{
+				Id:      tid,
+				Title:   title,
+				UserIds: []string{userId},
+			},
+		}
+		rsp := &chattypes.AddThreadResponse{}
+		err = router.Post(context.Background(), "chat", "/thread/add", req, rsp)
+		require.NoError(t, err)
+
+		thread := rsp.Thread
+
+		require.Equal(t, tid, thread.Id)
+		require.Equal(t, title, thread.Title)
+		threadId = thread.Id
+	})
+
+	t.Run("no user id", func(t *testing.T) {
+		req := chattypes.AddMessageRequest{
+			Message: &chattypes.Message{
+				Id:       uuid.New().String(),
+				ThreadId: threadId,
+				Content:  "hi there",
+			}}
+		err = router.Post(context.Background(), "chat", "/message/add", req, nil)
+		require.NoError(t, err)
+	})
 }

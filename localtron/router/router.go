@@ -77,12 +77,12 @@ func (r *Router) Post(ctx context.Context, serviceName, path string, request, re
 	if resp.StatusCode != http.StatusOK {
 		var errResponse map[string]string
 		if err := json.Unmarshal(responseBody, &errResponse); err != nil {
-			return formatError(fmt.Errorf("POST %v returned status '%s' and body '%v'", url, resp.Status, string(responseBody)))
+			return formatError(fmt.Errorf("POST %v -> '%s': %v", url, resp.Status, string(responseBody)))
 		}
 		if errMsg, exists := errResponse["error"]; exists {
-			return formatError(fmt.Errorf("POST %v returned status '%s' and body '%v'", url, resp.Status, errMsg))
+			return formatError(fmt.Errorf("POST %v -> '%s': %v", url, resp.Status, errMsg))
 		}
-		return formatError(fmt.Errorf("POST %v returned status '%s' and body '%v'", url, resp.Status, string(responseBody)))
+		return formatError(fmt.Errorf("POST %v -> '%s': %v", url, resp.Status, string(responseBody)))
 	}
 
 	if response != nil {
@@ -131,12 +131,12 @@ func (r *Router) Get(ctx context.Context, serviceName, path string, queryParams 
 	if resp.StatusCode != http.StatusOK {
 		var errResponse map[string]string
 		if err := json.Unmarshal(responseBody, &errResponse); err != nil {
-			return formatError(fmt.Errorf("service '%s' %s returned non-OK HTTP status: %s, body: %v", serviceName, path, resp.Status, string(responseBody)))
+			return formatError(fmt.Errorf("GET %v returned status '%s' and body -> %v", ur, resp.Status, string(responseBody)))
 		}
 		if errMsg, exists := errResponse["error"]; exists {
-			return formatError(fmt.Errorf("service '%s' %s error: %s", serviceName, path, errMsg))
+			return formatError(fmt.Errorf("GET %v returned status '%s' and body -> %v", ur, resp.Status, errMsg))
 		}
-		return formatError(fmt.Errorf("service '%s' %s returned non-OK HTTP status: %s, body: %v", serviceName, path, resp.Status, string(responseBody)))
+		return formatError(fmt.Errorf("GET %v returned status '%s' and body -> %v", ur, resp.Status, string(responseBody)))
 	}
 
 	if response != nil {
@@ -150,6 +150,8 @@ func (r *Router) Get(ctx context.Context, serviceName, path string, queryParams 
 }
 
 func formatError(err error) error {
+	return err
+
 	_, file, line, ok := runtime.Caller(3)
 	if !ok {
 		return fmt.Errorf("error: %w", err)

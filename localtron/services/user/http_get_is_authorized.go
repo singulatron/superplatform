@@ -8,6 +8,7 @@
 package userservice
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"log/slog"
@@ -24,37 +25,57 @@ func (s *UserService) IsAuthorized(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	permissionId := r.URL.Query().Get("permissionId")
-	err := s.isAuthorized(permissionId, r)
+	req := &usertypes.IsAuthorizedRequest{}
+	//m := map[string]string{}
+	err := json.NewDecoder(r.Body).Decode(&req)
+	if err != nil {
+		http.Error(w, `invalid JSON`, http.StatusBadRequest)
+		return
+	}
+	defer r.Body.Close()
+
+	if req.PermissionId == "" {
+		http.Error(w, `missing permission id`, http.StatusBadRequest)
+		return
+	}
+
+	user, err := s.isAuthorized(req.PermissionId, r)
 	if err != nil {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
+
+	bs, _ := json.Marshal(&usertypes.IsAuthorizedResponse{
+		Authorized: true,
+		User:       user,
+	})
+
+	w.Write(bs)
 }
 
 func (s *UserService) isAuthorized(permissionId string,
-	r *http.Request) error {
+	r *http.Request) (*usertypes.User, error) {
 	user, err := s.getUserFromRequest(r)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	roles, err := s.rolesStore.Query(
 		datastore.Equal(datastore.Field("id"), user.RoleIds),
 	).Find()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	for _, role := range roles {
 		for _, permId := range role.(*usertypes.Role).PermissionIds {
 			if permId == permissionId {
-				return nil
+				return user, nil
 			}
 		}
 	}
 
-	return errors.New("unauthorized")
+	return nil, errors.New("unauthorized")
 }
 
 func (s *UserService) getUserFromRequest(r *http.Request) (*usertypes.User, error) {

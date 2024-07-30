@@ -12,10 +12,12 @@ import (
 	"log/slog"
 	"sync"
 
+	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/logger"
 	"github.com/singulatron/singulatron/localtron/router"
 
 	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 type FirehoseService struct {
@@ -24,18 +26,32 @@ type FirehoseService struct {
 	subscribers map[int]func(events []*firehosetypes.Event)
 	mu          sync.Mutex
 	nextID      int
+
+	credentialStore datastore.DataStore
 }
 
-func NewFirehoseService(r *router.Router) (*FirehoseService, error) {
+func NewFirehoseService(r *router.Router, datastoreFactory func(tableName string, instance any) (datastore.DataStore, error)) (*FirehoseService, error) {
+	credentialStore, err := datastoreFactory("firehose_credentials", &usertypes.Credential{})
+	if err != nil {
+		return nil, err
+	}
+
 	service := &FirehoseService{
-		router:      r,
-		subscribers: make(map[int]func(events []*firehosetypes.Event)),
+		router:          r,
+		credentialStore: credentialStore,
+		subscribers:     make(map[int]func(events []*firehosetypes.Event)),
 	}
 
 	return service, nil
 }
 
 func (fs *FirehoseService) Start() error {
+	token, err := usertypes.RegisterService("firehose", "Firehose Service", fs.router, fs.credentialStore)
+	if err != nil {
+		return err
+	}
+	fs.router = fs.router.SetBearerToken(token)
+
 	return fs.registerPermissions()
 }
 

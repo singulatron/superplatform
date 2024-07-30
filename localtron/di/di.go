@@ -103,7 +103,7 @@ func BigBang(options *Options) (*http.ServeMux, func() error, error) {
 		os.Exit(1)
 	}
 
-	firehoseService, err := firehoseservice.NewFirehoseService(options.Router)
+	firehoseService, err := firehoseservice.NewFirehoseService(options.Router, options.DatastoreFactory)
 	if err != nil {
 		logger.Error("Firehose service creation failed", slog.String("error", err.Error()))
 		os.Exit(1)
@@ -123,7 +123,7 @@ func BigBang(options *Options) (*http.ServeMux, func() error, error) {
 		os.Exit(1)
 	}
 
-	downloadService, err := downloadservice.NewDownloadService(options.Router)
+	downloadService, err := downloadservice.NewDownloadService(options.Router, options.DatastoreFactory)
 	if err != nil {
 		logger.Error("Download service creation failed", slog.String("error", err.Error()))
 		os.Exit(1)
@@ -132,7 +132,7 @@ func BigBang(options *Options) (*http.ServeMux, func() error, error) {
 	downloadService.SetDefaultFolder(downloadFolder)
 	downloadService.SetStateFilePath(path.Join(singulatronFolder, "downloads.json"))
 
-	dockerService, err := dockerservice.NewDockerService(options.Router)
+	dockerService, err := dockerservice.NewDockerService(options.Router, options.DatastoreFactory)
 	if err != nil {
 		logger.Error("Docker service creation failed", slog.String("error", err.Error()))
 		os.Exit(1)
@@ -305,6 +305,9 @@ func BigBang(options *Options) (*http.ServeMux, func() error, error) {
 	}))
 	router.HandleFunc("/user/delete-role", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.DeleteRole(w, r)
+	}))
+	router.HandleFunc("/user/is-authorized", appl(func(w http.ResponseWriter, r *http.Request) {
+		userService.IsAuthorized(w, r)
 	}))
 	router.HandleFunc("/user/get-permissions", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.GetPermissions(w, r)

@@ -14,6 +14,7 @@ import (
 	"github.com/singulatron/singulatron/localtron/router"
 
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 type ModelService struct {
@@ -23,6 +24,8 @@ type ModelService struct {
 	router         *router.Router
 	modelsStore    datastore.DataStore
 	platformsStore datastore.DataStore
+
+	credentialStore datastore.DataStore
 }
 
 func NewModelService(
@@ -46,6 +49,12 @@ func NewModelService(
 	}
 	srv.platformsStore = platformsStore
 
+	credentialStore, err := datastoreFactory("model_credentials", &usertypes.Credential{})
+	if err != nil {
+		return nil, err
+	}
+	srv.credentialStore = credentialStore
+
 	err = srv.bootstrapModels()
 	if err != nil {
 		return nil, err
@@ -55,5 +64,11 @@ func NewModelService(
 }
 
 func (ms *ModelService) Start() error {
+	token, err := usertypes.RegisterService("model", "Model Service", ms.router, ms.credentialStore)
+	if err != nil {
+		return err
+	}
+	ms.router = ms.router.SetBearerToken(token)
+
 	return ms.registerPermissions()
 }

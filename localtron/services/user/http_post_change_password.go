@@ -15,7 +15,7 @@ import (
 )
 
 func (s *UserService) ChangePassword(w http.ResponseWriter, r *http.Request) {
-	err := s.isAuthorized(usertypes.PermissionUserPasswordChange.Id, r)
+	_, err := s.isAuthorized(usertypes.PermissionUserPasswordChange.Id, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return

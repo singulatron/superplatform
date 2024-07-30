@@ -54,11 +54,16 @@ func main() {
 		}
 	}()
 
-	router, err := di.BigBang(di.Options{
+	router, starter, err := di.BigBang(&di.Options{
 		Test: false,
 	})
 	if err != nil {
 		logger.Error("Cannot make universe", slog.Any("error", err))
+		os.Exit(1)
+	}
+	err = starter()
+	if err != nil {
+		logger.Error("Cannot start universe", slog.Any("error", err))
 		os.Exit(1)
 	}
 

@@ -11,7 +11,10 @@ import (
 	"sync"
 
 	"github.com/docker/docker/client"
+	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/router"
+
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 type DockerService struct {
@@ -24,17 +27,27 @@ type DockerService struct {
 	dockerPort           int
 	client               *client.Client
 	mutex                sync.Mutex
+
+	credentialStore datastore.DataStore
 }
 
 func NewDockerService(
 	router *router.Router,
+	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error),
 ) (*DockerService, error) {
 	c, err := client.NewClientWithOpts(client.FromEnv, client.WithAPIVersionNegotiation())
 	if err != nil {
 		return nil, err
 	}
+
+	credentialStore, err := datastoreFactory("docker_credentials", &usertypes.Credential{})
+	if err != nil {
+		return nil, err
+	}
+
 	service := &DockerService{
-		router: router,
+		router:          router,
+		credentialStore: credentialStore,
 
 		client:           c,
 		imagePullMutexes: make(map[string]*sync.Mutex),
@@ -45,6 +58,12 @@ func NewDockerService(
 }
 
 func (ds *DockerService) Start() error {
+	token, err := usertypes.RegisterService("docker", "Docker Service", ds.router, ds.credentialStore)
+	if err != nil {
+		return err
+	}
+	ds.router = ds.router.SetBearerToken(token)
+
 	return ds.registerPermissions()
 }
 

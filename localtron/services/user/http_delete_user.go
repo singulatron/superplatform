@@ -15,7 +15,7 @@ import (
 )
 
 func (s *UserService) DeleteUser(w http.ResponseWriter, r *http.Request) {
-	err := s.isAuthorized(usertypes.PermissionUserDelete.Id, r)
+	_, err := s.isAuthorized(usertypes.PermissionUserDelete.Id, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return

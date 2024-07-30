@@ -52,6 +52,11 @@ func (a *ChatService) AddThread(
 	}
 	defer r.Body.Close()
 
+	if req.Thread == nil {
+		http.Error(w, `missing thread`, http.StatusBadRequest)
+		return
+	}
+
 	req.Thread.UserIds = append(req.Thread.UserIds, rsp.User.Id)
 
 	thread, err := a.addThread(req.Thread)

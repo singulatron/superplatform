@@ -40,7 +40,7 @@ func (s *UserService) addPermissionToRole(userId, roleId, permissionId string) e
 	}
 	permission := permissionI.(*usertypes.Permission)
 
-	if permission.OwnerId != userId {
+	if permission.OwnerId != "" && permission.OwnerId != userId {
 		return errors.New("not an owner of the permission")
 	}
 

@@ -16,10 +16,12 @@ import (
 	"sync"
 	"time"
 
+	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/logger"
 	"github.com/singulatron/singulatron/localtron/router"
 	types "github.com/singulatron/singulatron/localtron/services/download/types"
 	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 type DownloadService struct {
@@ -33,14 +35,24 @@ type DownloadService struct {
 
 	// for testing purposes
 	SyncDownloads bool
+
+	credentialStore datastore.DataStore
 }
 
 func NewDownloadService(
 	router *router.Router,
+	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error),
 ) (*DownloadService, error) {
 	home, _ := os.UserHomeDir()
+
+	credentialStore, err := datastoreFactory("download_credentials", &usertypes.Credential{})
+	if err != nil {
+		return nil, err
+	}
+
 	ret := &DownloadService{
-		router: router,
+		credentialStore: credentialStore,
+		router:          router,
 
 		StateFilePath: path.Join(home, "downloads.json"),
 		downloads:     make(map[string]*types.Download),
@@ -58,7 +70,13 @@ func (dm *DownloadService) SetStateFilePath(s string) {
 }
 
 func (dm *DownloadService) Start() error {
-	err := dm.registerPermissions()
+	token, err := usertypes.RegisterService("download", "Download Service", dm.router, dm.credentialStore)
+	if err != nil {
+		return err
+	}
+	dm.router = dm.router.SetBearerToken(token)
+
+	err = dm.registerPermissions()
 	if err != nil {
 		return err
 	}

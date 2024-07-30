@@ -15,7 +15,7 @@ import (
 )
 
 func (s *UserService) CreateRole(w http.ResponseWriter, r *http.Request) {
-	err := s.isAuthorized(usertypes.PermissionRoleCreate.Id, r)
+	_, err := s.isAuthorized(usertypes.PermissionRoleCreate.Id, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
