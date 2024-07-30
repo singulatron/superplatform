@@ -134,6 +134,7 @@ type GetModelRequest struct {
 }
 
 type GetModelResponse struct {
+	Exists   bool      `json:"exists"`
 	Model    *Model    `json:"model,omitempty"`
 	Platform *Platform `json:"platform,omitempty"`
 }

@@ -73,11 +73,12 @@ func TestAddPrompt(t *testing.T) {
 			Description:    "hi",
 			PromptTemplate: "[INST] {prompt} [/INST]",
 		}}})
-	router.AddMock("model", "/status", &modeltypes.ModelStatus{
-		AssetsReady: true,
-		Running:     true,
-		Address:     "127.0.0.1:8888",
-	})
+	router.AddMock("model", "/status", &modeltypes.StatusResponse{
+		Status: &modeltypes.ModelStatus{
+			AssetsReady: true,
+			Running:     true,
+			Address:     "127.0.0.1:8888",
+		}})
 
 	responses := []*llm.CompletionResponse{
 		{
@@ -134,14 +135,6 @@ func TestAddPrompt(t *testing.T) {
 	}
 
 	require.Equal(t, true, model.Id != "")
-
-	//err = ds.Do(model.Assets["MODEL"], "")
-	//require.NoError(t, err)
-	//
-	//err = ms.Start("")
-	//require.NoError(t, err)
-	//
-	//ps := universe.PromptService
 
 	preq := prompttypes.AddPromptRequest{
 		PromptCreateFields: prompttypes.PromptCreateFields{

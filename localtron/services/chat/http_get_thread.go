@@ -52,14 +52,15 @@ func (a *ChatService) GetThread(
 	}
 	defer r.Body.Close()
 
-	thread, _, err := a.getThread(req.ThreadId)
+	thread, found, err := a.getThread(req.ThreadId)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	jsonData, _ := json.Marshal(chattypes.GetThreadResponse{
-		Thread: *thread,
+		Exists: found,
+		Thread: thread,
 	})
 	w.Write(jsonData)
 }

@@ -25,6 +25,7 @@ import (
 
 	apptypes "github.com/singulatron/singulatron/localtron/services/chat/types"
 	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
+	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
 	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
@@ -242,11 +243,22 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 }
 
 func (p *PromptService) processPlatform(address string, fullPrompt string, currentPrompt *prompttypes.Prompt) error {
+	modelId := currentPrompt.ModelId
+	if modelId == "" {
+		getConfigReq := configtypes.GetConfigRequest{}
+		getConfigRsp := configtypes.GetConfigResponse{}
+		err := p.router.Post(context.Background(), "config", "/get", getConfigReq, &getConfigRsp)
+		if err != nil {
+			return err
+		}
+		modelId = getConfigRsp.Config.Model.CurrentModelId
+	}
+
 	getModelReq := modeltypes.GetModelRequest{
-		Id: currentPrompt.ModelId,
+		Id: modelId,
 	}
 	getModelRsp := modeltypes.GetModelResponse{}
-	err := p.router.Post(context.Background(), "model", "/status", getModelReq, &getModelRsp)
+	err := p.router.Post(context.Background(), "model", "/get-model", getModelReq, &getModelRsp)
 	if err != nil {
 		return err
 	}

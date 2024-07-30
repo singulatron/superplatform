@@ -217,6 +217,9 @@ func BigBang(options *Options) (*http.ServeMux, func() error, error) {
 	router.HandleFunc("/model/get-models", appl(func(w http.ResponseWriter, r *http.Request) {
 		modelService.GetModels(w, r)
 	}))
+	router.HandleFunc("/model/get-model", appl(func(w http.ResponseWriter, r *http.Request) {
+		modelService.GetModel(w, r)
+	}))
 	router.HandleFunc("/model/start", appl(func(w http.ResponseWriter, r *http.Request) {
 		modelService.PostStart(w, r)
 	}))
@@ -367,6 +370,10 @@ func BigBang(options *Options) (*http.ServeMux, func() error, error) {
 			return err
 		}
 		err = chatService.Start()
+		if err != nil {
+			return err
+		}
+		err = promptService.Start()
 		if err != nil {
 			return err
 		}

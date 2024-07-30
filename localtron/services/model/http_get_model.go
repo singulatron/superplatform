@@ -15,7 +15,7 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func (ms *ModelService) GetModels(
+func (ms *ModelService) GetModel(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
@@ -32,7 +32,7 @@ func (ms *ModelService) GetModels(
 		return
 	}
 
-	req := modeltypes.GetModelsRequest{}
+	req := modeltypes.GetModelRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `invalid JSON`, http.StatusBadRequest)
@@ -40,14 +40,31 @@ func (ms *ModelService) GetModels(
 	}
 	defer r.Body.Close()
 
-	models, err := ms.getModels()
+	if req.Id == "" {
+		http.Error(w, "no model id", http.StatusBadRequest)
+		return
+	}
+
+	model, found, err := ms.getModel(req.Id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if !found {
+		http.Error(w, "model not found", http.StatusBadRequest)
+		return
+	}
+
+	platform, _, err := ms.getPlatform(model.PlatformId)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	jsonData, _ := json.Marshal(modeltypes.GetModelsResponse{
-		Models: models,
+	jsonData, _ := json.Marshal(modeltypes.GetModelResponse{
+		Exists:   found,
+		Model:    model,
+		Platform: platform,
 	})
 	w.Write(jsonData)
 }

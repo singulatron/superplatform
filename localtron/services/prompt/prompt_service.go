@@ -16,6 +16,7 @@ import (
 
 	streammanager "github.com/singulatron/singulatron/localtron/services/prompt/sub/stream_manager"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 type PromptService struct {
@@ -24,7 +25,8 @@ type PromptService struct {
 
 	*streammanager.StreamManager
 
-	promptsStore datastore.DataStore
+	promptsStore    datastore.DataStore
+	credentialStore datastore.DataStore
 
 	runMutex sync.Mutex
 	trigger  chan bool
@@ -40,13 +42,19 @@ func NewPromptService(
 		return nil, err
 	}
 
+	credentialStore, err := datastoreFactory("prompt_credentials", &usertypes.Credential{})
+	if err != nil {
+		return nil, err
+	}
+
 	service := &PromptService{
 		llmCLient: llmClient,
 		router:    router,
 
 		StreamManager: streammanager.NewStreamManager(),
 
-		promptsStore: promptsStore,
+		promptsStore:    promptsStore,
+		credentialStore: credentialStore,
 
 		trigger: make(chan bool, 1),
 	}
@@ -71,9 +79,17 @@ func NewPromptService(
 		return nil, err
 	}
 
-	service.registerPermissions()
-
 	go service.processPrompts()
 
 	return service, nil
+}
+
+func (cs *PromptService) Start() error {
+	token, err := usertypes.RegisterService("prompt", "Prompt Service", cs.router, cs.credentialStore)
+	if err != nil {
+		return err
+	}
+	cs.router = cs.router.SetBearerToken(token)
+
+	return cs.registerPermissions()
 }
