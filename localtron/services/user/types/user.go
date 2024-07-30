@@ -128,6 +128,10 @@ func (c *Credential) GetId() string {
 	return c.Email
 }
 
+// RegisterService registers a service or logs in with credentials loaded
+// from the credentials store.
+// Every service should have a user account in the user service and this method creates
+// that user account.
 func RegisterService(serviceEmail, serviceName string, router *router.Router, store datastore.DataStore) (string, error) {
 	res, err := store.Query(datastore.All()).Find()
 	if err != nil {
@@ -172,4 +176,26 @@ func RegisterService(serviceEmail, serviceName string, router *router.Router, st
 	}
 
 	return rsp.Token.Token, nil
+}
+
+func RegisterUser(router *router.Router, email, password, username string) (string, error) {
+	err := router.Post(context.Background(), "user", "/register", &RegisterRequest{
+		Email:    email,
+		Password: password,
+		Name:     username,
+	}, nil)
+	if err != nil {
+		return "", err
+	}
+
+	loginRsp := LoginResponse{}
+	err = router.Post(context.Background(), "user", "/login", &LoginRequest{
+		Email:    email,
+		Password: password,
+	}, &loginRsp)
+	if err != nil {
+		return "", err
+	}
+
+	return loginRsp.Token.Token, nil
 }

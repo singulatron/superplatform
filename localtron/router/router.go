@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"runtime"
+	"strings"
 
 	"github.com/singulatron/singulatron/localtron/datastore"
 )
@@ -41,6 +42,17 @@ func (r *Router) SetBearerToken(token string) *Router {
 		defaultAddress: r.defaultAddress,
 		bearerToken:    token,
 	}
+}
+
+func (router *Router) AsRequestMaker(r *http.Request) *Router {
+	authHeader := r.Header.Get("Authorization")
+	authHeader = strings.Replace(authHeader, "Bearer ", "", 1)
+
+	if authHeader == "" {
+		return router.SetBearerToken("")
+	}
+
+	return router.SetBearerToken(authHeader)
 }
 
 func (r *Router) Post(ctx context.Context, serviceName, path string, request, response any) error {

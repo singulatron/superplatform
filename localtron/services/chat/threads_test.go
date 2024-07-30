@@ -10,6 +10,7 @@ import (
 
 	"github.com/singulatron/singulatron/localtron/di"
 	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 func TestMessageCreatesThread(t *testing.T) {
@@ -29,6 +30,10 @@ func TestMessageCreatesThread(t *testing.T) {
 
 	err = starterFunc()
 	require.NoError(t, err)
+
+	token, err := usertypes.RegisterUser(router, "someuser", "pw123", "Some name")
+	require.NoError(t, err)
+	router = router.SetBearerToken(token)
 
 	t.Run("no thread id", func(t *testing.T) {
 		req := &chattypes.AddMessageRequest{
@@ -54,7 +59,7 @@ func TestMessageCreatesThread(t *testing.T) {
 
 	})
 
-	t.Run("no user id", func(t *testing.T) {
+	t.Run("no user id should not fail", func(t *testing.T) {
 		tid := uuid.New().String()
 		title := "Test Thread Title"
 
@@ -64,8 +69,9 @@ func TestMessageCreatesThread(t *testing.T) {
 				Title: title,
 			},
 		}
+
 		err = router.Post(context.Background(), "chat", "/thread/add", req, nil)
-		require.Error(t, err)
+		require.NoError(t, err)
 	})
 
 	userId := "usr-1"

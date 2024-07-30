@@ -11,6 +11,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/davecgh/go-spew/spew"
 	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
@@ -32,7 +33,7 @@ func (a *ChatService) AddThread(
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := a.router.Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
+	err := a.router.AsRequestMaker(r).Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
 		PermissionId: chattypes.PermissionThreadCreate.Id,
 	}, rsp)
 	if err != nil {
@@ -56,6 +57,8 @@ func (a *ChatService) AddThread(
 		http.Error(w, `missing thread`, http.StatusBadRequest)
 		return
 	}
+
+	spew.Dump("userid???", rsp.User.Id)
 
 	req.Thread.UserIds = append(req.Thread.UserIds, rsp.User.Id)
 
