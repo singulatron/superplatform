@@ -74,6 +74,6 @@ func (ds *DockerService) getDockerHost() string {
 	return ds.dockerHost
 }
 
-func (ds *DockerService) GetDockerPort() int {
+func (ds *DockerService) getDockerPort() int {
 	return ds.dockerPort
 }

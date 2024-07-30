@@ -214,7 +214,7 @@ func BigBang(options *Options) (*http.ServeMux, func() error, error) {
 		dockerService.Info(w, r)
 	}))
 	router.HandleFunc("/docker/host", appl(func(w http.ResponseWriter, r *http.Request) {
-		dockerService.Info(w, r)
+		dockerService.Host(w, r)
 	}))
 
 	router.HandleFunc("/model/status", appl(func(w http.ResponseWriter, r *http.Request) {

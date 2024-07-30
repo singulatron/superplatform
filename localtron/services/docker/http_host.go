@@ -15,7 +15,7 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func (dm *DockerService) DockerHost(
+func (dm *DockerService) Host(
 	w http.ResponseWriter,
 	req *http.Request,
 ) {
