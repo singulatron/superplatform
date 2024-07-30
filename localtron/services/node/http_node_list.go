@@ -20,7 +20,7 @@ func (ns *NodeService) List(
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := ns.router.Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
+	err := ns.router.AsRequestMaker(r).Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
 		PermissionId: nodetypes.PermissionNodeView.Id,
 	}, rsp)
 	if err != nil {

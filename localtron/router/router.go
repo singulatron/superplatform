@@ -20,6 +20,7 @@ type Router struct {
 	registry       map[string]string
 	defaultAddress string
 	bearerToken    string
+	mockEndpoints  map[string]any
 }
 
 func NewRouter(
@@ -27,11 +28,16 @@ func NewRouter(
 	return &Router{
 		registry:       map[string]string{},
 		defaultAddress: "http://127.0.0.1:" + DefaultPort,
+		mockEndpoints:  map[string]any{},
 	}, nil
 }
 
 func (r *Router) SetDefaultAddress(address string) {
 	r.defaultAddress = address
+}
+
+func (r *Router) AddMock(serviceName, path string, rsp any) {
+	r.mockEndpoints[serviceName+path] = rsp
 }
 
 func (r *Router) SetBearerToken(token string) *Router {
@@ -40,6 +46,7 @@ func (r *Router) SetBearerToken(token string) *Router {
 		registry: r.registry,
 
 		defaultAddress: r.defaultAddress,
+		mockEndpoints:  r.mockEndpoints,
 		bearerToken:    token,
 	}
 }
@@ -56,6 +63,12 @@ func (router *Router) AsRequestMaker(r *http.Request) *Router {
 }
 
 func (r *Router) Post(ctx context.Context, serviceName, path string, request, response any) error {
+	val, ok := r.mockEndpoints[serviceName+path]
+	if ok {
+		bs, _ := json.Marshal(val)
+		return json.Unmarshal(bs, response)
+	}
+
 	address, ok := r.registry[serviceName]
 	if !ok {
 		address = r.defaultAddress
@@ -108,6 +121,12 @@ func (r *Router) Post(ctx context.Context, serviceName, path string, request, re
 }
 
 func (r *Router) Get(ctx context.Context, serviceName, path string, queryParams map[string]string, response any) error {
+	val, ok := r.mockEndpoints[serviceName+path]
+	if ok {
+		bs, _ := json.Marshal(val)
+		return json.Unmarshal(bs, response)
+	}
+
 	address, ok := r.registry[serviceName]
 	if !ok {
 		address = r.defaultAddress

@@ -31,7 +31,7 @@ func (cs *ConfigService) Get(
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := cs.router.Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
+	err := cs.router.AsRequestMaker(r).Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
 		PermissionId: configtypes.PermissionConfigView.Id,
 	}, rsp)
 	if err != nil {

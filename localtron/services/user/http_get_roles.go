@@ -18,7 +18,7 @@ func (s *UserService) GetRoles(
 	w http.ResponseWriter,
 	r *http.Request) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := s.router.Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
+	err := s.router.AsRequestMaker(r).Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
 		PermissionId: usertypes.PermissionRoleView.Id,
 	}, rsp)
 	if err != nil {

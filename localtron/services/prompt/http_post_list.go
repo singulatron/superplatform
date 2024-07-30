@@ -33,7 +33,7 @@ func (p *PromptService) GetPrompts(
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := p.router.Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
+	err := p.router.AsRequestMaker(r).Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
 		PermissionId: prompttypes.PermissionPromptView.Id,
 	}, rsp)
 	if err != nil {

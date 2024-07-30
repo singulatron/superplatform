@@ -21,7 +21,7 @@ func (g *GenericService) UpsertMany(
 ) {
 
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := g.router.Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
+	err := g.router.AsRequestMaker(r).Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
 		PermissionId: generictypes.PermissionGenericCreate.Id,
 	}, rsp)
 	if err != nil {

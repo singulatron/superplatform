@@ -30,7 +30,7 @@ func (ds *DownloadService) List(
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := ds.router.Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
+	err := ds.router.AsRequestMaker(r).Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
 		PermissionId: downloadtypes.PermissionDownloadView.Id,
 	}, rsp)
 	if err != nil {

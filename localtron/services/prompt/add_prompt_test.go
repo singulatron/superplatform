@@ -9,60 +9,75 @@ package promptservice_test
 
 import (
 	"context"
+	"net/http/httptest"
 	"strings"
 	"testing"
 	"time"
 
 	"github.com/singulatron/singulatron/localtron/clients/llm"
 	"github.com/singulatron/singulatron/localtron/di"
-	downloadtypes "github.com/singulatron/singulatron/localtron/services/download/types"
+	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 	"github.com/stretchr/testify/require"
 	"go.uber.org/mock/gomock"
 )
 
 func TestAddPrompt(t *testing.T) {
+	hs := &di.HandlerSwitcher{}
+	server := httptest.NewServer(hs)
+	defer server.Close()
+
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	ds := downloadtypes.NewMockDownloadServiceI(ctrl)
-	ds.EXPECT().Do("https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q3_K_S.gguf", gomock.Any())
-	ds.EXPECT().SetDefaultFolder(gomock.Any())
-	ds.EXPECT().SetStateFilePath(gomock.Any())
-	ds.EXPECT().Start()
-
 	lc := llm.NewMockClientI(ctrl)
 
-	ms := modeltypes.NewMockModelServiceI(ctrl)
-	ms.EXPECT().Start(gomock.Any())
-	ms.EXPECT().GetModels().Return([]*modeltypes.Model{{
-		Id: "huggingface/TheBloke/mistral-7b-instruct-v0.2.Q3_K_S.gguf",
-		Assets: map[string]string{
-			"MODEL": "https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q3_K_S.gguf",
-		},
-		PlatformId:     "llama-cpp",
-		Name:           "Mistral",
-		Parameters:     "7B",
-		Flavour:        "Instruct",
-		Version:        "v0.2",
-		Quality:        "Q3_K_S",
-		Extension:      "GGUF",
-		FullName:       "Mistral 7B Instruct v0.2 Q3_K_S",
-		Size:           3.16,
-		MaxRam:         5.66,
-		QuantComment:   "very small, high quality loss",
-		Description:    "hi",
-		PromptTemplate: "[INST] {prompt} [/INST]",
-	}}, nil)
-	ms.EXPECT().Status(gomock.Any()).Return(&modeltypes.ModelStatus{
+	options := &di.Options{
+		Test:      true,
+		Url:       server.URL,
+		LLMClient: lc,
+	}
+
+	universe, starterFunc, err := di.BigBang(options)
+	require.NoError(t, err)
+
+	hs.UpdateHandler(universe)
+	router := options.Router
+
+	err = starterFunc()
+	require.NoError(t, err)
+
+	token, err := usertypes.RegisterUser(router, "someuser", "pw123", "Some name")
+	require.NoError(t, err)
+	router = router.SetBearerToken(token)
+
+	router.AddMock("model", "/get-models", modeltypes.GetModelsResponse{
+		Models: []*modeltypes.Model{{
+			Id: "huggingface/TheBloke/mistral-7b-instruct-v0.2.Q3_K_S.gguf",
+			Assets: map[string]string{
+				"MODEL": "https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q3_K_S.gguf",
+			},
+			PlatformId:     "llama-cpp",
+			Name:           "Mistral",
+			Parameters:     "7B",
+			Flavour:        "Instruct",
+			Version:        "v0.2",
+			Quality:        "Q3_K_S",
+			Extension:      "GGUF",
+			FullName:       "Mistral 7B Instruct v0.2 Q3_K_S",
+			Size:           3.16,
+			MaxRam:         5.66,
+			QuantComment:   "very small, high quality loss",
+			Description:    "hi",
+			PromptTemplate: "[INST] {prompt} [/INST]",
+		}}})
+	router.AddMock("model", "/status", &modeltypes.ModelStatus{
 		AssetsReady: true,
 		Running:     true,
 		Address:     "127.0.0.1:8888",
-	}, nil)
-	ms.EXPECT().GetPlatformByModelId(gomock.Any()).Return(&modeltypes.Platform{
-		Id: modeltypes.PlatformLlamaCpp.Id,
-	}, nil)
+	})
 
 	responses := []*llm.CompletionResponse{
 		{
@@ -101,48 +116,43 @@ func TestAddPrompt(t *testing.T) {
 			return nil
 		})
 
-	universe, err := di.BigBang(di.Options{
-		Test: true,
-		Pre: di.Universe{
-			DownloadService: ds,
-			ModelService:    ms,
-			LLMClient:       lc,
-		},
-	})
-	require.NoError(t, err)
-	require.NotNil(t, universe)
-
-	cs := universe.ConfigService
-
-	conf, err := cs.GetConfig()
+	creq := configtypes.GetConfigRequest{}
+	crsp := configtypes.GetConfigResponse{}
+	err = router.Post(context.Background(), "config", "/get", creq, &crsp)
 	require.NoError(t, err)
 
-	models, err := ms.GetModels()
+	mreq := modeltypes.GetModelsRequest{}
+	mrsp := modeltypes.GetModelsResponse{}
+	err = router.Post(context.Background(), "model", "/get-models", mreq, &mrsp)
 	require.NoError(t, err)
+
 	var model *modeltypes.Model
-	for _, v := range models {
-		if v.Id == conf.Model.CurrentModelId {
+	for _, v := range mrsp.Models {
+		if v.Id == crsp.Config.Model.CurrentModelId {
 			model = v
 		}
 	}
 
 	require.Equal(t, true, model.Id != "")
 
-	err = ds.Do(model.Assets["MODEL"], "")
-	require.NoError(t, err)
+	//err = ds.Do(model.Assets["MODEL"], "")
+	//require.NoError(t, err)
+	//
+	//err = ms.Start("")
+	//require.NoError(t, err)
+	//
+	//ps := universe.PromptService
 
-	err = ms.Start("")
-	require.NoError(t, err)
-
-	ps := universe.PromptService
-
-	prompt, err := ps.AddPrompt(context.Background(), &prompttypes.AddPromptRequest{
+	preq := prompttypes.AddPromptRequest{
 		PromptCreateFields: prompttypes.PromptCreateFields{
 			Sync:   true,
 			Prompt: "Hi there, how are you?",
 		},
-	}, "")
+	}
+	prsp := prompttypes.AddPromptResponse{}
+	err = router.Post(context.Background(), "prompt", "/add", preq, &prsp)
+	require.NoError(t, err)
 
 	require.NoError(t, err)
-	require.Equal(t, true, strings.Contains(prompt.Answer, "how"))
+	require.Equal(t, true, strings.Contains(prsp.Answer, "how"))
 }

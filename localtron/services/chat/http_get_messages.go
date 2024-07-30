@@ -32,7 +32,7 @@ func (a *ChatService) GetMessages(
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := a.router.Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
+	err := a.router.AsRequestMaker(r).Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
 		PermissionId: chattypes.PermissionMessageView.Id,
 	}, rsp)
 	if err != nil {

@@ -20,7 +20,7 @@ import (
 func (p *FirehoseService) Publish(w http.ResponseWriter,
 	r *http.Request) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := p.router.Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
+	err := p.router.AsRequestMaker(r).Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
 		PermissionId: prompttypes.PermissionPromptCreate.Id,
 	}, rsp)
 	if err != nil {

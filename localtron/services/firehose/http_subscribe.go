@@ -33,7 +33,7 @@ func (p *FirehoseService) Subscribe(
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := p.router.Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
+	err := p.router.AsRequestMaker(r).Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
 		PermissionId: firehosetypes.PermissionFirehoseView.Id,
 	}, rsp)
 	if err != nil {

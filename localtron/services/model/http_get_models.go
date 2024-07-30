@@ -20,7 +20,7 @@ func (ms *ModelService) GetModels(
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := ms.router.Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
+	err := ms.router.AsRequestMaker(r).Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
 		PermissionId: modeltypes.PermissionModelView.Id,
 	}, rsp)
 	if err != nil {

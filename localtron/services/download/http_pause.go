@@ -33,7 +33,7 @@ func (ds *DownloadService) Pause(
 
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := ds.router.Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
+	err := ds.router.AsRequestMaker(r).Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
 		PermissionId: downloadtypes.PermissionDownloadEdit.Id,
 	}, rsp)
 	if err != nil {
