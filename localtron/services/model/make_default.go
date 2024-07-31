@@ -11,10 +11,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/pkg/errors"
-	"github.com/singulatron/singulatron/localtron/datastore"
 	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
-	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 )
 
 func (ms *ModelService) makeDefault(modelId string) error {
@@ -36,31 +33,5 @@ func (ms *ModelService) makeDefault(modelId string) error {
 
 	return ms.router.Post(context.Background(), "config", "/save", &configtypes.SaveConfigRequest{
 		Config: rsp.Config,
-	}, rsp)
-}
-
-func (ms *ModelService) getPlatformByModelId(modelId string) (*modeltypes.Platform, error) {
-	modelI, found, err := ms.modelsStore.Query(
-		datastore.Id(modelId),
-	).FindOne()
-	if err != nil {
-		return nil, err
-	}
-	if !found {
-		return nil, errors.New("cannot find model")
-	}
-	model := modelI.(*modeltypes.Model)
-
-	platformI, found, err := ms.platformsStore.Query(
-		datastore.Id(model.PlatformId),
-	).FindOne()
-	if err != nil {
-		return nil, err
-	}
-	if !found {
-		return nil, errors.New("cannot find platform")
-	}
-	platform := platformI.(*modeltypes.Platform)
-
-	return platform, nil
+	}, nil)
 }
