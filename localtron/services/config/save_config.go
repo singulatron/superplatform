@@ -13,6 +13,7 @@ import (
 	"path"
 
 	"github.com/pkg/errors"
+	"github.com/singulatron/singulatron/localtron/logger"
 	types "github.com/singulatron/singulatron/localtron/services/config/types"
 	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
 	"gopkg.in/yaml.v2"
@@ -33,12 +34,15 @@ func (cs *ConfigService) saveConfig(config types.Config) error {
 	}
 
 	ev := types.EventConfigUpdate{}
-	cs.router.Post(context.Background(), "firehose", "/publish", firehosetypes.PublishRequest{
+	err = cs.router.Post(context.Background(), "firehose", "/publish", firehosetypes.PublishRequest{
 		Event: &firehosetypes.Event{
 			Name: ev.Name(),
 			Data: ev,
 		},
 	}, nil)
+	if err != nil {
+		logger.Error("Failed to publish: %v", err)
+	}
 
 	return nil
 }

@@ -163,10 +163,15 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 		slog.String("promptId", currentPrompt.Id),
 	)
 
-	defer p.router.Post(context.Background(), "firehose", "/publish", prompttypes.EventPromptProcessingFinished{
-		PromptId: currentPrompt.Id,
-		Error:    errToString(err),
-	}, nil)
+	defer func() {
+		err = p.router.Post(context.Background(), "firehose", "/publish", prompttypes.EventPromptProcessingFinished{
+			PromptId: currentPrompt.Id,
+			Error:    errToString(err),
+		}, nil)
+		if err != nil {
+			logger.Error("Failed to publish: %v", err)
+		}
+	}()
 
 	currentPrompt.LastRun = time.Now()
 	currentPrompt.Error = ""
@@ -181,12 +186,15 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 	ev := prompttypes.EventPromptProcessingStarted{
 		PromptId: currentPrompt.Id,
 	}
-	p.router.Post(context.Background(), "firehose", "/publish", firehosetypes.PublishRequest{
+	err = p.router.Post(context.Background(), "firehose", "/publish", firehosetypes.PublishRequest{
 		Event: &firehosetypes.Event{
 			Name: ev.Name(),
 			Data: ev,
 		},
 	}, nil)
+	if err != nil {
+		logger.Error("Failed to publish: %v", err)
+	}
 
 	addMessageReq := &apptypes.AddMessageRequest{
 		Message: &apptypes.Message{

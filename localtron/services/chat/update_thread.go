@@ -11,6 +11,7 @@ import (
 	"context"
 
 	"github.com/singulatron/singulatron/localtron/datastore"
+	"github.com/singulatron/singulatron/localtron/logger"
 	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
 	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
 )
@@ -27,12 +28,15 @@ func (a *ChatService) updateThread(chatThread *chattypes.Thread) (*chattypes.Thr
 	ev := chattypes.EventThreadUpdate{
 		ThreadId: chatThread.Id,
 	}
-	a.router.Post(context.Background(), "firehose", "/publish", firehosetypes.PublishRequest{
+	err = a.router.Post(context.Background(), "firehose", "/publish", firehosetypes.PublishRequest{
 		Event: &firehosetypes.Event{
 			Name: ev.Name(),
 			Data: ev,
 		},
 	}, nil)
+	if err != nil {
+		logger.Error("Failed to publish: %v", err)
+	}
 
 	return chatThread, nil
 }

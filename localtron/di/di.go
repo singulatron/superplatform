@@ -198,6 +198,9 @@ func BigBang(options *Options) (*http.ServeMux, func() error, error) {
 	router.HandleFunc("/firehose/subscribe", appl(func(w http.ResponseWriter, r *http.Request) {
 		firehoseService.Subscribe(w, r)
 	}))
+	router.HandleFunc("/firehose/publish", appl(func(w http.ResponseWriter, r *http.Request) {
+		firehoseService.Publish(w, r)
+	}))
 
 	router.HandleFunc("/download/do", appl(func(w http.ResponseWriter, r *http.Request) {
 		downloadService.Do(w, r)

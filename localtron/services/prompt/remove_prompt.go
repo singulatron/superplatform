@@ -34,12 +34,15 @@ func (p *PromptService) removePrompt(promptId string) error {
 	ev := prompttypes.EventPromptRemoved{
 		PromptId: promptId,
 	}
-	p.router.Post(context.Background(), "firehose", "/publish", firehosetypes.PublishRequest{
+	err = p.router.Post(context.Background(), "firehose", "/publish", firehosetypes.PublishRequest{
 		Event: &firehosetypes.Event{
 			Name: ev.Name(),
 			Data: ev,
 		},
 	}, nil)
+	if err != nil {
+		logger.Error("Failed to publish: %v", err)
+	}
 
 	return nil
 }

@@ -104,12 +104,15 @@ func (p *PromptService) addPrompt(ctx context.Context, promptReq *prompttypes.Ad
 	ev := prompttypes.EventPromptAdded{
 		PromptId: prompt.Id,
 	}
-	p.router.Post(context.Background(), "firehose", "/publish", firehosetypes.PublishRequest{
+	err = p.router.Post(context.Background(), "firehose", "/publish", firehosetypes.PublishRequest{
 		Event: &firehosetypes.Event{
 			Name: ev.Name(),
 			Data: ev,
 		},
 	}, nil)
+	if err != nil {
+		logger.Error("Failed to publish: %v", err)
+	}
 
 	go p.triggerPromptProcessing()
 
