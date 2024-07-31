@@ -15,6 +15,19 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
+// List godoc
+// @Summary List models
+// @Description Retrieves a list of models after checking authorization
+// @Description Requires "model.view" permission.
+// @Tags model
+// @Accept json
+// @Produce json
+// @Param GetModelsRequest body modeltypes.ListRequest true "Get models request"
+// @Success 200 {object} modeltypes.ListResponse
+// @Failure 400 {string} string "Invalid JSON"
+// @Failure 401 {string} string "Unauthorized"
+// @Failure 500 {string} string "Internal Server Error"
+// @Router /model/list [post]
 func (ms *ModelService) List(
 	w http.ResponseWriter,
 	r *http.Request,
@@ -32,10 +45,10 @@ func (ms *ModelService) List(
 		return
 	}
 
-	req := modeltypes.GetModelsRequest{}
+	req := modeltypes.ListRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
-		http.Error(w, `invalid JSON`, http.StatusBadRequest)
+		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
 		return
 	}
 	defer r.Body.Close()
@@ -46,7 +59,7 @@ func (ms *ModelService) List(
 		return
 	}
 
-	jsonData, _ := json.Marshal(modeltypes.GetModelsResponse{
+	jsonData, _ := json.Marshal(modeltypes.ListResponse{
 		Models: models,
 	})
 	w.Write(jsonData)

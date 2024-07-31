@@ -219,11 +219,9 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 		return err
 	}
 
-	statusReq := modeltypes.StatusRequest{
-		ModelId: currentPrompt.ModelId,
-	}
+	statusReq := modeltypes.StatusRequest{}
 	statusRsp := modeltypes.StatusResponse{}
-	err = p.router.Post(context.Background(), "model", "/status", statusReq, &statusRsp)
+	err = p.router.Post(context.Background(), "model", fmt.Sprintf("/%v/status", currentPrompt.ModelId), statusReq, &statusRsp)
 	if err != nil {
 		return err
 	}

@@ -97,21 +97,23 @@ export class ModelService {
 	}
 
 	async modelStatus(modelId?: string): Promise<ModelStatusResponse> {
-		const request: ModelStatusRequest = {
-			modelId: modelId,
-		};
-		return this.localtron.call('/model/status', request);
+		if (modelId) {
+			return this.localtron.call(`/model/${modelId}/status`, {});
+		}
+
+		return this.localtron.call('/model/default/status', {});
 	}
 
 	async modelStart(modelId?: string): Promise<ModelStartResponse> {
-		const request: ModelStartRequest = {
-			modelId: modelId,
-		};
-		return this.localtron.call('/model/start', request);
+		if (modelId) {
+			return this.localtron.call(`/model/${modelId}/start`, {});
+		}
+
+		return this.localtron.call('/model/default/start', {});
 	}
 
 	async makeDefault(id: string) {
-		this.localtron.call('/model/make-default', { id: id });
+		this.localtron.call(`/model/${id}/make-default`, {});
 	}
 }
 

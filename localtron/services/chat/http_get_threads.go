@@ -47,7 +47,7 @@ func (a *ChatService) GetThreads(
 	req := chattypes.GetThreadsRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
-		http.Error(w, `invalid JSON`, http.StatusBadRequest)
+		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
 		return
 	}
 	defer r.Body.Close()

@@ -15,6 +15,18 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
+// MakeDefault godoc
+// @Summary Make Default
+// @Description Sets a model as the default model - when prompts are sent without a Model ID, this model will be used.
+// @Tags model
+// @Accept json
+// @Produce json
+// @Param MakeDefaultRequest body modeltypes.MakeDefaultRequest true "Make default request"
+// @Success 200 {object} modeltypes.MakeDefaultResponse
+// @Failure 400 {string} string "Invalid JSON"
+// @Failure 401 {string} string "Unauthorized"
+// @Failure 500 {string} string "Internal Server Error"
+// @Router /model/{{id}}/make-default [post]
 func (ms *ModelService) MakeDefault(
 	w http.ResponseWriter,
 	r *http.Request,
@@ -35,7 +47,7 @@ func (ms *ModelService) MakeDefault(
 	req := modeltypes.MakeDefaultRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
-		http.Error(w, `invalid JSON`, http.StatusBadRequest)
+		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
 		return
 	}
 	defer r.Body.Close()

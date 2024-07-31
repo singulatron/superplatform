@@ -53,7 +53,7 @@ func TestAddPrompt(t *testing.T) {
 	require.NoError(t, err)
 	router = router.SetBearerToken(token)
 
-	router.AddMock("model", "/list", modeltypes.GetModelsResponse{
+	router.AddMock("model", "/list", modeltypes.ListResponse{
 		Models: []*modeltypes.Model{{
 			Id: "huggingface/TheBloke/mistral-7b-instruct-v0.2.Q3_K_S.gguf",
 			Assets: map[string]string{
@@ -73,7 +73,7 @@ func TestAddPrompt(t *testing.T) {
 			Description:    "hi",
 			PromptTemplate: "[INST] {prompt} [/INST]",
 		}}})
-	router.AddMock("model", "/status", &modeltypes.StatusResponse{
+	router.AddMock("model", "/default/status", &modeltypes.StatusResponse{
 		Status: &modeltypes.ModelStatus{
 			AssetsReady: true,
 			Running:     true,
@@ -122,9 +122,9 @@ func TestAddPrompt(t *testing.T) {
 	err = router.Post(context.Background(), "config", "/get", creq, &crsp)
 	require.NoError(t, err)
 
-	mreq := modeltypes.GetModelsRequest{}
-	mrsp := modeltypes.GetModelsResponse{}
-	err = router.Post(context.Background(), "model", "/list", mreq, &mrsp)
+	mreq := modeltypes.ListRequest{}
+	mrsp := modeltypes.ListResponse{}
+	err = router.Post(context.Background(), "model", "", mreq, &mrsp)
 	require.NoError(t, err)
 
 	var model *modeltypes.Model

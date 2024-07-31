@@ -70,6 +70,12 @@ const sidebar: SidebarsConfig = {
           label: "Get",
           className: "api-method post",
         },
+        {
+          type: "doc",
+          id: "singulatron/save",
+          label: "Save",
+          className: "api-method post",
+        },
       ],
     },
     {
@@ -80,6 +86,12 @@ const sidebar: SidebarsConfig = {
           type: "doc",
           id: "singulatron/do",
           label: "Do",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "singulatron/get-download",
+          label: "Get Download",
           className: "api-method post",
         },
         {
@@ -141,6 +153,54 @@ const sidebar: SidebarsConfig = {
           id: "singulatron/upsert-a-generic-object",
           label: "Upsert a Generic Object",
           className: "api-method post",
+        },
+      ],
+    },
+    {
+      type: "category",
+      label: "model",
+      items: [
+        {
+          type: "doc",
+          id: "singulatron/make-default",
+          label: "Make Default",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "singulatron/start-a-model",
+          label: "Start a Model",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "singulatron/start-the-default-model",
+          label: "Start the Default Model",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "singulatron/get-a-model",
+          label: "Get a Model",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "singulatron/list-models",
+          label: "List models",
+          className: "api-method post",
+        },
+      ],
+    },
+    {
+      type: "category",
+      label: "models",
+      items: [
+        {
+          type: "doc",
+          id: "singulatron/get-model-status",
+          label: "Get Model Status",
+          className: "api-method get",
         },
       ],
     },

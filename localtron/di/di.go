@@ -7,6 +7,7 @@ import (
 	"path"
 	"sync"
 
+	"github.com/gorilla/mux"
 	"github.com/singulatron/singulatron/localtron/clients/llm"
 	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/datastore/localstore"
@@ -36,7 +37,7 @@ type Options struct {
 	HomeDir          string
 }
 
-func BigBang(options *Options) (*http.ServeMux, func() error, error) {
+func BigBang(options *Options) (*mux.Router, func() error, error) {
 	var homeDir string
 	var err error
 	if options.Test {
@@ -193,7 +194,11 @@ func BigBang(options *Options) (*http.ServeMux, func() error, error) {
 	}
 	appl := applicator(mws)
 
-	router := http.NewServeMux()
+	router := mux.NewRouter().SkipClean(true).UseEncodedPath()
+
+	router.NotFoundHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		http.Error(w, "404 page not found", http.StatusNotFound)
+	})
 
 	router.HandleFunc("/firehose/subscribe", appl(func(w http.ResponseWriter, r *http.Request) {
 		firehoseService.Subscribe(w, r)
@@ -230,19 +235,25 @@ func BigBang(options *Options) (*http.ServeMux, func() error, error) {
 		dockerService.HashIsRunning(w, r)
 	}))
 
-	router.HandleFunc("/model/status", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/model/default/status", appl(func(w http.ResponseWriter, r *http.Request) {
+		modelService.DefaultStatus(w, r)
+	}))
+	router.HandleFunc("/model/{id}/status", appl(func(w http.ResponseWriter, r *http.Request) {
 		modelService.Status(w, r)
 	}))
-	router.HandleFunc("/model/list", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/model", appl(func(w http.ResponseWriter, r *http.Request) {
 		modelService.List(w, r)
 	}))
-	router.HandleFunc("/model/get", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/model/{id}", appl(func(w http.ResponseWriter, r *http.Request) {
 		modelService.Get(w, r)
 	}))
-	router.HandleFunc("/model/start", appl(func(w http.ResponseWriter, r *http.Request) {
-		modelService.Start_(w, r)
+	router.HandleFunc("/model/default/start", appl(func(w http.ResponseWriter, r *http.Request) {
+		modelService.StartDefault(w, r)
 	}))
-	router.HandleFunc("/model/make-default", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/model/{id}/start", appl(func(w http.ResponseWriter, r *http.Request) {
+		modelService.StartSpecific(w, r)
+	}))
+	router.HandleFunc("/model/{id}/make-default", appl(func(w http.ResponseWriter, r *http.Request) {
 		modelService.MakeDefault(w, r)
 	}))
 

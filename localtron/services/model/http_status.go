@@ -10,11 +10,26 @@ package modelservice
 import (
 	"encoding/json"
 	"net/http"
+	"net/url"
 
+	"github.com/gorilla/mux"
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
+// Status godoc
+// @Summary Get Model Status
+// @Description Retrieves the status of a model by ID.
+// @Description
+// @Description Requires the `model.view` permission.
+// @Tags model
+// @Accept json
+// @Produce json
+// @Param id path string true "Model ID" // Path parameter for the model ID
+// @Success 200 {object} modeltypes.StatusResponse "Model status retrieved successfully"
+// @Failure 401 {string} string "Unauthorized"
+// @Failure 500 {string} string "Internal Server Error"
+// @Router /model/{id}/status [get]
 func (ms *ModelService) Status(
 	w http.ResponseWriter,
 	r *http.Request,
@@ -32,15 +47,14 @@ func (ms *ModelService) Status(
 		return
 	}
 
-	req := modeltypes.StatusRequest{}
-	err = json.NewDecoder(r.Body).Decode(&req)
+	modelId := mux.Vars(r)["id"]
+	unesc, err := url.PathUnescape(modelId)
 	if err != nil {
-		http.Error(w, `invalid JSON`, http.StatusBadRequest)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	defer r.Body.Close()
 
-	status, err := ms.status(req.ModelId)
+	status, err := ms.status(unesc)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

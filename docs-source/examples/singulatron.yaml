@@ -68,6 +68,8 @@ definitions:
     type: object
   chattypes.GetThreadResponse:
     properties:
+      exists:
+        type: boolean
       thread:
         $ref: '#/definitions/chattypes.Thread'
     type: object
@@ -143,6 +145,8 @@ definitions:
     properties:
       app:
         $ref: '#/definitions/configtypes.AppServiceConfig'
+      directory:
+        type: string
       download:
         $ref: '#/definitions/configtypes.DownloadServiceConfig'
       isRuntimeInstalled:
@@ -154,20 +158,29 @@ definitions:
       model:
         $ref: '#/definitions/configtypes.ModelServiceConfig'
     type: object
-  configtypes.ConfigGetResponse:
-    properties:
-      config:
-        $ref: '#/definitions/configtypes.Config'
-    type: object
   configtypes.DownloadServiceConfig:
     properties:
       downloadFolder:
         type: string
     type: object
+  configtypes.GetConfigRequest:
+    type: object
+  configtypes.GetConfigResponse:
+    properties:
+      config:
+        $ref: '#/definitions/configtypes.Config'
+    type: object
   configtypes.ModelServiceConfig:
     properties:
       currentModelId:
         type: string
+    type: object
+  configtypes.SaveConfigRequest:
+    properties:
+      config:
+        $ref: '#/definitions/configtypes.Config'
+    type: object
+  configtypes.SaveConfigResponse:
     type: object
   datastore.AllCondition:
     type: object
@@ -315,6 +328,13 @@ definitions:
           $ref: '#/definitions/downloadtypes.DownloadDetails'
         type: array
     type: object
+  downloadtypes.GetDownloadResponse:
+    properties:
+      download:
+        $ref: '#/definitions/downloadtypes.DownloadDetails'
+      exists:
+        type: boolean
+    type: object
   generictypes.CreateRequest:
     properties:
       object:
@@ -425,6 +445,141 @@ definitions:
     properties:
       object:
         $ref: '#/definitions/generictypes.GenericObject'
+    type: object
+  modeltypes.Architectures:
+    properties:
+      cuda:
+        $ref: '#/definitions/modeltypes.Container'
+      default:
+        $ref: '#/definitions/modeltypes.Container'
+    type: object
+  modeltypes.Container:
+    properties:
+      envars:
+        description: "Envars passed to the container. eg.\n\t'DEVICES=all'"
+        items:
+          type: string
+        type: array
+      image:
+        type: string
+      persistentPaths:
+        description: Paths in the container to persist.
+        items:
+          type: string
+        type: array
+      port:
+        description: Port is the internal port of the Container
+        type: integer
+    type: object
+  modeltypes.GetModelRequest:
+    properties:
+      id:
+        type: string
+    type: object
+  modeltypes.GetModelResponse:
+    properties:
+      exists:
+        type: boolean
+      model:
+        $ref: '#/definitions/modeltypes.Model'
+      platform:
+        $ref: '#/definitions/modeltypes.Platform'
+    type: object
+  modeltypes.ListRequest:
+    type: object
+  modeltypes.ListResponse:
+    properties:
+      models:
+        items:
+          $ref: '#/definitions/modeltypes.Model'
+        type: array
+    type: object
+  modeltypes.MakeDefaultRequest:
+    properties:
+      id:
+        type: string
+    type: object
+  modeltypes.MakeDefaultResponse:
+    type: object
+  modeltypes.Model:
+    properties:
+      assets:
+        additionalProperties:
+          type: string
+        type: object
+      bits:
+        type: integer
+      description:
+        type: string
+      extension:
+        type: string
+      flavour:
+        type: string
+      full_name:
+        type: string
+      id:
+        type: string
+      max_bits:
+        type: integer
+      max_ram:
+        type: number
+      mirrors:
+        items:
+          type: string
+        type: array
+      name:
+        type: string
+      parameters:
+        type: string
+      platformId:
+        type: string
+      prompt_template:
+        type: string
+      quality:
+        type: string
+      quant_comment:
+        type: string
+      size:
+        type: number
+      tags:
+        items:
+          type: string
+        type: array
+      uncensored:
+        type: boolean
+      version:
+        type: string
+    type: object
+  modeltypes.ModelStatus:
+    properties:
+      address:
+        type: string
+      assetsReady:
+        type: boolean
+      running:
+        description: "Running triggers onModelLaunch on the frontend.\n\tRunning is
+          true when the model is both running and answering\n\t- fully loaded."
+        type: boolean
+    type: object
+  modeltypes.Platform:
+    properties:
+      architectures:
+        $ref: '#/definitions/modeltypes.Architectures'
+      id:
+        type: string
+      name:
+        type: string
+      version:
+        type: integer
+    type: object
+  modeltypes.StartRequest:
+    type: object
+  modeltypes.StartResponse:
+    type: object
+  modeltypes.StatusResponse:
+    properties:
+      status:
+        $ref: '#/definitions/modeltypes.ModelStatus'
     type: object
   prompttypes.AddPromptRequest:
     properties:
@@ -576,6 +731,8 @@ definitions:
     properties:
       promptId:
         type: string
+    type: object
+  prompttypes.RemovePromptResponse:
     type: object
 externalDocs:
   description: Singulatron API
@@ -875,13 +1032,20 @@ paths:
       consumes:
       - application/json
       description: Fetch the current configuration from the server
+      parameters:
+      - description: Get Config Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/configtypes.GetConfigRequest'
       produces:
       - application/json
       responses:
         "200":
           description: Current configuration retrieved successfully
           schema:
-            $ref: '#/definitions/configtypes.ConfigGetResponse'
+            $ref: '#/definitions/configtypes.GetConfigResponse'
         "401":
           description: Unauthorized
           schema:
@@ -891,6 +1055,36 @@ paths:
           schema:
             type: string
       summary: Get
+      tags:
+      - config
+  /config/save:
+    post:
+      consumes:
+      - application/json
+      description: Save the provided configuration to the server
+      parameters:
+      - description: Save Config Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/configtypes.SaveConfigRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Save Config Response
+          schema:
+            $ref: '#/definitions/configtypes.SaveConfigResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Save
       tags:
       - config
   /download/do:
@@ -926,6 +1120,29 @@ paths:
           schema:
             type: string
       summary: Do
+      tags:
+      - download
+  /download/get:
+    post:
+      consumes:
+      - application/json
+      description: Get a download by URL.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/downloadtypes.GetDownloadResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get Download
       tags:
       - download
   /download/list:
@@ -1195,6 +1412,221 @@ paths:
       summary: Upsert a Generic Object
       tags:
       - generic
+  /model/{{id}}/make-default:
+    post:
+      consumes:
+      - application/json
+      description: Sets a model as the default model - when prompts are sent without
+        a Model ID, this model will be used.
+      parameters:
+      - description: Make default request
+        in: body
+        name: MakeDefaultRequest
+        required: true
+        schema:
+          $ref: '#/definitions/modeltypes.MakeDefaultRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/modeltypes.MakeDefaultResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Make Default
+      tags:
+      - model
+  /model/{id}/start:
+    post:
+      consumes:
+      - application/json
+      description: Starts a model by ID
+      parameters:
+      - description: Model ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Model start request
+        in: body
+        name: StartRequest
+        schema:
+          $ref: '#/definitions/modeltypes.StartRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/modeltypes.StartResponse'
+        "400":
+          description: invalid JSON
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Start a Model
+      tags:
+      - model
+  /model/default/start:
+    post:
+      consumes:
+      - application/json
+      description: |-
+        Starts The Default Model.
+
+        Requires the `model.create` permission.
+      parameters:
+      - description: Model start request
+        in: body
+        name: StartRequest
+        required: true
+        schema:
+          $ref: '#/definitions/modeltypes.StartRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/modeltypes.StartResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Start the Default Model
+      tags:
+      - model
+  /model/get:
+    post:
+      consumes:
+      - application/json
+      description: |-
+        Retrieves details of a model by its ID.
+
+        Requires `model.view“ permission.
+      parameters:
+      - description: Get Model Request
+        in: body
+        name: GetModelRequest
+        required: true
+        schema:
+          $ref: '#/definitions/modeltypes.GetModelRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/modeltypes.GetModelResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get a Model
+      tags:
+      - model
+  /model/list:
+    post:
+      consumes:
+      - application/json
+      description: |-
+        Retrieves a list of models after checking authorization
+        Requires "model.view" permission.
+      parameters:
+      - description: Get models request
+        in: body
+        name: GetModelsRequest
+        required: true
+        schema:
+          $ref: '#/definitions/modeltypes.ListRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/modeltypes.ListResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: List models
+      tags:
+      - model
+  /models/{id}/status:
+    get:
+      consumes:
+      - application/json
+      description: |-
+        Retrieves the status of a model by ID.
+
+        Requires the `model.view` permission.
+      parameters:
+      - description: Model ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Model status retrieved successfully
+          schema:
+            $ref: '#/definitions/modeltypes.StatusResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get Model Status
+      tags:
+      - models
   /prompt/add:
     post:
       consumes:
@@ -1282,8 +1714,7 @@ paths:
         "200":
           description: '{}'
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/prompttypes.RemovePromptResponse'
         "400":
           description: Invalid JSON
           schema:

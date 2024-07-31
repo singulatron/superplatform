@@ -456,11 +456,68 @@ const docTemplate = `{
                     "config"
                 ],
                 "summary": "Get",
+                "parameters": [
+                    {
+                        "description": "Get Config Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/configtypes.GetConfigRequest"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Current configuration retrieved successfully",
                         "schema": {
-                            "$ref": "#/definitions/configtypes.ConfigGetResponse"
+                            "$ref": "#/definitions/configtypes.GetConfigResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/config/save": {
+            "post": {
+                "description": "Save the provided configuration to the server",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "config"
+                ],
+                "summary": "Save",
+                "parameters": [
+                    {
+                        "description": "Save Config Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/configtypes.SaveConfigRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Save Config Response",
+                        "schema": {
+                            "$ref": "#/definitions/configtypes.SaveConfigResponse"
                         }
                     },
                     "401": {
@@ -514,6 +571,41 @@ const docTemplate = `{
                         "description": "Invalid JSON",
                         "schema": {
                             "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/download/get": {
+            "post": {
+                "description": "Get a download by URL.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "download"
+                ],
+                "summary": "Get Download",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/downloadtypes.GetDownloadResponse"
                         }
                     },
                     "401": {
@@ -929,6 +1021,316 @@ const docTemplate = `{
                 }
             }
         },
+        "/model/default/start": {
+            "post": {
+                "description": "Starts The Default Model.\n\nRequires the ` + "`" + `model.create` + "`" + ` permission.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "model"
+                ],
+                "summary": "Start the Default Model",
+                "parameters": [
+                    {
+                        "description": "Model start request",
+                        "name": "StartRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.StartRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.StartResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/model/get": {
+            "post": {
+                "description": "Retrieves details of a model by its ID.\n\nRequires ` + "`" + `model.view“ permission.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "model"
+                ],
+                "summary": "Get a Model",
+                "parameters": [
+                    {
+                        "description": "Get Model Request",
+                        "name": "GetModelRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.GetModelRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.GetModelResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/model/list": {
+            "post": {
+                "description": "Retrieves a list of models after checking authorization\nRequires \"model.view\" permission.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "model"
+                ],
+                "summary": "List models",
+                "parameters": [
+                    {
+                        "description": "Get models request",
+                        "name": "GetModelsRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.ListRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.ListResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/model/{id}/start": {
+            "post": {
+                "description": "Starts a model by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "model"
+                ],
+                "summary": "Start a Model",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Model ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Model start request",
+                        "name": "StartRequest",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.StartRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.StartResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "invalid JSON",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/model/{{id}}/make-default": {
+            "post": {
+                "description": "Sets a model as the default model - when prompts are sent without a Model ID, this model will be used.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "model"
+                ],
+                "summary": "Make Default",
+                "parameters": [
+                    {
+                        "description": "Make default request",
+                        "name": "MakeDefaultRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.MakeDefaultRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.MakeDefaultResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/models/{id}/status": {
+            "get": {
+                "description": "Retrieves the status of a model by ID.\n\nRequires the ` + "`" + `model.view` + "`" + ` permission.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "models"
+                ],
+                "summary": "Get Model Status",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Model ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Model status retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.StatusResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/prompt/add": {
             "post": {
                 "description": "Adds a new prompt to the prompt queue and either waits for the response (if ` + "`" + `sync` + "`" + ` is set to true), or returns immediately.",
@@ -1061,8 +1463,7 @@ const docTemplate = `{
                     "200": {
                         "description": "{}",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": true
+                            "$ref": "#/definitions/prompttypes.RemovePromptResponse"
                         }
                     },
                     "400": {
@@ -1230,6 +1631,9 @@ const docTemplate = `{
         "chattypes.GetThreadResponse": {
             "type": "object",
             "properties": {
+                "exists": {
+                    "type": "boolean"
+                },
                 "thread": {
                     "$ref": "#/definitions/chattypes.Thread"
                 }
@@ -1336,6 +1740,9 @@ const docTemplate = `{
                 "app": {
                     "$ref": "#/definitions/configtypes.AppServiceConfig"
                 },
+                "directory": {
+                    "type": "string"
+                },
                 "download": {
                     "$ref": "#/definitions/configtypes.DownloadServiceConfig"
                 },
@@ -1348,19 +1755,22 @@ const docTemplate = `{
                 }
             }
         },
-        "configtypes.ConfigGetResponse": {
-            "type": "object",
-            "properties": {
-                "config": {
-                    "$ref": "#/definitions/configtypes.Config"
-                }
-            }
-        },
         "configtypes.DownloadServiceConfig": {
             "type": "object",
             "properties": {
                 "downloadFolder": {
                     "type": "string"
+                }
+            }
+        },
+        "configtypes.GetConfigRequest": {
+            "type": "object"
+        },
+        "configtypes.GetConfigResponse": {
+            "type": "object",
+            "properties": {
+                "config": {
+                    "$ref": "#/definitions/configtypes.Config"
                 }
             }
         },
@@ -1371,6 +1781,17 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        },
+        "configtypes.SaveConfigRequest": {
+            "type": "object",
+            "properties": {
+                "config": {
+                    "$ref": "#/definitions/configtypes.Config"
+                }
+            }
+        },
+        "configtypes.SaveConfigResponse": {
+            "type": "object"
         },
         "datastore.AllCondition": {
             "type": "object"
@@ -1586,6 +2007,17 @@ const docTemplate = `{
                 }
             }
         },
+        "downloadtypes.GetDownloadResponse": {
+            "type": "object",
+            "properties": {
+                "download": {
+                    "$ref": "#/definitions/downloadtypes.DownloadDetails"
+                },
+                "exists": {
+                    "type": "boolean"
+                }
+            }
+        },
         "generictypes.CreateRequest": {
             "type": "object",
             "properties": {
@@ -1743,6 +2175,210 @@ const docTemplate = `{
             "properties": {
                 "object": {
                     "$ref": "#/definitions/generictypes.GenericObject"
+                }
+            }
+        },
+        "modeltypes.Architectures": {
+            "type": "object",
+            "properties": {
+                "cuda": {
+                    "$ref": "#/definitions/modeltypes.Container"
+                },
+                "default": {
+                    "$ref": "#/definitions/modeltypes.Container"
+                }
+            }
+        },
+        "modeltypes.Container": {
+            "type": "object",
+            "properties": {
+                "envars": {
+                    "description": "Envars passed to the container. eg.\n\t'DEVICES=all'",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "image": {
+                    "type": "string"
+                },
+                "persistentPaths": {
+                    "description": "Paths in the container to persist.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "port": {
+                    "description": "Port is the internal port of the Container",
+                    "type": "integer"
+                }
+            }
+        },
+        "modeltypes.GetModelRequest": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                }
+            }
+        },
+        "modeltypes.GetModelResponse": {
+            "type": "object",
+            "properties": {
+                "exists": {
+                    "type": "boolean"
+                },
+                "model": {
+                    "$ref": "#/definitions/modeltypes.Model"
+                },
+                "platform": {
+                    "$ref": "#/definitions/modeltypes.Platform"
+                }
+            }
+        },
+        "modeltypes.ListRequest": {
+            "type": "object"
+        },
+        "modeltypes.ListResponse": {
+            "type": "object",
+            "properties": {
+                "models": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/modeltypes.Model"
+                    }
+                }
+            }
+        },
+        "modeltypes.MakeDefaultRequest": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                }
+            }
+        },
+        "modeltypes.MakeDefaultResponse": {
+            "type": "object"
+        },
+        "modeltypes.Model": {
+            "type": "object",
+            "properties": {
+                "assets": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "bits": {
+                    "type": "integer"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "extension": {
+                    "type": "string"
+                },
+                "flavour": {
+                    "type": "string"
+                },
+                "full_name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "max_bits": {
+                    "type": "integer"
+                },
+                "max_ram": {
+                    "type": "number"
+                },
+                "mirrors": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                },
+                "parameters": {
+                    "type": "string"
+                },
+                "platformId": {
+                    "type": "string"
+                },
+                "prompt_template": {
+                    "type": "string"
+                },
+                "quality": {
+                    "type": "string"
+                },
+                "quant_comment": {
+                    "type": "string"
+                },
+                "size": {
+                    "type": "number"
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "uncensored": {
+                    "type": "boolean"
+                },
+                "version": {
+                    "type": "string"
+                }
+            }
+        },
+        "modeltypes.ModelStatus": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "assetsReady": {
+                    "type": "boolean"
+                },
+                "running": {
+                    "description": "Running triggers onModelLaunch on the frontend.\n\tRunning is true when the model is both running and answering\n\t- fully loaded.",
+                    "type": "boolean"
+                }
+            }
+        },
+        "modeltypes.Platform": {
+            "type": "object",
+            "properties": {
+                "architectures": {
+                    "$ref": "#/definitions/modeltypes.Architectures"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "integer"
+                }
+            }
+        },
+        "modeltypes.StartRequest": {
+            "type": "object"
+        },
+        "modeltypes.StartResponse": {
+            "type": "object"
+        },
+        "modeltypes.StatusResponse": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "$ref": "#/definitions/modeltypes.ModelStatus"
                 }
             }
         },
@@ -1926,6 +2562,9 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        },
+        "prompttypes.RemovePromptResponse": {
+            "type": "object"
         }
     },
     "securityDefinitions": {

@@ -22,7 +22,7 @@ import (
 // @Accept json
 // @Produce json
 // @Param request body prompttypes.RemovePromptRequest true "Remove Prompt Request"
-// @Success 200 {object} mprompttypes.RemovePromptResponse "{}"
+// @Success 200 {object} prompttypes.RemovePromptResponse "{}"
 // @Failure 400 {object} prompttypes.ErrorResponse "Invalid JSON"
 // @Failure 401 {object} prompttypes.ErrorResponse "Unauthorized"
 // @Failure 500 {object} prompttypes.ErrorResponse "Internal Server Error"
@@ -47,7 +47,7 @@ func (p *PromptService) RemovePrompt(
 	req := &prompttypes.RemovePromptRequest{}
 	err = json.NewDecoder(r.Body).Decode(req)
 	if err != nil {
-		http.Error(w, `invalid JSON`, http.StatusBadRequest)
+		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
 		return
 	}
 	defer r.Body.Close()

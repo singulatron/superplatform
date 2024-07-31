@@ -110,10 +110,15 @@ type StatusResponse struct {
 }
 
 type StartRequest struct {
-	ModelId string `json:"status,omitempty"`
 }
 
 type StartResponse struct {
+}
+
+type StartDefaultRequest struct {
+}
+
+type StartDefaultResponse struct {
 }
 
 type MakeDefaultRequest struct {
@@ -123,9 +128,9 @@ type MakeDefaultRequest struct {
 type MakeDefaultResponse struct {
 }
 
-type GetModelsRequest struct{}
+type ListRequest struct{}
 
-type GetModelsResponse struct {
+type ListResponse struct {
 	Models []*Model `json:"models,omitempty"`
 }
 

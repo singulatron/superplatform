@@ -47,7 +47,7 @@ func (p *PromptService) Add(
 	req := &prompttypes.AddPromptRequest{}
 	err = json.NewDecoder(r.Body).Decode(req)
 	if err != nil {
-		http.Error(w, `invalid JSON`, http.StatusBadRequest)
+		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
 		return
 	}
 	defer r.Body.Close()

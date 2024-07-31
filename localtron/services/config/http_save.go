@@ -15,16 +15,17 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-// Get retrieves the current configuration
-// @Summary Get
-// @Description Fetch the current configuration from the server
+// Save saves the configuration
+// @Summary Save
+// @Description Save the provided configuration to the server
 // @Tags config
 // @Accept json
 // @Produce json
-// @Success 200 {object} configtypes.ConfigGetResponse "Current configuration retrieved successfully"
+// @Param request body configtypes.SaveConfigRequest true "Save Config Request"
+// @Success 200 {object} configtypes.SaveConfigResponse "Save Config Response"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
-// @Router /config/get [post]
+// @Router /config/save [post]
 func (cs *ConfigService) Save(
 	w http.ResponseWriter,
 	r *http.Request,
@@ -46,7 +47,7 @@ func (cs *ConfigService) Save(
 	req := &configtypes.SaveConfigRequest{}
 	err = json.NewDecoder(r.Body).Decode(req)
 	if err != nil {
-		http.Error(w, `invalid JSON`, http.StatusBadRequest)
+		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
 		return
 	}
 	defer r.Body.Close()

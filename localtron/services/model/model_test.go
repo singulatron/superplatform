@@ -2,7 +2,9 @@ package modelservice_test
 
 import (
 	"context"
+	"fmt"
 	"net/http/httptest"
+	"net/url"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -37,20 +39,18 @@ func TestModel(t *testing.T) {
 	router = router.SetBearerToken(token)
 
 	t.Run("get models", func(t *testing.T) {
-		getModelsReq := modeltypes.GetModelsRequest{}
-		getModelsRsp := modeltypes.GetModelsResponse{}
-		err = router.Post(context.Background(), "model", "/list", getModelsReq, &getModelsRsp)
+		getModelsReq := modeltypes.ListRequest{}
+		getModelsRsp := modeltypes.ListResponse{}
+		err = router.Post(context.Background(), "model", "", getModelsReq, &getModelsRsp)
 		require.NoError(t, err)
 
 		require.Equal(t, 1, len(getModelsRsp.Models[0].Assets))
 	})
 
 	t.Run("model status is not running, not ready", func(t *testing.T) {
-		statusReq := modeltypes.StatusRequest{
-			ModelId: "huggingface/TheBloke/mistral-7b-instruct-v0.2.Q2_K.gguf",
-		}
+		statusReq := modeltypes.StatusRequest{}
 		statusRsp := modeltypes.StatusResponse{}
-		err = router.Post(context.Background(), "model", "/status", statusReq, &statusRsp)
+		err = router.Post(context.Background(), "model", fmt.Sprintf("/%v/status", url.PathEscape("huggingface/TheBloke/mistral-7b-instruct-v0.2.Q2_K.gguf")), statusReq, &statusRsp)
 		require.NoError(t, err)
 
 		require.Equal(t, false, statusRsp.Status.Running)
@@ -65,11 +65,9 @@ func TestModel(t *testing.T) {
 		require.NoError(t, err)
 		require.Equal(t, configservice.DefaultModelId, getConfigRsp.Config.Model.CurrentModelId)
 
-		makeDefReq := modeltypes.MakeDefaultRequest{
-			Id: "huggingface/TheBloke/codellama-7b.Q3_K_M.gguf",
-		}
+		makeDefReq := modeltypes.MakeDefaultRequest{}
 		makeDefRsp := modeltypes.MakeDefaultResponse{}
-		err = router.Post(context.Background(), "model", "/make-default", makeDefReq, &makeDefRsp)
+		err = router.Post(context.Background(), "model", fmt.Sprintf("/%v/make-default", url.PathEscape("huggingface/TheBloke/codellama-7b.Q3_K_M.gguf")), makeDefReq, &makeDefRsp)
 		// errors because it is not downloaded yet
 		require.Error(t, err)
 
