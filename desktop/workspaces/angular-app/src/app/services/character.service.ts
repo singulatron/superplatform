@@ -51,7 +51,7 @@ export class CharacterService {
 	}
 
 	async upsertCharacter(character: Character) {
-		const exists = await this.getCharacter(character.id);
+		const exists = await this.getCharacter(character.id!);
 		return exists
 			? await this.updateCharacter(character)
 			: await this.createNewCharacter(character);
@@ -72,10 +72,10 @@ export class CharacterService {
 	async deleteCharacter(character: Character) {
 		if (character.id === this.selectedCharacter?.id) {
 			this.selectedCharacter = {} as any;
-			await this.deleteCharacterSelection(character.id);
+			await this.deleteCharacterSelection(character.id!);
 		}
 		await this.genericService.delete(CHARACTERS_TABLE_NAME, [
-			idCondition(character.id),
+			idCondition(character.id!),
 		]);
 	}
 
@@ -84,7 +84,7 @@ export class CharacterService {
 		character.updatedAt = now;
 		this.genericService.update(
 			CHARACTERS_TABLE_NAME,
-			[idCondition(character.id)],
+			[idCondition(character.id!)],
 			{
 				...character,
 			}
@@ -118,7 +118,7 @@ export class CharacterService {
 
 	async selectCharacter(character: Character): Promise<void> {
 		this.selectedCharacter = character;
-		this.upsertCharacterSelection(character.id);
+		this.upsertCharacterSelection(character.id!);
 	}
 
 	async upsertCharacterSelection(selectedCharacterId: string): Promise<void> {
@@ -177,6 +177,7 @@ export function initCharacter(): Character {
 			private: false,
 		},
 		id: '',
+		table: '',
 		createdAt: '',
 		updatedAt: '',
 	};
@@ -188,6 +189,7 @@ export function initCharacterSelection(): SelectedCharacter {
 			selectedCharacterId: '',
 		},
 		id: '',
+		table: '',
 		createdAt: '',
 		updatedAt: '',
 	};

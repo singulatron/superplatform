@@ -46,8 +46,8 @@ export class GenericService {
 	}
 
 	async create(table: string, object: GenericObject): Promise<void> {
+		object.table = table;
 		const request: CreateRequest = {
-			table: table,
 			object: object,
 		};
 
@@ -57,15 +57,17 @@ export class GenericService {
 	async find(table: string, conditions: Condition[]): Promise<FindResponse> {
 		const request: FindRequest = {
 			table: table,
-			conditions: conditions,
+			query: {
+				conditions: conditions,
+			},
 		};
 
 		return this.localtron.call('/generic/find', request);
 	}
 
 	async upsert(table: string, object: GenericObject): Promise<void> {
+		object.table = table;
 		const request: UpsertRequest = {
-			table: table,
 			object: object,
 		};
 

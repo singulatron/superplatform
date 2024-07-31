@@ -223,6 +223,9 @@ func BigBang(options *Options) (*http.ServeMux, func() error, error) {
 	router.HandleFunc("/docker/launch-container", appl(func(w http.ResponseWriter, r *http.Request) {
 		dockerService.LaunchContainer(w, r)
 	}))
+	router.HandleFunc("/docker/hash-is-running", appl(func(w http.ResponseWriter, r *http.Request) {
+		dockerService.HashIsRunning(w, r)
+	}))
 
 	router.HandleFunc("/model/status", appl(func(w http.ResponseWriter, r *http.Request) {
 		modelService.Status(w, r)

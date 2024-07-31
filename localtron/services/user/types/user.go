@@ -138,7 +138,7 @@ func RegisterService(serviceEmail, serviceName string, router *router.Router, st
 		return "", err
 	}
 
-	email := serviceName
+	email := serviceEmail
 	pw := ""
 
 	if len(res) > 0 {
