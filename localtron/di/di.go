@@ -249,6 +249,9 @@ func BigBang(options *Options) (*http.ServeMux, func() error, error) {
 	router.HandleFunc("/config/get", appl(func(w http.ResponseWriter, r *http.Request) {
 		configService.Get(w, r)
 	}))
+	router.HandleFunc("/config/save", appl(func(w http.ResponseWriter, r *http.Request) {
+		configService.Save(w, r)
+	}))
 
 	router.HandleFunc("/chat/message/add", appl(func(w http.ResponseWriter, r *http.Request) {
 		chatService.AddMessage(w, r)
