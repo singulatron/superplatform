@@ -25,7 +25,6 @@ import (
 const maxThreadTitle = 100
 
 func (p *PromptService) addPrompt(ctx context.Context, promptReq *prompttypes.AddPromptRequest, userId string) (*prompttypes.AddPromptResponse, error) {
-	// @todo validate userId
 
 	prompt := &prompttypes.Prompt{
 		PromptCreateFields: promptReq.PromptCreateFields,
@@ -35,6 +34,7 @@ func (p *PromptService) addPrompt(ctx context.Context, promptReq *prompttypes.Ad
 	now := TimeNow()
 	prompt.CreatedAt = now
 	prompt.UpdatedAt = now
+	prompt.UserId = userId
 
 	if prompt.Id == "" {
 		prompt.Id = uuid.New().String()
