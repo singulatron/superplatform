@@ -19,7 +19,7 @@ func (s *UserService) UpsertPermission(
 	r *http.Request,
 ) {
 	// @todo add proper permission here
-	_, err := s.isAuthorized(usertypes.PermissionPermissionCreate.Id, r)
+	_, err := s.isAuthorized(r, usertypes.PermissionPermissionCreate.Id, nil)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return

@@ -21,7 +21,8 @@ func (dm *DockerService) LaunchContainer(
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
 	err := dm.router.AsRequestMaker(r).Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
-		PermissionId: dockertypes.PermissionDockerCreate.Id,
+		PermissionId:  dockertypes.PermissionDockerCreate.Id,
+		EmailsGranted: []string{"model"},
 	}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)

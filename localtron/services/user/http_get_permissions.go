@@ -17,7 +17,7 @@ import (
 func (s *UserService) GetPermissions(
 	w http.ResponseWriter,
 	r *http.Request) {
-	_, err := s.isAuthorized(usertypes.PermissionRoleView.Id, r)
+	_, err := s.isAuthorized(r, usertypes.PermissionRoleView.Id, nil)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return

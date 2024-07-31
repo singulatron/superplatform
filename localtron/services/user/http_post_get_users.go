@@ -19,7 +19,7 @@ func (s *UserService) GetUsers(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	_, err := s.isAuthorized(usertypes.PermissionUserView.Id, r)
+	_, err := s.isAuthorized(r, usertypes.PermissionUserView.Id, nil)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return

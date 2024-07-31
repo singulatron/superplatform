@@ -15,7 +15,7 @@ import (
 )
 
 func (s *UserService) DeleteRole(w http.ResponseWriter, r *http.Request) {
-	_, err := s.isAuthorized(usertypes.PermissionRoleDelete.Id, r)
+	_, err := s.isAuthorized(r, usertypes.PermissionRoleDelete.Id, nil)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return

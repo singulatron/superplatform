@@ -39,7 +39,7 @@ func (s *UserService) IsAuthorized(
 		return
 	}
 
-	user, err := s.isAuthorized(req.PermissionId, r)
+	user, err := s.isAuthorized(r, req.PermissionId, req.EmailsGranted)
 	if err != nil {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
@@ -53,11 +53,21 @@ func (s *UserService) IsAuthorized(
 	w.Write(bs)
 }
 
-func (s *UserService) isAuthorized(permissionId string,
-	r *http.Request) (*usertypes.User, error) {
+func (s *UserService) isAuthorized(r *http.Request, permissionId string,
+	emailsGranted []string) (*usertypes.User, error) {
 	user, err := s.getUserFromRequest(r)
 	if err != nil {
 		return nil, err
+	}
+
+	emailGrant := false
+	for _, v := range emailsGranted {
+		if user.Email == v {
+			emailGrant = true
+		}
+	}
+	if emailGrant {
+		return user, nil
 	}
 
 	roles, err := s.rolesStore.Query(

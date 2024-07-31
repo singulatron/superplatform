@@ -133,7 +133,7 @@ func (r *Router) Get(ctx context.Context, serviceName, path string, queryParams 
 	}
 
 	// Construct URL with query parameters
-	ur := fmt.Sprintf("%v%v", address, path)
+	ur := fmt.Sprintf("%v/%v%v", address, serviceName, path)
 	if len(queryParams) > 0 {
 		q := url.Values{}
 		for key, value := range queryParams {
@@ -141,11 +141,12 @@ func (r *Router) Get(ctx context.Context, serviceName, path string, queryParams 
 		}
 		ur += "?" + q.Encode()
 	}
-
 	req, err := http.NewRequestWithContext(ctx, "GET", ur, nil)
 	if err != nil {
 		return err
 	}
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", "Bearer "+r.bearerToken)
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
@@ -162,12 +163,12 @@ func (r *Router) Get(ctx context.Context, serviceName, path string, queryParams 
 	if resp.StatusCode != http.StatusOK {
 		var errResponse map[string]string
 		if err := json.Unmarshal(responseBody, &errResponse); err != nil {
-			return formatError(fmt.Errorf("GET %v returned status '%s' and body -> %v", ur, resp.Status, string(responseBody)))
+			return formatError(fmt.Errorf("GET %v -> '%s': %v", ur, resp.Status, string(responseBody)))
 		}
 		if errMsg, exists := errResponse["error"]; exists {
-			return formatError(fmt.Errorf("GET %v returned status '%s' and body -> %v", ur, resp.Status, errMsg))
+			return formatError(fmt.Errorf("GET %v -> '%s': %v", ur, resp.Status, errMsg))
 		}
-		return formatError(fmt.Errorf("GET %v returned status '%s' and body -> %v", ur, resp.Status, string(responseBody)))
+		return formatError(fmt.Errorf("GET %v ->'%s': %v", ur, resp.Status, string(responseBody)))
 	}
 
 	if response != nil {
