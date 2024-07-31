@@ -11,40 +11,29 @@ import (
 	"sync"
 
 	"github.com/singulatron/singulatron/localtron/datastore"
-
-	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
-	dockertypes "github.com/singulatron/singulatron/localtron/services/docker/types"
-	downloadtypes "github.com/singulatron/singulatron/localtron/services/download/types"
-	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
+	"github.com/singulatron/singulatron/localtron/router"
 
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 type ModelService struct {
 	modelStateMutex sync.Mutex
 	modelPortMap    map[int]*modeltypes.ModelState
 
+	router         *router.Router
 	modelsStore    datastore.DataStore
 	platformsStore datastore.DataStore
 
-	userService     usertypes.UserServiceI
-	downloadService downloadtypes.DownloadServiceI
-	configService   configtypes.ConfigServiceI
-	dockerService   dockertypes.DockerServiceI
+	credentialStore datastore.DataStore
 }
 
 func NewModelService(
-	ds downloadtypes.DownloadServiceI,
-	userService usertypes.UserServiceI,
-	cs configtypes.ConfigServiceI,
-	dockerService dockertypes.DockerServiceI,
+	router *router.Router,
 	datastoreFactory func(tableName string, insance any) (datastore.DataStore, error),
 ) (*ModelService, error) {
 	srv := &ModelService{
-		userService:     userService,
-		downloadService: ds,
-		configService:   cs,
-		dockerService:   dockerService,
+		router: router,
 
 		modelPortMap: map[int]*modeltypes.ModelState{},
 	}
@@ -60,10 +49,11 @@ func NewModelService(
 	}
 	srv.platformsStore = platformsStore
 
-	err = srv.registerPermissions()
+	credentialStore, err := datastoreFactory("model_credentials", &usertypes.Credential{})
 	if err != nil {
 		return nil, err
 	}
+	srv.credentialStore = credentialStore
 
 	err = srv.bootstrapModels()
 	if err != nil {
@@ -71,4 +61,14 @@ func NewModelService(
 	}
 
 	return srv, nil
+}
+
+func (ms *ModelService) Start() error {
+	token, err := usertypes.RegisterService("model", "Model Service", ms.router, ms.credentialStore)
+	if err != nil {
+		return err
+	}
+	ms.router = ms.router.SetBearerToken(token)
+
+	return ms.registerPermissions()
 }

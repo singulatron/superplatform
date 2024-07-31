@@ -8,6 +8,7 @@
 package downloadservice
 
 import (
+	"context"
 	"encoding/json"
 	"log/slog"
 	"os"
@@ -15,15 +16,16 @@ import (
 	"sync"
 	"time"
 
+	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/logger"
+	"github.com/singulatron/singulatron/localtron/router"
 	types "github.com/singulatron/singulatron/localtron/services/download/types"
 	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 type DownloadService struct {
-	firehoseService firehosetypes.FirehoseServiceI
-	userService     usertypes.UserServiceI
+	router *router.Router
 
 	downloads     map[string]*types.Download
 	lock          sync.Mutex
@@ -33,23 +35,27 @@ type DownloadService struct {
 
 	// for testing purposes
 	SyncDownloads bool
+
+	credentialStore datastore.DataStore
 }
 
 func NewDownloadService(
-	firehoseService firehosetypes.FirehoseServiceI,
-	userService usertypes.UserServiceI,
+	router *router.Router,
+	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error),
 ) (*DownloadService, error) {
 	home, _ := os.UserHomeDir()
+
+	credentialStore, err := datastoreFactory("download_credentials", &usertypes.Credential{})
+	if err != nil {
+		return nil, err
+	}
+
 	ret := &DownloadService{
-		firehoseService: firehoseService,
-		userService:     userService,
+		credentialStore: credentialStore,
+		router:          router,
 
 		StateFilePath: path.Join(home, "downloads.json"),
 		downloads:     make(map[string]*types.Download),
-	}
-	err := ret.registerPermissions()
-	if err != nil {
-		return nil, err
 	}
 
 	return ret, nil
@@ -64,14 +70,25 @@ func (dm *DownloadService) SetStateFilePath(s string) {
 }
 
 func (dm *DownloadService) Start() error {
-	err := dm.loadState()
+	token, err := usertypes.RegisterService("download", "Download Service", dm.router, dm.credentialStore)
+	if err != nil {
+		return err
+	}
+	dm.router = dm.router.SetBearerToken(token)
+
+	err = dm.registerPermissions()
+	if err != nil {
+		return err
+	}
+
+	err = dm.loadState()
 	if err != nil {
 		return err
 	}
 
 	for _, download := range dm.downloads {
 		if download.Status == types.DownloadStatusInProgress {
-			err = dm.Do(download.URL, path.Dir(download.FilePath))
+			err = dm.do(download.URL, path.Dir(download.FilePath))
 			if err != nil {
 				return err
 			}
@@ -128,7 +145,11 @@ func (ds *DownloadService) saveState() error {
 	ds.hasChanged = false
 	ds.lock.Unlock()
 
-	ds.firehoseService.Publish(types.EventDownloadStatusChange{})
+	ds.router.Post(context.Background(), "firehose", "/publish", firehosetypes.PublishRequest{
+		Event: &firehosetypes.Event{
+			Name: types.EventDownloadStatusChangeName,
+		},
+	}, nil)
 
 	err = os.WriteFile(ds.StateFilePath, data, 0666)
 	if err != nil {
@@ -153,7 +174,7 @@ func (ds *DownloadService) periodicSaveState() {
 	}
 }
 
-func (dm *DownloadService) GetDownload(url string) (*types.Download, bool) {
+func (dm *DownloadService) getDownload(url string) (*types.Download, bool) {
 	dm.lock.Lock()
 	defer dm.lock.Unlock()
 

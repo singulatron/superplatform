@@ -9,7 +9,7 @@ package chatservice
 
 import "github.com/singulatron/singulatron/localtron/datastore"
 
-func (a *ChatService) DeleteThread(id string) error {
+func (a *ChatService) deleteThread(id string) error {
 	return a.threadsStore.Query(
 		datastore.Equal(datastore.Field("id"), id),
 	).Delete()

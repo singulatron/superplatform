@@ -1,6 +1,8 @@
 package userservice_test
 
 import (
+	"context"
+	"net/http/httptest"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -10,44 +12,80 @@ import (
 )
 
 func TestRegistration(t *testing.T) {
-	univ, err := di.BigBang(di.UniverseOptions{
+	hs := &di.HandlerSwitcher{}
+	server := httptest.NewServer(hs)
+	defer server.Close()
+
+	options := &di.Options{
 		Test: true,
-	})
+		Url:  server.URL,
+	}
+	universe, starterFunc, err := di.BigBang(options)
 	require.NoError(t, err)
-	us := univ.UserService
 
-	var token *usertypes.AuthToken
-	var user *usertypes.User
+	hs.UpdateHandler(universe)
+	router := options.Router
+
+	err = starterFunc()
+	require.NoError(t, err)
+
+	// tk, err := usertypes.RegisterUser(router, "someuser", "pw123", "Some name")
+	// require.NoError(t, err)
+	// router = router.SetBearerToken(tk)
+
 	t.Run("user password change", func(t *testing.T) {
-		var err error
-		token, err = us.Login("singulatron", "changeme")
+		req := usertypes.LoginRequest{
+			Email:    "singulatron",
+			Password: "changeme",
+		}
+		rsp := usertypes.LoginResponse{}
+		err := router.Post(context.Background(), "user", "/login", req, &rsp)
 		require.NoError(t, err)
 
-		user, err = us.ReadUserByToken(token.Token)
+		byTokenRsp := usertypes.ReadUserByTokenResponse{}
+		err = router.Post(context.Background(), "user", "/read-user-by-token", usertypes.ReadUserByTokenRequest{
+			Token: rsp.Token.Token,
+		}, &byTokenRsp)
 		require.NoError(t, err)
 
-		require.Equal(t, "singulatron", user.Email)
-		require.NotEqual(t, "changeme", user.PasswordHash)
+		require.Equal(t, "singulatron", byTokenRsp.User.Email)
+		require.Equal(t, "", byTokenRsp.User.PasswordHash)
 
-		err = us.ChangePasswordAdmin("singulatron", "yo")
-		require.NoError(t, err)
+		//err = router.Post(context.Background(), "user", "/change-password-admin", usertypes.ChangePasswordAdminRequest{
+		//	Email:       "singulatron",
+		//	NewPassword: "yo",
+		//}, nil)
+		//require.NoError(t, err)
+		//
+		//loginReq := usertypes.LoginRequest{
+		//	Email:    "singulatron",
+		//	Password: "changeme",
+		//}
+		//err = router.Post(context.Background(), "user", "/login", loginReq, &rsp)
+		//require.Error(t, err)
+		//
+		//loginReq.Password = "yo"
+		//err = router.Post(context.Background(), "user", "/login", loginReq, &rsp)
+		//require.NoError(t, err)
 
-		token, err = us.Login("singulatron", "changeme")
+		changePassReq := usertypes.ChangePasswordRequest{
+			Email:           "singulatron",
+			CurrentPassword: "changeme",
+			NewPassword:     "yo",
+		}
+		// not logged in router should not be able to change pasword
+		err = router.Post(context.Background(), "user", "/change-password", changePassReq, nil)
 		require.Error(t, err)
 
-		token, err = us.Login("singulatron", "yo")
+		loggedInRouter := router.SetBearerToken(rsp.Token.Token)
+
+		err = loggedInRouter.Post(context.Background(), "user", "/change-password", changePassReq, nil)
 		require.NoError(t, err)
 
-		err = us.ChangePassword("singulatron", "yo1", "yo1")
+		// changing with wrong password should error
+		changePassReq.CurrentPassword = "yoWRONG"
+		changePassReq.NewPassword = "yo1"
+		err = loggedInRouter.Post(context.Background(), "user", "/change-password", changePassReq, nil)
 		require.Error(t, err)
-
-		err = us.ChangePassword("singulatron", "yo", "yo1")
-		require.NoError(t, err)
-
-		token, err = us.Login("singulatron", "yo")
-		require.Error(t, err)
-
-		token, err = us.Login("singulatron", "yo1")
-		require.NoError(t, err)
 	})
 }

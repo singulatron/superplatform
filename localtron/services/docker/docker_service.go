@@ -11,14 +11,14 @@ import (
 	"sync"
 
 	"github.com/docker/docker/client"
-	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
-	downloadtypes "github.com/singulatron/singulatron/localtron/services/download/types"
+	"github.com/singulatron/singulatron/localtron/datastore"
+	"github.com/singulatron/singulatron/localtron/router"
+
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 type DockerService struct {
-	userService          usertypes.UserServiceI
-	configService        configtypes.ConfigServiceI
+	router               *router.Router
 	imagesCache          map[string]bool
 	imagePullMutexes     map[string]*sync.Mutex
 	imagePullGlobalMutex sync.Mutex
@@ -27,42 +27,53 @@ type DockerService struct {
 	dockerPort           int
 	client               *client.Client
 	mutex                sync.Mutex
-	ds                   downloadtypes.DownloadServiceI
+
+	credentialStore datastore.DataStore
 }
 
 func NewDockerService(
-	downloadService downloadtypes.DownloadServiceI,
-	userService usertypes.UserServiceI,
-	configService configtypes.ConfigServiceI,
+	router *router.Router,
+	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error),
 ) (*DockerService, error) {
 	c, err := client.NewClientWithOpts(client.FromEnv, client.WithAPIVersionNegotiation())
 	if err != nil {
 		return nil, err
 	}
+
+	credentialStore, err := datastoreFactory("docker_credentials", &usertypes.Credential{})
+	if err != nil {
+		return nil, err
+	}
+
 	service := &DockerService{
-		userService:   userService,
-		configService: configService,
-		ds:            downloadService,
+		router:          router,
+		credentialStore: credentialStore,
 
 		client:           c,
 		imagePullMutexes: make(map[string]*sync.Mutex),
 		imagesCache:      make(map[string]bool),
 	}
-	err = service.registerPermissions()
-	if err != nil {
-		return nil, err
-	}
 
 	return service, nil
 }
 
-func (ds *DockerService) GetDockerHost() string {
+func (ds *DockerService) Start() error {
+	token, err := usertypes.RegisterService("docker", "Docker Service", ds.router, ds.credentialStore)
+	if err != nil {
+		return err
+	}
+	ds.router = ds.router.SetBearerToken(token)
+
+	return ds.registerPermissions()
+}
+
+func (ds *DockerService) getDockerHost() string {
 	if ds.dockerHost == "" {
 		return "127.0.0.1"
 	}
 	return ds.dockerHost
 }
 
-func (ds *DockerService) GetDockerPort() int {
+func (ds *DockerService) getDockerPort() int {
 	return ds.dockerPort
 }

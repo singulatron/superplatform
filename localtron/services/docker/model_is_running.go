@@ -14,7 +14,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-func (d *DockerService) HashIsRunning(hash string) (bool, error) {
+func (d *DockerService) hashIsRunning(hash string) (bool, error) {
 	ctx := context.Background()
 	containers, err := d.client.ContainerList(ctx, container.ListOptions{All: true})
 	if err != nil {

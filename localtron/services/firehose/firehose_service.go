@@ -12,43 +12,59 @@ import (
 	"log/slog"
 	"sync"
 
+	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/logger"
+	"github.com/singulatron/singulatron/localtron/router"
 
 	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 type FirehoseService struct {
-	userService usertypes.UserServiceI
+	router *router.Router
 
-	subscribers map[int]func(events []firehosetypes.Event)
+	subscribers map[int]func(events []*firehosetypes.Event)
 	mu          sync.Mutex
 	nextID      int
+
+	credentialStore datastore.DataStore
 }
 
-func NewFirehoseService(userService usertypes.UserServiceI) (*FirehoseService, error) {
-	service := &FirehoseService{
-		userService: userService,
-		subscribers: make(map[int]func(events []firehosetypes.Event)),
-	}
-	err := service.registerPermissions()
+func NewFirehoseService(r *router.Router, datastoreFactory func(tableName string, instance any) (datastore.DataStore, error)) (*FirehoseService, error) {
+	credentialStore, err := datastoreFactory("firehose_credentials", &usertypes.Credential{})
 	if err != nil {
 		return nil, err
+	}
+
+	service := &FirehoseService{
+		router:          r,
+		credentialStore: credentialStore,
+		subscribers:     make(map[int]func(events []*firehosetypes.Event)),
 	}
 
 	return service, nil
 }
 
-func (fs *FirehoseService) PublishMany(events ...firehosetypes.Event) {
+func (fs *FirehoseService) Start() error {
+	token, err := usertypes.RegisterService("firehose", "Firehose Service", fs.router, fs.credentialStore)
+	if err != nil {
+		return err
+	}
+	fs.router = fs.router.SetBearerToken(token)
+
+	return fs.registerPermissions()
+}
+
+func (fs *FirehoseService) publishMany(events ...*firehosetypes.Event) {
 	for _, event := range events {
 		logger.Debug("Event published",
-			slog.String("eventName", event.Name()),
+			slog.String("eventName", event.Name),
 		)
 	}
 	fs.mu.Lock()
 	defer fs.mu.Unlock()
 	for _, subscriber := range fs.subscribers {
-		go func(subscriber func(events []firehosetypes.Event)) {
+		go func(subscriber func(events []*firehosetypes.Event)) {
 			defer func() {
 				if r := recover(); r != nil {
 					log.Printf("Recovered in subscriber: %v", r)
@@ -59,11 +75,11 @@ func (fs *FirehoseService) PublishMany(events ...firehosetypes.Event) {
 	}
 }
 
-func (fs *FirehoseService) Publish(event firehosetypes.Event) {
-	fs.PublishMany(event)
+func (fs *FirehoseService) publish(event *firehosetypes.Event) {
+	fs.publishMany(event)
 }
 
-func (fs *FirehoseService) Subscribe(callback func(events []firehosetypes.Event)) int {
+func (fs *FirehoseService) subscribe(callback func(events []*firehosetypes.Event)) int {
 	fs.mu.Lock()
 	defer fs.mu.Unlock()
 	id := fs.nextID
@@ -72,7 +88,7 @@ func (fs *FirehoseService) Subscribe(callback func(events []firehosetypes.Event)
 	return id
 }
 
-func (fs *FirehoseService) Unsubscribe(id int) {
+func (fs *FirehoseService) unsubscribe(id int) {
 	fs.mu.Lock()
 	defer fs.mu.Unlock()
 	delete(fs.subscribers, id)

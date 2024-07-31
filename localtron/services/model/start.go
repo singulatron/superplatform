@@ -8,6 +8,7 @@
 package modelservice
 
 import (
+	"context"
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
@@ -25,7 +26,9 @@ import (
 	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/logger"
 
+	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
 	dockertypes "github.com/singulatron/singulatron/localtron/services/docker/types"
+	downloadtypes "github.com/singulatron/singulatron/localtron/services/download/types"
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 )
 
@@ -35,12 +38,17 @@ const hostPortNum = 8001
 Starts the model which has the supplied modelId or the currently activated one of
 the modelId is empty.
 */
-func (ms *ModelService) Start(modelId string) error {
+func (ms *ModelService) start(modelId string) error {
+	var getConfigResponse *configtypes.GetConfigResponse
+
 	if modelId == "" {
-		conf, err := ms.configService.GetConfig()
+		rsp := configtypes.GetConfigResponse{}
+		err := ms.router.Get(context.Background(), "config", "/get", nil, &rsp)
 		if err != nil {
 			return err
 		}
+		getConfigResponse = &rsp
+		conf := rsp.Config
 		if conf.Model.CurrentModelId == "" {
 			return errors.New("no model id specified and no default model")
 		}
@@ -60,12 +68,18 @@ func (ms *ModelService) Start(modelId string) error {
 
 	env := map[string]string{}
 	for envarName, assetURL := range model.Assets {
-		download, exists := ms.downloadService.GetDownload(assetURL)
-		if !exists {
-			return fmt.Errorf("asset with URL '%v' is cannot be found locally", assetURL)
+		rsp := downloadtypes.GetDownloadResponse{}
+		err := ms.router.Post(context.Background(), "download", "/get", &downloadtypes.GetDownloadRequest{
+			Url: assetURL,
+		}, &rsp)
+		if err != nil {
+			return err
+		}
+		if !rsp.Exists {
+			return fmt.Errorf("asset with URL '%v' cannot be found locally", assetURL)
 		}
 
-		assetPath := download.FilePath
+		assetPath := *rsp.Download.FilePath
 		assetPath = transformWinPaths(assetPath)
 
 		env[envarName] = assetPath
@@ -108,7 +122,16 @@ func (ms *ModelService) Start(modelId string) error {
 		}
 	}
 
-	configFolderPath := ms.configService.GetConfigDirectory()
+	if getConfigResponse != nil {
+		rsp := configtypes.GetConfigResponse{}
+		err := ms.router.Get(context.Background(), "config", "/get", nil, &rsp)
+		if err != nil {
+			return err
+		}
+		getConfigResponse = &rsp
+	}
+	configFolderPath := getConfigResponse.Config.Directory
+
 	// The SINGULATRON_HOST_FOLDER is a path on the host which is mounted
 	// by Singulatron to download models etc.
 	// (To persist the ~/.singulatron of the container basically).
@@ -120,6 +143,7 @@ func (ms *ModelService) Start(modelId string) error {
 	// Becomes
 	// 		/host/path/downloads/somemodel
 	singulatronHostFolder := os.Getenv("SINGULATRON_HOST_FOLDER")
+
 	for envName, assetPath := range env {
 		if singulatronHostFolder != "" {
 			// assetPath is an intra-container path, returned by the DownloadService
@@ -153,15 +177,22 @@ func (ms *ModelService) Start(modelId string) error {
 	}
 	launchOptions.Hash = hash
 
-	launchInfo, err := ms.dockerService.LaunchContainer(image, port, hostPortNum, launchOptions)
+	launchReq := &dockertypes.LaunchContainerRequest{
+		Image:    image,
+		Port:     port,
+		HostPort: hostPortNum,
+		Options:  launchOptions,
+	}
+	launchRsp := &dockertypes.LaunchContainerResponse{}
+	err = ms.router.Post(context.Background(), "docker", "/launch-container", launchReq, &launchRsp)
 	if err != nil {
 		return errors.Wrap(err, "failed to launch container")
 	}
 
-	if launchInfo.NewContainerStarted {
-		state := ms.get(launchInfo.PortNumber)
+	if launchRsp.Info.NewContainerStarted {
+		state := ms.get(launchRsp.Info.PortNumber)
 		if !state.HasCheckerRunning {
-			go ms.checkIfAnswers(model, platform, launchInfo.PortNumber, state)
+			go ms.checkIfAnswers(model, platform, launchRsp.Info.PortNumber, state)
 		}
 	}
 
@@ -249,7 +280,11 @@ func (ms *ModelService) checkIfAnswers(
 
 		logger.Debug("Checking for answer started", slog.Int("port", port))
 
-		isModelRunning, err := ms.dockerService.HashIsRunning(hash)
+		hashReq := dockertypes.HashIsRunningRequest{
+			Hash: hash,
+		}
+		hashRsp := dockertypes.HashIsRunningResponse{}
+		err := ms.router.Post(context.Background(), "docker", "/hash-is-running", hashReq, &hashRsp)
 		if err != nil {
 			logger.Warn("Model check error",
 				slog.String("modelId", model.Id),
@@ -257,12 +292,22 @@ func (ms *ModelService) checkIfAnswers(
 			)
 			continue
 		}
-		if !isModelRunning {
+
+		if !hashRsp.IsRunning {
 			ms.printContainerLogs(model.Id, hash)
 			continue
 		}
 
-		dockerHost := ms.dockerService.GetDockerHost()
+		hostReq := dockertypes.GetDockerHostRequest{}
+		hostRsp := dockertypes.GetDockerHostResponse{}
+		err = ms.router.Post(context.Background(), "docker", "/host", hostReq, &hostRsp)
+		if err != nil {
+			logger.Warn("Docker host error",
+				slog.String("error", err.Error()),
+			)
+			continue
+		}
+		dockerHost := hostRsp.Host
 
 		singulatronLLMHost := os.Getenv("SINGULATRON_LLM_HOST")
 		if singulatronLLMHost != "" {
@@ -295,7 +340,12 @@ func (ms *ModelService) checkIfAnswers(
 }
 
 func (ms *ModelService) printContainerLogs(modelId, hash string) {
-	logs, err := ms.dockerService.GetContainerLogsAndStatus(hash, 10)
+	req := dockertypes.GetContainerSummaryRequest{
+		Hash:  hash,
+		Lines: 10,
+	}
+	rsp := dockertypes.GetContainerSummaryResponse{}
+	err := ms.router.Post(context.Background(), "docker", "/container-summary", req, &rsp)
 	if err != nil {
 		logger.Warn("Error getting container logs",
 			slog.String("modelId", modelId),
@@ -303,7 +353,7 @@ func (ms *ModelService) printContainerLogs(modelId, hash string) {
 		)
 	} else {
 		logger.Info("Container logs for model that is not running",
-			slog.String("logs", logs),
+			slog.String("logs", rsp.Summary),
 		)
 	}
 }

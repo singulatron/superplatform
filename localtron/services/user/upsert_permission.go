@@ -12,7 +12,7 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func (s *UserService) UpsertPermission(id, name, description string) (*usertypes.Permission, error) {
+func (s *UserService) upsertPermission(id, name, description string) (*usertypes.Permission, error) {
 	query := s.permissionsStore.Query(
 		datastore.Equal(datastore.Field("id"), id),
 	)

@@ -50,10 +50,7 @@ export class ModelService {
 			return this.models;
 		}
 
-		const rsp: GetModelsResponse = await this.localtron.call(
-			'/model/get-models',
-			{}
-		);
+		const rsp: GetModelsResponse = await this.localtron.call('/model/list', {});
 		return rsp.models;
 	}
 

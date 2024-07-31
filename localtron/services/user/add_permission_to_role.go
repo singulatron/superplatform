@@ -8,17 +8,18 @@
 package userservice
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/singulatron/singulatron/localtron/datastore"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func (s *UserService) AddPermissionToRole(roleId, permissionId string) error {
-	q := s.rolesStore.Query(
+func (s *UserService) addPermissionToRole(userId, roleId, permissionId string) error {
+	roleQ := s.rolesStore.Query(
 		datastore.Id(roleId),
 	)
-	roleI, found, err := q.FindOne()
+	roleI, found, err := roleQ.FindOne()
 	if err != nil {
 		return err
 	}
@@ -26,6 +27,22 @@ func (s *UserService) AddPermissionToRole(roleId, permissionId string) error {
 		return fmt.Errorf("cannot find role %v", roleId)
 	}
 	role := roleI.(*usertypes.Role)
+
+	permQ := s.permissionsStore.Query(
+		datastore.Id(permissionId),
+	)
+	permissionI, found, err := permQ.FindOne()
+	if err != nil {
+		return err
+	}
+	if !found {
+		return fmt.Errorf("cannot find permission %v", permissionId)
+	}
+	permission := permissionI.(*usertypes.Permission)
+
+	if permission.OwnerId != "" && permission.OwnerId != userId {
+		return errors.New("not an owner of the permission")
+	}
 
 	exists := false
 	for _, v := range role.PermissionIds {
@@ -38,14 +55,7 @@ func (s *UserService) AddPermissionToRole(roleId, permissionId string) error {
 		return nil
 	}
 
-	_, found, err = s.permissionsStore.Query(
-		datastore.Id(permissionId),
-	).FindOne()
-	if !found {
-		return fmt.Errorf("cannot find permission %v", permissionId)
-	}
-
 	role.PermissionIds = append(role.PermissionIds, permissionId)
 
-	return q.Update(role)
+	return roleQ.Update(role)
 }

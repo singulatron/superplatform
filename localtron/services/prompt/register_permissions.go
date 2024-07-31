@@ -9,17 +9,22 @@
 package promptservice
 
 import (
+	"context"
+
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 func (p *PromptService) registerPermissions() error {
 	for _, permission := range prompttypes.PromptPermissions {
-		_, err := p.userService.UpsertPermission(
-			permission.Id,
-			permission.Name,
-			permission.Description,
-		)
+		rsp := &usertypes.UpserPermissionResponse{}
+		err := p.router.Post(context.Background(), "user", "/upsert-permission", &usertypes.UpserPermissionRequest{
+			Permission: &usertypes.Permission{
+				Id:          permission.Id,
+				Name:        permission.Name,
+				Description: permission.Description,
+			},
+		}, rsp)
 		if err != nil {
 			return err
 		}
@@ -30,7 +35,14 @@ func (p *PromptService) registerPermissions() error {
 		usertypes.RoleUser,
 	} {
 		for _, permission := range prompttypes.PromptPermissions {
-			p.userService.AddPermissionToRole(role.Id, permission.Id)
+			rsp := &usertypes.AddPermissionToRoleResponse{}
+			err := p.router.Post(context.Background(), "user", "/add-permission-to-role", &usertypes.AddPermissionToRoleRequest{
+				RoleId:       role.Id,
+				PermissionId: permission.Id,
+			}, rsp)
+			if err != nil {
+				return err
+			}
 		}
 	}
 

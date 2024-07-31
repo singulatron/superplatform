@@ -8,14 +8,16 @@
 package chatservice
 
 import (
+	"context"
 	"errors"
 	"time"
 
 	"github.com/google/uuid"
 	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
+	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
 )
 
-func (a *ChatService) AddThread(chatThread *chattypes.Thread) (*chattypes.Thread, error) {
+func (a *ChatService) addThread(chatThread *chattypes.Thread) (*chattypes.Thread, error) {
 	if chatThread.Id == "" {
 		chatThread.Id = uuid.New().String()
 	}
@@ -34,9 +36,16 @@ func (a *ChatService) AddThread(chatThread *chattypes.Thread) (*chattypes.Thread
 		return nil, err
 	}
 
-	a.firehoseService.Publish(chattypes.EventThreadAdded{
+	ev := chattypes.EventThreadAdded{
 		ThreadId: chatThread.Id,
-	})
+	}
+
+	a.router.Post(context.Background(), "firehose", "/publish", firehosetypes.PublishRequest{
+		Event: &firehosetypes.Event{
+			Name: ev.Name(),
+			Data: ev,
+		},
+	}, nil)
 
 	return chatThread, nil
 }

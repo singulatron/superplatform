@@ -8,15 +8,17 @@
 package promptservice
 
 import (
+	"context"
 	"log/slog"
 
 	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/logger"
 
+	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
 )
 
-func (p *PromptService) RemovePrompt(promptId string) error {
+func (p *PromptService) removePrompt(promptId string) error {
 	logger.Info("Removing prompt",
 		slog.String("promptId", promptId),
 	)
@@ -29,9 +31,15 @@ func (p *PromptService) RemovePrompt(promptId string) error {
 		return err
 	}
 
-	p.firehoseService.Publish(prompttypes.EventPromptRemoved{
+	ev := prompttypes.EventPromptRemoved{
 		PromptId: promptId,
-	})
+	}
+	p.router.Post(context.Background(), "firehose", "/publish", firehosetypes.PublishRequest{
+		Event: &firehosetypes.Event{
+			Name: ev.Name(),
+			Data: ev,
+		},
+	}, nil)
 
 	return nil
 }

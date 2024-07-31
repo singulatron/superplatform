@@ -14,7 +14,7 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func (s *UserService) DeleteUser(userId string) error {
+func (s *UserService) deleteUser(userId string) error {
 	if userId == "" {
 		return errors.New("no user id")
 	}

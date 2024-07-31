@@ -8,6 +8,7 @@
 package promptservice
 
 import (
+	"context"
 	"fmt"
 	"log/slog"
 	"strings"
@@ -23,6 +24,9 @@ import (
 	"github.com/singulatron/singulatron/localtron/logger"
 
 	apptypes "github.com/singulatron/singulatron/localtron/services/chat/types"
+	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
+	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
+	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
 )
@@ -159,10 +163,10 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 		slog.String("promptId", currentPrompt.Id),
 	)
 
-	defer p.firehoseService.Publish(prompttypes.EventPromptProcessingFinished{
+	defer p.router.Post(context.Background(), "firehose", "/publish", prompttypes.EventPromptProcessingFinished{
 		PromptId: currentPrompt.Id,
 		Error:    errToString(err),
-	})
+	}, nil)
 
 	currentPrompt.LastRun = time.Now()
 	currentPrompt.Error = ""
@@ -174,27 +178,43 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 		return errors.Wrap(err, "error updating currently running prompt")
 	}
 
-	p.firehoseService.Publish(prompttypes.EventPromptProcessingStarted{
+	ev := prompttypes.EventPromptProcessingStarted{
 		PromptId: currentPrompt.Id,
-	})
+	}
+	p.router.Post(context.Background(), "firehose", "/publish", firehosetypes.PublishRequest{
+		Event: &firehosetypes.Event{
+			Name: ev.Name(),
+			Data: ev,
+		},
+	}, nil)
 
-	err = p.chatService.AddMessage(&apptypes.Message{
-		// not a fan of taking the prompt id but at least it makes this idempotent
-		// in case prompts get retried over and over again
-		Id:        currentPrompt.Id,
-		ThreadId:  currentPrompt.ThreadId,
-		UserId:    currentPrompt.UserId,
-		Content:   currentPrompt.Prompt,
-		CreatedAt: time.Now(),
-	})
+	addMessageReq := &apptypes.AddMessageRequest{
+		Message: &apptypes.Message{
+			// not a fan of taking the prompt id but at least it makes this idempotent
+			// in case prompts get retried over and over again
+			Id:        currentPrompt.Id,
+			ThreadId:  currentPrompt.ThreadId,
+			UserId:    currentPrompt.UserId,
+			Content:   currentPrompt.Prompt,
+			CreatedAt: time.Now(),
+		},
+	}
+
+	err = p.router.Post(context.Background(), "chat", "/message/add", addMessageReq, nil)
 	if err != nil {
 		return err
 	}
 
-	stat, err := p.modelService.Status(currentPrompt.ModelId)
-	if err != nil {
-		return errors.Wrap(err, "error getting model status")
+	statusReq := modeltypes.StatusRequest{
+		ModelId: currentPrompt.ModelId,
 	}
+	statusRsp := modeltypes.StatusResponse{}
+	err = p.router.Post(context.Background(), "model", "/status", statusReq, &statusRsp)
+	if err != nil {
+		return err
+	}
+
+	stat := statusRsp.Status
 	if !stat.Running {
 		return fmt.Errorf("model '%v' is not running", currentPrompt.ModelId)
 	}
@@ -223,19 +243,34 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 }
 
 func (p *PromptService) processPlatform(address string, fullPrompt string, currentPrompt *prompttypes.Prompt) error {
-	platform, err := p.modelService.GetPlatformByModelId(currentPrompt.ModelId)
+	modelId := currentPrompt.ModelId
+	if modelId == "" {
+		getConfigReq := configtypes.GetConfigRequest{}
+		getConfigRsp := configtypes.GetConfigResponse{}
+		err := p.router.Post(context.Background(), "config", "/get", getConfigReq, &getConfigRsp)
+		if err != nil {
+			return err
+		}
+		modelId = getConfigRsp.Config.Model.CurrentModelId
+	}
+
+	getModelReq := modeltypes.GetModelRequest{
+		Id: modelId,
+	}
+	getModelRsp := modeltypes.GetModelResponse{}
+	err := p.router.Post(context.Background(), "model", "/get", getModelReq, &getModelRsp)
 	if err != nil {
 		return err
 	}
 
-	switch platform.Id {
+	switch getModelRsp.Platform.Id {
 	case modeltypes.PlatformLlamaCpp.Id:
 		return p.processLlamaCpp(address, fullPrompt, currentPrompt)
 	case modeltypes.PlatformStableDiffusion.Id:
 		return p.processStableDiffusion(address, fullPrompt, currentPrompt)
 	}
 
-	return fmt.Errorf("cannot find platform %v", platform.Id)
+	return fmt.Errorf("cannot find platform %v", getModelRsp.Platform.Id)
 }
 
 func (p *PromptService) processStableDiffusion(address string, fullPrompt string, currentPrompt *prompttypes.Prompt) error {
@@ -284,19 +319,28 @@ func (p *PromptService) processStableDiffusion(address string, fullPrompt string
 		Id:      uuid.New().String(),
 		Content: base64String,
 	}
-	err = p.chatService.UpsertAssets([]*apptypes.Asset{
-		asset,
-	})
+
+	upsertReq := chattypes.UpsertAssetsRequest{
+		Assets: []*apptypes.Asset{
+			asset,
+		},
+	}
+	upsertRsp := chattypes.UpsertAssetsResponse{}
+	err = p.router.Post(context.Background(), "chat", "/upsert-assets", upsertReq, &upsertRsp)
 	if err != nil {
 		return err
 	}
 
-	err = p.chatService.AddMessage(&apptypes.Message{
-		Id:       uuid.New().String(),
-		ThreadId: currentPrompt.ThreadId,
-		Content:  "Sure, here is your image",
-		AssetIds: []string{asset.Id},
-	})
+	addMsgReq := chattypes.AddMessageRequest{
+		Message: &apptypes.Message{
+			Id:       uuid.New().String(),
+			ThreadId: currentPrompt.ThreadId,
+			Content:  "Sure, here is your image",
+			AssetIds: []string{asset.Id},
+		},
+	}
+	addMsgRsp := chattypes.AddMessageResponse{}
+	err = p.router.Post(context.Background(), "chat", "/message/add", addMsgReq, &addMsgRsp)
 	if err != nil {
 		logger.Error("Error when saving chat message after image generation",
 			slog.String("error", err.Error()))
@@ -353,12 +397,15 @@ func (p *PromptService) processLlamaCpp(address string, fullPrompt string, curre
 		p.StreamManager.Broadcast(currentPrompt.ThreadId, resp)
 
 		if len(resp.Choices) > 0 && resp.Choices[0].FinishReason == "stop" {
-
-			err := p.chatService.AddMessage(&apptypes.Message{
-				Id:       uuid.New().String(),
-				ThreadId: currentPrompt.ThreadId,
-				Content:  llmResponseToText(p.StreamManager.History[currentPrompt.ThreadId]),
-			})
+			addMsgReq := chattypes.AddMessageRequest{
+				Message: &apptypes.Message{
+					Id:       uuid.New().String(),
+					ThreadId: currentPrompt.ThreadId,
+					Content:  llmResponseToText(p.StreamManager.History[currentPrompt.ThreadId]),
+				},
+			}
+			addMsgRsp := chattypes.AddMessageResponse{}
+			err := p.router.Post(context.Background(), "chat", "/message/add", addMsgReq, &addMsgRsp)
 			if err != nil {
 				logger.Error("Error when saving chat message after broadcast",
 					slog.String("error", err.Error()))

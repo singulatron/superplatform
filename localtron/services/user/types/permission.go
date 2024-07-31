@@ -18,6 +18,9 @@ type Permission struct {
 	// eg. "User Viewer"
 	Name        string `json:"name,omitempty"`
 	Description string `json:"description,omitempty"`
+
+	// Service who owns the permission
+	OwnerId string `json:"ownerId,omitempty"`
 }
 
 func (c *Permission) GetId() string {
@@ -26,6 +29,15 @@ func (c *Permission) GetId() string {
 
 func (c *Permission) GetUpdatedAt() string {
 	return c.Id
+}
+
+type IsAuthorizedRequest struct {
+	PermissionId string `json:"permissionId,omitempty"`
+}
+
+type IsAuthorizedResponse struct {
+	Authorized bool  `json:"authorized,omitempty"`
+	User       *User `json:"user,omitempty"`
 }
 
 type CreatePermissionRequest struct {
@@ -41,6 +53,20 @@ type GetPermissionsRequest struct{}
 type GetPermissionsResponse struct {
 	Permissions []*Permission `json:"permissions"`
 }
+
+type UpserPermissionRequest struct {
+	Permission *Permission `json:"permissions"`
+}
+
+type UpserPermissionResponse struct {
+}
+
+type AddPermissionToRoleRequest struct {
+	RoleId       string `json:"roleId"`
+	PermissionId string `json:"permissionId"`
+}
+
+type AddPermissionToRoleResponse struct{}
 
 var PermissionUserCreate = Permission{
 	Id:   "user.create",
@@ -87,7 +113,28 @@ var PermissionRoleDelete = Permission{
 	Name: "Role Delete",
 }
 
+var PermissionPermissionCreate = Permission{
+	Id:   "permission.create",
+	Name: "Permission Create",
+}
+
+var PermissionPermissionEdit = Permission{
+	Id:   "permission.edit",
+	Name: "Permission Edit",
+}
+
+var PermissionPermissionAssign = Permission{
+	Id:   "permission.assign",
+	Name: "Permission Assign",
+}
+
 var UserPermissions = []Permission{
+	PermissionPermissionCreate,
+	PermissionPermissionEdit,
+	PermissionPermissionAssign,
+}
+
+var AdminPermissions = []Permission{
 	PermissionUserCreate,
 	PermissionUserView,
 	PermissionUserEdit,
@@ -97,4 +144,7 @@ var UserPermissions = []Permission{
 	PermissionRoleEdit,
 	PermissionRoleView,
 	PermissionRoleDelete,
+	PermissionPermissionCreate,
+	PermissionPermissionEdit,
+	PermissionPermissionAssign,
 }

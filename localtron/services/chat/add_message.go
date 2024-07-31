@@ -8,6 +8,7 @@
 package chatservice
 
 import (
+	"context"
 	"errors"
 	"log/slog"
 	"time"
@@ -17,9 +18,10 @@ import (
 	"github.com/singulatron/singulatron/localtron/logger"
 
 	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
+	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
 )
 
-func (a *ChatService) AddMessage(chatMessage *chattypes.Message) error {
+func (a *ChatService) addMessage(chatMessage *chattypes.Message) error {
 	if chatMessage.ThreadId == "" {
 		return errors.New("empty chat message thread id")
 	}
@@ -45,9 +47,15 @@ func (a *ChatService) AddMessage(chatMessage *chattypes.Message) error {
 		slog.String("messageId", chatMessage.Id),
 	)
 
-	a.firehoseService.Publish(chattypes.EventMessageAdded{
+	ev := chattypes.EventMessageAdded{
 		ThreadId: chatMessage.ThreadId,
-	})
+	}
+	a.router.Post(context.Background(), "firehose", "/publish", firehosetypes.PublishRequest{
+		Event: &firehosetypes.Event{
+			Name: ev.Name(),
+			Data: ev,
+		},
+	}, nil)
 
 	return a.messagesStore.Query(
 		datastore.Equal(datastore.Field("id"), chatMessage.Id),

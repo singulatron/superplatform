@@ -16,15 +16,15 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func (s *UserService) CreateUser(user *usertypes.User, password string, roleIds []string) error {
+func (s *UserService) createUser(user *usertypes.User, password string, roleIds []string) error {
 	if user.Name == "" {
-		return errors.New("Username missing")
+		return errors.New("username missing")
 	}
 	if user.Email == "" {
-		return errors.New("Email missing")
+		return errors.New("email missing")
 	}
 	if password == "" {
-		return errors.New("Password missing")
+		return errors.New("password missing")
 	}
 
 	_, emailExists, err := s.usersStore.Query(

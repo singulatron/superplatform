@@ -2,64 +2,41 @@ package di
 
 import (
 	"log/slog"
+	"net/http"
 	"os"
 	"path"
+	"sync"
 
 	"github.com/singulatron/singulatron/localtron/clients/llm"
 	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/datastore/localstore"
 	"github.com/singulatron/singulatron/localtron/logger"
-	appservice "github.com/singulatron/singulatron/localtron/services/app"
-	apptypes "github.com/singulatron/singulatron/localtron/services/app/types"
+	"github.com/singulatron/singulatron/localtron/middlewares"
+	"github.com/singulatron/singulatron/localtron/router"
 	chatservice "github.com/singulatron/singulatron/localtron/services/chat"
-	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
 	configservice "github.com/singulatron/singulatron/localtron/services/config"
-	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
 	dockerservice "github.com/singulatron/singulatron/localtron/services/docker"
-	dockertypes "github.com/singulatron/singulatron/localtron/services/docker/types"
 	downloadservice "github.com/singulatron/singulatron/localtron/services/download"
-	downloadtypes "github.com/singulatron/singulatron/localtron/services/download/types"
 	firehoseservice "github.com/singulatron/singulatron/localtron/services/firehose"
-	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
 	genericservice "github.com/singulatron/singulatron/localtron/services/generic"
-	generictypes "github.com/singulatron/singulatron/localtron/services/generic/types"
 	modelservice "github.com/singulatron/singulatron/localtron/services/model"
-	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 	nodeservice "github.com/singulatron/singulatron/localtron/services/node"
-	nodetypes "github.com/singulatron/singulatron/localtron/services/node/types"
 	promptservice "github.com/singulatron/singulatron/localtron/services/prompt"
-	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
-	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 const singulatronFolder = ".singulatron"
 
-type Universe struct {
-	ConfigService   configtypes.ConfigServiceI
-	PromptService   prompttypes.PromptServiceI
-	UserService     usertypes.UserServiceI
-	FirehoseService firehosetypes.FirehoseServiceI
-	ChatService     chattypes.ChatServiceI
-	GenericService  generictypes.GenericServiceI
-	ModelService    modeltypes.ModelServiceI
-	DownloadService downloadtypes.DownloadServiceI
-	AppService      apptypes.AppServiceI
-	DockerService   dockertypes.DockerServiceI
-	NodeService     nodetypes.NodeServiceI
-
-	LLMClient llm.ClientI
-}
-
-type UniverseOptions struct {
+type Options struct {
+	Url              string
 	Test             bool
-	Pre              Universe
+	LLMClient        llm.ClientI
+	Router           *router.Router
 	DatastoreFactory func(tableName string, instance any) (datastore.DataStore, error)
+	HomeDir          string
 }
 
-func BigBang(options UniverseOptions) (*Universe, error) {
-	universe := &Universe{}
-
+func BigBang(options *Options) (*http.ServeMux, func() error, error) {
 	var homeDir string
 	var err error
 	if options.Test {
@@ -75,30 +52,21 @@ func BigBang(options UniverseOptions) (*Universe, error) {
 			os.Exit(1)
 		}
 	}
+	options.HomeDir = homeDir
 
-	if options.Pre.ConfigService != nil {
-		universe.ConfigService = options.Pre.ConfigService
-	} else {
-		configService, err := configservice.NewConfigService()
-		if err != nil {
-			logger.Error("Config service creation failed", slog.String("error", err.Error()))
-			os.Exit(1)
-		}
-		configService.EventCallback = func(event firehosetypes.Event) {
-			logger.Debug("Received event from config before firehose is set up",
-				slog.String("eventName", event.Name()),
-			)
-		}
-		configService.ConfigDirectory = path.Join(homeDir, singulatronFolder)
-		if os.Getenv("SINGULATRON_CONFIG_PATH") != "" {
-			configService.ConfigDirectory = os.Getenv("SINGULATRON_CONFIG_PATH")
-		}
+	configService, err := configservice.NewConfigService()
+	if err != nil {
+		logger.Error("Config service creation failed", slog.String("error", err.Error()))
+		os.Exit(1)
+	}
 
-		universe.ConfigService = configService
+	configService.ConfigDirectory = path.Join(homeDir, singulatronFolder)
+	if os.Getenv("SINGULATRON_CONFIG_PATH") != "" {
+		configService.ConfigDirectory = os.Getenv("SINGULATRON_CONFIG_PATH")
 	}
 
 	if options.DatastoreFactory == nil {
-		localStorePath := path.Join(universe.ConfigService.GetConfigDirectory(), "data")
+		localStorePath := path.Join(configService.GetConfigDirectory(), "data")
 		err = os.MkdirAll(localStorePath, 0755)
 		if err != nil {
 			logger.Error("Creating data folder failed", slog.String("error", err.Error()))
@@ -109,43 +77,41 @@ func BigBang(options UniverseOptions) (*Universe, error) {
 			return localstore.NewLocalStore(instance, path.Join(localStorePath, tableName))
 		}
 	}
+	configService.SetDatastoreFactory(options.DatastoreFactory)
 
-	if options.Pre.UserService != nil {
-		universe.UserService = options.Pre.UserService
-	} else {
-		userService, err := userservice.NewUserService(
-			universe.ConfigService,
-			options.DatastoreFactory,
-		)
+	if options.Router == nil {
+		router, err := router.NewRouter(options.DatastoreFactory)
 		if err != nil {
-			logger.Error("User service start failed", slog.String("error", err.Error()))
+			logger.Error("Creating router failed", slog.String("error", err.Error()))
 			os.Exit(1)
 		}
-		universe.UserService = userService
+		if options.Url != "" {
+			router.SetDefaultAddress(options.Url)
+		}
+		options.Router = router
 	}
 
-	// hacks to avoid import cycles
-	universe.ConfigService.SetUpsertPermissionFunc(universe.UserService.UpsertPermission)
-	universe.ConfigService.SetAddPermissionToRoleFunc(universe.UserService.AddPermissionToRole)
+	configService.SetRouter(options.Router)
 
-	err = universe.ConfigService.Start()
+	userService, err := userservice.NewUserService(
+		options.Router,
+		options.DatastoreFactory,
+	)
+	if err != nil {
+		logger.Error("User service start failed", slog.String("error", err.Error()))
+		os.Exit(1)
+	}
+
 	if err != nil {
 		logger.Error("Config service start failed", slog.String("error", err.Error()))
 		os.Exit(1)
 	}
 
-	if options.Pre.FirehoseService != nil {
-		universe.FirehoseService = options.Pre.FirehoseService
-	} else {
-		firehoseService, err := firehoseservice.NewFirehoseService(universe.UserService)
-		if err != nil {
-			logger.Error("Firehose service creation failed", slog.String("error", err.Error()))
-			os.Exit(1)
-		}
-		universe.FirehoseService = firehoseService
+	firehoseService, err := firehoseservice.NewFirehoseService(options.Router, options.DatastoreFactory)
+	if err != nil {
+		logger.Error("Firehose service creation failed", slog.String("error", err.Error()))
+		os.Exit(1)
 	}
-
-	universe.ConfigService.SetEventCallback(universe.FirehoseService.Publish)
 
 	singulatronFolder := path.Join(homeDir, singulatronFolder)
 	err = os.MkdirAll(singulatronFolder, 0755)
@@ -161,134 +127,302 @@ func BigBang(options UniverseOptions) (*Universe, error) {
 		os.Exit(1)
 	}
 
-	if options.Pre.DownloadService != nil {
-		universe.DownloadService = options.Pre.DownloadService
-	} else {
-		downloadService, err := downloadservice.NewDownloadService(universe.FirehoseService, universe.UserService)
-		if err != nil {
-			logger.Error("Download service creation failed", slog.String("error", err.Error()))
-			os.Exit(1)
-		}
-		universe.DownloadService = downloadService
-	}
-
-	universe.DownloadService.SetDefaultFolder(downloadFolder)
-	universe.DownloadService.SetStateFilePath(path.Join(singulatronFolder, "downloads.json"))
-
-	err = universe.DownloadService.Start()
+	downloadService, err := downloadservice.NewDownloadService(options.Router, options.DatastoreFactory)
 	if err != nil {
-		logger.Error("Download service start failed", slog.String("error", err.Error()))
+		logger.Error("Download service creation failed", slog.String("error", err.Error()))
 		os.Exit(1)
 	}
 
-	if options.Pre.DockerService != nil {
-		universe.DockerService = options.Pre.DockerService
-	} else {
-		dockerService, err := dockerservice.NewDockerService(
-			universe.DownloadService,
-			universe.UserService,
-			universe.ConfigService,
-		)
-		if err != nil {
-			logger.Error("Docker service creation failed", slog.String("error", err.Error()))
-			os.Exit(1)
-		}
-		universe.DockerService = dockerService
+	downloadService.SetDefaultFolder(downloadFolder)
+	downloadService.SetStateFilePath(path.Join(singulatronFolder, "downloads.json"))
+
+	dockerService, err := dockerservice.NewDockerService(options.Router, options.DatastoreFactory)
+	if err != nil {
+		logger.Error("Docker service creation failed", slog.String("error", err.Error()))
+		os.Exit(1)
 	}
 
-	if options.Pre.ModelService != nil {
-		universe.ModelService = options.Pre.ModelService
-	} else {
-		modelService, err := modelservice.NewModelService(
-			universe.DownloadService,
-			universe.UserService,
-			universe.ConfigService,
-			universe.DockerService,
-			options.DatastoreFactory,
-		)
-		if err != nil {
-			logger.Error("Model service creation failed", slog.String("error", err.Error()))
-			os.Exit(1)
-		}
-		universe.ModelService = modelService
+	modelService, err := modelservice.NewModelService(
+		options.Router,
+		options.DatastoreFactory,
+	)
+	if err != nil {
+		logger.Error("Model service creation failed", slog.String("error", err.Error()))
+		os.Exit(1)
 	}
 
-	if options.Pre.AppService != nil {
-		universe.AppService = options.Pre.AppService
-	} else {
-		appService, err := appservice.NewAppService(
-			universe.ConfigService,
-			universe.FirehoseService,
-			universe.UserService,
-		)
-		if err != nil {
-			logger.Error("App service creation failed", slog.String("error", err.Error()))
-			os.Exit(1)
-		}
-		universe.AppService = appService
+	chatService, err := chatservice.NewChatService(
+		options.Router,
+		options.DatastoreFactory,
+	)
+	if err != nil {
+		logger.Error("Chat service creation failed", slog.String("error", err.Error()))
+		os.Exit(1)
 	}
 
-	if options.Pre.ChatService != nil {
-		universe.ChatService = options.Pre.ChatService
-	} else {
-		chatService, err := chatservice.NewChatService(
-			universe.ConfigService,
-			universe.FirehoseService,
-			universe.UserService,
-			options.DatastoreFactory,
-		)
-		if err != nil {
-			logger.Error("Chat service creation failed", slog.String("error", err.Error()))
-			os.Exit(1)
-		}
-		universe.ChatService = chatService
+	promptService, err := promptservice.NewPromptService(
+		options.Router,
+		options.LLMClient,
+		options.DatastoreFactory,
+	)
+	if err != nil {
+		logger.Error("Prompt service creation failed", slog.String("error", err.Error()))
+		os.Exit(1)
 	}
 
-	if options.Pre.PromptService != nil {
-		universe.PromptService = options.Pre.PromptService
-	} else {
-		promptService, err := promptservice.NewPromptService(
-			universe.ConfigService,
-			universe.UserService,
-			universe.ModelService,
-			universe.ChatService,
-			universe.FirehoseService,
-			options.Pre.LLMClient,
-			options.DatastoreFactory,
-		)
-		if err != nil {
-			logger.Error("Prompt service creation failed", slog.String("error", err.Error()))
-			os.Exit(1)
-		}
-		universe.PromptService = promptService
+	genericService, err := genericservice.NewGenericService(
+		options.Router,
+		options.DatastoreFactory,
+	)
+	if err != nil {
+		logger.Error("Generic service creation failed", slog.String("error", err.Error()))
+		os.Exit(1)
 	}
 
-	if options.Pre.GenericService != nil {
-		universe.GenericService = options.Pre.GenericService
-	} else {
-		genericService, err := genericservice.NewGenericService(
-			universe.ConfigService,
-			universe.FirehoseService,
-			universe.UserService,
-			options.DatastoreFactory,
-		)
-		if err != nil {
-			logger.Error("Generic service creation failed", slog.String("error", err.Error()))
-			os.Exit(1)
-		}
-		universe.GenericService = genericService
+	nodeService, err := nodeservice.NewNodeService(options.Router)
+	if err != nil {
+		logger.Error("Node service creation failed", slog.String("error", err.Error()))
+		os.Exit(1)
 	}
 
-	if options.Pre.NodeService != nil {
-		universe.NodeService = options.Pre.NodeService
-	} else {
-		nodeService, err := nodeservice.NewNodeService(universe.UserService)
-		if err != nil {
-			logger.Error("Node service creation failed", slog.String("error", err.Error()))
-			os.Exit(1)
-		}
-		universe.NodeService = nodeService
+	mws := []middlewares.Middleware{
+		middlewares.ThrottledLogger,
+		middlewares.Recover,
+		middlewares.CORS,
+		middlewares.GzipDecodeMiddleware,
 	}
+	appl := applicator(mws)
 
-	return universe, nil
+	router := http.NewServeMux()
+
+	router.HandleFunc("/firehose/subscribe", appl(func(w http.ResponseWriter, r *http.Request) {
+		firehoseService.Subscribe(w, r)
+	}))
+
+	router.HandleFunc("/download/do", appl(func(w http.ResponseWriter, r *http.Request) {
+		downloadService.Do(w, r)
+	}))
+
+	router.HandleFunc("/download/pause", appl(func(w http.ResponseWriter, r *http.Request) {
+		downloadService.Pause(w, r)
+	}))
+	router.HandleFunc("/download/get", appl(func(w http.ResponseWriter, r *http.Request) {
+		downloadService.Get(w, r)
+	}))
+
+	router.HandleFunc("/download/list", appl(func(w http.ResponseWriter, r *http.Request) {
+		downloadService.List(w, r)
+	}))
+
+	router.HandleFunc("/docker/info", appl(func(w http.ResponseWriter, r *http.Request) {
+		dockerService.Info(w, r)
+	}))
+	router.HandleFunc("/docker/host", appl(func(w http.ResponseWriter, r *http.Request) {
+		dockerService.Host(w, r)
+	}))
+
+	router.HandleFunc("/model/status", appl(func(w http.ResponseWriter, r *http.Request) {
+		modelService.Status(w, r)
+	}))
+	router.HandleFunc("/model/list", appl(func(w http.ResponseWriter, r *http.Request) {
+		modelService.List(w, r)
+	}))
+	router.HandleFunc("/model/get", appl(func(w http.ResponseWriter, r *http.Request) {
+		modelService.Get(w, r)
+	}))
+	router.HandleFunc("/model/start", appl(func(w http.ResponseWriter, r *http.Request) {
+		modelService.Start_(w, r)
+	}))
+	router.HandleFunc("/model/make-default", appl(func(w http.ResponseWriter, r *http.Request) {
+		modelService.MakeDefault(w, r)
+	}))
+
+	router.HandleFunc("/config/get", appl(func(w http.ResponseWriter, r *http.Request) {
+		configService.Get(w, r)
+	}))
+
+	router.HandleFunc("/chat/message/add", appl(func(w http.ResponseWriter, r *http.Request) {
+		chatService.AddMessage(w, r)
+	}))
+
+	router.HandleFunc("/chat/message/delete", appl(func(w http.ResponseWriter, r *http.Request) {
+		chatService.DeleteMessage(w, r)
+	}))
+
+	router.HandleFunc("/chat/messages", appl(func(w http.ResponseWriter, r *http.Request) {
+		chatService.GetMessages(w, r)
+	}))
+
+	router.HandleFunc("/chat/thread/add", appl(func(w http.ResponseWriter, r *http.Request) {
+		chatService.AddThread(w, r)
+	}))
+
+	router.HandleFunc("/chat/thread/delete", appl(func(w http.ResponseWriter, r *http.Request) {
+		chatService.DeleteThread(w, r)
+	}))
+
+	router.HandleFunc("/chat/threads", appl(func(w http.ResponseWriter, r *http.Request) {
+		chatService.GetThreads(w, r)
+	}))
+
+	router.HandleFunc("/chat/thread", appl(func(w http.ResponseWriter, r *http.Request) {
+		chatService.GetThread(w, r)
+	}))
+
+	router.HandleFunc("/chat/thread/update", appl(func(w http.ResponseWriter, r *http.Request) {
+		chatService.UpdateThread(w, r)
+	}))
+
+	router.HandleFunc("/prompt/add", appl(func(w http.ResponseWriter, r *http.Request) {
+		promptService.PostAdd(w, r)
+	}))
+
+	router.HandleFunc("/prompt/remove", appl(func(w http.ResponseWriter, r *http.Request) {
+		promptService.RemovePrompt(w, r)
+	}))
+
+	router.HandleFunc("/prompt/subscribe", appl(func(w http.ResponseWriter, r *http.Request) {
+		promptService.GetSubscribe(w, r)
+	}))
+
+	router.HandleFunc("/prompt/list", appl(func(w http.ResponseWriter, r *http.Request) {
+		promptService.GetPrompts(w, r)
+	}))
+
+	router.HandleFunc("/user/login", appl(func(w http.ResponseWriter, r *http.Request) {
+		userService.Login(w, r)
+	}))
+	router.HandleFunc("/user/read-user-by-token", appl(func(w http.ResponseWriter, r *http.Request) {
+		userService.ReadUserByToken(w, r)
+	}))
+	router.HandleFunc("/user/get-users", appl(func(w http.ResponseWriter, r *http.Request) {
+		userService.GetUsers(w, r)
+	}))
+	router.HandleFunc("/user/save-profile", appl(func(w http.ResponseWriter, r *http.Request) {
+		userService.SaveProfile(w, r)
+	}))
+	router.HandleFunc("/user/change-password", appl(func(w http.ResponseWriter, r *http.Request) {
+		userService.ChangePassword(w, r)
+	}))
+	router.HandleFunc("/user/change-password-admin", appl(func(w http.ResponseWriter, r *http.Request) {
+		userService.ChangePasswordAdmin(w, r)
+	}))
+	router.HandleFunc("/user/create-user", appl(func(w http.ResponseWriter, r *http.Request) {
+		userService.CreateUser(w, r)
+	}))
+	router.HandleFunc("/user/delete-user", appl(func(w http.ResponseWriter, r *http.Request) {
+		userService.DeleteUser(w, r)
+	}))
+	router.HandleFunc("/user/get-roles", appl(func(w http.ResponseWriter, r *http.Request) {
+		userService.GetRoles(w, r)
+	}))
+	router.HandleFunc("/user/delete-role", appl(func(w http.ResponseWriter, r *http.Request) {
+		userService.DeleteRole(w, r)
+	}))
+	router.HandleFunc("/user/is-authorized", appl(func(w http.ResponseWriter, r *http.Request) {
+		userService.IsAuthorized(w, r)
+	}))
+	router.HandleFunc("/user/get-permissions", appl(func(w http.ResponseWriter, r *http.Request) {
+		userService.GetPermissions(w, r)
+	}))
+	router.HandleFunc("/user/set-role-permissions", appl(func(w http.ResponseWriter, r *http.Request) {
+		userService.SetRolePermissions(w, r)
+	}))
+	router.HandleFunc("/user/upsert-permission", appl(func(w http.ResponseWriter, r *http.Request) {
+		userService.UpsertPermission(w, r)
+	}))
+	router.HandleFunc("/user/register", appl(func(w http.ResponseWriter, r *http.Request) {
+		userService.Register(w, r)
+	}))
+	router.HandleFunc("/user/add-permission-to-role", appl(func(w http.ResponseWriter, r *http.Request) {
+		userService.AddPermissionToRole(w, r)
+	}))
+
+	router.HandleFunc("/generic/create", appl(func(w http.ResponseWriter, r *http.Request) {
+		genericService.Create(w, r)
+	}))
+	router.HandleFunc("/generic/update", appl(func(w http.ResponseWriter, r *http.Request) {
+		genericService.Update(w, r)
+	}))
+	router.HandleFunc("/generic/delete", appl(func(w http.ResponseWriter, r *http.Request) {
+		genericService.Delete(w, r)
+	}))
+	router.HandleFunc("/generic/find", appl(func(w http.ResponseWriter, r *http.Request) {
+		genericService.Find(w, r)
+	}))
+	router.HandleFunc("/generic/upsert", appl(func(w http.ResponseWriter, r *http.Request) {
+		genericService.Upsert(w, r)
+	}))
+
+	router.HandleFunc("/node/list", appl(func(w http.ResponseWriter, r *http.Request) {
+		nodeService.List(w, r)
+	}))
+
+	return router, func() error {
+		err = configService.Start()
+		if err != nil {
+			return err
+		}
+		err = downloadService.Start()
+		if err != nil {
+			return err
+		}
+		err = firehoseService.Start()
+		if err != nil {
+			return err
+		}
+		err = dockerService.Start()
+		if err != nil {
+			return err
+		}
+		err = modelService.Start()
+		if err != nil {
+			return err
+		}
+		err = chatService.Start()
+		if err != nil {
+			return err
+		}
+		err = promptService.Start()
+		if err != nil {
+			return err
+		}
+		err = genericService.Start()
+		if err != nil {
+			return err
+		}
+
+		return nil
+	}, nil
+}
+
+func applicator(mws []middlewares.Middleware) func(http.HandlerFunc) http.HandlerFunc {
+	return func(h http.HandlerFunc) http.HandlerFunc {
+		for _, middleware := range mws {
+			h = middleware(h)
+		}
+
+		return h
+	}
+}
+
+type HandlerSwitcher struct {
+	mu      sync.RWMutex
+	handler http.Handler
+}
+
+func (hs *HandlerSwitcher) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	hs.mu.RLock()
+	defer hs.mu.RUnlock()
+	if hs.handler != nil {
+		hs.handler.ServeHTTP(w, r)
+	} else {
+		http.NotFound(w, r)
+	}
+}
+
+func (hs *HandlerSwitcher) UpdateHandler(handler http.Handler) {
+	hs.mu.Lock()
+	defer hs.mu.Unlock()
+	hs.handler = handler
 }

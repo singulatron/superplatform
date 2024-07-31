@@ -15,7 +15,7 @@ import (
 	generictypes "github.com/singulatron/singulatron/localtron/services/generic/types"
 )
 
-func (g *GenericService) Find(options generictypes.FindOptions) ([]*generictypes.GenericObject, error) {
+func (g *GenericService) find(options generictypes.FindOptions) ([]*generictypes.GenericObject, error) {
 	if options.Table == "" {
 		return nil, errors.New("no table name")
 	}

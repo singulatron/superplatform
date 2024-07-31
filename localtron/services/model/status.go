@@ -8,17 +8,27 @@
 package modelservice
 
 import (
+	"context"
 	"fmt"
 	"os"
 
 	"github.com/pkg/errors"
 	"github.com/singulatron/singulatron/localtron/datastore"
+	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
+	dockertypes "github.com/singulatron/singulatron/localtron/services/docker/types"
 	downloadtypes "github.com/singulatron/singulatron/localtron/services/download/types"
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 )
 
-func (ms *ModelService) Status(modelId string) (*modeltypes.ModelStatus, error) {
-	dockerHost := ms.dockerService.GetDockerHost()
+func (ms *ModelService) status(modelId string) (*modeltypes.ModelStatus, error) {
+	hostReq := dockertypes.GetDockerHostRequest{}
+	hostRsp := dockertypes.GetDockerHostResponse{}
+	err := ms.router.Post(context.Background(), "docker", "/host", hostReq, &hostRsp)
+	if err != nil {
+		return nil, err
+	}
+
+	dockerHost := hostRsp.Host
 	singulatronLLMHost := os.Getenv("SINGULATRON_LLM_HOST")
 	if singulatronLLMHost != "" {
 		dockerHost = singulatronLLMHost
@@ -27,14 +37,16 @@ func (ms *ModelService) Status(modelId string) (*modeltypes.ModelStatus, error) 
 	modelAddress := fmt.Sprintf("%v:%v", dockerHost, hostPortNum)
 
 	if modelId == "" {
-		conf, err := ms.configService.GetConfig()
+		rsp := configtypes.GetConfigResponse{}
+		err := ms.router.Get(context.Background(), "config", "/get", nil, &rsp)
 		if err != nil {
 			return nil, err
 		}
-		if conf.Model.CurrentModelId == "" {
+
+		if rsp.Config.Model.CurrentModelId == "" {
 			return nil, errors.New("no model id specified and no default model")
 		}
-		modelId = conf.Model.CurrentModelId
+		modelId = rsp.Config.Model.CurrentModelId
 	}
 
 	modelI, found, err := ms.modelsStore.Query(
@@ -49,10 +61,14 @@ func (ms *ModelService) Status(modelId string) (*modeltypes.ModelStatus, error) 
 	model := modelI.(*modeltypes.Model)
 
 	for _, assetUrl := range model.Assets {
-
-		downl, exists := ms.downloadService.GetDownload(assetUrl)
-
-		if !exists || downl.Status != downloadtypes.DownloadStatusCompleted {
+		rsp := downloadtypes.GetDownloadResponse{}
+		err := ms.router.Post(context.Background(), "download", "/get", &downloadtypes.GetDownloadRequest{
+			Url: assetUrl,
+		}, &rsp)
+		if err != nil {
+			return nil, err
+		}
+		if !rsp.Exists || rsp.Download.Status != string(downloadtypes.DownloadStatusCompleted) {
 			return &modeltypes.ModelStatus{
 				AssetsReady: false,
 				Address:     modelAddress,
@@ -77,7 +93,12 @@ func (ms *ModelService) Status(modelId string) (*modeltypes.ModelStatus, error) 
 	}
 
 	isRunning := false
-	if v, err := ms.dockerService.HashIsRunning(hash); err == nil && v {
+	hashReq := dockertypes.HashIsRunningRequest{
+		Hash: hash,
+	}
+	hashRsp := dockertypes.HashIsRunningResponse{}
+	err = ms.router.Post(context.Background(), "docker", "/hash-is-running", hashReq, &hashRsp)
+	if err == nil && hashRsp.IsRunning {
 		isRunning = true
 	}
 

@@ -9,27 +9,23 @@ package chatservice
 
 import (
 	"github.com/singulatron/singulatron/localtron/datastore"
+	"github.com/singulatron/singulatron/localtron/router"
 
 	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
-	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
-	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 type ChatService struct {
-	configService   configtypes.ConfigServiceI
-	userService     usertypes.UserServiceI
-	firehoseService firehosetypes.FirehoseServiceI
+	router *router.Router
 
-	messagesStore datastore.DataStore
-	threadsStore  datastore.DataStore
-	assetsStore   datastore.DataStore
+	messagesStore   datastore.DataStore
+	threadsStore    datastore.DataStore
+	assetsStore     datastore.DataStore
+	credentialStore datastore.DataStore
 }
 
 func NewChatService(
-	cs configtypes.ConfigServiceI,
-	fs firehosetypes.FirehoseServiceI,
-	userService usertypes.UserServiceI,
+	router *router.Router,
 	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error),
 ) (*ChatService, error) {
 	threadsStore, err := datastoreFactory("threads", &chattypes.Thread{})
@@ -44,21 +40,28 @@ func NewChatService(
 	if err != nil {
 		return nil, err
 	}
-
-	service := &ChatService{
-		configService:   cs,
-		firehoseService: fs,
-		userService:     userService,
-
-		messagesStore: messagesStore,
-		threadsStore:  threadsStore,
-		assetsStore:   assetsStore,
-	}
-
-	err = service.registerPermissions()
+	credentialStore, err := datastoreFactory("chat_credentials", &usertypes.Credential{})
 	if err != nil {
 		return nil, err
 	}
 
+	service := &ChatService{
+		router:          router,
+		messagesStore:   messagesStore,
+		threadsStore:    threadsStore,
+		assetsStore:     assetsStore,
+		credentialStore: credentialStore,
+	}
+
 	return service, nil
+}
+
+func (cs *ChatService) Start() error {
+	token, err := usertypes.RegisterService("chat", "Chat Service", cs.router, cs.credentialStore)
+	if err != nil {
+		return err
+	}
+	cs.router = cs.router.SetBearerToken(token)
+
+	return cs.registerPermissions()
 }

@@ -10,22 +10,24 @@ package userservice
 import (
 	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/logger"
+	"github.com/singulatron/singulatron/localtron/router"
 
-	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 type UserService struct {
-	configService configtypes.ConfigServiceI
+	router *router.Router
 
 	usersStore       datastore.DataStore
 	rolesStore       datastore.DataStore
 	permissionsStore datastore.DataStore
 	authTokensStore  datastore.DataStore
+
+	userId string
 }
 
 func NewUserService(
-	cs configtypes.ConfigServiceI,
+	router *router.Router,
 	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error),
 ) (*UserService, error) {
 	usersStore, err := datastoreFactory("users", &usertypes.User{})
@@ -46,8 +48,7 @@ func NewUserService(
 	}
 
 	service := &UserService{
-		configService: cs,
-
+		router:           router,
 		usersStore:       usersStore,
 		rolesStore:       rolesStore,
 		authTokensStore:  authTokensStore,
@@ -87,9 +88,10 @@ func (s *UserService) bootstrap() error {
 
 	logger.Info("Bootstrapping users")
 
-	_, err = s.Register("singulatron", "changeme", "Admin", []string{
+	_, err = s.register("singulatron", "changeme", "Admin", []string{
 		usertypes.RoleAdmin.Id,
 	})
+
 	return err
 }
 

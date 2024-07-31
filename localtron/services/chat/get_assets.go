@@ -12,7 +12,7 @@ import (
 	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
 )
 
-func (a *ChatService) GetAssets(assetIds []string) ([]*chattypes.Asset, error) {
+func (a *ChatService) getAssets(assetIds []string) ([]*chattypes.Asset, error) {
 	assetIs, err := a.assetsStore.Query(
 		datastore.Equal(datastore.Field("id"), assetIds),
 	).Find()

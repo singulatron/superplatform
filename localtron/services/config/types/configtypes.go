@@ -29,14 +29,22 @@ type Config struct {
 	 * button, but if the user has already installed the runtime we show
 	 * we show a START runtime button.
 	 * */
-	IsRuntimeInstalled bool `json:"isRuntimeInstalled" yaml:"isRuntimeInstalled"`
+	IsRuntimeInstalled bool   `json:"isRuntimeInstalled" yaml:"isRuntimeInstalled"`
+	Directory          string `json:"directory" yaml:"directory"`
 }
 
-type ConfigGetRequest struct {
+type GetConfigRequest struct {
 }
 
-type ConfigGetResponse struct {
+type GetConfigResponse struct {
 	Config *Config `json:"config"`
+}
+
+type SaveConfigRequest struct {
+	Config *Config `json:"config"`
+}
+
+type SaveConfigResponse struct {
 }
 
 //

@@ -15,7 +15,7 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func (s *UserService) SaveProfile(email, newName string) error {
+func (s *UserService) saveProfile(email, newName string) error {
 	query := s.usersStore.Query(
 		datastore.Equal(datastore.Field("email"), email),
 	)

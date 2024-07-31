@@ -17,35 +17,34 @@ import (
 
 	"github.com/pkg/errors"
 
+	"github.com/singulatron/singulatron/localtron/router"
 	nodetypes "github.com/singulatron/singulatron/localtron/services/node/types"
-	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 type NodeService struct {
 	Hostname string
 
-	userService usertypes.UserServiceI
+	router *router.Router
 }
 
-func NewNodeService(userService usertypes.UserServiceI) (*NodeService, error) {
+func NewNodeService(router *router.Router) (*NodeService, error) {
 	hostname, err := os.Hostname()
 	if err != nil {
 		return nil, err
 	}
 	service := &NodeService{
-		Hostname:    hostname,
-		userService: userService,
-	}
-
-	err = service.registerPermissions()
-	if err != nil {
-		return nil, err
+		Hostname: hostname,
+		router:   router,
 	}
 
 	return service, nil
 }
 
-func (ns *NodeService) ListNodes() ([]*nodetypes.Node, error) {
+func (ns *NodeService) Start() error {
+	return ns.registerPermissions()
+}
+
+func (ns *NodeService) listNodes() ([]*nodetypes.Node, error) {
 	outp, err := ns.GetNvidiaSmiOutput()
 	if err != nil {
 		return nil, err

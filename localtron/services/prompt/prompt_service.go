@@ -12,37 +12,28 @@ import (
 
 	"github.com/singulatron/singulatron/localtron/clients/llm"
 	"github.com/singulatron/singulatron/localtron/datastore"
+	"github.com/singulatron/singulatron/localtron/router"
 
-	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
-	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
-	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
-	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 	streammanager "github.com/singulatron/singulatron/localtron/services/prompt/sub/stream_manager"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 type PromptService struct {
-	userService     usertypes.UserServiceI
-	modelService    modeltypes.ModelServiceI
-	chatService     chattypes.ChatServiceI
-	firehoseService firehosetypes.FirehoseServiceI
-	llmCLient       llm.ClientI
+	llmCLient llm.ClientI
+	router    *router.Router
 
 	*streammanager.StreamManager
 
-	promptsStore datastore.DataStore
+	promptsStore    datastore.DataStore
+	credentialStore datastore.DataStore
 
 	runMutex sync.Mutex
 	trigger  chan bool
 }
 
 func NewPromptService(
-	cs configtypes.ConfigServiceI,
-	userService usertypes.UserServiceI,
-	modelService modeltypes.ModelServiceI,
-	chatService chattypes.ChatServiceI,
-	firehoseService firehosetypes.FirehoseServiceI,
+	router *router.Router,
 	llmClient llm.ClientI,
 	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error),
 ) (*PromptService, error) {
@@ -51,16 +42,19 @@ func NewPromptService(
 		return nil, err
 	}
 
+	credentialStore, err := datastoreFactory("prompt_credentials", &usertypes.Credential{})
+	if err != nil {
+		return nil, err
+	}
+
 	service := &PromptService{
-		userService:     userService,
-		modelService:    modelService,
-		chatService:     chatService,
-		firehoseService: firehoseService,
-		llmCLient:       llmClient,
+		llmCLient: llmClient,
+		router:    router,
 
 		StreamManager: streammanager.NewStreamManager(),
 
-		promptsStore: promptsStore,
+		promptsStore:    promptsStore,
+		credentialStore: credentialStore,
 
 		trigger: make(chan bool, 1),
 	}
@@ -85,9 +79,17 @@ func NewPromptService(
 		return nil, err
 	}
 
-	service.registerPermissions()
-
 	go service.processPrompts()
 
 	return service, nil
+}
+
+func (cs *PromptService) Start() error {
+	token, err := usertypes.RegisterService("prompt", "Prompt Service", cs.router, cs.credentialStore)
+	if err != nil {
+		return err
+	}
+	cs.router = cs.router.SetBearerToken(token)
+
+	return cs.registerPermissions()
 }

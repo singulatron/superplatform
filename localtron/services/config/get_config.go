@@ -11,6 +11,6 @@ import (
 	types "github.com/singulatron/singulatron/localtron/services/config/types"
 )
 
-func (cs *ConfigService) GetConfig() (types.Config, error) {
+func (cs *ConfigService) getConfig() (types.Config, error) {
 	return cs.config, nil
 }

@@ -27,7 +27,7 @@ import (
 A low level method for launching containers running models.
 For a higher level one use `ModelService.Start“.
 */
-func (d *DockerService) LaunchContainer(image string, internalPort, hostPort int, options *dockertypes.LaunchOptions) (*dockertypes.LaunchInfo, error) {
+func (d *DockerService) launchContainer(image string, internalPort, hostPort int, options *dockertypes.LaunchOptions) (*dockertypes.LaunchInfo, error) {
 	err := d.pullImage(image)
 	if err != nil {
 		return nil, errors.Wrap(err, "image pull failure")

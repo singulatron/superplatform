@@ -12,7 +12,7 @@ import (
 	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
 )
 
-func (a *ChatService) GetMessages(threadId string) ([]*chattypes.Message, error) {
+func (a *ChatService) getMessages(threadId string) ([]*chattypes.Message, error) {
 	messageIs, err := a.messagesStore.Query(
 		datastore.Equal(datastore.Field("threadId"), threadId),
 	).OrderBy(datastore.OrderByField("createdAt", false)).Find()

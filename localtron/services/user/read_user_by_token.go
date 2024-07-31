@@ -14,7 +14,7 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func (s *UserService) ReadUserByToken(token string) (*usertypes.User, error) {
+func (s *UserService) readUserByToken(token string) (*usertypes.User, error) {
 	authTokenI, found, err := s.authTokensStore.Query(
 		datastore.Equal(datastore.Field("token"), token),
 	).FindOne()

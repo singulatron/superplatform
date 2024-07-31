@@ -102,7 +102,7 @@ type ModelStatus struct {
 }
 
 type StatusRequest struct {
-	Url string `json:"url"`
+	ModelId string `json:"modelId"`
 }
 
 type StatusResponse struct {
@@ -117,14 +117,26 @@ type StartResponse struct {
 }
 
 type MakeDefaultRequest struct {
-	Url string `json:"url"`
+	Id string `json:"id"`
 }
 
 type MakeDefaultResponse struct {
 }
 
+type GetModelsRequest struct{}
+
 type GetModelsResponse struct {
 	Models []*Model `json:"models,omitempty"`
+}
+
+type GetModelRequest struct {
+	Id string `json:"id,omitempty"`
+}
+
+type GetModelResponse struct {
+	Exists   bool      `json:"exists"`
+	Model    *Model    `json:"model,omitempty"`
+	Platform *Platform `json:"platform,omitempty"`
 }
 
 //

@@ -3,10 +3,9 @@ package nodeservice_test
 import (
 	"testing"
 
-	"github.com/singulatron/singulatron/localtron/di"
-	nodeservice "github.com/singulatron/singulatron/localtron/services/node"
-
 	"github.com/stretchr/testify/require"
+
+	nodeservice "github.com/singulatron/singulatron/localtron/services/node"
 )
 
 // output for
@@ -17,14 +16,11 @@ NVIDIA GeForce RTX 3090, 52, 0, 24576, 2600, 26.85, 350.00, 535.183.01, 00000000
 `
 
 func TestNvidiaSmiOutput(t *testing.T) {
-	univ, err := di.BigBang(di.UniverseOptions{
-		Test: true,
-	})
+	ns, err := nodeservice.NewNodeService(nil)
 	require.NoError(t, err)
-	ns := univ.NodeService
-	ns.(*nodeservice.NodeService).Hostname = "testhost"
+	ns.Hostname = "testhost"
 
-	gpus, err := ns.(*nodeservice.NodeService).ParseNvidiaSmiOutput(nvidiaSmiOutput)
+	gpus, err := ns.ParseNvidiaSmiOutput(nvidiaSmiOutput)
 	require.NoError(t, err)
 
 	require.Equal(t, 2, len(gpus))

@@ -6,5 +6,6 @@ export declare class DownloadService {
     call(endpoint: string, request: any): Promise<any>;
     do(url: string): Promise<void>;
     pause(url: string): Promise<void>;
-    list(): Promise<download.DownloadsResponse>;
+    list(): Promise<download.ListResponse>;
+    get(url: string): Promise<download.GetResponse>;
 }

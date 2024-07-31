@@ -117,6 +117,8 @@ type RemovePromptRequest struct {
 	PromptId string `json:"promptId"`
 }
 
+type RemovePromptResponse struct{}
+
 type ListPromptOptions struct {
 	Query *datastore.Query `json:"query"`
 }

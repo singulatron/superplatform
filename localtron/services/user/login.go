@@ -20,7 +20,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-func (s *UserService) Login(email, password string) (*usertypes.AuthToken, error) {
+func (s *UserService) login(email, password string) (*usertypes.AuthToken, error) {
 	userI, found, err := s.usersStore.Query(
 		datastore.Equal(datastore.Field("email"), email),
 	).FindOne()

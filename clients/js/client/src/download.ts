@@ -20,7 +20,13 @@ export class DownloadService {
     this.call("/download/pause", { url: url });
   }
 
-  async list(): Promise<download.DownloadsResponse> {
+  async list(): Promise<download.ListResponse> {
     return this.call("/download/list", {});
+  }
+
+  async get(url: string): Promise<download.GetResponse> {
+    return this.call("/download/get", {
+      url: url,
+    });
   }
 }

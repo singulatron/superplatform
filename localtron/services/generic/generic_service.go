@@ -12,55 +12,58 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/singulatron/singulatron/localtron/datastore"
-	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
-	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
-	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
+	"github.com/singulatron/singulatron/localtron/router"
 
 	generictypes "github.com/singulatron/singulatron/localtron/services/generic/types"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 type GenericService struct {
-	configService   configtypes.ConfigServiceI
-	userService     usertypes.UserServiceI
-	firehoseService firehosetypes.FirehoseServiceI
-
-	store datastore.DataStore
+	router          *router.Router
+	store           datastore.DataStore
+	credentialStore datastore.DataStore
 }
 
 func NewGenericService(
-	cs configtypes.ConfigServiceI,
-	fs firehosetypes.FirehoseServiceI,
-	userService usertypes.UserServiceI,
+	router *router.Router,
 	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error),
 ) (*GenericService, error) {
 	store, err := datastoreFactory("generic", &generictypes.GenericObject{})
 	if err != nil {
 		return nil, err
 	}
-
-	service := &GenericService{
-		configService:   cs,
-		firehoseService: fs,
-		userService:     userService,
-		store:           store,
-	}
-
-	err = service.registerPermissions()
+	credentialStore, err := datastoreFactory("chat_credentials", &usertypes.Credential{})
 	if err != nil {
 		return nil, err
+	}
+
+	service := &GenericService{
+		credentialStore: credentialStore,
+		router:          router,
+		store:           store,
 	}
 
 	return service, nil
 }
 
-func (g *GenericService) Create(request *generictypes.CreateRequest) error {
+func (g *GenericService) Start() error {
+	token, err := usertypes.RegisterService("generic", "Generic Service", g.router, g.credentialStore)
+	if err != nil {
+		return err
+	}
+	g.router = g.router.SetBearerToken(token)
+
+	return g.registerPermissions()
+}
+
+func (g *GenericService) create(request *generictypes.CreateRequest) error {
 	if request.Object.Id == "" {
 		request.Object.Id = uuid.NewString()
 	}
 	return g.store.Create(request.Object)
 }
 
-func (g *GenericService) CreateMany(request *generictypes.CreateManyRequest) error {
+func (g *GenericService) createMany(request *generictypes.CreateManyRequest) error {
 	objectIs := []datastore.Row{}
 	for _, object := range request.Objects {
 		objectIs = append(objectIs, object)
@@ -69,7 +72,7 @@ func (g *GenericService) CreateMany(request *generictypes.CreateManyRequest) err
 	return g.store.CreateMany(objectIs)
 }
 
-func (g *GenericService) Upsert(request *generictypes.UpsertRequest) error {
+func (g *GenericService) upsert(request *generictypes.UpsertRequest) error {
 	vI, found, err := g.store.Query(
 		datastore.Id(request.Object.Id),
 	).FindOne()
@@ -87,7 +90,7 @@ func (g *GenericService) Upsert(request *generictypes.UpsertRequest) error {
 	return g.store.Upsert(request.Object)
 }
 
-func (g *GenericService) UpsertMany(request *generictypes.UpsertManyRequest) error {
+func (g *GenericService) upsertMany(request *generictypes.UpsertManyRequest) error {
 	objectIs := []datastore.Row{}
 	for _, object := range request.Objects {
 		objectIs = append(objectIs, object)
@@ -95,7 +98,7 @@ func (g *GenericService) UpsertMany(request *generictypes.UpsertManyRequest) err
 	return g.store.UpsertMany(objectIs)
 }
 
-func (g *GenericService) Update(tableName string, userId string, conditions []datastore.Condition, object *generictypes.GenericObject) error {
+func (g *GenericService) update(tableName string, userId string, conditions []datastore.Condition, object *generictypes.GenericObject) error {
 	if len(conditions) == 0 {
 		return errors.New("no conditions")
 	}
@@ -111,7 +114,7 @@ func (g *GenericService) Update(tableName string, userId string, conditions []da
 	).Update(object)
 }
 
-func (g *GenericService) Delete(tableName string, userId string, conditions []datastore.Condition) error {
+func (g *GenericService) delete(tableName string, userId string, conditions []datastore.Condition) error {
 	if len(conditions) == 0 {
 		return errors.New("no conditions")
 	}
