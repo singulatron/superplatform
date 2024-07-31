@@ -383,6 +383,10 @@ func BigBang(options *Options) (*http.ServeMux, func() error, error) {
 		if err != nil {
 			return err
 		}
+		err = genericService.Start()
+		if err != nil {
+			return err
+		}
 
 		return nil
 	}, nil

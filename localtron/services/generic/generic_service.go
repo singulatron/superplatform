@@ -15,11 +15,13 @@ import (
 	"github.com/singulatron/singulatron/localtron/router"
 
 	generictypes "github.com/singulatron/singulatron/localtron/services/generic/types"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 type GenericService struct {
-	router *router.Router
-	store  datastore.DataStore
+	router          *router.Router
+	store           datastore.DataStore
+	credentialStore datastore.DataStore
 }
 
 func NewGenericService(
@@ -30,16 +32,27 @@ func NewGenericService(
 	if err != nil {
 		return nil, err
 	}
+	credentialStore, err := datastoreFactory("chat_credentials", &usertypes.Credential{})
+	if err != nil {
+		return nil, err
+	}
 
 	service := &GenericService{
-		router: router,
-		store:  store,
+		credentialStore: credentialStore,
+		router:          router,
+		store:           store,
 	}
 
 	return service, nil
 }
 
 func (g *GenericService) Start() error {
+	token, err := usertypes.RegisterService("generic", "Generic Service", g.router, g.credentialStore)
+	if err != nil {
+		return err
+	}
+	g.router = g.router.SetBearerToken(token)
+
 	return g.registerPermissions()
 }
 
