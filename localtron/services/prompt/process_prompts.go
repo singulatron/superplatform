@@ -164,9 +164,15 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 	)
 
 	defer func() {
-		err = p.router.Post(context.Background(), "firehose", "/publish", prompttypes.EventPromptProcessingFinished{
+		ev := prompttypes.EventPromptProcessingFinished{
 			PromptId: currentPrompt.Id,
 			Error:    errToString(err),
+		}
+		err = p.router.Post(context.Background(), "firehose", "/publish", firehosetypes.PublishRequest{
+			Event: &firehosetypes.Event{
+				Name: ev.Name(),
+				Data: ev,
+			},
 		}, nil)
 		if err != nil {
 			logger.Error("Failed to publish: %v", err)

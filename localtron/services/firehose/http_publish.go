@@ -41,4 +41,6 @@ func (p *FirehoseService) Publish(w http.ResponseWriter,
 	defer r.Body.Close()
 
 	p.publish(req.Event)
+
+	w.Write([]byte(`{}`))
 }
