@@ -19,7 +19,7 @@ func (s *UserService) AddPermissionToRole(
 	r *http.Request,
 ) {
 	// @todo add proper permission here
-	_, err := s.isAuthorized(usertypes.PermissionPermissionAssign.Id, r)
+	_, err := s.isAuthorized(r, usertypes.PermissionPermissionAssign.Id, nil)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return

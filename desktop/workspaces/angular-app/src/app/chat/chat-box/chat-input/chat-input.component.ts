@@ -131,7 +131,7 @@ export class ChatInputComponent implements OnInit, AfterViewInit {
 
 		const character = this.getSelectedCharacter();
 		this.sends.emit({
-			characterId: character?.id,
+			characterId: character?.id || '',
 			message: message,
 			modelId: this.model?.id || '',
 		});

@@ -15,7 +15,7 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func (dm *DockerService) LaunchContainer(
+func (dm *DockerService) HashIsRunning(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
@@ -33,7 +33,7 @@ func (dm *DockerService) LaunchContainer(
 		return
 	}
 
-	req := &dockertypes.LaunchContainerRequest{}
+	req := &dockertypes.HashIsRunningRequest{}
 	err = json.NewDecoder(r.Body).Decode(req)
 	if err != nil {
 		http.Error(w, `invalid JSON`, http.StatusBadRequest)
@@ -41,14 +41,14 @@ func (dm *DockerService) LaunchContainer(
 	}
 	defer r.Body.Close()
 
-	di, err := dm.launchContainer(req.Image, req.Port, req.HostPort, req.Options)
+	isRunning, err := dm.hashIsRunning(req.Hash)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	jsonData, _ := json.Marshal(&dockertypes.LaunchContainerResponse{
-		Info: di,
+	jsonData, _ := json.Marshal(&dockertypes.HashIsRunningResponse{
+		IsRunning: isRunning,
 	})
 	w.Write(jsonData)
 }

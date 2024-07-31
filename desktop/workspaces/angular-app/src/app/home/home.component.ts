@@ -51,8 +51,8 @@ export class HomeComponent {
 	async ngOnInit() {
 		this.userService.noop();
 
-		const logStatus = await this.logService.logStatus();
-		this.loggingEnabled = logStatus.enabled;
+		//const logStatus = await this.logService.logStatus();
+		//this.loggingEnabled = logStatus.enabled;
 		if (!this.loggingEnabled) {
 			console.log('Logging is disabled');
 			this.ipcService.send(WindowApiConst.DISABLE_LOGGING_REQUEST, {});

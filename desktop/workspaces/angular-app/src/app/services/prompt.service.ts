@@ -67,12 +67,12 @@ export class PromptService {
 		if (!prompt.id) {
 			prompt.id = this.localtron.uuid();
 		}
-		const request: AddPromptRequest = { prompt: prompt };
+		const request: AddPromptRequest = prompt;
 		return this.localtron.call('/prompt/add', request);
 	}
 
 	async promptRemove(prompt: Prompt): Promise<void> {
-		const request: RemovePromptRequest = { prompt: prompt };
+		const request: RemovePromptRequest = { promptId: prompt.id };
 		return this.localtron.call('/prompt/remove', request);
 	}
 
