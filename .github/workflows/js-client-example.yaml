@@ -36,6 +36,8 @@ jobs:
             sleep 1
           done
 
+          sleep 2
+
           set -e
           (
             node ./dist/index.js
