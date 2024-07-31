@@ -280,7 +280,7 @@ func BigBang(options *Options) (*http.ServeMux, func() error, error) {
 	}))
 
 	router.HandleFunc("/prompt/add", appl(func(w http.ResponseWriter, r *http.Request) {
-		promptService.PostAdd(w, r)
+		promptService.Add(w, r)
 	}))
 
 	router.HandleFunc("/prompt/remove", appl(func(w http.ResponseWriter, r *http.Request) {

@@ -27,7 +27,7 @@ import (
 // @Failure 401 {object} prompttypes.ErrorResponse "Unauthorized"
 // @Failure 500 {object} prompttypes.ErrorResponse "Internal Server Error"
 // @Router /prompt/add [post]
-func (p *PromptService) PostAdd(
+func (p *PromptService) Add(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
