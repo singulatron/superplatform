@@ -50,12 +50,15 @@ func (a *ChatService) addMessage(chatMessage *chattypes.Message) error {
 	ev := chattypes.EventMessageAdded{
 		ThreadId: chatMessage.ThreadId,
 	}
-	a.router.Post(context.Background(), "firehose", "/publish", firehosetypes.PublishRequest{
+	err = a.router.Post(context.Background(), "firehose", "/publish", firehosetypes.PublishRequest{
 		Event: &firehosetypes.Event{
 			Name: ev.Name(),
 			Data: ev,
 		},
 	}, nil)
+	if err != nil {
+		logger.Error("Failed to publish: %v", err)
+	}
 
 	return a.messagesStore.Query(
 		datastore.Equal(datastore.Field("id"), chatMessage.Id),
