@@ -13,10 +13,18 @@ export interface DownloadDetails {
   error?: string;
 }
 
-export type DownloadsResponse = {
+export type ListResponse = {
   downloads: DownloadDetails[];
 };
 
 export interface DownloadStatusChangeEvent {
   allDownloads: DownloadDetails[];
 }
+
+export type GetRequest = {
+  download: DownloadDetails;
+};
+
+export type GetResponse = {
+  download: DownloadDetails;
+};

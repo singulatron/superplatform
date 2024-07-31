@@ -23,6 +23,13 @@ class DownloadService {
             return this.call("/download/list", {});
         });
     }
+    get(url) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.call("/download/get", {
+                url: url,
+            });
+        });
+    }
 }
 
 export { DownloadService };
