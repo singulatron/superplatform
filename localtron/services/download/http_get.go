@@ -11,7 +11,6 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/davecgh/go-spew/spew"
 	downloadtypes "github.com/singulatron/singulatron/localtron/services/download/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
@@ -51,7 +50,6 @@ func (ds *DownloadService) Get(
 	defer r.Body.Close()
 
 	dl, exists := ds.getDownload(req.Url)
-	spew.Dump(dl)
 
 	jsonData, _ := json.Marshal(downloadtypes.GetDownloadResponse{
 		Exists:   exists,

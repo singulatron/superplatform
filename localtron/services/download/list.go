@@ -38,10 +38,9 @@ func downloadToDownloadDetails(id string, download *types.Download) *types.Downl
 		progress = &computedProgress
 	}
 
-	var fullFileSize *int
+	var fullFileSize *int64
 	if download.TotalSize > 0 {
-		totalSize := int(download.TotalSize)
-		fullFileSize = &totalSize
+		fullFileSize = &download.TotalSize
 	}
 
 	var dir *string
@@ -59,7 +58,7 @@ func downloadToDownloadDetails(id string, download *types.Download) *types.Downl
 		FileName:        fileName,
 		Dir:             dir,
 		Progress:        progress,
-		DownloadedBytes: int(download.DownloadedSize),
+		DownloadedBytes: download.DownloadedSize,
 		FullFileSize:    fullFileSize,
 		Status:          string(download.Status),
 		FilePath:        &download.FilePath,

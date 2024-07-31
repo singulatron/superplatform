@@ -8,23 +8,25 @@
 package downloadservice_test
 
 import (
+	"context"
 	"io"
 	"net/http"
 	"net/http/httptest"
 	"os"
-	"path"
 	"path/filepath"
 	"testing"
 	"time"
 
 	"github.com/singulatron/singulatron/localtron/di"
 	downloadservice "github.com/singulatron/singulatron/localtron/services/download"
+	downloadtypes "github.com/singulatron/singulatron/localtron/services/download/types"
 	types "github.com/singulatron/singulatron/localtron/services/download/types"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 	"github.com/stretchr/testify/require"
 )
 
 func TestDownloadFile(t *testing.T) {
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	fileHostServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		rangeHeader := r.Header.Get("Range")
 		if rangeHeader != "" {
 			w.Header().Set("Content-Range", "bytes 0-10/11")
@@ -35,36 +37,56 @@ func TestDownloadFile(t *testing.T) {
 			io.WriteString(w, "Hello world")
 		}
 	}))
+	defer fileHostServer.Close()
+
+	hs := &di.HandlerSwitcher{}
+	server := httptest.NewServer(hs)
 	defer server.Close()
 
-	dir := path.Join(os.TempDir(), "download_test")
-	require.NoError(t, os.MkdirAll(dir, 0755))
-
-	universe, err := di.BigBang(di.Options{
+	options := &di.Options{
 		Test: true,
-	})
+		Url:  server.URL,
+	}
+	universe, starterFunc, err := di.BigBang(options)
 	require.NoError(t, err)
-	dm := universe.DownloadService
 
-	dm.(*downloadservice.DownloadService).StateFilePath = path.Join(dir, "downloadFile.json")
-	require.NoError(t, dm.Do(server.URL, dir))
+	hs.UpdateHandler(universe)
+	router := options.Router
+
+	err = starterFunc()
+	require.NoError(t, err)
+
+	token, err := usertypes.RegisterUser(router, "someuser", "pw123", "Some name")
+	require.NoError(t, err)
+	router = router.SetBearerToken(token)
+
+	err = router.Post(context.Background(), "download", "/do", downloadtypes.DownloadRequest{
+		URL: fileHostServer.URL,
+	}, nil)
+	require.NoError(t, err)
 
 	for {
 		time.Sleep(5 * time.Millisecond)
-		d, ok := dm.GetDownload(server.URL)
-		if ok && d.Status == types.DownloadStatusCompleted {
+		req := downloadtypes.GetDownloadRequest{
+			Url: fileHostServer.URL,
+		}
+		rsp := downloadtypes.GetDownloadResponse{}
+		err = router.Post(context.Background(), "download", "/get", req, &rsp)
+		require.NoError(t, err)
+
+		if rsp.Exists && rsp.Download.Status == string(types.DownloadStatusCompleted) {
 			break
 		}
 	}
 
-	expectedFilePath := filepath.Join(dir, downloadservice.EncodeURLtoFileName(server.URL))
+	expectedFilePath := filepath.Join(options.HomeDir, ".singulatron", "downloads", downloadservice.EncodeURLtoFileName(fileHostServer.URL))
 	data, err := os.ReadFile(expectedFilePath)
 	require.NoError(t, err)
 	require.Equal(t, "Hello world", string(data))
 }
 
 func TestDownloadFileWithPartFile(t *testing.T) {
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	fileHostServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		rangeHeader := r.Header.Get("Range")
 		if rangeHeader != "bytes=5-" {
 			t.Errorf("Expected 'bytes=5-' got '%s'", rangeHeader)
@@ -74,70 +96,111 @@ func TestDownloadFileWithPartFile(t *testing.T) {
 		w.WriteHeader(http.StatusPartialContent)
 		io.WriteString(w, " world")
 	}))
+	defer fileHostServer.Close()
+
+	hs := &di.HandlerSwitcher{}
+	server := httptest.NewServer(hs)
 	defer server.Close()
 
-	dir := path.Join(os.TempDir(), "download_test")
-	require.NoError(t, os.MkdirAll(dir, 0755))
+	options := &di.Options{
+		Test: true,
+		Url:  server.URL,
+	}
+	universe, starterFunc, err := di.BigBang(options)
+	require.NoError(t, err)
 
-	downloadURL := server.URL + "/file"
-	partFilePath := filepath.Join(dir, downloadservice.EncodeURLtoFileName(downloadURL)+".part")
+	hs.UpdateHandler(universe)
+	router := options.Router
+
+	err = starterFunc()
+	require.NoError(t, err)
+
+	token, err := usertypes.RegisterUser(router, "someuser", "pw123", "Some name")
+	require.NoError(t, err)
+	router = router.SetBearerToken(token)
+
+	downloadURL := fileHostServer.URL + "/file"
+
+	partFilePath := filepath.Join(options.HomeDir, ".singulatron", "downloads", downloadservice.EncodeURLtoFileName(downloadURL)+".part")
 	if err := os.WriteFile(partFilePath, []byte("Hello"), 0644); err != nil {
 		t.Fatalf("Failed to create part file: %s", err)
 	}
 
-	universe, err := di.BigBang(di.Options{
-		Test: true,
-	})
+	req := downloadtypes.DownloadRequest{
+		URL: downloadURL,
+	}
+	err = router.Post(context.Background(), "download", "/do", req, nil)
 	require.NoError(t, err)
-	dm := universe.DownloadService
-
-	dm.(*downloadservice.DownloadService).StateFilePath = path.Join(dir, "downloadFilePartial.json")
-
-	require.NoError(t, dm.Do(downloadURL, dir))
 
 	for {
 		time.Sleep(5 * time.Millisecond)
-		d, ok := dm.GetDownload(downloadURL)
-		if ok && d.Status == types.DownloadStatusCompleted {
+		req := downloadtypes.GetDownloadRequest{
+			Url: downloadURL,
+		}
+		rsp := downloadtypes.GetDownloadResponse{}
+		err = router.Post(context.Background(), "download", "/get", req, &rsp)
+		require.NoError(t, err)
+		if rsp.Exists && rsp.Download.Status == string(types.DownloadStatusCompleted) {
 			break
 		}
 	}
 
-	expectedFilePath := filepath.Join(dir, downloadservice.EncodeURLtoFileName(downloadURL))
+	expectedFilePath := filepath.Join(options.HomeDir, ".singulatron", "downloads", downloadservice.EncodeURLtoFileName(downloadURL))
 	data, err := os.ReadFile(expectedFilePath)
 	require.NoError(t, err)
 	require.Equal(t, "Hello world", string(data))
 }
 
 func TestDownloadFileWithFullFile(t *testing.T) {
-	dir := path.Join(os.TempDir(), "download_test")
-	require.NoError(t, os.MkdirAll(dir, 0755))
+	hs := &di.HandlerSwitcher{}
+	server := httptest.NewServer(hs)
+	defer server.Close()
+
+	options := &di.Options{
+		Test: true,
+		Url:  server.URL,
+	}
+	universe, starterFunc, err := di.BigBang(options)
+	require.NoError(t, err)
+
+	hs.UpdateHandler(universe)
+	router := options.Router
+
+	err = starterFunc()
+	require.NoError(t, err)
+
+	token, err := usertypes.RegisterUser(router, "someuser", "pw123", "Some name")
+	require.NoError(t, err)
+	router = router.SetBearerToken(token)
 
 	downloadURL := "full-file"
-	fullFilePath := filepath.Join(dir, downloadservice.EncodeURLtoFileName(downloadURL))
+	fullFilePath := filepath.Join(options.HomeDir, ".singulatron", "downloads", downloadservice.EncodeURLtoFileName(downloadURL))
 	require.NoError(t, os.WriteFile(fullFilePath, []byte("Hello world"), 0644))
 
-	universe, err := di.BigBang(di.Options{
-		Test: true,
-	})
+	req := downloadtypes.DownloadRequest{
+		URL: downloadURL,
+	}
+	err = router.Post(context.Background(), "download", "/do", req, nil)
 	require.NoError(t, err)
-	dm := universe.DownloadService
-
-	dm.(*downloadservice.DownloadService).StateFilePath = path.Join(dir, "downloadFileFull.json")
-	require.NoError(t, dm.Do(downloadURL, dir))
 
 	var (
-		d  *types.Download
-		ok bool
+		d *types.DownloadDetails
 	)
 	for {
 		time.Sleep(5 * time.Millisecond)
-		d, ok = dm.GetDownload(downloadURL)
-		if ok && d.Status == types.DownloadStatusCompleted {
+		req := downloadtypes.GetDownloadRequest{
+			Url: downloadURL,
+		}
+		rsp := downloadtypes.GetDownloadResponse{}
+		err = router.Post(context.Background(), "download", "/get", req, &rsp)
+		require.NoError(t, err)
+
+		if rsp.Exists && rsp.Download.Status == string(types.DownloadStatusCompleted) {
+			d = rsp.Download
 			break
 		}
 	}
 
-	require.Equal(t, int64(11), d.DownloadedSize)
-	require.Equal(t, int64(11), d.TotalSize)
+	require.Equal(t, int64(11), d.DownloadedBytes)
+	require.Equal(t, int64(11), *d.FullFileSize)
 }

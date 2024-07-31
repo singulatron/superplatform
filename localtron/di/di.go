@@ -33,6 +33,7 @@ type Options struct {
 	LLMClient        llm.ClientI
 	Router           *router.Router
 	DatastoreFactory func(tableName string, instance any) (datastore.DataStore, error)
+	HomeDir          string
 }
 
 func BigBang(options *Options) (*http.ServeMux, func() error, error) {
@@ -51,6 +52,7 @@ func BigBang(options *Options) (*http.ServeMux, func() error, error) {
 			os.Exit(1)
 		}
 	}
+	options.HomeDir = homeDir
 
 	configService, err := configservice.NewConfigService()
 	if err != nil {
