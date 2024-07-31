@@ -31,7 +31,8 @@ func (cs *ConfigService) Save(
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
 	err := cs.router.AsRequestMaker(r).Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
-		PermissionId: configtypes.PermissionConfigEdit.Id,
+		PermissionId:  configtypes.PermissionConfigEdit.Id,
+		EmailsGranted: []string{"model"},
 	}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
