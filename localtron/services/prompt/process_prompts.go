@@ -258,7 +258,7 @@ func (p *PromptService) processPlatform(address string, fullPrompt string, curre
 		Id: modelId,
 	}
 	getModelRsp := modeltypes.GetModelResponse{}
-	err := p.router.Post(context.Background(), "model", "/get-model", getModelReq, &getModelRsp)
+	err := p.router.Post(context.Background(), "model", "/get", getModelReq, &getModelRsp)
 	if err != nil {
 		return err
 	}
