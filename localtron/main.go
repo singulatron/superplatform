@@ -13,6 +13,7 @@ import (
 	"net/http"
 	"os"
 	"runtime/debug"
+	"time"
 
 	"github.com/singulatron/singulatron/localtron/di"
 	"github.com/singulatron/singulatron/localtron/logger"
@@ -61,11 +62,6 @@ func main() {
 		logger.Error("Cannot make universe", slog.Any("error", err))
 		os.Exit(1)
 	}
-	err = starter()
-	if err != nil {
-		logger.Error("Cannot start universe", slog.Any("error", err))
-		os.Exit(1)
-	}
 
 	router.HandleFunc("/swagger/", httpSwagger.WrapHandler)
 
@@ -74,6 +70,14 @@ func main() {
 	}
 
 	logger.Info("Server started", slog.String("port", port))
+	go func() {
+		time.Sleep(5 * time.Millisecond)
+		err = starter()
+		if err != nil {
+			logger.Error("Cannot start universe", slog.Any("error", err))
+			os.Exit(1)
+		}
+	}()
 	err = http.ListenAndServe(":58231", srv.Handler)
 	if err != nil {
 		logger.Error("HTTP listen failed", slog.String("error", err.Error()))

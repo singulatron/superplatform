@@ -85,7 +85,9 @@ func BigBang(options *Options) (*http.ServeMux, func() error, error) {
 			logger.Error("Creating router failed", slog.String("error", err.Error()))
 			os.Exit(1)
 		}
-		router.SetDefaultAddress(options.Url)
+		if options.Url != "" {
+			router.SetDefaultAddress(options.Url)
+		}
 		options.Router = router
 	}
 
