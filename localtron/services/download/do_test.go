@@ -9,9 +9,11 @@ package downloadservice_test
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"os"
 	"path/filepath"
 	"testing"
@@ -67,11 +69,9 @@ func TestDownloadFile(t *testing.T) {
 
 	for {
 		time.Sleep(5 * time.Millisecond)
-		req := downloadtypes.GetDownloadRequest{
-			Url: fileHostServer.URL,
-		}
+		// req := downloadtypes.GetDownloadRequest{}
 		rsp := downloadtypes.GetDownloadResponse{}
-		err = router.Post(context.Background(), "download-service", "/get", req, &rsp)
+		err = router.Get(context.Background(), "download-service", fmt.Sprintf("/download/%v", url.PathEscape(fileHostServer.URL)), nil, &rsp)
 		require.NoError(t, err)
 
 		if rsp.Exists && rsp.Download.Status == string(types.DownloadStatusCompleted) {

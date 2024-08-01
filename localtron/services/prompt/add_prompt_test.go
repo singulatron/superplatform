@@ -122,9 +122,9 @@ func TestAddPrompt(t *testing.T) {
 	err = router.Get(context.Background(), "config-service", "/config", nil, &crsp)
 	require.NoError(t, err)
 
-	mreq := modeltypes.ListRequest{}
+	//mreq := modeltypes.ListRequest{}
 	mrsp := modeltypes.ListResponse{}
-	err = router.Post(context.Background(), "model", "", mreq, &mrsp)
+	err = router.Get(context.Background(), "model-service", "/models", nil, &mrsp)
 	require.NoError(t, err)
 
 	var model *modeltypes.Model

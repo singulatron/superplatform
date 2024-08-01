@@ -15,6 +15,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/gorilla/mux"
 	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/logger"
 
@@ -34,12 +35,15 @@ func (s *UserService) IsAuthorized(
 	}
 	defer r.Body.Close()
 
-	if req.PermissionId == "" {
+	vars := mux.Vars(r)
+	permissionId := vars["permissionId"]
+
+	if permissionId == "" {
 		http.Error(w, `missing permission id`, http.StatusBadRequest)
 		return
 	}
 
-	user, err := s.isAuthorized(r, req.PermissionId, req.EmailsGranted)
+	user, err := s.isAuthorized(r, permissionId, req.EmailsGranted)
 	if err != nil {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
