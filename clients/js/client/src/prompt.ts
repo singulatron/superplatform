@@ -17,17 +17,17 @@ export class PromptService {
       prompt.id = uuid();
     }
 
-    return this.call("/prompt/add", prompt);
+    return this.call("'/prompt-service/add", prompt);
   }
 
   async promptRemove(promptId: string): Promise<void> {
     const request: prompt.RemovePromptRequest = { promptId: promptId };
-    return this.call("/prompt/remove", request);
+    return this.call("'/prompt-service/remove", request);
   }
 
   async promptList(
     request: prompt.ListPromptsRequest
   ): Promise<prompt.ListPromptsResponse> {
-    return this.call("/prompt/list", request);
+    return this.call("'/prompt-service/list", request);
   }
 }

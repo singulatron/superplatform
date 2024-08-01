@@ -12,6 +12,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	"github.com/singulatron/singulatron/localtron/clients/llm"
 	"github.com/singulatron/singulatron/localtron/logger"
 
@@ -27,7 +28,7 @@ import (
 // @Success 200 {string} string "Streaming response"
 // @Failure 400 {object} prompttypes.ErrorResponse "Missing threadId parameter"
 // @Failure 401 {object} prompttypes.ErrorResponse "Unauthorized"
-// @Router /prompt/subscribe [get]
+// @Router '/prompt-service/{threadId}/subscribe [get]
 func (p *PromptService) GetSubscribe(
 	w http.ResponseWriter,
 	r *http.Request,
@@ -45,12 +46,13 @@ func (p *PromptService) GetSubscribe(
 		return
 	}
 
-	threadId := r.URL.Query().Get("threadId")
+	vars := mux.Vars(r)
 
-	if threadId == "" {
-		http.Error(w, "Missing threadId parameter", http.StatusBadRequest)
+	if vars["threadId"] == "" {
+		http.Error(w, "Missing threadId path parameter", http.StatusBadRequest)
 		return
 	}
+	threadId := vars["threadId"]
 
 	w.Header().Set("Content-Type", "text/event-stream")
 

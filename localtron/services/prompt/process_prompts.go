@@ -168,7 +168,7 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 			PromptId: currentPrompt.Id,
 			Error:    errToString(err),
 		}
-		err = p.router.Post(context.Background(), "firehose", "/publish", firehosetypes.PublishRequest{
+		err = p.router.Post(context.Background(), "firehose-service", "/publish", firehosetypes.PublishRequest{
 			Event: &firehosetypes.Event{
 				Name: ev.Name(),
 				Data: ev,
@@ -192,7 +192,7 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 	ev := prompttypes.EventPromptProcessingStarted{
 		PromptId: currentPrompt.Id,
 	}
-	err = p.router.Post(context.Background(), "firehose", "/publish", firehosetypes.PublishRequest{
+	err = p.router.Post(context.Background(), "firehose-service", "/publish", firehosetypes.PublishRequest{
 		Event: &firehosetypes.Event{
 			Name: ev.Name(),
 			Data: ev,

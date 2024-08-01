@@ -68,16 +68,16 @@ export class PromptService {
 			prompt.id = this.localtron.uuid();
 		}
 		const request: AddPromptRequest = prompt;
-		return this.localtron.call('/prompt/add', request);
+		return this.localtron.call(''/prompt-service/add', request);
 	}
 
 	async promptRemove(prompt: Prompt): Promise<void> {
 		const request: RemovePromptRequest = { promptId: prompt.id };
-		return this.localtron.call('/prompt/remove', request);
+		return this.localtron.call(''/prompt-service/remove', request);
 	}
 
 	async promptList(request: ListPromptsRequest): Promise<ListPromptsResponse> {
-		return this.localtron.call('/prompt/list', request);
+		return this.localtron.call(''/prompt-service/list', request);
 	}
 
 	private resubCount = 0;
@@ -98,7 +98,7 @@ export class PromptService {
 
 				const uri =
 					this.localtron.config.env.localtronAddress +
-					'/prompt/subscribe?threadId=' +
+					`'/prompt-service/${threadId}/subscribe` +
 					threadId;
 
 				const headers = {

@@ -26,7 +26,7 @@ import (
 // @Failure 400 {string} string "Invalid JSON"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
-// @Router /chat/thread/add [post]
+// @Router /chat-service/thread/add [post]
 func (a *ChatService) AddThread(
 	w http.ResponseWriter,
 	r *http.Request,

@@ -26,7 +26,7 @@ import (
 // @Failure 400 {object} prompttypes.ErrorResponse "Invalid JSON"
 // @Failure 401 {object} prompttypes.ErrorResponse "Unauthorized"
 // @Failure 500 {object} prompttypes.ErrorResponse "Internal Server Error"
-// @Router /prompt/add [post]
+// @Router '/prompt-service/add [post]
 func (p *PromptService) Add(
 	w http.ResponseWriter,
 	r *http.Request,

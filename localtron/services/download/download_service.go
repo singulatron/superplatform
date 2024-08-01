@@ -145,7 +145,7 @@ func (ds *DownloadService) saveState() error {
 	ds.hasChanged = false
 	ds.lock.Unlock()
 
-	ds.router.Post(context.Background(), "firehose", "/publish", firehosetypes.PublishRequest{
+	ds.router.Post(context.Background(), "firehose-service", "/publish", firehosetypes.PublishRequest{
 		Event: &firehosetypes.Event{
 			Name: types.EventDownloadStatusChangeName,
 		},

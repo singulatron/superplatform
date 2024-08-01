@@ -23,12 +23,11 @@ import (
 // @Accept json
 // @Produce json
 // @Param id path string true "Model ID"
-// @Param StartRequest body modeltypes.StartRequest false "Model start request"
 // @Success 200 {object} modeltypes.StartResponse
-// @Failure 400 {string} string "invalid JSON"
-// @Failure 401 {string} string "Unauthorized"
-// @Failure 500 {string} string "Internal Server Error"
-// @Router /model/{id}/start [post]
+// @Failure 400 {object} modeltypes.ErrorResponse "Invalid JSON"
+// @Failure 401 {object} modeltypes.ErrorResponse "Unauthorized"
+// @Failure 500 {object} modeltypes.ErrorResponse "Internal Server Error"
+// @Router /model/{modelId}/start [put]
 func (ms *ModelService) StartSpecific(
 	w http.ResponseWriter,
 	r *http.Request,
@@ -60,7 +59,7 @@ func (ms *ModelService) StartSpecific(
 	}
 	defer r.Body.Close()
 
-	err = ms.start(v["id"])
+	err = ms.start(v["modelId"])
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

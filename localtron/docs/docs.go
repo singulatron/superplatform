@@ -1021,112 +1021,8 @@ const docTemplate = `{
                 }
             }
         },
-        "/model/default/start": {
-            "post": {
-                "description": "Starts The Default Model.\n\nRequires the ` + "`" + `model.create` + "`" + ` permission.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "model"
-                ],
-                "summary": "Start the Default Model",
-                "parameters": [
-                    {
-                        "description": "Model start request",
-                        "name": "StartRequest",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/modeltypes.StartRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/modeltypes.StartResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid JSON",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/model/get": {
-            "post": {
-                "description": "Retrieves details of a model by its ID.\n\nRequires ` + "`" + `model.view“ permission.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "model"
-                ],
-                "summary": "Get a Model",
-                "parameters": [
-                    {
-                        "description": "Get Model Request",
-                        "name": "GetModelRequest",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/modeltypes.GetModelRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/modeltypes.GetModelResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid JSON",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/model/list": {
-            "post": {
+        "/model": {
+            "get": {
                 "description": "Retrieves a list of models after checking authorization\nRequires \"model.view\" permission.",
                 "consumes": [
                     "application/json"
@@ -1137,7 +1033,7 @@ const docTemplate = `{
                 "tags": [
                     "model"
                 ],
-                "summary": "List models",
+                "summary": "List Models",
                 "parameters": [
                     {
                         "description": "Get models request",
@@ -1156,29 +1052,158 @@ const docTemplate = `{
                             "$ref": "#/definitions/modeltypes.ListResponse"
                         }
                     },
-                    "400": {
-                        "description": "Invalid JSON",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/modeltypes.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/modeltypes.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/model/default/start": {
+            "put": {
+                "description": "Starts The Default Model.\n\nRequires the ` + "`" + `model.create` + "`" + ` permission.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "model"
+                ],
+                "summary": "Start the Default Model",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.StartResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/model/{id}": {
+            "get": {
+                "description": "Retrieves the details of a model by its ID.\n\nRequires ` + "`" + `model.view` + "`" + ` permission.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "model"
+                ],
+                "summary": "Get a Model",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Model ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.GetModelResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/model/{id}/make-default": {
+            "put": {
+                "description": "Sets a model as the default model — when prompts are sent without a Model ID, the default model is used.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "model"
+                ],
+                "summary": "Make a Model Default",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Model ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.MakeDefaultResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.ErrorResponse"
                         }
                     }
                 }
             }
         },
         "/model/{id}/start": {
-            "post": {
+            "put": {
                 "description": "Starts a model by ID",
                 "consumes": [
                     "application/json"
@@ -1197,14 +1222,6 @@ const docTemplate = `{
                         "name": "id",
                         "in": "path",
                         "required": true
-                    },
-                    {
-                        "description": "Model start request",
-                        "name": "StartRequest",
-                        "in": "body",
-                        "schema": {
-                            "$ref": "#/definitions/modeltypes.StartRequest"
-                        }
                     }
                 ],
                 "responses": {
@@ -1215,79 +1232,27 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "invalid JSON",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/model/{{id}}/make-default": {
-            "post": {
-                "description": "Sets a model as the default model - when prompts are sent without a Model ID, this model will be used.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "model"
-                ],
-                "summary": "Make Default",
-                "parameters": [
-                    {
-                        "description": "Make default request",
-                        "name": "MakeDefaultRequest",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/modeltypes.MakeDefaultRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/modeltypes.MakeDefaultResponse"
-                        }
-                    },
-                    "400": {
                         "description": "Invalid JSON",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/modeltypes.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/modeltypes.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/modeltypes.ErrorResponse"
                         }
                     }
                 }
             }
         },
-        "/models/{id}/status": {
+        "/model/{id}/status": {
             "get": {
                 "description": "Retrieves the status of a model by ID.\n\nRequires the ` + "`" + `model.view` + "`" + ` permission.",
                 "consumes": [
@@ -1297,7 +1262,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "models"
+                    "model"
                 ],
                 "summary": "Get Model Status",
                 "parameters": [
@@ -2215,10 +2180,10 @@ const docTemplate = `{
                 }
             }
         },
-        "modeltypes.GetModelRequest": {
+        "modeltypes.ErrorResponse": {
             "type": "object",
             "properties": {
-                "id": {
+                "error": {
                     "type": "string"
                 }
             }
@@ -2248,14 +2213,6 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/modeltypes.Model"
                     }
-                }
-            }
-        },
-        "modeltypes.MakeDefaultRequest": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "string"
                 }
             }
         },
@@ -2367,9 +2324,6 @@ const docTemplate = `{
                     "type": "integer"
                 }
             }
-        },
-        "modeltypes.StartRequest": {
-            "type": "object"
         },
         "modeltypes.StartResponse": {
             "type": "object"

@@ -20,7 +20,7 @@ import { first } from 'rxjs';
 import { PageComponent } from '../components/page/page.component';
 import { IconMenuComponent } from '../components/icon-menu/icon-menu.component';
 import { CenteredComponent } from '../components/centered/centered.component';
-import { PromptComponent } from './prompt/prompt.component';
+import { PromptComponent } from '.'/prompt-service/prompt.component';
 import { QueryParser } from '../services/query.service';
 import {
 	queryHasFieldCondition,

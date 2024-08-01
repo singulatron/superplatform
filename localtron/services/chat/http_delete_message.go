@@ -26,7 +26,7 @@ import (
 // @Failure 400 {string} string "Invalid JSON"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
-// @Router /chat/message/delete [post]
+// @Router /chat-service/message/delete [post]
 func (a *ChatService) DeleteMessage(
 	w http.ResponseWriter,
 	r *http.Request,

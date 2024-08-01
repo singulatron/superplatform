@@ -16,18 +16,16 @@ import (
 )
 
 // List godoc
-// @Summary List models
+// @Summary List Models
 // @Description Retrieves a list of models after checking authorization
 // @Description Requires "model.view" permission.
 // @Tags model
 // @Accept json
 // @Produce json
-// @Param GetModelsRequest body modeltypes.ListRequest true "Get models request"
 // @Success 200 {object} modeltypes.ListResponse
-// @Failure 400 {string} string "Invalid JSON"
-// @Failure 401 {string} string "Unauthorized"
-// @Failure 500 {string} string "Internal Server Error"
-// @Router /model/list [post]
+// @Failure 401 {object} modeltypes.ErrorResponse "Unauthorized"
+// @Failure 500 {object} modeltypes.ErrorResponse "Internal Server Error"
+// @Router /model [get]
 func (ms *ModelService) List(
 	w http.ResponseWriter,
 	r *http.Request,

@@ -27,7 +27,7 @@ import (
 // @Success 200 {string} string "Event data"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
-// @Router /firehose/subscribe [get]
+// @Router /firehose-service/subscribe [get]
 func (p *FirehoseService) Subscribe(
 	w http.ResponseWriter,
 	r *http.Request,

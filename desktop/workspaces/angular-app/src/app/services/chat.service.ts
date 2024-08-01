@@ -58,39 +58,39 @@ export class ChatService {
 
 	async chatMessageDelete(messageId: string): Promise<chat.GetThreadResponse> {
 		const request: chat.DeleteMessageRequest = { messageId: messageId };
-		return this.localtron.call('/chat/message/delete', request);
+		return this.localtron.call('/chat-service/message/delete', request);
 	}
 
 	async chatMessages(threadId: string): Promise<chat.GetMessagesResponse> {
 		const request: chat.GetMessagesRequest = { threadId: threadId };
-		return this.localtron.call('/chat/messages', request);
+		return this.localtron.call('/chat-service/messages', request);
 	}
 
 	async chatThread(threadId: string): Promise<chat.GetThreadResponse> {
 		const request: chat.GetThreadRequest = { threadId: threadId };
-		return this.localtron.call('/chat/thread', request);
+		return this.localtron.call('/chat-service/thread', request);
 	}
 
 	async chatThreadAdd(thread: chat.Thread): Promise<chat.AddThreadResponse> {
 		const request: chat.AddThreadRequest = { thread: thread };
-		return this.localtron.call('/chat/thread/add', request);
+		return this.localtron.call('/chat-service/thread/add', request);
 	}
 
 	async chatThreadUpdate(
 		thread: chat.Thread
 	): Promise<chat.UpdateThreadResponse> {
 		const request: chat.UpdateThreadRequest = { thread: thread };
-		return this.localtron.call('/chat/thread/update', request);
+		return this.localtron.call('/chat-service/thread/update', request);
 	}
 
 	async chatThreadDelete(threadId: string): Promise<void> {
 		const request: chat.DeleteThreadRequest = { threadId: threadId };
-		return this.localtron.call('/chat/thread/delete', request);
+		return this.localtron.call('/chat-service/thread/delete', request);
 	}
 
 	async chatThreads(): Promise<chat.GetThreadsResponse> {
 		const request: chat.GetThreadsRequest = {};
-		return this.localtron.call('/chat/threads', request);
+		return this.localtron.call('/chat-service/threads', request);
 	}
 
 	setActiveThreadId(id: string) {

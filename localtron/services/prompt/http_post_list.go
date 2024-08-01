@@ -27,7 +27,7 @@ import (
 // @Failure 400 {object} prompttypes.ErrorResponse "Invalid JSON"
 // @Failure 401 {object} prompttypes.ErrorResponse "Unauthorized"
 // @Failure 500 {object} prompttypes.ErrorResponse "Internal Server Error"
-// @Router /prompt/list [post]
+// @Router '/prompt-service/list [post]
 func (p *PromptService) GetPrompts(
 	w http.ResponseWriter,
 	r *http.Request,

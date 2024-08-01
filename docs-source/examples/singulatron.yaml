@@ -471,9 +471,9 @@ definitions:
         description: Port is the internal port of the Container
         type: integer
     type: object
-  modeltypes.GetModelRequest:
+  modeltypes.ErrorResponse:
     properties:
-      id:
+      error:
         type: string
     type: object
   modeltypes.GetModelResponse:
@@ -493,11 +493,6 @@ definitions:
         items:
           $ref: '#/definitions/modeltypes.Model'
         type: array
-    type: object
-  modeltypes.MakeDefaultRequest:
-    properties:
-      id:
-        type: string
     type: object
   modeltypes.MakeDefaultResponse:
     type: object
@@ -571,8 +566,6 @@ definitions:
         type: string
       version:
         type: integer
-    type: object
-  modeltypes.StartRequest:
     type: object
   modeltypes.StartResponse:
     type: object
@@ -752,7 +745,7 @@ info:
   title: Singulatron
   version: "0.2"
 paths:
-  /chat/message/add:
+  /chat-service/message/add:
     post:
       consumes:
       - application/json
@@ -787,7 +780,7 @@ paths:
       summary: Add Message
       tags:
       - chat
-  /chat/message/delete:
+  /chat-service/message/delete:
     post:
       consumes:
       - application/json
@@ -822,7 +815,7 @@ paths:
       summary: Delete Message
       tags:
       - chat
-  /chat/messages:
+  /chat-service/messages:
     post:
       consumes:
       - application/json
@@ -856,7 +849,7 @@ paths:
       summary: Get Messages
       tags:
       - chat
-  /chat/thread:
+  /chat-service/thread:
     post:
       consumes:
       - application/json
@@ -890,7 +883,7 @@ paths:
       summary: Get Thread
       tags:
       - chat
-  /chat/thread/add:
+  /chat-service/thread/add:
     post:
       consumes:
       - application/json
@@ -924,7 +917,7 @@ paths:
       summary: Add Thread
       tags:
       - chat
-  /chat/thread/delete:
+  /chat-service/thread/delete:
     post:
       consumes:
       - application/json
@@ -959,7 +952,7 @@ paths:
       summary: Delete Thread
       tags:
       - chat
-  /chat/thread/update:
+  /chat-service/thread/update:
     post:
       consumes:
       - application/json
@@ -993,7 +986,7 @@ paths:
       summary: Update Thread
       tags:
       - chat
-  /chat/threads:
+  /chat-service/threads:
     post:
       consumes:
       - application/json
@@ -1412,155 +1405,8 @@ paths:
       summary: Upsert a Generic Object
       tags:
       - generic
-  /model/{{id}}/make-default:
-    post:
-      consumes:
-      - application/json
-      description: Sets a model as the default model - when prompts are sent without
-        a Model ID, this model will be used.
-      parameters:
-      - description: Make default request
-        in: body
-        name: MakeDefaultRequest
-        required: true
-        schema:
-          $ref: '#/definitions/modeltypes.MakeDefaultRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/modeltypes.MakeDefaultResponse'
-        "400":
-          description: Invalid JSON
-          schema:
-            type: string
-        "401":
-          description: Unauthorized
-          schema:
-            type: string
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      summary: Make Default
-      tags:
-      - model
-  /model/{id}/start:
-    post:
-      consumes:
-      - application/json
-      description: Starts a model by ID
-      parameters:
-      - description: Model ID
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: Model start request
-        in: body
-        name: StartRequest
-        schema:
-          $ref: '#/definitions/modeltypes.StartRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/modeltypes.StartResponse'
-        "400":
-          description: invalid JSON
-          schema:
-            type: string
-        "401":
-          description: Unauthorized
-          schema:
-            type: string
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      summary: Start a Model
-      tags:
-      - model
-  /model/default/start:
-    post:
-      consumes:
-      - application/json
-      description: |-
-        Starts The Default Model.
-
-        Requires the `model.create` permission.
-      parameters:
-      - description: Model start request
-        in: body
-        name: StartRequest
-        required: true
-        schema:
-          $ref: '#/definitions/modeltypes.StartRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/modeltypes.StartResponse'
-        "400":
-          description: Invalid JSON
-          schema:
-            type: string
-        "401":
-          description: Unauthorized
-          schema:
-            type: string
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      summary: Start the Default Model
-      tags:
-      - model
-  /model/get:
-    post:
-      consumes:
-      - application/json
-      description: |-
-        Retrieves details of a model by its ID.
-
-        Requires `model.view“ permission.
-      parameters:
-      - description: Get Model Request
-        in: body
-        name: GetModelRequest
-        required: true
-        schema:
-          $ref: '#/definitions/modeltypes.GetModelRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/modeltypes.GetModelResponse'
-        "400":
-          description: Invalid JSON
-          schema:
-            type: string
-        "401":
-          description: Unauthorized
-          schema:
-            type: string
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      summary: Get a Model
-      tags:
-      - model
-  /model/list:
-    post:
+  /model:
+    get:
       consumes:
       - application/json
       description: |-
@@ -1580,22 +1426,117 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/modeltypes.ListResponse'
-        "400":
-          description: Invalid JSON
-          schema:
-            type: string
         "401":
           description: Unauthorized
           schema:
-            type: string
+            $ref: '#/definitions/modeltypes.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            type: string
-      summary: List models
+            $ref: '#/definitions/modeltypes.ErrorResponse'
+      summary: List Models
       tags:
       - model
-  /models/{id}/status:
+  /model/{id}:
+    get:
+      consumes:
+      - application/json
+      description: |-
+        Retrieves the details of a model by its ID.
+
+        Requires `model.view` permission.
+      parameters:
+      - description: Model ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/modeltypes.GetModelResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/modeltypes.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/modeltypes.ErrorResponse'
+      summary: Get a Model
+      tags:
+      - model
+  /model/{id}/make-default:
+    put:
+      consumes:
+      - application/json
+      description: Sets a model as the default model — when prompts are sent without
+        a Model ID, the default model is used.
+      parameters:
+      - description: Model ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/modeltypes.MakeDefaultResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/modeltypes.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/modeltypes.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/modeltypes.ErrorResponse'
+      summary: Make a Model Default
+      tags:
+      - model
+  /model/{id}/start:
+    put:
+      consumes:
+      - application/json
+      description: Starts a model by ID
+      parameters:
+      - description: Model ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/modeltypes.StartResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/modeltypes.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/modeltypes.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/modeltypes.ErrorResponse'
+      summary: Start a Model
+      tags:
+      - model
+  /model/{id}/status:
     get:
       consumes:
       - application/json
@@ -1626,8 +1567,38 @@ paths:
             type: string
       summary: Get Model Status
       tags:
-      - models
-  /prompt/add:
+      - model
+  /model/default/start:
+    put:
+      consumes:
+      - application/json
+      description: |-
+        Starts The Default Model.
+
+        Requires the `model.create` permission.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/modeltypes.StartResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/modeltypes.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/modeltypes.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/modeltypes.ErrorResponse'
+      summary: Start the Default Model
+      tags:
+      - model
+  '/prompt-service/add:
     post:
       consumes:
       - application/json
@@ -1662,7 +1633,7 @@ paths:
       summary: Add Prompt
       tags:
       - prompts
-  /prompt/list:
+  '/prompt-service/list:
     post:
       consumes:
       - application/json
@@ -1696,7 +1667,7 @@ paths:
       summary: List Prompts
       tags:
       - prompts
-  /prompt/remove:
+  '/prompt-service/remove:
     post:
       consumes:
       - application/json
@@ -1730,7 +1701,7 @@ paths:
       summary: Remove Prompt
       tags:
       - prompts
-  /prompt/subscribe:
+  '/prompt-service/subscribe:
     get:
       description: Subscribe to prompt responses via Server-Sent Events (SSE)
       parameters:

@@ -11,24 +11,24 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // Get godoc
-// @Summary Get
+// @Summary Get a Model
 // @Description Retrieves the details of a model by its ID.
 // @Description
-// @Description Requires `model.view` permission.
+// @Description the Requires `model.view` permission.
 // @Tags model
 // @Accept json
 // @Produce json
-// @Param GetModelRequest body modeltypes.GetModelRequest true "Get Model Request"
+// @Param id path string true "Model ID"
 // @Success 200 {object} modeltypes.GetModelResponse
-// @Failure 400 {string} string "Invalid JSON"
-// @Failure 401 {string} string "Unauthorized"
-// @Failure 500 {string} string "Internal Server Error"
-// @Router /model/get [post]
+// @Failure 401 {object} modeltypes.ErrorResponse "Unauthorized"
+// @Failure 500 {object} modeltypes.ErrorResponse "Internal Server Error"
+// @Router /model/{modelId} [get]
 func (ms *ModelService) Get(
 	w http.ResponseWriter,
 	r *http.Request,
@@ -46,20 +46,13 @@ func (ms *ModelService) Get(
 		return
 	}
 
-	req := modeltypes.GetModelRequest{}
-	err = json.NewDecoder(r.Body).Decode(&req)
-	if err != nil {
-		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
-		return
-	}
-	defer r.Body.Close()
-
-	if req.Id == "" {
+	vars := mux.Vars(r)
+	if vars["modelId"] == "" {
 		http.Error(w, "no model id", http.StatusBadRequest)
 		return
 	}
 
-	model, found, err := ms.getModel(req.Id)
+	model, found, err := ms.getModel(vars["modelId"])
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

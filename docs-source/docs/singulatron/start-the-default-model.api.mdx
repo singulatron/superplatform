@@ -5,8 +5,8 @@ description: "Starts The Default Model."
 sidebar_label: "Start the Default Model"
 hide_title: true
 hide_table_of_contents: true
-api: eJytVE1v3DgM/SsCz4o9TVpg4dOm2w+k+5Egkx4WbYBybI6tVpYUSprprOH/vqBmkiZN0cNmfbEtUHzvkY+coKPYsgnJeAcNLBNyiupqIPWK1phtUn/6jmz10X10l3STDVNUaSD1aSznLRMm+qQC8WhiNN5VoIHpJlNML323g2aC1rtELsknhmBNiwJXf46COUFsBxpRvtIuEDTgV5+pTTDPs/6OXyGjorBUB5ADnGHqoEmcaZaDGLyLFCXp8WIhr4eJzn8H/QRes4bnP0p75jZoTafeLc//+g8AMbFx/R3As8cA7x3mNHg2/1D3VIAXP1aQiB1atSTeEKvXzJ6fhjRrSNhHaD5AMQ1caxgpDb6DBoIvLQyYBmigLgF1t/deXRoNGmLhIhkmyGwlsLa+RTv4mJoXvxyfPIP5WuLazCbtlsJm3/2XGE17miX7HbchpSBZSxQ0sJIYEJ4i5/KbeV9/xTFYgmaaNRi39rduxrZUgkY0wiaipfhrNK7PFhN7V7V+BA0OS/7TizO1zCH4ImYvQDg0dR1zIA4W09rzWKGp4ZHnL7NT6DrV0YasDyqSXR+JcOrU6ZnCEGKl/vaZVWDfM44jriwp444GnyOptxdXVZnoN4ZphZHU2nOZYbndkwysNS25KELvOL+9+ENtTqrFA8axqevtdlv1Llee+/pwL9bYB3t0Ui2qIY1WNCTiMZ6vxUWmpXuCt9j3xJXxdQmpQUMySYoMy28FBA3S8X0FFtWxpBSrjOjukSzrqkh5sK3guxLe20D/14Y7OCnR11QHi8YJwVKn6eDlW7MLl4Ijjit+vtYg7ZOQaZKGvGc7z3J8k4l30Hy41rBBNtJH+Zs1DIQdcRmAL7SDBn7bKzq6EiISbrMQejSbs769cdq2FNJPY+8P5sX58go0rA47XMRAA4xbWbi4hQZAgy8VLoNWziaw6PqMvcTuc8rzLwJQNd8=
-sidebar_class_name: "post api-method"
+api: eJy9lE1P3DAQhv+KNeeQLFCkKqdStUX0ixULhwpWYjaZTUwd24yd3dIo/70aL5Tl41Kp4pTEfjPzzMxrD1BTqFj7qJ2FEmYROQZ11pL6QEvsTVTfXE0mv7SX9pRues0UVGxJXXVpvWLCSFfKE3c6BO1sDhkwBe9soADlAHuTiTweJzr5AhlUzkayUXbRe6MrlN3iOohkgFC11KG8xVtPUIJbXFMVYRzHMYM3L4U9tis0ulafZyff/yWBZ+eJo94QE7PjrbwhsrYNSNaXSXafk5xb7GPrWP+m+tVIDl7uSSS2aNSMeEWsPqaYr4Mki9gEKC8g+QXmGXQUW1dDCb6PkIHH2EIJRdov6o3riiBGhAxCYpYAA/RsRFgYV6FpXYjlwdu9/V0Y56KretbxdibUG9D3GHR12Ev0v7BtjF6iJhWUsBBNYtd26UQoXcEqdYU61JIxoKHwLmjb9AYjO5tXroMMLKYYh9NjNeu9dwl4Ayl5yqIIvSf2BuPScZejLmDMnkzntLcKba1qWpFxXgUyyx0pjmp1eKzQ+5CrH65n5dk1jF2HC0NK253W9YHU0fQsT+f1k2ZaYCC1dJxOqPzdkBxHoyuygaSme+aj6Ve12s8nj4hDWRTr9TpvbJ87boq7/0KBjTc7+/kkb2NnpIZI3IWTpThKV7RV8BqbhjjXrkiSAjKIOhqRzB4aCBnIVDcdmOR7EtK7EDu0W5DpMkqlPLqL4EkLhwcn/6/7684tkX7FwhvUVgBTn4Y7v977WVhSHnFV8uw8AxmfSIZBBnLOZhxl+aYnvoXyYp7BClnLHOVrzKAlrImTyX/SrcynqshLzBWaXlCendBx+yRNz89gHP8A1EQAGA==
+sidebar_class_name: "put api-method"
 info_path: docs/singulatron/singulatron
 custom_edit_url: null
 ---
@@ -33,7 +33,7 @@ import TabItem from "@theme/TabItem";
 </Heading>
 
 <MethodEndpoint
-  method={"post"}
+  method={"put"}
   path={"/model/default/start"}
 >
   
@@ -45,68 +45,7 @@ Starts The Default Model.
 
 Requires the `model.create` permission.
 
-<Heading
-  id={"request"}
-  as={"h2"}
-  className={"openapi-tabs__heading"}
-  children={"Request"}
->
-</Heading>
-
-<MimeTabs
-  className={"openapi-tabs__mime"}
->
-  <TabItem
-    label={"application/json"}
-    value={"application/json-schema"}
-  >
-    <details
-      style={{}}
-      className={"openapi-markdown__details mime"}
-      data-collapsed={false}
-      open={true}
-    >
-      <summary
-        style={{}}
-        className={"openapi-markdown__details-summary-mime"}
-      >
-        <h3
-          className={"openapi-markdown__details-summary-header-body"}
-        >
-          Body
-        </h3><strong
-          className={"openapi-schema__required"}
-        >
-          required
-        </strong>
-      </summary><div
-        style={{"textAlign":"left","marginLeft":"1rem"}}
-      >
-        <div
-          style={{"marginTop":"1rem","marginBottom":"1rem"}}
-        >
-          
-          
-          Model start request
-          
-          
-        </div>
-      </div><ul
-        style={{"marginLeft":"1rem"}}
-      >
-        <div
-          style={{"marginTop":".5rem","marginBottom":".5rem"}}
-        >
-          
-          
-          object
-          
-          
-        </div>
-      </ul>
-    </details>
-  </TabItem>
-</MimeTabs><div>
+<div>
   <div>
     <ApiTabs
       label={undefined}
@@ -230,17 +169,28 @@ Requires the `model.create` permission.
                     </div><ul
                       style={{"marginLeft":"1rem"}}
                     >
-                      <div
-                        style={{"marginTop":".5rem","marginBottom":".5rem"}}
+                      <SchemaItem
+                        collapsible={false}
+                        name={"error"}
+                        required={false}
+                        schemaName={"string"}
+                        qualifierMessage={undefined}
+                        schema={{"type":"string"}}
                       >
                         
-                        
-                        string
-                        
-                        
-                      </div>
+                      </SchemaItem>
                     </ul>
                   </details>
+                </TabItem><TabItem
+                  label={"Example (from schema)"}
+                  value={"Example (from schema)"}
+                >
+                  <ResponseSamples
+                    responseExample={"{\n  \"error\": \"string\"\n}"}
+                    language={"json"}
+                  >
+                    
+                  </ResponseSamples>
                 </TabItem>
               </SchemaTabs>
             </TabItem>
@@ -292,17 +242,28 @@ Requires the `model.create` permission.
                     </div><ul
                       style={{"marginLeft":"1rem"}}
                     >
-                      <div
-                        style={{"marginTop":".5rem","marginBottom":".5rem"}}
+                      <SchemaItem
+                        collapsible={false}
+                        name={"error"}
+                        required={false}
+                        schemaName={"string"}
+                        qualifierMessage={undefined}
+                        schema={{"type":"string"}}
                       >
                         
-                        
-                        string
-                        
-                        
-                      </div>
+                      </SchemaItem>
                     </ul>
                   </details>
+                </TabItem><TabItem
+                  label={"Example (from schema)"}
+                  value={"Example (from schema)"}
+                >
+                  <ResponseSamples
+                    responseExample={"{\n  \"error\": \"string\"\n}"}
+                    language={"json"}
+                  >
+                    
+                  </ResponseSamples>
                 </TabItem>
               </SchemaTabs>
             </TabItem>
@@ -354,17 +315,28 @@ Requires the `model.create` permission.
                     </div><ul
                       style={{"marginLeft":"1rem"}}
                     >
-                      <div
-                        style={{"marginTop":".5rem","marginBottom":".5rem"}}
+                      <SchemaItem
+                        collapsible={false}
+                        name={"error"}
+                        required={false}
+                        schemaName={"string"}
+                        qualifierMessage={undefined}
+                        schema={{"type":"string"}}
                       >
                         
-                        
-                        string
-                        
-                        
-                      </div>
+                      </SchemaItem>
                     </ul>
                   </details>
+                </TabItem><TabItem
+                  label={"Example (from schema)"}
+                  value={"Example (from schema)"}
+                >
+                  <ResponseSamples
+                    responseExample={"{\n  \"error\": \"string\"\n}"}
+                    language={"json"}
+                  >
+                    
+                  </ResponseSamples>
                 </TabItem>
               </SchemaTabs>
             </TabItem>

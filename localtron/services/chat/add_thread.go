@@ -41,7 +41,7 @@ func (a *ChatService) addThread(chatThread *chattypes.Thread) (*chattypes.Thread
 		ThreadId: chatThread.Id,
 	}
 
-	err = a.router.Post(context.Background(), "firehose", "/publish", firehosetypes.PublishRequest{
+	err = a.router.Post(context.Background(), "firehose-service", "/publish", firehosetypes.PublishRequest{
 		Event: &firehosetypes.Event{
 			Name: ev.Name(),
 			Data: ev,

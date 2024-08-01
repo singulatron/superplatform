@@ -10,6 +10,10 @@ package modeltypes
 
 import "sync"
 
+type ErrorResponse struct {
+	Error string `json:"error"`
+}
+
 /*
 Platform (~AI Platform) roughly represents an AI container + its settings.
 */
@@ -122,7 +126,6 @@ type StartDefaultResponse struct {
 }
 
 type MakeDefaultRequest struct {
-	Id string `json:"id"`
 }
 
 type MakeDefaultResponse struct {

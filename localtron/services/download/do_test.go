@@ -60,7 +60,7 @@ func TestDownloadFile(t *testing.T) {
 	require.NoError(t, err)
 	router = router.SetBearerToken(token)
 
-	err = router.Post(context.Background(), "download", "/do", downloadtypes.DownloadRequest{
+	err = router.Post(context.Background(), "download-service", "/do", downloadtypes.DownloadRequest{
 		URL: fileHostServer.URL,
 	}, nil)
 	require.NoError(t, err)
@@ -71,7 +71,7 @@ func TestDownloadFile(t *testing.T) {
 			Url: fileHostServer.URL,
 		}
 		rsp := downloadtypes.GetDownloadResponse{}
-		err = router.Post(context.Background(), "download", "/get", req, &rsp)
+		err = router.Post(context.Background(), "download-service", "/get", req, &rsp)
 		require.NoError(t, err)
 
 		if rsp.Exists && rsp.Download.Status == string(types.DownloadStatusCompleted) {
@@ -129,7 +129,7 @@ func TestDownloadFileWithPartFile(t *testing.T) {
 	req := downloadtypes.DownloadRequest{
 		URL: downloadURL,
 	}
-	err = router.Post(context.Background(), "download", "/do", req, nil)
+	err = router.Post(context.Background(), "download-service", "/do", req, nil)
 	require.NoError(t, err)
 
 	for {
@@ -138,7 +138,7 @@ func TestDownloadFileWithPartFile(t *testing.T) {
 			Url: downloadURL,
 		}
 		rsp := downloadtypes.GetDownloadResponse{}
-		err = router.Post(context.Background(), "download", "/get", req, &rsp)
+		err = router.Post(context.Background(), "download-service", "/get", req, &rsp)
 		require.NoError(t, err)
 		if rsp.Exists && rsp.Download.Status == string(types.DownloadStatusCompleted) {
 			break
@@ -180,7 +180,7 @@ func TestDownloadFileWithFullFile(t *testing.T) {
 	req := downloadtypes.DownloadRequest{
 		URL: downloadURL,
 	}
-	err = router.Post(context.Background(), "download", "/do", req, nil)
+	err = router.Post(context.Background(), "download-service", "/do", req, nil)
 	require.NoError(t, err)
 
 	var (
@@ -192,7 +192,7 @@ func TestDownloadFileWithFullFile(t *testing.T) {
 			Url: downloadURL,
 		}
 		rsp := downloadtypes.GetDownloadResponse{}
-		err = router.Post(context.Background(), "download", "/get", req, &rsp)
+		err = router.Post(context.Background(), "download-service", "/get", req, &rsp)
 		require.NoError(t, err)
 
 		if rsp.Exists && rsp.Download.Status == string(types.DownloadStatusCompleted) {

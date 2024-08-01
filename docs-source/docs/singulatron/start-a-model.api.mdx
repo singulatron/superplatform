@@ -5,8 +5,8 @@ description: "Starts a model by ID"
 sidebar_label: "Start a Model"
 hide_title: true
 hide_table_of_contents: true
-api: eJylVU1v2zgQ/SvEnLYAI7nJFljo1PRji+xXgjg9FIUPY2kssUuR7JCy6wr678VQTuI22R42vlik3sx7M3wcjdBQrNmEZLyDCpYJOUWFqvcNWbXeq4s3oCEgY0+JOEL1cfwh5u8MzTgj64CpAw0Oe4IKTAMamD4PhqmBKvFAGmLdUY9QjZD2QVAxsXEtTNNqBlNMr3yzF0TtXSKX5BFDsKZG4S0/RSEfH6by609UJ5imST8qNEqJ6kACk/DF4F2kKElOFwv5+z7w8k/QT9Axafj1sbTGbdGaRv2xvPznfxDc9WwmeP6Q4L3DIXWezVdqnkrw4rEKLlwidmjVknhLrN4ye34a06QhYSs+g+xBWGnoKXW+EWv5mLIdUwcVlBlQjqaZynyqoCFmIbNNB7aCKq2v0XY+purFb6dnz0FMFqke2KT9UqTMR/8Ko6nPB0l9J6xLKcDBr7JeCwZEpNRyfe/Ut1+wD5agGie5Bht/a12scxuoRyNqIlqKL6Nx7WAxsXdF7fv723J+daGWQwg+FzMXIBqqsoxDIA4W08ZzX6Ap4YHBrwen0DWqoS1ZH1QkuzmRwqlR5xcKQ4iF+uAHVoF9y9j3uLakjDvp/BBJvbu6KdRNR+p3w7TGSGrjWaWOcnRLBWiwpiYXpdA7ze+u/lLbs2LxneJYleVutytaNxSe2/IQF0tsgz05KxZFl3orNSTiPl5uxEKmpqOCd9i2xIXxZYaUoCGZJE2G5X0DQYOc+NyBRXEqKcUnPbojkXmwKVR5BsAPjTsaMv81AQ9+SPQllcGicUKTqx0Pdrz1q4Yqz7zZkSsNcgDyehylpe/ZTpNsfx6I91B9XGnYIhs5iXm4mijPDVQbtJF+IvWX68NYfaaOZvCjSg+b6PbSLrSDrEDDv7SfZ/S0mjR0hA1xVjG/eD1zndxI+H3ggzs96duI87qmkH6KPb7QV5fLG9CwPsx66SBUwLiTjwbuZpE+157vaN4bwaJrB2wFO+eU3zenuFCh
-sidebar_class_name: "post api-method"
+api: eJy9VE1v3DgM/SsCT7uAYk+TBlj41BTbFtl+JOgkh6KYA8fm2MrKkkLJk84a/u8LytNmmo8F9tKTLfGRfCSfOEJDsWYTkvEOKlgm5BQVqt43ZNV6p87/BA0BGXtKxBGqr+MDn48ZmnFGzgFTBxoc9gQVmAY0MN0OhqmBKvFAGmLdUY9QjZB2QVAxsXEtTNNKwDF4FymK/XixkM/PGS/eg4bau0QuiRVDsKZGsZY3USDj4xR+fUN1gmmaJg0vnwp77rZoTaP+Wl58+j8JAvtAnMzMmJg9P1WafobJi8dMrh0OqfNs/qHmlzE5fbonidihVUviLbF6k2P+Gkpyia1IDrIcYaWhp9T5RlQ2pCzM1EEFZbaXo2mmMoqEQUPMhGfBDmwFVVpfo+18TNXpH8cnL0DkFqke2KTdUijPLF9jNPXZIKF/MO1SCrBXrpzXgsnEjdt4AUpLsM4toR6NZIxoKb6KxrWDxcTeFbXv79/G2eW5Wg4h+Ex4Jil5qrKMQyAOFtPGc1+gKWHSD0bzeXAKXaMa2pL1QUWymyMpjhp1dq4whFioL35gFdi3jH2Pa0vKuKPOD5HUu8urQl11pN4apjVGUhvPKnWUvVsqQIM1NblIUtN3zu8uP6jtSbH4iXGsyvLu7q5o3VB4bsu9XyyxDfbopFgUXeqt1JCI+3ixETmZmg4KvsO2JS6MLzOkBA3JJCuQ5X0DQYNMde7AojiWkMHH1KM7IJnXmEKVVxM8aNx4L97n9t1+5om+pTJYNE7S5GrHveS+S1JDlTfcrLqVBhmAmMdRWnrNdprk+nYg3kH1daVhi2xkEvMqNVH+G6g2aCP9B9XfPu+X6O/qYOM+yXR/iW4n7UI7yAk0/E27eSNPq0lDR9gQZxaz4ayuKaQDl0cvezp8gZfXVzBN/wKN0CCF
+sidebar_class_name: "put api-method"
 info_path: docs/singulatron/singulatron
 custom_edit_url: null
 ---
@@ -33,7 +33,7 @@ import TabItem from "@theme/TabItem";
 </Heading>
 
 <MethodEndpoint
-  method={"post"}
+  method={"put"}
   path={"/model/{id}/start"}
 >
   
@@ -75,56 +75,7 @@ Starts a model by ID
       </ParamsItem>
     </ul>
   </div>
-</details><MimeTabs
-  className={"openapi-tabs__mime"}
->
-  <TabItem
-    label={"application/json"}
-    value={"application/json-schema"}
-  >
-    <details
-      style={{}}
-      className={"openapi-markdown__details mime"}
-      data-collapsed={false}
-      open={true}
-    >
-      <summary
-        style={{}}
-        className={"openapi-markdown__details-summary-mime"}
-      >
-        <h3
-          className={"openapi-markdown__details-summary-header-body"}
-        >
-          Body
-        </h3>
-      </summary><div
-        style={{"textAlign":"left","marginLeft":"1rem"}}
-      >
-        <div
-          style={{"marginTop":"1rem","marginBottom":"1rem"}}
-        >
-          
-          
-          Model start request
-          
-          
-        </div>
-      </div><ul
-        style={{"marginLeft":"1rem"}}
-      >
-        <div
-          style={{"marginTop":".5rem","marginBottom":".5rem"}}
-        >
-          
-          
-          object
-          
-          
-        </div>
-      </ul>
-    </details>
-  </TabItem>
-</MimeTabs><div>
+</details><div>
   <div>
     <ApiTabs
       label={undefined}
@@ -209,7 +160,7 @@ Starts a model by ID
         <div>
           
           
-          invalid JSON
+          Invalid JSON
           
           
         </div><div>
@@ -248,17 +199,28 @@ Starts a model by ID
                     </div><ul
                       style={{"marginLeft":"1rem"}}
                     >
-                      <div
-                        style={{"marginTop":".5rem","marginBottom":".5rem"}}
+                      <SchemaItem
+                        collapsible={false}
+                        name={"error"}
+                        required={false}
+                        schemaName={"string"}
+                        qualifierMessage={undefined}
+                        schema={{"type":"string"}}
                       >
                         
-                        
-                        string
-                        
-                        
-                      </div>
+                      </SchemaItem>
                     </ul>
                   </details>
+                </TabItem><TabItem
+                  label={"Example (from schema)"}
+                  value={"Example (from schema)"}
+                >
+                  <ResponseSamples
+                    responseExample={"{\n  \"error\": \"string\"\n}"}
+                    language={"json"}
+                  >
+                    
+                  </ResponseSamples>
                 </TabItem>
               </SchemaTabs>
             </TabItem>
@@ -310,17 +272,28 @@ Starts a model by ID
                     </div><ul
                       style={{"marginLeft":"1rem"}}
                     >
-                      <div
-                        style={{"marginTop":".5rem","marginBottom":".5rem"}}
+                      <SchemaItem
+                        collapsible={false}
+                        name={"error"}
+                        required={false}
+                        schemaName={"string"}
+                        qualifierMessage={undefined}
+                        schema={{"type":"string"}}
                       >
                         
-                        
-                        string
-                        
-                        
-                      </div>
+                      </SchemaItem>
                     </ul>
                   </details>
+                </TabItem><TabItem
+                  label={"Example (from schema)"}
+                  value={"Example (from schema)"}
+                >
+                  <ResponseSamples
+                    responseExample={"{\n  \"error\": \"string\"\n}"}
+                    language={"json"}
+                  >
+                    
+                  </ResponseSamples>
                 </TabItem>
               </SchemaTabs>
             </TabItem>
@@ -372,17 +345,28 @@ Starts a model by ID
                     </div><ul
                       style={{"marginLeft":"1rem"}}
                     >
-                      <div
-                        style={{"marginTop":".5rem","marginBottom":".5rem"}}
+                      <SchemaItem
+                        collapsible={false}
+                        name={"error"}
+                        required={false}
+                        schemaName={"string"}
+                        qualifierMessage={undefined}
+                        schema={{"type":"string"}}
                       >
                         
-                        
-                        string
-                        
-                        
-                      </div>
+                      </SchemaItem>
                     </ul>
                   </details>
+                </TabItem><TabItem
+                  label={"Example (from schema)"}
+                  value={"Example (from schema)"}
+                >
+                  <ResponseSamples
+                    responseExample={"{\n  \"error\": \"string\"\n}"}
+                    language={"json"}
+                  >
+                    
+                  </ResponseSamples>
                 </TabItem>
               </SchemaTabs>
             </TabItem>

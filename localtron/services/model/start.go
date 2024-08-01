@@ -69,7 +69,7 @@ func (ms *ModelService) start(modelId string) error {
 	env := map[string]string{}
 	for envarName, assetURL := range model.Assets {
 		rsp := downloadtypes.GetDownloadResponse{}
-		err := ms.router.Post(context.Background(), "download", "/get", &downloadtypes.GetDownloadRequest{
+		err := ms.router.Post(context.Background(), "download-service", "/get", &downloadtypes.GetDownloadRequest{
 			Url: assetURL,
 		}, &rsp)
 		if err != nil {

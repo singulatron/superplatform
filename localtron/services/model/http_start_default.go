@@ -23,12 +23,11 @@ import (
 // @Tags model
 // @Accept json
 // @Produce json
-// @Param StartRequest body modeltypes.StartRequest true "Model start request"
 // @Success 200 {object} modeltypes.StartResponse
-// @Failure 400 {string} string "Invalid JSON"
-// @Failure 401 {string} string "Unauthorized"
-// @Failure 500 {string} string "Internal Server Error"
-// @Router /model/default/start [post]
+// @Failure 400 {object} modeltypes.ErrorResponse "Invalid JSON"
+// @Failure 401 {object} modeltypes.ErrorResponse "Unauthorized"
+// @Failure 500 {object} modeltypes.ErrorResponse "Internal Server Error"
+// @Router /model/default/start [put]
 func (ms *ModelService) StartDefault(
 	w http.ResponseWriter,
 	r *http.Request,

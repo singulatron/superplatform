@@ -11,22 +11,23 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // MakeDefault godoc
-// @Summary Make Default
-// @Description Sets a model as the default model - when prompts are sent without a Model ID, this model will be used.
+// @Summary Make a Model Default
+// @Description Sets a model as the default model — when prompts are sent without a Model ID, the default model is used.
 // @Tags model
 // @Accept json
 // @Produce json
-// @Param MakeDefaultRequest body modeltypes.MakeDefaultRequest true "Make default request"
+// @Param id path string true "Model ID"
 // @Success 200 {object} modeltypes.MakeDefaultResponse
-// @Failure 400 {string} string "Invalid JSON"
-// @Failure 401 {string} string "Unauthorized"
-// @Failure 500 {string} string "Internal Server Error"
-// @Router /model/{{id}}/make-default [post]
+// @Failure 400 {object} modeltypes.ErrorResponse "Invalid JSON"
+// @Failure 401 {object} modeltypes.ErrorResponse "Unauthorized"
+// @Failure 500 {object} modeltypes.ErrorResponse "Internal Server Error"
+// @Router /model/{modelId}/make-default [put]
 func (ms *ModelService) MakeDefault(
 	w http.ResponseWriter,
 	r *http.Request,
@@ -44,15 +45,9 @@ func (ms *ModelService) MakeDefault(
 		return
 	}
 
-	req := modeltypes.MakeDefaultRequest{}
-	err = json.NewDecoder(r.Body).Decode(&req)
-	if err != nil {
-		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
-		return
-	}
-	defer r.Body.Close()
+	vars := mux.Vars(r)
 
-	err = ms.makeDefault(req.Id)
+	err = ms.makeDefault(vars["modelId"])
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

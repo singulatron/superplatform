@@ -51,7 +51,7 @@ export class GenericService {
 			object: object,
 		};
 
-		return this.localtron.call('/generic/create', request);
+		return this.localtron.call('/generic-service/create', request);
 	}
 
 	async find(table: string, conditions: Condition[]): Promise<FindResponse> {
@@ -62,7 +62,7 @@ export class GenericService {
 			},
 		};
 
-		return this.localtron.call('/generic/find', request);
+		return this.localtron.call('/generic-service/find', request);
 	}
 
 	async upsert(table: string, object: GenericObject): Promise<void> {
@@ -71,7 +71,7 @@ export class GenericService {
 			object: object,
 		};
 
-		return this.localtron.call('/generic/upsert', request);
+		return this.localtron.call('/generic-service/upsert', request);
 	}
 
 	async update(
@@ -85,7 +85,7 @@ export class GenericService {
 			object: object,
 		};
 
-		return this.localtron.call('/generic/update', request);
+		return this.localtron.call('/generic-service/update', request);
 	}
 
 	async delete(
@@ -97,6 +97,6 @@ export class GenericService {
 			conditions: conditions,
 		};
 
-		return this.localtron.call('/generic/delete', request);
+		return this.localtron.call('/generic-service/delete', request);
 	}
 }

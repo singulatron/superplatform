@@ -62,7 +62,7 @@ func (ms *ModelService) status(modelId string) (*modeltypes.ModelStatus, error) 
 
 	for _, assetUrl := range model.Assets {
 		rsp := downloadtypes.GetDownloadResponse{}
-		err := ms.router.Post(context.Background(), "download", "/get", &downloadtypes.GetDownloadRequest{
+		err := ms.router.Post(context.Background(), "download-service", "/get", &downloadtypes.GetDownloadRequest{
 			Url: assetUrl,
 		}, &rsp)
 		if err != nil {
