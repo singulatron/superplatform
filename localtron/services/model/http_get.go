@@ -11,6 +11,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 
 	"github.com/gorilla/mux"
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
@@ -51,7 +52,13 @@ func (ms *ModelService) Get(
 		return
 	}
 
-	model, found, err := ms.getModel(vars["modelId"])
+	mid, err := url.PathUnescape(vars["modelId"])
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	model, found, err := ms.getModel(mid)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

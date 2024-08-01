@@ -11,6 +11,7 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
+	"net/url"
 	"strings"
 	"sync"
 	"time"
@@ -52,6 +53,7 @@ func (p *PromptService) processPrompts() {
 
 		err := p.processNextPrompt()
 		if err != nil {
+			panic(err)
 			logger.Error("Error processing prompt",
 				slog.String("error", err.Error()),
 			)
@@ -113,6 +115,7 @@ func (p *PromptService) processNextPrompt() error {
 }
 
 func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err error) {
+
 	updateCurr := func() {
 		logger.Info("Prompt finished",
 			slog.String("promptId", currentPrompt.Id),
@@ -219,15 +222,27 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 		return err
 	}
 
+	modelId := currentPrompt.ModelId
+	if modelId == "" {
+		//getConfigReq := configtypes.GetConfigRequest{}
+		getConfigRsp := configtypes.GetConfigResponse{}
+		err := p.router.Get(context.Background(), "config-service", "/config", nil, &getConfigRsp)
+		if err != nil {
+			return err
+		}
+		modelId = getConfigRsp.Config.Model.CurrentModelId
+	}
+
 	statusRsp := modeltypes.StatusResponse{}
-	err = p.router.Get(context.Background(), "model-service", fmt.Sprintf("/model/%v/status", currentPrompt.ModelId), nil, &statusRsp)
+	err = p.router.Get(context.Background(), "model-service", fmt.Sprintf("/model/%v/status", url.PathEscape(modelId)), nil, &statusRsp)
 	if err != nil {
+
 		return err
 	}
 
 	stat := statusRsp.Status
 	if !stat.Running {
-		return fmt.Errorf("model '%v' is not running", currentPrompt.ModelId)
+		return fmt.Errorf("model '%v' is not running", modelId)
 	}
 	if stat.Address == "" {
 		return errors.Wrap(err, "missing model address")
@@ -241,7 +256,7 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 		fullPrompt = strings.Replace(currentPrompt.Template, "{prompt}", currentPrompt.Prompt, -1)
 	}
 
-	err = p.processPlatform(stat.Address, fullPrompt, currentPrompt)
+	err = p.processPlatform(stat.Address, modelId, fullPrompt, currentPrompt)
 
 	logger.Debug("Finished streaming LLM",
 		slog.String("error", fmt.Sprintf("%v", err)),
@@ -253,21 +268,11 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 	return nil
 }
 
-func (p *PromptService) processPlatform(address string, fullPrompt string, currentPrompt *prompttypes.Prompt) error {
-	modelId := currentPrompt.ModelId
-	if modelId == "" {
-		//getConfigReq := configtypes.GetConfigRequest{}
-		getConfigRsp := configtypes.GetConfigResponse{}
-		err := p.router.Get(context.Background(), "config-service", "/config", nil, &getConfigRsp)
-		if err != nil {
-			return err
-		}
-		modelId = getConfigRsp.Config.Model.CurrentModelId
-	}
-
+func (p *PromptService) processPlatform(address string, modelId string, fullPrompt string, currentPrompt *prompttypes.Prompt) error {
 	getModelRsp := modeltypes.GetModelResponse{}
-	err := p.router.Get(context.Background(), "model-service", fmt.Sprintf("/model/%v", modelId), nil, &getModelRsp)
+	err := p.router.Get(context.Background(), "model-service", fmt.Sprintf("/model/%v", url.PathEscape(modelId)), nil, &getModelRsp)
 	if err != nil {
+		panic(err)
 		return err
 	}
 
@@ -405,6 +410,10 @@ func (p *PromptService) processLlamaCpp(address string, fullPrompt string, curre
 		p.StreamManager.Broadcast(currentPrompt.ThreadId, resp)
 
 		if len(resp.Choices) > 0 && resp.Choices[0].FinishReason == "stop" {
+			defer func() {
+				done <- true
+			}()
+
 			addMsgReq := chattypes.AddMessageRequest{
 				Message: &apptypes.Message{
 					Id:       uuid.New().String(),
@@ -413,7 +422,7 @@ func (p *PromptService) processLlamaCpp(address string, fullPrompt string, curre
 				},
 			}
 			addMsgRsp := chattypes.AddMessageResponse{}
-			err := p.router.Post(context.Background(), "chat", "/message/add", addMsgReq, &addMsgRsp)
+			err := p.router.Post(context.Background(), "chat-service", "/message", addMsgReq, &addMsgRsp)
 			if err != nil {
 				logger.Error("Error when saving chat message after broadcast",
 					slog.String("error", err.Error()))
@@ -422,7 +431,6 @@ func (p *PromptService) processLlamaCpp(address string, fullPrompt string, curre
 
 			delete(p.StreamManager.History, currentPrompt.ThreadId)
 
-			done <- true
 		}
 	})
 

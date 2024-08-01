@@ -9,13 +9,16 @@ package promptservice_test
 
 import (
 	"context"
+	"fmt"
 	"net/http/httptest"
+	"net/url"
 	"strings"
 	"testing"
 	"time"
 
 	"github.com/singulatron/singulatron/localtron/clients/llm"
 	"github.com/singulatron/singulatron/localtron/di"
+	configservice "github.com/singulatron/singulatron/localtron/services/config"
 	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
@@ -53,7 +56,7 @@ func TestAddPrompt(t *testing.T) {
 	require.NoError(t, err)
 	router = router.SetBearerToken(token)
 
-	router.AddMock("model", "/list", modeltypes.ListResponse{
+	router.AddMock("model-service", "/models", modeltypes.ListResponse{
 		Models: []*modeltypes.Model{{
 			Id: "huggingface/TheBloke/mistral-7b-instruct-v0.2.Q3_K_S.gguf",
 			Assets: map[string]string{
@@ -73,7 +76,7 @@ func TestAddPrompt(t *testing.T) {
 			Description:    "hi",
 			PromptTemplate: "[INST] {prompt} [/INST]",
 		}}})
-	router.AddMock("model", "/default/status", &modeltypes.StatusResponse{
+	router.AddMock("model-service", fmt.Sprintf("/model/%v/status", url.PathEscape(configservice.DefaultModelId)), &modeltypes.StatusResponse{
 		Status: &modeltypes.ModelStatus{
 			AssetsReady: true,
 			Running:     true,
@@ -107,6 +110,7 @@ func TestAddPrompt(t *testing.T) {
 		PostCompletionsStreamed(gomock.Any(), gomock.Any()).
 		DoAndReturn(func(req llm.PostCompletionsRequest, callback llm.StreamCallback) error {
 			go func() {
+
 				for i := range responses {
 					// without this sleep the test hangs forever
 					time.Sleep(1 * time.Millisecond)
@@ -143,9 +147,9 @@ func TestAddPrompt(t *testing.T) {
 		},
 	}
 	prsp := prompttypes.AddPromptResponse{}
+
 	err = router.Post(context.Background(), "prompt-service", "/prompt", preq, &prsp)
 	require.NoError(t, err)
 
-	require.NoError(t, err)
 	require.Equal(t, true, strings.Contains(prsp.Answer, "how"))
 }

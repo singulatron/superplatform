@@ -16,7 +16,7 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-// Add adds a new prompt
+// Add a new prompt
 // @Summary Add Prompt
 // @Description Adds a new prompt to the prompt queue and either waits for the response (if `sync` is set to true), or returns immediately.
 // @Tags prompts
@@ -27,11 +27,12 @@ import (
 // @Failure 400 {object} prompttypes.ErrorResponse "Invalid JSON"
 // @Failure 401 {object} prompttypes.ErrorResponse "Unauthorized"
 // @Failure 500 {object} prompttypes.ErrorResponse "Internal Server Error"
-// @Router '/prompt-service/add [post]
+// @Router /prompt-service/prompt [post]
 func (p *PromptService) Add(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
+
 	rsp := &usertypes.IsAuthorizedResponse{}
 	err := p.router.AsRequestMaker(r).Post(r.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", prompttypes.PermissionPromptCreate.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
