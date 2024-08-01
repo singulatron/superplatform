@@ -286,7 +286,7 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 
 	router.HandleFunc("/chat-service/threads", appl(func(w http.ResponseWriter, r *http.Request) {
 		chatService.GetThreads(w, r)
-	})).Methods("GET")
+	})).Methods("POST")
 
 	router.HandleFunc("/chat-service/thread/{threadId}", appl(func(w http.ResponseWriter, r *http.Request) {
 		chatService.GetThread(w, r)
@@ -310,7 +310,7 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 
 	router.HandleFunc("/prompt-service/prompts", appl(func(w http.ResponseWriter, r *http.Request) {
 		promptService.GetPrompts(w, r)
-	})).Methods("GET")
+	})).Methods("POST")
 
 	router.HandleFunc("/user-service/login", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.Login(w, r)

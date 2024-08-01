@@ -62,14 +62,17 @@ export class DownloadService {
 	}
 
 	async downloadDo(url: string) {
-		this.localtron.call('/download/do', { url: url });
+		this.localtron.put('/download-service/download', { url: url });
 	}
 
 	async downloadPause(url: string) {
-		this.localtron.call('/download/pause', { url: url });
+		this.localtron.put(
+			`/download-service/${encodeURIComponent(url)}/pause`,
+			{}
+		);
 	}
 
 	async downloadList(): Promise<DownloadsResponse> {
-		return this.localtron.call('/download/list', {});
+		return this.localtron.get('/download/list');
 	}
 }

@@ -17,7 +17,7 @@ import (
 )
 
 // Do initiates a download request
-// @Summary Download
+// @Summary Download a File
 // @Description Start a download for a specified URL.
 // @Description
 // @Description Requires the `download.create` permission.

@@ -98,13 +98,14 @@ export class LocaltronService {
 		);
 	}
 
-	delete(path: string): Promise<any> {
+	delete(path: string, request?: any): Promise<any> {
 		const uri = this.config.env.localtronAddress + path;
+		const body = JSON.stringify(request);
 		const headers = this.prepareHeaders();
 
 		return firstValueFrom(
 			this.http
-				.delete<any>(uri, { headers, responseType: 'text' as 'json' })
+				.delete<any>(uri, { body, headers, responseType: 'text' as 'json' })
 				.pipe(
 					map((response) => JSON.parse(response)),
 					catchError((error) => this.handleError(error))
