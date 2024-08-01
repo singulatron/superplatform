@@ -23,7 +23,7 @@ import (
 // @Tags model
 // @Accept json
 // @Produce json
-// @Param id path string true "Model ID"
+// @Param modelId path string true "Model ID"
 // @Success 200 {object} modeltypes.StartResponse
 // @Failure 400 {object} modeltypes.ErrorResponse "Invalid JSON"
 // @Failure 401 {object} modeltypes.ErrorResponse "Unauthorized"

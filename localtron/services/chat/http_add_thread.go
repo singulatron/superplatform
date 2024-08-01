@@ -18,7 +18,9 @@ import (
 
 // AddThread creates a new chat thread
 // @Summary Add Thread
-// @Description Create a new chat thread and add the requesting user to it
+// @Description Create a new chat thread and add the requesting user to it.
+// @Decription
+// @Description Requires the `thread.create` permission.
 // @Tags chat
 // @Accept json
 // @Produce json

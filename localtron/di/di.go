@@ -264,7 +264,7 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 		configService.Save(w, r)
 	})).Methods("PUT")
 
-	router.HandleFunc("/chat-service/message", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/chat-service/thread/{threadId}/message", appl(func(w http.ResponseWriter, r *http.Request) {
 		chatService.AddMessage(w, r)
 	})).Methods("POST")
 
@@ -272,7 +272,7 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 		chatService.DeleteMessage(w, r)
 	})).Methods("DELETE")
 
-	router.HandleFunc("/chat-service/messages", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/chat-service/thread/{threadId}/messages", appl(func(w http.ResponseWriter, r *http.Request) {
 		chatService.GetMessages(w, r)
 	})).Methods("GET")
 

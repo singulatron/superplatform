@@ -217,7 +217,7 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 		},
 	}
 
-	err = p.router.Post(context.Background(), "chat-service", "/message", addMessageReq, nil)
+	err = p.router.Post(context.Background(), "chat-service", fmt.Sprintf("/thread/%v/message", currentPrompt.ThreadId), addMessageReq, nil)
 	if err != nil {
 		return err
 	}
@@ -422,7 +422,7 @@ func (p *PromptService) processLlamaCpp(address string, fullPrompt string, curre
 				},
 			}
 			addMsgRsp := chattypes.AddMessageResponse{}
-			err := p.router.Post(context.Background(), "chat-service", "/message", addMsgReq, &addMsgRsp)
+			err := p.router.Post(context.Background(), "chat-service", fmt.Sprintf("/thread/%v/message", currentPrompt.ThreadId), addMsgReq, &addMsgRsp)
 			if err != nil {
 				logger.Error("Error when saving chat message after broadcast",
 					slog.String("error", err.Error()))

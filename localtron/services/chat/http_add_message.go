@@ -12,22 +12,24 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // AddMessage sends a new message to a chat thread
 // @Summary Add Message
-// @Description Add a new message to a specific chat thread
+// @Description Add a new message to a specific thread.
 // @Tags chat
 // @Accept json
 // @Produce json
+// @Param threadId path string true "Thread ID"
 // @Param request body chattypes.AddMessageRequest true "Add Message Request"
 // @Success 200 {object} map[string]any "Message successfully added"
 // @Failure 400 {string} string "Invalid JSON"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
-// @Router /chat-service/message [post]
+// @Router /chat-service/thread/{threadId}/message [post]
 func (a *ChatService) AddMessage(
 	w http.ResponseWriter,
 	r *http.Request,
@@ -50,6 +52,10 @@ func (a *ChatService) AddMessage(
 		return
 	}
 	defer r.Body.Close()
+
+	vars := mux.Vars(r)
+	threadId := vars["threadId"]
+	req.Message.ThreadId = threadId
 
 	err = a.addMessage(req.Message)
 	if err != nil {
