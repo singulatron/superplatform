@@ -15,15 +15,15 @@ export class LogService {
 	constructor(private localtron: LocaltronService) {}
 
 	async logDisable(): Promise<void> {
-		return this.localtron.call('/app/log/disable', {});
+		return this.localtron.post('/app/log/disable', {});
 	}
 
 	async logEnable(): Promise<void> {
-		return this.localtron.call('/app/log/enable', {});
+		return this.localtron.post('/app/log/enable', {});
 	}
 
 	async logStatus(): Promise<LoggingStatus> {
-		return this.localtron.call('/app/log/status', {});
+		return this.localtron.post('/app/log/status', {});
 	}
 }
 

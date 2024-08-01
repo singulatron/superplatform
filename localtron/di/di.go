@@ -235,7 +235,7 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 		dockerService.HashIsRunning(w, r)
 	})).Methods("GET")
 
-	router.HandleFunc("/model-service/default/status", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/model-service/default-model/status", appl(func(w http.ResponseWriter, r *http.Request) {
 		modelService.DefaultStatus(w, r)
 	})).Methods("GET")
 	router.HandleFunc("/model-service/model/{modelId}/status", appl(func(w http.ResponseWriter, r *http.Request) {
@@ -247,13 +247,13 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 	router.HandleFunc("/model-service/model/{modelId}", appl(func(w http.ResponseWriter, r *http.Request) {
 		modelService.Get(w, r)
 	})).Methods("GET")
-	router.HandleFunc("/model-service/default/start", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/model-service/default-model/start", appl(func(w http.ResponseWriter, r *http.Request) {
 		modelService.StartDefault(w, r)
 	})).Methods("PUT")
-	router.HandleFunc("/model-service/{modelId}/start", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/model-service/model/{modelId}/start", appl(func(w http.ResponseWriter, r *http.Request) {
 		modelService.StartSpecific(w, r)
 	})).Methods("PUT")
-	router.HandleFunc("/model-service/{modelId}/make-default", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/model-service/model/{modelId}/make-default", appl(func(w http.ResponseWriter, r *http.Request) {
 		modelService.MakeDefault(w, r)
 	})).Methods("PUT")
 
@@ -320,7 +320,7 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 	})).Methods("POST")
 	router.HandleFunc("/user-service/users", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.GetUsers(w, r)
-	})).Methods("GET")
+	})).Methods("POST")
 	router.HandleFunc("/user-service/user/{userId}", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.SaveProfile(w, r)
 	})).Methods("PUT")
@@ -350,7 +350,7 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 	})).Methods("GET")
 	router.HandleFunc("/user-service/set-role-permissions", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.SetRolePermissions(w, r)
-	}))
+	})).Methods("POST")
 	router.HandleFunc("/user-service/permission/{permissionId}", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.UpsertPermission(w, r)
 	})).Methods("PUT")

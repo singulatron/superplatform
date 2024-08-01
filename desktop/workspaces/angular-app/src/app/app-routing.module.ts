@@ -8,7 +8,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { StartupComponent } from './startup/startup.component';
-import { ChatComponent } from './chat-service/chat.component';
+import { ChatComponent } from './chat/chat.component';
 import { ModelExplorerComponent } from './model-explorer/model-explorer.component';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';

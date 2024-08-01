@@ -14,7 +14,6 @@ import { UserService } from './user.service';
 import {
 	Prompt,
 	AddPromptRequest,
-	RemovePromptRequest,
 	ListPromptsRequest,
 	ListPromptsResponse,
 	CompletionResponse,

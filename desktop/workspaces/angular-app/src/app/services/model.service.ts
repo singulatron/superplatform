@@ -50,7 +50,10 @@ export class ModelService {
 			return this.models;
 		}
 
-		const rsp: GetModelsResponse = await this.localtron.call('/model/list', {});
+		const rsp: GetModelsResponse = await this.localtron.post(
+			'/model-service/models',
+			{}
+		);
 		return rsp.models;
 	}
 
@@ -98,22 +101,22 @@ export class ModelService {
 
 	async modelStatus(modelId?: string): Promise<ModelStatusResponse> {
 		if (modelId) {
-			return this.localtron.call(`/model/${modelId}/status`, {});
+			return this.localtron.get(`/model-service/model/${modelId}/status`);
 		}
 
-		return this.localtron.call('/model/default/status', {});
+		return this.localtron.get('/model-service/default-model/status');
 	}
 
 	async modelStart(modelId?: string): Promise<ModelStartResponse> {
 		if (modelId) {
-			return this.localtron.call(`/model/${modelId}/start`, {});
+			return this.localtron.put(`/model-service/model/${modelId}/start`, {});
 		}
 
-		return this.localtron.call('/model/default/start', {});
+		return this.localtron.put('/model-service/default-model/start', {});
 	}
 
 	async makeDefault(id: string) {
-		this.localtron.call(`/model/${id}/make-default`, {});
+		this.localtron.put(`/model-service/${id}/make-default`, {});
 	}
 }
 
@@ -131,16 +134,8 @@ interface ModelStatus {
 	address: string;
 }
 
-interface ModelStatusRequest {
-	modelId?: string;
-}
-
 interface ModelStatusResponse {
 	status: ModelStatus | null;
-}
-
-interface ModelStartRequest {
-	modelId?: string;
 }
 
 // eslint-disable-next-line

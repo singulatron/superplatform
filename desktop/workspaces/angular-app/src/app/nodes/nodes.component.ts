@@ -53,11 +53,11 @@ export class NodesComponent {
 
 	private async initializeOnLogin() {
 		try {
-			const rsp = await this.nodeService.nodesList({});
+			const rsp = await this.nodeService.nodesList();
 			// const rsp = fixture
 
 			this.nodes = rsp.nodes;
-			await this.nodeService.nodesList({});
+			await this.nodeService.nodesList();
 		} catch (error) {
 			this.error = JSON.parse(error as string)?.error;
 		}
