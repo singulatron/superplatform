@@ -28,7 +28,7 @@ import (
 // @Failure 400 {object} modeltypes.ErrorResponse "Invalid JSON"
 // @Failure 401 {object} modeltypes.ErrorResponse "Unauthorized"
 // @Failure 500 {object} modeltypes.ErrorResponse "Internal Server Error"
-// @Router /model/{modelId}/start [put]
+// @Router /model-service/{modelId}/start [put]
 func (ms *ModelService) StartSpecific(
 	w http.ResponseWriter,
 	r *http.Request,

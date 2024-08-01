@@ -42,7 +42,7 @@ func TestMessageCreatesThread(t *testing.T) {
 				Content: "hi there",
 			},
 		}
-		err = router.Post(context.Background(), "chat", "/message/add", req, nil)
+		err = router.Post(context.Background(), "chat-service", "/message", req, nil)
 		require.Error(t, err)
 	})
 
@@ -54,7 +54,7 @@ func TestMessageCreatesThread(t *testing.T) {
 				Content:  "hi there",
 			},
 		}
-		err = router.Post(context.Background(), "chat", "/message/add", req, nil)
+		err = router.Post(context.Background(), "chat-service", "/message", req, nil)
 		require.Error(t, err)
 
 	})

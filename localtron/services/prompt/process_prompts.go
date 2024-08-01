@@ -214,14 +214,13 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 		},
 	}
 
-	err = p.router.Post(context.Background(), "chat", "/message/add", addMessageReq, nil)
+	err = p.router.Post(context.Background(), "chat-service", "/message", addMessageReq, nil)
 	if err != nil {
 		return err
 	}
 
-	statusReq := modeltypes.StatusRequest{}
 	statusRsp := modeltypes.StatusResponse{}
-	err = p.router.Post(context.Background(), "model", fmt.Sprintf("/%v/status", currentPrompt.ModelId), statusReq, &statusRsp)
+	err = p.router.Get(context.Background(), "model-service", fmt.Sprintf("/model/%v/status", currentPrompt.ModelId), nil, &statusRsp)
 	if err != nil {
 		return err
 	}
@@ -257,20 +256,17 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 func (p *PromptService) processPlatform(address string, fullPrompt string, currentPrompt *prompttypes.Prompt) error {
 	modelId := currentPrompt.ModelId
 	if modelId == "" {
-		getConfigReq := configtypes.GetConfigRequest{}
+		//getConfigReq := configtypes.GetConfigRequest{}
 		getConfigRsp := configtypes.GetConfigResponse{}
-		err := p.router.Post(context.Background(), "config-service", "/config", getConfigReq, &getConfigRsp)
+		err := p.router.Get(context.Background(), "config-service", "/config", nil, &getConfigRsp)
 		if err != nil {
 			return err
 		}
 		modelId = getConfigRsp.Config.Model.CurrentModelId
 	}
 
-	getModelReq := modeltypes.GetModelRequest{
-		Id: modelId,
-	}
 	getModelRsp := modeltypes.GetModelResponse{}
-	err := p.router.Post(context.Background(), "model", "/get", getModelReq, &getModelRsp)
+	err := p.router.Get(context.Background(), "model-service", fmt.Sprintf("/model/%v", modelId), nil, &getModelRsp)
 	if err != nil {
 		return err
 	}

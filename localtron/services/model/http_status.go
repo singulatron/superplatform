@@ -30,7 +30,7 @@ import (
 // @Success 200 {object} modeltypes.StatusResponse "Model status retrieved successfully"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
-// @Router /model/{id}/status [get]
+// @Router /model-service/{id}/status [get]
 func (ms *ModelService) Status(
 	w http.ResponseWriter,
 	r *http.Request,

@@ -29,7 +29,7 @@ import (
 // @Success 200 {object} modeltypes.GetModelResponse
 // @Failure 401 {object} modeltypes.ErrorResponse "Unauthorized"
 // @Failure 500 {object} modeltypes.ErrorResponse "Internal Server Error"
-// @Router /model/{modelId} [get]
+// @Router /model-service/{modelId} [get]
 func (ms *ModelService) Get(
 	w http.ResponseWriter,
 	r *http.Request,

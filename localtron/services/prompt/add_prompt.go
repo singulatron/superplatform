@@ -9,6 +9,7 @@ package promptservice
 
 import (
 	"context"
+	"fmt"
 	"log/slog"
 	"time"
 
@@ -55,18 +56,9 @@ func (p *PromptService) addPrompt(ctx context.Context, promptReq *prompttypes.Ad
 
 	threadId := prompt.ThreadId
 
-	getThreadResp := apptypes.GetThreadResponse{}
-	err = p.router.Post(ctx, "chat", "/thread", apptypes.GetThreadRequest{
-		ThreadId: threadId,
-	}, &getThreadResp)
-	if err != nil {
-		return nil, err
-	}
-
+	//getThreadResp := apptypes.GetThreadResponse{}
 	getThreadRsp := &chattypes.GetThreadResponse{}
-	err = p.router.Post(context.Background(), "chat", "/thread", &chattypes.GetThreadRequest{
-		ThreadId: threadId,
-	}, getThreadRsp)
+	err = p.router.Get(ctx, "chat-service", fmt.Sprintf("/thread/%v", threadId), nil, &getThreadRsp)
 	if err != nil {
 		return nil, err
 	}

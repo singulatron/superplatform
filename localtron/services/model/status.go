@@ -10,6 +10,7 @@ package modelservice
 import (
 	"context"
 	"fmt"
+	"net/url"
 	"os"
 
 	"github.com/pkg/errors"
@@ -21,9 +22,9 @@ import (
 )
 
 func (ms *ModelService) status(modelId string) (*modeltypes.ModelStatus, error) {
-	hostReq := dockertypes.GetDockerHostRequest{}
+	// hostReq := dockertypes.GetDockerHostRequest{}
 	hostRsp := dockertypes.GetDockerHostResponse{}
-	err := ms.router.Post(context.Background(), "docker", "/host", hostReq, &hostRsp)
+	err := ms.router.Get(context.Background(), "docker-service", "/host", nil, &hostRsp)
 	if err != nil {
 		return nil, err
 	}
@@ -62,9 +63,7 @@ func (ms *ModelService) status(modelId string) (*modeltypes.ModelStatus, error) 
 
 	for _, assetUrl := range model.Assets {
 		rsp := downloadtypes.GetDownloadResponse{}
-		err := ms.router.Post(context.Background(), "download-service", "/get", &downloadtypes.GetDownloadRequest{
-			Url: assetUrl,
-		}, &rsp)
+		err := ms.router.Get(context.Background(), "download-service", fmt.Sprintf("/download/%v", url.PathEscape(assetUrl)), nil, &rsp)
 		if err != nil {
 			return nil, err
 		}

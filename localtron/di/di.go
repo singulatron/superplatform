@@ -238,7 +238,7 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 	router.HandleFunc("/model-service/default/status", appl(func(w http.ResponseWriter, r *http.Request) {
 		modelService.DefaultStatus(w, r)
 	})).Methods("GET")
-	router.HandleFunc("/model-service/{modelId}/status", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/model-service/model/{modelId}/status", appl(func(w http.ResponseWriter, r *http.Request) {
 		modelService.Status(w, r)
 	})).Methods("GET")
 	router.HandleFunc("/model-service/models", appl(func(w http.ResponseWriter, r *http.Request) {
@@ -361,21 +361,21 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 		userService.AddPermissionToRole(w, r)
 	})).Methods("PUT")
 
-	router.HandleFunc("/generic-service/create", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/generic-service/object", appl(func(w http.ResponseWriter, r *http.Request) {
 		genericService.Create(w, r)
-	}))
-	router.HandleFunc("/generic-service/update", appl(func(w http.ResponseWriter, r *http.Request) {
+	})).Methods("POST")
+	router.HandleFunc("/generic-service/objects/update", appl(func(w http.ResponseWriter, r *http.Request) {
 		genericService.Update(w, r)
-	}))
-	router.HandleFunc("/generic-service/delete", appl(func(w http.ResponseWriter, r *http.Request) {
+	})).Methods("POST")
+	router.HandleFunc("/generic-service/objects/delete", appl(func(w http.ResponseWriter, r *http.Request) {
 		genericService.Delete(w, r)
-	}))
-	router.HandleFunc("/generic-service/find", appl(func(w http.ResponseWriter, r *http.Request) {
+	})).Methods("DELETE")
+	router.HandleFunc("/generic-service/objects/query", appl(func(w http.ResponseWriter, r *http.Request) {
 		genericService.Find(w, r)
-	}))
-	router.HandleFunc("/generic-service/upsert", appl(func(w http.ResponseWriter, r *http.Request) {
+	})).Methods("POST")
+	router.HandleFunc("/generic-service/object/{objectId}", appl(func(w http.ResponseWriter, r *http.Request) {
 		genericService.Upsert(w, r)
-	}))
+	})).Methods("PUT")
 
 	router.HandleFunc("/node-service/nodes", appl(func(w http.ResponseWriter, r *http.Request) {
 		nodeService.List(w, r)

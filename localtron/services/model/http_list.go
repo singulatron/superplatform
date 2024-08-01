@@ -26,7 +26,7 @@ import (
 // @Success 200 {object} modeltypes.ListResponse
 // @Failure 401 {object} modeltypes.ErrorResponse "Unauthorized"
 // @Failure 500 {object} modeltypes.ErrorResponse "Internal Server Error"
-// @Router /model [get]
+// @Router /model-service/models [get]
 func (ms *ModelService) List(
 	w http.ResponseWriter,
 	r *http.Request,
@@ -41,14 +41,6 @@ func (ms *ModelService) List(
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
-
-	req := modeltypes.ListRequest{}
-	err = json.NewDecoder(r.Body).Decode(&req)
-	if err != nil {
-		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
-		return
-	}
-	defer r.Body.Close()
 
 	models, err := ms.getModels()
 	if err != nil {

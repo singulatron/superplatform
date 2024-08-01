@@ -47,7 +47,7 @@ func (g *GenericService) Find(
 		return
 	}
 
-	req := &generictypes.FindRequest{}
+	req := &generictypes.QueryRequest{}
 	err = json.NewDecoder(r.Body).Decode(req)
 	if err != nil {
 		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
@@ -55,7 +55,7 @@ func (g *GenericService) Find(
 	}
 	defer r.Body.Close()
 
-	objects, err := g.find(generictypes.FindOptions{
+	objects, err := g.find(generictypes.QueryOptions{
 		Table:  req.Table,
 		UserId: rsp.User.Id,
 		Public: req.Public,
@@ -66,7 +66,7 @@ func (g *GenericService) Find(
 		return
 	}
 
-	bs, _ := json.Marshal(generictypes.FindResponse{
+	bs, _ := json.Marshal(generictypes.QueryResponse{
 		Objects: objects,
 	})
 	w.Write(bs)

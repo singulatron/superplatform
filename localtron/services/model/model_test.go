@@ -47,9 +47,9 @@ func TestModel(t *testing.T) {
 	})
 
 	t.Run("model status is not running, not ready", func(t *testing.T) {
-		statusReq := modeltypes.StatusRequest{}
+		// statusReq := modeltypes.StatusRequest{}
 		statusRsp := modeltypes.StatusResponse{}
-		err = router.Post(context.Background(), "model-service", fmt.Sprintf("/%v/status", url.PathEscape("huggingface/TheBloke/mistral-7b-instruct-v0.2.Q2_K.gguf")), statusReq, &statusRsp)
+		err = router.Get(context.Background(), "model-service", fmt.Sprintf("/model/%v/status", url.PathEscape("huggingface/TheBloke/mistral-7b-instruct-v0.2.Q2_K.gguf")), nil, &statusRsp)
 		require.NoError(t, err)
 
 		require.Equal(t, false, statusRsp.Status.Running)

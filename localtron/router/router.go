@@ -189,8 +189,8 @@ func (r *Router) Put(ctx context.Context, serviceName, path string, request, res
 	return r.request(ctx, "PUT", serviceName, path, request, response)
 }
 
-func (r *Router) Delete(ctx context.Context, serviceName, path string, response any) error {
-	return r.request(ctx, "DELETE", serviceName, path, nil, response)
+func (r *Router) Delete(ctx context.Context, serviceName, path string, request, response any) error {
+	return r.request(ctx, "DELETE", serviceName, path, request, response)
 }
 
 func formatError(err error) error {

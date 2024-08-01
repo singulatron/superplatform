@@ -143,7 +143,7 @@ func TestAddPrompt(t *testing.T) {
 		},
 	}
 	prsp := prompttypes.AddPromptResponse{}
-	err = router.Post(context.Background(), "prompt", "/add", preq, &prsp)
+	err = router.Post(context.Background(), "prompt-service", "/prompt", preq, &prsp)
 	require.NoError(t, err)
 
 	require.NoError(t, err)

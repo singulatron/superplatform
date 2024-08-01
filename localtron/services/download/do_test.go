@@ -134,11 +134,9 @@ func TestDownloadFileWithPartFile(t *testing.T) {
 
 	for {
 		time.Sleep(5 * time.Millisecond)
-		req := downloadtypes.GetDownloadRequest{
-			Url: downloadURL,
-		}
+
 		rsp := downloadtypes.GetDownloadResponse{}
-		err = router.Post(context.Background(), "download-service", "/get", req, &rsp)
+		err = router.Get(context.Background(), "download-service", fmt.Sprintf("/download/%v", url.PathEscape(downloadURL)), nil, &rsp)
 		require.NoError(t, err)
 		if rsp.Exists && rsp.Download.Status == string(types.DownloadStatusCompleted) {
 			break
@@ -188,11 +186,8 @@ func TestDownloadFileWithFullFile(t *testing.T) {
 	)
 	for {
 		time.Sleep(5 * time.Millisecond)
-		req := downloadtypes.GetDownloadRequest{
-			Url: downloadURL,
-		}
 		rsp := downloadtypes.GetDownloadResponse{}
-		err = router.Post(context.Background(), "download-service", "/get", req, &rsp)
+		err = router.Post(context.Background(), "download-service", fmt.Sprintf("/download/%v", url.PathEscape(downloadURL)), req, &rsp)
 		require.NoError(t, err)
 
 		if rsp.Exists && rsp.Download.Status == string(types.DownloadStatusCompleted) {

@@ -18,6 +18,10 @@ import (
 	"github.com/singulatron/singulatron/localtron/router"
 )
 
+type GetUsersOptions struct {
+	Query *datastore.Query `json:"query"`
+}
+
 type User struct {
 	Id        string    `json:"id,omitempty"`
 	CreatedAt time.Time `json:"createdAt,omitempty"`
