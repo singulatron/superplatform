@@ -11,19 +11,20 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	downloadtypes "github.com/singulatron/singulatron/localtron/services/download/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // @Summary Get Download
-// @Description Get a download by URL.
+// @Description Get a download by ID.
 // @Tags download
 // @Accept json
 // @Produce json
 // @Success 200 {object} downloadtypes.GetDownloadResponse
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
-// @Router /download/get [post]
+// @Router /download-service/download/{downloadId} [get]
 func (ds *DownloadService) Get(
 	w http.ResponseWriter,
 	r *http.Request,
@@ -41,19 +42,12 @@ func (ds *DownloadService) Get(
 		return
 	}
 
-	req := downloadtypes.GetDownloadRequest{}
-	err = json.NewDecoder(r.Body).Decode(&req)
-	if err != nil {
-		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
-		return
-	}
-	defer r.Body.Close()
-
-	dl, exists := ds.getDownload(req.Url)
+	vars := mux.Vars(r)
+	dl, exists := ds.getDownload(vars["downloadId"])
 
 	jsonData, _ := json.Marshal(downloadtypes.GetDownloadResponse{
 		Exists:   exists,
-		Download: downloadToDownloadDetails(req.Url, dl),
+		Download: downloadToDownloadDetails(vars["downloadId"], dl),
 	})
 	w.Write(jsonData)
 }

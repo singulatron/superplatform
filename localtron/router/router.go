@@ -23,8 +23,7 @@ type Router struct {
 	mockEndpoints  map[string]any
 }
 
-func NewRouter(
-	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error)) (*Router, error) {
+func NewRouter(datastoreFactory func(tableName string, instance any) (datastore.DataStore, error)) (*Router, error) {
 	return &Router{
 		registry:       map[string]string{},
 		defaultAddress: "http://127.0.0.1:" + DefaultPort,
@@ -42,31 +41,29 @@ func (r *Router) AddMock(serviceName, path string, rsp any) {
 
 func (r *Router) SetBearerToken(token string) *Router {
 	return &Router{
-		// @todo copy?
-		registry: r.registry,
-
+		registry:       r.registry,
 		defaultAddress: r.defaultAddress,
 		mockEndpoints:  r.mockEndpoints,
 		bearerToken:    token,
 	}
 }
 
-func (router *Router) AsRequestMaker(r *http.Request) *Router {
-	authHeader := r.Header.Get("Authorization")
+func (r *Router) AsRequestMaker(req *http.Request) *Router {
+	authHeader := req.Header.Get("Authorization")
 	authHeader = strings.Replace(authHeader, "Bearer ", "", 1)
 
 	if authHeader == "" {
-		return router.SetBearerToken("")
+		return r.SetBearerToken("")
 	}
 
-	return router.SetBearerToken(authHeader)
+	return r.SetBearerToken(authHeader)
 }
 
-func (r *Router) Post(ctx context.Context, serviceName, path string, request, response any) error {
+func (r *Router) request(ctx context.Context, method, serviceName, path string, requestBody, responseBody any) error {
 	val, ok := r.mockEndpoints[serviceName+path]
 	if ok {
 		bs, _ := json.Marshal(val)
-		return json.Unmarshal(bs, response)
+		return json.Unmarshal(bs, responseBody)
 	}
 
 	address, ok := r.registry[serviceName]
@@ -74,13 +71,17 @@ func (r *Router) Post(ctx context.Context, serviceName, path string, request, re
 		address = r.defaultAddress
 	}
 
-	requestJSON, err := json.Marshal(request)
-	if err != nil {
-		return err
+	var bodyBytes []byte
+	var err error
+	if requestBody != nil {
+		bodyBytes, err = json.Marshal(requestBody)
+		if err != nil {
+			return err
+		}
 	}
 
 	url := fmt.Sprintf("%v/%v%v", address, serviceName, path)
-	req, err := http.NewRequestWithContext(ctx, "POST", url, bytes.NewBuffer(requestJSON))
+	req, err := http.NewRequestWithContext(ctx, method, url, bytes.NewBuffer(bodyBytes))
 	if err != nil {
 		return err
 	}
@@ -94,30 +95,34 @@ func (r *Router) Post(ctx context.Context, serviceName, path string, request, re
 	}
 	defer resp.Body.Close()
 
-	responseBody, err := ioutil.ReadAll(resp.Body)
+	responseBytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return err
 	}
 
 	if resp.StatusCode != http.StatusOK {
 		var errResponse map[string]string
-		if err := json.Unmarshal(responseBody, &errResponse); err != nil {
-			return formatError(fmt.Errorf("POST %v -> '%s': %v", url, resp.Status, string(responseBody)))
+		if err := json.Unmarshal(responseBytes, &errResponse); err != nil {
+			return formatError(fmt.Errorf("%s %v -> '%s': %v", method, url, resp.Status, string(responseBytes)))
 		}
 		if errMsg, exists := errResponse["error"]; exists {
-			return formatError(fmt.Errorf("POST %v -> '%s': %v", url, resp.Status, errMsg))
+			return formatError(fmt.Errorf("%s %v -> '%s': %v", method, url, resp.Status, errMsg))
 		}
-		return formatError(fmt.Errorf("POST %v -> '%s': %v", url, resp.Status, string(responseBody)))
+		return formatError(fmt.Errorf("%s %v -> '%s': %v", method, url, resp.Status, string(responseBytes)))
 	}
 
-	if response != nil {
-		err = json.Unmarshal(responseBody, response)
+	if responseBody != nil {
+		err = json.Unmarshal(responseBytes, responseBody)
 		if err != nil {
 			return err
 		}
 	}
 
 	return nil
+}
+
+func (r *Router) Post(ctx context.Context, serviceName, path string, request, response any) error {
+	return r.request(ctx, "POST", serviceName, path, request, response)
 }
 
 func (r *Router) Get(ctx context.Context, serviceName, path string, queryParams map[string]string, response any) error {
@@ -132,7 +137,6 @@ func (r *Router) Get(ctx context.Context, serviceName, path string, queryParams 
 		address = r.defaultAddress
 	}
 
-	// Construct URL with query parameters
 	ur := fmt.Sprintf("%v/%v%v", address, serviceName, path)
 	if len(queryParams) > 0 {
 		q := url.Values{}
@@ -155,24 +159,24 @@ func (r *Router) Get(ctx context.Context, serviceName, path string, queryParams 
 	}
 	defer resp.Body.Close()
 
-	responseBody, err := ioutil.ReadAll(resp.Body)
+	responseBytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return err
 	}
 
 	if resp.StatusCode != http.StatusOK {
 		var errResponse map[string]string
-		if err := json.Unmarshal(responseBody, &errResponse); err != nil {
-			return formatError(fmt.Errorf("GET %v -> '%s': %v", ur, resp.Status, string(responseBody)))
+		if err := json.Unmarshal(responseBytes, &errResponse); err != nil {
+			return formatError(fmt.Errorf("GET %v -> '%s': %v", ur, resp.Status, string(responseBytes)))
 		}
 		if errMsg, exists := errResponse["error"]; exists {
 			return formatError(fmt.Errorf("GET %v -> '%s': %v", ur, resp.Status, errMsg))
 		}
-		return formatError(fmt.Errorf("GET %v ->'%s': %v", ur, resp.Status, string(responseBody)))
+		return formatError(fmt.Errorf("GET %v -> '%s': %v", ur, resp.Status, string(responseBytes)))
 	}
 
 	if response != nil {
-		err = json.Unmarshal(responseBody, response)
+		err = json.Unmarshal(responseBytes, response)
 		if err != nil {
 			return err
 		}
@@ -181,9 +185,15 @@ func (r *Router) Get(ctx context.Context, serviceName, path string, queryParams 
 	return nil
 }
 
-func formatError(err error) error {
-	return err
+func (r *Router) Put(ctx context.Context, serviceName, path string, request, response any) error {
+	return r.request(ctx, "PUT", serviceName, path, request, response)
+}
 
+func (r *Router) Delete(ctx context.Context, serviceName, path string, response any) error {
+	return r.request(ctx, "DELETE", serviceName, path, nil, response)
+}
+
+func formatError(err error) error {
 	_, file, line, ok := runtime.Caller(3)
 	if !ok {
 		return fmt.Errorf("error: %w", err)

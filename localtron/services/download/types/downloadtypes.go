@@ -7,6 +7,10 @@
  */
 package downloadtypes
 
+type ErrorResponse struct {
+	Error string `json:"error"`
+}
+
 type DownloadStatus string
 
 var (

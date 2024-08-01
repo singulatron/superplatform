@@ -39,11 +39,11 @@ func TestRegistration(t *testing.T) {
 			Password: "changeme",
 		}
 		rsp := usertypes.LoginResponse{}
-		err := router.Post(context.Background(), "user", "/login", req, &rsp)
+		err := router.Post(context.Background(), "user-service", "/login", req, &rsp)
 		require.NoError(t, err)
 
 		byTokenRsp := usertypes.ReadUserByTokenResponse{}
-		err = router.Post(context.Background(), "user", "/read-user-by-token", usertypes.ReadUserByTokenRequest{
+		err = router.Post(context.Background(), "user-service", "/read-user-by-token", usertypes.ReadUserByTokenRequest{
 			Token: rsp.Token.Token,
 		}, &byTokenRsp)
 		require.NoError(t, err)
@@ -51,7 +51,7 @@ func TestRegistration(t *testing.T) {
 		require.Equal(t, "singulatron", byTokenRsp.User.Email)
 		require.Equal(t, "", byTokenRsp.User.PasswordHash)
 
-		//err = router.Post(context.Background(), "user", "/change-password-admin", usertypes.ChangePasswordAdminRequest{
+		//err = router.Post(context.Background(), "user-service", "/change-password-admin", usertypes.ChangePasswordAdminRequest{
 		//	Email:       "singulatron",
 		//	NewPassword: "yo",
 		//}, nil)
@@ -61,11 +61,11 @@ func TestRegistration(t *testing.T) {
 		//	Email:    "singulatron",
 		//	Password: "changeme",
 		//}
-		//err = router.Post(context.Background(), "user", "/login", loginReq, &rsp)
+		//err = router.Post(context.Background(), "user-service", "/login", loginReq, &rsp)
 		//require.Error(t, err)
 		//
 		//loginReq.Password = "yo"
-		//err = router.Post(context.Background(), "user", "/login", loginReq, &rsp)
+		//err = router.Post(context.Background(), "user-service", "/login", loginReq, &rsp)
 		//require.NoError(t, err)
 
 		changePassReq := usertypes.ChangePasswordRequest{
@@ -74,18 +74,18 @@ func TestRegistration(t *testing.T) {
 			NewPassword:     "yo",
 		}
 		// not logged in router should not be able to change pasword
-		err = router.Post(context.Background(), "user", "/change-password", changePassReq, nil)
+		err = router.Post(context.Background(), "user-service", "/change-password", changePassReq, nil)
 		require.Error(t, err)
 
 		loggedInRouter := router.SetBearerToken(rsp.Token.Token)
 
-		err = loggedInRouter.Post(context.Background(), "user", "/change-password", changePassReq, nil)
+		err = loggedInRouter.Post(context.Background(), "user-service", "/change-password", changePassReq, nil)
 		require.NoError(t, err)
 
 		// changing with wrong password should error
 		changePassReq.CurrentPassword = "yoWRONG"
 		changePassReq.NewPassword = "yo1"
-		err = loggedInRouter.Post(context.Background(), "user", "/change-password", changePassReq, nil)
+		err = loggedInRouter.Post(context.Background(), "user-service", "/change-password", changePassReq, nil)
 		require.Error(t, err)
 	})
 }

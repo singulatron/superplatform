@@ -16,15 +16,15 @@ import (
 )
 
 // List retrieves a list of download details
-// @Summary List
-// @Description Fetch a list of all download details
+// @Summary List Downloads
+// @Description Fetch a list of all download details.
 // @Tags download
 // @Accept json
 // @Produce json
 // @Success 200 {object} downloadtypes.DownloadsResponse "List of downloads"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
-// @Router /download/list [post]
+// @Router /download-service/downloads [get]
 func (ds *DownloadService) List(
 	w http.ResponseWriter,
 	r *http.Request,

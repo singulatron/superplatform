@@ -70,7 +70,7 @@ func (dm *DownloadService) SetStateFilePath(s string) {
 }
 
 func (dm *DownloadService) Start() error {
-	token, err := usertypes.RegisterService("download", "Download Service", dm.router, dm.credentialStore)
+	token, err := usertypes.RegisterService("download-service", "Download Service", dm.router, dm.credentialStore)
 	if err != nil {
 		return err
 	}

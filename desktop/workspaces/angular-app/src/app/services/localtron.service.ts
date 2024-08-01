@@ -7,7 +7,7 @@
  */
 import { Injectable, Inject, InjectionToken } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { firstValueFrom, map, throwError } from 'rxjs';
+import { firstValueFrom, map } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 import { catchError } from 'rxjs/operators';
 
@@ -42,40 +42,72 @@ export class LocaltronService {
 		this.headers = new HttpHeaders();
 	}
 
-	call(path: string, request: any): Promise<any> {
-		if (!this.config.env.localtronAddress) {
-			console.log('Localtron address is not set', {
-				config: this.config,
-			});
-			throw 'Localtron address seems to be empty';
-		}
-
-		const uri = this.config.env.localtronAddress + path;
-
-		const body = JSON.stringify(request);
-
-		// @todo get this from the user service - import cycle currently
-		const headers = this.headers.set(
+	private prepareHeaders(): HttpHeaders {
+		return this.headers.set(
 			'Authorization',
 			'Bearer ' + this.cs.get('the_token')
 		);
+	}
+
+	private handleError(error: any): Promise<any> {
+		if (error.status >= 400) {
+			throw error.error;
+		}
+		return Promise.reject(error);
+	}
+
+	get(path: string): Promise<any> {
+		const uri = this.config.env.localtronAddress + path;
+		const headers = this.prepareHeaders();
+
+		return firstValueFrom(
+			this.http.get<any>(uri, { headers, responseType: 'text' as 'json' }).pipe(
+				map((response) => JSON.parse(response)),
+				catchError((error) => this.handleError(error))
+			)
+		);
+	}
+
+	post(path: string, request: any): Promise<any> {
+		const uri = this.config.env.localtronAddress + path;
+		const body = JSON.stringify(request);
+		const headers = this.prepareHeaders();
 
 		return firstValueFrom(
 			this.http
-				.post<any>(uri, body, {
-					headers: headers,
-					responseType: 'text' as 'json',
-				})
+				.post<any>(uri, body, { headers, responseType: 'text' as 'json' })
 				.pipe(
-					map((response) => {
-						return JSON.parse(response);
-					}),
-					catchError((error) => {
-						if (error.status >= 400) {
-							throw error.error;
-						}
-						return throwError(error);
-					})
+					map((response) => JSON.parse(response)),
+					catchError((error) => this.handleError(error))
+				)
+		);
+	}
+
+	put(path: string, request: any): Promise<any> {
+		const uri = this.config.env.localtronAddress + path;
+		const body = JSON.stringify(request);
+		const headers = this.prepareHeaders();
+
+		return firstValueFrom(
+			this.http
+				.put<any>(uri, body, { headers, responseType: 'text' as 'json' })
+				.pipe(
+					map((response) => JSON.parse(response)),
+					catchError((error) => this.handleError(error))
+				)
+		);
+	}
+
+	delete(path: string): Promise<any> {
+		const uri = this.config.env.localtronAddress + path;
+		const headers = this.prepareHeaders();
+
+		return firstValueFrom(
+			this.http
+				.delete<any>(uri, { headers, responseType: 'text' as 'json' })
+				.pipe(
+					map((response) => JSON.parse(response)),
+					catchError((error) => this.handleError(error))
 				)
 		);
 	}

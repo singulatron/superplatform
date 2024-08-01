@@ -9,6 +9,7 @@ package downloadservice
 
 import (
 	"context"
+	"fmt"
 
 	downloadtypes "github.com/singulatron/singulatron/localtron/services/download/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
@@ -17,9 +18,8 @@ import (
 func (ds *DownloadService) registerPermissions() error {
 	for _, permission := range downloadtypes.DownloadPermissions {
 		rsp := &usertypes.UpserPermissionResponse{}
-		err := ds.router.Post(context.Background(), "user", "/upsert-permission", &usertypes.UpserPermissionRequest{
+		err := ds.router.Put(context.Background(), "user-service", fmt.Sprintf("/permission/%v", permission.Id), &usertypes.UpserPermissionRequest{
 			Permission: &usertypes.Permission{
-				Id:          permission.Id,
 				Name:        permission.Name,
 				Description: permission.Description,
 			},
@@ -35,10 +35,8 @@ func (ds *DownloadService) registerPermissions() error {
 	} {
 		for _, permission := range downloadtypes.DownloadPermissions {
 			rsp := &usertypes.AddPermissionToRoleResponse{}
-			err := ds.router.Post(context.Background(), "user", "/add-permission-to-role", &usertypes.AddPermissionToRoleRequest{
-				RoleId:       role.Id,
-				PermissionId: permission.Id,
-			}, rsp)
+			err := ds.router.Put(context.Background(), "user-service",
+				fmt.Sprintf("/role/%v/permission/%v", role.Id, permission.Id), &usertypes.AddPermissionToRoleRequest{}, rsp)
 			if err != nil {
 				return err
 			}

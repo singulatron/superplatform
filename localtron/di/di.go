@@ -300,66 +300,66 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 		promptService.Add(w, r)
 	})).Methods("POST")
 
-	router.HandleFunc("/prompt-service'/prompt-service/{promptId}", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/prompt-service'/prompt/{promptId}", appl(func(w http.ResponseWriter, r *http.Request) {
 		promptService.RemovePrompt(w, r)
 	})).Methods("DELETE")
 
 	router.HandleFunc("/prompt-service/{threadId}/subscribe", appl(func(w http.ResponseWriter, r *http.Request) {
 		promptService.GetSubscribe(w, r)
-	}))
+	})).Methods("GET")
 
 	router.HandleFunc("/prompt-service/prompts", appl(func(w http.ResponseWriter, r *http.Request) {
 		promptService.GetPrompts(w, r)
-	}))
+	})).Methods("GET")
 
 	router.HandleFunc("/user-service/login", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.Login(w, r)
-	}))
-	router.HandleFunc("/user-service/read-user-by-token", appl(func(w http.ResponseWriter, r *http.Request) {
+	})).Methods("POST")
+	router.HandleFunc("/user-service/user/by-token", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.ReadUserByToken(w, r)
-	}))
+	})).Methods("GET")
 	router.HandleFunc("/user-service/users", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.GetUsers(w, r)
-	}))
-	router.HandleFunc("/user-service/save-profile", appl(func(w http.ResponseWriter, r *http.Request) {
+	})).Methods("GET")
+	router.HandleFunc("/user-service/user/{userId}", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.SaveProfile(w, r)
-	}))
-	router.HandleFunc("/user-service/change-password", appl(func(w http.ResponseWriter, r *http.Request) {
+	})).Methods("PUT")
+	router.HandleFunc("/user-service/user/{userId}/change-password", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.ChangePassword(w, r)
-	}))
-	router.HandleFunc("/user-service/change-password-admin", appl(func(w http.ResponseWriter, r *http.Request) {
+	})).Methods("POST")
+	router.HandleFunc("/user-service/user/{userId}/change-password-admin", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.ChangePasswordAdmin(w, r)
-	}))
-	router.HandleFunc("/user-service/create-user", appl(func(w http.ResponseWriter, r *http.Request) {
+	})).Methods("POST")
+	router.HandleFunc("/user-service/user", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.CreateUser(w, r)
-	}))
-	router.HandleFunc("/user-service/delete-user", appl(func(w http.ResponseWriter, r *http.Request) {
+	})).Methods("POST")
+	router.HandleFunc("/user-service/user/{userId}", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.DeleteUser(w, r)
-	}))
-	router.HandleFunc("/user-service/get-roles", appl(func(w http.ResponseWriter, r *http.Request) {
+	})).Methods("DELETE")
+	router.HandleFunc("/user-service/roles", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.GetRoles(w, r)
-	}))
-	router.HandleFunc("/user-service/delete-role", appl(func(w http.ResponseWriter, r *http.Request) {
+	})).Methods("GET")
+	router.HandleFunc("/user-service/role/{roleId}", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.DeleteRole(w, r)
-	}))
-	router.HandleFunc("/user-service/is-authorized", appl(func(w http.ResponseWriter, r *http.Request) {
+	})).Methods("DELETE")
+	router.HandleFunc("/user-service/permission/{permissionId}/is-authorized", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.IsAuthorized(w, r)
-	}))
-	router.HandleFunc("/user-service/get-permissions", appl(func(w http.ResponseWriter, r *http.Request) {
+	})).Methods("POST")
+	router.HandleFunc("/user-service/permissions", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.GetPermissions(w, r)
-	}))
+	})).Methods("GET")
 	router.HandleFunc("/user-service/set-role-permissions", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.SetRolePermissions(w, r)
 	}))
-	router.HandleFunc("/user-service/upsert-permission", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/user-service/permission/{permissionId}", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.UpsertPermission(w, r)
-	}))
+	})).Methods("PUT")
 	router.HandleFunc("/user-service/register", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.Register(w, r)
-	}))
-	router.HandleFunc("/user-service/add-permission-to-role", appl(func(w http.ResponseWriter, r *http.Request) {
+	})).Methods("POST")
+	router.HandleFunc("/user-service/role/{roleId}/permission/{permissionId}", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.AddPermissionToRole(w, r)
-	}))
+	})).Methods("PUT")
 
 	router.HandleFunc("/generic-service/create", appl(func(w http.ResponseWriter, r *http.Request) {
 		genericService.Create(w, r)
@@ -377,7 +377,7 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 		genericService.Upsert(w, r)
 	}))
 
-	router.HandleFunc("/node/list", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/node-service/nodes", appl(func(w http.ResponseWriter, r *http.Request) {
 		nodeService.List(w, r)
 	}))
 

@@ -10,6 +10,7 @@ package modelservice
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/singulatron/singulatron/localtron/datastore"
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
@@ -19,9 +20,8 @@ import (
 func (p *ModelService) registerPermissions() error {
 	for _, permission := range modeltypes.ModelPermissions {
 		rsp := &usertypes.UpserPermissionResponse{}
-		err := p.router.Post(context.Background(), "user", "/upsert-permission", &usertypes.UpserPermissionRequest{
+		err := p.router.Put(context.Background(), "user-service", fmt.Sprintf("/permission/%v", permission.Id), &usertypes.UpserPermissionRequest{
 			Permission: &usertypes.Permission{
-				Id:          permission.Id,
 				Name:        permission.Name,
 				Description: permission.Description,
 			},
@@ -37,10 +37,8 @@ func (p *ModelService) registerPermissions() error {
 	} {
 		for _, permission := range modeltypes.ModelPermissions {
 			rsp := &usertypes.AddPermissionToRoleResponse{}
-			err := p.router.Post(context.Background(), "user", "/add-permission-to-role", &usertypes.AddPermissionToRoleRequest{
-				RoleId:       role.Id,
-				PermissionId: permission.Id,
-			}, rsp)
+			err := p.router.Put(context.Background(), "user-service",
+				fmt.Sprintf("/role/%v/permission/%v", role.Id, permission.Id), &usertypes.AddPermissionToRoleRequest{}, rsp)
 			if err != nil {
 				return err
 			}

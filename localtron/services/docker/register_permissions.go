@@ -10,6 +10,7 @@ package dockerservice
 
 import (
 	"context"
+	"fmt"
 
 	dockertypes "github.com/singulatron/singulatron/localtron/services/docker/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
@@ -18,9 +19,8 @@ import (
 func (p *DockerService) registerPermissions() error {
 	for _, permission := range dockertypes.DockerPermissions {
 		rsp := &usertypes.UpserPermissionResponse{}
-		err := p.router.Post(context.Background(), "user", "/upsert-permission", &usertypes.UpserPermissionRequest{
+		err := p.router.Put(context.Background(), "user-service", fmt.Sprintf("/permission/%v", permission.Id), &usertypes.UpserPermissionRequest{
 			Permission: &usertypes.Permission{
-				Id:          permission.Id,
 				Name:        permission.Name,
 				Description: permission.Description,
 			},
@@ -36,10 +36,8 @@ func (p *DockerService) registerPermissions() error {
 	} {
 		for _, permission := range dockertypes.DockerPermissions {
 			rsp := &usertypes.AddPermissionToRoleResponse{}
-			err := p.router.Post(context.Background(), "user", "/add-permission-to-role", &usertypes.AddPermissionToRoleRequest{
-				RoleId:       role.Id,
-				PermissionId: permission.Id,
-			}, rsp)
+			err := p.router.Put(context.Background(), "user-service",
+				fmt.Sprintf("/role/%v/permission/%v", role.Id, permission.Id), &usertypes.AddPermissionToRoleRequest{}, rsp)
 			if err != nil {
 				return err
 			}

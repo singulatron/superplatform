@@ -64,7 +64,7 @@ func NewModelService(
 }
 
 func (ms *ModelService) Start() error {
-	token, err := usertypes.RegisterService("model", "Model Service", ms.router, ms.credentialStore)
+	token, err := usertypes.RegisterService("model-service", "Model Service", ms.router, ms.credentialStore)
 	if err != nil {
 		return err
 	}

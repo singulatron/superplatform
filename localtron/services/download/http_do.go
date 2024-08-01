@@ -16,17 +16,19 @@ import (
 )
 
 // Do initiates a download request
-// @Summary Do
-// @Description Start a download for a specified URL and folder path
+// @Summary Download
+// @Description Start a download for a specified URL.
+// @Description
+// @Description Requires the `download.create` permission.
 // @Tags download
 // @Accept json
 // @Produce json
 // @Param request body downloadtypes.DownloadRequest true "Download Request"
 // @Success 200 {object} map[string]any "Download initiated successfully"
-// @Failure 400 {string} string "Invalid JSON"
-// @Failure 401 {string} string "Unauthorized"
-// @Failure 500 {string} string "Internal Server Error"
-// @Router /download/do [post]
+// @Failure 400 {object} downloadtypes.ErrorResponse "Invalid JSON"
+// @Failure 401 {object} downloadtypes.ErrorResponse "Unauthorized"
+// @Failure 500 {object} downloadtypes.ErrorResponse "Internal Server Error"
+// @Router /download-service/download [put]
 func (ds *DownloadService) Do(
 	w http.ResponseWriter,
 	r *http.Request,
