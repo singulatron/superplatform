@@ -11,13 +11,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 
 	"github.com/gorilla/mux"
 	downloadtypes "github.com/singulatron/singulatron/localtron/services/download/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-// @Summary Get Download
+// @Summary Get a Download
 // @Description Get a download by ID.
 // @Tags download
 // @Accept json
@@ -42,7 +43,13 @@ func (ds *DownloadService) Get(
 	}
 
 	vars := mux.Vars(r)
-	dl, exists := ds.getDownload(vars["downloadId"])
+	did, err := url.PathUnescape(vars["downloadId"])
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	dl, exists := ds.getDownload(did)
 
 	jsonData, _ := json.Marshal(downloadtypes.GetDownloadResponse{
 		Exists:   exists,

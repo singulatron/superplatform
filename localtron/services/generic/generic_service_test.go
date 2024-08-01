@@ -91,7 +91,7 @@ func TestCreate(t *testing.T) {
 		CreatedAt: time.Now().String(),
 	}
 
-	err = user2Router.Post(context.Background(), "generic", "/create", &generictypes.CreateRequest{
+	err = user2Router.Post(context.Background(), "generic-service", "/object", &generictypes.CreateRequest{
 		Object: &obj2.GenericObjectCreateFields,
 	}, nil)
 	require.NoError(t, err)
@@ -121,7 +121,7 @@ func TestCreate(t *testing.T) {
 			}},
 		}
 		rsp := generictypes.QueryResponse{}
-		err = user1Router.Post(context.Background(), "generic-service", "/find", req, &rsp)
+		err = user1Router.Post(context.Background(), "generic-service", "/objects/query", req, &rsp)
 		require.NoError(t, err)
 		require.Equal(t, 1, len(rsp.Objects))
 		require.Equal(t, rsp.Objects[0].Id, uuid1)
@@ -190,7 +190,7 @@ func TestCreate(t *testing.T) {
 			}},
 		}
 		rsp := generictypes.QueryResponse{}
-		err = user1Router.Post(context.Background(), "generic", "/find", req, &rsp)
+		err = user1Router.Post(context.Background(), "generic-service", "/objects/query", req, &rsp)
 		require.NoError(t, err)
 		require.Equal(t, 1, len(rsp.Objects))
 		require.Contains(t, rsp.Objects[0].Id, uuid1)
