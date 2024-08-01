@@ -60,7 +60,7 @@ func TestDownloadFile(t *testing.T) {
 	require.NoError(t, err)
 	router = router.SetBearerToken(token)
 
-	err = router.Post(context.Background(), "download-service", "/do", downloadtypes.DownloadRequest{
+	err = router.Put(context.Background(), "download-service", "/download", downloadtypes.DownloadRequest{
 		URL: fileHostServer.URL,
 	}, nil)
 	require.NoError(t, err)
@@ -129,7 +129,7 @@ func TestDownloadFileWithPartFile(t *testing.T) {
 	req := downloadtypes.DownloadRequest{
 		URL: downloadURL,
 	}
-	err = router.Post(context.Background(), "download-service", "/do", req, nil)
+	err = router.Put(context.Background(), "download-service", "/download", req, nil)
 	require.NoError(t, err)
 
 	for {
@@ -180,7 +180,7 @@ func TestDownloadFileWithFullFile(t *testing.T) {
 	req := downloadtypes.DownloadRequest{
 		URL: downloadURL,
 	}
-	err = router.Post(context.Background(), "download-service", "/do", req, nil)
+	err = router.Put(context.Background(), "download-service", "/download", req, nil)
 	require.NoError(t, err)
 
 	var (

@@ -93,7 +93,7 @@ func (p *PromptService) addPrompt(ctx context.Context, promptReq *prompttypes.Ad
 		}
 
 		rsp := &chattypes.AddThreadResponse{}
-		err = p.router.Post(context.Background(), "chat", "/thread/add", &chattypes.AddThreadRequest{
+		err = p.router.Post(context.Background(), "chat-service", "/thread", &chattypes.AddThreadRequest{
 			Thread: thread,
 		}, rsp)
 		if err != nil {

@@ -38,7 +38,7 @@ func (ms *ModelService) status(modelId string) (*modeltypes.ModelStatus, error) 
 
 	if modelId == "" {
 		rsp := configtypes.GetConfigResponse{}
-		err := ms.router.Get(context.Background(), "config", "/get", nil, &rsp)
+		err := ms.router.Get(context.Background(), "config-service", "/config", nil, &rsp)
 		if err != nil {
 			return nil, err
 		}

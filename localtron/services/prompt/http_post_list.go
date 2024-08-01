@@ -9,6 +9,7 @@ package promptservice
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/singulatron/singulatron/localtron/datastore"
@@ -33,9 +34,7 @@ func (p *PromptService) GetPrompts(
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := p.router.AsRequestMaker(r).Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
-		PermissionId: prompttypes.PermissionPromptView.Id,
-	}, rsp)
+	err := p.router.AsRequestMaker(r).Post(r.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", prompttypes.PermissionPromptView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return

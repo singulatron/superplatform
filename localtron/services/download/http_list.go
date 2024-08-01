@@ -9,6 +9,7 @@ package downloadservice
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	downloadtypes "github.com/singulatron/singulatron/localtron/services/download/types"
@@ -30,9 +31,7 @@ func (ds *DownloadService) List(
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := ds.router.AsRequestMaker(r).Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
-		PermissionId: downloadtypes.PermissionDownloadView.Id,
-	}, rsp)
+	err := ds.router.AsRequestMaker(r).Post(r.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", downloadtypes.PermissionDownloadView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return

@@ -11,9 +11,24 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
+// UpsertPermission handles the creation or update of a permission
+//
+// @Summary Upsert a permission
+// @Description Creates a new permission or updates an existing permission identified by permissionId.
+// @Tags Permission Management
+// @Accept json
+// @Produce json
+// @Param permissionId path string true "Permission ID" example(123)
+// @Param requestBody body usertypes.UpserPermissionRequest true "Permission Details"
+// @Success 200 {object} usertypes.CreateUserResponse
+// @Failure 400 {string} string "Bad Request"
+// @Failure 401 {string} string "Unauthorized"
+// @Failure 500 {string} string "Internal Server Error"
+// @Router /user-service/permission/{permissionId} [put]
 func (s *UserService) UpsertPermission(
 	w http.ResponseWriter,
 	r *http.Request,
@@ -33,7 +48,9 @@ func (s *UserService) UpsertPermission(
 	}
 	defer r.Body.Close()
 
-	_, err = s.upsertPermission(req.Permission.Id, req.Permission.Name, req.Permission.Description)
+	vars := mux.Vars(r)
+
+	_, err = s.upsertPermission(vars["permissionId"], req.Permission.Name, req.Permission.Description)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

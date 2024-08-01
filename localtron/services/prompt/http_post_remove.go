@@ -9,6 +9,7 @@ package promptservice
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
@@ -32,9 +33,7 @@ func (p *PromptService) RemovePrompt(
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := p.router.AsRequestMaker(r).Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
-		PermissionId: prompttypes.PermissionPromptCreate.Id,
-	}, rsp)
+	err := p.router.AsRequestMaker(r).Post(r.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", prompttypes.PermissionPromptCreate.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return

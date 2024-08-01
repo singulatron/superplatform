@@ -9,6 +9,7 @@ package configservice
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
@@ -31,8 +32,7 @@ func (cs *ConfigService) Save(
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := cs.router.AsRequestMaker(r).Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
-		PermissionId:  configtypes.PermissionConfigEdit.Id,
+	err := cs.router.AsRequestMaker(r).Post(r.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", configtypes.PermissionConfigEdit.Id), &usertypes.IsAuthorizedRequest{
 		EmailsGranted: []string{"model"},
 	}, rsp)
 	if err != nil {

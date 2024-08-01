@@ -43,7 +43,7 @@ func TestRegistration(t *testing.T) {
 		require.NoError(t, err)
 
 		byTokenRsp := usertypes.ReadUserByTokenResponse{}
-		err = router.Post(context.Background(), "user-service", "/read-user-by-token", usertypes.ReadUserByTokenRequest{
+		err = router.Post(context.Background(), "user-service", "/user/by-token", usertypes.ReadUserByTokenRequest{
 			Token: rsp.Token.Token,
 		}, &byTokenRsp)
 		require.NoError(t, err)

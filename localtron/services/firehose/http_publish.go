@@ -10,6 +10,7 @@ package firehoseservice
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
@@ -20,9 +21,7 @@ import (
 func (p *FirehoseService) Publish(w http.ResponseWriter,
 	r *http.Request) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := p.router.AsRequestMaker(r).Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
-		PermissionId: prompttypes.PermissionPromptCreate.Id,
-	}, rsp)
+	err := p.router.AsRequestMaker(r).Post(r.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", prompttypes.PermissionPromptCreate.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return

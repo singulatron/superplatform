@@ -117,9 +117,9 @@ func TestAddPrompt(t *testing.T) {
 			return nil
 		})
 
-	creq := configtypes.GetConfigRequest{}
+	//creq := configtypes.GetConfigRequest{}
 	crsp := configtypes.GetConfigResponse{}
-	err = router.Post(context.Background(), "config", "/get", creq, &crsp)
+	err = router.Get(context.Background(), "config-service", "/config", nil, &crsp)
 	require.NoError(t, err)
 
 	mreq := modeltypes.ListRequest{}

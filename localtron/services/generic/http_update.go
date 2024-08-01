@@ -9,6 +9,7 @@ package genericservice
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	generictypes "github.com/singulatron/singulatron/localtron/services/generic/types"
@@ -33,9 +34,7 @@ func (g *GenericService) Update(
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := g.router.AsRequestMaker(r).Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
-		PermissionId: generictypes.PermissionGenericEdit.Id,
-	}, rsp)
+	err := g.router.AsRequestMaker(r).Post(r.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", generictypes.PermissionGenericEdit.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return

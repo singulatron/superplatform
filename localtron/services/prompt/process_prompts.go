@@ -259,7 +259,7 @@ func (p *PromptService) processPlatform(address string, fullPrompt string, curre
 	if modelId == "" {
 		getConfigReq := configtypes.GetConfigRequest{}
 		getConfigRsp := configtypes.GetConfigResponse{}
-		err := p.router.Post(context.Background(), "config", "/get", getConfigReq, &getConfigRsp)
+		err := p.router.Post(context.Background(), "config-service", "/config", getConfigReq, &getConfigRsp)
 		if err != nil {
 			return err
 		}

@@ -9,6 +9,7 @@ package modelservice
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
@@ -33,9 +34,7 @@ func (ms *ModelService) StartDefault(
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := ms.router.AsRequestMaker(r).Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
-		PermissionId: modeltypes.PermissionModelCreate.Id,
-	}, rsp)
+	err := ms.router.AsRequestMaker(r).Post(r.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", modeltypes.PermissionModelCreate.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return

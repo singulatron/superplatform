@@ -9,6 +9,7 @@ package dockerservice
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	dockertypes "github.com/singulatron/singulatron/localtron/services/docker/types"
@@ -20,8 +21,7 @@ func (dm *DockerService) HashIsRunning(
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := dm.router.AsRequestMaker(r).Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
-		PermissionId:  dockertypes.PermissionDockerCreate.Id,
+	err := dm.router.AsRequestMaker(r).Post(r.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", dockertypes.PermissionDockerCreate.Id), &usertypes.IsAuthorizedRequest{
 		EmailsGranted: []string{"model"},
 	}, rsp)
 	if err != nil {

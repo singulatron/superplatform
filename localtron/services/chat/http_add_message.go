@@ -9,6 +9,7 @@ package chatservice
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
@@ -32,9 +33,7 @@ func (a *ChatService) AddMessage(
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := a.router.AsRequestMaker(r).Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
-		PermissionId: chattypes.PermissionMessageCreate.Id,
-	}, rsp)
+	err := a.router.AsRequestMaker(r).Post(r.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", chattypes.PermissionMessageCreate.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return

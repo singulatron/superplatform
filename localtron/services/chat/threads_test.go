@@ -70,7 +70,7 @@ func TestMessageCreatesThread(t *testing.T) {
 			},
 		}
 
-		err = router.Post(context.Background(), "chat", "/thread/add", req, nil)
+		err = router.Post(context.Background(), "chat-service", "/thread", req, nil)
 		require.NoError(t, err)
 	})
 
@@ -89,7 +89,7 @@ func TestMessageCreatesThread(t *testing.T) {
 			},
 		}
 		rsp := &chattypes.AddThreadResponse{}
-		err = router.Post(context.Background(), "chat", "/thread/add", req, rsp)
+		err = router.Post(context.Background(), "chat-service", "/thread", req, rsp)
 		require.NoError(t, err)
 
 		thread := rsp.Thread

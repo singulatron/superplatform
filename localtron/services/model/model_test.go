@@ -39,9 +39,8 @@ func TestModel(t *testing.T) {
 	router = router.SetBearerToken(token)
 
 	t.Run("get models", func(t *testing.T) {
-		getModelsReq := modeltypes.ListRequest{}
 		getModelsRsp := modeltypes.ListResponse{}
-		err = router.Post(context.Background(), "model", "", getModelsReq, &getModelsRsp)
+		err = router.Get(context.Background(), "model-service", "/models", nil, &getModelsRsp)
 		require.NoError(t, err)
 
 		require.Equal(t, 1, len(getModelsRsp.Models[0].Assets))
@@ -61,7 +60,7 @@ func TestModel(t *testing.T) {
 	t.Run("default", func(t *testing.T) {
 		getConfigReq := configtypes.GetConfigRequest{}
 		getConfigRsp := configtypes.GetConfigResponse{}
-		err = router.Post(context.Background(), "config", "/get", getConfigReq, &getConfigRsp)
+		err = router.Post(context.Background(), "config-service", "/config", getConfigReq, &getConfigRsp)
 		require.NoError(t, err)
 		require.Equal(t, configservice.DefaultModelId, getConfigRsp.Config.Model.CurrentModelId)
 
@@ -73,7 +72,7 @@ func TestModel(t *testing.T) {
 
 		getConfigReq = configtypes.GetConfigRequest{}
 		getConfigRsp = configtypes.GetConfigResponse{}
-		err = router.Post(context.Background(), "config", "/get", getConfigReq, &getConfigRsp)
+		err = router.Post(context.Background(), "config-service", "/config", getConfigReq, &getConfigRsp)
 		require.NoError(t, err)
 		require.Equal(t, configservice.DefaultModelId, getConfigRsp.Config.Model.CurrentModelId)
 

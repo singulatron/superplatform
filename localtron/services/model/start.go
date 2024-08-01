@@ -43,7 +43,7 @@ func (ms *ModelService) start(modelId string) error {
 
 	if modelId == "" {
 		rsp := configtypes.GetConfigResponse{}
-		err := ms.router.Get(context.Background(), "config", "/get", nil, &rsp)
+		err := ms.router.Get(context.Background(), "config-service", "/config", nil, &rsp)
 		if err != nil {
 			return err
 		}
@@ -124,7 +124,7 @@ func (ms *ModelService) start(modelId string) error {
 
 	if getConfigResponse != nil {
 		rsp := configtypes.GetConfigResponse{}
-		err := ms.router.Get(context.Background(), "config", "/get", nil, &rsp)
+		err := ms.router.Get(context.Background(), "config-service", "/config", nil, &rsp)
 		if err != nil {
 			return err
 		}

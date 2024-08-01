@@ -237,10 +237,10 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 
 	router.HandleFunc("/model-service/default/status", appl(func(w http.ResponseWriter, r *http.Request) {
 		modelService.DefaultStatus(w, r)
-	}))
+	})).Methods("GET")
 	router.HandleFunc("/model-service/{modelId}/status", appl(func(w http.ResponseWriter, r *http.Request) {
 		modelService.Status(w, r)
-	}))
+	})).Methods("GET")
 	router.HandleFunc("/model-service/models", appl(func(w http.ResponseWriter, r *http.Request) {
 		modelService.List(w, r)
 	})).Methods("GET")
@@ -317,7 +317,7 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 	})).Methods("POST")
 	router.HandleFunc("/user-service/user/by-token", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.ReadUserByToken(w, r)
-	})).Methods("GET")
+	})).Methods("POST")
 	router.HandleFunc("/user-service/users", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.GetUsers(w, r)
 	})).Methods("GET")
