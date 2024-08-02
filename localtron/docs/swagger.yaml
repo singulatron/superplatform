@@ -35,21 +35,6 @@ definitions:
         description: Url of the asset where
         type: string
     type: object
-  chattypes.DeleteMessageRequest:
-    properties:
-      messageId:
-        type: string
-    type: object
-  chattypes.DeleteThreadRequest:
-    properties:
-      threadId:
-        type: string
-    type: object
-  chattypes.GetMessagesRequest:
-    properties:
-      threadId:
-        type: string
-    type: object
   chattypes.GetMessagesResponse:
     properties:
       assets:
@@ -60,11 +45,6 @@ definitions:
         items:
           $ref: '#/definitions/chattypes.Message'
         type: array
-    type: object
-  chattypes.GetThreadRequest:
-    properties:
-      threadId:
-        type: string
     type: object
   chattypes.GetThreadResponse:
     properties:
@@ -287,6 +267,84 @@ definitions:
         description: Selector selects one, more or all fields
       value: {}
     type: object
+  dockertypes.ContainerIsRunningResponse:
+    properties:
+      isRunning:
+        type: boolean
+    type: object
+  dockertypes.DockerInfo:
+    properties:
+      dockerDaemonAddress:
+        type: string
+      error:
+        type: string
+      hasDocker:
+        type: boolean
+    type: object
+  dockertypes.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  dockertypes.GetContainerSummaryResponse:
+    properties:
+      summary:
+        type: string
+    type: object
+  dockertypes.GetDockerHostResponse:
+    properties:
+      host:
+        type: string
+    type: object
+  dockertypes.GetInfoResponse:
+    properties:
+      info:
+        $ref: '#/definitions/dockertypes.DockerInfo'
+    type: object
+  dockertypes.LaunchContainerRequest:
+    properties:
+      hostPort:
+        type: integer
+      image:
+        type: string
+      options:
+        $ref: '#/definitions/dockertypes.LaunchOptions'
+      port:
+        type: integer
+    type: object
+  dockertypes.LaunchContainerResponse:
+    properties:
+      info:
+        $ref: '#/definitions/dockertypes.LaunchInfo'
+    type: object
+  dockertypes.LaunchInfo:
+    properties:
+      newContainerStarted:
+        type: boolean
+      portNumber:
+        type: integer
+    type: object
+  dockertypes.LaunchOptions:
+    properties:
+      envs:
+        items:
+          type: string
+        type: array
+      gpuEnabled:
+        type: boolean
+      hash:
+        type: string
+      hostBinds:
+        items:
+          type: string
+        type: array
+      labels:
+        additionalProperties:
+          type: string
+        type: object
+      name:
+        type: string
+    type: object
   downloadtypes.DownloadDetails:
     properties:
       cancelled:
@@ -328,6 +386,11 @@ definitions:
           $ref: '#/definitions/downloadtypes.DownloadDetails'
         type: array
     type: object
+  downloadtypes.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
   downloadtypes.GetDownloadResponse:
     properties:
       download:
@@ -360,22 +423,6 @@ definitions:
     properties:
       error:
         type: string
-    type: object
-  generictypes.FindRequest:
-    properties:
-      public:
-        type: boolean
-      query:
-        $ref: '#/definitions/datastore.Query'
-      table:
-        type: string
-    type: object
-  generictypes.FindResponse:
-    properties:
-      objects:
-        items:
-          $ref: '#/definitions/generictypes.GenericObject'
-        type: array
     type: object
   generictypes.GenericObject:
     properties:
@@ -422,6 +469,22 @@ definitions:
     required:
     - data
     - table
+    type: object
+  generictypes.QueryRequest:
+    properties:
+      public:
+        type: boolean
+      query:
+        $ref: '#/definitions/datastore.Query'
+      table:
+        type: string
+    type: object
+  generictypes.QueryResponse:
+    properties:
+      objects:
+        items:
+          $ref: '#/definitions/generictypes.GenericObject'
+        type: array
     type: object
   generictypes.UpdateRequest:
     properties:
@@ -484,8 +547,6 @@ definitions:
         $ref: '#/definitions/modeltypes.Model'
       platform:
         $ref: '#/definitions/modeltypes.Platform'
-    type: object
-  modeltypes.ListRequest:
     type: object
   modeltypes.ListResponse:
     properties:
@@ -727,6 +788,31 @@ definitions:
     type: object
   prompttypes.RemovePromptResponse:
     type: object
+  usertypes.CreateUserResponse:
+    type: object
+  usertypes.Permission:
+    properties:
+      createdAt:
+        type: string
+      description:
+        type: string
+      id:
+        description: eg. "user.viewer"
+        type: string
+      name:
+        description: eg. "User Viewer"
+        type: string
+      ownerId:
+        description: Service who owns the permission
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  usertypes.UpserPermissionRequest:
+    properties:
+      permissions:
+        $ref: '#/definitions/usertypes.Permission'
+    type: object
 externalDocs:
   description: Singulatron API
   url: https://superplatform.ai/docs/category/singulatron-api
@@ -745,53 +831,17 @@ info:
   title: Singulatron
   version: "0.2"
 paths:
-  /chat/message/add:
-    post:
-      consumes:
-      - application/json
-      description: Add a new message to a specific chat thread
-      parameters:
-      - description: Add Message Request
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/chattypes.AddMessageRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Message successfully added
-          schema:
-            additionalProperties: true
-            type: object
-        "400":
-          description: Invalid JSON
-          schema:
-            type: string
-        "401":
-          description: Unauthorized
-          schema:
-            type: string
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      summary: Add Message
-      tags:
-      - chat
-  /chat/message/delete:
-    post:
+  /chat-service/message/{messageId}:
+    delete:
       consumes:
       - application/json
       description: Delete a specific message from a chat thread by its ID
       parameters:
-      - description: Delete Message Request
-        in: body
-        name: request
+      - description: Message ID
+        in: path
+        name: messageId
         required: true
-        schema:
-          $ref: '#/definitions/chattypes.DeleteMessageRequest'
+        type: string
       produces:
       - application/json
       responses:
@@ -815,79 +865,13 @@ paths:
       summary: Delete Message
       tags:
       - chat
-  /chat/messages:
+  /chat-service/thread:
     post:
       consumes:
       - application/json
-      description: Fetch messages (and associated assets) for a specific chat thread.
-      parameters:
-      - description: Get Messages Request
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/chattypes.GetMessagesRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Messages and assets successfully retrieved
-          schema:
-            $ref: '#/definitions/chattypes.GetMessagesResponse'
-        "400":
-          description: Invalid JSON
-          schema:
-            type: string
-        "401":
-          description: Unauthorized
-          schema:
-            type: string
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      summary: Get Messages
-      tags:
-      - chat
-  /chat/thread:
-    post:
-      consumes:
-      - application/json
-      description: Fetch information about a specific chat thread by its ID
-      parameters:
-      - description: Get Thread Request
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/chattypes.GetThreadRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Thread details successfully retrieved
-          schema:
-            $ref: '#/definitions/chattypes.GetThreadResponse'
-        "400":
-          description: Invalid JSON
-          schema:
-            type: string
-        "401":
-          description: Unauthorized
-          schema:
-            type: string
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      summary: Get Thread
-      tags:
-      - chat
-  /chat/thread/add:
-    post:
-      consumes:
-      - application/json
-      description: Create a new chat thread and add the requesting user to it
+      description: |-
+        Create a new chat thread and add the requesting user to it.
+        Requires the `thread.create` permission.
       parameters:
       - description: Add Thread Request
         in: body
@@ -917,18 +901,17 @@ paths:
       summary: Add Thread
       tags:
       - chat
-  /chat/thread/delete:
-    post:
+  /chat-service/thread/{threadId}:
+    delete:
       consumes:
       - application/json
       description: Delete a specific chat thread by its ID
       parameters:
-      - description: Delete Thread Request
-        in: body
-        name: request
+      - description: Thread ID
+        in: path
+        name: threadId
         required: true
-        schema:
-          $ref: '#/definitions/chattypes.DeleteThreadRequest'
+        type: string
       produces:
       - application/json
       responses:
@@ -952,12 +935,42 @@ paths:
       summary: Delete Thread
       tags:
       - chat
-  /chat/thread/update:
-    post:
+    get:
+      consumes:
+      - application/json
+      description: Fetch information about a specific chat thread by its ID
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Thread details successfully retrieved
+          schema:
+            $ref: '#/definitions/chattypes.GetThreadResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get Thread
+      tags:
+      - chat
+    put:
       consumes:
       - application/json
       description: Modify the details of a specific chat thread
       parameters:
+      - description: Thread ID
+        in: path
+        name: threadId
+        required: true
+        type: string
       - description: Update Thread Request
         in: body
         name: request
@@ -986,7 +999,80 @@ paths:
       summary: Update Thread
       tags:
       - chat
-  /chat/threads:
+  /chat-service/thread/{threadId}/message:
+    post:
+      consumes:
+      - application/json
+      description: Add a new message to a specific thread.
+      parameters:
+      - description: Thread ID
+        in: path
+        name: threadId
+        required: true
+        type: string
+      - description: Add Message Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/chattypes.AddMessageRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Message successfully added
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid JSON
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Add Message
+      tags:
+      - chat
+  /chat-service/thread/{threadId}/messages:
+    get:
+      consumes:
+      - application/json
+      description: Fetch messages (and associated assets) for a specific chat thread.
+      parameters:
+      - description: Thread ID
+        in: path
+        name: threadId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Messages and assets successfully retrieved
+          schema:
+            $ref: '#/definitions/chattypes.GetMessagesResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get Messages
+      tags:
+      - chat
+  /chat-service/threads:
     post:
       consumes:
       - application/json
@@ -1080,11 +1166,171 @@ paths:
       summary: Save
       tags:
       - config
-  /download/do:
-    post:
+  /docker-service/container:
+    put:
       consumes:
       - application/json
-      description: Start a download for a specified URL and folder path
+      description: |-
+        Launches a Docker container with the specified parameters.
+
+        Requires the `docker.create` permission.
+      parameters:
+      - description: Launch Container Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dockertypes.LaunchContainerRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dockertypes.LaunchContainerResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/dockertypes.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dockertypes.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dockertypes.ErrorResponse'
+      summary: Launch a Docker Container
+      tags:
+      - Docker Service
+  /docker-service/container/{hash}/is-running:
+    get:
+      consumes:
+      - application/json
+      description: Check if a Docker container identified by the hash is running
+      parameters:
+      - description: Container Hash
+        in: path
+        name: hash
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dockertypes.ContainerIsRunningResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/dockertypes.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dockertypes.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dockertypes.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Check If a Container Is Running
+      tags:
+      - Docker Service
+  /docker-service/container/{hash}/summary/{numberOfLines}:
+    get:
+      consumes:
+      - application/json
+      description: Get a summary of the Docker container identified by the hash, limited
+        to a specified number of lines
+      parameters:
+      - description: Container Hash
+        in: path
+        name: hash
+        required: true
+        type: string
+      - description: Number of Lines
+        in: path
+        name: numberOfLines
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dockertypes.GetContainerSummaryResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/dockertypes.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dockertypes.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dockertypes.ErrorResponse'
+      summary: Get Container Summary
+      tags:
+      - Docker Service
+  /docker-service/host:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve information about the Docker host
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dockertypes.GetDockerHostResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dockertypes.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dockertypes.ErrorResponse'
+      summary: Get Docker Host
+      tags:
+      - Docker Service
+  /docker-service/info:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve detailed information about the Docker service
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Service Information
+          schema:
+            $ref: '#/definitions/dockertypes.GetInfoResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dockertypes.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dockertypes.ErrorResponse'
+      summary: Get Docker Service Information
+      tags:
+      - Docker Service
+  /download-service/download:
+    put:
+      consumes:
+      - application/json
+      description: |-
+        Start a download for a specified URL.
+
+        Requires the `download.create` permission.
       parameters:
       - description: Download Request
         in: body
@@ -1103,23 +1349,29 @@ paths:
         "400":
           description: Invalid JSON
           schema:
-            type: string
+            $ref: '#/definitions/downloadtypes.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            type: string
+            $ref: '#/definitions/downloadtypes.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            type: string
-      summary: Do
+            $ref: '#/definitions/downloadtypes.ErrorResponse'
+      summary: Download a File
       tags:
-      - download
-  /download/get:
-    post:
+      - Download Service
+  /download-service/download/{downloadId}:
+    get:
       consumes:
       - application/json
-      description: Get a download by URL.
+      description: Get a download by ID.
+      parameters:
+      - description: Download ID
+        in: path
+        name: downloadId
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -1135,44 +1387,20 @@ paths:
           description: Internal Server Error
           schema:
             type: string
-      summary: Get Download
+      summary: Get a Download
       tags:
-      - download
-  /download/list:
-    post:
-      consumes:
-      - application/json
-      description: Fetch a list of all download details
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: List of downloads
-          schema:
-            $ref: '#/definitions/downloadtypes.DownloadsResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            type: string
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      summary: List
-      tags:
-      - download
-  /download/pause:
-    post:
+      - Download Service
+  /download-service/download/{downloadId}/pause:
+    put:
       consumes:
       - application/json
       description: Pause a download that is currently in progress
       parameters:
-      - description: Download request payload
-        in: body
-        name: body
+      - description: Download ID
+        in: path
+        name: downloadId
         required: true
-        schema:
-          $ref: '#/definitions/downloadtypes.DownloadRequest'
+        type: string
       produces:
       - application/json
       responses:
@@ -1195,8 +1423,31 @@ paths:
             type: string
       summary: Pause
       tags:
-      - download
-  /firehose/subscribe:
+      - Download Service
+  /download-service/downloads:
+    post:
+      consumes:
+      - application/json
+      description: Fetch a list of all download details.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of downloads
+          schema:
+            $ref: '#/definitions/downloadtypes.DownloadsResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: List Downloads
+      tags:
+      - Download Service
+  /firehose-service/subscribe:
     get:
       consumes:
       - application/json
@@ -1257,13 +1508,18 @@ paths:
       summary: Create a Generic Object
       tags:
       - generic
-  /generic/delete:
-    post:
+  /generic/object/{objectId}:
+    delete:
       consumes:
       - application/json
       description: Removes a generic object from the system based on the provided
         conditions. Requires authorization and user authentication.
       parameters:
+      - description: Container Hash
+        in: path
+        name: hash
+        required: true
+        type: string
       - description: Delete request payload
         in: body
         name: body
@@ -1293,8 +1549,8 @@ paths:
       - BearerAuth: []
       summary: Delete a Generic Object
       tags:
-      - generic
-  /generic/find:
+      - Generic Service
+  /generic/objects/query:
     post:
       consumes:
       - application/json
@@ -1305,19 +1561,19 @@ paths:
 
         Use helper functions in your respective client library such as condition constructors (`equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
       parameters:
-      - description: Find request payload
+      - description: Query Request
         in: body
         name: body
         required: true
         schema:
-          $ref: '#/definitions/generictypes.FindRequest'
+          $ref: '#/definitions/generictypes.QueryRequest'
       produces:
       - application/json
       responses:
         "200":
           description: Successful retrieval of objects
           schema:
-            $ref: '#/definitions/generictypes.FindResponse'
+            $ref: '#/definitions/generictypes.QueryResponse'
         "400":
           description: Invalid JSON
           schema:
@@ -1333,7 +1589,7 @@ paths:
       summary: Find Generic Objects
       tags:
       - generic
-  /generic/update:
+  /generic/objects/update:
     post:
       consumes:
       - application/json
@@ -1405,46 +1661,46 @@ paths:
       summary: Upsert a Generic Object
       tags:
       - generic
-  /model:
+  /model-service/{id}/status:
     get:
       consumes:
       - application/json
       description: |-
-        Retrieves a list of models after checking authorization
-        Requires "model.view" permission.
+        Retrieves the status of a model by ID.
+
+        Requires the `model.view` permission.
       parameters:
-      - description: Get models request
-        in: body
-        name: GetModelsRequest
+      - description: Model ID
+        in: path
+        name: id
         required: true
-        schema:
-          $ref: '#/definitions/modeltypes.ListRequest'
+        type: string
       produces:
       - application/json
       responses:
         "200":
-          description: OK
+          description: Model status retrieved successfully
           schema:
-            $ref: '#/definitions/modeltypes.ListResponse'
+            $ref: '#/definitions/modeltypes.StatusResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/modeltypes.ErrorResponse'
+            type: string
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/modeltypes.ErrorResponse'
-      summary: List Models
+            type: string
+      summary: Get Model Status
       tags:
       - model
-  /model/{id}:
+  /model-service/{modelId}:
     get:
       consumes:
       - application/json
       description: |-
         Retrieves the details of a model by its ID.
 
-        Requires `model.view` permission.
+        the Requires `model.view` permission.
       parameters:
       - description: Model ID
         in: path
@@ -1469,7 +1725,7 @@ paths:
       summary: Get a Model
       tags:
       - model
-  /model/{id}/make-default:
+  /model-service/{modelId}/make-default:
     put:
       consumes:
       - application/json
@@ -1503,7 +1759,7 @@ paths:
       summary: Make a Model Default
       tags:
       - model
-  /model/{id}/start:
+  /model-service/{modelId}/start:
     put:
       consumes:
       - application/json
@@ -1511,7 +1767,7 @@ paths:
       parameters:
       - description: Model ID
         in: path
-        name: id
+        name: modelId
         required: true
         type: string
       produces:
@@ -1536,39 +1792,7 @@ paths:
       summary: Start a Model
       tags:
       - model
-  /model/{id}/status:
-    get:
-      consumes:
-      - application/json
-      description: |-
-        Retrieves the status of a model by ID.
-
-        Requires the `model.view` permission.
-      parameters:
-      - description: Model ID
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Model status retrieved successfully
-          schema:
-            $ref: '#/definitions/modeltypes.StatusResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            type: string
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      summary: Get Model Status
-      tags:
-      - model
-  /model/default/start:
+  /model-service/default/start:
     put:
       consumes:
       - application/json
@@ -1598,7 +1822,91 @@ paths:
       summary: Start the Default Model
       tags:
       - model
-  /prompt/add:
+  /model-service/models:
+    get:
+      consumes:
+      - application/json
+      description: |-
+        Retrieves a list of models after checking authorization
+        Requires "model.view" permission.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/modeltypes.ListResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/modeltypes.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/modeltypes.ErrorResponse'
+      summary: List Models
+      tags:
+      - model
+  /prompt-service/{threadId}/subscribe:
+    get:
+      description: Subscribe to prompt responses via Server-Sent Events (SSE)
+      parameters:
+      - description: Thread ID
+        in: query
+        name: threadId
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Streaming response
+          schema:
+            type: string
+        "400":
+          description: Missing threadId parameter
+          schema:
+            $ref: '#/definitions/prompttypes.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/prompttypes.ErrorResponse'
+      summary: Subscribe to Prompt
+      tags:
+      - Prompt Service
+  /prompt-service/list:
+    post:
+      consumes:
+      - application/json
+      description: List prompts that satisfy a query.
+      parameters:
+      - description: List Prompts Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/prompttypes.ListPromptsRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/prompttypes.ListPromptsResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/prompttypes.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/prompttypes.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/prompttypes.ErrorResponse'
+      summary: List Prompts
+      tags:
+      - Prompt Service
+  /prompt-service/prompt:
     post:
       consumes:
       - application/json
@@ -1632,42 +1940,8 @@ paths:
             $ref: '#/definitions/prompttypes.ErrorResponse'
       summary: Add Prompt
       tags:
-      - prompts
-  /prompt/list:
-    post:
-      consumes:
-      - application/json
-      description: List prompts that satisfy a query.
-      parameters:
-      - description: List Prompts Request
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/prompttypes.ListPromptsRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/prompttypes.ListPromptsResponse'
-        "400":
-          description: Invalid JSON
-          schema:
-            $ref: '#/definitions/prompttypes.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/prompttypes.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/prompttypes.ErrorResponse'
-      summary: List Prompts
-      tags:
-      - prompts
-  /prompt/remove:
+      - Prompt Service
+  /prompt-service/remove:
     post:
       consumes:
       - application/json
@@ -1700,32 +1974,85 @@ paths:
             $ref: '#/definitions/prompttypes.ErrorResponse'
       summary: Remove Prompt
       tags:
-      - prompts
-  /prompt/subscribe:
-    get:
-      description: Subscribe to prompt responses via Server-Sent Events (SSE)
+      - Prompt Service
+  /user-service/permission/{permissionId}:
+    put:
+      consumes:
+      - application/json
+      description: Creates a new permission or updates an existing permission identified
+        by permissionId.
       parameters:
-      - description: Thread ID
-        in: query
-        name: threadId
+      - description: Permission ID
+        example: "123"
+        in: path
+        name: permissionId
         required: true
         type: string
+      - description: Permission Details
+        in: body
+        name: requestBody
+        required: true
+        schema:
+          $ref: '#/definitions/usertypes.UpserPermissionRequest'
+      produces:
+      - application/json
       responses:
         "200":
-          description: Streaming response
+          description: OK
+          schema:
+            $ref: '#/definitions/usertypes.CreateUserResponse'
+        "400":
+          description: Bad Request
           schema:
             type: string
-        "400":
-          description: Missing threadId parameter
-          schema:
-            $ref: '#/definitions/prompttypes.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/prompttypes.ErrorResponse'
-      summary: Subscribe to Prompt
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Upsert a permission
       tags:
-      - prompts
+      - Permission Management
+  /user-service/role/{roleId}/permission/{permissionId}:
+    put:
+      consumes:
+      - application/json
+      description: |-
+        Adds a specific permission to a role identified by roleId.
+
+        Requires the `permission.assign` permission.
+      parameters:
+      - description: Role ID
+        in: path
+        name: roleId
+        required: true
+        type: string
+      - description: Permission ID
+        in: path
+        name: permissionId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/usertypes.CreateUserResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Add Permission to Role
+      tags:
+      - user
 securityDefinitions:
   BasicAuth:
     type: basic

@@ -24,61 +24,8 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/chat/message/add": {
-            "post": {
-                "description": "Add a new message to a specific chat thread",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "chat"
-                ],
-                "summary": "Add Message",
-                "parameters": [
-                    {
-                        "description": "Add Message Request",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/chattypes.AddMessageRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Message successfully added",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid JSON",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/chat/message/delete": {
-            "post": {
+        "/chat-service/message/{messageId}": {
+            "delete": {
                 "description": "Delete a specific message from a chat thread by its ID",
                 "consumes": [
                     "application/json"
@@ -92,13 +39,11 @@ const docTemplate = `{
                 "summary": "Delete Message",
                 "parameters": [
                     {
-                        "description": "Delete Message Request",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/chattypes.DeleteMessageRequest"
-                        }
+                        "type": "string",
+                        "description": "Message ID",
+                        "name": "messageId",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -130,113 +75,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/chat/messages": {
+        "/chat-service/thread": {
             "post": {
-                "description": "Fetch messages (and associated assets) for a specific chat thread.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "chat"
-                ],
-                "summary": "Get Messages",
-                "parameters": [
-                    {
-                        "description": "Get Messages Request",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/chattypes.GetMessagesRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Messages and assets successfully retrieved",
-                        "schema": {
-                            "$ref": "#/definitions/chattypes.GetMessagesResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid JSON",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/chat/thread": {
-            "post": {
-                "description": "Fetch information about a specific chat thread by its ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "chat"
-                ],
-                "summary": "Get Thread",
-                "parameters": [
-                    {
-                        "description": "Get Thread Request",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/chattypes.GetThreadRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Thread details successfully retrieved",
-                        "schema": {
-                            "$ref": "#/definitions/chattypes.GetThreadResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid JSON",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/chat/thread/add": {
-            "post": {
-                "description": "Create a new chat thread and add the requesting user to it",
+                "description": "Create a new chat thread and add the requesting user to it.\nRequires the ` + "`" + `thread.create` + "`" + ` permission.",
                 "consumes": [
                     "application/json"
                 ],
@@ -286,9 +127,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/chat/thread/delete": {
-            "post": {
-                "description": "Delete a specific chat thread by its ID",
+        "/chat-service/thread/{threadId}": {
+            "get": {
+                "description": "Fetch information about a specific chat thread by its ID",
                 "consumes": [
                     "application/json"
                 ],
@@ -298,24 +139,12 @@ const docTemplate = `{
                 "tags": [
                     "chat"
                 ],
-                "summary": "Delete Thread",
-                "parameters": [
-                    {
-                        "description": "Delete Thread Request",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/chattypes.DeleteThreadRequest"
-                        }
-                    }
-                ],
+                "summary": "Get Thread",
                 "responses": {
                     "200": {
-                        "description": "Thread successfully deleted",
+                        "description": "Thread details successfully retrieved",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": true
+                            "$ref": "#/definitions/chattypes.GetThreadResponse"
                         }
                     },
                     "400": {
@@ -337,10 +166,8 @@ const docTemplate = `{
                         }
                     }
                 }
-            }
-        },
-        "/chat/thread/update": {
-            "post": {
+            },
+            "put": {
                 "description": "Modify the details of a specific chat thread",
                 "consumes": [
                     "application/json"
@@ -353,6 +180,13 @@ const docTemplate = `{
                 ],
                 "summary": "Update Thread",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Thread ID",
+                        "name": "threadId",
+                        "in": "path",
+                        "required": true
+                    },
                     {
                         "description": "Update Thread Request",
                         "name": "request",
@@ -389,9 +223,168 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "delete": {
+                "description": "Delete a specific chat thread by its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "chat"
+                ],
+                "summary": "Delete Thread",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Thread ID",
+                        "name": "threadId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Thread successfully deleted",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
             }
         },
-        "/chat/threads": {
+        "/chat-service/thread/{threadId}/message": {
+            "post": {
+                "description": "Add a new message to a specific thread.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "chat"
+                ],
+                "summary": "Add Message",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Thread ID",
+                        "name": "threadId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Add Message Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/chattypes.AddMessageRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Message successfully added",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/chat-service/thread/{threadId}/messages": {
+            "get": {
+                "description": "Fetch messages (and associated assets) for a specific chat thread.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "chat"
+                ],
+                "summary": "Get Messages",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Thread ID",
+                        "name": "threadId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Messages and assets successfully retrieved",
+                        "schema": {
+                            "$ref": "#/definitions/chattypes.GetMessagesResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/chat-service/threads": {
             "post": {
                 "description": "Fetch all chat threads associated with a specific user",
                 "consumes": [
@@ -535,9 +528,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/download/do": {
-            "post": {
-                "description": "Start a download for a specified URL and folder path",
+        "/docker-service/container": {
+            "put": {
+                "description": "Launches a Docker container with the specified parameters.\n\nRequires the ` + "`" + `docker.create` + "`" + ` permission.",
                 "consumes": [
                     "application/json"
                 ],
@@ -545,9 +538,243 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "download"
+                    "Docker Service"
                 ],
-                "summary": "Do",
+                "summary": "Launch a Docker Container",
+                "parameters": [
+                    {
+                        "description": "Launch Container Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dockertypes.LaunchContainerRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dockertypes.LaunchContainerResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/dockertypes.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/dockertypes.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/dockertypes.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/docker-service/container/{hash}/is-running": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Check if a Docker container identified by the hash is running",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Docker Service"
+                ],
+                "summary": "Check If a Container Is Running",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Container Hash",
+                        "name": "hash",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dockertypes.ContainerIsRunningResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/dockertypes.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/dockertypes.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/dockertypes.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/docker-service/container/{hash}/summary/{numberOfLines}": {
+            "get": {
+                "description": "Get a summary of the Docker container identified by the hash, limited to a specified number of lines",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Docker Service"
+                ],
+                "summary": "Get Container Summary",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Container Hash",
+                        "name": "hash",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Number of Lines",
+                        "name": "numberOfLines",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dockertypes.GetContainerSummaryResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/dockertypes.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/dockertypes.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/dockertypes.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/docker-service/host": {
+            "get": {
+                "description": "Retrieve information about the Docker host",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Docker Service"
+                ],
+                "summary": "Get Docker Host",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dockertypes.GetDockerHostResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/dockertypes.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/dockertypes.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/docker-service/info": {
+            "get": {
+                "description": "Retrieve detailed information about the Docker service",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Docker Service"
+                ],
+                "summary": "Get Docker Service Information",
+                "responses": {
+                    "200": {
+                        "description": "Service Information",
+                        "schema": {
+                            "$ref": "#/definitions/dockertypes.GetInfoResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/dockertypes.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/dockertypes.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/download-service/download": {
+            "put": {
+                "description": "Start a download for a specified URL.\n\nRequires the ` + "`" + `download.create` + "`" + ` permission.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Download Service"
+                ],
+                "summary": "Download a File",
                 "parameters": [
                     {
                         "description": "Download Request",
@@ -570,27 +797,27 @@ const docTemplate = `{
                     "400": {
                         "description": "Invalid JSON",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/downloadtypes.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/downloadtypes.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/downloadtypes.ErrorResponse"
                         }
                     }
                 }
             }
         },
-        "/download/get": {
-            "post": {
-                "description": "Get a download by URL.",
+        "/download-service/download/{downloadId}": {
+            "get": {
+                "description": "Get a download by ID.",
                 "consumes": [
                     "application/json"
                 ],
@@ -598,9 +825,18 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "download"
+                    "Download Service"
                 ],
-                "summary": "Get Download",
+                "summary": "Get a Download",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Download ID",
+                        "name": "downloadId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -623,43 +859,8 @@ const docTemplate = `{
                 }
             }
         },
-        "/download/list": {
-            "post": {
-                "description": "Fetch a list of all download details",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "download"
-                ],
-                "summary": "List",
-                "responses": {
-                    "200": {
-                        "description": "List of downloads",
-                        "schema": {
-                            "$ref": "#/definitions/downloadtypes.DownloadsResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/download/pause": {
-            "post": {
+        "/download-service/download/{downloadId}/pause": {
+            "put": {
                 "description": "Pause a download that is currently in progress",
                 "consumes": [
                     "application/json"
@@ -668,18 +869,16 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "download"
+                    "Download Service"
                 ],
                 "summary": "Pause",
                 "parameters": [
                     {
-                        "description": "Download request payload",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/downloadtypes.DownloadRequest"
-                        }
+                        "type": "string",
+                        "description": "Download ID",
+                        "name": "downloadId",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -711,7 +910,42 @@ const docTemplate = `{
                 }
             }
         },
-        "/firehose/subscribe": {
+        "/download-service/downloads": {
+            "post": {
+                "description": "Fetch a list of all download details.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Download Service"
+                ],
+                "summary": "List Downloads",
+                "responses": {
+                    "200": {
+                        "description": "List of downloads",
+                        "schema": {
+                            "$ref": "#/definitions/downloadtypes.DownloadsResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/firehose-service/subscribe": {
             "get": {
                 "description": "Establish a subscription to firehose events and stream them to the client in real-time.",
                 "consumes": [
@@ -803,8 +1037,8 @@ const docTemplate = `{
                 }
             }
         },
-        "/generic/delete": {
-            "post": {
+        "/generic/object/{objectId}": {
+            "delete": {
                 "security": [
                     {
                         "BearerAuth": []
@@ -818,10 +1052,17 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "generic"
+                    "Generic Service"
                 ],
                 "summary": "Delete a Generic Object",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Container Hash",
+                        "name": "hash",
+                        "in": "path",
+                        "required": true
+                    },
                     {
                         "description": "Delete request payload",
                         "name": "body",
@@ -860,7 +1101,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/generic/find": {
+        "/generic/objects/query": {
             "post": {
                 "description": "Retrieves objects from a specified table based on search criteria.\nRequires authorization and user authentication.\n\n\nUse helper functions in your respective client library such as condition constructors (` + "`" + `equal` + "`" + `, ` + "`" + `contains` + "`" + `, ` + "`" + `startsWith` + "`" + `) and field selectors (` + "`" + `field` + "`" + `, ` + "`" + `fields` + "`" + `, ` + "`" + `id` + "`" + `) for easier access.",
                 "consumes": [
@@ -875,12 +1116,12 @@ const docTemplate = `{
                 "summary": "Find Generic Objects",
                 "parameters": [
                     {
-                        "description": "Find request payload",
+                        "description": "Query Request",
                         "name": "body",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/generictypes.FindRequest"
+                            "$ref": "#/definitions/generictypes.QueryRequest"
                         }
                     }
                 ],
@@ -888,7 +1129,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Successful retrieval of objects",
                         "schema": {
-                            "$ref": "#/definitions/generictypes.FindResponse"
+                            "$ref": "#/definitions/generictypes.QueryResponse"
                         }
                     },
                     "400": {
@@ -912,7 +1153,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/generic/update": {
+        "/generic/objects/update": {
             "post": {
                 "security": [
                     {
@@ -1021,53 +1262,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/model": {
-            "get": {
-                "description": "Retrieves a list of models after checking authorization\nRequires \"model.view\" permission.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "model"
-                ],
-                "summary": "List Models",
-                "parameters": [
-                    {
-                        "description": "Get models request",
-                        "name": "GetModelsRequest",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/modeltypes.ListRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/modeltypes.ListResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/modeltypes.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/modeltypes.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/model/default/start": {
+        "/model-service/default/start": {
             "put": {
                 "description": "Starts The Default Model.\n\nRequires the ` + "`" + `model.create` + "`" + ` permission.",
                 "consumes": [
@@ -1108,9 +1303,88 @@ const docTemplate = `{
                 }
             }
         },
-        "/model/{id}": {
+        "/model-service/models": {
             "get": {
-                "description": "Retrieves the details of a model by its ID.\n\nRequires ` + "`" + `model.view` + "`" + ` permission.",
+                "description": "Retrieves a list of models after checking authorization\nRequires \"model.view\" permission.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "model"
+                ],
+                "summary": "List Models",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.ListResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/model-service/{id}/status": {
+            "get": {
+                "description": "Retrieves the status of a model by ID.\n\nRequires the ` + "`" + `model.view` + "`" + ` permission.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "model"
+                ],
+                "summary": "Get Model Status",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Model ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Model status retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.StatusResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/model-service/{modelId}": {
+            "get": {
+                "description": "Retrieves the details of a model by its ID.\n\nthe Requires ` + "`" + `model.view` + "`" + ` permission.",
                 "consumes": [
                     "application/json"
                 ],
@@ -1152,7 +1426,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/model/{id}/make-default": {
+        "/model-service/{modelId}/make-default": {
             "put": {
                 "description": "Sets a model as the default model — when prompts are sent without a Model ID, the default model is used.",
                 "consumes": [
@@ -1202,7 +1476,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/model/{id}/start": {
+        "/model-service/{modelId}/start": {
             "put": {
                 "description": "Starts a model by ID",
                 "consumes": [
@@ -1219,7 +1493,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "Model ID",
-                        "name": "id",
+                        "name": "modelId",
                         "in": "path",
                         "required": true
                     }
@@ -1252,103 +1526,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/model/{id}/status": {
-            "get": {
-                "description": "Retrieves the status of a model by ID.\n\nRequires the ` + "`" + `model.view` + "`" + ` permission.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "model"
-                ],
-                "summary": "Get Model Status",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Model ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Model status retrieved successfully",
-                        "schema": {
-                            "$ref": "#/definitions/modeltypes.StatusResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/prompt/add": {
-            "post": {
-                "description": "Adds a new prompt to the prompt queue and either waits for the response (if ` + "`" + `sync` + "`" + ` is set to true), or returns immediately.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "prompts"
-                ],
-                "summary": "Add Prompt",
-                "parameters": [
-                    {
-                        "description": "Add Prompt Request",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/prompttypes.AddPromptRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/prompttypes.AddPromptResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid JSON",
-                        "schema": {
-                            "$ref": "#/definitions/prompttypes.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/prompttypes.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/prompttypes.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/prompt/list": {
+        "/prompt-service/list": {
             "post": {
                 "description": "List prompts that satisfy a query.",
                 "consumes": [
@@ -1358,7 +1536,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "prompts"
+                    "Prompt Service"
                 ],
                 "summary": "List Prompts",
                 "parameters": [
@@ -1400,7 +1578,59 @@ const docTemplate = `{
                 }
             }
         },
-        "/prompt/remove": {
+        "/prompt-service/prompt": {
+            "post": {
+                "description": "Adds a new prompt to the prompt queue and either waits for the response (if ` + "`" + `sync` + "`" + ` is set to true), or returns immediately.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Prompt Service"
+                ],
+                "summary": "Add Prompt",
+                "parameters": [
+                    {
+                        "description": "Add Prompt Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/prompttypes.AddPromptRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/prompttypes.AddPromptResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/prompttypes.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/prompttypes.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/prompttypes.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/prompt-service/remove": {
             "post": {
                 "description": "Remove a prompt by ID.",
                 "consumes": [
@@ -1410,7 +1640,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "prompts"
+                    "Prompt Service"
                 ],
                 "summary": "Remove Prompt",
                 "parameters": [
@@ -1452,11 +1682,11 @@ const docTemplate = `{
                 }
             }
         },
-        "/prompt/subscribe": {
+        "/prompt-service/{threadId}/subscribe": {
             "get": {
                 "description": "Subscribe to prompt responses via Server-Sent Events (SSE)",
                 "tags": [
-                    "prompts"
+                    "Prompt Service"
                 ],
                 "summary": "Subscribe to Prompt",
                 "parameters": [
@@ -1485,6 +1715,117 @@ const docTemplate = `{
                         "description": "Unauthorized",
                         "schema": {
                             "$ref": "#/definitions/prompttypes.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/user-service/permission/{permissionId}": {
+            "put": {
+                "description": "Creates a new permission or updates an existing permission identified by permissionId.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Permission Management"
+                ],
+                "summary": "Upsert a permission",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "example": "123",
+                        "description": "Permission ID",
+                        "name": "permissionId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Permission Details",
+                        "name": "requestBody",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.UpserPermissionRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.CreateUserResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/user-service/role/{roleId}/permission/{permissionId}": {
+            "put": {
+                "description": "Adds a specific permission to a role identified by roleId.\n\nRequires the ` + "`" + `permission.assign` + "`" + ` permission.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Add Permission to Role",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Role ID",
+                        "name": "roleId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Permission ID",
+                        "name": "permissionId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.CreateUserResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }
@@ -1544,30 +1885,6 @@ const docTemplate = `{
                 }
             }
         },
-        "chattypes.DeleteMessageRequest": {
-            "type": "object",
-            "properties": {
-                "messageId": {
-                    "type": "string"
-                }
-            }
-        },
-        "chattypes.DeleteThreadRequest": {
-            "type": "object",
-            "properties": {
-                "threadId": {
-                    "type": "string"
-                }
-            }
-        },
-        "chattypes.GetMessagesRequest": {
-            "type": "object",
-            "properties": {
-                "threadId": {
-                    "type": "string"
-                }
-            }
-        },
         "chattypes.GetMessagesResponse": {
             "type": "object",
             "properties": {
@@ -1582,14 +1899,6 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/chattypes.Message"
                     }
-                }
-            }
-        },
-        "chattypes.GetThreadRequest": {
-            "type": "object",
-            "properties": {
-                "threadId": {
-                    "type": "string"
                 }
             }
         },
@@ -1909,6 +2218,128 @@ const docTemplate = `{
                 "value": {}
             }
         },
+        "dockertypes.ContainerIsRunningResponse": {
+            "type": "object",
+            "properties": {
+                "isRunning": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "dockertypes.DockerInfo": {
+            "type": "object",
+            "properties": {
+                "dockerDaemonAddress": {
+                    "type": "string"
+                },
+                "error": {
+                    "type": "string"
+                },
+                "hasDocker": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "dockertypes.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "dockertypes.GetContainerSummaryResponse": {
+            "type": "object",
+            "properties": {
+                "summary": {
+                    "type": "string"
+                }
+            }
+        },
+        "dockertypes.GetDockerHostResponse": {
+            "type": "object",
+            "properties": {
+                "host": {
+                    "type": "string"
+                }
+            }
+        },
+        "dockertypes.GetInfoResponse": {
+            "type": "object",
+            "properties": {
+                "info": {
+                    "$ref": "#/definitions/dockertypes.DockerInfo"
+                }
+            }
+        },
+        "dockertypes.LaunchContainerRequest": {
+            "type": "object",
+            "properties": {
+                "hostPort": {
+                    "type": "integer"
+                },
+                "image": {
+                    "type": "string"
+                },
+                "options": {
+                    "$ref": "#/definitions/dockertypes.LaunchOptions"
+                },
+                "port": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dockertypes.LaunchContainerResponse": {
+            "type": "object",
+            "properties": {
+                "info": {
+                    "$ref": "#/definitions/dockertypes.LaunchInfo"
+                }
+            }
+        },
+        "dockertypes.LaunchInfo": {
+            "type": "object",
+            "properties": {
+                "newContainerStarted": {
+                    "type": "boolean"
+                },
+                "portNumber": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dockertypes.LaunchOptions": {
+            "type": "object",
+            "properties": {
+                "envs": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "gpuEnabled": {
+                    "type": "boolean"
+                },
+                "hash": {
+                    "type": "string"
+                },
+                "hostBinds": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "labels": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "downloadtypes.DownloadDetails": {
             "type": "object",
             "properties": {
@@ -1972,6 +2403,14 @@ const docTemplate = `{
                 }
             }
         },
+        "downloadtypes.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
         "downloadtypes.GetDownloadResponse": {
             "type": "object",
             "properties": {
@@ -2021,31 +2460,6 @@ const docTemplate = `{
             "properties": {
                 "error": {
                     "type": "string"
-                }
-            }
-        },
-        "generictypes.FindRequest": {
-            "type": "object",
-            "properties": {
-                "public": {
-                    "type": "boolean"
-                },
-                "query": {
-                    "$ref": "#/definitions/datastore.Query"
-                },
-                "table": {
-                    "type": "string"
-                }
-            }
-        },
-        "generictypes.FindResponse": {
-            "type": "object",
-            "properties": {
-                "objects": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/generictypes.GenericObject"
-                    }
                 }
             }
         },
@@ -2104,6 +2518,31 @@ const docTemplate = `{
                 },
                 "userId": {
                     "type": "string"
+                }
+            }
+        },
+        "generictypes.QueryRequest": {
+            "type": "object",
+            "properties": {
+                "public": {
+                    "type": "boolean"
+                },
+                "query": {
+                    "$ref": "#/definitions/datastore.Query"
+                },
+                "table": {
+                    "type": "string"
+                }
+            }
+        },
+        "generictypes.QueryResponse": {
+            "type": "object",
+            "properties": {
+                "objects": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/generictypes.GenericObject"
+                    }
                 }
             }
         },
@@ -2201,9 +2640,6 @@ const docTemplate = `{
                     "$ref": "#/definitions/modeltypes.Platform"
                 }
             }
-        },
-        "modeltypes.ListRequest": {
-            "type": "object"
         },
         "modeltypes.ListResponse": {
             "type": "object",
@@ -2519,6 +2955,43 @@ const docTemplate = `{
         },
         "prompttypes.RemovePromptResponse": {
             "type": "object"
+        },
+        "usertypes.CreateUserResponse": {
+            "type": "object"
+        },
+        "usertypes.Permission": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "description": "eg. \"user.viewer\"",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "eg. \"User Viewer\"",
+                    "type": "string"
+                },
+                "ownerId": {
+                    "description": "Service who owns the permission",
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "usertypes.UpserPermissionRequest": {
+            "type": "object",
+            "properties": {
+                "permissions": {
+                    "$ref": "#/definitions/usertypes.Permission"
+                }
+            }
         }
     },
     "securityDefinitions": {

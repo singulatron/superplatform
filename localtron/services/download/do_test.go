@@ -19,7 +19,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/singulatron/singulatron/localtron/di"
 	downloadservice "github.com/singulatron/singulatron/localtron/services/download"
 	downloadtypes "github.com/singulatron/singulatron/localtron/services/download/types"
@@ -68,19 +67,12 @@ func TestDownloadFile(t *testing.T) {
 	}, nil)
 	require.NoError(t, err)
 
-	c := 0
 	for {
 		time.Sleep(5 * time.Millisecond)
 		// req := downloadtypes.GetDownloadRequest{}
 		rsp := downloadtypes.GetDownloadResponse{}
 		err = router.Get(context.Background(), "download-service", fmt.Sprintf("/download/%v", url.PathEscape(fileHostServer.URL)), nil, &rsp)
 		require.NoError(t, err)
-
-		c++
-		if c > 100 {
-			spew.Dump(rsp)
-			panic("what")
-		}
 
 		if rsp.Exists && rsp.Download.Status == string(types.DownloadStatusCompleted) {
 			break

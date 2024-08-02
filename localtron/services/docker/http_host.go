@@ -16,6 +16,15 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
+// @Summary      Get Docker Host
+// @Description  Retrieve information about the Docker host
+// @Tags         Docker Service
+// @Accept       json
+// @Produce      json
+// @Success      200   {object}  dockertypes.GetDockerHostResponse
+// @Failure      401   {object}  dockertypes.ErrorResponse  "Unauthorized"
+// @Failure      500   {object}  dockertypes.ErrorResponse  "Internal Server Error"
+// @Router       /docker-service/host [get]
 func (dm *DockerService) Host(
 	w http.ResponseWriter,
 	req *http.Request,

@@ -19,7 +19,7 @@ import (
 // Add a new prompt
 // @Summary Add Prompt
 // @Description Adds a new prompt to the prompt queue and either waits for the response (if `sync` is set to true), or returns immediately.
-// @Tags prompts
+// @Tags Prompt Service
 // @Accept json
 // @Produce json
 // @Param request body prompttypes.AddPromptRequest true "Add Prompt Request"

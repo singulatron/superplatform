@@ -73,6 +73,6 @@ export class DownloadService {
 	}
 
 	async downloadList(): Promise<DownloadsResponse> {
-		return this.localtron.get('/download/list');
+		return this.localtron.post('/download-service/downloads', {});
 	}
 }

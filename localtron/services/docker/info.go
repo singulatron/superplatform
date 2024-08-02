@@ -28,7 +28,7 @@ import (
 	"github.com/singulatron/singulatron/localtron/logger"
 )
 
-func (d *DockerService) info() (*ts.OnDockerInfo, error) {
+func (d *DockerService) info() (*ts.DockerInfo, error) {
 	d.mutex.Lock()
 	defer d.mutex.Unlock()
 
@@ -36,7 +36,7 @@ func (d *DockerService) info() (*ts.OnDockerInfo, error) {
 	// even on windows, we want a docker daemon that can run linux containers
 	// as our containers are linux ones
 	if err == nil && inf.OSType == "linux" {
-		ret := &ts.OnDockerInfo{
+		ret := &ts.DockerInfo{
 			HasDocker: true,
 		}
 		if d.dockerHost != "" && d.dockerPort != 0 {
@@ -52,7 +52,7 @@ func (d *DockerService) info() (*ts.OnDockerInfo, error) {
 	ip, port, err := d.tryFixDockerAddress()
 	if err != nil {
 		logger.Warn("Cannot find Docker address", slog.String("error", err.Error()))
-		return &ts.OnDockerInfo{
+		return &ts.DockerInfo{
 			HasDocker: false,
 		}, nil
 	}
@@ -62,7 +62,7 @@ func (d *DockerService) info() (*ts.OnDockerInfo, error) {
 	d.dockerPort = port
 
 	daemonAddress := fmt.Sprintf("%v:%v", ip, port)
-	return &ts.OnDockerInfo{
+	return &ts.DockerInfo{
 		HasDocker:           true,
 		DockerDaemonAddress: &daemonAddress,
 	}, nil

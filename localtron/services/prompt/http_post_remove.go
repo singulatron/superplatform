@@ -19,7 +19,7 @@ import (
 // Remove removes a prompt
 // @Summary Remove Prompt
 // @Description Remove a prompt by ID.
-// @Tags prompts
+// @Tags Prompt Service
 // @Accept json
 // @Produce json
 // @Param request body prompttypes.RemovePromptRequest true "Remove Prompt Request"
@@ -27,7 +27,7 @@ import (
 // @Failure 400 {object} prompttypes.ErrorResponse "Invalid JSON"
 // @Failure 401 {object} prompttypes.ErrorResponse "Unauthorized"
 // @Failure 500 {object} prompttypes.ErrorResponse "Internal Server Error"
-// @Router '/prompt-service/remove [post]
+// @Router /prompt-service/remove [post]
 func (p *PromptService) RemovePrompt(
 	w http.ResponseWriter,
 	r *http.Request,

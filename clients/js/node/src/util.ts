@@ -1,8 +1,18 @@
 import axios, { AxiosRequestConfig, Method } from "axios";
 
+export interface Environment {
+  production: boolean;
+  brandName: string;
+  shortBrandName: string;
+  backendAddress: string;
+  localPromptAddress: string;
+  localtronAddress: string;
+}
+
 export interface ClientOptions {
   address?: string;
   apiKey?: string;
+  env?: Environment;
 }
 
 export async function call<T>(
@@ -11,10 +21,8 @@ export async function call<T>(
   data?: any,
   method: Method = "POST"
 ): Promise<T> {
-  if (!options.address) {
-    options.address = "http://127.0.0.1:58231";
-  }
-  const url = `${options.address}${endpoint}`;
+  const address = options.address || options.env?.localtronAddress || "http://127.0.0.1:58231";
+  const url = `${address}${endpoint}`;
   const headers: Record<string, string> = {};
 
   if (options.apiKey) {
@@ -33,10 +41,7 @@ export async function call<T>(
     return response.data as T;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      console.error(
-        "Error:",
-        error.response ? error.response.data : error.message
-      );
+      console.error("Error:", error.response ? error.response.data : error.message);
     } else {
       console.error("Unexpected Error:", error);
     }
@@ -44,7 +49,23 @@ export async function call<T>(
   }
 }
 
-export function uuid() {
+export function get<T>(options: ClientOptions, endpoint: string): Promise<T> {
+  return call<T>(options, endpoint, undefined, "GET");
+}
+
+export function post<T>(options: ClientOptions, endpoint: string, data: any): Promise<T> {
+  return call<T>(options, endpoint, data, "POST");
+}
+
+export function put<T>(options: ClientOptions, endpoint: string, data: any): Promise<T> {
+  return call<T>(options, endpoint, data, "PUT");
+}
+
+export function deleteRequest<T>(options: ClientOptions, endpoint: string, data?: any): Promise<T> {
+  return call<T>(options, endpoint, data, "DELETE");
+}
+
+export function uuid(): string {
   return (
     generateSegment(8) +
     "-" +
@@ -58,7 +79,7 @@ export function uuid() {
   );
 }
 
-function generateSegment(length: number) {
+function generateSegment(length: number): string {
   return Array.from({ length: length }, () =>
     Math.floor(Math.random() * 16).toString(16)
   ).join("");

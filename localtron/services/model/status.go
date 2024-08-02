@@ -92,10 +92,10 @@ func (ms *ModelService) status(modelId string) (*modeltypes.ModelStatus, error) 
 	}
 
 	isRunning := false
-	hashReq := dockertypes.HashIsRunningRequest{
+	hashReq := dockertypes.ContainerIsRunningRequest{
 		Hash: hash,
 	}
-	hashRsp := dockertypes.HashIsRunningResponse{}
+	hashRsp := dockertypes.ContainerIsRunningResponse{}
 	err = ms.router.Post(context.Background(), "docker", "/hash-is-running", hashReq, &hashRsp)
 	if err == nil && hashRsp.IsRunning {
 		isRunning = true

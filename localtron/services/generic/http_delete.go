@@ -17,18 +17,19 @@ import (
 )
 
 // Delete removes a generic object based on the provided conditions
-// @Summary Delete a Generic Object
+// @Summary     Delete a Generic Object
 // @Description Removes a generic object from the system based on the provided conditions. Requires authorization and user authentication.
-// @Tags generic
-// @Accept json
-// @Produce json
-// @Param body body generictypes.DeleteRequest true "Delete request payload"
-// @Success 200 {object} generictypes.DeleteResponse "Successful deletion of object"
-// @Failure 400 {object} generictypes.ErrorResponse "Invalid JSON"
-// @Failure 401 {object} generictypes.ErrorResponse "Unauthorized"
-// @Failure 500 {object} generictypes.ErrorResponse "Internal Server Error"
-// @Security BearerAuth
-// @Router /generic/delete [post]
+// @Tags        Generic Service
+// @Accept      json
+// @Produce     json
+// @Param       hash  path     string  true  "Container Hash"
+// @Param       body  body     generictypes.DeleteRequest true "Delete request payload"
+// @Success     200   {object} generictypes.DeleteResponse "Successful deletion of object"
+// @Failure     400   {object} generictypes.ErrorResponse "Invalid JSON"
+// @Failure     401   {object} generictypes.ErrorResponse "Unauthorized"
+// @Failure     500   {object} generictypes.ErrorResponse "Internal Server Error"
+// @Security    BearerAuth
+// @Router      /generic/object/{objectId} [delete]
 func (g *GenericService) Delete(
 	w http.ResponseWriter,
 	r *http.Request,

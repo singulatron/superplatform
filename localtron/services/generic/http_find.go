@@ -26,12 +26,12 @@ import (
 // @Tags generic
 // @Accept json
 // @Produce json
-// @Param body body generictypes.FindRequest true "Find request payload"
-// @Success 200 {object} generictypes.FindResponse "Successful retrieval of objects"
+// @Param body body generictypes.QueryRequest true "Query Request"
+// @Success 200 {object} generictypes.QueryResponse "Successful retrieval of objects"
 // @Failure 400 {object} generictypes.ErrorResponse "Invalid JSON"
 // @Failure 401 {object} generictypes.ErrorResponse "Unauthorized"
 // @Failure 500 {object} generictypes.ErrorResponse "Internal Server Error"
-// @Router /generic/find [post]
+// @Router /generic/objects/query [post]
 func (g *GenericService) Find(
 	w http.ResponseWriter,
 	r *http.Request,

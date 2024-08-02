@@ -20,9 +20,12 @@ import (
 
 // @Summary Get a Download
 // @Description Get a download by ID.
-// @Tags download
+// @Description
+// @Description Requires the `download.view` permission.
+// @Tags Download Service
 // @Accept json
 // @Produce json
+// @Param downloadId path string true "Download ID"
 // @Success 200 {object} downloadtypes.GetDownloadResponse
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"

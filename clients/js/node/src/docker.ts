@@ -13,6 +13,6 @@ export class DockerService {
   }
 
   async dockerInfo(): Promise<docker.DockerInfoResponse> {
-    return this.call("/docker/info", {});
+    return this.call("/docker-service/info", {});
   }
 }

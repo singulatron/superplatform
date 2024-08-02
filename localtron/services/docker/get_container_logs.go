@@ -10,7 +10,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-func (d *DockerService) GetContainerLogsAndStatus(singulatronHash string, logCount int) (string, error) {
+func (d *DockerService) getContainerLogsAndStatus(singulatronHash string, logCount int) (string, error) {
 	ctx := context.Background()
 	containers, err := d.client.ContainerList(ctx, container.ListOptions{All: true})
 	if err != nil {

@@ -21,7 +21,7 @@ import (
 // @Description Start a download for a specified URL.
 // @Description
 // @Description Requires the `download.create` permission.
-// @Tags download
+// @Tags Download Service
 // @Accept json
 // @Produce json
 // @Param request body downloadtypes.DownloadRequest true "Download Request"

@@ -1,6 +1,7 @@
 import { ClientOptions, call } from "./util";
 import * as user from "@singulatron/types";
 import { equal, field } from "@singulatron/types";
+import { Method } from "axios";
 
 export class UserService {
   private options: ClientOptions;
@@ -9,25 +10,25 @@ export class UserService {
     this.options = options;
   }
 
-  call(endpoint: string, request: any): Promise<any> {
-    return call(this.options, endpoint, request);
+  call(endpoint: string, request: any, method: Method = "POST"): Promise<any> {
+    return call(this.options, endpoint, request, method);
   }
 
   login(email: string, password: string): Promise<user.LoginResponse> {
-    return this.call("/user/login", {
+    return this.call("/user-service/login", {
       email: email,
       password: password,
     });
   }
 
   readUserByToken(token: string): Promise<user.ReadUserByTokenResponse> {
-    return this.call("/user/read-user-by-token", {
+    return this.call("/user-service/user/by-token", {
       token: token,
     });
   }
 
   getUsers(request: user.GetUsersRequest): Promise<user.GetUsersResponse> {
-    return this.call("/user/get-users", request);
+    return this.call("/user-service/users", request);
   }
 
   /** Save profile on behalf of a user */
@@ -36,7 +37,7 @@ export class UserService {
       email: email,
       name: name,
     };
-    return this.call("/user/save-profile", request);
+    return this.call(`/user-service/user/anyIDTodo`, request, "PUT");
   }
 
   changePassword(
@@ -49,7 +50,7 @@ export class UserService {
       currentPassword: currentPassword,
       newPassword: newPassword,
     };
-    return this.call("/user/change-password", request);
+    return this.call("/user-service/change-password", request);
   }
 
   changePasswordAdmin(
@@ -60,7 +61,7 @@ export class UserService {
       email: email,
       newPassword: newPassword,
     };
-    return this.call("/user/change-password-admin", request);
+    return this.call("/user-service/change-password-admin", request);
   }
 
   /** Create a user - alternative to registration
@@ -75,15 +76,15 @@ export class UserService {
       password: password,
       roleIds: roleIds,
     };
-    return this.call("/user/create-user", request);
+    return this.call("/user-service/create-user", request);
   }
 
   getRoles(): Promise<user.GetRolesResposne> {
-    return this.call("/user/get-roles", {});
+    return this.call("/user-service/get-roles", {});
   }
 
   getPermissions(): Promise<user.GetPermissionsResposne> {
-    return this.call("/user/get-permissions", {});
+    return this.call("/user-service/get-permissions", {});
   }
 
   setRolePermissions(
@@ -94,21 +95,21 @@ export class UserService {
       roleId: roleId,
       permissionIds: permissionIds,
     };
-    return this.call("/user/set-role-permissions", request);
+    return this.call("/user-service/set-role-permissions", request);
   }
 
   deleteRole(roleId: string): Promise<user.DeleteRoleResponse> {
     const request: user.DeleteRoleRequest = {
       roleId: roleId,
     };
-    return this.call("/user/delete-role", request);
+    return this.call(`/user-service/role/${roleId}`, request, "DELETE");
   }
 
   deleteUser(userId: string): Promise<user.DeleteUserResponse> {
     const request: user.DeleteUserRequest = {
       userId: userId,
     };
-    return this.call("/user/delete-user", request);
+    return this.call(`/user-service/user/${userId}`, request, "DELETE");
   }
 
   async getUser(id: string): Promise<user.User | undefined> {

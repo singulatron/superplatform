@@ -16,6 +16,15 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
+// @Summary      Get Docker Service Information
+// @Description  Retrieve detailed information about the Docker service
+// @Tags         Docker Service
+// @Accept       json
+// @Produce      json
+// @Success      200   {object} dockertypes.GetInfoResponse "Service Information"
+// @Failure      401   {object} dockertypes.ErrorResponse  "Unauthorized"
+// @Failure      500   {object} dockertypes.ErrorResponse  "Internal Server Error"
+// @Router       /docker-service/info [get]
 func (dm *DockerService) Info(
 	w http.ResponseWriter,
 	req *http.Request,
@@ -37,8 +46,8 @@ func (dm *DockerService) Info(
 		return
 	}
 
-	jsonData, _ := json.Marshal(map[string]any{
-		"info": di,
+	jsonData, _ := json.Marshal(dockertypes.GetInfoResponse{
+		Info: di,
 	})
 	w.Write(jsonData)
 }

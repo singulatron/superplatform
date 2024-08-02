@@ -5,7 +5,7 @@ description: "Starts a model by ID"
 sidebar_label: "Start a Model"
 hide_title: true
 hide_table_of_contents: true
-api: eJy9VE1v3DgM/SsCT7uAYk+TBlj41BTbFtl+JOgkh6KYA8fm2MrKkkLJk84a/u8LytNmmo8F9tKTLfGRfCSfOEJDsWYTkvEOKlgm5BQVqt43ZNV6p87/BA0BGXtKxBGqr+MDn48ZmnFGzgFTBxoc9gQVmAY0MN0OhqmBKvFAGmLdUY9QjZB2QVAxsXEtTNNKwDF4FymK/XixkM/PGS/eg4bau0QuiRVDsKZGsZY3USDj4xR+fUN1gmmaJg0vnwp77rZoTaP+Wl58+j8JAvtAnMzMmJg9P1WafobJi8dMrh0OqfNs/qHmlzE5fbonidihVUviLbF6k2P+Gkpyia1IDrIcYaWhp9T5RlQ2pCzM1EEFZbaXo2mmMoqEQUPMhGfBDmwFVVpfo+18TNXpH8cnL0DkFqke2KTdUijPLF9jNPXZIKF/MO1SCrBXrpzXgsnEjdt4AUpLsM4toR6NZIxoKb6KxrWDxcTeFbXv79/G2eW5Wg4h+Ex4Jil5qrKMQyAOFtPGc1+gKWHSD0bzeXAKXaMa2pL1QUWymyMpjhp1dq4whFioL35gFdi3jH2Pa0vKuKPOD5HUu8urQl11pN4apjVGUhvPKnWUvVsqQIM1NblIUtN3zu8uP6jtSbH4iXGsyvLu7q5o3VB4bsu9XyyxDfbopFgUXeqt1JCI+3ixETmZmg4KvsO2JS6MLzOkBA3JJCuQ5X0DQYNMde7AojiWkMHH1KM7IJnXmEKVVxM8aNx4L97n9t1+5om+pTJYNE7S5GrHveS+S1JDlTfcrLqVBhmAmMdRWnrNdprk+nYg3kH1daVhi2xkEvMqNVH+G6g2aCP9B9XfPu+X6O/qYOM+yXR/iW4n7UI7yAk0/E27eSNPq0lDR9gQZxaz4ayuKaQDl0cvezp8gZfXVzBN/wKN0CCF
+api: eJy9VEtv2zAM/isCTxug2lm7AYNP67AHsleLpj0MRQ6MzdjqZEmj5HSZ4f8+0E7XrI8Bu+xkS/xIfiQ/sYeKYskmJOMdFLBIyCkqVK2vyKrVVs3fgIaAjC0l4gjFZX/H5/MIHXFGzgFTAxoctgQFjIHmFWhg+t4ZpgqKxB1piGVDLULRQ9oGgcbExtUwDEsBx+BdpCj2w9lMPn+mPfkIGkrvErkkVgzBmhLFml9FgfT3U/jVFZUJhmEYNDx/KOzcbdCaSn1YnHz5lwSBfSBOZmJMzJ4fKk0/wuTZfSYXDrvUeDY/qfpvTF483JNE7NCqBfGGWL0dY/4fSnKJtehukhIsNbSUGl+J1Lo0qjM1UEA+2g8i8caUlPc75Q15FFGDhjiynyTcsRWX3PoSbeNjKl68PDx6BqK9SGXHJm0Xwn+i/BqjKY87yfObdpNSgJ2M5bwSzFiFcWsvQOkPlmN/qEUjGSNaiq+icXVnMbF3Wenb29dyfDpXiy4EPxKeSEqeIs9jF4iDxbT23GZochj0nTmddU6hq1RFG7I+qEh2fSDFUaWO5wpDiJn66jtWgX3N2La4sqSMO2h8F0m9Pz3P1HlD6p1hWmEktfasUkOjd00ZaLCmJBdJarrh/P70k9ocZbM/GMciz6+vr7PadZnnOt/5xRzrYA+OslnWpNZKDYm4jSfrxTS3vYKvsa6JM+PzEZKDhmSSFcjitoGgQaY6dWCWHUrI4GNq0e2RHBebQjUuK7jTuP5WyY9twN3ME/1IebBonKQZq+13+tvp80Z/oKG43X2TBJcaZBqC7Xvp7wXbYZDr7x3xForLpYYNspGxTJvWRPmvoFijjfQX3k/Oduv1qdpbyA/S3l2i20rv0HZyAg3faLu3sIfloKEhrIhHKpP1uCwppD2/ew9/2H+gpxfnMAy/AMW1LoU=
 sidebar_class_name: "put api-method"
 info_path: docs/singulatron/singulatron
 custom_edit_url: null
@@ -34,7 +34,7 @@ import TabItem from "@theme/TabItem";
 
 <MethodEndpoint
   method={"put"}
-  path={"/model/{id}/start"}
+  path={"/model-service/{modelId}/start"}
 >
   
 </MethodEndpoint>
@@ -69,7 +69,7 @@ Starts a model by ID
     <ul>
       <ParamsItem
         className={"paramsItem"}
-        param={{"description":"Model ID","in":"path","name":"id","required":true,"schema":{"type":"string"}}}
+        param={{"description":"Model ID","in":"path","name":"modelId","required":true,"schema":{"type":"string"}}}
       >
         
       </ParamsItem>

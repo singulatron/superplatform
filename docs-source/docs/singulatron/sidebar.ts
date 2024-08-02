@@ -12,27 +12,9 @@ const sidebar: SidebarsConfig = {
       items: [
         {
           type: "doc",
-          id: "singulatron/add-message",
-          label: "Add Message",
-          className: "api-method post",
-        },
-        {
-          type: "doc",
           id: "singulatron/delete-message",
           label: "Delete Message",
-          className: "api-method post",
-        },
-        {
-          type: "doc",
-          id: "singulatron/get-messages",
-          label: "Get Messages",
-          className: "api-method post",
-        },
-        {
-          type: "doc",
-          id: "singulatron/get-thread",
-          label: "Get Thread",
-          className: "api-method post",
+          className: "api-method delete",
         },
         {
           type: "doc",
@@ -44,13 +26,31 @@ const sidebar: SidebarsConfig = {
           type: "doc",
           id: "singulatron/delete-thread",
           label: "Delete Thread",
-          className: "api-method post",
+          className: "api-method delete",
+        },
+        {
+          type: "doc",
+          id: "singulatron/get-thread",
+          label: "Get Thread",
+          className: "api-method get",
         },
         {
           type: "doc",
           id: "singulatron/update-thread",
           label: "Update Thread",
+          className: "api-method put",
+        },
+        {
+          type: "doc",
+          id: "singulatron/add-message",
+          label: "Add Message",
           className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "singulatron/get-messages",
+          label: "Get Messages",
+          className: "api-method get",
         },
         {
           type: "doc",
@@ -80,30 +80,66 @@ const sidebar: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "download",
+      label: "Docker Service",
       items: [
         {
           type: "doc",
-          id: "singulatron/do",
-          label: "Do",
-          className: "api-method post",
+          id: "singulatron/launch-a-docker-container",
+          label: "Launch a Docker Container",
+          className: "api-method put",
         },
         {
           type: "doc",
-          id: "singulatron/get-download",
-          label: "Get Download",
-          className: "api-method post",
+          id: "singulatron/check-if-a-container-is-running",
+          label: "Check If a Container Is Running",
+          className: "api-method get",
         },
         {
           type: "doc",
-          id: "singulatron/list",
-          label: "List",
-          className: "api-method post",
+          id: "singulatron/get-container-summary",
+          label: "Get Container Summary",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "singulatron/get-docker-host",
+          label: "Get Docker Host",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "singulatron/get-docker-service-information",
+          label: "Get Docker Service Information",
+          className: "api-method get",
+        },
+      ],
+    },
+    {
+      type: "category",
+      label: "Download Service",
+      items: [
+        {
+          type: "doc",
+          id: "singulatron/download-a-file",
+          label: "Download a File",
+          className: "api-method put",
+        },
+        {
+          type: "doc",
+          id: "singulatron/get-a-download",
+          label: "Get a Download",
+          className: "api-method get",
         },
         {
           type: "doc",
           id: "singulatron/pause",
           label: "Pause",
+          className: "api-method put",
+        },
+        {
+          type: "doc",
+          id: "singulatron/list-downloads",
+          label: "List Downloads",
           className: "api-method post",
         },
       ],
@@ -132,12 +168,6 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
-          id: "singulatron/delete-a-generic-object",
-          label: "Delete a Generic Object",
-          className: "api-method post",
-        },
-        {
-          type: "doc",
           id: "singulatron/find-generic-objects",
           label: "Find Generic Objects",
           className: "api-method post",
@@ -158,12 +188,24 @@ const sidebar: SidebarsConfig = {
     },
     {
       type: "category",
+      label: "Generic Service",
+      items: [
+        {
+          type: "doc",
+          id: "singulatron/delete-a-generic-object",
+          label: "Delete a Generic Object",
+          className: "api-method delete",
+        },
+      ],
+    },
+    {
+      type: "category",
       label: "model",
       items: [
         {
           type: "doc",
-          id: "singulatron/list-models",
-          label: "List Models",
+          id: "singulatron/get-model-status",
+          label: "Get Model Status",
           className: "api-method get",
         },
         {
@@ -186,27 +228,27 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
-          id: "singulatron/get-model-status",
-          label: "Get Model Status",
-          className: "api-method get",
-        },
-        {
-          type: "doc",
           id: "singulatron/start-the-default-model",
           label: "Start the Default Model",
           className: "api-method put",
+        },
+        {
+          type: "doc",
+          id: "singulatron/list-models",
+          label: "List Models",
+          className: "api-method get",
         },
       ],
     },
     {
       type: "category",
-      label: "prompts",
+      label: "Prompt Service",
       items: [
         {
           type: "doc",
-          id: "singulatron/add-prompt",
-          label: "Add Prompt",
-          className: "api-method post",
+          id: "singulatron/subscribe-to-prompt",
+          label: "Subscribe to Prompt",
+          className: "api-method get",
         },
         {
           type: "doc",
@@ -216,15 +258,39 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
-          id: "singulatron/remove-prompt",
-          label: "Remove Prompt",
+          id: "singulatron/add-prompt",
+          label: "Add Prompt",
           className: "api-method post",
         },
         {
           type: "doc",
-          id: "singulatron/subscribe-to-prompt",
-          label: "Subscribe to Prompt",
-          className: "api-method get",
+          id: "singulatron/remove-prompt",
+          label: "Remove Prompt",
+          className: "api-method post",
+        },
+      ],
+    },
+    {
+      type: "category",
+      label: "Permission Management",
+      items: [
+        {
+          type: "doc",
+          id: "singulatron/upsert-a-permission",
+          label: "Upsert a permission",
+          className: "api-method put",
+        },
+      ],
+    },
+    {
+      type: "category",
+      label: "user",
+      items: [
+        {
+          type: "doc",
+          id: "singulatron/add-permission-to-role",
+          label: "Add Permission to Role",
+          className: "api-method put",
         },
       ],
     },

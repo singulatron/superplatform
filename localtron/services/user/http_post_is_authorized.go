@@ -15,7 +15,6 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/gorilla/mux"
 	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/logger"
@@ -54,7 +53,7 @@ func (s *UserService) IsAuthorized(
 		Authorized: true,
 		User:       user,
 	})
-	spew.Dump("what?")
+
 	w.Write(bs)
 }
 

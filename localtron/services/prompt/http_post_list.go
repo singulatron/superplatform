@@ -20,7 +20,7 @@ import (
 // List lists prompts
 // @Summary List Prompts
 // @Description List prompts that satisfy a query.
-// @Tags prompts
+// @Tags Prompt Service
 // @Accept json
 // @Produce json
 // @Param request body prompttypes.ListPromptsRequest true "List Prompts Request"
@@ -28,7 +28,7 @@ import (
 // @Failure 400 {object} prompttypes.ErrorResponse "Invalid JSON"
 // @Failure 401 {object} prompttypes.ErrorResponse "Unauthorized"
 // @Failure 500 {object} prompttypes.ErrorResponse "Internal Server Error"
-// @Router '/prompt-service/list [post]
+// @Router /prompt-service/list [post]
 func (p *PromptService) GetPrompts(
 	w http.ResponseWriter,
 	r *http.Request,

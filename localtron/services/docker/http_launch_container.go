@@ -16,6 +16,19 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
+// @Summary Launch a Docker Container
+// @Description Launches a Docker container with the specified parameters.
+// @Description
+// @Description Requires the `docker.create` permission.
+// @Tags Docker Service
+// @Accept json
+// @Produce json
+// @Param request body dockertypes.LaunchContainerRequest true "Launch Container Request"
+// @Success 200 {object} dockertypes.LaunchContainerResponse
+// @Failure 400 {object} dockertypes.ErrorResponse "Invalid JSON"
+// @Failure 401 {object} dockertypes.ErrorResponse "Unauthorized"
+// @Failure 500 {object} dockertypes.ErrorResponse "Internal Server Error"
+// @Router /docker-service/container [put]
 func (dm *DockerService) LaunchContainer(
 	w http.ResponseWriter,
 	r *http.Request,
