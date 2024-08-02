@@ -85,7 +85,7 @@ export class ChatService {
 	}
 
 	async chatThreads(): Promise<chat.GetThreadsResponse> {
-		return this.localtron.get('/chat-service/threads');
+		return this.localtron.post('/chat-service/threads', {});
 	}
 
 	setActiveThreadId(id: string) {

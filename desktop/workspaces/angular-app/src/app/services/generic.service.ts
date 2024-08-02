@@ -62,7 +62,7 @@ export class GenericService {
 			},
 		};
 
-		return this.localtron.post('/generic-service/objects/query', request);
+		return this.localtron.post('/generic-service/objects', request);
 	}
 
 	async upsert(table: string, object: GenericObject): Promise<void> {
