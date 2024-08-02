@@ -14,6 +14,16 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
+// @Summary Read User by Token
+// @Description Retrieve user information based on an authentication token.
+// @Tags User Service
+// @Accept json
+// @Produce json
+// @Param body body usertypes.ReadUserByTokenRequest true "Read User By Token Request"
+// @Success 200 {object} usertypes.ReadUserByTokenResponse
+// @Failure 400 {object} usertypes.ErrorResponse "Invalid JSON"
+// @Failure 500 {object} usertypes.ErrorResponse "Internal Server Error"
+// @Router /user-service/user/by-token [post]
 func (s *UserService) ReadUserByToken(w http.ResponseWriter, r *http.Request) {
 	req := usertypes.ReadUserByTokenRequest{}
 	err := json.NewDecoder(r.Body).Decode(&req)

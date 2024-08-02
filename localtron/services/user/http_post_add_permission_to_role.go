@@ -27,8 +27,8 @@ import (
 // @Param roleId path string true "Role ID"
 // @Param permissionId path string true "Permission ID"
 // @Success 200 {object} usertypes.CreateUserResponse
-// @Failure 401 {string} string "Unauthorized"
-// @Failure 500 {string} string "Internal Server Error"
+// @Failure 401 {object} usertypes.ErrorResponse "Unauthorized"
+// @Failure 500 {object} usertypes.ErrorResponse "Internal Server Error"
 // @Router /user-service/role/{roleId}/permission/{permissionId} [put]
 func (s *UserService) AddPermissionToRole(
 	w http.ResponseWriter,

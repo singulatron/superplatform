@@ -889,6 +889,20 @@ definitions:
           $ref: '#/definitions/usertypes.User'
         type: array
     type: object
+  usertypes.IsAuthorizedRequest:
+    properties:
+      emailsGranted:
+        items:
+          type: string
+        type: array
+    type: object
+  usertypes.IsAuthorizedResponse:
+    properties:
+      authorized:
+        type: boolean
+      user:
+        $ref: '#/definitions/usertypes.User'
+    type: object
   usertypes.LoginRequest:
     properties:
       email:
@@ -919,6 +933,27 @@ definitions:
       updatedAt:
         type: string
     type: object
+  usertypes.ReadUserByTokenRequest:
+    properties:
+      token:
+        type: string
+    type: object
+  usertypes.ReadUserByTokenResponse:
+    properties:
+      user:
+        $ref: '#/definitions/usertypes.User'
+    type: object
+  usertypes.RegisterRequest:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+    type: object
+  usertypes.RegisterResponse:
+    type: object
   usertypes.Role:
     properties:
       createdAt:
@@ -935,6 +970,15 @@ definitions:
         type: array
       updatedAt:
         type: string
+    type: object
+  usertypes.SetRolePermissionsRequest:
+    properties:
+      permissionIds:
+        items:
+          type: string
+        type: array
+    type: object
+  usertypes.SetRolePermissionsResponse:
     type: object
   usertypes.UpserPermissionRequest:
     properties:
@@ -1020,7 +1064,7 @@ paths:
             type: string
       summary: Delete Message
       tags:
-      - chat
+      - Chat Service
   /chat-service/thread:
     post:
       consumes:
@@ -1056,7 +1100,7 @@ paths:
             type: string
       summary: Add Thread
       tags:
-      - chat
+      - Chat Service
   /chat-service/thread/{threadId}:
     delete:
       consumes:
@@ -1090,7 +1134,7 @@ paths:
             type: string
       summary: Delete Thread
       tags:
-      - chat
+      - Chat Service
     get:
       consumes:
       - application/json
@@ -1116,7 +1160,7 @@ paths:
             type: string
       summary: Get Thread
       tags:
-      - chat
+      - Chat Service
     put:
       consumes:
       - application/json
@@ -1154,7 +1198,7 @@ paths:
             type: string
       summary: Update Thread
       tags:
-      - chat
+      - Chat Service
   /chat-service/thread/{threadId}/message:
     post:
       consumes:
@@ -1194,7 +1238,7 @@ paths:
             type: string
       summary: Add Message
       tags:
-      - chat
+      - Chat Service
   /chat-service/thread/{threadId}/messages:
     get:
       consumes:
@@ -1227,7 +1271,7 @@ paths:
             type: string
       summary: Get Messages
       tags:
-      - chat
+      - Chat Service
   /chat-service/threads:
     post:
       consumes:
@@ -1261,7 +1305,7 @@ paths:
             type: string
       summary: Get Threads
       tags:
-      - chat
+      - Chat Service
   /config/get:
     post:
       consumes:
@@ -1291,7 +1335,7 @@ paths:
             type: string
       summary: Get
       tags:
-      - config
+      - Config Service
   /config/save:
     post:
       consumes:
@@ -1321,7 +1365,7 @@ paths:
             type: string
       summary: Save
       tags:
-      - config
+      - Config Service
   /docker-service/container:
     put:
       consumes:
@@ -1885,7 +1929,7 @@ paths:
             type: string
       summary: Get Model Status
       tags:
-      - model
+      - Model Service
   /model-service/{modelId}:
     get:
       consumes:
@@ -1917,7 +1961,7 @@ paths:
             $ref: '#/definitions/modeltypes.ErrorResponse'
       summary: Get a Model
       tags:
-      - model
+      - Model Service
   /model-service/{modelId}/make-default:
     put:
       consumes:
@@ -1951,7 +1995,7 @@ paths:
             $ref: '#/definitions/modeltypes.ErrorResponse'
       summary: Make a Model Default
       tags:
-      - model
+      - Model Service
   /model-service/{modelId}/start:
     put:
       consumes:
@@ -1984,7 +2028,7 @@ paths:
             $ref: '#/definitions/modeltypes.ErrorResponse'
       summary: Start a Model
       tags:
-      - model
+      - Model Service
   /model-service/default/start:
     put:
       consumes:
@@ -2014,7 +2058,7 @@ paths:
             $ref: '#/definitions/modeltypes.ErrorResponse'
       summary: Start the Default Model
       tags:
-      - model
+      - Model Service
   /model-service/models:
     get:
       consumes:
@@ -2039,7 +2083,7 @@ paths:
             $ref: '#/definitions/modeltypes.ErrorResponse'
       summary: List Models
       tags:
-      - model
+      - Model Service
   /prompt-service/{threadId}/subscribe:
     get:
       description: Subscribe to prompt responses via Server-Sent Events (SSE)
@@ -2074,7 +2118,6 @@ paths:
       - description: List Prompts Request
         in: body
         name: request
-        required: true
         schema:
           $ref: '#/definitions/prompttypes.ListPromptsRequest'
       produces:
@@ -2190,15 +2233,15 @@ paths:
         "400":
           description: Invalid JSON
           schema:
-            type: string
+            $ref: '#/definitions/usertypes.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            type: string
+            $ref: '#/definitions/usertypes.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            type: string
+            $ref: '#/definitions/usertypes.ErrorResponse'
       summary: Change User Password
       tags:
       - User Service
@@ -2224,15 +2267,15 @@ paths:
         "400":
           description: Invalid JSON
           schema:
-            type: string
+            $ref: '#/definitions/usertypes.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            type: string
+            $ref: '#/definitions/usertypes.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            type: string
+            $ref: '#/definitions/usertypes.ErrorResponse'
       summary: Change User Password (Admin)
       tags:
       - User Service
@@ -2270,6 +2313,10 @@ paths:
     put:
       consumes:
       - application/json
+      description: |-
+        Creates or updates a permission.
+
+        Requires the `permission.create` permission.
       parameters:
       - description: Permission ID
         example: "123"
@@ -2302,7 +2349,74 @@ paths:
           description: Internal Server Error
           schema:
             type: string
-      summary: Upsert a permission
+      summary: Upsert a Permission
+      tags:
+      - User Service
+  /user-service/permission/{permissionId}/is-authorized:
+    post:
+      consumes:
+      - application/json
+      description: Check if a user is authorized for a specific permission.
+      parameters:
+      - description: Permission ID
+        in: path
+        name: permissionId
+        required: true
+        type: string
+      - description: Is Authorized Request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/usertypes.IsAuthorizedRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/usertypes.IsAuthorizedResponse'
+        "400":
+          description: Invalid JSON or missing permission id
+          schema:
+            $ref: '#/definitions/usertypes.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/usertypes.ErrorResponse'
+      summary: Is Authorized
+      tags:
+      - User Service
+  /user-service/register:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user with a name, email, and password.
+      parameters:
+      - description: Register Request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/usertypes.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/usertypes.RegisterResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/usertypes.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/usertypes.ErrorResponse'
+      summary: Register a New User
+      tags:
+      - User Service
   /user-service/role:
     post:
       consumes:
@@ -2328,15 +2442,15 @@ paths:
         "400":
           description: Invalid JSON
           schema:
-            type: string
+            $ref: '#/definitions/usertypes.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            type: string
+            $ref: '#/definitions/usertypes.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            type: string
+            $ref: '#/definitions/usertypes.ErrorResponse'
       summary: Create a New Role
       tags:
       - User Service
@@ -2369,12 +2483,51 @@ paths:
         "401":
           description: Unauthorized
           schema:
-            type: string
+            $ref: '#/definitions/usertypes.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            type: string
+            $ref: '#/definitions/usertypes.ErrorResponse'
       summary: Add Permission to Role
+      tags:
+      - User Service
+  /user-service/role/{roleId}/permissions:
+    put:
+      consumes:
+      - application/json
+      description: Set permissions for a specified role.
+      parameters:
+      - description: Role ID
+        in: path
+        name: roleId
+        required: true
+        type: string
+      - description: Set Role Permissions Request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/usertypes.SetRolePermissionsRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/usertypes.SetRolePermissionsResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/usertypes.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/usertypes.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/usertypes.ErrorResponse'
+      summary: Set Role Permissions
       tags:
       - User Service
   /user-service/user:
@@ -2400,16 +2553,46 @@ paths:
         "400":
           description: Invalid JSON
           schema:
-            type: string
+            $ref: '#/definitions/usertypes.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            type: string
+            $ref: '#/definitions/usertypes.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            type: string
+            $ref: '#/definitions/usertypes.ErrorResponse'
       summary: Create a New User
+      tags:
+      - User Service
+  /user-service/user/by-token:
+    post:
+      consumes:
+      - application/json
+      description: Retrieve user information based on an authentication token.
+      parameters:
+      - description: Read User By Token Request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/usertypes.ReadUserByTokenRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/usertypes.ReadUserByTokenResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/usertypes.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/usertypes.ErrorResponse'
+      summary: Read User by Token
       tags:
       - User Service
   /user-service/users:
@@ -2421,7 +2604,6 @@ paths:
       - description: Get Users Request
         in: body
         name: request
-        required: true
         schema:
           $ref: '#/definitions/usertypes.GetUsersRequest'
       produces:
@@ -2434,15 +2616,15 @@ paths:
         "400":
           description: Invalid JSON
           schema:
-            type: string
+            $ref: '#/definitions/usertypes.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            type: string
+            $ref: '#/definitions/usertypes.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            type: string
+            $ref: '#/definitions/usertypes.ErrorResponse'
       summary: List Users
       tags:
       - User Service

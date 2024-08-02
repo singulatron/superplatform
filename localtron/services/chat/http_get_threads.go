@@ -19,7 +19,7 @@ import (
 // GetThreads retrieves a list of chat threads for a user
 // @Summary Get Threads
 // @Description Fetch all chat threads associated with a specific user
-// @Tags chat
+// @Tags Chat Service
 // @Accept json
 // @Produce json
 // @Param request body chattypes.GetThreadsRequest true "Get Threads Request"

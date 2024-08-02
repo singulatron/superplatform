@@ -8,7 +8,7 @@ const sidebar: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "chat",
+      label: "Chat Service",
       items: [
         {
           type: "doc",
@@ -62,7 +62,7 @@ const sidebar: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "config",
+      label: "Config Service",
       items: [
         {
           type: "doc",
@@ -200,7 +200,7 @@ const sidebar: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "model",
+      label: "Model Service",
       items: [
         {
           type: "doc",
@@ -294,6 +294,24 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
+          id: "singulatron/upsert-a-permission",
+          label: "Upsert a Permission",
+          className: "api-method put",
+        },
+        {
+          type: "doc",
+          id: "singulatron/is-authorized",
+          label: "Is Authorized",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "singulatron/register-a-new-user",
+          label: "Register a New User",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
           id: "singulatron/create-a-new-role",
           label: "Create a New Role",
           className: "api-method post",
@@ -306,8 +324,20 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
+          id: "singulatron/set-role-permissions",
+          label: "Set Role Permissions",
+          className: "api-method put",
+        },
+        {
+          type: "doc",
           id: "singulatron/create-a-new-user",
           label: "Create a New User",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "singulatron/read-user-by-token",
+          label: "Read User by Token",
           className: "api-method post",
         },
         {
@@ -315,18 +345,6 @@ const sidebar: SidebarsConfig = {
           id: "singulatron/list-users",
           label: "List Users",
           className: "api-method post",
-        },
-      ],
-    },
-    {
-      type: "category",
-      label: "UNTAGGED",
-      items: [
-        {
-          type: "doc",
-          id: "singulatron/upsert-a-permission",
-          label: "Upsert a permission",
-          className: "api-method put",
         },
       ],
     },

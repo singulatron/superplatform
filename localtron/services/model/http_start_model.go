@@ -20,7 +20,7 @@ import (
 // StartSpecific godoc
 // @Summary Start a Model
 // @Description Starts a model by ID
-// @Tags model
+// @Tags Model Service
 // @Accept json
 // @Produce json
 // @Param modelId path string true "Model ID"

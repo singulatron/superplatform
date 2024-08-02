@@ -23,7 +23,7 @@ import (
 // @Tags Prompt Service
 // @Accept json
 // @Produce json
-// @Param request body prompttypes.ListPromptsRequest true "List Prompts Request"
+// @Param request body prompttypes.ListPromptsRequest false "List Prompts Request"
 // @Success 200 {object} prompttypes.ListPromptsResponse
 // @Failure 400 {object} prompttypes.ErrorResponse "Invalid JSON"
 // @Failure 401 {object} prompttypes.ErrorResponse "Unauthorized"

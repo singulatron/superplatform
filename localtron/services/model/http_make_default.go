@@ -20,7 +20,7 @@ import (
 // MakeDefault godoc
 // @Summary Make a Model Default
 // @Description Sets a model as the default model — when prompts are sent without a Model ID, the default model is used.
-// @Tags model
+// @Tags Model Service
 // @Accept json
 // @Produce json
 // @Param id path string true "Model ID"

@@ -81,7 +81,6 @@ export class RolesComponent {
 				this.selectedRole.id as string,
 				permissionIds
 			);
-			// Optionally, you can provide some user feedback here, such as a success message
 		}
 	}
 

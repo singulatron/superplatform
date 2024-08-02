@@ -21,7 +21,7 @@ import (
 // @Description Starts The Default Model.
 // @Description
 // @Description Requires the `model.create` permission.
-// @Tags model
+// @Tags Model Service
 // @Accept json
 // @Produce json
 // @Success 200 {object} modeltypes.StartResponse

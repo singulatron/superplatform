@@ -20,7 +20,7 @@ import (
 // GetMessages retrieves messages from a chat thread
 // @Summary Get Messages
 // @Description Fetch messages (and associated assets) for a specific chat thread.
-// @Tags chat
+// @Tags Chat Service
 // @Accept json
 // @Produce json
 // @Param threadId path string true "Thread ID"
