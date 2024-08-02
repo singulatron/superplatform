@@ -10,11 +10,13 @@ package modelservice
 import (
 	"context"
 	"fmt"
+	"log/slog"
 	"net/url"
 	"os"
 
 	"github.com/pkg/errors"
 	"github.com/singulatron/singulatron/localtron/datastore"
+	"github.com/singulatron/singulatron/localtron/logger"
 	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
 	dockertypes "github.com/singulatron/singulatron/localtron/services/docker/types"
 	downloadtypes "github.com/singulatron/singulatron/localtron/services/download/types"
@@ -92,11 +94,14 @@ func (ms *ModelService) status(modelId string) (*modeltypes.ModelStatus, error) 
 	}
 
 	isRunning := false
-	hashReq := dockertypes.ContainerIsRunningRequest{
-		Hash: hash,
-	}
+
 	hashRsp := dockertypes.ContainerIsRunningResponse{}
-	err = ms.router.Post(context.Background(), "docker", "/hash-is-running", hashReq, &hashRsp)
+	err = ms.router.Get(context.Background(), "docker-service", fmt.Sprintf("/container/%v/is-running", hash), nil, &hashRsp)
+	if err != nil {
+		logger.Warn("Checking if running error",
+			slog.String("error", err.Error()),
+		)
+	}
 	if err == nil && hashRsp.IsRunning {
 		isRunning = true
 	}

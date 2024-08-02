@@ -12,6 +12,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	dockertypes "github.com/singulatron/singulatron/localtron/services/docker/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
@@ -35,7 +36,7 @@ func (dm *DockerService) HashIsRunning(
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
 	err := dm.router.AsRequestMaker(r).Post(r.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", dockertypes.PermissionDockerView.Id), &usertypes.IsAuthorizedRequest{
-		EmailsGranted: []string{"model"},
+		EmailsGranted: []string{"model-service"},
 	}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
@@ -46,15 +47,9 @@ func (dm *DockerService) HashIsRunning(
 		return
 	}
 
-	req := &dockertypes.ContainerIsRunningRequest{}
-	err = json.NewDecoder(r.Body).Decode(req)
-	if err != nil {
-		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
-		return
-	}
-	defer r.Body.Close()
+	vars := mux.Vars(r)
 
-	isRunning, err := dm.hashIsRunning(req.Hash)
+	isRunning, err := dm.hashIsRunning(vars["hash"])
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

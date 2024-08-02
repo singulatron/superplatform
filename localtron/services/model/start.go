@@ -336,7 +336,7 @@ func (ms *ModelService) checkIfAnswers(
 
 func (ms *ModelService) printContainerLogs(modelId, hash string) {
 	rsp := dockertypes.GetContainerSummaryResponse{}
-	err := ms.router.Get(context.Background(), "docker", fmt.Sprintf("/container/%v/summary/%v", hash, 10), nil, &rsp)
+	err := ms.router.Get(context.Background(), "docker-service", fmt.Sprintf("/container/%v/summary/%v", hash, 10), nil, &rsp)
 	if err != nil {
 		logger.Warn("Error getting container logs",
 			slog.String("modelId", modelId),
