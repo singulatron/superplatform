@@ -8,25 +8,27 @@ export class DownloadService {
     this.options = options;
   }
 
-  call(endpoint: string, request: any): Promise<any> {
+  call(endpoint: string, request: any, method: string = "POST"): Promise<any> {
     return call(this.options, endpoint, request);
   }
 
-  async do(url: string) {
-    this.call("/download/do", { url: url });
+  async download(url: string) {
+    this.call("/download-service/download", { url: url }, "PUT");
   }
 
   async pause(url: string) {
-    this.call("/download/pause", { url: url });
+    this.call(`/download-service/${encodeURIComponent(url)}/pause`, {}, "PUT");
   }
 
   async list(): Promise<download.ListResponse> {
-    return this.call("/download/list", {});
+    return this.call("/download-service/downloads", {});
   }
 
   async get(url: string): Promise<download.GetResponse> {
-    return this.call("/download/get", {
-      url: url,
-    });
+    return this.call(
+      `/download-service/download/${encodeURIComponent(url)}`,
+      {},
+      "GET"
+    );
   }
 }

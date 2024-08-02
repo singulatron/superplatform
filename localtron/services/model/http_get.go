@@ -9,20 +9,34 @@ package modelservice
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"net/url"
 
+	"github.com/gorilla/mux"
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
+// Get godoc
+// @Summary Get a Model
+// @Description Retrieves the details of a model by its ID.
+// @Description
+// @Description the Requires `model.view` permission.
+// @Tags model
+// @Accept json
+// @Produce json
+// @Param id path string true "Model ID"
+// @Success 200 {object} modeltypes.GetModelResponse
+// @Failure 401 {object} modeltypes.ErrorResponse "Unauthorized"
+// @Failure 500 {object} modeltypes.ErrorResponse "Internal Server Error"
+// @Router /model-service/{modelId} [get]
 func (ms *ModelService) Get(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := ms.router.AsRequestMaker(r).Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
-		PermissionId: modeltypes.PermissionModelView.Id,
-	}, rsp)
+	err := ms.router.AsRequestMaker(r).Post(r.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", modeltypes.PermissionModelView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -32,20 +46,19 @@ func (ms *ModelService) Get(
 		return
 	}
 
-	req := modeltypes.GetModelRequest{}
-	err = json.NewDecoder(r.Body).Decode(&req)
-	if err != nil {
-		http.Error(w, `invalid JSON`, http.StatusBadRequest)
-		return
-	}
-	defer r.Body.Close()
-
-	if req.Id == "" {
+	vars := mux.Vars(r)
+	if vars["modelId"] == "" {
 		http.Error(w, "no model id", http.StatusBadRequest)
 		return
 	}
 
-	model, found, err := ms.getModel(req.Id)
+	mid, err := url.PathUnescape(vars["modelId"])
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	model, found, err := ms.getModel(mid)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

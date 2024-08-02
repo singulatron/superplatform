@@ -9,6 +9,7 @@ package genericservice
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	generictypes "github.com/singulatron/singulatron/localtron/services/generic/types"
@@ -16,27 +17,26 @@ import (
 )
 
 // Delete removes a generic object based on the provided conditions
-// @Summary Delete a Generic Object
+// @Summary     Delete a Generic Object
 // @Description Removes a generic object from the system based on the provided conditions. Requires authorization and user authentication.
-// @Tags generic
-// @Accept json
-// @Produce json
-// @Param body body generictypes.DeleteRequest true "Delete request payload"
-// @Success 200 {object} generictypes.DeleteResponse "Successful deletion of object"
-// @Failure 400 {object} generictypes.ErrorResponse "Invalid JSON"
-// @Failure 401 {object} generictypes.ErrorResponse "Unauthorized"
-// @Failure 500 {object} generictypes.ErrorResponse "Internal Server Error"
-// @Security BearerAuth
-// @Router /generic/delete [post]
+// @Tags        Generic Service
+// @Accept      json
+// @Produce     json
+// @Param       hash  path     string  true  "Container Hash"
+// @Param       body  body     generictypes.DeleteRequest true "Delete request payload"
+// @Success     200   {object} generictypes.DeleteResponse "Successful deletion of object"
+// @Failure     400   {object} generictypes.ErrorResponse "Invalid JSON"
+// @Failure     401   {object} generictypes.ErrorResponse "Unauthorized"
+// @Failure     500   {object} generictypes.ErrorResponse "Internal Server Error"
+// @Security    BearerAuth
+// @Router      /generic/object/{objectId} [delete]
 func (g *GenericService) Delete(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
 
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := g.router.AsRequestMaker(r).Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
-		PermissionId: generictypes.PermissionGenericDelete.Id,
-	}, rsp)
+	err := g.router.AsRequestMaker(r).Post(r.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", generictypes.PermissionGenericDelete.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -49,7 +49,7 @@ func (g *GenericService) Delete(
 	req := &generictypes.DeleteRequest{}
 	err = json.NewDecoder(r.Body).Decode(req)
 	if err != nil {
-		http.Error(w, `invalid JSON`, http.StatusBadRequest)
+		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
 		return
 	}
 	defer r.Body.Close()

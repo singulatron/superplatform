@@ -9,6 +9,7 @@ package genericservice
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	generictypes "github.com/singulatron/singulatron/localtron/services/generic/types"
@@ -18,7 +19,7 @@ import (
 // Create creates a new generic object
 // @Summary Create a Generic Object
 // @Description Creates a new object with the provided details. Requires authorization and user authentication.
-// @Tags generic
+// @Tags Generic Service
 // @Accept json
 // @Produce json
 // @Param body body generictypes.CreateRequest true "Create request payload"
@@ -34,9 +35,7 @@ func (g *GenericService) Create(
 ) {
 
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := g.router.AsRequestMaker(r).Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
-		PermissionId: generictypes.PermissionGenericCreate.Id,
-	}, rsp)
+	err := g.router.AsRequestMaker(r).Post(r.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", generictypes.PermissionGenericCreate.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -48,7 +47,7 @@ func (g *GenericService) Create(
 	req := &generictypes.CreateRequest{}
 	err = json.NewDecoder(r.Body).Decode(req)
 	if err != nil {
-		http.Error(w, `invalid JSON`, http.StatusBadRequest)
+		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
 		return
 	}
 	defer r.Body.Close()

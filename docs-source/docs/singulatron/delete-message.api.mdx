@@ -5,8 +5,8 @@ description: "Delete a specific message from a chat thread by its ID"
 sidebar_label: "Delete Message"
 hide_title: true
 hide_table_of_contents: true
-api: eJylVVuP0zwQ/SvWPHuTsgsSyhPLVUXfx1bb5QGhfZg608Tg2MaXllLlv6NJUujuVohLXxpPxnPOGZ9x9lBTVEH7pJ2FCl6SoUQCRfSk9For0VGM2JBYB9cJFKrFJFIbCGux2gmdopi/BAmBvmSK6bmrd1DtQTmbyCZ+RO+NVsgA5afIKHuIqqUO+ckH5ykkTZFXE9i85kXaeYIKYgraNtD38hBxq0+kEvQcOkn//4nz9UhqoqcD1VClkKnnQPTOxhH2fDbjv7u1DkViVopiXGdjdqIeAGqQv68Q61rzKzSLI61M44SgXsLjU2TmdoNG1+Lt8urdn4Df7+EI8OghwHuLObUu6G9/pu4UwJPTChIFi0YsKWwoiFchuPBvSOwIbCJUH4FtCbcSOkqtq6EC74Zz95haqKDk9+XkrnI8RJAQBypcYA85GE4sjVNoWhdT9eTp+cUj6G85T+Wg027JZEbLPMeo1WXm6j+otSl5rjpkQQUrzhmMy2quf07Iq6/YeUP3HP9DmgRt1+4wRqiG5lCHmhlGNBSfRW2bbDAFZwvlOpBgccC8XMzFMnvvAssfRTGvqixj9hS8wbR2oStQl/Bgfq6zFWhrUdOGjPMiklmfcTOoFpdzgd7HQnxwOQgfXBOw63BlSGh71rocSbxZ3BTipiXxWgdaYSSxdkGklobdDRUgwWhFNg7iD5zfLP4Tm4tidodxrMpyu90Wjc2FC0057YslNt6cXRSzok2dYQ2JQhev1mwsrehI8BabhkKhXTmklCAh6cSNh+XPBoIEdsHYgVlxziXZPh3aI5J3rxa417mjG+/v79DJRom+ptIb1JaZDA3ZT0aejC4PthloDGa+lcDnxCn7PXf+fTB9z+EvmcIOqo+3EjYYNB8Yr3oJLWFNYXD/Z9pBBS9GDWc3TITTTWZCD+ayl4cdl0qRT7/MPZ7KxdXyBiSspq9E52reE3DLVzRuoQKQ4IaeDlM2xPZg0DaZ5VYw1uTfd6bDUjQ=
-sidebar_class_name: "post api-method"
+api: eJylVMFu3DYQ/RViTi1ASxu7AQqd6sJusEXaGFnnUAR7mKVmJaYUyQypdbeC/r0YSY7XzqJA2pNEcobvvZnHGaCmZNjGbIOHCm7IUSaFKkUydm+N6iglbEjtOXQKlWkxq9wyYa12R2VzUusb0BCRsaNMnKD6OLy49bfljinSyk7E3IIGjx1BBQvGugYNTJ97y1RDlbknDcm01CFUA+RjlOCU2foGxnErwSkGnyjJ+eVqJZ/z0Kk3hlLa984dVT2pFDQTfCafJQ9jdNag5JWfkiQPJ+BY11aO0N1xiMTZCuhMcSEWdp/IZBjHcdTwwzkya39AZ2v16+bd798C/lL5DPDqa4APHvvcBrZ/f5u6cwCvzyvIxB6d2hAfiNUtc+D/hzRqyNiIbUDMBVsNHeU21FDB3KjJXrmFCkqJuEjEB2uoXGxTDl/8M4KGNDGbbdizk6zSBYOuDSlXr3+8vHoF4p1EpmebjxvhNjvoZ0zWXPcC9YVpm3OExYay3kkMCGvr90ECRTuaSTt1aAUxoaP0U7K+6R1mDr4woXvy+/XdWm36GANn0AtJwanKMvWRODrM+8BdgbaEUb/owfveK/S1qulALkSVyO0vRBzV6nqtMMZUqD9CzypyaBi7DneOlPUXbegTqTd394W6b0n9Ypl2mEjtA6vc0pTdUAEanDXkE4mmR85v7t6qw1WxesY4VWX58PBQNL4vAjflkpdKbKK7uCpWRZs7JxoycZfe7Tdz704EP2DTEBc2lFNICRqyzU5CNk8FBA3S1bkCq+JSrowh5Q79CcllfC2PHl5Ubniy6X8fdIstMv2Vy+jQemEyFWRYXDr7+NGloB/HG2ionibdVoP0TMKHQbrwgd04yvbnnvgI1cethgOylebNM9Um+a+h2qNL9C/ivnu/DNHv1bPRe5b7son+KDVG18sKNPxJx2ejedyOGlrCmniiM59fG0Mxn2R+9fzH0wd9c/v29v4WxvEf/zE3zw==
+sidebar_class_name: "delete api-method"
 info_path: docs/singulatron/singulatron
 custom_edit_url: null
 ---
@@ -33,8 +33,8 @@ import TabItem from "@theme/TabItem";
 </Heading>
 
 <MethodEndpoint
-  method={"post"}
-  path={"/chat/message/delete"}
+  method={"delete"}
+  path={"/chat-service/message/{messageId}"}
 >
   
 </MethodEndpoint>
@@ -51,61 +51,31 @@ Delete a specific message from a chat thread by its ID
 >
 </Heading>
 
-<MimeTabs
-  className={"openapi-tabs__mime"}
+<details
+  style={{"marginBottom":"1rem"}}
+  className={"openapi-markdown__details"}
+  data-collapsed={false}
+  open={true}
 >
-  <TabItem
-    label={"application/json"}
-    value={"application/json-schema"}
+  <summary
+    style={{}}
   >
-    <details
-      style={{}}
-      className={"openapi-markdown__details mime"}
-      data-collapsed={false}
-      open={true}
+    <h3
+      className={"openapi-markdown__details-summary-header-params"}
     >
-      <summary
-        style={{}}
-        className={"openapi-markdown__details-summary-mime"}
+      Path Parameters
+    </h3>
+  </summary><div>
+    <ul>
+      <ParamsItem
+        className={"paramsItem"}
+        param={{"description":"Message ID","in":"path","name":"messageId","required":true,"schema":{"type":"string"}}}
       >
-        <h3
-          className={"openapi-markdown__details-summary-header-body"}
-        >
-          Body
-        </h3><strong
-          className={"openapi-schema__required"}
-        >
-          required
-        </strong>
-      </summary><div
-        style={{"textAlign":"left","marginLeft":"1rem"}}
-      >
-        <div
-          style={{"marginTop":"1rem","marginBottom":"1rem"}}
-        >
-          
-          
-          Delete Message Request
-          
-          
-        </div>
-      </div><ul
-        style={{"marginLeft":"1rem"}}
-      >
-        <SchemaItem
-          collapsible={false}
-          name={"messageId"}
-          required={false}
-          schemaName={"string"}
-          qualifierMessage={undefined}
-          schema={{"type":"string"}}
-        >
-          
-        </SchemaItem>
-      </ul>
-    </details>
-  </TabItem>
-</MimeTabs><div>
+        
+      </ParamsItem>
+    </ul>
+  </div>
+</details><div>
   <div>
     <ApiTabs
       label={undefined}

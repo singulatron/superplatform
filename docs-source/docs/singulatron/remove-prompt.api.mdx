@@ -5,7 +5,7 @@ description: "Remove a prompt by ID."
 sidebar_label: "Remove Prompt"
 hide_title: true
 hide_table_of_contents: true
-api: eJy9ld9v00AMx/+Vk5+zpGwgoTyx8UtFiFXreEBoD27iJgeXu8N3aSlR/nfkS8taNiR4oS+9OD77429td4CaQsXaR+0slHBDnduQQuXZdT6q1U7NX+WQAdO3nkK8cvUOygEqZyPZKEf03ugKJUDxJUiUAULVUody8uw8cdQU9k+dj/NaznHnCUoIkbVtYByzg8WtvlAVYRTTo3SLie1mQtrDaaYaysg9jWII3tkwJT2fzeTrNNQwQvb3VWBda3mFZnFUjyR7hHrM4OljKed2g0bX6t3y+sO/JD+VkJgd/6V+ieTJQ5KPFvvYOtY/qP5vJM8e1yQSWzRqSbwhVq9TzP+DJEZsApSf930Z4C6DjmLraijBu9RbHmMLJRSTS8GpBSGDkIDl9gA9G3EpjKvQtC7E8tnz84snMN6JX9WzjrulIE+UVxh0ddlL3F+kbYxeoiYvKGElPglcar65n77X37Hzhk6n6VehGWi7docJxSopSB1qAQxoKLwI2ja9wcjO5pXrIAOLKeXlYq6WvfeOpe6pJsEqiyL0ntgbjGvHXY66gIez2VuFtlY1bcg4rwKZ9ZloQbW6nCv0PuTqk+tZVkvD2HW4MqS0PWtdH0i9Xdzm6rYl9UYzrTCQWjtWsaV0uyFZQkZXZEOq/cD8dvFebS7y2QlxKItiu93mje1zx02xvxcKbLw5u8hneRs7IzVE4i5cr6X7dEVHBW+xaYhz7YrkUkAGUUfRHZb3AkIG0gSTArP8XEJK33RojyBP1hb8JtzRLv3z9t03SaTvsfAGtZVEqd5h36CHHk7bMLXoXQYiv7waBhH0I5txFPO3nngH5ee7DDbIWn4HeRozaAlr4tTTX2kHJbyc2M5uBUDcTS8gD2ZyzA43LquKEsaffY+nbHG9vIUMVvv/lc7VcodxK4XgFkqADFzSKs1Osg1g0DY9NuI7xZTPT8PHWT8=
+api: eJy9VU2P0zAQ/SvWnNOk7IKEcmL5VBFiq+1yQKs9TJNpYnBsM3ZaSpT/jsZp2S27SHAhl9ij8fi9lzeTAWoKFWsftbNQwhV1bksKlWfX+ajWe7V4nUMGTN96CvGlq/dQDlA5G8lGWaL3RlcoBYovQaoMEKqWOpSVZ+eJo6Zw2HU+LmpZx70nKCFE1raBccyOEbf+QlWEUUKPoltO2K4mSAdwmqmGMnJPowSCdzZMl57N5/I6LTWMkP09iwfIxgyePlZ2YbdodK3ery4//ssFpzIRs+O/1CghefIQySeLfWwd6x9U/zckzx7XJBJbNGpFvCVWb1LN/wNJgtgEKG/g4BoBoSuC2ww6iq2roQTvko08xhZKKCaXzsKUWXByHWQQEn4pNkDPRlIL4yo0rQuxfPb87PwJjLeSV/Ws434lDCbQLzHo6qKX+r+AtzF6qZqyoIS15CQeIsHVXcO9+Y6dN3TaQL94Z6Dtxh2bEqskKHWoBWBAQ+FF0LbpDUZ2Nq9cBxlYTFdeLBdq1XvvWPhPnARWWRSh98TeYNw47nLUBTxsx94qtLWqaUvGeRXIbGaiBdXqYqHQ+5Crz65nmSYNY9fh2pDSdta6PpB6t7zO1XVL6q1mWmMgtXGsYkvpdEMyd4yuyIbE/Yj53fKD2p7n8xPEoSyK3W6XN7bPHTfF4VwosPFmdp7P8zZ2RjhE4i5cbo4+uCO8w6YhzrUrUkoBGUQdRXdY3QkIGYgJJgXm+ZmUFP90aO+BPJlU8Jtw98bnnwfuwSSRvsfCG9RWLkp8h4NRb+DUqGkQJqveZiCfQVKGQYT9xGYcJfytJ95DeXObwRZZy/eQ3ZhBS1gTJ29/pT2U8GrCOLsWIJJuegH0oFXH7Hjioqoosf1z7v2uW16uriGD9eGX0rlazjDuhAjuoATIwCXNUg+l2AAGbdNjI7lTTXl+AtNOVyk=
 sidebar_class_name: "post api-method"
 info_path: docs/singulatron/singulatron
 custom_edit_url: null
@@ -34,7 +34,7 @@ import TabItem from "@theme/TabItem";
 
 <MethodEndpoint
   method={"post"}
-  path={"/prompt/remove"}
+  path={"/prompt-service/remove"}
 >
   
 </MethodEndpoint>
@@ -157,17 +157,15 @@ Remove a prompt by ID.
                     </div><ul
                       style={{"marginLeft":"1rem"}}
                     >
-                      <SchemaItem
-                        name={"property name*"}
-                        required={false}
-                        schemaName={"any"}
-                        qualifierMessage={undefined}
-                        schema={{"additionalProperties":true,"type":"object"}}
-                        collapsible={false}
-                        discriminator={false}
+                      <div
+                        style={{"marginTop":".5rem","marginBottom":".5rem"}}
                       >
                         
-                      </SchemaItem>
+                        
+                        object
+                        
+                        
+                      </div>
                     </ul>
                   </details>
                 </TabItem><TabItem

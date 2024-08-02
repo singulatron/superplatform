@@ -9,6 +9,7 @@ package chatservice
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
@@ -26,15 +27,13 @@ import (
 // @Failure 400 {string} string "Invalid JSON"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
-// @Router /chat/threads [post]
+// @Router /chat-service/threads [post]
 func (a *ChatService) GetThreads(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := a.router.AsRequestMaker(r).Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
-		PermissionId: chattypes.PermissionThreadView.Id,
-	}, rsp)
+	err := a.router.AsRequestMaker(r).Post(r.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", chattypes.PermissionThreadView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -47,7 +46,7 @@ func (a *ChatService) GetThreads(
 	req := chattypes.GetThreadsRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
-		http.Error(w, `invalid JSON`, http.StatusBadRequest)
+		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
 		return
 	}
 	defer r.Body.Close()

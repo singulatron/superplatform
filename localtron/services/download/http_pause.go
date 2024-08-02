@@ -9,33 +9,35 @@ package downloadservice
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	downloadtypes "github.com/singulatron/singulatron/localtron/services/download/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // Pause pauses an ongoing download
-// @Summary Pause
-// @Description Pause a download that is currently in progress
-// @Tags download
+// @Summary Pause a Download
+// @Description Pause a download that is currently in progress.
+// @Description
+// @Description Requires the `download.edit` permission.
+// @Tags Download Service
 // @Accept json
 // @Produce json
-// @Param body body downloadtypes.DownloadRequest true "Download request payload"
+// @Param downloadId path string true "Download ID"
 // @Success 200 {object} map[string]any "Success response"
 // @Failure 400 {string} string "Invalid JSON"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
-// @Router /download/pause [post]
+// @Router /download-service/download/{downloadId}/pause [put]
 func (ds *DownloadService) Pause(
 	w http.ResponseWriter,
 	r *http.Request,
 
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := ds.router.AsRequestMaker(r).Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
-		PermissionId: downloadtypes.PermissionDownloadEdit.Id,
-	}, rsp)
+	err := ds.router.AsRequestMaker(r).Post(r.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", downloadtypes.PermissionDownloadEdit.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -45,15 +47,9 @@ func (ds *DownloadService) Pause(
 		return
 	}
 
-	req := downloadtypes.DownloadRequest{}
-	err = json.NewDecoder(r.Body).Decode(&req)
-	if err != nil {
-		http.Error(w, `invalid JSON`, http.StatusBadRequest)
-		return
-	}
-	defer r.Body.Close()
+	downloadId := mux.Vars(r)["downloadId"]
 
-	err = ds.pause(req.URL)
+	err = ds.pause(downloadId)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

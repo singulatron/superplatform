@@ -18,61 +18,8 @@
     "host": "localhost:58231",
     "basePath": "/",
     "paths": {
-        "/chat/message/add": {
-            "post": {
-                "description": "Add a new message to a specific chat thread",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "chat"
-                ],
-                "summary": "Add Message",
-                "parameters": [
-                    {
-                        "description": "Add Message Request",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/chattypes.AddMessageRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Message successfully added",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid JSON",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/chat/message/delete": {
-            "post": {
+        "/chat-service/message/{messageId}": {
+            "delete": {
                 "description": "Delete a specific message from a chat thread by its ID",
                 "consumes": [
                     "application/json"
@@ -86,13 +33,11 @@
                 "summary": "Delete Message",
                 "parameters": [
                     {
-                        "description": "Delete Message Request",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/chattypes.DeleteMessageRequest"
-                        }
+                        "type": "string",
+                        "description": "Message ID",
+                        "name": "messageId",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -124,113 +69,9 @@
                 }
             }
         },
-        "/chat/messages": {
+        "/chat-service/thread": {
             "post": {
-                "description": "Fetch messages (and associated assets) for a specific chat thread.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "chat"
-                ],
-                "summary": "Get Messages",
-                "parameters": [
-                    {
-                        "description": "Get Messages Request",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/chattypes.GetMessagesRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Messages and assets successfully retrieved",
-                        "schema": {
-                            "$ref": "#/definitions/chattypes.GetMessagesResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid JSON",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/chat/thread": {
-            "post": {
-                "description": "Fetch information about a specific chat thread by its ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "chat"
-                ],
-                "summary": "Get Thread",
-                "parameters": [
-                    {
-                        "description": "Get Thread Request",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/chattypes.GetThreadRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Thread details successfully retrieved",
-                        "schema": {
-                            "$ref": "#/definitions/chattypes.GetThreadResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid JSON",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/chat/thread/add": {
-            "post": {
-                "description": "Create a new chat thread and add the requesting user to it",
+                "description": "Create a new chat thread and add the requesting user to it.\nRequires the `thread.create` permission.",
                 "consumes": [
                     "application/json"
                 ],
@@ -280,9 +121,9 @@
                 }
             }
         },
-        "/chat/thread/delete": {
-            "post": {
-                "description": "Delete a specific chat thread by its ID",
+        "/chat-service/thread/{threadId}": {
+            "get": {
+                "description": "Fetch information about a specific chat thread by its ID",
                 "consumes": [
                     "application/json"
                 ],
@@ -292,24 +133,12 @@
                 "tags": [
                     "chat"
                 ],
-                "summary": "Delete Thread",
-                "parameters": [
-                    {
-                        "description": "Delete Thread Request",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/chattypes.DeleteThreadRequest"
-                        }
-                    }
-                ],
+                "summary": "Get Thread",
                 "responses": {
                     "200": {
-                        "description": "Thread successfully deleted",
+                        "description": "Thread details successfully retrieved",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": true
+                            "$ref": "#/definitions/chattypes.GetThreadResponse"
                         }
                     },
                     "400": {
@@ -331,10 +160,8 @@
                         }
                     }
                 }
-            }
-        },
-        "/chat/thread/update": {
-            "post": {
+            },
+            "put": {
                 "description": "Modify the details of a specific chat thread",
                 "consumes": [
                     "application/json"
@@ -347,6 +174,13 @@
                 ],
                 "summary": "Update Thread",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Thread ID",
+                        "name": "threadId",
+                        "in": "path",
+                        "required": true
+                    },
                     {
                         "description": "Update Thread Request",
                         "name": "request",
@@ -383,9 +217,168 @@
                         }
                     }
                 }
+            },
+            "delete": {
+                "description": "Delete a specific chat thread by its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "chat"
+                ],
+                "summary": "Delete Thread",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Thread ID",
+                        "name": "threadId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Thread successfully deleted",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
             }
         },
-        "/chat/threads": {
+        "/chat-service/thread/{threadId}/message": {
+            "post": {
+                "description": "Add a new message to a specific thread.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "chat"
+                ],
+                "summary": "Add Message",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Thread ID",
+                        "name": "threadId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Add Message Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/chattypes.AddMessageRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Message successfully added",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/chat-service/thread/{threadId}/messages": {
+            "get": {
+                "description": "Fetch messages (and associated assets) for a specific chat thread.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "chat"
+                ],
+                "summary": "Get Messages",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Thread ID",
+                        "name": "threadId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Messages and assets successfully retrieved",
+                        "schema": {
+                            "$ref": "#/definitions/chattypes.GetMessagesResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/chat-service/threads": {
             "post": {
                 "description": "Fetch all chat threads associated with a specific user",
                 "consumes": [
@@ -450,11 +443,22 @@
                     "config"
                 ],
                 "summary": "Get",
+                "parameters": [
+                    {
+                        "description": "Get Config Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/configtypes.GetConfigRequest"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Current configuration retrieved successfully",
                         "schema": {
-                            "$ref": "#/definitions/configtypes.ConfigGetResponse"
+                            "$ref": "#/definitions/configtypes.GetConfigResponse"
                         }
                     },
                     "401": {
@@ -472,9 +476,9 @@
                 }
             }
         },
-        "/download/do": {
+        "/config/save": {
             "post": {
-                "description": "Start a download for a specified URL and folder path",
+                "description": "Save the provided configuration to the server",
                 "consumes": [
                     "application/json"
                 ],
@@ -482,9 +486,289 @@
                     "application/json"
                 ],
                 "tags": [
-                    "download"
+                    "config"
                 ],
-                "summary": "Do",
+                "summary": "Save",
+                "parameters": [
+                    {
+                        "description": "Save Config Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/configtypes.SaveConfigRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Save Config Response",
+                        "schema": {
+                            "$ref": "#/definitions/configtypes.SaveConfigResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/docker-service/container": {
+            "put": {
+                "description": "Launches a Docker container with the specified parameters.\n\nRequires the `docker.create` permission.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Docker Service"
+                ],
+                "summary": "Launch a Docker Container",
+                "parameters": [
+                    {
+                        "description": "Launch Container Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dockertypes.LaunchContainerRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dockertypes.LaunchContainerResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/dockertypes.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/dockertypes.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/dockertypes.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/docker-service/container/{hash}/is-running": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Check if a Docker container identified by the hash is running",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Docker Service"
+                ],
+                "summary": "Check If a Container Is Running",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Container Hash",
+                        "name": "hash",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dockertypes.ContainerIsRunningResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/dockertypes.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/dockertypes.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/dockertypes.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/docker-service/container/{hash}/summary/{numberOfLines}": {
+            "get": {
+                "description": "Get a summary of the Docker container identified by the hash, limited to a specified number of lines",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Docker Service"
+                ],
+                "summary": "Get Container Summary",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Container Hash",
+                        "name": "hash",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Number of Lines",
+                        "name": "numberOfLines",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dockertypes.GetContainerSummaryResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/dockertypes.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/dockertypes.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/dockertypes.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/docker-service/host": {
+            "get": {
+                "description": "Retrieve information about the Docker host",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Docker Service"
+                ],
+                "summary": "Get Docker Host",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dockertypes.GetDockerHostResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/dockertypes.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/dockertypes.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/docker-service/info": {
+            "get": {
+                "description": "Retrieve detailed information about the Docker service",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Docker Service"
+                ],
+                "summary": "Get Docker Service Information",
+                "responses": {
+                    "200": {
+                        "description": "Service Information",
+                        "schema": {
+                            "$ref": "#/definitions/dockertypes.GetInfoResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/dockertypes.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/dockertypes.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/download-service/download": {
+            "put": {
+                "description": "Start a download for a specified URL.\n\nRequires the `download.create` permission.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Download Service"
+                ],
+                "summary": "Download a File",
                 "parameters": [
                     {
                         "description": "Download Request",
@@ -507,27 +791,27 @@
                     "400": {
                         "description": "Invalid JSON",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/downloadtypes.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/downloadtypes.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/downloadtypes.ErrorResponse"
                         }
                     }
                 }
             }
         },
-        "/download/list": {
-            "post": {
-                "description": "Fetch a list of all download details",
+        "/download-service/download/{downloadId}": {
+            "get": {
+                "description": "Get a download by ID.\n\nRequires the `download.view` permission.",
                 "consumes": [
                     "application/json"
                 ],
@@ -535,53 +819,60 @@
                     "application/json"
                 ],
                 "tags": [
-                    "download"
+                    "Download Service"
                 ],
-                "summary": "List",
-                "responses": {
-                    "200": {
-                        "description": "List of downloads",
-                        "schema": {
-                            "$ref": "#/definitions/downloadtypes.DownloadsResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/download/pause": {
-            "post": {
-                "description": "Pause a download that is currently in progress",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "download"
-                ],
-                "summary": "Pause",
+                "summary": "Get a Download",
                 "parameters": [
                     {
-                        "description": "Download request payload",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
+                        "type": "string",
+                        "description": "Download ID",
+                        "name": "downloadId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/downloadtypes.DownloadRequest"
+                            "$ref": "#/definitions/downloadtypes.GetDownloadResponse"
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/download-service/download/{downloadId}/pause": {
+            "put": {
+                "description": "Pause a download that is currently in progress.\n\nRequires the `download.edit` permission.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Download Service"
+                ],
+                "summary": "Pause a Download",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Download ID",
+                        "name": "downloadId",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -613,24 +904,24 @@
                 }
             }
         },
-        "/firehose/subscribe": {
-            "get": {
-                "description": "Establish a subscription to firehose events and stream them to the client in real-time.",
+        "/download-service/downloads": {
+            "post": {
+                "description": "Fetch a list of all download details.\n\nRequires the `download.view` permission.",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
-                    "text/event-stream"
+                    "application/json"
                 ],
                 "tags": [
-                    "firehose"
+                    "Download Service"
                 ],
-                "summary": "Subscribe",
+                "summary": "List Downloads",
                 "responses": {
                     "200": {
-                        "description": "Event data",
+                        "description": "List of downloads",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/downloadtypes.DownloadsResponse"
                         }
                     },
                     "401": {
@@ -643,6 +934,84 @@
                         "description": "Internal Server Error",
                         "schema": {
                             "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/firehose-service/publish": {
+            "post": {
+                "description": "Publishes an event to the firehose service after authorization check",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Firehose Service"
+                ],
+                "summary": "Publish an Event",
+                "parameters": [
+                    {
+                        "description": "Event to publish",
+                        "name": "event",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/firehosetypes.PublishRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{}"
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/firehosetypes.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/firehosetypes.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/firehose-service/subscribe": {
+            "get": {
+                "description": "Establish a subscription to the firehose events and accept a real time stream of them.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "text/event-stream"
+                ],
+                "tags": [
+                    "Firehose Service"
+                ],
+                "summary": "Subscribe to the Event Stream",
+                "responses": {
+                    "200": {
+                        "description": "Event data",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/firehosetypes.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/firehosetypes.ErrorResponse"
                         }
                     }
                 }
@@ -663,7 +1032,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "generic"
+                    "Generic Service"
                 ],
                 "summary": "Create a Generic Object",
                 "parameters": [
@@ -705,8 +1074,8 @@
                 }
             }
         },
-        "/generic/delete": {
-            "post": {
+        "/generic/object/{objectId}": {
+            "delete": {
                 "security": [
                     {
                         "BearerAuth": []
@@ -720,10 +1089,17 @@
                     "application/json"
                 ],
                 "tags": [
-                    "generic"
+                    "Generic Service"
                 ],
                 "summary": "Delete a Generic Object",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Container Hash",
+                        "name": "hash",
+                        "in": "path",
+                        "required": true
+                    },
                     {
                         "description": "Delete request payload",
                         "name": "body",
@@ -762,7 +1138,7 @@
                 }
             }
         },
-        "/generic/find": {
+        "/generic/objects": {
             "post": {
                 "description": "Retrieves objects from a specified table based on search criteria.\nRequires authorization and user authentication.\n\n\nUse helper functions in your respective client library such as condition constructors (`equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.",
                 "consumes": [
@@ -772,17 +1148,16 @@
                     "application/json"
                 ],
                 "tags": [
-                    "generic"
+                    "Generic Service"
                 ],
                 "summary": "Find Generic Objects",
                 "parameters": [
                     {
-                        "description": "Find request payload",
+                        "description": "Query Request",
                         "name": "body",
                         "in": "body",
-                        "required": true,
                         "schema": {
-                            "$ref": "#/definitions/generictypes.FindRequest"
+                            "$ref": "#/definitions/generictypes.QueryRequest"
                         }
                     }
                 ],
@@ -790,7 +1165,7 @@
                     "200": {
                         "description": "Successful retrieval of objects",
                         "schema": {
-                            "$ref": "#/definitions/generictypes.FindResponse"
+                            "$ref": "#/definitions/generictypes.QueryResponse"
                         }
                     },
                     "400": {
@@ -814,7 +1189,7 @@
                 }
             }
         },
-        "/generic/update": {
+        "/generic/objects/update": {
             "post": {
                 "security": [
                     {
@@ -829,7 +1204,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "generic"
+                    "Generic Service"
                 ],
                 "summary": "Update Generic Objects",
                 "parameters": [
@@ -881,7 +1256,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "generic"
+                    "Generic Service"
                 ],
                 "summary": "Upsert a Generic Object",
                 "parameters": [
@@ -923,9 +1298,9 @@
                 }
             }
         },
-        "/prompt/add": {
-            "post": {
-                "description": "Adds a new prompt to the prompt queue and either waits for the response (if `sync` is set to true), or returns immediately.",
+        "/model-service/default/start": {
+            "put": {
+                "description": "Starts The Default Model.\n\nRequires the `model.create` permission.",
                 "consumes": [
                     "application/json"
                 ],
@@ -933,49 +1308,261 @@
                     "application/json"
                 ],
                 "tags": [
-                    "prompts"
+                    "model"
                 ],
-                "summary": "Add Prompt",
+                "summary": "Start the Default Model",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.StartResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/model-service/models": {
+            "get": {
+                "description": "Retrieves a list of models after checking authorization\nRequires \"model.view\" permission.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "model"
+                ],
+                "summary": "List Models",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.ListResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/model-service/{id}/status": {
+            "get": {
+                "description": "Retrieves the status of a model by ID.\n\nRequires the `model.view` permission.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "model"
+                ],
+                "summary": "Get Model Status",
                 "parameters": [
                     {
-                        "description": "Add Prompt Request",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
+                        "type": "string",
+                        "description": "Model ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Model status retrieved successfully",
                         "schema": {
-                            "$ref": "#/definitions/prompttypes.AddPromptRequest"
+                            "$ref": "#/definitions/modeltypes.StatusResponse"
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/model-service/{modelId}": {
+            "get": {
+                "description": "Retrieves the details of a model by its ID.\n\nthe Requires `model.view` permission.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "model"
+                ],
+                "summary": "Get a Model",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Model ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/prompttypes.AddPromptResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid JSON",
-                        "schema": {
-                            "$ref": "#/definitions/prompttypes.ErrorResponse"
+                            "$ref": "#/definitions/modeltypes.GetModelResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/prompttypes.ErrorResponse"
+                            "$ref": "#/definitions/modeltypes.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/prompttypes.ErrorResponse"
+                            "$ref": "#/definitions/modeltypes.ErrorResponse"
                         }
                     }
                 }
             }
         },
-        "/prompt/list": {
+        "/model-service/{modelId}/make-default": {
+            "put": {
+                "description": "Sets a model as the default model — when prompts are sent without a Model ID, the default model is used.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "model"
+                ],
+                "summary": "Make a Model Default",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Model ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.MakeDefaultResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/model-service/{modelId}/start": {
+            "put": {
+                "description": "Starts a model by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "model"
+                ],
+                "summary": "Start a Model",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Model ID",
+                        "name": "modelId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.StartResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/prompt-service/list": {
             "post": {
                 "description": "List prompts that satisfy a query.",
                 "consumes": [
@@ -985,7 +1572,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "prompts"
+                    "Prompt Service"
                 ],
                 "summary": "List Prompts",
                 "parameters": [
@@ -1027,9 +1614,9 @@
                 }
             }
         },
-        "/prompt/remove": {
+        "/prompt-service/prompt": {
             "post": {
-                "description": "Remove a prompt by ID.",
+                "description": "Adds a new prompt to the prompt queue and either waits for the response (if `sync` is set to true), or returns immediately.",
                 "consumes": [
                     "application/json"
                 ],
@@ -1037,26 +1624,25 @@
                     "application/json"
                 ],
                 "tags": [
-                    "prompts"
+                    "Prompt Service"
                 ],
-                "summary": "Remove Prompt",
+                "summary": "Add Prompt",
                 "parameters": [
                     {
-                        "description": "Remove Prompt Request",
+                        "description": "Add Prompt Request",
                         "name": "request",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/prompttypes.RemovePromptRequest"
+                            "$ref": "#/definitions/prompttypes.AddPromptRequest"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "{}",
+                        "description": "OK",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": true
+                            "$ref": "#/definitions/prompttypes.AddPromptResponse"
                         }
                     },
                     "400": {
@@ -1080,11 +1666,63 @@
                 }
             }
         },
-        "/prompt/subscribe": {
+        "/prompt-service/remove": {
+            "post": {
+                "description": "Remove a prompt by ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Prompt Service"
+                ],
+                "summary": "Remove Prompt",
+                "parameters": [
+                    {
+                        "description": "Remove Prompt Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/prompttypes.RemovePromptRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{}",
+                        "schema": {
+                            "$ref": "#/definitions/prompttypes.RemovePromptResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/prompttypes.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/prompttypes.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/prompttypes.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/prompt-service/{threadId}/subscribe": {
             "get": {
                 "description": "Subscribe to prompt responses via Server-Sent Events (SSE)",
                 "tags": [
-                    "prompts"
+                    "Prompt Service"
                 ],
                 "summary": "Subscribe to Prompt",
                 "parameters": [
@@ -1113,6 +1751,419 @@
                         "description": "Unauthorized",
                         "schema": {
                             "$ref": "#/definitions/prompttypes.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/user-service/change-password": {
+            "post": {
+                "description": "Allows an authenticated user to change their own password.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Service"
+                ],
+                "summary": "Change User Password",
+                "parameters": [
+                    {
+                        "description": "Change Password Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.ChangePasswordRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Password changed successfully",
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.ChangePasswordResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/user-service/change-password-admin": {
+            "post": {
+                "description": "Allows an administrator to change a user's password.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Service"
+                ],
+                "summary": "Change User Password (Admin)",
+                "parameters": [
+                    {
+                        "description": "Change Password Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.ChangePasswordAdminRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Password changed successfully",
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.ChangePasswordAdminResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/user-service/login": {
+            "post": {
+                "description": "Authenticates a user and returns a token.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Service"
+                ],
+                "summary": "Login",
+                "parameters": [
+                    {
+                        "description": "Login Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.LoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Login successful",
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.LoginResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/user-service/permission/{permissionId}": {
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Upsert a permission",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "example": "123",
+                        "description": "Permission ID",
+                        "name": "permissionId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Permission Details",
+                        "name": "requestBody",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.UpserPermissionRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.CreateUserResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/user-service/role": {
+            "post": {
+                "description": "Create a new role.\n\nRequires the `role.create` permission.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Service"
+                ],
+                "summary": "Create a New Role",
+                "parameters": [
+                    {
+                        "description": "Create Role Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.CreateRoleRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Role created successfully",
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.CreateRoleResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/user-service/role/{roleId}/permission/{permissionId}": {
+            "put": {
+                "description": "Adds a specific permission to a role identified by roleId.\n\nRequires the `permission.assign` permission.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Service"
+                ],
+                "summary": "Add Permission to Role",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Role ID",
+                        "name": "roleId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Permission ID",
+                        "name": "permissionId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.CreateUserResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/user-service/user": {
+            "post": {
+                "description": "Allows an authenticated administrator to create a new user with specified details.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Service"
+                ],
+                "summary": "Create a New User",
+                "parameters": [
+                    {
+                        "description": "Create User Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.CreateUserRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User created successfully",
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.CreateUserResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/user-service/users": {
+            "post": {
+                "description": "Fetches a list of users with optional query filters and pagination.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Service"
+                ],
+                "summary": "List Users",
+                "parameters": [
+                    {
+                        "description": "Get Users Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.GetUsersRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of users retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.GetUsersResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }
@@ -1172,30 +2223,6 @@
                 }
             }
         },
-        "chattypes.DeleteMessageRequest": {
-            "type": "object",
-            "properties": {
-                "messageId": {
-                    "type": "string"
-                }
-            }
-        },
-        "chattypes.DeleteThreadRequest": {
-            "type": "object",
-            "properties": {
-                "threadId": {
-                    "type": "string"
-                }
-            }
-        },
-        "chattypes.GetMessagesRequest": {
-            "type": "object",
-            "properties": {
-                "threadId": {
-                    "type": "string"
-                }
-            }
-        },
         "chattypes.GetMessagesResponse": {
             "type": "object",
             "properties": {
@@ -1213,17 +2240,12 @@
                 }
             }
         },
-        "chattypes.GetThreadRequest": {
-            "type": "object",
-            "properties": {
-                "threadId": {
-                    "type": "string"
-                }
-            }
-        },
         "chattypes.GetThreadResponse": {
             "type": "object",
             "properties": {
+                "exists": {
+                    "type": "boolean"
+                },
                 "thread": {
                     "$ref": "#/definitions/chattypes.Thread"
                 }
@@ -1330,6 +2352,9 @@
                 "app": {
                     "$ref": "#/definitions/configtypes.AppServiceConfig"
                 },
+                "directory": {
+                    "type": "string"
+                },
                 "download": {
                     "$ref": "#/definitions/configtypes.DownloadServiceConfig"
                 },
@@ -1342,19 +2367,22 @@
                 }
             }
         },
-        "configtypes.ConfigGetResponse": {
-            "type": "object",
-            "properties": {
-                "config": {
-                    "$ref": "#/definitions/configtypes.Config"
-                }
-            }
-        },
         "configtypes.DownloadServiceConfig": {
             "type": "object",
             "properties": {
                 "downloadFolder": {
                     "type": "string"
+                }
+            }
+        },
+        "configtypes.GetConfigRequest": {
+            "type": "object"
+        },
+        "configtypes.GetConfigResponse": {
+            "type": "object",
+            "properties": {
+                "config": {
+                    "$ref": "#/definitions/configtypes.Config"
                 }
             }
         },
@@ -1365,6 +2393,17 @@
                     "type": "string"
                 }
             }
+        },
+        "configtypes.SaveConfigRequest": {
+            "type": "object",
+            "properties": {
+                "config": {
+                    "$ref": "#/definitions/configtypes.Config"
+                }
+            }
+        },
+        "configtypes.SaveConfigResponse": {
+            "type": "object"
         },
         "datastore.AllCondition": {
             "type": "object"
@@ -1517,6 +2556,128 @@
                 "value": {}
             }
         },
+        "dockertypes.ContainerIsRunningResponse": {
+            "type": "object",
+            "properties": {
+                "isRunning": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "dockertypes.DockerInfo": {
+            "type": "object",
+            "properties": {
+                "dockerDaemonAddress": {
+                    "type": "string"
+                },
+                "error": {
+                    "type": "string"
+                },
+                "hasDocker": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "dockertypes.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "dockertypes.GetContainerSummaryResponse": {
+            "type": "object",
+            "properties": {
+                "summary": {
+                    "type": "string"
+                }
+            }
+        },
+        "dockertypes.GetDockerHostResponse": {
+            "type": "object",
+            "properties": {
+                "host": {
+                    "type": "string"
+                }
+            }
+        },
+        "dockertypes.GetInfoResponse": {
+            "type": "object",
+            "properties": {
+                "info": {
+                    "$ref": "#/definitions/dockertypes.DockerInfo"
+                }
+            }
+        },
+        "dockertypes.LaunchContainerRequest": {
+            "type": "object",
+            "properties": {
+                "hostPort": {
+                    "type": "integer"
+                },
+                "image": {
+                    "type": "string"
+                },
+                "options": {
+                    "$ref": "#/definitions/dockertypes.LaunchOptions"
+                },
+                "port": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dockertypes.LaunchContainerResponse": {
+            "type": "object",
+            "properties": {
+                "info": {
+                    "$ref": "#/definitions/dockertypes.LaunchInfo"
+                }
+            }
+        },
+        "dockertypes.LaunchInfo": {
+            "type": "object",
+            "properties": {
+                "newContainerStarted": {
+                    "type": "boolean"
+                },
+                "portNumber": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dockertypes.LaunchOptions": {
+            "type": "object",
+            "properties": {
+                "envs": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "gpuEnabled": {
+                    "type": "boolean"
+                },
+                "hash": {
+                    "type": "string"
+                },
+                "hostBinds": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "labels": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "downloadtypes.DownloadDetails": {
             "type": "object",
             "properties": {
@@ -1580,6 +2741,50 @@
                 }
             }
         },
+        "downloadtypes.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "downloadtypes.GetDownloadResponse": {
+            "type": "object",
+            "properties": {
+                "download": {
+                    "$ref": "#/definitions/downloadtypes.DownloadDetails"
+                },
+                "exists": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "firehosetypes.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "firehosetypes.Event": {
+            "type": "object",
+            "properties": {
+                "data": {},
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "firehosetypes.PublishRequest": {
+            "type": "object",
+            "properties": {
+                "event": {
+                    "$ref": "#/definitions/firehosetypes.Event"
+                }
+            }
+        },
         "generictypes.CreateRequest": {
             "type": "object",
             "properties": {
@@ -1618,31 +2823,6 @@
             "properties": {
                 "error": {
                     "type": "string"
-                }
-            }
-        },
-        "generictypes.FindRequest": {
-            "type": "object",
-            "properties": {
-                "public": {
-                    "type": "boolean"
-                },
-                "query": {
-                    "$ref": "#/definitions/datastore.Query"
-                },
-                "table": {
-                    "type": "string"
-                }
-            }
-        },
-        "generictypes.FindResponse": {
-            "type": "object",
-            "properties": {
-                "objects": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/generictypes.GenericObject"
-                    }
                 }
             }
         },
@@ -1704,6 +2884,31 @@
                 }
             }
         },
+        "generictypes.QueryRequest": {
+            "type": "object",
+            "properties": {
+                "public": {
+                    "type": "boolean"
+                },
+                "query": {
+                    "$ref": "#/definitions/datastore.Query"
+                },
+                "table": {
+                    "type": "string"
+                }
+            }
+        },
+        "generictypes.QueryResponse": {
+            "type": "object",
+            "properties": {
+                "objects": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/generictypes.GenericObject"
+                    }
+                }
+            }
+        },
         "generictypes.UpdateRequest": {
             "type": "object",
             "properties": {
@@ -1737,6 +2942,196 @@
             "properties": {
                 "object": {
                     "$ref": "#/definitions/generictypes.GenericObject"
+                }
+            }
+        },
+        "modeltypes.Architectures": {
+            "type": "object",
+            "properties": {
+                "cuda": {
+                    "$ref": "#/definitions/modeltypes.Container"
+                },
+                "default": {
+                    "$ref": "#/definitions/modeltypes.Container"
+                }
+            }
+        },
+        "modeltypes.Container": {
+            "type": "object",
+            "properties": {
+                "envars": {
+                    "description": "Envars passed to the container. eg.\n\t'DEVICES=all'",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "image": {
+                    "type": "string"
+                },
+                "persistentPaths": {
+                    "description": "Paths in the container to persist.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "port": {
+                    "description": "Port is the internal port of the Container",
+                    "type": "integer"
+                }
+            }
+        },
+        "modeltypes.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "modeltypes.GetModelResponse": {
+            "type": "object",
+            "properties": {
+                "exists": {
+                    "type": "boolean"
+                },
+                "model": {
+                    "$ref": "#/definitions/modeltypes.Model"
+                },
+                "platform": {
+                    "$ref": "#/definitions/modeltypes.Platform"
+                }
+            }
+        },
+        "modeltypes.ListResponse": {
+            "type": "object",
+            "properties": {
+                "models": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/modeltypes.Model"
+                    }
+                }
+            }
+        },
+        "modeltypes.MakeDefaultResponse": {
+            "type": "object"
+        },
+        "modeltypes.Model": {
+            "type": "object",
+            "properties": {
+                "assets": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "bits": {
+                    "type": "integer"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "extension": {
+                    "type": "string"
+                },
+                "flavour": {
+                    "type": "string"
+                },
+                "full_name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "max_bits": {
+                    "type": "integer"
+                },
+                "max_ram": {
+                    "type": "number"
+                },
+                "mirrors": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                },
+                "parameters": {
+                    "type": "string"
+                },
+                "platformId": {
+                    "type": "string"
+                },
+                "prompt_template": {
+                    "type": "string"
+                },
+                "quality": {
+                    "type": "string"
+                },
+                "quant_comment": {
+                    "type": "string"
+                },
+                "size": {
+                    "type": "number"
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "uncensored": {
+                    "type": "boolean"
+                },
+                "version": {
+                    "type": "string"
+                }
+            }
+        },
+        "modeltypes.ModelStatus": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "assetsReady": {
+                    "type": "boolean"
+                },
+                "running": {
+                    "description": "Running triggers onModelLaunch on the frontend.\n\tRunning is true when the model is both running and answering\n\t- fully loaded.",
+                    "type": "boolean"
+                }
+            }
+        },
+        "modeltypes.Platform": {
+            "type": "object",
+            "properties": {
+                "architectures": {
+                    "$ref": "#/definitions/modeltypes.Architectures"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "integer"
+                }
+            }
+        },
+        "modeltypes.StartResponse": {
+            "type": "object"
+        },
+        "modeltypes.StatusResponse": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "$ref": "#/definitions/modeltypes.ModelStatus"
                 }
             }
         },
@@ -1917,6 +3312,262 @@
             "type": "object",
             "properties": {
                 "promptId": {
+                    "type": "string"
+                }
+            }
+        },
+        "prompttypes.RemovePromptResponse": {
+            "type": "object"
+        },
+        "usertypes.AuthToken": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "token": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "string"
+                }
+            }
+        },
+        "usertypes.ChangePasswordAdminRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "newPassword": {
+                    "type": "string"
+                }
+            }
+        },
+        "usertypes.ChangePasswordAdminResponse": {
+            "type": "object"
+        },
+        "usertypes.ChangePasswordRequest": {
+            "type": "object",
+            "properties": {
+                "currentPassword": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "newPassword": {
+                    "type": "string"
+                }
+            }
+        },
+        "usertypes.ChangePasswordResponse": {
+            "type": "object"
+        },
+        "usertypes.CreateRoleRequest": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "permissionIds": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "usertypes.CreateRoleResponse": {
+            "type": "object",
+            "properties": {
+                "role": {
+                    "$ref": "#/definitions/usertypes.Role"
+                }
+            }
+        },
+        "usertypes.CreateUserRequest": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "roleIds": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "user": {
+                    "$ref": "#/definitions/usertypes.User"
+                }
+            }
+        },
+        "usertypes.CreateUserResponse": {
+            "type": "object"
+        },
+        "usertypes.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "usertypes.GetUsersRequest": {
+            "type": "object",
+            "properties": {
+                "query": {
+                    "$ref": "#/definitions/datastore.Query"
+                }
+            }
+        },
+        "usertypes.GetUsersResponse": {
+            "type": "object",
+            "properties": {
+                "after": {
+                    "type": "string"
+                },
+                "count": {
+                    "type": "integer"
+                },
+                "users": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/usertypes.User"
+                    }
+                }
+            }
+        },
+        "usertypes.LoginRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "usertypes.LoginResponse": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "$ref": "#/definitions/usertypes.AuthToken"
+                }
+            }
+        },
+        "usertypes.Permission": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "description": "eg. \"user.viewer\"",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "eg. \"User Viewer\"",
+                    "type": "string"
+                },
+                "ownerId": {
+                    "description": "Service who owns the permission",
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "usertypes.Role": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "permissionIds": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "usertypes.UpserPermissionRequest": {
+            "type": "object",
+            "properties": {
+                "permissions": {
+                    "$ref": "#/definitions/usertypes.Permission"
+                }
+            }
+        },
+        "usertypes.User": {
+            "type": "object",
+            "properties": {
+                "authTokenIds": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "type": "string"
+                },
+                "email": {
+                    "description": "Email or username",
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "isService": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "passwordHash": {
+                    "type": "string"
+                },
+                "roleIds": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "updatedAt": {
                     "type": "string"
                 }
             }

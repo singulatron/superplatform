@@ -15,6 +15,7 @@ import (
 	"fmt"
 	"log/slog"
 	"net"
+	"net/url"
 	"os"
 	"path"
 	"regexp"
@@ -43,7 +44,7 @@ func (ms *ModelService) start(modelId string) error {
 
 	if modelId == "" {
 		rsp := configtypes.GetConfigResponse{}
-		err := ms.router.Get(context.Background(), "config", "/get", nil, &rsp)
+		err := ms.router.Get(context.Background(), "config-service", "/config", nil, &rsp)
 		if err != nil {
 			return err
 		}
@@ -69,9 +70,7 @@ func (ms *ModelService) start(modelId string) error {
 	env := map[string]string{}
 	for envarName, assetURL := range model.Assets {
 		rsp := downloadtypes.GetDownloadResponse{}
-		err := ms.router.Post(context.Background(), "download", "/get", &downloadtypes.GetDownloadRequest{
-			Url: assetURL,
-		}, &rsp)
+		err := ms.router.Get(context.Background(), "download-service", fmt.Sprintf("/download/%v", url.PathEscape(assetURL)), nil, &rsp)
 		if err != nil {
 			return err
 		}
@@ -124,7 +123,7 @@ func (ms *ModelService) start(modelId string) error {
 
 	if getConfigResponse != nil {
 		rsp := configtypes.GetConfigResponse{}
-		err := ms.router.Get(context.Background(), "config", "/get", nil, &rsp)
+		err := ms.router.Get(context.Background(), "config-service", "/config", nil, &rsp)
 		if err != nil {
 			return err
 		}
@@ -184,7 +183,7 @@ func (ms *ModelService) start(modelId string) error {
 		Options:  launchOptions,
 	}
 	launchRsp := &dockertypes.LaunchContainerResponse{}
-	err = ms.router.Post(context.Background(), "docker", "/launch-container", launchReq, &launchRsp)
+	err = ms.router.Put(context.Background(), "docker-service", "/container", launchReq, &launchRsp)
 	if err != nil {
 		return errors.Wrap(err, "failed to launch container")
 	}
@@ -280,11 +279,8 @@ func (ms *ModelService) checkIfAnswers(
 
 		logger.Debug("Checking for answer started", slog.Int("port", port))
 
-		hashReq := dockertypes.HashIsRunningRequest{
-			Hash: hash,
-		}
-		hashRsp := dockertypes.HashIsRunningResponse{}
-		err := ms.router.Post(context.Background(), "docker", "/hash-is-running", hashReq, &hashRsp)
+		hashRsp := dockertypes.ContainerIsRunningResponse{}
+		err := ms.router.Get(context.Background(), "docker-service", fmt.Sprintf("/container/%v/is-running", hash), nil, &hashRsp)
 		if err != nil {
 			logger.Warn("Model check error",
 				slog.String("modelId", model.Id),
@@ -298,9 +294,8 @@ func (ms *ModelService) checkIfAnswers(
 			continue
 		}
 
-		hostReq := dockertypes.GetDockerHostRequest{}
 		hostRsp := dockertypes.GetDockerHostResponse{}
-		err = ms.router.Post(context.Background(), "docker", "/host", hostReq, &hostRsp)
+		err = ms.router.Get(context.Background(), "docker-service", "/host", nil, &hostRsp)
 		if err != nil {
 			logger.Warn("Docker host error",
 				slog.String("error", err.Error()),
@@ -340,12 +335,8 @@ func (ms *ModelService) checkIfAnswers(
 }
 
 func (ms *ModelService) printContainerLogs(modelId, hash string) {
-	req := dockertypes.GetContainerSummaryRequest{
-		Hash:  hash,
-		Lines: 10,
-	}
 	rsp := dockertypes.GetContainerSummaryResponse{}
-	err := ms.router.Post(context.Background(), "docker", "/container-summary", req, &rsp)
+	err := ms.router.Get(context.Background(), "docker-service", fmt.Sprintf("/container/%v/summary/%v", hash, 10), nil, &rsp)
 	if err != nil {
 		logger.Warn("Error getting container logs",
 			slog.String("modelId", modelId),

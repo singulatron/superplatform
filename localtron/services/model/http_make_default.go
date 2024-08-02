@@ -9,20 +9,32 @@ package modelservice
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
+// MakeDefault godoc
+// @Summary Make a Model Default
+// @Description Sets a model as the default model — when prompts are sent without a Model ID, the default model is used.
+// @Tags model
+// @Accept json
+// @Produce json
+// @Param id path string true "Model ID"
+// @Success 200 {object} modeltypes.MakeDefaultResponse
+// @Failure 400 {object} modeltypes.ErrorResponse "Invalid JSON"
+// @Failure 401 {object} modeltypes.ErrorResponse "Unauthorized"
+// @Failure 500 {object} modeltypes.ErrorResponse "Internal Server Error"
+// @Router /model-service/{modelId}/make-default [put]
 func (ms *ModelService) MakeDefault(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := ms.router.AsRequestMaker(r).Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
-		PermissionId: modeltypes.PermissionModelEdit.Id,
-	}, rsp)
+	err := ms.router.AsRequestMaker(r).Post(r.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", modeltypes.PermissionModelEdit.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -32,15 +44,9 @@ func (ms *ModelService) MakeDefault(
 		return
 	}
 
-	req := modeltypes.MakeDefaultRequest{}
-	err = json.NewDecoder(r.Body).Decode(&req)
-	if err != nil {
-		http.Error(w, `invalid JSON`, http.StatusBadRequest)
-		return
-	}
-	defer r.Body.Close()
+	vars := mux.Vars(r)
 
-	err = ms.makeDefault(req.Id)
+	err = ms.makeDefault(vars["modelId"])
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

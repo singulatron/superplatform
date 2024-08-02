@@ -9,6 +9,7 @@ package genericservice
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	generictypes "github.com/singulatron/singulatron/localtron/services/generic/types"
@@ -18,7 +19,7 @@ import (
 // Update modifies existing generic objects based on given conditions
 // @Summary Update Generic Objects
 // @Description Updates objects in a specified table based on provided conditions. Requires authorization and user authentication.
-// @Tags generic
+// @Tags Generic Service
 // @Accept json
 // @Produce json
 // @Param body body generictypes.UpdateRequest true "Update request payload"
@@ -27,15 +28,13 @@ import (
 // @Failure 401 {object} generictypes.ErrorResponse "Unauthorized"
 // @Failure 500 {object} generictypes.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
-// @Router /generic/update [post]
+// @Router /generic/objects/update [post]
 func (g *GenericService) Update(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := g.router.AsRequestMaker(r).Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
-		PermissionId: generictypes.PermissionGenericEdit.Id,
-	}, rsp)
+	err := g.router.AsRequestMaker(r).Post(r.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", generictypes.PermissionGenericEdit.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -48,7 +47,7 @@ func (g *GenericService) Update(
 	req := &generictypes.UpdateRequest{}
 	err = json.NewDecoder(r.Body).Decode(req)
 	if err != nil {
-		http.Error(w, `invalid JSON`, http.StatusBadRequest)
+		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
 		return
 	}
 	defer r.Body.Close()

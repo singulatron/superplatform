@@ -96,7 +96,7 @@ func (d *DockerService) launchContainer(image string, internalPort, hostPort int
 
 	if existingContainer != nil {
 		if existingContainer.State != "running" || existingContainer.Labels["singulatron-hash"] != options.Hash {
-			logs, _ := d.GetContainerLogsAndStatus(options.Hash, 10)
+			logs, _ := d.getContainerLogsAndStatus(options.Hash, 10)
 			logger.Debug("Container state is not running or hash is mismatched, removing...",
 				slog.String("containerLogs", logs),
 			)

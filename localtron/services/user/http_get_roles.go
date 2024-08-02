@@ -9,6 +9,7 @@ package userservice
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
@@ -18,9 +19,7 @@ func (s *UserService) GetRoles(
 	w http.ResponseWriter,
 	r *http.Request) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := s.router.AsRequestMaker(r).Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
-		PermissionId: usertypes.PermissionRoleView.Id,
-	}, rsp)
+	err := s.router.AsRequestMaker(r).Post(r.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", usertypes.PermissionRoleView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -33,7 +32,7 @@ func (s *UserService) GetRoles(
 	req := usertypes.GetRolesRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
-		http.Error(w, `invalid JSON`, http.StatusBadRequest)
+		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
 		return
 	}
 	defer r.Body.Close()

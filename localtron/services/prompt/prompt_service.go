@@ -85,7 +85,7 @@ func NewPromptService(
 }
 
 func (cs *PromptService) Start() error {
-	token, err := usertypes.RegisterService("prompt", "Prompt Service", cs.router, cs.credentialStore)
+	token, err := usertypes.RegisterService("prompt-service", "Prompt Service", cs.router, cs.credentialStore)
 	if err != nil {
 		return err
 	}

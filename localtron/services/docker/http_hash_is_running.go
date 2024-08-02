@@ -9,20 +9,34 @@ package dockerservice
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	dockertypes "github.com/singulatron/singulatron/localtron/services/docker/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
+// @Summary      Check If a Container Is Running
+// @Description  Check if a Docker container identified by the hash is running
+// @Tags         Docker Service
+// @Accept       json
+// @Produce      json
+// @Param        hash  path      string  true  "Container Hash"
+// @Success      200   {object}  dockertypes.ContainerIsRunningResponse
+// @Failure      400   {object}  dockertypes.ErrorResponse  "Invalid JSON"
+// @Failure      401   {object}  dockertypes.ErrorResponse  "Unauthorized"
+// @Failure      500   {object}  dockertypes.ErrorResponse  "Internal Server Error"
+// @SecurityDefinitions.bearerAuth BearerAuth
+// @Security     BearerAuth
+// @Router       /docker-service/container/{hash}/is-running [get]
 func (dm *DockerService) HashIsRunning(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := dm.router.AsRequestMaker(r).Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
-		PermissionId:  dockertypes.PermissionDockerCreate.Id,
-		EmailsGranted: []string{"model"},
+	err := dm.router.AsRequestMaker(r).Post(r.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", dockertypes.PermissionDockerView.Id), &usertypes.IsAuthorizedRequest{
+		EmailsGranted: []string{"model-service"},
 	}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
@@ -33,21 +47,15 @@ func (dm *DockerService) HashIsRunning(
 		return
 	}
 
-	req := &dockertypes.HashIsRunningRequest{}
-	err = json.NewDecoder(r.Body).Decode(req)
-	if err != nil {
-		http.Error(w, `invalid JSON`, http.StatusBadRequest)
-		return
-	}
-	defer r.Body.Close()
+	vars := mux.Vars(r)
 
-	isRunning, err := dm.hashIsRunning(req.Hash)
+	isRunning, err := dm.hashIsRunning(vars["hash"])
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	jsonData, _ := json.Marshal(&dockertypes.HashIsRunningResponse{
+	jsonData, _ := json.Marshal(&dockertypes.ContainerIsRunningResponse{
 		IsRunning: isRunning,
 	})
 	w.Write(jsonData)

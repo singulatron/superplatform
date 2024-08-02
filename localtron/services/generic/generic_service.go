@@ -47,7 +47,7 @@ func NewGenericService(
 }
 
 func (g *GenericService) Start() error {
-	token, err := usertypes.RegisterService("generic", "Generic Service", g.router, g.credentialStore)
+	token, err := usertypes.RegisterService("generic-service", "Generic Service", g.router, g.credentialStore)
 	if err != nil {
 		return err
 	}

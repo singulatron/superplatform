@@ -10,10 +10,13 @@ package modelservice
 import (
 	"context"
 	"fmt"
+	"log/slog"
+	"net/url"
 	"os"
 
 	"github.com/pkg/errors"
 	"github.com/singulatron/singulatron/localtron/datastore"
+	"github.com/singulatron/singulatron/localtron/logger"
 	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
 	dockertypes "github.com/singulatron/singulatron/localtron/services/docker/types"
 	downloadtypes "github.com/singulatron/singulatron/localtron/services/download/types"
@@ -21,9 +24,9 @@ import (
 )
 
 func (ms *ModelService) status(modelId string) (*modeltypes.ModelStatus, error) {
-	hostReq := dockertypes.GetDockerHostRequest{}
+	// hostReq := dockertypes.GetDockerHostRequest{}
 	hostRsp := dockertypes.GetDockerHostResponse{}
-	err := ms.router.Post(context.Background(), "docker", "/host", hostReq, &hostRsp)
+	err := ms.router.Get(context.Background(), "docker-service", "/host", nil, &hostRsp)
 	if err != nil {
 		return nil, err
 	}
@@ -38,7 +41,7 @@ func (ms *ModelService) status(modelId string) (*modeltypes.ModelStatus, error) 
 
 	if modelId == "" {
 		rsp := configtypes.GetConfigResponse{}
-		err := ms.router.Get(context.Background(), "config", "/get", nil, &rsp)
+		err := ms.router.Get(context.Background(), "config-service", "/config", nil, &rsp)
 		if err != nil {
 			return nil, err
 		}
@@ -62,9 +65,7 @@ func (ms *ModelService) status(modelId string) (*modeltypes.ModelStatus, error) 
 
 	for _, assetUrl := range model.Assets {
 		rsp := downloadtypes.GetDownloadResponse{}
-		err := ms.router.Post(context.Background(), "download", "/get", &downloadtypes.GetDownloadRequest{
-			Url: assetUrl,
-		}, &rsp)
+		err := ms.router.Get(context.Background(), "download-service", fmt.Sprintf("/download/%v", url.PathEscape(assetUrl)), nil, &rsp)
 		if err != nil {
 			return nil, err
 		}
@@ -93,11 +94,14 @@ func (ms *ModelService) status(modelId string) (*modeltypes.ModelStatus, error) 
 	}
 
 	isRunning := false
-	hashReq := dockertypes.HashIsRunningRequest{
-		Hash: hash,
+
+	hashRsp := dockertypes.ContainerIsRunningResponse{}
+	err = ms.router.Get(context.Background(), "docker-service", fmt.Sprintf("/container/%v/is-running", hash), nil, &hashRsp)
+	if err != nil {
+		logger.Warn("Checking if running error",
+			slog.String("error", err.Error()),
+		)
 	}
-	hashRsp := dockertypes.HashIsRunningResponse{}
-	err = ms.router.Post(context.Background(), "docker", "/hash-is-running", hashReq, &hashRsp)
 	if err == nil && hashRsp.IsRunning {
 		isRunning = true
 	}

@@ -106,20 +106,20 @@ export class UserService {
 	}
 
 	login(email: string, password: string): Promise<user.LoginResponse> {
-		return this.localtron.call('/user/login', {
+		return this.localtron.post('/user-service/login', {
 			email: email,
 			password: password,
 		});
 	}
 
 	readUserByToken(token: string): Promise<user.ReadUserByTokenResponse> {
-		return this.localtron.call('/user/read-user-by-token', {
+		return this.localtron.post('/user-service/user/by-token', {
 			token: token,
 		});
 	}
 
 	getUsers(request: user.GetUsersRequest): Promise<user.GetUsersResponse> {
-		return this.localtron.call('/user/get-users', request);
+		return this.localtron.post('/user-service/users', request);
 	}
 
 	/** Save profile on behalf of a user */
@@ -128,7 +128,7 @@ export class UserService {
 			email: email,
 			name: name,
 		};
-		return this.localtron.call('/user/save-profile', request);
+		return this.localtron.put(`/user-service/user/${email}`, request);
 	}
 
 	changePassword(
@@ -141,7 +141,7 @@ export class UserService {
 			currentPassword: currentPassword,
 			newPassword: newPassword,
 		};
-		return this.localtron.call('/user/change-password', request);
+		return this.localtron.post('/user-serviec/change-password', request);
 	}
 
 	changePasswordAdmin(
@@ -152,7 +152,7 @@ export class UserService {
 			email: email,
 			newPassword: newPassword,
 		};
-		return this.localtron.call('/user/change-password-admin', request);
+		return this.localtron.post('/user-service/change-password-admin', request);
 	}
 
 	/** Create a user - alternative to registration
@@ -167,15 +167,15 @@ export class UserService {
 			password: password,
 			roleIds: roleIds,
 		};
-		return this.localtron.call('/user/create-user', request);
+		return this.localtron.post('/user-service/user', request);
 	}
 
 	getRoles(): Promise<user.GetRolesResposne> {
-		return this.localtron.call('/user/get-roles', {});
+		return this.localtron.get('/user-service/roles');
 	}
 
 	getPermissions(): Promise<user.GetPermissionsResposne> {
-		return this.localtron.call('/user/get-permissions', {});
+		return this.localtron.get('/user-service/permissions');
 	}
 
 	setRolePermissions(
@@ -186,21 +186,15 @@ export class UserService {
 			roleId: roleId,
 			permissionIds: permissionIds,
 		};
-		return this.localtron.call('/user/set-role-permissions', request);
+		return this.localtron.post('/user/set-role-permissions', request);
 	}
 
 	deleteRole(roleId: string): Promise<user.DeleteRoleResponse> {
-		const request: user.DeleteRoleRequest = {
-			roleId: roleId,
-		};
-		return this.localtron.call('/user/delete-role', request);
+		return this.localtron.delete(`/user-service/role/${roleId}`);
 	}
 
 	deleteUser(userId: string): Promise<user.DeleteUserResponse> {
-		const request: user.DeleteUserRequest = {
-			userId: userId,
-		};
-		return this.localtron.call('/user/delete-user', request);
+		return this.localtron.delete(`/user-service/user/${userId}`);
 	}
 
 	async getUserId(): Promise<string> {

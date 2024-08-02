@@ -18,6 +18,14 @@ import (
 	"github.com/singulatron/singulatron/localtron/router"
 )
 
+type ErrorResponse struct {
+	Error string `json:"error"`
+}
+
+type GetUsersOptions struct {
+	Query *datastore.Query `json:"query"`
+}
+
 type User struct {
 	Id        string    `json:"id,omitempty"`
 	CreatedAt time.Time `json:"createdAt,omitempty"`
@@ -149,7 +157,7 @@ func RegisterService(serviceEmail, serviceName string, router *router.Router, st
 		logger.Info(fmt.Sprintf("Registering the %v service", serviceEmail))
 
 		pw = uuid.New().String()
-		err = router.Post(context.Background(), "user", "/register", RegisterRequest{
+		err = router.Post(context.Background(), "user-service", "/register", RegisterRequest{
 			Email:    email,
 			Name:     serviceName,
 			Password: pw,
@@ -167,7 +175,7 @@ func RegisterService(serviceEmail, serviceName string, router *router.Router, st
 	}
 
 	rsp := LoginResponse{}
-	err = router.Post(context.Background(), "user", "/login", LoginRequest{
+	err = router.Post(context.Background(), "user-service", "/login", LoginRequest{
 		Email:    email,
 		Password: pw,
 	}, &rsp)
@@ -179,7 +187,7 @@ func RegisterService(serviceEmail, serviceName string, router *router.Router, st
 }
 
 func RegisterUser(router *router.Router, email, password, username string) (string, error) {
-	err := router.Post(context.Background(), "user", "/register", &RegisterRequest{
+	err := router.Post(context.Background(), "user-service", "/register", &RegisterRequest{
 		Email:    email,
 		Password: password,
 		Name:     username,
@@ -189,7 +197,7 @@ func RegisterUser(router *router.Router, email, password, username string) (stri
 	}
 
 	loginRsp := LoginResponse{}
-	err = router.Post(context.Background(), "user", "/login", &LoginRequest{
+	err = router.Post(context.Background(), "user-service", "/login", &LoginRequest{
 		Email:    email,
 		Password: password,
 	}, &loginRsp)

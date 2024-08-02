@@ -70,7 +70,7 @@ func (dm *DownloadService) SetStateFilePath(s string) {
 }
 
 func (dm *DownloadService) Start() error {
-	token, err := usertypes.RegisterService("download", "Download Service", dm.router, dm.credentialStore)
+	token, err := usertypes.RegisterService("download-service", "Download Service", dm.router, dm.credentialStore)
 	if err != nil {
 		return err
 	}
@@ -145,7 +145,7 @@ func (ds *DownloadService) saveState() error {
 	ds.hasChanged = false
 	ds.lock.Unlock()
 
-	ds.router.Post(context.Background(), "firehose", "/publish", firehosetypes.PublishRequest{
+	ds.router.Post(context.Background(), "firehose-service", "/publish", firehosetypes.PublishRequest{
 		Event: &firehosetypes.Event{
 			Name: types.EventDownloadStatusChangeName,
 		},

@@ -9,6 +9,7 @@ package downloadservice
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	downloadtypes "github.com/singulatron/singulatron/localtron/services/download/types"
@@ -16,23 +17,23 @@ import (
 )
 
 // List retrieves a list of download details
-// @Summary List
-// @Description Fetch a list of all download details
-// @Tags download
+// @Summary List Downloads
+// @Description Fetch a list of all download details.
+// @Description
+// @Description Requires the `download.view` permission.
+// @Tags Download Service
 // @Accept json
 // @Produce json
 // @Success 200 {object} downloadtypes.DownloadsResponse "List of downloads"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
-// @Router /download/list [post]
+// @Router /download-service/downloads [post]
 func (ds *DownloadService) List(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := ds.router.AsRequestMaker(r).Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
-		PermissionId: downloadtypes.PermissionDownloadView.Id,
-	}, rsp)
+	err := ds.router.AsRequestMaker(r).Post(r.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", downloadtypes.PermissionDownloadView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return

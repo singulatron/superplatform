@@ -9,6 +9,7 @@ package promptservice
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
@@ -18,23 +19,21 @@ import (
 // Remove removes a prompt
 // @Summary Remove Prompt
 // @Description Remove a prompt by ID.
-// @Tags prompts
+// @Tags Prompt Service
 // @Accept json
 // @Produce json
 // @Param request body prompttypes.RemovePromptRequest true "Remove Prompt Request"
-// @Success 200 {object} mprompttypes.RemovePromptResponse "{}"
+// @Success 200 {object} prompttypes.RemovePromptResponse "{}"
 // @Failure 400 {object} prompttypes.ErrorResponse "Invalid JSON"
 // @Failure 401 {object} prompttypes.ErrorResponse "Unauthorized"
 // @Failure 500 {object} prompttypes.ErrorResponse "Internal Server Error"
-// @Router /prompt/remove [post]
+// @Router /prompt-service/remove [post]
 func (p *PromptService) RemovePrompt(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := p.router.AsRequestMaker(r).Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
-		PermissionId: prompttypes.PermissionPromptCreate.Id,
-	}, rsp)
+	err := p.router.AsRequestMaker(r).Post(r.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", prompttypes.PermissionPromptCreate.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -47,7 +46,7 @@ func (p *PromptService) RemovePrompt(
 	req := &prompttypes.RemovePromptRequest{}
 	err = json.NewDecoder(r.Body).Decode(req)
 	if err != nil {
-		http.Error(w, `invalid JSON`, http.StatusBadRequest)
+		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
 		return
 	}
 	defer r.Body.Close()

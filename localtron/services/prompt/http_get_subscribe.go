@@ -9,9 +9,11 @@ package promptservice
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	"github.com/singulatron/singulatron/localtron/clients/llm"
 	"github.com/singulatron/singulatron/localtron/logger"
 
@@ -22,20 +24,18 @@ import (
 // Subscribe streams prompt responses to the client
 // @Summary Subscribe to Prompt
 // @Description Subscribe to prompt responses via Server-Sent Events (SSE)
-// @Tags prompts
+// @Tags Prompt Service
 // @Param threadId query string true "Thread ID"
 // @Success 200 {string} string "Streaming response"
 // @Failure 400 {object} prompttypes.ErrorResponse "Missing threadId parameter"
 // @Failure 401 {object} prompttypes.ErrorResponse "Unauthorized"
-// @Router /prompt/subscribe [get]
+// @Router /prompt-service/{threadId}/subscribe [get]
 func (p *PromptService) GetSubscribe(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := p.router.AsRequestMaker(r).Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
-		PermissionId: prompttypes.PermissionPromptStream.Id,
-	}, rsp)
+	err := p.router.AsRequestMaker(r).Post(r.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", prompttypes.PermissionPromptStream.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -45,12 +45,13 @@ func (p *PromptService) GetSubscribe(
 		return
 	}
 
-	threadId := r.URL.Query().Get("threadId")
+	vars := mux.Vars(r)
 
-	if threadId == "" {
-		http.Error(w, "Missing threadId parameter", http.StatusBadRequest)
+	if vars["threadId"] == "" {
+		http.Error(w, "Missing threadId path parameter", http.StatusBadRequest)
 		return
 	}
+	threadId := vars["threadId"]
 
 	w.Header().Set("Content-Type", "text/event-stream")
 

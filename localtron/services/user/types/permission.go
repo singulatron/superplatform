@@ -32,7 +32,6 @@ func (c *Permission) GetUpdatedAt() string {
 }
 
 type IsAuthorizedRequest struct {
-	PermissionId  string   `json:"permissionId,omitempty"`
 	EmailsGranted []string `json:"emailsGranted,omitempty"`
 }
 

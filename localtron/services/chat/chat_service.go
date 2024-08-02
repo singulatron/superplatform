@@ -57,7 +57,7 @@ func NewChatService(
 }
 
 func (cs *ChatService) Start() error {
-	token, err := usertypes.RegisterService("chat", "Chat Service", cs.router, cs.credentialStore)
+	token, err := usertypes.RegisterService("chat-service", "Chat Service", cs.router, cs.credentialStore)
 	if err != nil {
 		return err
 	}

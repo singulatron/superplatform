@@ -14,7 +14,6 @@ import { UserService } from './user.service';
 import {
 	Prompt,
 	AddPromptRequest,
-	RemovePromptRequest,
 	ListPromptsRequest,
 	ListPromptsResponse,
 	CompletionResponse,
@@ -68,16 +67,15 @@ export class PromptService {
 			prompt.id = this.localtron.uuid();
 		}
 		const request: AddPromptRequest = prompt;
-		return this.localtron.call('/prompt/add', request);
+		return this.localtron.post(`/prompt-service/prompt`, request);
 	}
 
-	async promptRemove(prompt: Prompt): Promise<void> {
-		const request: RemovePromptRequest = { promptId: prompt.id };
-		return this.localtron.call('/prompt/remove', request);
+	async promptRemove(promptId: string): Promise<void> {
+		return this.localtron.delete(`/prompt-service/prompt/${promptId}`);
 	}
 
 	async promptList(request: ListPromptsRequest): Promise<ListPromptsResponse> {
-		return this.localtron.call('/prompt/list', request);
+		return this.localtron.post(`/prompt-service/prompts`, request);
 	}
 
 	private resubCount = 0;
@@ -98,8 +96,7 @@ export class PromptService {
 
 				const uri =
 					this.localtron.config.env.localtronAddress +
-					'/prompt/subscribe?threadId=' +
-					threadId;
+					`/prompt-service/${threadId}/subscribe`;
 
 				const headers = {
 					Authorization: 'Bearer ' + this.userService.getToken(),
@@ -208,6 +205,7 @@ export class PromptService {
 			};
 		}).pipe(
 			catchError((error) => {
+				console.error(error);
 				console.error('Prompt subscription error', {
 					error: JSON.stringify(error),
 				});

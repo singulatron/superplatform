@@ -9,6 +9,7 @@ package genericservice
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	generictypes "github.com/singulatron/singulatron/localtron/services/generic/types"
@@ -22,23 +23,21 @@ import (
 // @Description
 // @Description
 // @Description Use helper functions in your respective client library such as condition constructors (`equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
-// @Tags generic
+// @Tags Generic Service
 // @Accept json
 // @Produce json
-// @Param body body generictypes.FindRequest true "Find request payload"
-// @Success 200 {object} generictypes.FindResponse "Successful retrieval of objects"
+// @Param body body generictypes.QueryRequest false "Query Request"
+// @Success 200 {object} generictypes.QueryResponse "Successful retrieval of objects"
 // @Failure 400 {object} generictypes.ErrorResponse "Invalid JSON"
 // @Failure 401 {object} generictypes.ErrorResponse "Unauthorized"
 // @Failure 500 {object} generictypes.ErrorResponse "Internal Server Error"
-// @Router /generic/find [post]
+// @Router /generic/objects [post]
 func (g *GenericService) Find(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := g.router.AsRequestMaker(r).Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
-		PermissionId: generictypes.PermissionGenericView.Id,
-	}, rsp)
+	err := g.router.AsRequestMaker(r).Post(r.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", generictypes.PermissionGenericView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -48,15 +47,15 @@ func (g *GenericService) Find(
 		return
 	}
 
-	req := &generictypes.FindRequest{}
+	req := &generictypes.QueryRequest{}
 	err = json.NewDecoder(r.Body).Decode(req)
 	if err != nil {
-		http.Error(w, `invalid JSON`, http.StatusBadRequest)
+		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
 		return
 	}
 	defer r.Body.Close()
 
-	objects, err := g.find(generictypes.FindOptions{
+	objects, err := g.find(generictypes.QueryOptions{
 		Table:  req.Table,
 		UserId: rsp.User.Id,
 		Public: req.Public,
@@ -67,7 +66,7 @@ func (g *GenericService) Find(
 		return
 	}
 
-	bs, _ := json.Marshal(generictypes.FindResponse{
+	bs, _ := json.Marshal(generictypes.QueryResponse{
 		Objects: objects,
 	})
 	w.Write(bs)

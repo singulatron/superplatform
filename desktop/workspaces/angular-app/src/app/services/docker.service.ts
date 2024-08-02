@@ -49,6 +49,6 @@ export class DockerService {
 	}
 
 	async dockerInfo(): Promise<DockerInfoResponse> {
-		return this.localtron.call('/docker/info', {});
+		return this.localtron.get('/docker-service/info');
 	}
 }

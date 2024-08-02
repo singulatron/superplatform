@@ -9,20 +9,33 @@ package dockerservice
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	dockertypes "github.com/singulatron/singulatron/localtron/services/docker/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
+// @Summary Launch a Docker Container
+// @Description Launches a Docker container with the specified parameters.
+// @Description
+// @Description Requires the `docker.create` permission.
+// @Tags Docker Service
+// @Accept json
+// @Produce json
+// @Param request body dockertypes.LaunchContainerRequest true "Launch Container Request"
+// @Success 200 {object} dockertypes.LaunchContainerResponse
+// @Failure 400 {object} dockertypes.ErrorResponse "Invalid JSON"
+// @Failure 401 {object} dockertypes.ErrorResponse "Unauthorized"
+// @Failure 500 {object} dockertypes.ErrorResponse "Internal Server Error"
+// @Router /docker-service/container [put]
 func (dm *DockerService) LaunchContainer(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := dm.router.AsRequestMaker(r).Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
-		PermissionId:  dockertypes.PermissionDockerCreate.Id,
-		EmailsGranted: []string{"model"},
+	err := dm.router.AsRequestMaker(r).Post(r.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", dockertypes.PermissionDockerCreate.Id), &usertypes.IsAuthorizedRequest{
+		EmailsGranted: []string{"model-service"},
 	}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
@@ -36,7 +49,7 @@ func (dm *DockerService) LaunchContainer(
 	req := &dockertypes.LaunchContainerRequest{}
 	err = json.NewDecoder(r.Body).Decode(req)
 	if err != nil {
-		http.Error(w, `invalid JSON`, http.StatusBadRequest)
+		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
 		return
 	}
 	defer r.Body.Close()

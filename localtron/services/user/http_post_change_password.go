@@ -14,6 +14,18 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
+// ChangePassword allows a user to update their own password
+// @Summary Change User Password
+// @Description Allows an authenticated user to change their own password.
+// @Tags User Service
+// @Accept json
+// @Produce json
+// @Param request body usertypes.ChangePasswordRequest true "Change Password Request"
+// @Success 200 {object} usertypes.ChangePasswordResponse "Password changed successfully"
+// @Failure 400 {string} string "Invalid JSON"
+// @Failure 401 {string} string "Unauthorized"
+// @Failure 500 {string} string "Internal Server Error"
+// @Router /user-service/change-password [post]
 func (s *UserService) ChangePassword(w http.ResponseWriter, r *http.Request) {
 	_, err := s.isAuthorized(r, usertypes.PermissionUserPasswordChange.Id, nil)
 	if err != nil {
@@ -24,7 +36,7 @@ func (s *UserService) ChangePassword(w http.ResponseWriter, r *http.Request) {
 	req := usertypes.ChangePasswordRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
-		http.Error(w, `invalid JSON`, http.StatusBadRequest)
+		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
 		return
 	}
 	defer r.Body.Close()

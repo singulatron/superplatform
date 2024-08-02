@@ -14,11 +14,22 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
+// Login handles user authentication
+// @Summary Login
+// @Description Authenticates a user and returns a token.
+// @Tags User Service
+// @Accept json
+// @Produce json
+// @Param request body usertypes.LoginRequest true "Login Request"
+// @Success 200 {object} usertypes.LoginResponse "Login successful"
+// @Failure 400 {object} usertypes.ErrorResponse "Invalid JSON"
+// @Failure 500 {object} usertypes.ErrorResponse "Internal Server Error"
+// @Router /user-service/login [post]
 func (s *UserService) Login(w http.ResponseWriter, r *http.Request) {
 	req := usertypes.LoginRequest{}
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
-		http.Error(w, `invalid JSON`, http.StatusBadRequest)
+		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
 		return
 	}
 	defer r.Body.Close()

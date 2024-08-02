@@ -11,43 +11,43 @@ class ChatService {
     chatMessageDelete(messageId) {
         return __awaiter(this, void 0, void 0, function* () {
             const request = { messageId: messageId };
-            return this.call("/chat/message/delete", request);
+            return this.call("/chat-service/message/delete", request);
         });
     }
     chatMessages(threadId) {
         return __awaiter(this, void 0, void 0, function* () {
             const request = { threadId: threadId };
-            return this.call("/chat/messages", request);
+            return this.call("/chat-service/messages", request);
         });
     }
     chatThread(threadId) {
         return __awaiter(this, void 0, void 0, function* () {
             const request = { threadId: threadId };
-            return this.call("/chat/thread", request);
+            return this.call("/chat-service/thread", request);
         });
     }
     chatThreadAdd(thread) {
         return __awaiter(this, void 0, void 0, function* () {
             const request = { thread: thread };
-            return this.call("/chat/thread/add", request);
+            return this.call("/chat-service/thread/add", request);
         });
     }
     chatThreadUpdate(thread) {
         return __awaiter(this, void 0, void 0, function* () {
             const request = { thread: thread };
-            return this.call("/chat/thread/update", request);
+            return this.call("/chat-service/thread/update", request);
         });
     }
     chatThreadDelete(threadId) {
         return __awaiter(this, void 0, void 0, function* () {
             const request = { threadId: threadId };
-            return this.call("/chat/thread/delete", request);
+            return this.call("/chat-service/thread/delete", request);
         });
     }
     chatThreads() {
         return __awaiter(this, void 0, void 0, function* () {
             const request = {};
-            return this.call("/chat/threads", request);
+            return this.call("/chat-service/threads", request);
         });
     }
 }

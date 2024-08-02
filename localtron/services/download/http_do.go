@@ -9,6 +9,7 @@ package downloadservice
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	downloadtypes "github.com/singulatron/singulatron/localtron/services/download/types"
@@ -16,25 +17,25 @@ import (
 )
 
 // Do initiates a download request
-// @Summary Do
-// @Description Start a download for a specified URL and folder path
-// @Tags download
+// @Summary Download a File
+// @Description Start a download for a specified URL.
+// @Description
+// @Description Requires the `download.create` permission.
+// @Tags Download Service
 // @Accept json
 // @Produce json
 // @Param request body downloadtypes.DownloadRequest true "Download Request"
 // @Success 200 {object} map[string]any "Download initiated successfully"
-// @Failure 400 {string} string "Invalid JSON"
-// @Failure 401 {string} string "Unauthorized"
-// @Failure 500 {string} string "Internal Server Error"
-// @Router /download/do [post]
+// @Failure 400 {object} downloadtypes.ErrorResponse "Invalid JSON"
+// @Failure 401 {object} downloadtypes.ErrorResponse "Unauthorized"
+// @Failure 500 {object} downloadtypes.ErrorResponse "Internal Server Error"
+// @Router /download-service/download [put]
 func (ds *DownloadService) Do(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := ds.router.AsRequestMaker(r).Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
-		PermissionId: downloadtypes.PermissionDownloadCreate.Id,
-	}, rsp)
+	err := ds.router.AsRequestMaker(r).Post(r.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", downloadtypes.PermissionDownloadCreate.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -47,7 +48,7 @@ func (ds *DownloadService) Do(
 	req := downloadtypes.DownloadRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
-		http.Error(w, `invalid JSON`, http.StatusBadRequest)
+		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
 		return
 	}
 	defer r.Body.Close()

@@ -43,7 +43,8 @@ export class FirehoseService {
 				console.info('Subscribing to the firehose');
 
 				const uri =
-					this.localtron.config.env.localtronAddress + '/firehose/subscribe';
+					this.localtron.config.env.localtronAddress +
+					'/firehose-service/subscribe';
 
 				const headers = {
 					Authorization: 'Bearer ' + this.userService.getToken(),
@@ -88,7 +89,7 @@ export class FirehoseService {
 													trimmedLine === 'data: [DONE]'
 												) {
 													// Skip empty lines, lines containing only 'data: ', or "[DONE]" markers
-													continue
+													continue;
 												}
 
 												const cleanedText = trimmedLine

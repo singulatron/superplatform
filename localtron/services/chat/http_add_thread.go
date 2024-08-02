@@ -9,6 +9,7 @@ package chatservice
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
@@ -17,7 +18,9 @@ import (
 
 // AddThread creates a new chat thread
 // @Summary Add Thread
-// @Description Create a new chat thread and add the requesting user to it
+// @Description Create a new chat thread and add the requesting user to it.
+// @Decription
+// @Description Requires the `thread.create` permission.
 // @Tags chat
 // @Accept json
 // @Produce json
@@ -26,15 +29,13 @@ import (
 // @Failure 400 {string} string "Invalid JSON"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
-// @Router /chat/thread/add [post]
+// @Router /chat-service/thread [post]
 func (a *ChatService) AddThread(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := a.router.AsRequestMaker(r).Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
-		PermissionId: chattypes.PermissionThreadCreate.Id,
-	}, rsp)
+	err := a.router.AsRequestMaker(r).Post(r.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", chattypes.PermissionThreadCreate.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -47,7 +48,7 @@ func (a *ChatService) AddThread(
 	req := chattypes.AddThreadRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
-		http.Error(w, `invalid JSON`, http.StatusBadRequest)
+		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
 		return
 	}
 	defer r.Body.Close()

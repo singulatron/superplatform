@@ -9,29 +9,33 @@ package downloadservice
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"net/url"
 
+	"github.com/gorilla/mux"
 	downloadtypes "github.com/singulatron/singulatron/localtron/services/download/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-// @Summary Get Download
-// @Description Get a download by URL.
-// @Tags download
+// @Summary Get a Download
+// @Description Get a download by ID.
+// @Description
+// @Description Requires the `download.view` permission.
+// @Tags Download Service
 // @Accept json
 // @Produce json
+// @Param downloadId path string true "Download ID"
 // @Success 200 {object} downloadtypes.GetDownloadResponse
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
-// @Router /download/get [post]
+// @Router /download-service/download/{downloadId} [get]
 func (ds *DownloadService) Get(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := ds.router.AsRequestMaker(r).Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
-		PermissionId: downloadtypes.PermissionDownloadView.Id,
-	}, rsp)
+	err := ds.router.AsRequestMaker(r).Post(r.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", downloadtypes.PermissionDownloadView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -41,19 +45,18 @@ func (ds *DownloadService) Get(
 		return
 	}
 
-	req := downloadtypes.GetDownloadRequest{}
-	err = json.NewDecoder(r.Body).Decode(&req)
+	vars := mux.Vars(r)
+	did, err := url.PathUnescape(vars["downloadId"])
 	if err != nil {
-		http.Error(w, `invalid JSON`, http.StatusBadRequest)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	defer r.Body.Close()
 
-	dl, exists := ds.getDownload(req.Url)
+	dl, exists := ds.getDownload(did)
 
 	jsonData, _ := json.Marshal(downloadtypes.GetDownloadResponse{
 		Exists:   exists,
-		Download: downloadToDownloadDetails(req.Url, dl),
+		Download: downloadToDownloadDetails(vars["downloadId"], dl),
 	})
 	w.Write(jsonData)
 }

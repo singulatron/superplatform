@@ -9,32 +9,33 @@ package chatservice
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // AddMessage sends a new message to a chat thread
 // @Summary Add Message
-// @Description Add a new message to a specific chat thread
+// @Description Add a new message to a specific thread.
 // @Tags chat
 // @Accept json
 // @Produce json
+// @Param threadId path string true "Thread ID"
 // @Param request body chattypes.AddMessageRequest true "Add Message Request"
 // @Success 200 {object} map[string]any "Message successfully added"
 // @Failure 400 {string} string "Invalid JSON"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
-// @Router /chat/message/add [post]
+// @Router /chat-service/thread/{threadId}/message [post]
 func (a *ChatService) AddMessage(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := a.router.AsRequestMaker(r).Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
-		PermissionId: chattypes.PermissionMessageCreate.Id,
-	}, rsp)
+	err := a.router.AsRequestMaker(r).Post(r.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", chattypes.PermissionMessageCreate.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -47,10 +48,14 @@ func (a *ChatService) AddMessage(
 	req := chattypes.AddMessageRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
-		http.Error(w, `invalid JSON`, http.StatusBadRequest)
+		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
 		return
 	}
 	defer r.Body.Close()
+
+	vars := mux.Vars(r)
+	threadId := vars["threadId"]
+	req.Message.ThreadId = threadId
 
 	err = a.addMessage(req.Message)
 	if err != nil {

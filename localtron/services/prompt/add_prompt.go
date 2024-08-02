@@ -9,6 +9,7 @@ package promptservice
 
 import (
 	"context"
+	"fmt"
 	"log/slog"
 	"time"
 
@@ -25,7 +26,6 @@ import (
 const maxThreadTitle = 100
 
 func (p *PromptService) addPrompt(ctx context.Context, promptReq *prompttypes.AddPromptRequest, userId string) (*prompttypes.AddPromptResponse, error) {
-
 	prompt := &prompttypes.Prompt{
 		PromptCreateFields: promptReq.PromptCreateFields,
 	}
@@ -55,18 +55,9 @@ func (p *PromptService) addPrompt(ctx context.Context, promptReq *prompttypes.Ad
 
 	threadId := prompt.ThreadId
 
-	getThreadResp := apptypes.GetThreadResponse{}
-	err = p.router.Post(ctx, "chat", "/thread", apptypes.GetThreadRequest{
-		ThreadId: threadId,
-	}, &getThreadResp)
-	if err != nil {
-		return nil, err
-	}
-
+	//getThreadResp := apptypes.GetThreadResponse{}
 	getThreadRsp := &chattypes.GetThreadResponse{}
-	err = p.router.Post(context.Background(), "chat", "/thread", &chattypes.GetThreadRequest{
-		ThreadId: threadId,
-	}, getThreadRsp)
+	err = p.router.Get(ctx, "chat-service", fmt.Sprintf("/thread/%v", threadId), nil, &getThreadRsp)
 	if err != nil {
 		return nil, err
 	}
@@ -93,7 +84,7 @@ func (p *PromptService) addPrompt(ctx context.Context, promptReq *prompttypes.Ad
 		}
 
 		rsp := &chattypes.AddThreadResponse{}
-		err = p.router.Post(context.Background(), "chat", "/thread/add", &chattypes.AddThreadRequest{
+		err = p.router.Post(context.Background(), "chat-service", "/thread", &chattypes.AddThreadRequest{
 			Thread: thread,
 		}, rsp)
 		if err != nil {
@@ -104,7 +95,8 @@ func (p *PromptService) addPrompt(ctx context.Context, promptReq *prompttypes.Ad
 	ev := prompttypes.EventPromptAdded{
 		PromptId: prompt.Id,
 	}
-	err = p.router.Post(context.Background(), "firehose", "/publish", firehosetypes.PublishRequest{
+
+	err = p.router.Post(context.Background(), "firehose-service", "/publish", firehosetypes.PublishRequest{
 		Event: &firehosetypes.Event{
 			Name: ev.Name(),
 			Data: ev,

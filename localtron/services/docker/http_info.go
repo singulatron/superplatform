@@ -9,20 +9,28 @@ package dockerservice
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	dockertypes "github.com/singulatron/singulatron/localtron/services/docker/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
+// @Summary      Get Docker Service Information
+// @Description  Retrieve detailed information about the Docker service
+// @Tags         Docker Service
+// @Accept       json
+// @Produce      json
+// @Success      200   {object} dockertypes.GetInfoResponse "Service Information"
+// @Failure      401   {object} dockertypes.ErrorResponse  "Unauthorized"
+// @Failure      500   {object} dockertypes.ErrorResponse  "Internal Server Error"
+// @Router       /docker-service/info [get]
 func (dm *DockerService) Info(
 	w http.ResponseWriter,
 	req *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := dm.router.AsRequestMaker(req).Post(req.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
-		PermissionId: dockertypes.PermissionDockerView.Id,
-	}, rsp)
+	err := dm.router.AsRequestMaker(req).Post(req.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", dockertypes.PermissionDockerView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -38,8 +46,8 @@ func (dm *DockerService) Info(
 		return
 	}
 
-	jsonData, _ := json.Marshal(map[string]any{
-		"info": di,
+	jsonData, _ := json.Marshal(dockertypes.GetInfoResponse{
+		Info: di,
 	})
 	w.Write(jsonData)
 }

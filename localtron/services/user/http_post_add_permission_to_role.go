@@ -11,9 +11,25 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
+// AddPermissionToRole handles the addition of a permission to a role
+//
+// @Summary Add Permission to Role
+// @Description Adds a specific permission to a role identified by roleId.
+// @Description
+// @Description Requires the `permission.assign` permission.
+// @Tags User Service
+// @Accept json
+// @Produce json
+// @Param roleId path string true "Role ID"
+// @Param permissionId path string true "Permission ID"
+// @Success 200 {object} usertypes.CreateUserResponse
+// @Failure 401 {string} string "Unauthorized"
+// @Failure 500 {string} string "Internal Server Error"
+// @Router /user-service/role/{roleId}/permission/{permissionId} [put]
 func (s *UserService) AddPermissionToRole(
 	w http.ResponseWriter,
 	r *http.Request,
@@ -31,15 +47,9 @@ func (s *UserService) AddPermissionToRole(
 		return
 	}
 
-	req := usertypes.AddPermissionToRoleRequest{}
-	err = json.NewDecoder(r.Body).Decode(&req)
-	if err != nil {
-		http.Error(w, `invalid JSON`, http.StatusBadRequest)
-		return
-	}
-	defer r.Body.Close()
+	vars := mux.Vars(r)
 
-	err = s.addPermissionToRole(user.Id, req.RoleId, req.PermissionId)
+	err = s.addPermissionToRole(user.Id, vars["roleId"], vars["permissionId"])
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

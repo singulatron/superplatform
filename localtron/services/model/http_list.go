@@ -9,20 +9,30 @@ package modelservice
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
+// List godoc
+// @Summary List Models
+// @Description Retrieves a list of models after checking authorization
+// @Description Requires "model.view" permission.
+// @Tags model
+// @Accept json
+// @Produce json
+// @Success 200 {object} modeltypes.ListResponse
+// @Failure 401 {object} modeltypes.ErrorResponse "Unauthorized"
+// @Failure 500 {object} modeltypes.ErrorResponse "Internal Server Error"
+// @Router /model-service/models [get]
 func (ms *ModelService) List(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := ms.router.AsRequestMaker(r).Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
-		PermissionId: modeltypes.PermissionModelView.Id,
-	}, rsp)
+	err := ms.router.AsRequestMaker(r).Post(r.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", modeltypes.PermissionModelView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -32,21 +42,13 @@ func (ms *ModelService) List(
 		return
 	}
 
-	req := modeltypes.GetModelsRequest{}
-	err = json.NewDecoder(r.Body).Decode(&req)
-	if err != nil {
-		http.Error(w, `invalid JSON`, http.StatusBadRequest)
-		return
-	}
-	defer r.Body.Close()
-
 	models, err := ms.getModels()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	jsonData, _ := json.Marshal(modeltypes.GetModelsResponse{
+	jsonData, _ := json.Marshal(modeltypes.ListResponse{
 		Models: models,
 	})
 	w.Write(jsonData)

@@ -9,6 +9,7 @@ package promptservice
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/singulatron/singulatron/localtron/datastore"
@@ -19,7 +20,7 @@ import (
 // List lists prompts
 // @Summary List Prompts
 // @Description List prompts that satisfy a query.
-// @Tags prompts
+// @Tags Prompt Service
 // @Accept json
 // @Produce json
 // @Param request body prompttypes.ListPromptsRequest true "List Prompts Request"
@@ -27,15 +28,13 @@ import (
 // @Failure 400 {object} prompttypes.ErrorResponse "Invalid JSON"
 // @Failure 401 {object} prompttypes.ErrorResponse "Unauthorized"
 // @Failure 500 {object} prompttypes.ErrorResponse "Internal Server Error"
-// @Router /prompt/list [post]
+// @Router /prompt-service/list [post]
 func (p *PromptService) GetPrompts(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := p.router.AsRequestMaker(r).Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
-		PermissionId: prompttypes.PermissionPromptView.Id,
-	}, rsp)
+	err := p.router.AsRequestMaker(r).Post(r.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", prompttypes.PermissionPromptView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -48,7 +47,7 @@ func (p *PromptService) GetPrompts(
 	req := prompttypes.ListPromptsRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
-		http.Error(w, `invalid JSON`, http.StatusBadRequest)
+		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
 		return
 	}
 	defer r.Body.Close()

@@ -9,8 +9,10 @@ package chatservice
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
@@ -21,20 +23,18 @@ import (
 // @Tags chat
 // @Accept json
 // @Produce json
-// @Param request body chattypes.GetMessagesRequest true "Get Messages Request"
+// @Param threadId path string true "Thread ID"
 // @Success 200 {object} chattypes.GetMessagesResponse "Messages and assets successfully retrieved"
 // @Failure 400 {string} string "Invalid JSON"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
-// @Router /chat/messages [post]
+// @Router /chat-service/thread/{threadId}/messages [get]
 func (a *ChatService) GetMessages(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := a.router.AsRequestMaker(r).Post(r.Context(), "user", "/is-authorized", &usertypes.IsAuthorizedRequest{
-		PermissionId: chattypes.PermissionMessageView.Id,
-	}, rsp)
+	err := a.router.AsRequestMaker(r).Post(r.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", chattypes.PermissionMessageView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -44,15 +44,9 @@ func (a *ChatService) GetMessages(
 		return
 	}
 
-	req := chattypes.GetMessagesRequest{}
-	err = json.NewDecoder(r.Body).Decode(&req)
-	if err != nil {
-		http.Error(w, `invalid JSON`, http.StatusBadRequest)
-		return
-	}
-	defer r.Body.Close()
+	threadId := mux.Vars(r)["threadId"]
 
-	messages, err := a.getMessages(req.ThreadId)
+	messages, err := a.getMessages(threadId)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

@@ -14,6 +14,18 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
+// CreateUser allows an administrator to create a new user
+// @Summary Create a New User
+// @Description Allows an authenticated administrator to create a new user with specified details.
+// @Tags User Service
+// @Accept json
+// @Produce json
+// @Param request body usertypes.CreateUserRequest true "Create User Request"
+// @Success 200 {object} usertypes.CreateUserResponse "User created successfully"
+// @Failure 400 {string} string "Invalid JSON"
+// @Failure 401 {string} string "Unauthorized"
+// @Failure 500 {string} string "Internal Server Error"
+// @Router /user-service/user [post]
 func (s *UserService) CreateUser(
 	w http.ResponseWriter,
 	r *http.Request) {
@@ -26,7 +38,7 @@ func (s *UserService) CreateUser(
 	req := usertypes.CreateUserRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
-		http.Error(w, `invalid JSON`, http.StatusBadRequest)
+		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
 		return
 	}
 	defer r.Body.Close()

@@ -24,7 +24,7 @@ func (ms *ModelService) makeDefault(modelId string) error {
 	}
 
 	rsp := configtypes.GetConfigResponse{}
-	err = ms.router.Get(context.Background(), "config", "/get", nil, &rsp)
+	err = ms.router.Get(context.Background(), "config-service", "/config", nil, &rsp)
 	if err != nil {
 		return err
 	}

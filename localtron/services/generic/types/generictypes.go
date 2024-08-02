@@ -48,20 +48,20 @@ type GenericObject struct {
 	UpdatedAt string `json:"updatedAt,omitempty"`
 }
 
-type FindRequest struct {
+type QueryRequest struct {
 	Table  string           `json:"table"`
 	Query  *datastore.Query `json:"query"`
 	Public bool             `json:"public"`
 }
 
-type FindOptions struct {
+type QueryOptions struct {
 	Table  string
 	Query  *datastore.Query
 	UserId string
 	Public bool
 }
 
-type FindResponse struct {
+type QueryResponse struct {
 	Objects []*GenericObject `json:"objects,omitempty"`
 }
 

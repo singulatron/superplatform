@@ -7,13 +7,17 @@
  */
 package dockertypes
 
+type ErrorResponse struct {
+	Error string `json:"error"`
+}
+
 type LaunchOptions struct {
-	Name       string
-	Envs       []string
-	Labels     map[string]string
-	HostBinds  []string
-	GPUEnabled bool
-	Hash       string
+	Name       string            `json:"name,omitempty"`
+	Envs       []string          `json:"envs,omitempty"`
+	Labels     map[string]string `json:"labels,omitempty"`
+	HostBinds  []string          `json:"hostBinds,omitempty"`
+	GPUEnabled bool              `json:"gpuEnabled,omitempty"`
+	Hash       string            `json:"hash,omitempty"`
 }
 
 type LaunchInfo struct {
@@ -27,7 +31,11 @@ type OnModelLaunch struct {
 	Error *string `json:"error,omitempty"`
 }
 
-type OnDockerInfo struct {
+type GetInfoResponse struct {
+	Info *DockerInfo `json:"info"`
+}
+
+type DockerInfo struct {
 	HasDocker           bool    `json:"hasDocker"`
 	DockerDaemonAddress *string `json:"dockerDaemonAddress,omitempty"`
 	Error               *string `json:"error,omitempty"`
@@ -68,11 +76,11 @@ type GetContainerSummaryResponse struct {
 	Summary string `json:"summary"`
 }
 
-type HashIsRunningRequest struct {
+type ContainerIsRunningRequest struct {
 	Hash string `json:"hash"`
 }
 
-type HashIsRunningResponse struct {
+type ContainerIsRunningResponse struct {
 	IsRunning bool `json:"isRunning"`
 }
 

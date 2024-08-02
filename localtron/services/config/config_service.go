@@ -70,7 +70,7 @@ func (cs *ConfigService) Start() error {
 	}
 	cs.credentialStore = credentialStore
 
-	token, err := usertypes.RegisterService("config", "Config Service", cs.router, cs.credentialStore)
+	token, err := usertypes.RegisterService("config-service", "Config Service", cs.router, cs.credentialStore)
 	if err != nil {
 		return err
 	}
