@@ -26,6 +26,11 @@ const docTemplate = `{
     "paths": {
         "/chat-service/message/{messageId}": {
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Delete a specific message from a chat thread by its ID",
                 "consumes": [
                     "application/json"
@@ -77,6 +82,11 @@ const docTemplate = `{
         },
         "/chat-service/thread": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Create a new chat thread and add the requesting user to it.\nRequires the ` + "`" + `thread.create` + "`" + ` permission.",
                 "consumes": [
                     "application/json"
@@ -129,6 +139,11 @@ const docTemplate = `{
         },
         "/chat-service/thread/{threadId}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Fetch information about a specific chat thread by its ID",
                 "consumes": [
                     "application/json"
@@ -168,6 +183,11 @@ const docTemplate = `{
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Modify the details of a specific chat thread",
                 "consumes": [
                     "application/json"
@@ -225,6 +245,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Delete a specific chat thread by its ID",
                 "consumes": [
                     "application/json"
@@ -276,6 +301,11 @@ const docTemplate = `{
         },
         "/chat-service/thread/{threadId}/message": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Add a new message to a specific thread.",
                 "consumes": [
                     "application/json"
@@ -336,6 +366,11 @@ const docTemplate = `{
         },
         "/chat-service/thread/{threadId}/messages": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Fetch messages (and associated assets) for a specific chat thread.",
                 "consumes": [
                     "application/json"
@@ -386,6 +421,11 @@ const docTemplate = `{
         },
         "/chat-service/threads": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Fetch all chat threads associated with a specific user",
                 "consumes": [
                     "application/json"
@@ -438,6 +478,11 @@ const docTemplate = `{
         },
         "/config/get": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Fetch the current configuration from the server",
                 "consumes": [
                     "application/json"
@@ -484,6 +529,11 @@ const docTemplate = `{
         },
         "/config/save": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Save the provided configuration to the server",
                 "consumes": [
                     "application/json"
@@ -530,6 +580,11 @@ const docTemplate = `{
         },
         "/docker-service/container": {
             "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Launches a Docker container with the specified parameters.\n\nRequires the ` + "`" + `docker.create` + "`" + ` permission.",
                 "consumes": [
                     "application/json"
@@ -637,6 +692,11 @@ const docTemplate = `{
         },
         "/docker-service/container/{hash}/summary/{numberOfLines}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Get a summary of the Docker container identified by the hash, limited to a specified number of lines",
                 "consumes": [
                     "application/json"
@@ -694,6 +754,11 @@ const docTemplate = `{
         },
         "/docker-service/host": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Retrieve information about the Docker host",
                 "consumes": [
                     "application/json"
@@ -729,6 +794,11 @@ const docTemplate = `{
         },
         "/docker-service/info": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Retrieve detailed information about the Docker service",
                 "consumes": [
                     "application/json"
@@ -764,6 +834,11 @@ const docTemplate = `{
         },
         "/download-service/download": {
             "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Start a download for a specified URL.\n\nRequires the ` + "`" + `download.create` + "`" + ` permission.",
                 "consumes": [
                     "application/json"
@@ -817,6 +892,11 @@ const docTemplate = `{
         },
         "/download-service/download/{downloadId}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Get a download by ID.\n\nRequires the ` + "`" + `download.view` + "`" + ` permission.",
                 "consumes": [
                     "application/json"
@@ -861,6 +941,11 @@ const docTemplate = `{
         },
         "/download-service/download/{downloadId}/pause": {
             "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Pause a download that is currently in progress.\n\nRequires the ` + "`" + `download.edit` + "`" + ` permission.",
                 "consumes": [
                     "application/json"
@@ -912,6 +997,11 @@ const docTemplate = `{
         },
         "/download-service/downloads": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Fetch a list of all download details.\n\nRequires the ` + "`" + `download.view` + "`" + ` permission.",
                 "consumes": [
                     "application/json"
@@ -947,6 +1037,11 @@ const docTemplate = `{
         },
         "/firehose-service/publish": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Publishes an event to the firehose service after authorization check",
                 "consumes": [
                     "application/json"
@@ -990,6 +1085,11 @@ const docTemplate = `{
         },
         "/firehose-service/subscribe": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Establish a subscription to the firehose events and accept a real time stream of them.",
                 "consumes": [
                     "application/json"
@@ -1146,6 +1246,11 @@ const docTemplate = `{
         },
         "/generic/objects": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Retrieves objects from a specified table based on search criteria.\nRequires authorization and user authentication.\n\n\nUse helper functions in your respective client library such as condition constructors (` + "`" + `equal` + "`" + `, ` + "`" + `contains` + "`" + `, ` + "`" + `startsWith` + "`" + `) and field selectors (` + "`" + `field` + "`" + `, ` + "`" + `fields` + "`" + `, ` + "`" + `id` + "`" + `) for easier access.",
                 "consumes": [
                     "application/json"
@@ -1254,6 +1359,11 @@ const docTemplate = `{
         },
         "/generic/upsert": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Creates a new generic object or updates an existing one based on the provided data. Requires authorization and user authentication.",
                 "consumes": [
                     "application/json"
@@ -1306,6 +1416,11 @@ const docTemplate = `{
         },
         "/model-service/default/start": {
             "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Starts The Default Model.\n\nRequires the ` + "`" + `model.create` + "`" + ` permission.",
                 "consumes": [
                     "application/json"
@@ -1347,6 +1462,11 @@ const docTemplate = `{
         },
         "/model-service/models": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Retrieves a list of models after checking authorization\nRequires \"model.view\" permission.",
                 "consumes": [
                     "application/json"
@@ -1382,6 +1502,11 @@ const docTemplate = `{
         },
         "/model-service/{id}/status": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Retrieves the status of a model by ID.\n\nRequires the ` + "`" + `model.view` + "`" + ` permission.",
                 "consumes": [
                     "application/json"
@@ -1426,6 +1551,11 @@ const docTemplate = `{
         },
         "/model-service/{modelId}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Retrieves the details of a model by its ID.\n\nthe Requires ` + "`" + `model.view` + "`" + ` permission.",
                 "consumes": [
                     "application/json"
@@ -1470,6 +1600,11 @@ const docTemplate = `{
         },
         "/model-service/{modelId}/make-default": {
             "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Sets a model as the default model — when prompts are sent without a Model ID, the default model is used.",
                 "consumes": [
                     "application/json"
@@ -1520,6 +1655,11 @@ const docTemplate = `{
         },
         "/model-service/{modelId}/start": {
             "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Starts a model by ID",
                 "consumes": [
                     "application/json"
@@ -3855,8 +3995,11 @@ const docTemplate = `{
         }
     },
     "securityDefinitions": {
-        "BasicAuth": {
-            "type": "basic"
+        "BearerAuth": {
+            "description": "Type \"Bearer\" followed by a space and token acquired from the User sService Login endpoint.",
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     },
     "externalDocs": {

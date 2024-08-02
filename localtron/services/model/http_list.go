@@ -26,6 +26,7 @@ import (
 // @Success 200 {object} modeltypes.ListResponse
 // @Failure 401 {object} modeltypes.ErrorResponse "Unauthorized"
 // @Failure 500 {object} modeltypes.ErrorResponse "Internal Server Error"
+// @Security BearerAuth
 // @Router /model-service/models [get]
 func (ms *ModelService) List(
 	w http.ResponseWriter,

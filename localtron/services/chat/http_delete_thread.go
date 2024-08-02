@@ -28,6 +28,7 @@ import (
 // @Failure 400 {string} string "Invalid JSON"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
+// @Security BearerAuth
 // @Router /chat-service/thread/{threadId} [delete]
 func (a *ChatService) DeleteThread(
 	w http.ResponseWriter,

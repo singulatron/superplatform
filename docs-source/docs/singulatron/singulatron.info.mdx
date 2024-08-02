@@ -51,12 +51,12 @@ Run and develop self-hosted AI apps. Your programmable in-house GPT. The Firebas
     className={"openapi-tabs__security-schemes"}
   >
     <TabItem
-      label={"HTTP: Basic Auth"}
-      value={"BasicAuth"}
+      label={"API Key: BearerAuth"}
+      value={"BearerAuth"}
     >
       
       
-      
+      Type "Bearer" followed by a space and token acquired from the User sService Login endpoint.
       
       <div>
         <table>
@@ -65,13 +65,13 @@ Run and develop self-hosted AI apps. Your programmable in-house GPT. The Firebas
               <th>
                 Security Scheme Type:
               </th><td>
-                http
+                apiKey
               </td>
             </tr><tr>
               <th>
-                HTTP Authorization Scheme:
+                Header parameter name:
               </th><td>
-                basic
+                Authorization
               </td>
             </tr>
           </tbody>

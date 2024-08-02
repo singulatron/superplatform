@@ -30,6 +30,7 @@ import (
 // @Failure 400 {string} string "Invalid JSON"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
+// @Security BearerAuth
 // @Router /download-service/download/{downloadId}/pause [put]
 func (ds *DownloadService) Pause(
 	w http.ResponseWriter,

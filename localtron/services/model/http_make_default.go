@@ -28,6 +28,7 @@ import (
 // @Failure 400 {object} modeltypes.ErrorResponse "Invalid JSON"
 // @Failure 401 {object} modeltypes.ErrorResponse "Unauthorized"
 // @Failure 500 {object} modeltypes.ErrorResponse "Internal Server Error"
+// @Security BearerAuth
 // @Router /model-service/{modelId}/make-default [put]
 func (ms *ModelService) MakeDefault(
 	w http.ResponseWriter,
