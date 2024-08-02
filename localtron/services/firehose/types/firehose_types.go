@@ -7,6 +7,10 @@
  */
 package firehosetypes
 
+type ErrorResponse struct {
+	Error string `json:"error"`
+}
+
 type Event struct {
 	Name string `json:"name"`
 	Data any    `json:"data"`

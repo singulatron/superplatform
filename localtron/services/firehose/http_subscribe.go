@@ -20,14 +20,14 @@ import (
 )
 
 // Subscribe subscribes to a firehose stream and streams events to the client
-// @Summary Subscribe
-// @Description Establish a subscription to firehose events and stream them to the client in real-time.
-// @Tags firehose
+// @Summary Subscribe to the Event Stream
+// @Description Establish a subscription to the firehose events and accept a real time stream of them.
+// @Tags Firehose Service
 // @Accept json
 // @Produce text/event-stream
 // @Success 200 {string} string "Event data"
-// @Failure 401 {string} string "Unauthorized"
-// @Failure 500 {string} string "Internal Server Error"
+// @Failure 401 {object} firehosetypes.ErrorResponse "Unauthorized"
+// @Failure 500 {object} firehosetypes.ErrorResponse "Internal Server Error"
 // @Router /firehose-service/subscribe [get]
 func (p *FirehoseService) Subscribe(
 	w http.ResponseWriter,

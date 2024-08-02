@@ -14,6 +14,20 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
+// CreateRole creates a new role
+// @Summary Create a New Role
+// @Description Create a new role.
+// @Description
+// @Description Requires the `role.create` permission.
+// @Tags User Service
+// @Accept json
+// @Produce json
+// @Param request body usertypes.CreateRoleRequest true "Create Role Request"
+// @Success 200 {object} usertypes.CreateRoleResponse "Role created successfully"
+// @Failure 400 {string} string "Invalid JSON"
+// @Failure 401 {string} string "Unauthorized"
+// @Failure 500 {string} string "Internal Server Error"
+// @Router /user-service/role [post]
 func (s *UserService) CreateRole(w http.ResponseWriter, r *http.Request) {
 	_, err := s.isAuthorized(r, usertypes.PermissionRoleCreate.Id, nil)
 	if err != nil {

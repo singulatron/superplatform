@@ -817,7 +817,7 @@ const docTemplate = `{
         },
         "/download-service/download/{downloadId}": {
             "get": {
-                "description": "Get a download by ID.",
+                "description": "Get a download by ID.\n\nRequires the ` + "`" + `download.view` + "`" + ` permission.",
                 "consumes": [
                     "application/json"
                 ],
@@ -861,7 +861,7 @@ const docTemplate = `{
         },
         "/download-service/download/{downloadId}/pause": {
             "put": {
-                "description": "Pause a download that is currently in progress",
+                "description": "Pause a download that is currently in progress.\n\nRequires the ` + "`" + `download.edit` + "`" + ` permission.",
                 "consumes": [
                     "application/json"
                 ],
@@ -871,7 +871,7 @@ const docTemplate = `{
                 "tags": [
                     "Download Service"
                 ],
-                "summary": "Pause",
+                "summary": "Pause a Download",
                 "parameters": [
                     {
                         "type": "string",
@@ -912,7 +912,7 @@ const docTemplate = `{
         },
         "/download-service/downloads": {
             "post": {
-                "description": "Fetch a list of all download details.",
+                "description": "Fetch a list of all download details.\n\nRequires the ` + "`" + `download.view` + "`" + ` permission.",
                 "consumes": [
                     "application/json"
                 ],
@@ -945,9 +945,52 @@ const docTemplate = `{
                 }
             }
         },
+        "/firehose-service/publish": {
+            "post": {
+                "description": "Publishes an event to the firehose service after authorization check",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Firehose Service"
+                ],
+                "summary": "Publish an Event",
+                "parameters": [
+                    {
+                        "description": "Event to publish",
+                        "name": "event",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/firehosetypes.PublishRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{}"
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/firehosetypes.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/firehosetypes.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/firehose-service/subscribe": {
             "get": {
-                "description": "Establish a subscription to firehose events and stream them to the client in real-time.",
+                "description": "Establish a subscription to the firehose events and accept a real time stream of them.",
                 "consumes": [
                     "application/json"
                 ],
@@ -955,9 +998,9 @@ const docTemplate = `{
                     "text/event-stream"
                 ],
                 "tags": [
-                    "firehose"
+                    "Firehose Service"
                 ],
-                "summary": "Subscribe",
+                "summary": "Subscribe to the Event Stream",
                 "responses": {
                     "200": {
                         "description": "Event data",
@@ -968,13 +1011,13 @@ const docTemplate = `{
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/firehosetypes.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/firehosetypes.ErrorResponse"
                         }
                     }
                 }
@@ -1720,6 +1763,156 @@ const docTemplate = `{
                 }
             }
         },
+        "/user-service/change-password": {
+            "post": {
+                "description": "Allows an authenticated user to change their own password.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Service"
+                ],
+                "summary": "Change User Password",
+                "parameters": [
+                    {
+                        "description": "Change Password Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.ChangePasswordRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Password changed successfully",
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.ChangePasswordResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/user-service/change-password-admin": {
+            "post": {
+                "description": "Allows an administrator to change a user's password.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Service"
+                ],
+                "summary": "Change User Password (Admin)",
+                "parameters": [
+                    {
+                        "description": "Change Password Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.ChangePasswordAdminRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Password changed successfully",
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.ChangePasswordAdminResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/user-service/login": {
+            "post": {
+                "description": "Authenticates a user and returns a token.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Service"
+                ],
+                "summary": "Login",
+                "parameters": [
+                    {
+                        "description": "Login Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.LoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Login successful",
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.LoginResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/user-service/permission/{permissionId}": {
             "put": {
                 "description": "Creates a new permission or updates an existing permission identified by permissionId.",
@@ -1780,6 +1973,58 @@ const docTemplate = `{
                 }
             }
         },
+        "/user-service/role": {
+            "post": {
+                "description": "Create a new role.\n\nRequires the ` + "`" + `role.create` + "`" + ` permission.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Service"
+                ],
+                "summary": "Create a New Role",
+                "parameters": [
+                    {
+                        "description": "Create Role Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.CreateRoleRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Role created successfully",
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.CreateRoleResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/user-service/role/{roleId}/permission/{permissionId}": {
             "put": {
                 "description": "Adds a specific permission to a role identified by roleId.\n\nRequires the ` + "`" + `permission.assign` + "`" + ` permission.",
@@ -1790,7 +2035,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "user"
+                    "User Service"
                 ],
                 "summary": "Add Permission to Role",
                 "parameters": [
@@ -1814,6 +2059,110 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/usertypes.CreateUserResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/user-service/user": {
+            "post": {
+                "description": "Allows an authenticated administrator to create a new user with specified details.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Service"
+                ],
+                "summary": "Create a New User",
+                "parameters": [
+                    {
+                        "description": "Create User Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.CreateUserRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User created successfully",
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.CreateUserResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/user-service/users": {
+            "post": {
+                "description": "Fetches a list of users with optional query filters and pagination.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Service"
+                ],
+                "summary": "List Users",
+                "parameters": [
+                    {
+                        "description": "Get Users Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.GetUsersRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of users retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.GetUsersResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "type": "string"
                         }
                     },
                     "401": {
@@ -2422,6 +2771,31 @@ const docTemplate = `{
                 }
             }
         },
+        "firehosetypes.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "firehosetypes.Event": {
+            "type": "object",
+            "properties": {
+                "data": {},
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "firehosetypes.PublishRequest": {
+            "type": "object",
+            "properties": {
+                "event": {
+                    "$ref": "#/definitions/firehosetypes.Event"
+                }
+            }
+        },
         "generictypes.CreateRequest": {
             "type": "object",
             "properties": {
@@ -2956,8 +3330,156 @@ const docTemplate = `{
         "prompttypes.RemovePromptResponse": {
             "type": "object"
         },
+        "usertypes.AuthToken": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "token": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "string"
+                }
+            }
+        },
+        "usertypes.ChangePasswordAdminRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "newPassword": {
+                    "type": "string"
+                }
+            }
+        },
+        "usertypes.ChangePasswordAdminResponse": {
+            "type": "object"
+        },
+        "usertypes.ChangePasswordRequest": {
+            "type": "object",
+            "properties": {
+                "currentPassword": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "newPassword": {
+                    "type": "string"
+                }
+            }
+        },
+        "usertypes.ChangePasswordResponse": {
+            "type": "object"
+        },
+        "usertypes.CreateRoleRequest": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "permissionIds": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "usertypes.CreateRoleResponse": {
+            "type": "object",
+            "properties": {
+                "role": {
+                    "$ref": "#/definitions/usertypes.Role"
+                }
+            }
+        },
+        "usertypes.CreateUserRequest": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "roleIds": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "user": {
+                    "$ref": "#/definitions/usertypes.User"
+                }
+            }
+        },
         "usertypes.CreateUserResponse": {
             "type": "object"
+        },
+        "usertypes.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "usertypes.GetUsersRequest": {
+            "type": "object",
+            "properties": {
+                "query": {
+                    "$ref": "#/definitions/datastore.Query"
+                }
+            }
+        },
+        "usertypes.GetUsersResponse": {
+            "type": "object",
+            "properties": {
+                "after": {
+                    "type": "string"
+                },
+                "count": {
+                    "type": "integer"
+                },
+                "users": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/usertypes.User"
+                    }
+                }
+            }
+        },
+        "usertypes.LoginRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "usertypes.LoginResponse": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "$ref": "#/definitions/usertypes.AuthToken"
+                }
+            }
         },
         "usertypes.Permission": {
             "type": "object",
@@ -2985,11 +3507,79 @@ const docTemplate = `{
                 }
             }
         },
+        "usertypes.Role": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "permissionIds": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
         "usertypes.UpserPermissionRequest": {
             "type": "object",
             "properties": {
                 "permissions": {
                     "$ref": "#/definitions/usertypes.Permission"
+                }
+            }
+        },
+        "usertypes.User": {
+            "type": "object",
+            "properties": {
+                "authTokenIds": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "type": "string"
+                },
+                "email": {
+                    "description": "Email or username",
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "isService": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "passwordHash": {
+                    "type": "string"
+                },
+                "roleIds": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "updatedAt": {
+                    "type": "string"
                 }
             }
         }

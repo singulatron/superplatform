@@ -132,8 +132,8 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
-          id: "singulatron/pause",
-          label: "Pause",
+          id: "singulatron/pause-a-download",
+          label: "Pause a Download",
           className: "api-method put",
         },
         {
@@ -146,12 +146,18 @@ const sidebar: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "firehose",
+      label: "Firehose Service",
       items: [
         {
           type: "doc",
-          id: "singulatron/subscribe",
-          label: "Subscribe",
+          id: "singulatron/publish-an-event",
+          label: "Publish an Event",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "singulatron/subscribe-to-the-event-stream",
+          label: "Subscribe to the Event Stream",
           className: "api-method get",
         },
       ],
@@ -272,24 +278,60 @@ const sidebar: SidebarsConfig = {
     },
     {
       type: "category",
+      label: "User Service",
+      items: [
+        {
+          type: "doc",
+          id: "singulatron/change-user-password",
+          label: "Change User Password",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "singulatron/change-user-password-admin",
+          label: "Change User Password (Admin)",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "singulatron/login",
+          label: "Login",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "singulatron/create-a-new-role",
+          label: "Create a New Role",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "singulatron/add-permission-to-role",
+          label: "Add Permission to Role",
+          className: "api-method put",
+        },
+        {
+          type: "doc",
+          id: "singulatron/create-a-new-user",
+          label: "Create a New User",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "singulatron/list-users",
+          label: "List Users",
+          className: "api-method post",
+        },
+      ],
+    },
+    {
+      type: "category",
       label: "Permission Management",
       items: [
         {
           type: "doc",
           id: "singulatron/upsert-a-permission",
           label: "Upsert a permission",
-          className: "api-method put",
-        },
-      ],
-    },
-    {
-      type: "category",
-      label: "user",
-      items: [
-        {
-          type: "doc",
-          id: "singulatron/add-permission-to-role",
-          label: "Add Permission to Role",
           className: "api-method put",
         },
       ],

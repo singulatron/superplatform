@@ -18,6 +18,16 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
+// @Summary Publish an Event
+// @Description Publishes an event to the firehose service after authorization check
+// @Tags Firehose Service
+// @Accept json
+// @Produce json
+// @Param event body firehosetypes.PublishRequest true "Event to publish"
+// @Success 200 {object} nil "{}"
+// @Failure 400 {object} firehosetypes.ErrorResponse "Invalid JSON"
+// @Failure 401 {object} firehosetypes.ErrorResponse "Unauthorized"
+// @Router /firehose-service/publish [post]
 func (p *FirehoseService) Publish(w http.ResponseWriter,
 	r *http.Request) {
 	rsp := &usertypes.IsAuthorizedResponse{}

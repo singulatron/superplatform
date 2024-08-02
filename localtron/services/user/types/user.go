@@ -18,6 +18,10 @@ import (
 	"github.com/singulatron/singulatron/localtron/router"
 )
 
+type ErrorResponse struct {
+	Error string `json:"error"`
+}
+
 type GetUsersOptions struct {
 	Query *datastore.Query `json:"query"`
 }

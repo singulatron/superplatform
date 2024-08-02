@@ -21,7 +21,7 @@ import (
 // @Description Adds a specific permission to a role identified by roleId.
 // @Description
 // @Description Requires the `permission.assign` permission.
-// @Tags user
+// @Tags User Service
 // @Accept json
 // @Produce json
 // @Param roleId path string true "Role ID"

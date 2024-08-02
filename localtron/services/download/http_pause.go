@@ -18,7 +18,7 @@ import (
 )
 
 // Pause pauses an ongoing download
-// @Summary Pause
+// @Summary Pause a Download
 // @Description Pause a download that is currently in progress.
 // @Description
 // @Description Requires the `download.edit` permission.

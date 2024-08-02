@@ -398,6 +398,22 @@ definitions:
       exists:
         type: boolean
     type: object
+  firehosetypes.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  firehosetypes.Event:
+    properties:
+      data: {}
+      name:
+        type: string
+    type: object
+  firehosetypes.PublishRequest:
+    properties:
+      event:
+        $ref: '#/definitions/firehosetypes.Event'
+    type: object
   generictypes.CreateRequest:
     properties:
       object:
@@ -788,7 +804,102 @@ definitions:
     type: object
   prompttypes.RemovePromptResponse:
     type: object
+  usertypes.AuthToken:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      id:
+        type: string
+      token:
+        type: string
+      updatedAt:
+        type: string
+      userId:
+        type: string
+    type: object
+  usertypes.ChangePasswordAdminRequest:
+    properties:
+      email:
+        type: string
+      newPassword:
+        type: string
+    type: object
+  usertypes.ChangePasswordAdminResponse:
+    type: object
+  usertypes.ChangePasswordRequest:
+    properties:
+      currentPassword:
+        type: string
+      email:
+        type: string
+      newPassword:
+        type: string
+    type: object
+  usertypes.ChangePasswordResponse:
+    type: object
+  usertypes.CreateRoleRequest:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      permissionIds:
+        items:
+          type: string
+        type: array
+    type: object
+  usertypes.CreateRoleResponse:
+    properties:
+      role:
+        $ref: '#/definitions/usertypes.Role'
+    type: object
+  usertypes.CreateUserRequest:
+    properties:
+      password:
+        type: string
+      roleIds:
+        items:
+          type: string
+        type: array
+      user:
+        $ref: '#/definitions/usertypes.User'
+    type: object
   usertypes.CreateUserResponse:
+    type: object
+  usertypes.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  usertypes.GetUsersRequest:
+    properties:
+      query:
+        $ref: '#/definitions/datastore.Query'
+    type: object
+  usertypes.GetUsersResponse:
+    properties:
+      after:
+        type: string
+      count:
+        type: integer
+      users:
+        items:
+          $ref: '#/definitions/usertypes.User'
+        type: array
+    type: object
+  usertypes.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  usertypes.LoginResponse:
+    properties:
+      token:
+        $ref: '#/definitions/usertypes.AuthToken'
     type: object
   usertypes.Permission:
     properties:
@@ -808,10 +919,55 @@ definitions:
       updatedAt:
         type: string
     type: object
+  usertypes.Role:
+    properties:
+      createdAt:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      permissionIds:
+        items:
+          type: string
+        type: array
+      updatedAt:
+        type: string
+    type: object
   usertypes.UpserPermissionRequest:
     properties:
       permissions:
         $ref: '#/definitions/usertypes.Permission'
+    type: object
+  usertypes.User:
+    properties:
+      authTokenIds:
+        items:
+          type: string
+        type: array
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      email:
+        description: Email or username
+        type: string
+      id:
+        type: string
+      isService:
+        type: boolean
+      name:
+        type: string
+      passwordHash:
+        type: string
+      roleIds:
+        items:
+          type: string
+        type: array
+      updatedAt:
+        type: string
     type: object
 externalDocs:
   description: Singulatron API
@@ -1365,7 +1521,10 @@ paths:
     get:
       consumes:
       - application/json
-      description: Get a download by ID.
+      description: |-
+        Get a download by ID.
+
+        Requires the `download.view` permission.
       parameters:
       - description: Download ID
         in: path
@@ -1394,7 +1553,10 @@ paths:
     put:
       consumes:
       - application/json
-      description: Pause a download that is currently in progress
+      description: |-
+        Pause a download that is currently in progress.
+
+        Requires the `download.edit` permission.
       parameters:
       - description: Download ID
         in: path
@@ -1421,14 +1583,17 @@ paths:
           description: Internal Server Error
           schema:
             type: string
-      summary: Pause
+      summary: Pause a Download
       tags:
       - Download Service
   /download-service/downloads:
     post:
       consumes:
       - application/json
-      description: Fetch a list of all download details.
+      description: |-
+        Fetch a list of all download details.
+
+        Requires the `download.view` permission.
       produces:
       - application/json
       responses:
@@ -1447,12 +1612,41 @@ paths:
       summary: List Downloads
       tags:
       - Download Service
+  /firehose-service/publish:
+    post:
+      consumes:
+      - application/json
+      description: Publishes an event to the firehose service after authorization
+        check
+      parameters:
+      - description: Event to publish
+        in: body
+        name: event
+        required: true
+        schema:
+          $ref: '#/definitions/firehosetypes.PublishRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{}'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/firehosetypes.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/firehosetypes.ErrorResponse'
+      summary: Publish an Event
+      tags:
+      - Firehose Service
   /firehose-service/subscribe:
     get:
       consumes:
       - application/json
-      description: Establish a subscription to firehose events and stream them to
-        the client in real-time.
+      description: Establish a subscription to the firehose events and accept a real
+        time stream of them.
       produces:
       - text/event-stream
       responses:
@@ -1463,14 +1657,14 @@ paths:
         "401":
           description: Unauthorized
           schema:
-            type: string
+            $ref: '#/definitions/firehosetypes.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            type: string
-      summary: Subscribe
+            $ref: '#/definitions/firehosetypes.ErrorResponse'
+      summary: Subscribe to the Event Stream
       tags:
-      - firehose
+      - Firehose Service
   /generic/create:
     post:
       consumes:
@@ -1975,6 +2169,104 @@ paths:
       summary: Remove Prompt
       tags:
       - Prompt Service
+  /user-service/change-password:
+    post:
+      consumes:
+      - application/json
+      description: Allows an authenticated user to change their own password.
+      parameters:
+      - description: Change Password Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/usertypes.ChangePasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Password changed successfully
+          schema:
+            $ref: '#/definitions/usertypes.ChangePasswordResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Change User Password
+      tags:
+      - User Service
+  /user-service/change-password-admin:
+    post:
+      consumes:
+      - application/json
+      description: Allows an administrator to change a user's password.
+      parameters:
+      - description: Change Password Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/usertypes.ChangePasswordAdminRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Password changed successfully
+          schema:
+            $ref: '#/definitions/usertypes.ChangePasswordAdminResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Change User Password (Admin)
+      tags:
+      - User Service
+  /user-service/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticates a user and returns a token.
+      parameters:
+      - description: Login Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/usertypes.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Login successful
+          schema:
+            $ref: '#/definitions/usertypes.LoginResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/usertypes.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/usertypes.ErrorResponse'
+      summary: Login
+      tags:
+      - User Service
   /user-service/permission/{permissionId}:
     put:
       consumes:
@@ -2016,6 +2308,43 @@ paths:
       summary: Upsert a permission
       tags:
       - Permission Management
+  /user-service/role:
+    post:
+      consumes:
+      - application/json
+      description: |-
+        Create a new role.
+
+        Requires the `role.create` permission.
+      parameters:
+      - description: Create Role Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/usertypes.CreateRoleRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Role created successfully
+          schema:
+            $ref: '#/definitions/usertypes.CreateRoleResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Create a New Role
+      tags:
+      - User Service
   /user-service/role/{roleId}/permission/{permissionId}:
     put:
       consumes:
@@ -2052,7 +2381,76 @@ paths:
             type: string
       summary: Add Permission to Role
       tags:
-      - user
+      - User Service
+  /user-service/user:
+    post:
+      consumes:
+      - application/json
+      description: Allows an authenticated administrator to create a new user with
+        specified details.
+      parameters:
+      - description: Create User Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/usertypes.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User created successfully
+          schema:
+            $ref: '#/definitions/usertypes.CreateUserResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Create a New User
+      tags:
+      - User Service
+  /user-service/users:
+    post:
+      consumes:
+      - application/json
+      description: Fetches a list of users with optional query filters and pagination.
+      parameters:
+      - description: Get Users Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/usertypes.GetUsersRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of users retrieved successfully
+          schema:
+            $ref: '#/definitions/usertypes.GetUsersResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: List Users
+      tags:
+      - User Service
 securityDefinitions:
   BasicAuth:
     type: basic

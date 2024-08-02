@@ -15,6 +15,18 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
+// GetUsers retrieves a list of users based on query parameters
+// @Summary List Users
+// @Description Fetches a list of users with optional query filters and pagination.
+// @Tags User Service
+// @Accept json
+// @Produce json
+// @Param request body usertypes.GetUsersRequest true "Get Users Request"
+// @Success 200 {object} usertypes.GetUsersResponse "List of users retrieved successfully"
+// @Failure 400 {string} string "Invalid JSON"
+// @Failure 401 {string} string "Unauthorized"
+// @Failure 500 {string} string "Internal Server Error"
+// @Router /user-service/users [post]
 func (s *UserService) GetUsers(
 	w http.ResponseWriter,
 	r *http.Request,
