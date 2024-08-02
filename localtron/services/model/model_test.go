@@ -40,7 +40,7 @@ func TestModel(t *testing.T) {
 
 	t.Run("get models", func(t *testing.T) {
 		getModelsRsp := modeltypes.ListResponse{}
-		err = router.Get(context.Background(), "model-service", "/models", nil, &getModelsRsp)
+		err = router.Post(context.Background(), "model-service", "/models", nil, &getModelsRsp)
 		require.NoError(t, err)
 
 		require.Equal(t, 1, len(getModelsRsp.Models[0].Assets))
