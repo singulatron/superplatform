@@ -18,8 +18,7 @@ import (
 // UpsertPermission handles the creation or update of a permission
 //
 // @Summary Upsert a permission
-// @Description Creates a new permission or updates an existing permission identified by permissionId.
-// @Tags Permission Management
+// @DescrUser Service
 // @Accept json
 // @Produce json
 // @Param permissionId path string true "Permission ID" example(123)

@@ -19,7 +19,7 @@ import (
 // Update modifies existing generic objects based on given conditions
 // @Summary Update Generic Objects
 // @Description Updates objects in a specified table based on provided conditions. Requires authorization and user authentication.
-// @Tags generic
+// @Tags Generic Service
 // @Accept json
 // @Produce json
 // @Param body body generictypes.UpdateRequest true "Update request payload"

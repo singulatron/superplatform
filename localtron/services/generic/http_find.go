@@ -23,15 +23,15 @@ import (
 // @Description
 // @Description
 // @Description Use helper functions in your respective client library such as condition constructors (`equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
-// @Tags generic
+// @Tags Generic Service
 // @Accept json
 // @Produce json
-// @Param body body generictypes.QueryRequest true "Query Request"
+// @Param body body generictypes.QueryRequest false "Query Request"
 // @Success 200 {object} generictypes.QueryResponse "Successful retrieval of objects"
 // @Failure 400 {object} generictypes.ErrorResponse "Invalid JSON"
 // @Failure 401 {object} generictypes.ErrorResponse "Unauthorized"
 // @Failure 500 {object} generictypes.ErrorResponse "Internal Server Error"
-// @Router /generic/objects/query [post]
+// @Router /generic/objects [post]
 func (g *GenericService) Find(
 	w http.ResponseWriter,
 	r *http.Request,

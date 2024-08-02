@@ -164,13 +164,19 @@ const sidebar: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "generic",
+      label: "Generic Service",
       items: [
         {
           type: "doc",
           id: "singulatron/create-a-generic-object",
           label: "Create a Generic Object",
           className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "singulatron/delete-a-generic-object",
+          label: "Delete a Generic Object",
+          className: "api-method delete",
         },
         {
           type: "doc",
@@ -189,18 +195,6 @@ const sidebar: SidebarsConfig = {
           id: "singulatron/upsert-a-generic-object",
           label: "Upsert a Generic Object",
           className: "api-method post",
-        },
-      ],
-    },
-    {
-      type: "category",
-      label: "Generic Service",
-      items: [
-        {
-          type: "doc",
-          id: "singulatron/delete-a-generic-object",
-          label: "Delete a Generic Object",
-          className: "api-method delete",
         },
       ],
     },
@@ -326,7 +320,7 @@ const sidebar: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "Permission Management",
+      label: "UNTAGGED",
       items: [
         {
           type: "doc",

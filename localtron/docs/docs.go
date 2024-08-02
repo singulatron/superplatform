@@ -1038,7 +1038,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "generic"
+                    "Generic Service"
                 ],
                 "summary": "Create a Generic Object",
                 "parameters": [
@@ -1144,7 +1144,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/generic/objects/query": {
+        "/generic/objects": {
             "post": {
                 "description": "Retrieves objects from a specified table based on search criteria.\nRequires authorization and user authentication.\n\n\nUse helper functions in your respective client library such as condition constructors (` + "`" + `equal` + "`" + `, ` + "`" + `contains` + "`" + `, ` + "`" + `startsWith` + "`" + `) and field selectors (` + "`" + `field` + "`" + `, ` + "`" + `fields` + "`" + `, ` + "`" + `id` + "`" + `) for easier access.",
                 "consumes": [
@@ -1154,7 +1154,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "generic"
+                    "Generic Service"
                 ],
                 "summary": "Find Generic Objects",
                 "parameters": [
@@ -1162,7 +1162,6 @@ const docTemplate = `{
                         "description": "Query Request",
                         "name": "body",
                         "in": "body",
-                        "required": true,
                         "schema": {
                             "$ref": "#/definitions/generictypes.QueryRequest"
                         }
@@ -1211,7 +1210,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "generic"
+                    "Generic Service"
                 ],
                 "summary": "Update Generic Objects",
                 "parameters": [
@@ -1263,7 +1262,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "generic"
+                    "Generic Service"
                 ],
                 "summary": "Upsert a Generic Object",
                 "parameters": [
@@ -1915,15 +1914,11 @@ const docTemplate = `{
         },
         "/user-service/permission/{permissionId}": {
             "put": {
-                "description": "Creates a new permission or updates an existing permission identified by permissionId.",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
-                ],
-                "tags": [
-                    "Permission Management"
                 ],
                 "summary": "Upsert a permission",
                 "parameters": [

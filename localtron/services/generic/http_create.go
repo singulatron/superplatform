@@ -19,7 +19,7 @@ import (
 // Create creates a new generic object
 // @Summary Create a Generic Object
 // @Description Creates a new object with the provided details. Requires authorization and user authentication.
-// @Tags generic
+// @Tags Generic Service
 // @Accept json
 // @Produce json
 // @Param body body generictypes.CreateRequest true "Create request payload"

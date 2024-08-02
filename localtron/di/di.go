@@ -376,7 +376,7 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 	router.HandleFunc("/generic-service/objects/delete", appl(func(w http.ResponseWriter, r *http.Request) {
 		genericService.Delete(w, r)
 	})).Methods("OPTIONS", "DELETE")
-	router.HandleFunc("/generic-service/objects/query", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/generic-service/objects", appl(func(w http.ResponseWriter, r *http.Request) {
 		genericService.Find(w, r)
 	})).Methods("OPTIONS", "POST")
 	router.HandleFunc("/generic-service/object/{objectId}", appl(func(w http.ResponseWriter, r *http.Request) {

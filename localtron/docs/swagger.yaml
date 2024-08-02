@@ -1701,7 +1701,7 @@ paths:
       - BearerAuth: []
       summary: Create a Generic Object
       tags:
-      - generic
+      - Generic Service
   /generic/object/{objectId}:
     delete:
       consumes:
@@ -1744,7 +1744,7 @@ paths:
       summary: Delete a Generic Object
       tags:
       - Generic Service
-  /generic/objects/query:
+  /generic/objects:
     post:
       consumes:
       - application/json
@@ -1758,7 +1758,6 @@ paths:
       - description: Query Request
         in: body
         name: body
-        required: true
         schema:
           $ref: '#/definitions/generictypes.QueryRequest'
       produces:
@@ -1782,7 +1781,7 @@ paths:
             $ref: '#/definitions/generictypes.ErrorResponse'
       summary: Find Generic Objects
       tags:
-      - generic
+      - Generic Service
   /generic/objects/update:
     post:
       consumes:
@@ -1819,7 +1818,7 @@ paths:
       - BearerAuth: []
       summary: Update Generic Objects
       tags:
-      - generic
+      - Generic Service
   /generic/upsert:
     post:
       consumes:
@@ -1854,7 +1853,7 @@ paths:
             $ref: '#/definitions/generictypes.ErrorResponse'
       summary: Upsert a Generic Object
       tags:
-      - generic
+      - Generic Service
   /model-service/{id}/status:
     get:
       consumes:
@@ -2271,8 +2270,6 @@ paths:
     put:
       consumes:
       - application/json
-      description: Creates a new permission or updates an existing permission identified
-        by permissionId.
       parameters:
       - description: Permission ID
         example: "123"
@@ -2306,8 +2303,6 @@ paths:
           schema:
             type: string
       summary: Upsert a permission
-      tags:
-      - Permission Management
   /user-service/role:
     post:
       consumes:
