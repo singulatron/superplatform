@@ -34,7 +34,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "chat"
+                    "Chat Service"
                 ],
                 "summary": "Delete Message",
                 "parameters": [
@@ -85,7 +85,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "chat"
+                    "Chat Service"
                 ],
                 "summary": "Add Thread",
                 "parameters": [
@@ -137,7 +137,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "chat"
+                    "Chat Service"
                 ],
                 "summary": "Get Thread",
                 "responses": {
@@ -176,7 +176,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "chat"
+                    "Chat Service"
                 ],
                 "summary": "Update Thread",
                 "parameters": [
@@ -233,7 +233,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "chat"
+                    "Chat Service"
                 ],
                 "summary": "Delete Thread",
                 "parameters": [
@@ -284,7 +284,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "chat"
+                    "Chat Service"
                 ],
                 "summary": "Add Message",
                 "parameters": [
@@ -344,7 +344,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "chat"
+                    "Chat Service"
                 ],
                 "summary": "Get Messages",
                 "parameters": [
@@ -394,7 +394,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "chat"
+                    "Chat Service"
                 ],
                 "summary": "Get Threads",
                 "parameters": [
@@ -446,7 +446,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "config"
+                    "Config Service"
                 ],
                 "summary": "Get",
                 "parameters": [
@@ -492,7 +492,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "config"
+                    "Config Service"
                 ],
                 "summary": "Save",
                 "parameters": [
@@ -1314,7 +1314,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "model"
+                    "Model Service"
                 ],
                 "summary": "Start the Default Model",
                 "responses": {
@@ -1355,7 +1355,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "model"
+                    "Model Service"
                 ],
                 "summary": "List Models",
                 "responses": {
@@ -1390,7 +1390,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "model"
+                    "Model Service"
                 ],
                 "summary": "Get Model Status",
                 "parameters": [
@@ -1434,7 +1434,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "model"
+                    "Model Service"
                 ],
                 "summary": "Get a Model",
                 "parameters": [
@@ -1478,7 +1478,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "model"
+                    "Model Service"
                 ],
                 "summary": "Make a Model Default",
                 "parameters": [
@@ -1528,7 +1528,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "model"
+                    "Model Service"
                 ],
                 "summary": "Start a Model",
                 "parameters": [
@@ -1586,7 +1586,6 @@ const docTemplate = `{
                         "description": "List Prompts Request",
                         "name": "request",
                         "in": "body",
-                        "required": true,
                         "schema": {
                             "$ref": "#/definitions/prompttypes.ListPromptsRequest"
                         }
@@ -1796,19 +1795,19 @@ const docTemplate = `{
                     "400": {
                         "description": "Invalid JSON",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/usertypes.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/usertypes.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/usertypes.ErrorResponse"
                         }
                     }
                 }
@@ -1848,19 +1847,19 @@ const docTemplate = `{
                     "400": {
                         "description": "Invalid JSON",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/usertypes.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/usertypes.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/usertypes.ErrorResponse"
                         }
                     }
                 }
@@ -1914,13 +1913,17 @@ const docTemplate = `{
         },
         "/user-service/permission/{permissionId}": {
             "put": {
+                "description": "Creates or updates a permission.\n\nRequires the ` + "`" + `permission.create` + "`" + ` permission.",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Upsert a permission",
+                "tags": [
+                    "User Service"
+                ],
+                "summary": "Upsert a Permission",
                 "parameters": [
                     {
                         "type": "string",
@@ -1968,6 +1971,105 @@ const docTemplate = `{
                 }
             }
         },
+        "/user-service/permission/{permissionId}/is-authorized": {
+            "post": {
+                "description": "Check if a user is authorized for a specific permission.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Service"
+                ],
+                "summary": "Is Authorized",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Permission ID",
+                        "name": "permissionId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Is Authorized Request",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.IsAuthorizedRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.IsAuthorizedResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON or missing permission id",
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/user-service/register": {
+            "post": {
+                "description": "Register a new user with a name, email, and password.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Service"
+                ],
+                "summary": "Register a New User",
+                "parameters": [
+                    {
+                        "description": "Register Request",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.RegisterRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.RegisterResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/user-service/role": {
             "post": {
                 "description": "Create a new role.\n\nRequires the ` + "`" + `role.create` + "`" + ` permission.",
@@ -2002,19 +2104,19 @@ const docTemplate = `{
                     "400": {
                         "description": "Invalid JSON",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/usertypes.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/usertypes.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/usertypes.ErrorResponse"
                         }
                     }
                 }
@@ -2059,13 +2161,72 @@ const docTemplate = `{
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/usertypes.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/user-service/role/{roleId}/permissions": {
+            "put": {
+                "description": "Set permissions for a specified role.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Service"
+                ],
+                "summary": "Set Role Permissions",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Role ID",
+                        "name": "roleId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Set Role Permissions Request",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.SetRolePermissionsRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.SetRolePermissionsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.ErrorResponse"
                         }
                     }
                 }
@@ -2105,19 +2266,65 @@ const docTemplate = `{
                     "400": {
                         "description": "Invalid JSON",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/usertypes.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/usertypes.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/user-service/user/by-token": {
+            "post": {
+                "description": "Retrieve user information based on an authentication token.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Service"
+                ],
+                "summary": "Read User by Token",
+                "parameters": [
+                    {
+                        "description": "Read User By Token Request",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.ReadUserByTokenRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.ReadUserByTokenResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.ErrorResponse"
                         }
                     }
                 }
@@ -2141,7 +2348,6 @@ const docTemplate = `{
                         "description": "Get Users Request",
                         "name": "request",
                         "in": "body",
-                        "required": true,
                         "schema": {
                             "$ref": "#/definitions/usertypes.GetUsersRequest"
                         }
@@ -2157,19 +2363,19 @@ const docTemplate = `{
                     "400": {
                         "description": "Invalid JSON",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/usertypes.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/usertypes.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/usertypes.ErrorResponse"
                         }
                     }
                 }
@@ -3457,6 +3663,28 @@ const docTemplate = `{
                 }
             }
         },
+        "usertypes.IsAuthorizedRequest": {
+            "type": "object",
+            "properties": {
+                "emailsGranted": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "usertypes.IsAuthorizedResponse": {
+            "type": "object",
+            "properties": {
+                "authorized": {
+                    "type": "boolean"
+                },
+                "user": {
+                    "$ref": "#/definitions/usertypes.User"
+                }
+            }
+        },
         "usertypes.LoginRequest": {
             "type": "object",
             "properties": {
@@ -3502,6 +3730,39 @@ const docTemplate = `{
                 }
             }
         },
+        "usertypes.ReadUserByTokenRequest": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "type": "string"
+                }
+            }
+        },
+        "usertypes.ReadUserByTokenResponse": {
+            "type": "object",
+            "properties": {
+                "user": {
+                    "$ref": "#/definitions/usertypes.User"
+                }
+            }
+        },
+        "usertypes.RegisterRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "usertypes.RegisterResponse": {
+            "type": "object"
+        },
         "usertypes.Role": {
             "type": "object",
             "properties": {
@@ -3527,6 +3788,20 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        },
+        "usertypes.SetRolePermissionsRequest": {
+            "type": "object",
+            "properties": {
+                "permissionIds": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "usertypes.SetRolePermissionsResponse": {
+            "type": "object"
         },
         "usertypes.UpserPermissionRequest": {
             "type": "object",

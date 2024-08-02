@@ -20,7 +20,7 @@ import (
 // UpdateThread updates the details of an existing chat thread
 // @Summary Update Thread
 // @Description Modify the details of a specific chat thread
-// @Tags chat
+// @Tags Chat Service
 // @Accept json
 // @Produce json
 // @Param threadId path string true "Thread ID"

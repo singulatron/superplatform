@@ -21,7 +21,7 @@ import (
 // @Description Create a new chat thread and add the requesting user to it.
 // @Decription
 // @Description Requires the `thread.create` permission.
-// @Tags chat
+// @Tags Chat Service
 // @Accept json
 // @Produce json
 // @Param request body chattypes.AddThreadRequest true "Add Thread Request"

@@ -20,7 +20,7 @@ import (
 // GetThread retrieves details of a specific chat thread
 // @Summary Get Thread
 // @Description Fetch information about a specific chat thread by its ID
-// @Tags chat
+// @Tags Chat Service
 // @Accept json
 // @Produce json
 // @Success 200 {object} chattypes.GetThreadResponse "Thread details successfully retrieved"

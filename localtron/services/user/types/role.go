@@ -70,7 +70,6 @@ type GetRolesResponse struct {
 }
 
 type SetRolePermissionsRequest struct {
-	RoleId        string   `json:"roleId,omitempty"`
 	PermissionIds []string `json:"permissionIds,omitempty"`
 }
 

@@ -20,7 +20,7 @@ import (
 // @Summary List Models
 // @Description Retrieves a list of models after checking authorization
 // @Description Requires "model.view" permission.
-// @Tags model
+// @Tags Model Service
 // @Accept json
 // @Produce json
 // @Success 200 {object} modeltypes.ListResponse

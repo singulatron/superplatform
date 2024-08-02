@@ -5,7 +5,7 @@ description: "Adds a specific permission to a role identified by roleId."
 sidebar_label: "Add Permission to Role"
 hide_title: true
 hide_table_of_contents: true
-api: eJy9VFFv2zYQ/ivEPW0AI7nJCgx6mod1hdEBNZrkYUgNlJbOEluKZO+oZJ6g/16c5Ea20w1YBvRJInm877u7j18PFXJJNiYbPBSwrCpWRnHE0u5sqSJSa5lt8CoFZRQFh8pW6JPdWazUdj9urarsvX/v3+HnzhKySg2qD/PdzDDb2n84SpeBhmjItJiQGIq7/ozJO0Fa/QYarCyjSQ1o8KZFKGDCBA00IVZQJOpQA5cNtgaKHtI+SiQnsr6GYdDnAOu5tH+Cmen+R7CNBHMMnpHl/HKxkM8pgbdvQEMZfEKf5NTE6Gxp5DT/yBLSP4UI249YJhiGYdDw0+LF07S33nSpCWT/xuoZAI81CMDLb/Fe+YTkjVPXSPdI6hVRoP+HNGhIphYZwC0jjZltibDR0GJqQiXD6NKomdRAAXnHSBc8heUih7yfRDHk89Ty/niCA2jgkfKkt46cZMpdKI1rAqfi5c+XVy9ApsdYdmTT/lpITzP81bAtl53AP5bQpBThIARZbyVGxAbW74IESlNMOTYFW2MFkY1D/oWtrztnEgWflaGdRbdcr9R1F2MgqXciKThFnnMXkaIzaReozYzNYdDnz6bzyvhKVXiPLkTF6HYXUhxWarlSJkbO1J+hIxUp1GTa1mzlSfuLJnSM6vX6JlM3DarfLeHWMKpdoPE9y+0a5d06W6JnlJq+cn69/kPdX2WLE8Zc5PnDw0NW+y4LVOeHe5ybOrqLq2yRNal1UkNCavnt7uvY54IfTF0jZTbkY0gOGpJNTkKu5waCBpnq1IFFdikpY+DUGn9MsqrU+sTPxGPgrIP9rOPv64YHSSX8K+XRGeulirGZ/UH1d3CsejGkiX/xaIdzRtk+sa+NBpGBZOl7GewtuWGQ7c8d0h6Ku42Ge0NW9DD5sWX5r6DYGcf4L3364VBq9aOabfub9Rw2jd/LzIzrZAUaPuF+tvXRq58Dfm7pz6Bw0rNhM2ho0FRIY0emkGVZYkxHl5+43XDsW+vbGxiGL/LzjfY=
+api: eJy9VcGO2zYQ/RViTg2glZzdBih0qoMmgZECMbK7h2JjILQ4lphQJDND7dYV9O/FSE5ke7cFkkNOlqjhvPeGz489GOSKbEw2eChhaQwrrThiZXe2UhGptcw2eJWC0oqCQ2UN+mR3Fo3a7sellck/+A/+PX7pLCGr1KD6OO/NNbOt/cejdjlkEDXpFhMSQ3nXnzF5L0irPyADK69RpwYy8LpFKGHChAxoQjRQJuowA64abDWUPaR9lEpOZH0Nw5CdA6xnaf8FM9P9TrCNFHMMnpHl++ViIT+nBN69hQyq4BP6JF91jM5WWr4Wn1hK+scQYfsJqwTDMAwZ/Lp4/rjtrdddagLZf9B8D0CkEJGSnRgjUaAn5/gkkxdPCVz5hOS1U9dI90jq1djz51CSRV2LseCWkUYKtkLYZNBiaoKR4+3S6MLUQAlFx0gXPJUVYrCin2w2FLMPiv7YEwNkwKO2ycEdOelUuFBp1wRO5YvfLq+eg/iBserIpv21qJsEvdRsq2Un8N9ENSlFOFhL3rdSM2q0fhekUKanq3F62GoriKwd8u9sfd05nSj4vArtbOPleqWuuxgDid6JpOCURcFdRIpOp12gNte2gCE7/yN2XmlvlMF7dCEqRre7EHFo1HKldIycq79CRypSqEm3rd5KSPiLJnSM6s36Jlc3DarXlnCrGdUu0JgQsrtGSQJnK/SMoukr5zfrP9X9Vb44YcxlUTw8POS17/JAdXHYx4Wuo7u4yhd5k1onGhJSy+92X499Fvyg6xopt6EYSwrIINnkpOR6HiBkIKc6TWCRX0rLGDi12h+TNEatTxJSUgvOJtjPhv+5+XqwVMK/UxGdtl5UjMPsD66/g2PXS8RN/MtvATt3lOWTQNxkIDaQLn0vB3tLbhhk+UuHtIfybpPBvSYrfpgS3rI8Gyh32jH+z5x+OUg1z9R8ETyp57Co/V7OTLtO3iCDz7ifL4ox/X8E/PyS+AEKJzMbNkMGDWqDNE5kKllWFcZ0tPlRLA7HubW+vYFh+Bc4YqsK
 sidebar_class_name: "put api-method"
 info_path: docs/singulatron/singulatron
 custom_edit_url: null
@@ -206,17 +206,28 @@ Requires the `permission.assign` permission.
                     </div><ul
                       style={{"marginLeft":"1rem"}}
                     >
-                      <div
-                        style={{"marginTop":".5rem","marginBottom":".5rem"}}
+                      <SchemaItem
+                        collapsible={false}
+                        name={"error"}
+                        required={false}
+                        schemaName={"string"}
+                        qualifierMessage={undefined}
+                        schema={{"type":"string"}}
                       >
                         
-                        
-                        string
-                        
-                        
-                      </div>
+                      </SchemaItem>
                     </ul>
                   </details>
+                </TabItem><TabItem
+                  label={"Example (from schema)"}
+                  value={"Example (from schema)"}
+                >
+                  <ResponseSamples
+                    responseExample={"{\n  \"error\": \"string\"\n}"}
+                    language={"json"}
+                  >
+                    
+                  </ResponseSamples>
                 </TabItem>
               </SchemaTabs>
             </TabItem>
@@ -268,17 +279,28 @@ Requires the `permission.assign` permission.
                     </div><ul
                       style={{"marginLeft":"1rem"}}
                     >
-                      <div
-                        style={{"marginTop":".5rem","marginBottom":".5rem"}}
+                      <SchemaItem
+                        collapsible={false}
+                        name={"error"}
+                        required={false}
+                        schemaName={"string"}
+                        qualifierMessage={undefined}
+                        schema={{"type":"string"}}
                       >
                         
-                        
-                        string
-                        
-                        
-                      </div>
+                      </SchemaItem>
                     </ul>
                   </details>
+                </TabItem><TabItem
+                  label={"Example (from schema)"}
+                  value={"Example (from schema)"}
+                >
+                  <ResponseSamples
+                    responseExample={"{\n  \"error\": \"string\"\n}"}
+                    language={"json"}
+                  >
+                    
+                  </ResponseSamples>
                 </TabItem>
               </SchemaTabs>
             </TabItem>

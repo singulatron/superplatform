@@ -22,9 +22,9 @@ import (
 // @Produce json
 // @Param request body usertypes.ChangePasswordAdminRequest true "Change Password Request"
 // @Success 200 {object} usertypes.ChangePasswordAdminResponse "Password changed successfully"
-// @Failure 400 {string} string "Invalid JSON"
-// @Failure 401 {string} string "Unauthorized"
-// @Failure 500 {string} string "Internal Server Error"
+// @Failure 400 {object} usertypes.ErrorResponse "Invalid JSON"
+// @Failure 401 {object} usertypes.ErrorResponse "Unauthorized"
+// @Failure 500 {object} usertypes.ErrorResponse "Internal Server Error"
 // @Router /user-service/change-password-admin [post]
 func (s *UserService) ChangePasswordAdmin(w http.ResponseWriter, r *http.Request) {
 	_, err := s.isAuthorized(r, usertypes.PermissionUserPasswordChange.Id, nil)

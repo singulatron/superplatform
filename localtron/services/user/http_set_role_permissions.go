@@ -11,9 +11,23 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
+// SetRolePermissions sets the permissions for a specified role
+// @Summary Set Role Permissions
+// @Description Set permissions for a specified role.
+// @Tags User Service
+// @Accept json
+// @Produce json
+// @Param roleId path string true "Role ID"
+// @Param body body usertypes.SetRolePermissionsRequest true "Set Role Permissions Request"
+// @Success 200 {object} usertypes.SetRolePermissionsResponse
+// @Failure 400 {object} usertypes.ErrorResponse "Invalid JSON"
+// @Failure 401 {object} usertypes.ErrorResponse "Unauthorized"
+// @Failure 500 {object} usertypes.ErrorResponse "Internal Server Error"
+// @Router /user-service/role/{roleId}/permissions [put]
 func (s *UserService) SetRolePermissions(
 	w http.ResponseWriter,
 	r *http.Request) {
@@ -31,7 +45,9 @@ func (s *UserService) SetRolePermissions(
 	}
 	defer r.Body.Close()
 
-	err = s.setRolePermissions(req.RoleId, req.PermissionIds)
+	roleId := mux.Vars(r)["roleId"]
+
+	err = s.setRolePermissions(roleId, req.PermissionIds)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

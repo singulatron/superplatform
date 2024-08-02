@@ -20,7 +20,7 @@ import (
 // AddMessage sends a new message to a chat thread
 // @Summary Add Message
 // @Description Add a new message to a specific thread.
-// @Tags chat
+// @Tags Chat Service
 // @Accept json
 // @Produce json
 // @Param threadId path string true "Thread ID"

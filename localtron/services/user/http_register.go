@@ -14,6 +14,16 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
+// @Summary Register a New User
+// @Description Register a new user with a name, email, and password.
+// @Tags User Service
+// @Accept json
+// @Produce json
+// @Param body body usertypes.RegisterRequest true "Register Request"
+// @Success 200 {object} usertypes.RegisterResponse
+// @Failure 400 {object} usertypes.ErrorResponse "Invalid JSON"
+// @Failure 500 {object} usertypes.ErrorResponse "Internal Server Error"
+// @Router /user-service/register [post]
 func (s *UserService) Register(w http.ResponseWriter, r *http.Request) {
 	req := usertypes.RegisterRequest{}
 	err := json.NewDecoder(r.Body).Decode(&req)

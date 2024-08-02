@@ -183,10 +183,12 @@ export class UserService {
 		permissionIds: string[]
 	): Promise<user.SetRolePermissionsResponse> {
 		const request: user.SetRolePermissionsRequest = {
-			roleId: roleId,
 			permissionIds: permissionIds,
 		};
-		return this.localtron.post('/user/set-role-permissions', request);
+		return this.localtron.put(
+			`/user-service/role/${roleId}/permissions`,
+			request
+		);
 	}
 
 	deleteRole(roleId: string): Promise<user.DeleteRoleResponse> {

@@ -22,6 +22,17 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
+// @Summary Is Authorized
+// @Description Check if a user is authorized for a specific permission.
+// @Tags User Service
+// @Accept json
+// @Produce json
+// @Param permissionId path string true "Permission ID"
+// @Param body body usertypes.IsAuthorizedRequest true "Is Authorized Request"
+// @Success 200 {object} usertypes.IsAuthorizedResponse
+// @Failure 400 {object} usertypes.ErrorResponse "Invalid JSON or missing permission id"
+// @Failure 401 {object} usertypes.ErrorResponse "Unauthorized"
+// @Router /user-service/permission/{permissionId}/is-authorized [post]
 func (s *UserService) IsAuthorized(
 	w http.ResponseWriter,
 	r *http.Request,
