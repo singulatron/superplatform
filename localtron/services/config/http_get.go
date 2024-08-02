@@ -26,6 +26,7 @@ import (
 // @Success 200 {object} configtypes.GetConfigResponse "Current configuration retrieved successfully"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
+// @Security BearerAuth
 // @Router /config/get [post]
 func (cs *ConfigService) Get(
 	w http.ResponseWriter,

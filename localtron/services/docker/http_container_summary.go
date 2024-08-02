@@ -29,6 +29,7 @@ import (
 // @Failure      400            {object} dockertypes.ErrorResponse  "Invalid JSON"
 // @Failure      401            {object} dockertypes.ErrorResponse  "Unauthorized"
 // @Failure      500            {object} dockertypes.ErrorResponse  "Internal Server Error"
+// @Security BearerAuth
 // @Router       /docker-service/container/{hash}/summary/{numberOfLines} [get]
 func (dm *DockerService) Summary(
 	w http.ResponseWriter,

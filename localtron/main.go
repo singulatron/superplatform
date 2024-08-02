@@ -40,7 +40,10 @@ const port = router.DefaultPort
 // @host      localhost:58231
 // @BasePath  /
 
-// @securityDefinitions.basic  BasicAuth
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
+// @description Type "Bearer" followed by a space and token acquired from the User sService Login endpoint.
 
 // @externalDocs.description  Singulatron API
 // @externalDocs.url          https://superplatform.ai/docs/category/singulatron-api

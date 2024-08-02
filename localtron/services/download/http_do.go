@@ -29,6 +29,7 @@ import (
 // @Failure 400 {object} downloadtypes.ErrorResponse "Invalid JSON"
 // @Failure 401 {object} downloadtypes.ErrorResponse "Unauthorized"
 // @Failure 500 {object} downloadtypes.ErrorResponse "Internal Server Error"
+// @Security BearerAuth
 // @Router /download-service/download [put]
 func (ds *DownloadService) Do(
 	w http.ResponseWriter,

@@ -1062,6 +1062,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Delete Message
       tags:
       - Chat Service
@@ -1098,6 +1100,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Add Thread
       tags:
       - Chat Service
@@ -1132,6 +1136,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Delete Thread
       tags:
       - Chat Service
@@ -1158,6 +1164,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Get Thread
       tags:
       - Chat Service
@@ -1196,6 +1204,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Update Thread
       tags:
       - Chat Service
@@ -1236,6 +1246,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Add Message
       tags:
       - Chat Service
@@ -1269,6 +1281,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Get Messages
       tags:
       - Chat Service
@@ -1303,6 +1317,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Get Threads
       tags:
       - Chat Service
@@ -1333,6 +1349,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Get
       tags:
       - Config Service
@@ -1363,6 +1381,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Save
       tags:
       - Config Service
@@ -1400,6 +1420,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/dockertypes.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Launch a Docker Container
       tags:
       - Docker Service
@@ -1474,6 +1496,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/dockertypes.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Get Container Summary
       tags:
       - Docker Service
@@ -1497,6 +1521,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/dockertypes.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Get Docker Host
       tags:
       - Docker Service
@@ -1520,6 +1546,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/dockertypes.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Get Docker Service Information
       tags:
       - Docker Service
@@ -1558,6 +1586,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/downloadtypes.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Download a File
       tags:
       - Download Service
@@ -1590,6 +1620,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Get a Download
       tags:
       - Download Service
@@ -1627,6 +1659,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Pause a Download
       tags:
       - Download Service
@@ -1653,6 +1687,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: List Downloads
       tags:
       - Download Service
@@ -1682,6 +1718,8 @@ paths:
           description: Unauthorized
           schema:
             $ref: '#/definitions/firehosetypes.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Publish an Event
       tags:
       - Firehose Service
@@ -1706,6 +1744,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/firehosetypes.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Subscribe to the Event Stream
       tags:
       - Firehose Service
@@ -1823,6 +1863,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/generictypes.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Find Generic Objects
       tags:
       - Generic Service
@@ -1895,6 +1937,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/generictypes.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Upsert a Generic Object
       tags:
       - Generic Service
@@ -1927,6 +1971,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Get Model Status
       tags:
       - Model Service
@@ -1959,6 +2005,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/modeltypes.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Get a Model
       tags:
       - Model Service
@@ -1993,6 +2041,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/modeltypes.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Make a Model Default
       tags:
       - Model Service
@@ -2026,6 +2076,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/modeltypes.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Start a Model
       tags:
       - Model Service
@@ -2056,6 +2108,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/modeltypes.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Start the Default Model
       tags:
       - Model Service
@@ -2081,6 +2135,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/modeltypes.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: List Models
       tags:
       - Model Service
@@ -2629,6 +2685,10 @@ paths:
       tags:
       - User Service
 securityDefinitions:
-  BasicAuth:
-    type: basic
+  BearerAuth:
+    description: Type "Bearer" followed by a space and token acquired from the User
+      sService Login endpoint.
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

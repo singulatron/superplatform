@@ -29,6 +29,7 @@ import (
 // @Success 200 {object} downloadtypes.GetDownloadResponse
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
+// @Security BearerAuth
 // @Router /download-service/download/{downloadId} [get]
 func (ds *DownloadService) Get(
 	w http.ResponseWriter,

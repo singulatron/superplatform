@@ -27,6 +27,7 @@ import (
 // @Success 200 {object} nil "{}"
 // @Failure 400 {object} firehosetypes.ErrorResponse "Invalid JSON"
 // @Failure 401 {object} firehosetypes.ErrorResponse "Unauthorized"
+// @Security BearerAuth
 // @Router /firehose-service/publish [post]
 func (p *FirehoseService) Publish(w http.ResponseWriter,
 	r *http.Request) {
