@@ -96,8 +96,7 @@ export class PromptService {
 
 				const uri =
 					this.localtron.config.env.localtronAddress +
-					`'/prompt-service/${threadId}/subscribe` +
-					threadId;
+					`/prompt-service/${threadId}/subscribe`;
 
 				const headers = {
 					Authorization: 'Bearer ' + this.userService.getToken(),
@@ -206,6 +205,7 @@ export class PromptService {
 			};
 		}).pipe(
 			catchError((error) => {
+				console.error(error);
 				console.error('Prompt subscription error', {
 					error: JSON.stringify(error),
 				});
