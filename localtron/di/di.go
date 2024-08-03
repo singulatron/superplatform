@@ -277,7 +277,7 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 
 	router.HandleFunc("/chat-service/thread/{threadId}/messages", appl(func(w http.ResponseWriter, r *http.Request) {
 		chatService.GetMessages(w, r)
-	})).Methods("OPTIONS", "GET")
+	})).Methods("OPTIONS", "POST")
 
 	router.HandleFunc("/chat-service/thread", appl(func(w http.ResponseWriter, r *http.Request) {
 		chatService.AddThread(w, r)

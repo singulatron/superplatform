@@ -27,8 +27,6 @@ jobs:
 
       - name: Run tests
         run: |
-          cd localtron
-
           docker rm -f mypostgres
           docker run --name mypostgres -e POSTGRES_PASSWORD=mysecretpassword -e POSTGRES_DB=mydatabase -p 5432:5432 -d postgres
 
@@ -39,3 +37,12 @@ jobs:
             SINGULATRON_DB_DEBUG=true \
             SINGULATRON_DB_SQL_CONNECTION_STRING="postgres://postgres:mysecretpassword@localhost:5432/mydatabase?sslmode=disable" \
             go test ./... -v
+        working-directory: localtron
+
+      - name: Test OpenAPI annotations
+        run: |
+          go install github.com/swaggo/swag/cmd/swag@latest
+          npm install @openapitools/openapi-generator-cli -g
+          swag init
+          openapi-generator-cli generate -i docs/swagger.yaml -g typescript-fetch -o ./genn
+        working-directory: localtron

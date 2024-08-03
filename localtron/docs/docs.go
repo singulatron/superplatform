@@ -41,7 +41,7 @@ const docTemplate = `{
                 "tags": [
                     "Chat Service"
                 ],
-                "summary": "Delete Message",
+                "summary": "Delete a Message",
                 "parameters": [
                     {
                         "type": "string",
@@ -155,6 +155,15 @@ const docTemplate = `{
                     "Chat Service"
                 ],
                 "summary": "Get Thread",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Thread ID",
+                        "name": "threadId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Thread details successfully retrieved",
@@ -260,7 +269,7 @@ const docTemplate = `{
                 "tags": [
                     "Chat Service"
                 ],
-                "summary": "Delete Thread",
+                "summary": "Delete a Thread",
                 "parameters": [
                     {
                         "type": "string",
@@ -365,7 +374,7 @@ const docTemplate = `{
             }
         },
         "/chat-service/thread/{threadId}/messages": {
-            "get": {
+            "post": {
                 "security": [
                     {
                         "BearerAuth": []
@@ -381,7 +390,7 @@ const docTemplate = `{
                 "tags": [
                     "Chat Service"
                 ],
-                "summary": "Get Messages",
+                "summary": "List Messages",
                 "parameters": [
                     {
                         "type": "string",
@@ -493,7 +502,7 @@ const docTemplate = `{
                 "tags": [
                     "Config Service"
                 ],
-                "summary": "Get",
+                "summary": "Get Config",
                 "parameters": [
                     {
                         "description": "Get Config Request",
@@ -544,7 +553,7 @@ const docTemplate = `{
                 "tags": [
                     "Config Service"
                 ],
-                "summary": "Save",
+                "summary": "Save Config",
                 "parameters": [
                     {
                         "description": "Save Config Request",
@@ -1123,7 +1132,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/generic/create": {
+        "/generic-service/create": {
             "post": {
                 "security": [
                     {
@@ -1180,7 +1189,69 @@ const docTemplate = `{
                 }
             }
         },
-        "/generic/object/{objectId}": {
+        "/generic-service/object/{objectId}": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Creates a new generic object or updates an existing one based on the provided data. Requires authorization and user authentication.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Generic Service"
+                ],
+                "summary": "Upsert a Generic Object",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Object ID",
+                        "name": "objectId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Upsert request payload",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/generictypes.UpsertRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful creation or update of object",
+                        "schema": {
+                            "$ref": "#/definitions/generictypes.UpsertResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/generictypes.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/generictypes.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/generictypes.ErrorResponse"
+                        }
+                    }
+                }
+            },
             "delete": {
                 "security": [
                     {
@@ -1201,8 +1272,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Container Hash",
-                        "name": "hash",
+                        "description": "Object ID",
+                        "name": "objectId",
                         "in": "path",
                         "required": true
                     },
@@ -1244,7 +1315,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/generic/objects": {
+        "/generic-service/objects": {
             "post": {
                 "security": [
                     {
@@ -1300,7 +1371,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/generic/objects/update": {
+        "/generic-service/objects/update": {
             "post": {
                 "security": [
                     {
@@ -1334,63 +1405,6 @@ const docTemplate = `{
                         "description": "Successful update of objects",
                         "schema": {
                             "$ref": "#/definitions/generictypes.UpdateResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid JSON",
-                        "schema": {
-                            "$ref": "#/definitions/generictypes.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/generictypes.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/generictypes.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/generic/upsert": {
-            "post": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Creates a new generic object or updates an existing one based on the provided data. Requires authorization and user authentication.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Generic Service"
-                ],
-                "summary": "Upsert a Generic Object",
-                "parameters": [
-                    {
-                        "description": "Upsert request payload",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/generictypes.UpsertRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful creation or update of object",
-                        "schema": {
-                            "$ref": "#/definitions/generictypes.UpsertResponse"
                         }
                     },
                     "400": {
@@ -1571,7 +1585,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "Model ID",
-                        "name": "id",
+                        "name": "modelId",
                         "in": "path",
                         "required": true
                     }
@@ -1620,7 +1634,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "Model ID",
-                        "name": "id",
+                        "name": "modelId",
                         "in": "path",
                         "required": true
                     }
@@ -1875,7 +1889,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Thread ID",
                         "name": "threadId",
-                        "in": "query",
+                        "in": "path",
                         "required": true
                     }
                 ],
@@ -2067,7 +2081,6 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "example": "123",
                         "description": "Permission ID",
                         "name": "permissionId",
                         "in": "path",

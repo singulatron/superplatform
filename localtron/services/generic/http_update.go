@@ -28,7 +28,7 @@ import (
 // @Failure 401 {object} generictypes.ErrorResponse "Unauthorized"
 // @Failure 500 {object} generictypes.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
-// @Router /generic/objects/update [post]
+// @Router /generic-service/objects/update [post]
 func (g *GenericService) Update(
 	w http.ResponseWriter,
 	r *http.Request,

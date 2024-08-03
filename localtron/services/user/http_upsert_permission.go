@@ -24,7 +24,7 @@ import (
 // @Tags User Service
 // @Accept json
 // @Produce json
-// @Param permissionId path string true "Permission ID" example(123)
+// @Param permissionId path string true "Permission ID"
 // @Param requestBody body usertypes.UpserPermissionRequest true "Permission Details"
 // @Success 200 {object} usertypes.CreateUserResponse
 // @Failure 400 {string} string "Bad Request"

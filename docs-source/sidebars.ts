@@ -22,7 +22,8 @@ const sidebars: SidebarsConfig = {
       link: {
         type: "generated-index",
         title: "Singulatron API",
-        description: "Singuatron API sidebar",
+        description:
+          "API documentation for the batteries that are included with your Singulatron installation.",
         slug: "/category/singulatron-api",
       },
       // @ts-ignore

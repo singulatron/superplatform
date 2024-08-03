@@ -25,7 +25,7 @@ import (
 // @Summary Subscribe to Prompt
 // @Description Subscribe to prompt responses via Server-Sent Events (SSE)
 // @Tags Prompt Service
-// @Param threadId query string true "Thread ID"
+// @Param threadId path string true "Thread ID"
 // @Success 200 {string} string "Streaming response"
 // @Failure 400 {object} prompttypes.ErrorResponse "Missing threadId parameter"
 // @Failure 401 {object} prompttypes.ErrorResponse "Unauthorized"
