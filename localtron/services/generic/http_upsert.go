@@ -23,6 +23,7 @@ import (
 // @Tags Generic Service
 // @Accept json
 // @Produce json
+// @Param objectId path string true  "Object ID"
 // @Param body body generictypes.UpsertRequest true "Upsert request payload"
 // @Success 200 {object} generictypes.UpsertResponse "Successful creation or update of object"
 // @Failure 400 {object} generictypes.ErrorResponse "Invalid JSON"

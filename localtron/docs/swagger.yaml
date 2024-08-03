@@ -1064,7 +1064,7 @@ paths:
             type: string
       security:
       - BearerAuth: []
-      summary: Delete Message
+      summary: Delete a Message
       tags:
       - Chat Service
   /chat-service/thread:
@@ -1138,13 +1138,19 @@ paths:
             type: string
       security:
       - BearerAuth: []
-      summary: Delete Thread
+      summary: Delete a Thread
       tags:
       - Chat Service
     get:
       consumes:
       - application/json
       description: Fetch information about a specific chat thread by its ID
+      parameters:
+      - description: Thread ID
+        in: path
+        name: threadId
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -1252,7 +1258,7 @@ paths:
       tags:
       - Chat Service
   /chat-service/thread/{threadId}/messages:
-    get:
+    post:
       consumes:
       - application/json
       description: Fetch messages (and associated assets) for a specific chat thread.
@@ -1283,7 +1289,7 @@ paths:
             type: string
       security:
       - BearerAuth: []
-      summary: Get Messages
+      summary: List Messages
       tags:
       - Chat Service
   /chat-service/threads:
@@ -1351,7 +1357,7 @@ paths:
             type: string
       security:
       - BearerAuth: []
-      summary: Get
+      summary: Get Config
       tags:
       - Config Service
   /config/save:
@@ -1383,7 +1389,7 @@ paths:
             type: string
       security:
       - BearerAuth: []
-      summary: Save
+      summary: Save Config
       tags:
       - Config Service
   /docker-service/container:
@@ -1749,7 +1755,7 @@ paths:
       summary: Subscribe to the Event Stream
       tags:
       - Firehose Service
-  /generic/create:
+  /generic-service/create:
     post:
       consumes:
       - application/json
@@ -1786,16 +1792,16 @@ paths:
       summary: Create a Generic Object
       tags:
       - Generic Service
-  /generic/object/{objectId}:
+  /generic-service/object/{objectId}:
     delete:
       consumes:
       - application/json
       description: Removes a generic object from the system based on the provided
         conditions. Requires authorization and user authentication.
       parameters:
-      - description: Container Hash
+      - description: Object ID
         in: path
-        name: hash
+        name: objectId
         required: true
         type: string
       - description: Delete request payload
@@ -1828,7 +1834,48 @@ paths:
       summary: Delete a Generic Object
       tags:
       - Generic Service
-  /generic/objects:
+    put:
+      consumes:
+      - application/json
+      description: Creates a new generic object or updates an existing one based on
+        the provided data. Requires authorization and user authentication.
+      parameters:
+      - description: Object ID
+        in: path
+        name: objectId
+        required: true
+        type: string
+      - description: Upsert request payload
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/generictypes.UpsertRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful creation or update of object
+          schema:
+            $ref: '#/definitions/generictypes.UpsertResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/generictypes.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/generictypes.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/generictypes.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Upsert a Generic Object
+      tags:
+      - Generic Service
+  /generic-service/objects:
     post:
       consumes:
       - application/json
@@ -1868,7 +1915,7 @@ paths:
       summary: Find Generic Objects
       tags:
       - Generic Service
-  /generic/objects/update:
+  /generic-service/objects/update:
     post:
       consumes:
       - application/json
@@ -1903,43 +1950,6 @@ paths:
       security:
       - BearerAuth: []
       summary: Update Generic Objects
-      tags:
-      - Generic Service
-  /generic/upsert:
-    post:
-      consumes:
-      - application/json
-      description: Creates a new generic object or updates an existing one based on
-        the provided data. Requires authorization and user authentication.
-      parameters:
-      - description: Upsert request payload
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/generictypes.UpsertRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Successful creation or update of object
-          schema:
-            $ref: '#/definitions/generictypes.UpsertResponse'
-        "400":
-          description: Invalid JSON
-          schema:
-            $ref: '#/definitions/generictypes.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/generictypes.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/generictypes.ErrorResponse'
-      security:
-      - BearerAuth: []
-      summary: Upsert a Generic Object
       tags:
       - Generic Service
   /model-service/{id}/status:
@@ -1987,7 +1997,7 @@ paths:
       parameters:
       - description: Model ID
         in: path
-        name: id
+        name: modelId
         required: true
         type: string
       produces:
@@ -2019,7 +2029,7 @@ paths:
       parameters:
       - description: Model ID
         in: path
-        name: id
+        name: modelId
         required: true
         type: string
       produces:
@@ -2145,7 +2155,7 @@ paths:
       description: Subscribe to prompt responses via Server-Sent Events (SSE)
       parameters:
       - description: Thread ID
-        in: query
+        in: path
         name: threadId
         required: true
         type: string
@@ -2375,7 +2385,6 @@ paths:
         Requires the `permission.create` permission.
       parameters:
       - description: Permission ID
-        example: "123"
         in: path
         name: permissionId
         required: true

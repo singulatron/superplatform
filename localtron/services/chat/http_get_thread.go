@@ -23,6 +23,7 @@ import (
 // @Tags Chat Service
 // @Accept json
 // @Produce json
+// @Param threadId path string true "Thread ID"
 // @Success 200 {object} chattypes.GetThreadResponse "Thread details successfully retrieved"
 // @Failure 400 {string} string "Invalid JSON"
 // @Failure 401 {string} string "Unauthorized"

@@ -26,7 +26,7 @@ import (
 // @Tags Model Service
 // @Accept json
 // @Produce json
-// @Param id path string true "Model ID"
+// @Param modelId path string true "Model ID"
 // @Success 200 {object} modeltypes.GetModelResponse
 // @Failure 401 {object} modeltypes.ErrorResponse "Unauthorized"
 // @Failure 500 {object} modeltypes.ErrorResponse "Internal Server Error"
