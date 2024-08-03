@@ -61,7 +61,7 @@ export class ChatService {
 	}
 
 	async chatMessages(threadId: string): Promise<chat.GetMessagesResponse> {
-		return this.localtron.get(`/chat-service/thread/${threadId}/messages`);
+		return this.localtron.post(`/chat-service/thread/${threadId}/messages`, {});
 	}
 
 	async chatThread(threadId: string): Promise<chat.GetThreadResponse> {

@@ -17,7 +17,7 @@ import (
 )
 
 // Save saves the configuration
-// @Summary Save
+// @Summary Save Config
 // @Description Save the provided configuration to the server
 // @Tags Config Service
 // @Accept json

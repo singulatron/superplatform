@@ -32,7 +32,7 @@ import (
 // @Failure 401 {object} generictypes.ErrorResponse "Unauthorized"
 // @Failure 500 {object} generictypes.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
-// @Router /generic/objects [post]
+// @Router /generic-service/objects [post]
 func (g *GenericService) Find(
 	w http.ResponseWriter,
 	r *http.Request,

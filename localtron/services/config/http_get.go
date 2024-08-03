@@ -17,7 +17,7 @@ import (
 )
 
 // Get retrieves the current configuration
-// @Summary Get
+// @Summary Get Config
 // @Description Fetch the current configuration from the server
 // @Tags Config Service
 // @Accept json

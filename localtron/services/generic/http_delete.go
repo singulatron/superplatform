@@ -29,7 +29,7 @@ import (
 // @Failure     401   {object} generictypes.ErrorResponse "Unauthorized"
 // @Failure     500   {object} generictypes.ErrorResponse "Internal Server Error"
 // @Security    BearerAuth
-// @Router      /generic/object/{objectId} [delete]
+// @Router      /generic-service/object/{objectId} [delete]
 func (g *GenericService) Delete(
 	w http.ResponseWriter,
 	r *http.Request,

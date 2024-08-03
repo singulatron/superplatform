@@ -12,6 +12,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	generictypes "github.com/singulatron/singulatron/localtron/services/generic/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
@@ -28,7 +29,7 @@ import (
 // @Failure 401 {object} generictypes.ErrorResponse "Unauthorized"
 // @Failure 500 {object} generictypes.ErrorResponse "Internal Server Error"
 // @Security    BearerAuth
-// @Router /generic/upsert [post]
+// @Router /generic-service/object/{objectId} [put]
 func (g *GenericService) Upsert(
 	w http.ResponseWriter,
 	r *http.Request,
@@ -53,6 +54,9 @@ func (g *GenericService) Upsert(
 	}
 	defer r.Body.Close()
 	req.Object.UserId = rsp.User.Id
+
+	objectId := mux.Vars(r)
+	req.Object.Id = objectId["objectId"]
 
 	err = g.upsert(req)
 	if err != nil {

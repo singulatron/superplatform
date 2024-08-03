@@ -18,7 +18,7 @@ import (
 )
 
 // GetMessages retrieves messages from a chat thread
-// @Summary Get Messages
+// @Summary List Messages
 // @Description Fetch messages (and associated assets) for a specific chat thread.
 // @Tags Chat Service
 // @Accept json
@@ -29,7 +29,7 @@ import (
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
 // @Security BearerAuth
-// @Router /chat-service/thread/{threadId}/messages [get]
+// @Router /chat-service/thread/{threadId}/messages [post]
 func (a *ChatService) GetMessages(
 	w http.ResponseWriter,
 	r *http.Request,
