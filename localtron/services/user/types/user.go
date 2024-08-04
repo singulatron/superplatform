@@ -41,17 +41,17 @@ type User struct {
 }
 
 type KeyPair struct {
-	Id         string `json:"id,omitempty"`
+	Id        string    `json:"id,omitempty"`
+	CreatedAt time.Time `json:"createdAt,omitempty"`
+	UpdatedAt time.Time `json:"updatedAt,omitempty"`
+
 	PrivateKey string `json:"privateKey,omitempty"`
 	PublicKey  string `json:"publicKey,omitempty"`
 }
 
-// type UserToRole struct {
-// 	// Id is `userId:roleId` to be easily idempontent
-// 	Id     string `json:"id,omitempty"`
-// 	UserId string `json:"userId,omitempty"`
-// 	RoleId string `json:"roleId,omitempty"`
-// }
+func (k *KeyPair) GetId() string {
+	return k.Id
+}
 
 func (c *User) GetId() string {
 	return c.Id
@@ -142,4 +142,9 @@ type Credential struct {
 
 func (c *Credential) GetId() string {
 	return c.Email
+}
+
+type GetPublicKeyRequest struct{}
+type GetPublicKeyResponse struct {
+	PublicKey string `json:"publicKey,omitempty"`
 }

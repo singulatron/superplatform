@@ -63,3 +63,22 @@ func generateJWT(userId string, privateKey *rsa.PrivateKey) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
 	return token.SignedString(privateKey)
 }
+
+func publicKeyFromString(publicKeyPem string) (*rsa.PublicKey, error) {
+	block, _ := pem.Decode([]byte(publicKeyPem))
+	if block == nil || block.Type != "PUBLIC KEY" {
+		return nil, fmt.Errorf("failed to decode PEM block containing public key")
+	}
+	pub, err := x509.ParsePKIXPublicKey(block.Bytes)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse public key: %v", err)
+	}
+
+	// Type assertion to convert from interface{} to *rsa.PublicKey
+	rsaPub, ok := pub.(*rsa.PublicKey)
+	if !ok {
+		return nil, fmt.Errorf("not an RSA public key")
+	}
+
+	return rsaPub, nil
+}
