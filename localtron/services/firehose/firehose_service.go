@@ -15,6 +15,7 @@ import (
 	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/logger"
 	"github.com/singulatron/singulatron/localtron/router"
+	sdk "github.com/singulatron/singulatron/localtron/sdk/go"
 
 	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
@@ -46,7 +47,7 @@ func NewFirehoseService(r *router.Router, datastoreFactory func(tableName string
 }
 
 func (fs *FirehoseService) Start() error {
-	token, err := usertypes.RegisterService("firehose-service", "Firehose Service", fs.router, fs.credentialStore)
+	token, err := sdk.RegisterService("firehose-service", "Firehose Service", fs.router, fs.credentialStore)
 	if err != nil {
 		return err
 	}

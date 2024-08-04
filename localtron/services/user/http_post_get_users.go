@@ -63,7 +63,6 @@ func (s *UserService) GetUsers(
 
 	for i := range users {
 		users[i].PasswordHash = ""
-		users[i].AuthTokenIds = nil
 	}
 
 	bs, _ := json.Marshal(usertypes.GetUsersResponse{

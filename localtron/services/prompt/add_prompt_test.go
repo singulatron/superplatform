@@ -18,11 +18,11 @@ import (
 
 	"github.com/singulatron/singulatron/localtron/clients/llm"
 	"github.com/singulatron/singulatron/localtron/di"
+	sdk "github.com/singulatron/singulatron/localtron/sdk/go"
 	configservice "github.com/singulatron/singulatron/localtron/services/config"
 	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
-	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 	"github.com/stretchr/testify/require"
 	"go.uber.org/mock/gomock"
 )
@@ -52,7 +52,7 @@ func TestAddPrompt(t *testing.T) {
 	err = starterFunc()
 	require.NoError(t, err)
 
-	token, err := usertypes.RegisterUser(router, "someuser", "pw123", "Some name")
+	token, err := sdk.RegisterUser(router, "someuser", "pw123", "Some name")
 	require.NoError(t, err)
 	router = router.SetBearerToken(token)
 

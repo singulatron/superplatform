@@ -13,6 +13,7 @@ import (
 	"github.com/docker/docker/client"
 	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/router"
+	sdk "github.com/singulatron/singulatron/localtron/sdk/go"
 
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
@@ -58,7 +59,7 @@ func NewDockerService(
 }
 
 func (ds *DockerService) Start() error {
-	token, err := usertypes.RegisterService("docker-service", "Docker Service", ds.router, ds.credentialStore)
+	token, err := sdk.RegisterService("docker-service", "Docker Service", ds.router, ds.credentialStore)
 	if err != nil {
 		return err
 	}

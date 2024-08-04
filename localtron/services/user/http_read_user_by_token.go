@@ -40,7 +40,6 @@ func (s *UserService) ReadUserByToken(w http.ResponseWriter, r *http.Request) {
 	}
 
 	user.PasswordHash = ""
-	user.AuthTokenIds = nil
 
 	bs, _ := json.Marshal(usertypes.ReadUserByTokenResponse{
 		User: user,

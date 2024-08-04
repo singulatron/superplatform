@@ -11,8 +11,8 @@ import (
 	"github.com/google/uuid"
 	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/di"
+	sdk "github.com/singulatron/singulatron/localtron/sdk/go"
 	generictypes "github.com/singulatron/singulatron/localtron/services/generic/types"
-	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 	"github.com/stretchr/testify/require"
 )
 
@@ -40,11 +40,11 @@ func TestCreate(t *testing.T) {
 	err = starterFunc()
 	require.NoError(t, err)
 
-	token, err := usertypes.RegisterUser(router, "someuser", "pw123", "Some name")
+	token, err := sdk.RegisterUser(router, "someuser", "pw123", "Some name")
 	require.NoError(t, err)
 	user1Router := router.SetBearerToken(token)
 
-	token, err = usertypes.RegisterUser(router, "someuser2", "pw123", "Some name 2")
+	token, err = sdk.RegisterUser(router, "someuser2", "pw123", "Some name 2")
 	require.NoError(t, err)
 	user2Router := router.SetBearerToken(token)
 

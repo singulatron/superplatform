@@ -20,6 +20,7 @@ import (
 
 	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/router"
+	sdk "github.com/singulatron/singulatron/localtron/sdk/go"
 	types "github.com/singulatron/singulatron/localtron/services/config/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 
@@ -70,7 +71,7 @@ func (cs *ConfigService) Start() error {
 	}
 	cs.credentialStore = credentialStore
 
-	token, err := usertypes.RegisterService("config-service", "Config Service", cs.router, cs.credentialStore)
+	token, err := sdk.RegisterService("config-service", "Config Service", cs.router, cs.credentialStore)
 	if err != nil {
 		return err
 	}

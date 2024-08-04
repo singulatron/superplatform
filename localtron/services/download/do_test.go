@@ -20,10 +20,10 @@ import (
 	"time"
 
 	"github.com/singulatron/singulatron/localtron/di"
+	sdk "github.com/singulatron/singulatron/localtron/sdk/go"
 	downloadservice "github.com/singulatron/singulatron/localtron/services/download"
 	downloadtypes "github.com/singulatron/singulatron/localtron/services/download/types"
 	types "github.com/singulatron/singulatron/localtron/services/download/types"
-	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 	"github.com/stretchr/testify/require"
 )
 
@@ -58,7 +58,7 @@ func TestDownloadFile(t *testing.T) {
 	err = starterFunc()
 	require.NoError(t, err)
 
-	token, err := usertypes.RegisterUser(router, "someuser", "pw123", "Some name")
+	token, err := sdk.RegisterUser(router, "someuser", "pw123", "Some name")
 	require.NoError(t, err)
 	router = router.SetBearerToken(token)
 
@@ -115,7 +115,7 @@ func TestDownloadFileWithPartFile(t *testing.T) {
 	err = starterFunc()
 	require.NoError(t, err)
 
-	token, err := usertypes.RegisterUser(router, "someuser", "pw123", "Some name")
+	token, err := sdk.RegisterUser(router, "someuser", "pw123", "Some name")
 	require.NoError(t, err)
 	router = router.SetBearerToken(token)
 
@@ -167,7 +167,7 @@ func TestDownloadFileWithFullFile(t *testing.T) {
 	err = starterFunc()
 	require.NoError(t, err)
 
-	token, err := usertypes.RegisterUser(router, "someuser", "pw123", "Some name")
+	token, err := sdk.RegisterUser(router, "someuser", "pw123", "Some name")
 	require.NoError(t, err)
 	router = router.SetBearerToken(token)
 

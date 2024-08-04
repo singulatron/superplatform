@@ -22,6 +22,7 @@ type UserService struct {
 	rolesStore       datastore.DataStore
 	permissionsStore datastore.DataStore
 	authTokensStore  datastore.DataStore
+	keyPairsStore    datastore.DataStore
 
 	userId string
 }
@@ -46,6 +47,10 @@ func NewUserService(
 	if err != nil {
 		return nil, err
 	}
+	keyPairsStore, err := datastoreFactory("keyPairs", &usertypes.Permission{})
+	if err != nil {
+		return nil, err
+	}
 
 	service := &UserService{
 		router:           router,
@@ -53,6 +58,7 @@ func NewUserService(
 		rolesStore:       rolesStore,
 		authTokensStore:  authTokensStore,
 		permissionsStore: permissionsStore,
+		keyPairsStore:    keyPairsStore,
 	}
 
 	err = service.registerRoles()

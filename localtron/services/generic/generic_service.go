@@ -13,6 +13,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/router"
+	sdk "github.com/singulatron/singulatron/localtron/sdk/go"
 
 	generictypes "github.com/singulatron/singulatron/localtron/services/generic/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
@@ -47,7 +48,7 @@ func NewGenericService(
 }
 
 func (g *GenericService) Start() error {
-	token, err := usertypes.RegisterService("generic-service", "Generic Service", g.router, g.credentialStore)
+	token, err := sdk.RegisterService("generic-service", "Generic Service", g.router, g.credentialStore)
 	if err != nil {
 		return err
 	}

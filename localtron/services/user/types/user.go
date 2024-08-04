@@ -8,14 +8,9 @@
 package usertypes
 
 import (
-	"context"
-	"fmt"
 	"time"
 
-	"github.com/google/uuid"
 	"github.com/singulatron/singulatron/localtron/datastore"
-	"github.com/singulatron/singulatron/localtron/logger"
-	"github.com/singulatron/singulatron/localtron/router"
 )
 
 type ErrorResponse struct {
@@ -39,11 +34,24 @@ type User struct {
 
 	PasswordHash string `json:"passwordHash,omitempty"`
 
-	RoleIds      []string `json:"roleIds,omitempty"`
-	AuthTokenIds []string `json:"authTokenIds,omitempty"`
+	/* Many to many relationship between User and Role */
+	RoleIds []string `json:"roleIds,omitempty"`
 
 	IsService bool `json:"isService,omitempty"`
 }
+
+type KeyPair struct {
+	Id         string `json:"id,omitempty"`
+	PrivateKey string `json:"privateKey,omitempty"`
+	PublicKey  string `json:"publicKey,omitempty"`
+}
+
+// type UserToRole struct {
+// 	// Id is `userId:roleId` to be easily idempontent
+// 	Id     string `json:"id,omitempty"`
+// 	UserId string `json:"userId,omitempty"`
+// 	RoleId string `json:"roleId,omitempty"`
+// }
 
 func (c *User) GetId() string {
 	return c.Id
@@ -134,76 +142,4 @@ type Credential struct {
 
 func (c *Credential) GetId() string {
 	return c.Email
-}
-
-// RegisterService registers a service or logs in with credentials loaded
-// from the credentials store.
-// Every service should have a user account in the user service and this method creates
-// that user account.
-func RegisterService(serviceEmail, serviceName string, router *router.Router, store datastore.DataStore) (string, error) {
-	res, err := store.Query(datastore.All()).Find()
-	if err != nil {
-		return "", err
-	}
-
-	email := serviceEmail
-	pw := ""
-
-	if len(res) > 0 {
-		cred := res[0].(*Credential)
-		email = cred.Email
-		pw = cred.Password
-	} else {
-		logger.Info(fmt.Sprintf("Registering the %v service", serviceEmail))
-
-		pw = uuid.New().String()
-		err = router.Post(context.Background(), "user-service", "/register", RegisterRequest{
-			Email:    email,
-			Name:     serviceName,
-			Password: pw,
-		}, nil)
-		if err != nil {
-			return "", err
-		}
-		err = store.Upsert(&Credential{
-			Email:    email,
-			Password: pw,
-		})
-		if err != nil {
-			return "", err
-		}
-	}
-
-	rsp := LoginResponse{}
-	err = router.Post(context.Background(), "user-service", "/login", LoginRequest{
-		Email:    email,
-		Password: pw,
-	}, &rsp)
-	if err != nil {
-		return "", err
-	}
-
-	return rsp.Token.Token, nil
-}
-
-func RegisterUser(router *router.Router, email, password, username string) (string, error) {
-	err := router.Post(context.Background(), "user-service", "/register", &RegisterRequest{
-		Email:    email,
-		Password: password,
-		Name:     username,
-	}, nil)
-	if err != nil {
-		return "", err
-	}
-
-	loginRsp := LoginResponse{}
-	err = router.Post(context.Background(), "user-service", "/login", &LoginRequest{
-		Email:    email,
-		Password: password,
-	}, &loginRsp)
-	if err != nil {
-		return "", err
-	}
-
-	return loginRsp.Token.Token, nil
 }

@@ -12,6 +12,7 @@ import (
 
 	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/router"
+	sdk "github.com/singulatron/singulatron/localtron/sdk/go"
 
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
@@ -64,7 +65,7 @@ func NewModelService(
 }
 
 func (ms *ModelService) Start() error {
-	token, err := usertypes.RegisterService("model-service", "Model Service", ms.router, ms.credentialStore)
+	token, err := sdk.RegisterService("model-service", "Model Service", ms.router, ms.credentialStore)
 	if err != nil {
 		return err
 	}

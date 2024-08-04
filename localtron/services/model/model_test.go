@@ -10,10 +10,10 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/singulatron/singulatron/localtron/di"
+	sdk "github.com/singulatron/singulatron/localtron/sdk/go"
 	configservice "github.com/singulatron/singulatron/localtron/services/config"
 	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
-	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 func TestModel(t *testing.T) {
@@ -34,7 +34,7 @@ func TestModel(t *testing.T) {
 
 	require.NoError(t, starterFunc())
 
-	token, err := usertypes.RegisterUser(router, "someuser", "pw123", "Some name")
+	token, err := sdk.RegisterUser(router, "someuser", "pw123", "Some name")
 	require.NoError(t, err)
 	router = router.SetBearerToken(token)
 

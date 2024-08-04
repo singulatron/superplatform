@@ -53,7 +53,6 @@ func (s *UserService) register(email, password, name string, roleIds []string) (
 	}
 
 	token := generateAuthToken(user.Id)
-	user.AuthTokenIds = append(user.AuthTokenIds, token.Id)
 
 	return token, s.authTokensStore.Create(token)
 }

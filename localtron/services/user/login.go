@@ -37,7 +37,7 @@ func (s *UserService) login(email, password string) (*usertypes.AuthToken, error
 	}
 
 	tokens, err := s.authTokensStore.Query(
-		datastore.Equal(datastore.Field("id"), user.AuthTokenIds),
+		datastore.Equal(datastore.Field("userId"), user.Id),
 	).OrderBy(datastore.OrderByField("createdAt", true)).Find()
 	if err != nil {
 		return nil, err
@@ -48,7 +48,6 @@ func (s *UserService) login(email, password string) (*usertypes.AuthToken, error
 	}
 
 	token := generateAuthToken(user.Id)
-	user.AuthTokenIds = append(user.AuthTokenIds, token.Id)
 
 	err = s.authTokensStore.Create(token)
 	if err != nil {

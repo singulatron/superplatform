@@ -10,6 +10,7 @@ package chatservice
 import (
 	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/router"
+	sdk "github.com/singulatron/singulatron/localtron/sdk/go"
 
 	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
@@ -57,7 +58,7 @@ func NewChatService(
 }
 
 func (cs *ChatService) Start() error {
-	token, err := usertypes.RegisterService("chat-service", "Chat Service", cs.router, cs.credentialStore)
+	token, err := sdk.RegisterService("chat-service", "Chat Service", cs.router, cs.credentialStore)
 	if err != nil {
 		return err
 	}
