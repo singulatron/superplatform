@@ -2,6 +2,8 @@ package sdk
 
 import (
 	"crypto/rsa"
+	"crypto/x509"
+	"encoding/pem"
 	"fmt"
 
 	"github.com/golang-jwt/jwt/v4"
@@ -12,7 +14,12 @@ type Claims struct {
 	jwt.RegisteredClaims
 }
 
-func DecodeJWT(tokenString string, publicKey *rsa.PublicKey) (*Claims, error) {
+func DecodeJWT(tokenString string, publicKeyString string) (*Claims, error) {
+	publicKey, err := PublicKeyFromString(publicKeyString)
+	if err != nil {
+		return nil, err
+	}
+
 	token, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodRSA); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
@@ -29,4 +36,23 @@ func DecodeJWT(tokenString string, publicKey *rsa.PublicKey) (*Claims, error) {
 	}
 
 	return nil, fmt.Errorf("invalid JWT token")
+}
+
+func PublicKeyFromString(publicKeyPem string) (*rsa.PublicKey, error) {
+	block, _ := pem.Decode([]byte(publicKeyPem))
+	if block == nil || block.Type != "PUBLIC KEY" {
+		return nil, fmt.Errorf("failed to decode PEM block containing public key")
+	}
+	pub, err := x509.ParsePKIXPublicKey(block.Bytes)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse public key: %v", err)
+	}
+
+	// Type assertion to convert from interface{} to *rsa.PublicKey
+	rsaPub, ok := pub.(*rsa.PublicKey)
+	if !ok {
+		return nil, fmt.Errorf("not an RSA public key")
+	}
+
+	return rsaPub, nil
 }

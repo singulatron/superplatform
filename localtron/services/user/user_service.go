@@ -15,6 +15,7 @@ import (
 	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/logger"
 	"github.com/singulatron/singulatron/localtron/router"
+	sdk "github.com/singulatron/singulatron/localtron/sdk/go"
 
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
@@ -99,7 +100,7 @@ func (s *UserService) bootstrap() error {
 			return err
 		}
 		s.privateKey = privKey
-		pubKey, err := publicKeyFromString(kp.PublicKey)
+		pubKey, err := sdk.PublicKeyFromString(kp.PublicKey)
 		if err != nil {
 			return err
 		}
@@ -127,7 +128,7 @@ func (s *UserService) bootstrap() error {
 			return err
 		}
 		s.privateKey = privKeyTyped
-		pubKeyTyped, err := publicKeyFromString(kp.PublicKey)
+		pubKeyTyped, err := sdk.PublicKeyFromString(kp.PublicKey)
 		if err != nil {
 			return err
 		}
