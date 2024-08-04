@@ -28,7 +28,7 @@ func (s *UserService) GetPublicKey(
 	r *http.Request) {
 
 	bs, _ := json.Marshal(usertypes.GetPublicKeyResponse{
-		PublicKey: s.publicKey.N.String(),
+		PublicKey: s.publicKeyPem,
 	})
 	w.Write(bs)
 }

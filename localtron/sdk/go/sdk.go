@@ -7,6 +7,7 @@ import (
 	"fmt"
 
 	"github.com/golang-jwt/jwt/v4"
+	"github.com/pkg/errors"
 )
 
 type Claims struct {
@@ -17,7 +18,7 @@ type Claims struct {
 func DecodeJWT(tokenString string, publicKeyString string) (*Claims, error) {
 	publicKey, err := PublicKeyFromString(publicKeyString)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "failed to get public key from string")
 	}
 
 	token, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {

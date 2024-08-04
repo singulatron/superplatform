@@ -15,7 +15,6 @@ import (
 	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/logger"
 	"github.com/singulatron/singulatron/localtron/router"
-	sdk "github.com/singulatron/singulatron/localtron/sdk/go"
 
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
@@ -29,8 +28,8 @@ type UserService struct {
 	authTokensStore  datastore.DataStore
 	keyPairsStore    datastore.DataStore
 
-	privateKey *rsa.PrivateKey
-	publicKey  *rsa.PublicKey
+	privateKey   *rsa.PrivateKey
+	publicKeyPem string
 }
 
 func NewUserService(
@@ -100,11 +99,7 @@ func (s *UserService) bootstrap() error {
 			return err
 		}
 		s.privateKey = privKey
-		pubKey, err := sdk.PublicKeyFromString(kp.PublicKey)
-		if err != nil {
-			return err
-		}
-		s.publicKey = pubKey
+		s.publicKeyPem = kp.PublicKey
 	} else {
 		privKey, pubKey, err := generateRSAKeys(4096)
 		if err != nil {
@@ -128,11 +123,7 @@ func (s *UserService) bootstrap() error {
 			return err
 		}
 		s.privateKey = privKeyTyped
-		pubKeyTyped, err := sdk.PublicKeyFromString(kp.PublicKey)
-		if err != nil {
-			return err
-		}
-		s.publicKey = pubKeyTyped
+		s.publicKeyPem = kp.PublicKey
 
 	}
 

@@ -47,7 +47,7 @@ func TestRegistration(t *testing.T) {
 		err = router.Get(context.Background(), "user-service", "/public-key", nil, &pkrsp)
 		require.NoError(t, err)
 
-		claim, err := sdk.DecodeJWT(pkrsp.PublicKey, pkrsp.PublicKey)
+		claim, err := sdk.DecodeJWT(rsp.Token.Token, pkrsp.PublicKey)
 		require.NoError(t, err)
 
 		byTokenRsp := usertypes.ReadUserByTokenResponse{}

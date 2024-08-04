@@ -6,6 +6,7 @@ import (
 	"crypto/x509"
 	"encoding/pem"
 	"fmt"
+	"log"
 
 	"github.com/golang-jwt/jwt/v4"
 	sdk "github.com/singulatron/singulatron/localtron/sdk/go"
@@ -59,7 +60,14 @@ func generateJWT(userId string, privateKey *rsa.PrivateKey) (string, error) {
 		RegisteredClaims: jwt.RegisteredClaims{},
 	}
 
-	// Create token with RS256 signing method
 	token := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
-	return token.SignedString(privateKey)
+
+	tokenString, err := token.SignedString(privateKey)
+	if err != nil {
+		// Log the error if signing fails
+		log.Printf("Error signing token: %v\n", err)
+		return "", fmt.Errorf("failed to sign token: %v", err)
+	}
+
+	return tokenString, nil
 }
