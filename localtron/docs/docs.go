@@ -1917,6 +1917,11 @@ const docTemplate = `{
         },
         "/user-service/change-password": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Allows an authenticated user to change their own password.",
                 "consumes": [
                     "application/json"
@@ -1969,6 +1974,11 @@ const docTemplate = `{
         },
         "/user-service/change-password-admin": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Allows an administrator to change a user's password.",
                 "consumes": [
                     "application/json"
@@ -2067,6 +2077,11 @@ const docTemplate = `{
         },
         "/user-service/permission/{permissionId}": {
             "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Creates or updates a permission.\n\nRequires the ` + "`" + `permission.create` + "`" + ` permission.",
                 "consumes": [
                     "application/json"
@@ -2126,6 +2141,11 @@ const docTemplate = `{
         },
         "/user-service/permission/{permissionId}/is-authorized": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Check if a user is authorized for a specific permission.",
                 "consumes": [
                     "application/json"
@@ -2160,6 +2180,41 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/usertypes.IsAuthorizedResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON or missing permission id",
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/user-service/public-key": {
+            "get": {
+                "description": "Get the public key to descrypt the JWT.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Service"
+                ],
+                "summary": "Ge Public Key",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.GetPublicKeyResponse"
                         }
                     },
                     "400": {
@@ -2225,6 +2280,11 @@ const docTemplate = `{
         },
         "/user-service/role": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Create a new role.\n\nRequires the ` + "`" + `role.create` + "`" + ` permission.",
                 "consumes": [
                     "application/json"
@@ -2275,8 +2335,68 @@ const docTemplate = `{
                 }
             }
         },
+        "/user-service/role/{roleId}": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Delete a role based on the role ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "roles"
+                ],
+                "summary": "Delete a Role",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Role ID",
+                        "name": "roleId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.DeleteRoleResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/user-service/role/{roleId}/permission/{permissionId}": {
             "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Adds a specific permission to a role identified by roleId.\n\nRequires the ` + "`" + `permission.assign` + "`" + ` permission.",
                 "consumes": [
                     "application/json"
@@ -2327,7 +2447,65 @@ const docTemplate = `{
             }
         },
         "/user-service/role/{roleId}/permissions": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve permissions associated with a specific role ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "permissions"
+                ],
+                "summary": "Get Permissions by Role",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Role ID",
+                        "name": "roleId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.GetPermissionsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
             "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Set permissions for a specified role.",
                 "consumes": [
                     "application/json"
@@ -2385,8 +2563,53 @@ const docTemplate = `{
                 }
             }
         },
+        "/user-service/roles": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve all roles from the user service.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "roles"
+                ],
+                "summary": "Get all Roles",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.GetRolesResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/user-service/user": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Allows an authenticated administrator to create a new user with specified details.",
                 "consumes": [
                     "application/json"
@@ -2439,6 +2662,11 @@ const docTemplate = `{
         },
         "/user-service/user/by-token": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Retrieve user information based on an authentication token.",
                 "consumes": [
                     "application/json"
@@ -2483,8 +2711,62 @@ const docTemplate = `{
                 }
             }
         },
+        "/user-service/user/{userId}": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Delete a user based on the user ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Delete a User",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/usertypes.DeleteUserResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/user-service/users": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Fetches a list of users with optional query filters and pagination.",
                 "consumes": [
                     "application/json"
@@ -3783,11 +4065,47 @@ const docTemplate = `{
         "usertypes.CreateUserResponse": {
             "type": "object"
         },
+        "usertypes.DeleteRoleResponse": {
+            "type": "object"
+        },
+        "usertypes.DeleteUserResponse": {
+            "type": "object"
+        },
         "usertypes.ErrorResponse": {
             "type": "object",
             "properties": {
                 "error": {
                     "type": "string"
+                }
+            }
+        },
+        "usertypes.GetPermissionsResponse": {
+            "type": "object",
+            "properties": {
+                "permissions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/usertypes.Permission"
+                    }
+                }
+            }
+        },
+        "usertypes.GetPublicKeyResponse": {
+            "type": "object",
+            "properties": {
+                "publicKey": {
+                    "type": "string"
+                }
+            }
+        },
+        "usertypes.GetRolesResponse": {
+            "type": "object",
+            "properties": {
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/usertypes.Role"
+                    }
                 }
             }
         },
@@ -3967,12 +4285,6 @@ const docTemplate = `{
         "usertypes.User": {
             "type": "object",
             "properties": {
-                "authTokenIds": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
                 "createdAt": {
                     "type": "string"
                 },
@@ -3996,6 +4308,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "roleIds": {
+                    "description": "Many to many relationship between User and Role",
                     "type": "array",
                     "items": {
                         "type": "string"

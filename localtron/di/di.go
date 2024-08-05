@@ -351,7 +351,7 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 	router.HandleFunc("/user-service/permission/{permissionId}/is-authorized", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.IsAuthorized(w, r)
 	})).Methods("OPTIONS", "POST")
-	router.HandleFunc("/user-service/permissions", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/user-service/role/{roleId}/permissions", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.GetPermissions(w, r)
 	})).Methods("OPTIONS", "GET")
 	router.HandleFunc("/user-service/role/{roleId}/permissions", appl(func(w http.ResponseWriter, r *http.Request) {
@@ -366,6 +366,9 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 	router.HandleFunc("/user-service/role/{roleId}/permission/{permissionId}", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.AddPermissionToRole(w, r)
 	})).Methods("OPTIONS", "PUT")
+	router.HandleFunc("/user-service/public-key", appl(func(w http.ResponseWriter, r *http.Request) {
+		userService.GetPublicKey(w, r)
+	})).Methods("OPTIONS", "GET")
 
 	router.HandleFunc("/generic-service/object", appl(func(w http.ResponseWriter, r *http.Request) {
 		genericService.Create(w, r)

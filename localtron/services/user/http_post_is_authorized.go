@@ -32,6 +32,7 @@ import (
 // @Success 200 {object} usertypes.IsAuthorizedResponse
 // @Failure 400 {object} usertypes.ErrorResponse "Invalid JSON or missing permission id"
 // @Failure 401 {object} usertypes.ErrorResponse "Unauthorized"
+// @Security BearerAuth
 // @Router /user-service/permission/{permissionId}/is-authorized [post]
 func (s *UserService) IsAuthorized(
 	w http.ResponseWriter,

@@ -15,6 +15,17 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
+// GetRoles handles the retrieval of all roles.
+// @Summary Get all Roles
+// @Description Retrieve all roles from the user service.
+// @Tags roles
+// @Accept json
+// @Produce json
+// @Success 200 {object} usertypes.GetRolesResponse
+// @Failure 401 {string} string "Unauthorized"
+// @Failure 500 {string} string "Internal Server Error"
+// @Security BearerAuth
+// @Router /user-service/roles [get]
 func (s *UserService) GetRoles(
 	w http.ResponseWriter,
 	r *http.Request) {
@@ -28,14 +39,6 @@ func (s *UserService) GetRoles(
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
-
-	req := usertypes.GetRolesRequest{}
-	err = json.NewDecoder(r.Body).Decode(&req)
-	if err != nil {
-		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
-		return
-	}
-	defer r.Body.Close()
 
 	roles, err := s.getRoles()
 	if err != nil {

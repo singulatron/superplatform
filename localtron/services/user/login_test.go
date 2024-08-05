@@ -8,6 +8,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/singulatron/singulatron/localtron/di"
+	sdk "github.com/singulatron/singulatron/localtron/sdk/go"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
@@ -42,6 +43,13 @@ func TestRegistration(t *testing.T) {
 		err := router.Post(context.Background(), "user-service", "/login", req, &rsp)
 		require.NoError(t, err)
 
+		pkrsp := usertypes.GetPublicKeyResponse{}
+		err = router.Get(context.Background(), "user-service", "/public-key", nil, &pkrsp)
+		require.NoError(t, err)
+
+		claim, err := sdk.DecodeJWT(rsp.Token.Token, pkrsp.PublicKey)
+		require.NoError(t, err)
+
 		byTokenRsp := usertypes.ReadUserByTokenResponse{}
 		err = router.Post(context.Background(), "user-service", "/user/by-token", usertypes.ReadUserByTokenRequest{
 			Token: rsp.Token.Token,
@@ -50,6 +58,9 @@ func TestRegistration(t *testing.T) {
 
 		require.Equal(t, "singulatron", byTokenRsp.User.Email)
 		require.Equal(t, "", byTokenRsp.User.PasswordHash)
+
+		require.Equal(t, claim.UserId, byTokenRsp.User.Id)
+		require.Equal(t, claim.RoleIds, byTokenRsp.User.RoleIds)
 
 		//err = router.Post(context.Background(), "user-service", "/change-password-admin", usertypes.ChangePasswordAdminRequest{
 		//	Email:       "singulatron",

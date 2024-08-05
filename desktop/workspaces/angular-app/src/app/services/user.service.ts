@@ -174,8 +174,8 @@ export class UserService {
 		return this.localtron.get('/user-service/roles');
 	}
 
-	getPermissions(): Promise<user.GetPermissionsResposne> {
-		return this.localtron.get('/user-service/permissions');
+	getPermissions(roleId: string): Promise<user.GetPermissionsResposne> {
+		return this.localtron.get(`/user-service/role/${roleId}/permissions`);
 	}
 
 	setRolePermissions(

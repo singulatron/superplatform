@@ -10,8 +10,8 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/singulatron/singulatron/localtron/di"
+	sdk "github.com/singulatron/singulatron/localtron/sdk/go"
 	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
-	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 func TestMessageCreatesThread(t *testing.T) {
@@ -32,7 +32,7 @@ func TestMessageCreatesThread(t *testing.T) {
 	err = starterFunc()
 	require.NoError(t, err)
 
-	token, err := usertypes.RegisterUser(router, "someuser", "pw123", "Some name")
+	token, err := sdk.RegisterUser(router, "someuser", "pw123", "Some name")
 	require.NoError(t, err)
 	router = router.SetBearerToken(token)
 

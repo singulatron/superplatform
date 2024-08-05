@@ -8,8 +8,6 @@
 package userservice
 
 import (
-	"crypto/rand"
-	"encoding/hex"
 	"time"
 
 	"github.com/google/uuid"
@@ -37,7 +35,7 @@ func (s *UserService) login(email, password string) (*usertypes.AuthToken, error
 	}
 
 	tokens, err := s.authTokensStore.Query(
-		datastore.Equal(datastore.Field("id"), user.AuthTokenIds),
+		datastore.Equal(datastore.Field("userId"), user.Id),
 	).OrderBy(datastore.OrderByField("createdAt", true)).Find()
 	if err != nil {
 		return nil, err
@@ -47,17 +45,17 @@ func (s *UserService) login(email, password string) (*usertypes.AuthToken, error
 		return tokens[0].(*usertypes.AuthToken), nil
 	}
 
-	token := generateAuthToken(user.Id)
-	user.AuthTokenIds = append(user.AuthTokenIds, token.Id)
+	token, err := s.generateAuthToken(user)
+	if err != nil {
+		return nil, err
+	}
 
 	err = s.authTokensStore.Create(token)
 	if err != nil {
 		return nil, errors.Wrap(err, "error creating token")
 	}
 
-	return token, s.usersStore.Query(
-		datastore.Id(user.Id),
-	).Update(user)
+	return token, nil
 }
 
 func checkPasswordHash(password, hash string) bool {
@@ -65,17 +63,16 @@ func checkPasswordHash(password, hash string) bool {
 	return err == nil
 }
 
-func generateAuthToken(userId string) *usertypes.AuthToken {
-	randomBytes := make([]byte, 16)
-	_, err := rand.Read(randomBytes)
+func (s *UserService) generateAuthToken(user *usertypes.User) (*usertypes.AuthToken, error) {
+	token, err := generateJWT(user, s.privateKey)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
-	token := hex.EncodeToString(randomBytes)
+
 	return &usertypes.AuthToken{
 		Id:        uuid.New().String(),
-		UserId:    userId,
+		UserId:    user.Id,
 		Token:     token,
 		CreatedAt: time.Now(),
-	}
+	}, nil
 }

@@ -13,6 +13,7 @@ import (
 	"github.com/singulatron/singulatron/localtron/clients/llm"
 	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/router"
+	sdk "github.com/singulatron/singulatron/localtron/sdk/go"
 
 	streammanager "github.com/singulatron/singulatron/localtron/services/prompt/sub/stream_manager"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
@@ -85,7 +86,7 @@ func NewPromptService(
 }
 
 func (cs *PromptService) Start() error {
-	token, err := usertypes.RegisterService("prompt-service", "Prompt Service", cs.router, cs.credentialStore)
+	token, err := sdk.RegisterService("prompt-service", "Prompt Service", cs.router, cs.credentialStore)
 	if err != nil {
 		return err
 	}

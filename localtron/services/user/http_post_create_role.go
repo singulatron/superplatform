@@ -27,6 +27,7 @@ import (
 // @Failure 400 {object} usertypes.ErrorResponse "Invalid JSON"
 // @Failure 401 {object} usertypes.ErrorResponse "Unauthorized"
 // @Failure 500 {object} usertypes.ErrorResponse "Internal Server Error"
+// @Security BearerAuth
 // @Router /user-service/role [post]
 func (s *UserService) CreateRole(w http.ResponseWriter, r *http.Request) {
 	_, err := s.isAuthorized(r, usertypes.PermissionRoleCreate.Id, nil)

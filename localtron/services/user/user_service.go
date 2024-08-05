@@ -8,6 +8,10 @@
 package userservice
 
 import (
+	"crypto/rsa"
+	"time"
+
+	"github.com/google/uuid"
 	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/logger"
 	"github.com/singulatron/singulatron/localtron/router"
@@ -22,8 +26,10 @@ type UserService struct {
 	rolesStore       datastore.DataStore
 	permissionsStore datastore.DataStore
 	authTokensStore  datastore.DataStore
+	keyPairsStore    datastore.DataStore
 
-	userId string
+	privateKey   *rsa.PrivateKey
+	publicKeyPem string
 }
 
 func NewUserService(
@@ -46,6 +52,10 @@ func NewUserService(
 	if err != nil {
 		return nil, err
 	}
+	keyPairsStore, err := datastoreFactory("keyPairs", &usertypes.KeyPair{})
+	if err != nil {
+		return nil, err
+	}
 
 	service := &UserService{
 		router:           router,
@@ -53,6 +63,7 @@ func NewUserService(
 		rolesStore:       rolesStore,
 		authTokensStore:  authTokensStore,
 		permissionsStore: permissionsStore,
+		keyPairsStore:    keyPairsStore,
 	}
 
 	err = service.registerRoles()
@@ -74,6 +85,48 @@ func NewUserService(
 }
 
 func (s *UserService) bootstrap() error {
+	keyPairs, err := s.keyPairsStore.Query(
+		datastore.All(),
+	).Find()
+	if err != nil {
+		return err
+	}
+
+	if len(keyPairs) > 0 {
+		kp := keyPairs[0].(*usertypes.KeyPair)
+		privKey, err := privateKeyFromString(kp.PrivateKey)
+		if err != nil {
+			return err
+		}
+		s.privateKey = privKey
+		s.publicKeyPem = kp.PublicKey
+	} else {
+		privKey, pubKey, err := generateRSAKeys(4096)
+		if err != nil {
+			return err
+		}
+		now := time.Now()
+		kp := &usertypes.KeyPair{
+			Id:         uuid.New().String(),
+			CreatedAt:  now,
+			UpdatedAt:  now,
+			PublicKey:  pubKey,
+			PrivateKey: privKey,
+		}
+		err = s.keyPairsStore.Upsert(kp)
+		if err != nil {
+			return err
+		}
+
+		privKeyTyped, err := privateKeyFromString(kp.PrivateKey)
+		if err != nil {
+			return err
+		}
+		s.privateKey = privKeyTyped
+		s.publicKeyPem = kp.PublicKey
+
+	}
+
 	count, err := s.usersStore.Query(
 		datastore.All(),
 	).Count()
