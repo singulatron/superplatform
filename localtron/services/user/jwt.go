@@ -10,16 +10,15 @@ import (
 
 	"github.com/golang-jwt/jwt/v4"
 	sdk "github.com/singulatron/singulatron/localtron/sdk/go"
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 func generateRSAKeys(bits int) (privateKeyPem, publicKeyPem string, err error) {
-	// Generate RSA private key
 	privateKey, err := rsa.GenerateKey(rand.Reader, bits)
 	if err != nil {
 		return "", "", fmt.Errorf("error generating RSA key: %v", err)
 	}
 
-	// Export the private key to PEM format
 	privateKeyBytes := x509.MarshalPKCS1PrivateKey(privateKey)
 	privateKeyBlock := &pem.Block{
 		Type:  "RSA PRIVATE KEY",
@@ -27,7 +26,6 @@ func generateRSAKeys(bits int) (privateKeyPem, publicKeyPem string, err error) {
 	}
 	privateKeyPem = string(pem.EncodeToMemory(privateKeyBlock))
 
-	// Export the public key to PEM format
 	publicKeyBytes, err := x509.MarshalPKIXPublicKey(&privateKey.PublicKey)
 	if err != nil {
 		return "", "", fmt.Errorf("error marshaling public key: %v", err)
@@ -54,9 +52,10 @@ func privateKeyFromString(privateKeyPem string) (*rsa.PrivateKey, error) {
 	return privateKey, nil
 }
 
-func generateJWT(userId string, privateKey *rsa.PrivateKey) (string, error) {
+func generateJWT(user *usertypes.User, privateKey *rsa.PrivateKey) (string, error) {
 	claims := &sdk.Claims{
-		UserId:           userId,
+		UserId:           user.Id,
+		RoleIds:          user.RoleIds,
 		RegisteredClaims: jwt.RegisteredClaims{},
 	}
 

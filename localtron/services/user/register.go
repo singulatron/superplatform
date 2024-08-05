@@ -52,7 +52,7 @@ func (s *UserService) register(email, password, name string, roleIds []string) (
 		return nil, err
 	}
 
-	token, err := s.generateAuthToken(user.Id)
+	token, err := s.generateAuthToken(user)
 	if err != nil {
 		return nil, err
 	}

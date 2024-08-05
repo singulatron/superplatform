@@ -45,7 +45,7 @@ func (s *UserService) login(email, password string) (*usertypes.AuthToken, error
 		return tokens[0].(*usertypes.AuthToken), nil
 	}
 
-	token, err := s.generateAuthToken(user.Id)
+	token, err := s.generateAuthToken(user)
 	if err != nil {
 		return nil, err
 	}
@@ -63,15 +63,15 @@ func checkPasswordHash(password, hash string) bool {
 	return err == nil
 }
 
-func (s *UserService) generateAuthToken(userId string) (*usertypes.AuthToken, error) {
-	token, err := generateJWT(userId, s.privateKey)
+func (s *UserService) generateAuthToken(user *usertypes.User) (*usertypes.AuthToken, error) {
+	token, err := generateJWT(user, s.privateKey)
 	if err != nil {
 		return nil, err
 	}
 
 	return &usertypes.AuthToken{
 		Id:        uuid.New().String(),
-		UserId:    userId,
+		UserId:    user.Id,
 		Token:     token,
 		CreatedAt: time.Now(),
 	}, nil
