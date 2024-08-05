@@ -868,10 +868,33 @@ definitions:
     type: object
   usertypes.CreateUserResponse:
     type: object
+  usertypes.DeleteRoleResponse:
+    type: object
+  usertypes.DeleteUserResponse:
+    type: object
   usertypes.ErrorResponse:
     properties:
       error:
         type: string
+    type: object
+  usertypes.GetPermissionsResponse:
+    properties:
+      permissions:
+        items:
+          $ref: '#/definitions/usertypes.Permission'
+        type: array
+    type: object
+  usertypes.GetPublicKeyResponse:
+    properties:
+      publicKey:
+        type: string
+    type: object
+  usertypes.GetRolesResponse:
+    properties:
+      roles:
+        items:
+          $ref: '#/definitions/usertypes.Role'
+        type: array
     type: object
   usertypes.GetUsersRequest:
     properties:
@@ -987,10 +1010,6 @@ definitions:
     type: object
   usertypes.User:
     properties:
-      authTokenIds:
-        items:
-          type: string
-        type: array
       createdAt:
         type: string
       deletedAt:
@@ -1007,6 +1026,7 @@ definitions:
       passwordHash:
         type: string
       roleIds:
+        description: Many to many relationship between User and Role
         items:
           type: string
         type: array
@@ -2308,6 +2328,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/usertypes.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Change User Password
       tags:
       - User Service
@@ -2342,6 +2364,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/usertypes.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Change User Password (Admin)
       tags:
       - User Service
@@ -2414,6 +2438,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Upsert a Permission
       tags:
       - User Service
@@ -2449,7 +2475,32 @@ paths:
           description: Unauthorized
           schema:
             $ref: '#/definitions/usertypes.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Is Authorized
+      tags:
+      - User Service
+  /user-service/public-key:
+    get:
+      consumes:
+      - application/json
+      description: Get the public key to descrypt the JWT.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/usertypes.GetPublicKeyResponse'
+        "400":
+          description: Invalid JSON or missing permission id
+          schema:
+            $ref: '#/definitions/usertypes.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/usertypes.ErrorResponse'
+      summary: Ge Public Key
       tags:
       - User Service
   /user-service/register:
@@ -2516,9 +2567,46 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/usertypes.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Create a New Role
       tags:
       - User Service
+  /user-service/role/{roleId}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a role based on the role ID.
+      parameters:
+      - description: Role ID
+        in: path
+        name: roleId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/usertypes.DeleteRoleResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Delete a Role
+      tags:
+      - roles
   /user-service/role/{roleId}/permission/{permissionId}:
     put:
       consumes:
@@ -2553,10 +2641,46 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/usertypes.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Add Permission to Role
       tags:
       - User Service
   /user-service/role/{roleId}/permissions:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve permissions associated with a specific role ID.
+      parameters:
+      - description: Role ID
+        in: path
+        name: roleId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/usertypes.GetPermissionsResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Get Permissions by Role
+      tags:
+      - permissions
     put:
       consumes:
       - application/json
@@ -2592,9 +2716,36 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/usertypes.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Set Role Permissions
       tags:
       - User Service
+  /user-service/roles:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve all roles from the user service.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/usertypes.GetRolesResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Get all Roles
+      tags:
+      - roles
   /user-service/user:
     post:
       consumes:
@@ -2627,9 +2778,42 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/usertypes.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Create a New User
       tags:
       - User Service
+  /user-service/user/{userId}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a user based on the user ID.
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/usertypes.DeleteUserResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Delete a User
+      tags:
+      - users
   /user-service/user/by-token:
     post:
       consumes:
@@ -2657,6 +2841,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/usertypes.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Read User by Token
       tags:
       - User Service
@@ -2690,6 +2876,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/usertypes.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: List Users
       tags:
       - User Service

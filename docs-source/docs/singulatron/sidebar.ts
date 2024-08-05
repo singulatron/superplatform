@@ -12,8 +12,8 @@ const sidebar: SidebarsConfig = {
       items: [
         {
           type: "doc",
-          id: "singulatron/delete-message",
-          label: "Delete Message",
+          id: "singulatron/delete-a-message",
+          label: "Delete a Message",
           className: "api-method delete",
         },
         {
@@ -24,8 +24,8 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
-          id: "singulatron/delete-thread",
-          label: "Delete Thread",
+          id: "singulatron/delete-a-thread",
+          label: "Delete a Thread",
           className: "api-method delete",
         },
         {
@@ -48,9 +48,9 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
-          id: "singulatron/get-messages",
-          label: "Get Messages",
-          className: "api-method get",
+          id: "singulatron/list-messages",
+          label: "List Messages",
+          className: "api-method post",
         },
         {
           type: "doc",
@@ -66,14 +66,14 @@ const sidebar: SidebarsConfig = {
       items: [
         {
           type: "doc",
-          id: "singulatron/get",
-          label: "Get",
+          id: "singulatron/get-config",
+          label: "Get Config",
           className: "api-method post",
         },
         {
           type: "doc",
-          id: "singulatron/save",
-          label: "Save",
+          id: "singulatron/save-config",
+          label: "Save Config",
           className: "api-method post",
         },
       ],
@@ -180,6 +180,12 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
+          id: "singulatron/upsert-a-generic-object",
+          label: "Upsert a Generic Object",
+          className: "api-method put",
+        },
+        {
+          type: "doc",
           id: "singulatron/find-generic-objects",
           label: "Find Generic Objects",
           className: "api-method post",
@@ -188,12 +194,6 @@ const sidebar: SidebarsConfig = {
           type: "doc",
           id: "singulatron/update-generic-objects",
           label: "Update Generic Objects",
-          className: "api-method post",
-        },
-        {
-          type: "doc",
-          id: "singulatron/upsert-a-generic-object",
-          label: "Upsert a Generic Object",
           className: "api-method post",
         },
       ],
@@ -306,6 +306,12 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
+          id: "singulatron/ge-public-key",
+          label: "Ge Public Key",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
           id: "singulatron/register-a-new-user",
           label: "Register a New User",
           className: "api-method post",
@@ -345,6 +351,48 @@ const sidebar: SidebarsConfig = {
           id: "singulatron/list-users",
           label: "List Users",
           className: "api-method post",
+        },
+      ],
+    },
+    {
+      type: "category",
+      label: "roles",
+      items: [
+        {
+          type: "doc",
+          id: "singulatron/delete-a-role",
+          label: "Delete a Role",
+          className: "api-method delete",
+        },
+        {
+          type: "doc",
+          id: "singulatron/get-all-roles",
+          label: "Get all Roles",
+          className: "api-method get",
+        },
+      ],
+    },
+    {
+      type: "category",
+      label: "permissions",
+      items: [
+        {
+          type: "doc",
+          id: "singulatron/get-permissions-by-role",
+          label: "Get Permissions by Role",
+          className: "api-method get",
+        },
+      ],
+    },
+    {
+      type: "category",
+      label: "users",
+      items: [
+        {
+          type: "doc",
+          id: "singulatron/delete-a-user",
+          label: "Delete a User",
+          className: "api-method delete",
         },
       ],
     },
