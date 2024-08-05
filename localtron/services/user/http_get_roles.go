@@ -18,7 +18,7 @@ import (
 // GetRoles handles the retrieval of all roles.
 // @Summary Get all Roles
 // @Description Retrieve all roles from the user service.
-// @Tags roles
+// @Tags User Service
 // @Accept json
 // @Produce json
 // @Success 200 {object} usertypes.GetRolesResponse
