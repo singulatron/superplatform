@@ -351,7 +351,7 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 	router.HandleFunc("/user-service/permission/{permissionId}/is-authorized", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.IsAuthorized(w, r)
 	})).Methods("OPTIONS", "POST")
-	router.HandleFunc("/user-service/permissions", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/user-service/role/{roleId}/permissions", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.GetPermissions(w, r)
 	})).Methods("OPTIONS", "GET")
 	router.HandleFunc("/user-service/role/{roleId}/permissions", appl(func(w http.ResponseWriter, r *http.Request) {

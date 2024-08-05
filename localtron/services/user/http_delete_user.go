@@ -11,9 +11,22 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
+// DeleteUser handles the deletion of a user by user ID.
+// @Summary Delete a User
+// @Description Delete a user based on the user ID.
+// @Tags users
+// @Accept  json
+// @Produce  json
+// @Param   userId     path    string  true  "User ID"
+// @Success 200 {object} usertypes.DeleteUserResponse
+// @Failure 401 {string} string "Unauthorized"
+// @Failure 500 {string} string "Internal Server Error"
+// @Security BearerAuth
+// @Router /user-service/user/{userId} [delete]
 func (s *UserService) DeleteUser(w http.ResponseWriter, r *http.Request) {
 	_, err := s.isAuthorized(r, usertypes.PermissionUserDelete.Id, nil)
 	if err != nil {
@@ -21,15 +34,9 @@ func (s *UserService) DeleteUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	req := usertypes.DeleteUserRequest{}
-	err = json.NewDecoder(r.Body).Decode(&req)
-	if err != nil {
-		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
-		return
-	}
-	defer r.Body.Close()
+	userId := mux.Vars(r)["userId"]
 
-	err = s.deleteUser(req.UserId)
+	err = s.deleteUser(userId)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

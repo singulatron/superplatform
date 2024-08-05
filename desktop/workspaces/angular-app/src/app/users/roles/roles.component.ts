@@ -46,9 +46,6 @@ export class RolesComponent {
 		const rsp = await this.userService.getRoles();
 		this.roles = await rsp.roles;
 
-		const rsp2 = await this.userService.getPermissions();
-		this.permissions = await rsp2.permissions;
-
 		this.cd.markForCheck();
 	}
 
@@ -57,13 +54,16 @@ export class RolesComponent {
 		this.loadRolePermissions(role);
 	}
 
-	loadRolePermissions(role: Role) {
+	async loadRolePermissions(role: Role) {
 		this.selectedRolePermissions.clear();
+		const rsp = await this.userService.getPermissions(role.id!);
+		this.permissions = rsp.permissions;
 		if (role.permissionIds) {
 			for (const id of role.permissionIds) {
 				this.selectedRolePermissions.add(id);
 			}
 		}
+		this.cd.markForCheck();
 	}
 
 	togglePermission(permissionId: string) {

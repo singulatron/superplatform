@@ -14,6 +14,19 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
+// GetPermissions handles the retrieval of permissions based on the role ID.
+// @Summary Get Permissions by Role
+// @Description Retrieve permissions associated with a specific role ID.
+// @Tags permissions
+// @Accept  json
+// @Produce  json
+// @Param   roleId     path    int     true        "Role ID"
+// @Success 200 {object} usertypes.GetPermissionsResponse
+// @Failure 400 {string} string "Invalid JSON"
+// @Failure 401 {string} string "Unauthorized"
+// @Failure 500 {string} string "Internal Server Error"
+// @Security BearerAuth
+// @Router /user-service/role/{roleId}/permissions [get]
 func (s *UserService) GetPermissions(
 	w http.ResponseWriter,
 	r *http.Request) {
@@ -22,14 +35,6 @@ func (s *UserService) GetPermissions(
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
-
-	req := usertypes.GetPermissionsRequest{}
-	err = json.NewDecoder(r.Body).Decode(&req)
-	if err != nil {
-		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
-		return
-	}
-	defer r.Body.Close()
 
 	permissions, err := s.getPermissions()
 	if err != nil {

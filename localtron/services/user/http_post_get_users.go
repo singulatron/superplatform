@@ -26,6 +26,7 @@ import (
 // @Failure 400 {object} usertypes.ErrorResponse "Invalid JSON"
 // @Failure 401 {object} usertypes.ErrorResponse "Unauthorized"
 // @Failure 500 {object} usertypes.ErrorResponse "Internal Server Error"
+// @Security BearerAuth
 // @Router /user-service/users [post]
 func (s *UserService) GetUsers(
 	w http.ResponseWriter,

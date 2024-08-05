@@ -23,6 +23,7 @@ import (
 // @Success 200 {object} usertypes.ReadUserByTokenResponse
 // @Failure 400 {object} usertypes.ErrorResponse "Invalid JSON"
 // @Failure 500 {object} usertypes.ErrorResponse "Internal Server Error"
+// @Security BearerAuth
 // @Router /user-service/user/by-token [post]
 func (s *UserService) ReadUserByToken(w http.ResponseWriter, r *http.Request) {
 	req := usertypes.ReadUserByTokenRequest{}
