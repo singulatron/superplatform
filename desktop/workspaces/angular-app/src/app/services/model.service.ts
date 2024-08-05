@@ -51,7 +51,7 @@ export class ModelService {
 		}
 
 		const rsp: GetModelsResponse = await this.localtron.post(
-			'/model-service/models',
+			'/model-svc/models',
 			{}
 		);
 		return rsp.models;
@@ -101,22 +101,22 @@ export class ModelService {
 
 	async modelStatus(modelId?: string): Promise<ModelStatusResponse> {
 		if (modelId) {
-			return this.localtron.get(`/model-service/model/${modelId}/status`);
+			return this.localtron.get(`/model-svc/model/${modelId}/status`);
 		}
 
-		return this.localtron.get('/model-service/default-model/status');
+		return this.localtron.get('/model-svc/default-model/status');
 	}
 
 	async modelStart(modelId?: string): Promise<ModelStartResponse> {
 		if (modelId) {
-			return this.localtron.put(`/model-service/model/${modelId}/start`, {});
+			return this.localtron.put(`/model-svc/model/${modelId}/start`, {});
 		}
 
-		return this.localtron.put('/model-service/default-model/start', {});
+		return this.localtron.put('/model-svc/default-model/start', {});
 	}
 
 	async makeDefault(id: string) {
-		this.localtron.put(`/model-service/${id}/make-default`, {});
+		this.localtron.put(`/model-svc/${id}/make-default`, {});
 	}
 }
 

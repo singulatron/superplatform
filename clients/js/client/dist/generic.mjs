@@ -10,18 +10,18 @@ class GenericService {
     }
     create(request) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.call("/generic-service/create", request);
+            return this.call("/generic-svc/create", request);
         });
     }
     find(options) {
         return __awaiter(this, void 0, void 0, function* () {
             const request = options;
-            return this.call("/generic-service/find", request);
+            return this.call("/generic-svc/find", request);
         });
     }
     upsert(object) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.call("/generic-service/upsert", object);
+            return this.call("/generic-svc/upsert", object);
         });
     }
     update(table, conditions, object) {
@@ -31,7 +31,7 @@ class GenericService {
                 conditions: conditions,
                 object: object,
             };
-            return this.call("/generic-service/update", request);
+            return this.call("/generic-svc/update", request);
         });
     }
     delete(table, conditions) {
@@ -40,7 +40,7 @@ class GenericService {
                 table: table,
                 conditions: conditions,
             };
-            return this.call("/generic-service/delete", request);
+            return this.call("/generic-svc/delete", request);
         });
     }
 }

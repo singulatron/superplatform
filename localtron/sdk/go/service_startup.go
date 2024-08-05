@@ -32,7 +32,7 @@ func RegisterService(serviceEmail, serviceName string, router *router.Router, st
 		logger.Info(fmt.Sprintf("Registering the %v service", serviceEmail))
 
 		pw = uuid.New().String()
-		err = router.Post(context.Background(), "user-service", "/register", usertypes.RegisterRequest{
+		err = router.Post(context.Background(), "user-svc", "/register", usertypes.RegisterRequest{
 			Email:    email,
 			Name:     serviceName,
 			Password: pw,
@@ -50,7 +50,7 @@ func RegisterService(serviceEmail, serviceName string, router *router.Router, st
 	}
 
 	rsp := usertypes.LoginResponse{}
-	err = router.Post(context.Background(), "user-service", "/login", usertypes.LoginRequest{
+	err = router.Post(context.Background(), "user-svc", "/login", usertypes.LoginRequest{
 		Email:    email,
 		Password: pw,
 	}, &rsp)
@@ -62,7 +62,7 @@ func RegisterService(serviceEmail, serviceName string, router *router.Router, st
 }
 
 func RegisterUser(router *router.Router, email, password, username string) (string, error) {
-	err := router.Post(context.Background(), "user-service", "/register", &usertypes.RegisterRequest{
+	err := router.Post(context.Background(), "user-svc", "/register", &usertypes.RegisterRequest{
 		Email:    email,
 		Password: password,
 		Name:     username,
@@ -72,7 +72,7 @@ func RegisterUser(router *router.Router, email, password, username string) (stri
 	}
 
 	loginRsp := usertypes.LoginResponse{}
-	err = router.Post(context.Background(), "user-service", "/login", &usertypes.LoginRequest{
+	err = router.Post(context.Background(), "user-svc", "/login", &usertypes.LoginRequest{
 		Email:    email,
 		Password: password,
 	}, &loginRsp)

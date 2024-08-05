@@ -26,7 +26,7 @@ import (
 func (ms *ModelService) status(modelId string) (*modeltypes.ModelStatus, error) {
 	// hostReq := dockertypes.GetDockerHostRequest{}
 	hostRsp := dockertypes.GetDockerHostResponse{}
-	err := ms.router.Get(context.Background(), "docker-service", "/host", nil, &hostRsp)
+	err := ms.router.Get(context.Background(), "docker-svc", "/host", nil, &hostRsp)
 	if err != nil {
 		return nil, err
 	}
@@ -41,7 +41,7 @@ func (ms *ModelService) status(modelId string) (*modeltypes.ModelStatus, error) 
 
 	if modelId == "" {
 		rsp := configtypes.GetConfigResponse{}
-		err := ms.router.Get(context.Background(), "config-service", "/config", nil, &rsp)
+		err := ms.router.Get(context.Background(), "config-svc", "/config", nil, &rsp)
 		if err != nil {
 			return nil, err
 		}
@@ -65,7 +65,7 @@ func (ms *ModelService) status(modelId string) (*modeltypes.ModelStatus, error) 
 
 	for _, assetUrl := range model.Assets {
 		rsp := downloadtypes.GetDownloadResponse{}
-		err := ms.router.Get(context.Background(), "download-service", fmt.Sprintf("/download/%v", url.PathEscape(assetUrl)), nil, &rsp)
+		err := ms.router.Get(context.Background(), "download-svc", fmt.Sprintf("/download/%v", url.PathEscape(assetUrl)), nil, &rsp)
 		if err != nil {
 			return nil, err
 		}
@@ -96,7 +96,7 @@ func (ms *ModelService) status(modelId string) (*modeltypes.ModelStatus, error) 
 	isRunning := false
 
 	hashRsp := dockertypes.ContainerIsRunningResponse{}
-	err = ms.router.Get(context.Background(), "docker-service", fmt.Sprintf("/container/%v/is-running", hash), nil, &hashRsp)
+	err = ms.router.Get(context.Background(), "docker-svc", fmt.Sprintf("/container/%v/is-running", hash), nil, &hashRsp)
 	if err != nil {
 		logger.Warn("Checking if running error",
 			slog.String("error", err.Error()),

@@ -18,7 +18,7 @@ import (
 func (ds *DownloadService) registerPermissions() error {
 	for _, permission := range downloadtypes.DownloadPermissions {
 		rsp := &usertypes.UpserPermissionResponse{}
-		err := ds.router.Put(context.Background(), "user-service", fmt.Sprintf("/permission/%v", permission.Id), &usertypes.UpserPermissionRequest{
+		err := ds.router.Put(context.Background(), "user-svc", fmt.Sprintf("/permission/%v", permission.Id), &usertypes.UpserPermissionRequest{
 			Permission: &usertypes.Permission{
 				Name:        permission.Name,
 				Description: permission.Description,
@@ -35,7 +35,7 @@ func (ds *DownloadService) registerPermissions() error {
 	} {
 		for _, permission := range downloadtypes.DownloadPermissions {
 			rsp := &usertypes.AddPermissionToRoleResponse{}
-			err := ds.router.Put(context.Background(), "user-service",
+			err := ds.router.Put(context.Background(), "user-svc",
 				fmt.Sprintf("/role/%v/permission/%v", role.Id, permission.Id), &usertypes.AddPermissionToRoleRequest{}, rsp)
 			if err != nil {
 				return err

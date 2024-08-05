@@ -27,7 +27,7 @@ import (
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
 // @Security BearerAuth
-// @Router /user-service/role/{roleId} [delete]
+// @Router /user-svc/role/{roleId} [delete]
 func (s *UserService) DeleteRole(w http.ResponseWriter, r *http.Request) {
 	_, err := s.isAuthorized(r, usertypes.PermissionRoleDelete.Id, nil)
 	if err != nil {

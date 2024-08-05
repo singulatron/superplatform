@@ -62,7 +62,7 @@ func TestDownloadFile(t *testing.T) {
 	require.NoError(t, err)
 	router = router.SetBearerToken(token)
 
-	err = router.Put(context.Background(), "download-service", "/download", downloadtypes.DownloadRequest{
+	err = router.Put(context.Background(), "download-svc", "/download", downloadtypes.DownloadRequest{
 		URL: fileHostServer.URL,
 	}, nil)
 	require.NoError(t, err)
@@ -71,7 +71,7 @@ func TestDownloadFile(t *testing.T) {
 		time.Sleep(5 * time.Millisecond)
 		// req := downloadtypes.GetDownloadRequest{}
 		rsp := downloadtypes.GetDownloadResponse{}
-		err = router.Get(context.Background(), "download-service", fmt.Sprintf("/download/%v", url.PathEscape(fileHostServer.URL)), nil, &rsp)
+		err = router.Get(context.Background(), "download-svc", fmt.Sprintf("/download/%v", url.PathEscape(fileHostServer.URL)), nil, &rsp)
 		require.NoError(t, err)
 
 		if rsp.Exists && rsp.Download.Status == string(types.DownloadStatusCompleted) {
@@ -129,14 +129,14 @@ func TestDownloadFileWithPartFile(t *testing.T) {
 	req := downloadtypes.DownloadRequest{
 		URL: downloadURL,
 	}
-	err = router.Put(context.Background(), "download-service", "/download", req, nil)
+	err = router.Put(context.Background(), "download-svc", "/download", req, nil)
 	require.NoError(t, err)
 
 	for {
 		time.Sleep(5 * time.Millisecond)
 
 		rsp := downloadtypes.GetDownloadResponse{}
-		err = router.Get(context.Background(), "download-service", fmt.Sprintf("/download/%v", url.PathEscape(downloadURL)), nil, &rsp)
+		err = router.Get(context.Background(), "download-svc", fmt.Sprintf("/download/%v", url.PathEscape(downloadURL)), nil, &rsp)
 		require.NoError(t, err)
 		if rsp.Exists && rsp.Download.Status == string(types.DownloadStatusCompleted) {
 			break
@@ -178,7 +178,7 @@ func TestDownloadFileWithFullFile(t *testing.T) {
 	req := downloadtypes.DownloadRequest{
 		URL: downloadURL,
 	}
-	err = router.Put(context.Background(), "download-service", "/download", req, nil)
+	err = router.Put(context.Background(), "download-svc", "/download", req, nil)
 	require.NoError(t, err)
 
 	var (
@@ -187,7 +187,7 @@ func TestDownloadFileWithFullFile(t *testing.T) {
 	for {
 		time.Sleep(5 * time.Millisecond)
 		rsp := downloadtypes.GetDownloadResponse{}
-		err = router.Get(context.Background(), "download-service", fmt.Sprintf("/download/%v", url.PathEscape(downloadURL)), nil, &rsp)
+		err = router.Get(context.Background(), "download-svc", fmt.Sprintf("/download/%v", url.PathEscape(downloadURL)), nil, &rsp)
 		require.NoError(t, err)
 
 		if rsp.Exists && rsp.Download.Status == string(types.DownloadStatusCompleted) {

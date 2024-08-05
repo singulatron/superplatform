@@ -29,14 +29,14 @@ import (
 // @Failure     401       {object} generictypes.ErrorResponse "Unauthorized"
 // @Failure     500       {object} generictypes.ErrorResponse "Internal Server Error"
 // @Security    BearerAuth
-// @Router      /generic-service/object/{objectId} [delete]
+// @Router      /generic-svc/object/{objectId} [delete]
 func (g *GenericService) Delete(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
 
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := g.router.AsRequestMaker(r).Post(r.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", generictypes.PermissionGenericDelete.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	err := g.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", generictypes.PermissionGenericDelete.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return

@@ -48,7 +48,7 @@ func NewGenericService(
 }
 
 func (g *GenericService) Start() error {
-	token, err := sdk.RegisterService("generic-service", "Generic Service", g.router, g.credentialStore)
+	token, err := sdk.RegisterService("generic-svc", "Generic Service", g.router, g.credentialStore)
 	if err != nil {
 		return err
 	}

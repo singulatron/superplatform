@@ -18,7 +18,7 @@ import (
 func (ns *NodeService) registerPermissions() error {
 	for _, permission := range nodetypes.NodePermissions {
 		rsp := &usertypes.UpserPermissionResponse{}
-		err := ns.router.Put(context.Background(), "user-service", fmt.Sprintf("/permission/%v", permission.Id), &usertypes.UpserPermissionRequest{
+		err := ns.router.Put(context.Background(), "user-svc", fmt.Sprintf("/permission/%v", permission.Id), &usertypes.UpserPermissionRequest{
 			Permission: &usertypes.Permission{
 				Name:        permission.Name,
 				Description: permission.Description,
@@ -35,7 +35,7 @@ func (ns *NodeService) registerPermissions() error {
 	} {
 		for _, permission := range nodetypes.NodePermissions {
 			rsp := &usertypes.AddPermissionToRoleResponse{}
-			err := ns.router.Put(context.Background(), "user-service",
+			err := ns.router.Put(context.Background(), "user-svc",
 				fmt.Sprintf("/role/%v/permission/%v", role.Id, permission.Id), &usertypes.AddPermissionToRoleRequest{}, rsp)
 			if err != nil {
 				return err

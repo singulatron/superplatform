@@ -60,7 +60,7 @@ func TestCreate(t *testing.T) {
 		CreatedAt: time.Now().String(),
 	}
 
-	err = user1Router.Post(context.Background(), "generic-service", "/object", &generictypes.CreateRequest{
+	err = user1Router.Post(context.Background(), "generic-svc", "/object", &generictypes.CreateRequest{
 		Object: &obj.GenericObjectCreateFields,
 	}, nil)
 	require.NoError(t, err)
@@ -76,7 +76,7 @@ func TestCreate(t *testing.T) {
 			},
 		}
 		rsp := generictypes.QueryResponse{}
-		err = user1Router.Post(context.Background(), "generic-service", "/objects", req, &rsp)
+		err = user1Router.Post(context.Background(), "generic-svc", "/objects", req, &rsp)
 		require.NoError(t, err)
 		require.Equal(t, 1, len(rsp.Objects))
 		require.Contains(t, rsp.Objects[0].Id, uuid1)
@@ -91,7 +91,7 @@ func TestCreate(t *testing.T) {
 		CreatedAt: time.Now().String(),
 	}
 
-	err = user2Router.Post(context.Background(), "generic-service", "/object", &generictypes.CreateRequest{
+	err = user2Router.Post(context.Background(), "generic-svc", "/object", &generictypes.CreateRequest{
 		Object: &obj2.GenericObjectCreateFields,
 	}, nil)
 	require.NoError(t, err)
@@ -106,7 +106,7 @@ func TestCreate(t *testing.T) {
 				}},
 		}
 		rsp := generictypes.QueryResponse{}
-		err = user2Router.Post(context.Background(), "generic-service", "/objects", req, &rsp)
+		err = user2Router.Post(context.Background(), "generic-svc", "/objects", req, &rsp)
 		require.NoError(t, err)
 		require.Equal(t, 1, len(rsp.Objects))
 		require.Contains(t, rsp.Objects[0].Id, uuid2)
@@ -121,7 +121,7 @@ func TestCreate(t *testing.T) {
 			}},
 		}
 		rsp := generictypes.QueryResponse{}
-		err = user1Router.Post(context.Background(), "generic-service", "/objects", req, &rsp)
+		err = user1Router.Post(context.Background(), "generic-svc", "/objects", req, &rsp)
 		require.NoError(t, err)
 		require.Equal(t, 1, len(rsp.Objects))
 		require.Equal(t, rsp.Objects[0].Id, uuid1)
@@ -136,13 +136,13 @@ func TestCreate(t *testing.T) {
 			}},
 		}
 		rsp := generictypes.QueryResponse{}
-		err = user1Router.Post(context.Background(), "generic-service", "/objects", req, &rsp)
+		err = user1Router.Post(context.Background(), "generic-svc", "/objects", req, &rsp)
 		require.NoError(t, err)
 		require.Equal(t, 0, len(rsp.Objects))
 	})
 
 	t.Run("already exists", func(t *testing.T) {
-		err = user1Router.Post(context.Background(), "generic-service", "/create",
+		err = user1Router.Post(context.Background(), "generic-svc", "/create",
 			&generictypes.CreateRequest{
 				Object: &obj.GenericObjectCreateFields,
 			},
@@ -159,7 +159,7 @@ func TestCreate(t *testing.T) {
 			}},
 		}
 		rsp := generictypes.QueryResponse{}
-		err = user1Router.Post(context.Background(), "generic-service", "/objects", req, &rsp)
+		err = user1Router.Post(context.Background(), "generic-svc", "/objects", req, &rsp)
 		require.NoError(t, err)
 		require.Equal(t, 0, len(rsp.Objects))
 	})
@@ -168,7 +168,7 @@ func TestCreate(t *testing.T) {
 		req := &generictypes.UpsertRequest{
 			Object: &obj.GenericObjectCreateFields,
 		}
-		err = user2Router.Put(context.Background(), "generic-service", fmt.Sprintf("/object/%v", req.Object.Id), req, nil)
+		err = user2Router.Put(context.Background(), "generic-svc", fmt.Sprintf("/object/%v", req.Object.Id), req, nil)
 		// unauthorized
 		require.Error(t, err)
 	})
@@ -177,7 +177,7 @@ func TestCreate(t *testing.T) {
 		req := &generictypes.UpsertRequest{
 			Object: &obj.GenericObjectCreateFields,
 		}
-		err = user1Router.Put(context.Background(), "generic-service", fmt.Sprintf("/object/%v", req.Object.Id), req, nil)
+		err = user1Router.Put(context.Background(), "generic-svc", fmt.Sprintf("/object/%v", req.Object.Id), req, nil)
 		require.NoError(t, err)
 	})
 
@@ -190,7 +190,7 @@ func TestCreate(t *testing.T) {
 			}},
 		}
 		rsp := generictypes.QueryResponse{}
-		err = user1Router.Post(context.Background(), "generic-service", "/objects", req, &rsp)
+		err = user1Router.Post(context.Background(), "generic-svc", "/objects", req, &rsp)
 		require.NoError(t, err)
 		require.Equal(t, 1, len(rsp.Objects))
 		require.Contains(t, rsp.Objects[0].Id, uuid1)
@@ -204,7 +204,7 @@ func TestCreate(t *testing.T) {
 			},
 		}
 
-		err = user2Router.Delete(context.Background(), "generic-service", "/objects/delete", req, nil)
+		err = user2Router.Delete(context.Background(), "generic-svc", "/objects/delete", req, nil)
 		// no unauthorized but no error either...
 		require.NoError(t, err)
 	})
@@ -219,7 +219,7 @@ func TestCreate(t *testing.T) {
 			}},
 		}
 		rsp := generictypes.QueryResponse{}
-		err = user2Router.Post(context.Background(), "generic-service", "/objects", req, &rsp)
+		err = user2Router.Post(context.Background(), "generic-svc", "/objects", req, &rsp)
 
 		require.NoError(t, err)
 		require.Equal(t, 0, len(rsp.Objects))

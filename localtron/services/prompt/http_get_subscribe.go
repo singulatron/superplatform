@@ -29,13 +29,13 @@ import (
 // @Success 200 {string} string "Streaming response"
 // @Failure 400 {object} prompttypes.ErrorResponse "Missing threadId parameter"
 // @Failure 401 {object} prompttypes.ErrorResponse "Unauthorized"
-// @Router /prompt-service/{threadId}/subscribe [get]
+// @Router /prompt-svc/{threadId}/subscribe [get]
 func (p *PromptService) GetSubscribe(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := p.router.AsRequestMaker(r).Post(r.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", prompttypes.PermissionPromptStream.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	err := p.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", prompttypes.PermissionPromptStream.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return

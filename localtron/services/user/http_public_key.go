@@ -22,7 +22,7 @@ import (
 // @Success 200 {object} usertypes.GetPublicKeyResponse
 // @Failure 400 {object} usertypes.ErrorResponse "Invalid JSON or missing permission id"
 // @Failure 401 {object} usertypes.ErrorResponse "Unauthorized"
-// @Router /user-service/public-key [get]
+// @Router /user-svc/public-key [get]
 func (s *UserService) GetPublicKey(
 	w http.ResponseWriter,
 	r *http.Request) {

@@ -13,17 +13,17 @@ export class GenericService {
   }
 
   async create(request: generic.CreateRequest): Promise<void> {
-    return this.call("/generic-service/create", request);
+    return this.call("/generic-svc/create", request);
   }
 
   async find(options: generic.FindRequest): Promise<generic.FindResponse> {
     const request: generic.FindRequest = options;
 
-    return this.call("/generic-service/find", request);
+    return this.call("/generic-svc/find", request);
   }
 
   async upsert(object: generic.GenericObjectCreateFields): Promise<void> {
-    return this.call("/generic-service/upsert", object);
+    return this.call("/generic-svc/upsert", object);
   }
 
   async update(
@@ -37,7 +37,7 @@ export class GenericService {
       object: object,
     };
 
-    return this.call("/generic-service/update", request);
+    return this.call("/generic-svc/update", request);
   }
 
   async delete(
@@ -49,6 +49,6 @@ export class GenericService {
       conditions: conditions,
     };
 
-    return this.call("/generic-service/delete", request);
+    return this.call("/generic-svc/delete", request);
   }
 }

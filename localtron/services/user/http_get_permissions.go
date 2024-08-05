@@ -26,7 +26,7 @@ import (
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
 // @Security BearerAuth
-// @Router /user-service/role/{roleId}/permissions [get]
+// @Router /user-svc/role/{roleId}/permissions [get]
 func (s *UserService) GetPermissions(
 	w http.ResponseWriter,
 	r *http.Request) {

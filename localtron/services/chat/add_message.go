@@ -50,7 +50,7 @@ func (a *ChatService) addMessage(chatMessage *chattypes.Message) error {
 	ev := chattypes.EventMessageAdded{
 		ThreadId: chatMessage.ThreadId,
 	}
-	err = a.router.Post(context.Background(), "firehose-service", "/publish", firehosetypes.PublishRequest{
+	err = a.router.Post(context.Background(), "firehose-svc", "/publish", firehosetypes.PublishRequest{
 		Event: &firehosetypes.Event{
 			Name: ev.Name(),
 			Data: ev,

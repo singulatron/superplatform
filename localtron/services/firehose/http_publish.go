@@ -28,11 +28,11 @@ import (
 // @Failure 400 {object} firehosetypes.ErrorResponse "Invalid JSON"
 // @Failure 401 {object} firehosetypes.ErrorResponse "Unauthorized"
 // @Security BearerAuth
-// @Router /firehose-service/publish [post]
+// @Router /firehose-svc/publish [post]
 func (p *FirehoseService) Publish(w http.ResponseWriter,
 	r *http.Request) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := p.router.AsRequestMaker(r).Post(r.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", prompttypes.PermissionPromptCreate.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	err := p.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", prompttypes.PermissionPromptCreate.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return

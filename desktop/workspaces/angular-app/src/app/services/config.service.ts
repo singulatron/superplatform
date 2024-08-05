@@ -59,6 +59,6 @@ export class ConfigService {
 	}
 
 	async configGet(): Promise<ConfigGetResponse> {
-		return await this.localtron.get('/config-service/config');
+		return await this.localtron.get('/config-svc/config');
 	}
 }

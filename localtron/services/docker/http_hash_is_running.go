@@ -29,14 +29,14 @@ import (
 // @Failure      500   {object}  dockertypes.ErrorResponse  "Internal Server Error"
 // @SecurityDefinitions.bearerAuth BearerAuth
 // @Security     BearerAuth
-// @Router       /docker-service/container/{hash}/is-running [get]
+// @Router       /docker-svc/container/{hash}/is-running [get]
 func (dm *DockerService) HashIsRunning(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := dm.router.AsRequestMaker(r).Post(r.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", dockertypes.PermissionDockerView.Id), &usertypes.IsAuthorizedRequest{
-		EmailsGranted: []string{"model-service"},
+	err := dm.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", dockertypes.PermissionDockerView.Id), &usertypes.IsAuthorizedRequest{
+		EmailsGranted: []string{"model-svc"},
 	}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)

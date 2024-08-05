@@ -27,14 +27,14 @@ import (
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
 // @Security BearerAuth
-// @Router /config-service/save [post]
+// @Router /config-svc/save [post]
 func (cs *ConfigService) Save(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := cs.router.AsRequestMaker(r).Post(r.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", configtypes.PermissionConfigEdit.Id), &usertypes.IsAuthorizedRequest{
-		EmailsGranted: []string{"model-service"},
+	err := cs.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", configtypes.PermissionConfigEdit.Id), &usertypes.IsAuthorizedRequest{
+		EmailsGranted: []string{"model-svc"},
 	}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)

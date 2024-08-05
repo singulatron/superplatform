@@ -29,13 +29,13 @@ import (
 // @Failure 401 {object} modeltypes.ErrorResponse "Unauthorized"
 // @Failure 500 {object} modeltypes.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
-// @Router /model-service/{modelId}/make-default [put]
+// @Router /model-svc/{modelId}/make-default [put]
 func (ms *ModelService) MakeDefault(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := ms.router.AsRequestMaker(r).Post(r.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", modeltypes.PermissionModelEdit.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	err := ms.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", modeltypes.PermissionModelEdit.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return

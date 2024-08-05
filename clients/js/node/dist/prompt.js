@@ -15,18 +15,18 @@ class PromptService {
             if (!prompt.id) {
                 prompt.id = util.uuid();
             }
-            return this.call("'/prompt-service/add", prompt);
+            return this.call("'/prompt-svc/add", prompt);
         });
     }
     promptRemove(promptId) {
         return util.__awaiter(this, void 0, void 0, function* () {
             const request = { promptId: promptId };
-            return this.call("'/prompt-service/remove", request);
+            return this.call("'/prompt-svc/remove", request);
         });
     }
     promptList(request) {
         return util.__awaiter(this, void 0, void 0, function* () {
-            return this.call("'/prompt-service/list", request);
+            return this.call("'/prompt-svc/list", request);
         });
     }
 }

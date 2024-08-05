@@ -14,38 +14,38 @@ export class ChatService {
 
   async chatMessageDelete(messageId: string): Promise<chat.GetThreadResponse> {
     const request: chat.DeleteMessageRequest = { messageId: messageId };
-    return this.call("/chat-service/message/delete", request);
+    return this.call("/chat-svc/message/delete", request);
   }
 
   async chatMessages(threadId: string): Promise<chat.GetMessagesResponse> {
     const request: chat.GetMessagesRequest = { threadId: threadId };
-    return this.call("/chat-service/messages", request);
+    return this.call("/chat-svc/messages", request);
   }
 
   async chatThread(threadId: string): Promise<chat.GetThreadResponse> {
     const request: chat.GetThreadRequest = { threadId: threadId };
-    return this.call("/chat-service/thread", request);
+    return this.call("/chat-svc/thread", request);
   }
 
   async chatThreadAdd(thread: chat.Thread): Promise<chat.AddThreadResponse> {
     const request: chat.AddThreadRequest = { thread: thread };
-    return this.call("/chat-service/thread/add", request);
+    return this.call("/chat-svc/thread/add", request);
   }
 
   async chatThreadUpdate(
     thread: chat.Thread
   ): Promise<chat.UpdateThreadResponse> {
     const request: chat.UpdateThreadRequest = { thread: thread };
-    return this.call("/chat-service/thread/update", request);
+    return this.call("/chat-svc/thread/update", request);
   }
 
   async chatThreadDelete(threadId: string): Promise<void> {
     const request: chat.DeleteThreadRequest = { threadId: threadId };
-    return this.call("/chat-service/thread/delete", request);
+    return this.call("/chat-svc/thread/delete", request);
   }
 
   async chatThreads(): Promise<chat.GetThreadsResponse> {
     const request: chat.GetThreadsRequest = {};
-    return this.call("/chat-service/threads", request);
+    return this.call("/chat-svc/threads", request);
   }
 }

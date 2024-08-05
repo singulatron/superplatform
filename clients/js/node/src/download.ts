@@ -13,20 +13,20 @@ export class DownloadService {
   }
 
   async download(url: string) {
-    this.call("/download-service/download", { url: url }, "PUT");
+    this.call("/download-svc/download", { url: url }, "PUT");
   }
 
   async pause(url: string) {
-    this.call(`/download-service/${encodeURIComponent(url)}/pause`, {}, "PUT");
+    this.call(`/download-svc/${encodeURIComponent(url)}/pause`, {}, "PUT");
   }
 
   async list(): Promise<download.ListResponse> {
-    return this.call("/download-service/downloads", {});
+    return this.call("/download-svc/downloads", {});
   }
 
   async get(url: string): Promise<download.GetResponse> {
     return this.call(
-      `/download-service/download/${encodeURIComponent(url)}`,
+      `/download-svc/download/${encodeURIComponent(url)}`,
       {},
       "GET"
     );

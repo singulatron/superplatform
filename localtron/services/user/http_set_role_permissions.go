@@ -28,7 +28,7 @@ import (
 // @Failure 401 {object} usertypes.ErrorResponse "Unauthorized"
 // @Failure 500 {object} usertypes.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
-// @Router /user-service/role/{roleId}/permissions [put]
+// @Router /user-svc/role/{roleId}/permissions [put]
 func (s *UserService) SetRolePermissions(
 	w http.ResponseWriter,
 	r *http.Request) {

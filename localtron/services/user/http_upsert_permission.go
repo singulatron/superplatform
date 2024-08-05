@@ -31,7 +31,7 @@ import (
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
 // @Security BearerAuth
-// @Router /user-service/permission/{permissionId} [put]
+// @Router /user-svc/permission/{permissionId} [put]
 func (s *UserService) UpsertPermission(
 	w http.ResponseWriter,
 	r *http.Request,

@@ -56,7 +56,7 @@ func TestAddPrompt(t *testing.T) {
 	require.NoError(t, err)
 	router = router.SetBearerToken(token)
 
-	router.AddMock("model-service", "/models", modeltypes.ListResponse{
+	router.AddMock("model-svc", "/models", modeltypes.ListResponse{
 		Models: []*modeltypes.Model{{
 			Id: "huggingface/TheBloke/mistral-7b-instruct-v0.2.Q3_K_S.gguf",
 			Assets: map[string]string{
@@ -76,7 +76,7 @@ func TestAddPrompt(t *testing.T) {
 			Description:    "hi",
 			PromptTemplate: "[INST] {prompt} [/INST]",
 		}}})
-	router.AddMock("model-service", fmt.Sprintf("/model/%v/status", url.PathEscape(configservice.DefaultModelId)), &modeltypes.StatusResponse{
+	router.AddMock("model-svc", fmt.Sprintf("/model/%v/status", url.PathEscape(configservice.DefaultModelId)), &modeltypes.StatusResponse{
 		Status: &modeltypes.ModelStatus{
 			AssetsReady: true,
 			Running:     true,
@@ -123,12 +123,12 @@ func TestAddPrompt(t *testing.T) {
 
 	//creq := configtypes.GetConfigRequest{}
 	crsp := configtypes.GetConfigResponse{}
-	err = router.Get(context.Background(), "config-service", "/config", nil, &crsp)
+	err = router.Get(context.Background(), "config-svc", "/config", nil, &crsp)
 	require.NoError(t, err)
 
 	//mreq := modeltypes.ListRequest{}
 	mrsp := modeltypes.ListResponse{}
-	err = router.Get(context.Background(), "model-service", "/models", nil, &mrsp)
+	err = router.Get(context.Background(), "model-svc", "/models", nil, &mrsp)
 	require.NoError(t, err)
 
 	var model *modeltypes.Model
@@ -148,7 +148,7 @@ func TestAddPrompt(t *testing.T) {
 	}
 	prsp := prompttypes.AddPromptResponse{}
 
-	err = router.Post(context.Background(), "prompt-service", "/prompt", preq, &prsp)
+	err = router.Post(context.Background(), "prompt-svc", "/prompt", preq, &prsp)
 	require.NoError(t, err)
 
 	require.Equal(t, true, strings.Contains(prsp.Answer, "how"))
