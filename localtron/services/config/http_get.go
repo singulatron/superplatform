@@ -27,7 +27,7 @@ import (
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
 // @Security BearerAuth
-// @Router /config/get [post]
+// @Router /config-service/get [post]
 func (cs *ConfigService) Get(
 	w http.ResponseWriter,
 	r *http.Request,

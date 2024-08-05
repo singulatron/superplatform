@@ -1348,7 +1348,7 @@ paths:
       summary: Get Threads
       tags:
       - Chat Service
-  /config/get:
+  /config-service/get:
     post:
       consumes:
       - application/json
@@ -1380,7 +1380,7 @@ paths:
       summary: Get Config
       tags:
       - Config Service
-  /config/save:
+  /config-service/save:
     post:
       consumes:
       - application/json

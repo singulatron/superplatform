@@ -485,7 +485,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/config/get": {
+        "/config-service/get": {
             "post": {
                 "security": [
                     {
@@ -536,7 +536,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/config/save": {
+        "/config-service/save": {
             "post": {
                 "security": [
                     {

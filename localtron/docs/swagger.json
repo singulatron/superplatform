@@ -479,7 +479,7 @@
                 }
             }
         },
-        "/config/get": {
+        "/config-service/get": {
             "post": {
                 "security": [
                     {
@@ -530,7 +530,7 @@
                 }
             }
         },
-        "/config/save": {
+        "/config-service/save": {
             "post": {
                 "security": [
                     {
