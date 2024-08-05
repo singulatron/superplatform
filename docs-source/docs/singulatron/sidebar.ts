@@ -324,9 +324,21 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
+          id: "singulatron/delete-a-role",
+          label: "Delete a Role",
+          className: "api-method delete",
+        },
+        {
+          type: "doc",
           id: "singulatron/add-permission-to-role",
           label: "Add Permission to Role",
           className: "api-method put",
+        },
+        {
+          type: "doc",
+          id: "singulatron/get-permissions-by-role",
+          label: "Get Permissions by Role",
+          className: "api-method get",
         },
         {
           type: "doc",
@@ -336,9 +348,21 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
+          id: "singulatron/get-all-roles",
+          label: "Get all Roles",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
           id: "singulatron/create-a-new-user",
           label: "Create a New User",
           className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "singulatron/delete-a-user",
+          label: "Delete a User",
+          className: "api-method delete",
         },
         {
           type: "doc",
@@ -351,48 +375,6 @@ const sidebar: SidebarsConfig = {
           id: "singulatron/list-users",
           label: "List Users",
           className: "api-method post",
-        },
-      ],
-    },
-    {
-      type: "category",
-      label: "roles",
-      items: [
-        {
-          type: "doc",
-          id: "singulatron/delete-a-role",
-          label: "Delete a Role",
-          className: "api-method delete",
-        },
-        {
-          type: "doc",
-          id: "singulatron/get-all-roles",
-          label: "Get all Roles",
-          className: "api-method get",
-        },
-      ],
-    },
-    {
-      type: "category",
-      label: "permissions",
-      items: [
-        {
-          type: "doc",
-          id: "singulatron/get-permissions-by-role",
-          label: "Get Permissions by Role",
-          className: "api-method get",
-        },
-      ],
-    },
-    {
-      type: "category",
-      label: "users",
-      items: [
-        {
-          type: "doc",
-          id: "singulatron/delete-a-user",
-          label: "Delete a User",
-          className: "api-method delete",
         },
       ],
     },

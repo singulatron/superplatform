@@ -18,7 +18,7 @@ import (
 // DeleteUser handles the deletion of a user by user ID.
 // @Summary Delete a User
 // @Description Delete a user based on the user ID.
-// @Tags users
+// @Tags User Service
 // @Accept  json
 // @Produce  json
 // @Param   userId     path    string  true  "User ID"

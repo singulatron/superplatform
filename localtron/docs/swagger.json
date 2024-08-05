@@ -2344,7 +2344,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "roles"
+                    "User Service"
                 ],
                 "summary": "Delete a Role",
                 "parameters": [
@@ -2455,7 +2455,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "permissions"
+                    "User Service"
                 ],
                 "summary": "Get Permissions by Role",
                 "parameters": [
@@ -2572,7 +2572,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "roles"
+                    "User Service"
                 ],
                 "summary": "Get all Roles",
                 "responses": {
@@ -2720,7 +2720,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "users"
+                    "User Service"
                 ],
                 "summary": "Delete a User",
                 "parameters": [
@@ -4271,7 +4271,7 @@
         "usertypes.UpserPermissionRequest": {
             "type": "object",
             "properties": {
-                "permissions": {
+                "permission": {
                     "$ref": "#/definitions/usertypes.Permission"
                 }
             }

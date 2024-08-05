@@ -55,7 +55,7 @@ type GetPermissionsResponse struct {
 }
 
 type UpserPermissionRequest struct {
-	Permission *Permission `json:"permissions"`
+	Permission *Permission `json:"permission"`
 }
 
 type UpserPermissionResponse struct {

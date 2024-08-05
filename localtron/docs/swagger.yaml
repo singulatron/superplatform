@@ -1005,7 +1005,7 @@ definitions:
     type: object
   usertypes.UpserPermissionRequest:
     properties:
-      permissions:
+      permission:
         $ref: '#/definitions/usertypes.Permission'
     type: object
   usertypes.User:
@@ -2606,7 +2606,7 @@ paths:
       - BearerAuth: []
       summary: Delete a Role
       tags:
-      - roles
+      - User Service
   /user-service/role/{roleId}/permission/{permissionId}:
     put:
       consumes:
@@ -2680,7 +2680,7 @@ paths:
       - BearerAuth: []
       summary: Get Permissions by Role
       tags:
-      - permissions
+      - User Service
     put:
       consumes:
       - application/json
@@ -2745,7 +2745,7 @@ paths:
       - BearerAuth: []
       summary: Get all Roles
       tags:
-      - roles
+      - User Service
   /user-service/user:
     post:
       consumes:
@@ -2813,7 +2813,7 @@ paths:
       - BearerAuth: []
       summary: Delete a User
       tags:
-      - users
+      - User Service
   /user-service/user/by-token:
     post:
       consumes:

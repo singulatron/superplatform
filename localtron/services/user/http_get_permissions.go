@@ -17,7 +17,7 @@ import (
 // GetPermissions handles the retrieval of permissions based on the role ID.
 // @Summary Get Permissions by Role
 // @Description Retrieve permissions associated with a specific role ID.
-// @Tags permissions
+// @Tags User Service
 // @Accept  json
 // @Produce  json
 // @Param   roleId     path    int     true        "Role ID"

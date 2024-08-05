@@ -2350,7 +2350,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "roles"
+                    "User Service"
                 ],
                 "summary": "Delete a Role",
                 "parameters": [
@@ -2461,7 +2461,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "permissions"
+                    "User Service"
                 ],
                 "summary": "Get Permissions by Role",
                 "parameters": [
@@ -2578,7 +2578,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "roles"
+                    "User Service"
                 ],
                 "summary": "Get all Roles",
                 "responses": {
@@ -2726,7 +2726,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "users"
+                    "User Service"
                 ],
                 "summary": "Delete a User",
                 "parameters": [
@@ -4277,7 +4277,7 @@ const docTemplate = `{
         "usertypes.UpserPermissionRequest": {
             "type": "object",
             "properties": {
-                "permissions": {
+                "permission": {
                     "$ref": "#/definitions/usertypes.Permission"
                 }
             }

@@ -18,7 +18,7 @@ import (
 // DeleteRole handles the deletion of a role by role ID.
 // @Summary Delete a Role
 // @Description Delete a role based on the role ID.
-// @Tags roles
+// @Tags User Service
 // @Accept  json
 // @Produce  json
 // @Param   roleId     path    string  true  "Role ID"
