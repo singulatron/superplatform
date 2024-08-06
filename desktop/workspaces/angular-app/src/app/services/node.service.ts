@@ -15,7 +15,7 @@ export class NodeService {
 	constructor(private localtron: LocaltronService) {}
 
 	async nodesList(): Promise<ListNodesResponse> {
-		return this.localtron.get('/node-service/nodes');
+		return this.localtron.get('/node-svc/nodes');
 	}
 }
 

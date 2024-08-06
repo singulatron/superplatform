@@ -20,7 +20,7 @@ import (
 // @Summary Download a File
 // @Description Start a download for a specified URL.
 // @Description
-// @Description Requires the `download.create` permission.
+// @Description Requires the `download-svc:download:create` permission.
 // @Tags Download Service
 // @Accept json
 // @Produce json
@@ -30,13 +30,13 @@ import (
 // @Failure 401 {object} downloadtypes.ErrorResponse "Unauthorized"
 // @Failure 500 {object} downloadtypes.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
-// @Router /download-service/download [put]
+// @Router /download-svc/download [put]
 func (ds *DownloadService) Do(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := ds.router.AsRequestMaker(r).Post(r.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", downloadtypes.PermissionDownloadCreate.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	err := ds.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", downloadtypes.PermissionDownloadCreate.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return

@@ -25,13 +25,13 @@ import (
 // @Failure      401   {object}  dockertypes.ErrorResponse  "Unauthorized"
 // @Failure      500   {object}  dockertypes.ErrorResponse  "Internal Server Error"
 // @Security BearerAuth
-// @Router       /docker-service/host [get]
+// @Router       /docker-svc/host [get]
 func (dm *DockerService) Host(
 	w http.ResponseWriter,
 	req *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := dm.router.AsRequestMaker(req).Post(req.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", dockertypes.PermissionDockerView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	err := dm.router.AsRequestMaker(req).Post(req.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", dockertypes.PermissionDockerView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return

@@ -29,13 +29,13 @@ import (
 // @Failure 401 {object} firehosetypes.ErrorResponse "Unauthorized"
 // @Failure 500 {object} firehosetypes.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
-// @Router /firehose-service/subscribe [get]
+// @Router /firehose-svc/subscribe [get]
 func (p *FirehoseService) Subscribe(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := p.router.AsRequestMaker(r).Post(r.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", firehosetypes.PermissionFirehoseView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	err := p.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", firehosetypes.PermissionFirehoseView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return

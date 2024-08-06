@@ -24,7 +24,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/chat-service/message/{messageId}": {
+        "/chat-svc/message/{messageId}": {
             "delete": {
                 "security": [
                     {
@@ -80,14 +80,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/chat-service/thread": {
+        "/chat-svc/thread": {
             "post": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "Create a new chat thread and add the requesting user to it.\nRequires the ` + "`" + `thread.create` + "`" + ` permission.",
+                "description": "Create a new chat thread and add the requesting user to it.\nRequires the ` + "`" + `chat-svc:thread:create` + "`" + ` permission.",
                 "consumes": [
                     "application/json"
                 ],
@@ -137,7 +137,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/chat-service/thread/{threadId}": {
+        "/chat-svc/thread/{threadId}": {
             "get": {
                 "security": [
                     {
@@ -308,7 +308,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/chat-service/thread/{threadId}/message": {
+        "/chat-svc/thread/{threadId}/message": {
             "post": {
                 "security": [
                     {
@@ -373,7 +373,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/chat-service/thread/{threadId}/messages": {
+        "/chat-svc/thread/{threadId}/messages": {
             "post": {
                 "security": [
                     {
@@ -428,7 +428,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/chat-service/threads": {
+        "/chat-svc/threads": {
             "post": {
                 "security": [
                     {
@@ -485,7 +485,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/config-service/get": {
+        "/config-svc/get": {
             "post": {
                 "security": [
                     {
@@ -536,7 +536,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/config-service/save": {
+        "/config-svc/save": {
             "post": {
                 "security": [
                     {
@@ -587,14 +587,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/docker-service/container": {
+        "/docker-svc/container": {
             "put": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "Launches a Docker container with the specified parameters.\n\nRequires the ` + "`" + `docker.create` + "`" + ` permission.",
+                "description": "Launches a Docker container with the specified parameters.\n\nRequires the ` + "`" + `docker-svc:docker:create` + "`" + ` permission.",
                 "consumes": [
                     "application/json"
                 ],
@@ -644,7 +644,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/docker-service/container/{hash}/is-running": {
+        "/docker-svc/container/{hash}/is-running": {
             "get": {
                 "security": [
                     {
@@ -699,7 +699,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/docker-service/container/{hash}/summary/{numberOfLines}": {
+        "/docker-svc/container/{hash}/summary/{numberOfLines}": {
             "get": {
                 "security": [
                     {
@@ -761,7 +761,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/docker-service/host": {
+        "/docker-svc/host": {
             "get": {
                 "security": [
                     {
@@ -801,7 +801,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/docker-service/info": {
+        "/docker-svc/info": {
             "get": {
                 "security": [
                     {
@@ -841,14 +841,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/download-service/download": {
+        "/download-svc/download": {
             "put": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "Start a download for a specified URL.\n\nRequires the ` + "`" + `download.create` + "`" + ` permission.",
+                "description": "Start a download for a specified URL.\n\nRequires the ` + "`" + `download-svc:download:create` + "`" + ` permission.",
                 "consumes": [
                     "application/json"
                 ],
@@ -899,14 +899,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/download-service/download/{downloadId}": {
+        "/download-svc/download/{downloadId}": {
             "get": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "Get a download by ID.\n\nRequires the ` + "`" + `download.view` + "`" + ` permission.",
+                "description": "Get a download by ID.\n\nRequires the ` + "`" + `download-svc:download:view` + "`" + ` permission.",
                 "consumes": [
                     "application/json"
                 ],
@@ -948,14 +948,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/download-service/download/{downloadId}/pause": {
+        "/download-svc/download/{downloadId}/pause": {
             "put": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "Pause a download that is currently in progress.\n\nRequires the ` + "`" + `download.edit` + "`" + ` permission.",
+                "description": "Pause a download that is currently in progress.\n\nRequires the ` + "`" + `download-svc:download:edit` + "`" + ` permission.",
                 "consumes": [
                     "application/json"
                 ],
@@ -1004,14 +1004,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/download-service/downloads": {
+        "/download-svc/downloads": {
             "post": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "Fetch a list of all download details.\n\nRequires the ` + "`" + `download.view` + "`" + ` permission.",
+                "description": "Fetch a list of all download details.\n\nRequires the ` + "`" + `download-svc:download:view` + "`" + ` permission.",
                 "consumes": [
                     "application/json"
                 ],
@@ -1044,7 +1044,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/firehose-service/publish": {
+        "/firehose-svc/publish": {
             "post": {
                 "security": [
                     {
@@ -1092,7 +1092,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/firehose-service/subscribe": {
+        "/firehose-svc/subscribe": {
             "get": {
                 "security": [
                     {
@@ -1132,7 +1132,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/generic-service/create": {
+        "/generic-svc/create": {
             "post": {
                 "security": [
                     {
@@ -1189,7 +1189,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/generic-service/object/{objectId}": {
+        "/generic-svc/object/{objectId}": {
             "put": {
                 "security": [
                     {
@@ -1315,7 +1315,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/generic-service/objects": {
+        "/generic-svc/objects": {
             "post": {
                 "security": [
                     {
@@ -1371,7 +1371,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/generic-service/objects/update": {
+        "/generic-svc/objects/update": {
             "post": {
                 "security": [
                     {
@@ -1428,14 +1428,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/model-service/default/start": {
+        "/model-svc/default/start": {
             "put": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "Starts The Default Model.\n\nRequires the ` + "`" + `model.create` + "`" + ` permission.",
+                "description": "Starts The Default Model.\n\nRequires the ` + "`" + `model-svc:model:create` + "`" + ` permission.",
                 "consumes": [
                     "application/json"
                 ],
@@ -1474,7 +1474,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/model-service/models": {
+        "/model-svc/models": {
             "get": {
                 "security": [
                     {
@@ -1514,14 +1514,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/model-service/{id}/status": {
+        "/model-svc/{id}/status": {
             "get": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "Retrieves the status of a model by ID.\n\nRequires the ` + "`" + `model.view` + "`" + ` permission.",
+                "description": "Retrieves the status of a model by ID.\n\nRequires the ` + "`" + `model-svc:model:view` + "`" + ` permission.",
                 "consumes": [
                     "application/json"
                 ],
@@ -1563,7 +1563,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/model-service/{modelId}": {
+        "/model-svc/{modelId}": {
             "get": {
                 "security": [
                     {
@@ -1612,7 +1612,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/model-service/{modelId}/make-default": {
+        "/model-svc/{modelId}/make-default": {
             "put": {
                 "security": [
                     {
@@ -1667,7 +1667,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/model-service/{modelId}/start": {
+        "/model-svc/{modelId}/start": {
             "put": {
                 "security": [
                     {
@@ -1722,7 +1722,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/prompt-service/list": {
+        "/prompt-svc/list": {
             "post": {
                 "description": "List prompts that satisfy a query.",
                 "consumes": [
@@ -1773,7 +1773,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/prompt-service/prompt": {
+        "/prompt-svc/prompt": {
             "post": {
                 "description": "Adds a new prompt to the prompt queue and either waits for the response (if ` + "`" + `sync` + "`" + ` is set to true), or returns immediately.",
                 "consumes": [
@@ -1825,7 +1825,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/prompt-service/remove": {
+        "/prompt-svc/remove": {
             "post": {
                 "description": "Remove a prompt by ID.",
                 "consumes": [
@@ -1877,7 +1877,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/prompt-service/{threadId}/subscribe": {
+        "/prompt-svc/{threadId}/subscribe": {
             "get": {
                 "description": "Subscribe to prompt responses via Server-Sent Events (SSE)",
                 "tags": [
@@ -1915,7 +1915,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/user-service/change-password": {
+        "/user-svc/change-password": {
             "post": {
                 "security": [
                     {
@@ -1972,7 +1972,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/user-service/change-password-admin": {
+        "/user-svc/change-password-admin": {
             "post": {
                 "security": [
                     {
@@ -2029,7 +2029,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/user-service/login": {
+        "/user-svc/login": {
             "post": {
                 "description": "Authenticates a user and returns a token.",
                 "consumes": [
@@ -2075,14 +2075,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/user-service/permission/{permissionId}": {
+        "/user-svc/permission/{permissionId}": {
             "put": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "Creates or updates a permission.\n\nRequires the ` + "`" + `permission.create` + "`" + ` permission.",
+                "description": "Creates or updates a permission.\n\u003cb\u003eThe permission ID must be prefixed by the callers username (email).\u003c/b\u003e\nEg. if the owner's email/username is ` + "`" + `petstore-svc` + "`" + ` the permission should look like ` + "`" + `petstore-svc:pet:edit` + "`" + `.\n\nRequires the ` + "`" + `user-svc:permission:create` + "`" + ` permission.",
                 "consumes": [
                     "application/json"
                 ],
@@ -2119,7 +2119,7 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "Bad Request",
+                        "description": "Bad Request: Invalid JSON or Bad Namespace",
                         "schema": {
                             "type": "string"
                         }
@@ -2139,7 +2139,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/user-service/permission/{permissionId}/is-authorized": {
+        "/user-svc/permission/{permissionId}/is-authorized": {
             "post": {
                 "security": [
                     {
@@ -2197,7 +2197,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/user-service/public-key": {
+        "/user-svc/public-key": {
             "get": {
                 "description": "Get the public key to descrypt the JWT.",
                 "consumes": [
@@ -2232,7 +2232,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/user-service/register": {
+        "/user-svc/register": {
             "post": {
                 "description": "Register a new user with a name, email, and password.",
                 "consumes": [
@@ -2278,14 +2278,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/user-service/role": {
+        "/user-svc/role": {
             "post": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "Create a new role.\n\nRequires the ` + "`" + `role.create` + "`" + ` permission.",
+                "description": "Create a new role.\n\u003cb\u003eThe role ID must be prefixed by the callers username (email).\u003c/b\u003e\nEg. if the owner's email/username is ` + "`" + `petstore-svc` + "`" + ` the role should look like ` + "`" + `petstore-svc:admin` + "`" + `.\nThe user account who creates the role will become the owner of that role, and only the owner will be able to edit the role.\n\nRequires the ` + "`" + `user-svc:role:create` + "`" + ` permission.",
                 "consumes": [
                     "application/json"
                 ],
@@ -2335,7 +2335,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/user-service/role/{roleId}": {
+        "/user-svc/role/{roleId}": {
             "delete": {
                 "security": [
                     {
@@ -2390,14 +2390,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/user-service/role/{roleId}/permission/{permissionId}": {
+        "/user-svc/role/{roleId}/permission/{permissionId}": {
             "put": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "Adds a specific permission to a role identified by roleId.\n\nRequires the ` + "`" + `permission.assign` + "`" + ` permission.",
+                "description": "Adds a specific permission to a role identified by roleId.\n\nRequires the ` + "`" + `user-svc:permission:assign` + "`" + ` permission.",
                 "consumes": [
                     "application/json"
                 ],
@@ -2446,7 +2446,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/user-service/role/{roleId}/permissions": {
+        "/user-svc/role/{roleId}/permissions": {
             "get": {
                 "security": [
                     {
@@ -2506,7 +2506,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Set permissions for a specified role.",
+                "description": "Set permissions for a specified role. The caller can add permissions it owns to any role.\nIf the caller tries to add a permission it doesn't own to a role, ` + "`" + `StatusBadRequest` + "`" + ` will be returned.",
                 "consumes": [
                     "application/json"
                 ],
@@ -2563,7 +2563,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/user-service/roles": {
+        "/user-svc/roles": {
             "get": {
                 "security": [
                     {
@@ -2603,7 +2603,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/user-service/user": {
+        "/user-svc/user": {
             "post": {
                 "security": [
                     {
@@ -2660,7 +2660,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/user-service/user/by-token": {
+        "/user-svc/user/by-token": {
             "post": {
                 "security": [
                     {
@@ -2711,7 +2711,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/user-service/user/{userId}": {
+        "/user-svc/user/{userId}": {
             "delete": {
                 "security": [
                     {
@@ -2760,7 +2760,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/user-service/users": {
+        "/user-svc/users": {
             "post": {
                 "security": [
                     {
@@ -4247,6 +4247,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "name": {
+                    "type": "string"
+                },
+                "ownerId": {
                     "type": "string"
                 },
                 "permissionIds": {

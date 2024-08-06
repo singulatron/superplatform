@@ -13,28 +13,28 @@ import (
 )
 
 var PermissionGenericCreate = usertypes.Permission{
-	Id:   "generic.create",
-	Name: "Generic Create",
+	Id:   "generic-svc:object:create",
+	Name: "Generic Service - Object Create",
 }
 
 var PermissionGenericView = usertypes.Permission{
-	Id:   "generic.view",
-	Name: "Generic View",
+	Id:   "generic-svc:object:view",
+	Name: "Generic Service - Object View",
 }
 
 var PermissionGenericEdit = usertypes.Permission{
-	Id:   "generic.edit",
-	Name: "Generic Edit",
+	Id:   "generic-svc:object:edit",
+	Name: "Generic Service - Object Edit",
 }
 
 var PermissionGenericDelete = usertypes.Permission{
-	Id:   "generic.delete",
-	Name: "Generic Delete",
+	Id:   "generic-svc:object:delete",
+	Name: "Generic Service - Object Delete",
 }
 
 var PermissionGenericStream = usertypes.Permission{
-	Id:   "generic.stream",
-	Name: "Generic Stream",
+	Id:   "generic-svc:object:stream",
+	Name: "Generic Service - Object Stream",
 }
 
 var GenericPermissions = []usertypes.Permission{

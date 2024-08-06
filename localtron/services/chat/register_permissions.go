@@ -19,7 +19,7 @@ import (
 func (p *ChatService) registerPermissions() error {
 	for _, permission := range chattypes.ThreadPermissions {
 		rsp := &usertypes.UpserPermissionResponse{}
-		err := p.router.Put(context.Background(), "user-service", fmt.Sprintf("/permission/%v", permission.Id), &usertypes.UpserPermissionRequest{
+		err := p.router.Put(context.Background(), "user-svc", fmt.Sprintf("/permission/%v", permission.Id), &usertypes.UpserPermissionRequest{
 			Permission: &usertypes.Permission{
 				Name:        permission.Name,
 				Description: permission.Description,
@@ -36,7 +36,7 @@ func (p *ChatService) registerPermissions() error {
 	} {
 		for _, permission := range chattypes.ThreadPermissions {
 			rsp := &usertypes.AddPermissionToRoleResponse{}
-			err := p.router.Put(context.Background(), "user-service",
+			err := p.router.Put(context.Background(), "user-svc",
 				fmt.Sprintf("/role/%v/permission/%v", role.Id, permission.Id), &usertypes.AddPermissionToRoleRequest{}, rsp)
 			if err != nil {
 				return err
@@ -46,7 +46,7 @@ func (p *ChatService) registerPermissions() error {
 
 	for _, permission := range chattypes.MessagePermissions {
 		rsp := &usertypes.UpserPermissionResponse{}
-		err := p.router.Put(context.Background(), "user-service", fmt.Sprintf("/permission/%v", permission.Id), &usertypes.UpserPermissionRequest{
+		err := p.router.Put(context.Background(), "user-svc", fmt.Sprintf("/permission/%v", permission.Id), &usertypes.UpserPermissionRequest{
 			Permission: &usertypes.Permission{
 				Name:        permission.Name,
 				Description: permission.Description,
@@ -63,7 +63,7 @@ func (p *ChatService) registerPermissions() error {
 	} {
 		for _, permission := range chattypes.MessagePermissions {
 			rsp := &usertypes.AddPermissionToRoleResponse{}
-			err := p.router.Put(context.Background(), "user-service",
+			err := p.router.Put(context.Background(), "user-svc",
 				fmt.Sprintf("/role/%v/permission/%v", role.Id, permission.Id), &usertypes.AddPermissionToRoleRequest{}, rsp)
 			if err != nil {
 				return err

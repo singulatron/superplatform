@@ -9,6 +9,7 @@ package userservice
 
 import (
 	"crypto/rsa"
+	"fmt"
 	"time"
 
 	"github.com/google/uuid"
@@ -25,11 +26,13 @@ type UserService struct {
 	usersStore       datastore.DataStore
 	rolesStore       datastore.DataStore
 	permissionsStore datastore.DataStore
+	credentialsStore datastore.DataStore
 	authTokensStore  datastore.DataStore
 	keyPairsStore    datastore.DataStore
 
-	privateKey   *rsa.PrivateKey
-	publicKeyPem string
+	privateKey    *rsa.PrivateKey
+	publicKeyPem  string
+	serviceUserId string
 }
 
 func NewUserService(
@@ -52,6 +55,10 @@ func NewUserService(
 	if err != nil {
 		return nil, err
 	}
+	credentialsStore, err := datastoreFactory("user_credetentials", &usertypes.Permission{})
+	if err != nil {
+		return nil, err
+	}
 	keyPairsStore, err := datastoreFactory("keyPairs", &usertypes.KeyPair{})
 	if err != nil {
 		return nil, err
@@ -63,6 +70,7 @@ func NewUserService(
 		rolesStore:       rolesStore,
 		authTokensStore:  authTokensStore,
 		permissionsStore: permissionsStore,
+		credentialsStore: credentialsStore,
 		keyPairsStore:    keyPairsStore,
 	}
 
@@ -85,6 +93,8 @@ func NewUserService(
 }
 
 func (s *UserService) bootstrap() error {
+	// bootstrapping keys
+
 	keyPairs, err := s.keyPairsStore.Query(
 		datastore.All(),
 	).Find()
@@ -127,6 +137,8 @@ func (s *UserService) bootstrap() error {
 
 	}
 
+	// bootstrap admin user
+
 	count, err := s.usersStore.Query(
 		datastore.All(),
 	).Count()
@@ -139,13 +151,59 @@ func (s *UserService) bootstrap() error {
 		return nil
 	}
 
-	logger.Info("Bootstrapping users")
-
 	_, err = s.register("singulatron", "changeme", "Admin", []string{
 		usertypes.RoleAdmin.Id,
 	})
+	if err != nil {
+		return err
+	}
 
-	return err
+	// bootstrapping service user
+
+	credentials, err := s.credentialsStore.Query(datastore.All()).Find()
+	if err != nil {
+		return err
+	}
+
+	email := "user-svc"
+	pw := ""
+
+	if len(credentials) > 0 {
+		cred := credentials[0].(*usertypes.Credential)
+		email = cred.Email
+		pw = cred.Password
+	} else {
+		pw = uuid.New().String()
+		err = s.credentialsStore.Upsert(&usertypes.Credential{
+			Email:    email,
+			Password: pw,
+		})
+		if err != nil {
+			return err
+		}
+	}
+
+	tok, err := s.login(email, pw)
+	if err != nil {
+		logger.Info(fmt.Sprintf("Registering the %v service", email))
+
+		usr, err := s.register(email, pw,
+			"User Service", []string{
+				usertypes.RoleUser.Id,
+			})
+		if err != nil {
+			return err
+		}
+		s.serviceUserId = usr.Id
+	} else {
+		usr, err := s.readUserByToken(tok.Token)
+		if err != nil {
+			return err
+		}
+		s.serviceUserId = usr.Id
+	}
+
+	return nil
 }
 
 func (s *UserService) registerRoles() error {

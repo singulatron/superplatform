@@ -71,7 +71,7 @@ func (cs *ConfigService) Start() error {
 	}
 	cs.credentialStore = credentialStore
 
-	token, err := sdk.RegisterService("config-service", "Config Service", cs.router, cs.credentialStore)
+	token, err := sdk.RegisterService("config-svc", "Config Service", cs.router, cs.credentialStore)
 	if err != nil {
 		return err
 	}

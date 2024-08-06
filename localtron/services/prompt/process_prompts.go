@@ -171,7 +171,7 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 			PromptId: currentPrompt.Id,
 			Error:    errToString(err),
 		}
-		err = p.router.Post(context.Background(), "firehose-service", "/publish", firehosetypes.PublishRequest{
+		err = p.router.Post(context.Background(), "firehose-svc", "/publish", firehosetypes.PublishRequest{
 			Event: &firehosetypes.Event{
 				Name: ev.Name(),
 				Data: ev,
@@ -195,7 +195,7 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 	ev := prompttypes.EventPromptProcessingStarted{
 		PromptId: currentPrompt.Id,
 	}
-	err = p.router.Post(context.Background(), "firehose-service", "/publish", firehosetypes.PublishRequest{
+	err = p.router.Post(context.Background(), "firehose-svc", "/publish", firehosetypes.PublishRequest{
 		Event: &firehosetypes.Event{
 			Name: ev.Name(),
 			Data: ev,
@@ -217,7 +217,7 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 		},
 	}
 
-	err = p.router.Post(context.Background(), "chat-service", fmt.Sprintf("/thread/%v/message", currentPrompt.ThreadId), addMessageReq, nil)
+	err = p.router.Post(context.Background(), "chat-svc", fmt.Sprintf("/thread/%v/message", currentPrompt.ThreadId), addMessageReq, nil)
 	if err != nil {
 		return err
 	}
@@ -226,7 +226,7 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 	if modelId == "" {
 		//getConfigReq := configtypes.GetConfigRequest{}
 		getConfigRsp := configtypes.GetConfigResponse{}
-		err := p.router.Get(context.Background(), "config-service", "/config", nil, &getConfigRsp)
+		err := p.router.Get(context.Background(), "config-svc", "/config", nil, &getConfigRsp)
 		if err != nil {
 			return err
 		}
@@ -234,7 +234,7 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 	}
 
 	statusRsp := modeltypes.StatusResponse{}
-	err = p.router.Get(context.Background(), "model-service", fmt.Sprintf("/model/%v/status", url.PathEscape(modelId)), nil, &statusRsp)
+	err = p.router.Get(context.Background(), "model-svc", fmt.Sprintf("/model/%v/status", url.PathEscape(modelId)), nil, &statusRsp)
 	if err != nil {
 
 		return err
@@ -270,7 +270,7 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 
 func (p *PromptService) processPlatform(address string, modelId string, fullPrompt string, currentPrompt *prompttypes.Prompt) error {
 	getModelRsp := modeltypes.GetModelResponse{}
-	err := p.router.Get(context.Background(), "model-service", fmt.Sprintf("/model/%v", url.PathEscape(modelId)), nil, &getModelRsp)
+	err := p.router.Get(context.Background(), "model-svc", fmt.Sprintf("/model/%v", url.PathEscape(modelId)), nil, &getModelRsp)
 	if err != nil {
 		panic(err)
 		return err
@@ -422,7 +422,7 @@ func (p *PromptService) processLlamaCpp(address string, fullPrompt string, curre
 				},
 			}
 			addMsgRsp := chattypes.AddMessageResponse{}
-			err := p.router.Post(context.Background(), "chat-service", fmt.Sprintf("/thread/%v/message", currentPrompt.ThreadId), addMsgReq, &addMsgRsp)
+			err := p.router.Post(context.Background(), "chat-svc", fmt.Sprintf("/thread/%v/message", currentPrompt.ThreadId), addMsgReq, &addMsgRsp)
 			if err != nil {
 				logger.Error("Error when saving chat message after broadcast",
 					slog.String("error", err.Error()))

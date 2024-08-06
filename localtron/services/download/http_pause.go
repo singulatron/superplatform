@@ -21,7 +21,7 @@ import (
 // @Summary Pause a Download
 // @Description Pause a download that is currently in progress.
 // @Description
-// @Description Requires the `download.edit` permission.
+// @Description Requires the `download-svc:download:edit` permission.
 // @Tags Download Service
 // @Accept json
 // @Produce json
@@ -31,14 +31,14 @@ import (
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
 // @Security BearerAuth
-// @Router /download-service/download/{downloadId}/pause [put]
+// @Router /download-svc/download/{downloadId}/pause [put]
 func (ds *DownloadService) Pause(
 	w http.ResponseWriter,
 	r *http.Request,
 
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := ds.router.AsRequestMaker(r).Post(r.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", downloadtypes.PermissionDownloadEdit.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	err := ds.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", downloadtypes.PermissionDownloadEdit.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return

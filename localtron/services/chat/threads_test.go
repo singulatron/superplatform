@@ -43,7 +43,7 @@ func TestMessageCreatesThread(t *testing.T) {
 				Content: "hi there",
 			},
 		}
-		err = router.Post(context.Background(), "chat-service", "/message", req, nil)
+		err = router.Post(context.Background(), "chat-svc", "/message", req, nil)
 		require.Error(t, err)
 	})
 
@@ -55,7 +55,7 @@ func TestMessageCreatesThread(t *testing.T) {
 				Content:  "hi there",
 			},
 		}
-		err = router.Post(context.Background(), "chat-service", "/message", req, nil)
+		err = router.Post(context.Background(), "chat-svc", "/message", req, nil)
 		require.Error(t, err)
 
 	})
@@ -71,7 +71,7 @@ func TestMessageCreatesThread(t *testing.T) {
 			},
 		}
 
-		err = router.Post(context.Background(), "chat-service", "/thread", req, nil)
+		err = router.Post(context.Background(), "chat-svc", "/thread", req, nil)
 		require.NoError(t, err)
 	})
 
@@ -90,7 +90,7 @@ func TestMessageCreatesThread(t *testing.T) {
 			},
 		}
 		rsp := &chattypes.AddThreadResponse{}
-		err = router.Post(context.Background(), "chat-service", "/thread", req, rsp)
+		err = router.Post(context.Background(), "chat-svc", "/thread", req, rsp)
 		require.NoError(t, err)
 
 		thread := rsp.Thread
@@ -107,7 +107,7 @@ func TestMessageCreatesThread(t *testing.T) {
 				ThreadId: threadId,
 				Content:  "hi there",
 			}}
-		err = router.Post(context.Background(), "chat-service", fmt.Sprintf("/thread/%v/message", threadId), req, nil)
+		err = router.Post(context.Background(), "chat-svc", fmt.Sprintf("/thread/%v/message", threadId), req, nil)
 		require.NoError(t, err)
 	})
 }

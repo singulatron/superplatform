@@ -8,11 +8,13 @@
 package userservice
 
 import (
+	"fmt"
+
 	"github.com/singulatron/singulatron/localtron/datastore"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func (s *UserService) upsertPermission(id, name, description string) (*usertypes.Permission, error) {
+func (s *UserService) upsertPermission(userId, id, name, description string) (*usertypes.Permission, error) {
 	query := s.permissionsStore.Query(
 		datastore.Equal(datastore.Field("id"), id),
 	)
@@ -24,6 +26,9 @@ func (s *UserService) upsertPermission(id, name, description string) (*usertypes
 
 	if found {
 		perm := permI.(*usertypes.Permission)
+		if perm.OwnerId != userId {
+			return nil, fmt.Errorf("cannot update unowned permission")
+		}
 
 		perm.Name = name
 		perm.Description = description
@@ -35,6 +40,7 @@ func (s *UserService) upsertPermission(id, name, description string) (*usertypes
 		Id:          id,
 		Name:        name,
 		Description: description,
+		OwnerId:     userId,
 	}
 
 	s.permissionsStore.Create(permission)

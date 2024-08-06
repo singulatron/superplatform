@@ -65,7 +65,7 @@ func NewModelService(
 }
 
 func (ms *ModelService) Start() error {
-	token, err := sdk.RegisterService("model-service", "Model Service", ms.router, ms.credentialStore)
+	token, err := sdk.RegisterService("model-svc", "Model Service", ms.router, ms.credentialStore)
 	if err != nil {
 		return err
 	}

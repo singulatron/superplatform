@@ -20,7 +20,7 @@ import (
 // @Summary Add Permission to Role
 // @Description Adds a specific permission to a role identified by roleId.
 // @Description
-// @Description Requires the `permission.assign` permission.
+// @Description Requires the `user-svc:permission:assign` permission.
 // @Tags User Service
 // @Accept json
 // @Produce json
@@ -30,7 +30,7 @@ import (
 // @Failure 401 {object} usertypes.ErrorResponse "Unauthorized"
 // @Failure 500 {object} usertypes.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
-// @Router /user-service/role/{roleId}/permission/{permissionId} [put]
+// @Router /user-svc/role/{roleId}/permission/{permissionId} [put]
 func (s *UserService) AddPermissionToRole(
 	w http.ResponseWriter,
 	r *http.Request,

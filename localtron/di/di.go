@@ -200,193 +200,193 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 		http.Error(w, "404 page not found", http.StatusNotFound)
 	})
 
-	router.HandleFunc("/firehose-service/subscribe", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/firehose-svc/subscribe", appl(func(w http.ResponseWriter, r *http.Request) {
 		firehoseService.Subscribe(w, r)
 	})).Methods("OPTIONS", "GET")
-	router.HandleFunc("/firehose-service/publish", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/firehose-svc/publish", appl(func(w http.ResponseWriter, r *http.Request) {
 		firehoseService.Publish(w, r)
 	})).Methods("OPTIONS", "POST")
 
-	router.HandleFunc("/download-service/download", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/download-svc/download", appl(func(w http.ResponseWriter, r *http.Request) {
 		downloadService.Do(w, r)
 	})).Methods("OPTIONS", "PUT")
 
-	router.HandleFunc("/download-service/download/{downloadId}/pause", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/download-svc/download/{downloadId}/pause", appl(func(w http.ResponseWriter, r *http.Request) {
 		downloadService.Pause(w, r)
 	})).Methods("OPTIONS", "PUT")
-	router.HandleFunc("/download-service/download/{downloadId}", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/download-svc/download/{downloadId}", appl(func(w http.ResponseWriter, r *http.Request) {
 		downloadService.Get(w, r)
 	})).Methods("OPTIONS", "GET")
 
-	router.HandleFunc("/download-service/downloads", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/download-svc/downloads", appl(func(w http.ResponseWriter, r *http.Request) {
 		downloadService.List(w, r)
 	})).Methods("OPTIONS", "POST")
 
-	router.HandleFunc("/docker-service/info", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/docker-svc/info", appl(func(w http.ResponseWriter, r *http.Request) {
 		dockerService.Info(w, r)
 	})).Methods("OPTIONS", "GET")
-	router.HandleFunc("/docker-service/host", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/docker-svc/host", appl(func(w http.ResponseWriter, r *http.Request) {
 		dockerService.Host(w, r)
 	})).Methods("OPTIONS", "GET")
-	router.HandleFunc("/docker-service/container", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/docker-svc/container", appl(func(w http.ResponseWriter, r *http.Request) {
 		dockerService.LaunchContainer(w, r)
 	})).Methods("OPTIONS", "PUT")
-	router.HandleFunc("/docker-service/container/{hash}/is-running", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/docker-svc/container/{hash}/is-running", appl(func(w http.ResponseWriter, r *http.Request) {
 		dockerService.HashIsRunning(w, r)
 	})).Methods("OPTIONS", "GET")
-	router.HandleFunc("/docker-service/container/{hash}/summary/{numberOfLines}", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/docker-svc/container/{hash}/summary/{numberOfLines}", appl(func(w http.ResponseWriter, r *http.Request) {
 		dockerService.Summary(w, r)
 	})).Methods("OPTIONS", "GET")
 
-	router.HandleFunc("/model-service/default-model/status", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/model-svc/default-model/status", appl(func(w http.ResponseWriter, r *http.Request) {
 		modelService.DefaultStatus(w, r)
 	})).Methods("OPTIONS", "GET")
-	router.HandleFunc("/model-service/model/{modelId}/status", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/model-svc/model/{modelId}/status", appl(func(w http.ResponseWriter, r *http.Request) {
 		modelService.Status(w, r)
 	})).Methods("OPTIONS", "GET")
-	router.HandleFunc("/model-service/models", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/model-svc/models", appl(func(w http.ResponseWriter, r *http.Request) {
 		modelService.List(w, r)
 	})).Methods("OPTIONS", "POST")
-	router.HandleFunc("/model-service/model/{modelId}", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/model-svc/model/{modelId}", appl(func(w http.ResponseWriter, r *http.Request) {
 		modelService.Get(w, r)
 	})).Methods("OPTIONS", "GET")
-	router.HandleFunc("/model-service/default-model/start", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/model-svc/default-model/start", appl(func(w http.ResponseWriter, r *http.Request) {
 		modelService.StartDefault(w, r)
 	})).Methods("OPTIONS", "PUT")
-	router.HandleFunc("/model-service/model/{modelId}/start", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/model-svc/model/{modelId}/start", appl(func(w http.ResponseWriter, r *http.Request) {
 		modelService.StartSpecific(w, r)
 	})).Methods("OPTIONS", "PUT")
-	router.HandleFunc("/model-service/model/{modelId}/make-default", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/model-svc/model/{modelId}/make-default", appl(func(w http.ResponseWriter, r *http.Request) {
 		modelService.MakeDefault(w, r)
 	})).Methods("OPTIONS", "PUT")
 
-	router.HandleFunc("/config-service/config", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/config-svc/config", appl(func(w http.ResponseWriter, r *http.Request) {
 		configService.Get(w, r)
 	})).Methods("OPTIONS", "GET")
-	router.HandleFunc("/config-service/config", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/config-svc/config", appl(func(w http.ResponseWriter, r *http.Request) {
 		configService.Save(w, r)
 	})).Methods("OPTIONS", "PUT")
 
-	router.HandleFunc("/chat-service/thread/{threadId}/message", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/chat-svc/thread/{threadId}/message", appl(func(w http.ResponseWriter, r *http.Request) {
 		chatService.AddMessage(w, r)
 	})).Methods("OPTIONS", "POST")
 
-	router.HandleFunc("/chat-service/message/{messageId}", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/chat-svc/message/{messageId}", appl(func(w http.ResponseWriter, r *http.Request) {
 		chatService.DeleteMessage(w, r)
 	})).Methods("OPTIONS", "DELETE")
 
-	router.HandleFunc("/chat-service/thread/{threadId}/messages", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/chat-svc/thread/{threadId}/messages", appl(func(w http.ResponseWriter, r *http.Request) {
 		chatService.GetMessages(w, r)
 	})).Methods("OPTIONS", "POST")
 
-	router.HandleFunc("/chat-service/thread", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/chat-svc/thread", appl(func(w http.ResponseWriter, r *http.Request) {
 		chatService.AddThread(w, r)
 	})).Methods("OPTIONS", "POST")
 
-	router.HandleFunc("/chat-service/thread/{threadId}", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/chat-svc/thread/{threadId}", appl(func(w http.ResponseWriter, r *http.Request) {
 		chatService.DeleteThread(w, r)
 	})).Methods("OPTIONS", "DELETE")
 
-	router.HandleFunc("/chat-service/threads", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/chat-svc/threads", appl(func(w http.ResponseWriter, r *http.Request) {
 		chatService.GetThreads(w, r)
 	})).Methods("OPTIONS", "POST")
 
-	router.HandleFunc("/chat-service/thread/{threadId}", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/chat-svc/thread/{threadId}", appl(func(w http.ResponseWriter, r *http.Request) {
 		chatService.GetThread(w, r)
 	})).Methods("OPTIONS", "GET")
 
-	router.HandleFunc("/chat-service/thread/{threadId}", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/chat-svc/thread/{threadId}", appl(func(w http.ResponseWriter, r *http.Request) {
 		chatService.UpdateThread(w, r)
 	})).Methods("OPTIONS", "PUT")
 
-	router.HandleFunc("/prompt-service/prompt", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/prompt-svc/prompt", appl(func(w http.ResponseWriter, r *http.Request) {
 		promptService.Add(w, r)
 	})).Methods("OPTIONS", "POST")
 
-	router.HandleFunc("/prompt-service'/prompt/{promptId}", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/prompt-svc'/prompt/{promptId}", appl(func(w http.ResponseWriter, r *http.Request) {
 		promptService.RemovePrompt(w, r)
 	})).Methods("OPTIONS", "DELETE")
 
-	router.HandleFunc("/prompt-service/{threadId}/subscribe", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/prompt-svc/{threadId}/subscribe", appl(func(w http.ResponseWriter, r *http.Request) {
 		promptService.GetSubscribe(w, r)
 	})).Methods("OPTIONS", "GET")
 
-	router.HandleFunc("/prompt-service/prompts", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/prompt-svc/prompts", appl(func(w http.ResponseWriter, r *http.Request) {
 		promptService.GetPrompts(w, r)
 	})).Methods("OPTIONS", "POST")
 
-	router.HandleFunc("/user-service/login", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/user-svc/login", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.Login(w, r)
 	})).Methods("OPTIONS", "POST")
-	router.HandleFunc("/user-service/user/by-token", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/user-svc/user/by-token", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.ReadUserByToken(w, r)
 	})).Methods("OPTIONS", "POST")
-	router.HandleFunc("/user-service/users", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/user-svc/users", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.GetUsers(w, r)
 	})).Methods("OPTIONS", "POST")
-	router.HandleFunc("/user-service/user/{userId}", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/user-svc/user/{userId}", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.SaveProfile(w, r)
 	})).Methods("OPTIONS", "PUT")
-	router.HandleFunc("/user-service/change-password", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/user-svc/change-password", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.ChangePassword(w, r)
 	})).Methods("OPTIONS", "POST")
-	router.HandleFunc("/user-service/change-password-admin", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/user-svc/change-password-admin", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.ChangePasswordAdmin(w, r)
 	})).Methods("OPTIONS", "POST")
-	router.HandleFunc("/user-service/user", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/user-svc/user", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.CreateUser(w, r)
 	})).Methods("OPTIONS", "POST")
-	router.HandleFunc("/user-service/user/{userId}", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/user-svc/user/{userId}", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.DeleteUser(w, r)
 	})).Methods("OPTIONS", "DELETE")
-	router.HandleFunc("/user-service/roles", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/user-svc/roles", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.GetRoles(w, r)
 	})).Methods("OPTIONS", "GET")
-	router.HandleFunc("/user-service/role/{roleId}", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/user-svc/role/{roleId}", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.DeleteRole(w, r)
 	})).Methods("OPTIONS", "DELETE")
-	router.HandleFunc("/user-service/role", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/user-svc/role", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.CreateRole(w, r)
 	})).Methods("OPTIONS", "POST")
-	router.HandleFunc("/user-service/permission/{permissionId}/is-authorized", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/user-svc/permission/{permissionId}/is-authorized", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.IsAuthorized(w, r)
 	})).Methods("OPTIONS", "POST")
-	router.HandleFunc("/user-service/role/{roleId}/permissions", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/user-svc/role/{roleId}/permissions", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.GetPermissions(w, r)
 	})).Methods("OPTIONS", "GET")
-	router.HandleFunc("/user-service/role/{roleId}/permissions", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/user-svc/role/{roleId}/permissions", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.SetRolePermissions(w, r)
 	})).Methods("OPTIONS", "PUT")
-	router.HandleFunc("/user-service/permission/{permissionId}", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/user-svc/permission/{permissionId}", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.UpsertPermission(w, r)
 	})).Methods("OPTIONS", "PUT")
-	router.HandleFunc("/user-service/register", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/user-svc/register", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.Register(w, r)
 	})).Methods("OPTIONS", "POST")
-	router.HandleFunc("/user-service/role/{roleId}/permission/{permissionId}", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/user-svc/role/{roleId}/permission/{permissionId}", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.AddPermissionToRole(w, r)
 	})).Methods("OPTIONS", "PUT")
-	router.HandleFunc("/user-service/public-key", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/user-svc/public-key", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.GetPublicKey(w, r)
 	})).Methods("OPTIONS", "GET")
 
-	router.HandleFunc("/generic-service/object", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/generic-svc/object", appl(func(w http.ResponseWriter, r *http.Request) {
 		genericService.Create(w, r)
 	})).Methods("OPTIONS", "POST")
-	router.HandleFunc("/generic-service/objects/update", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/generic-svc/objects/update", appl(func(w http.ResponseWriter, r *http.Request) {
 		genericService.Update(w, r)
 	})).Methods("OPTIONS", "POST")
-	router.HandleFunc("/generic-service/objects/delete", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/generic-svc/objects/delete", appl(func(w http.ResponseWriter, r *http.Request) {
 		genericService.Delete(w, r)
 	})).Methods("OPTIONS", "DELETE")
-	router.HandleFunc("/generic-service/objects", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/generic-svc/objects", appl(func(w http.ResponseWriter, r *http.Request) {
 		genericService.Find(w, r)
 	})).Methods("OPTIONS", "POST")
-	router.HandleFunc("/generic-service/object/{objectId}", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/generic-svc/object/{objectId}", appl(func(w http.ResponseWriter, r *http.Request) {
 		genericService.Upsert(w, r)
 	})).Methods("OPTIONS", "PUT")
 
-	router.HandleFunc("/node-service/nodes", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/node-svc/nodes", appl(func(w http.ResponseWriter, r *http.Request) {
 		nodeService.List(w, r)
 	}))
 

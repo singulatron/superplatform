@@ -57,7 +57,7 @@ func (p *PromptService) addPrompt(ctx context.Context, promptReq *prompttypes.Ad
 
 	//getThreadResp := apptypes.GetThreadResponse{}
 	getThreadRsp := &chattypes.GetThreadResponse{}
-	err = p.router.Get(ctx, "chat-service", fmt.Sprintf("/thread/%v", threadId), nil, &getThreadRsp)
+	err = p.router.Get(ctx, "chat-svc", fmt.Sprintf("/thread/%v", threadId), nil, &getThreadRsp)
 	if err != nil {
 		return nil, err
 	}
@@ -84,7 +84,7 @@ func (p *PromptService) addPrompt(ctx context.Context, promptReq *prompttypes.Ad
 		}
 
 		rsp := &chattypes.AddThreadResponse{}
-		err = p.router.Post(context.Background(), "chat-service", "/thread", &chattypes.AddThreadRequest{
+		err = p.router.Post(context.Background(), "chat-svc", "/thread", &chattypes.AddThreadRequest{
 			Thread: thread,
 		}, rsp)
 		if err != nil {
@@ -96,7 +96,7 @@ func (p *PromptService) addPrompt(ctx context.Context, promptReq *prompttypes.Ad
 		PromptId: prompt.Id,
 	}
 
-	err = p.router.Post(context.Background(), "firehose-service", "/publish", firehosetypes.PublishRequest{
+	err = p.router.Post(context.Background(), "firehose-svc", "/publish", firehosetypes.PublishRequest{
 		Event: &firehosetypes.Event{
 			Name: ev.Name(),
 			Data: ev,

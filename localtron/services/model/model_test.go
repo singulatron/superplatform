@@ -40,7 +40,7 @@ func TestModel(t *testing.T) {
 
 	t.Run("get models", func(t *testing.T) {
 		getModelsRsp := modeltypes.ListResponse{}
-		err = router.Post(context.Background(), "model-service", "/models", nil, &getModelsRsp)
+		err = router.Post(context.Background(), "model-svc", "/models", nil, &getModelsRsp)
 		require.NoError(t, err)
 
 		require.Equal(t, 1, len(getModelsRsp.Models[0].Assets))
@@ -49,7 +49,7 @@ func TestModel(t *testing.T) {
 	t.Run("model status is not running, not ready", func(t *testing.T) {
 		// statusReq := modeltypes.StatusRequest{}
 		statusRsp := modeltypes.StatusResponse{}
-		err = router.Get(context.Background(), "model-service", fmt.Sprintf("/model/%v/status", url.PathEscape("huggingface/TheBloke/mistral-7b-instruct-v0.2.Q2_K.gguf")), nil, &statusRsp)
+		err = router.Get(context.Background(), "model-svc", fmt.Sprintf("/model/%v/status", url.PathEscape("huggingface/TheBloke/mistral-7b-instruct-v0.2.Q2_K.gguf")), nil, &statusRsp)
 		require.NoError(t, err)
 
 		require.Equal(t, false, statusRsp.Status.Running)
@@ -60,19 +60,19 @@ func TestModel(t *testing.T) {
 	t.Run("default", func(t *testing.T) {
 		//getConfigReq := configtypes.GetConfigRequest{}
 		getConfigRsp := configtypes.GetConfigResponse{}
-		err = router.Get(context.Background(), "config-service", "/config", nil, &getConfigRsp)
+		err = router.Get(context.Background(), "config-svc", "/config", nil, &getConfigRsp)
 		require.NoError(t, err)
 		require.Equal(t, configservice.DefaultModelId, getConfigRsp.Config.Model.CurrentModelId)
 
 		makeDefReq := modeltypes.MakeDefaultRequest{}
 		makeDefRsp := modeltypes.MakeDefaultResponse{}
-		err = router.Post(context.Background(), "model-service", fmt.Sprintf("/%v/make-default", url.PathEscape("huggingface/TheBloke/codellama-7b.Q3_K_M.gguf")), makeDefReq, &makeDefRsp)
+		err = router.Post(context.Background(), "model-svc", fmt.Sprintf("/%v/make-default", url.PathEscape("huggingface/TheBloke/codellama-7b.Q3_K_M.gguf")), makeDefReq, &makeDefRsp)
 		// errors because it is not downloaded yet
 		require.Error(t, err)
 
 		//getConfigReq = configtypes.GetConfigRequest{}
 		getConfigRsp = configtypes.GetConfigResponse{}
-		err = router.Get(context.Background(), "config-service", "/config", nil, &getConfigRsp)
+		err = router.Get(context.Background(), "config-svc", "/config", nil, &getConfigRsp)
 		require.NoError(t, err)
 		require.Equal(t, configservice.DefaultModelId, getConfigRsp.Config.Model.CurrentModelId)
 

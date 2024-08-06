@@ -13,18 +13,18 @@ import (
 )
 
 var PermissionDockerCreate = usertypes.Permission{
-	Id:   "docker.create",
-	Name: "Docker Create",
+	Id:   "docker-svc:container:create",
+	Name: "Docker Service - Container Create",
 }
 
 var PermissionDockerView = usertypes.Permission{
-	Id:   "docker.view",
-	Name: "Docker View",
+	Id:   "docker-svc:container:view",
+	Name: "Docker Service - Container View",
 }
 
 var PermissionDockerEdit = usertypes.Permission{
-	Id:   "docker.edit",
-	Name: "Docker Edit",
+	Id:   "docker-svc:container:.edit",
+	Name: "Docker Service - Container Edit",
 }
 
 var DockerPermissions = []usertypes.Permission{

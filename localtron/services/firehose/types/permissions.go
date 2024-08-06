@@ -13,27 +13,27 @@ import (
 )
 
 var PermissionFirehoseCreate = usertypes.Permission{
-	Id:   "firehose.create",
+	Id:   "firehose-svc:firehose:create",
 	Name: "Firehose Create",
 }
 
 var PermissionFirehoseView = usertypes.Permission{
-	Id:   "firehose.view",
+	Id:   "firehose-svc:firehose:view",
 	Name: "Firehose View",
 }
 
 var PermissionFirehoseEdit = usertypes.Permission{
-	Id:   "firehose.edit",
+	Id:   "firehose-svc:firehose:edit",
 	Name: "Firehose Edit",
 }
 
 var PermissionFirehoseDelete = usertypes.Permission{
-	Id:   "firehose.delete",
+	Id:   "firehose-svc:firehose:delete",
 	Name: "Firehose Delete",
 }
 
 var PermissionFirehoseStream = usertypes.Permission{
-	Id:   "firehose.stream",
+	Id:   "firehose-svc:firehose:stream",
 	Name: "Firehose Stream",
 }
 

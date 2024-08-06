@@ -13,27 +13,27 @@ import (
 )
 
 var PermissionPromptCreate = usertypes.Permission{
-	Id:   "prompt.create",
+	Id:   "prompt-svc:prompt:create",
 	Name: "Prompt Create",
 }
 
 var PermissionPromptView = usertypes.Permission{
-	Id:   "prompt.view",
+	Id:   "prompt-svc:prompt:view",
 	Name: "Prompt View",
 }
 
 var PermissionPromptEdit = usertypes.Permission{
-	Id:   "prompt.edit",
+	Id:   "prompt-svc:prompt:edit",
 	Name: "Prompt Edit",
 }
 
 var PermissionPromptDelete = usertypes.Permission{
-	Id:   "prompt.delete",
+	Id:   "prompt-svc:prompt:delete",
 	Name: "Prompt Delete",
 }
 
 var PermissionPromptStream = usertypes.Permission{
-	Id:   "prompt.stream",
+	Id:   "prompt-svc:prompt:stream",
 	Name: "Prompt Stream",
 }
 

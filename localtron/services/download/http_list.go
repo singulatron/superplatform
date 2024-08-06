@@ -20,7 +20,7 @@ import (
 // @Summary List Downloads
 // @Description Fetch a list of all download details.
 // @Description
-// @Description Requires the `download.view` permission.
+// @Description Requires the `download-svc:download:view` permission.
 // @Tags Download Service
 // @Accept json
 // @Produce json
@@ -28,13 +28,13 @@ import (
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
 // @Security BearerAuth
-// @Router /download-service/downloads [post]
+// @Router /download-svc/downloads [post]
 func (ds *DownloadService) List(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := ds.router.AsRequestMaker(r).Post(r.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", downloadtypes.PermissionDownloadView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	err := ds.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", downloadtypes.PermissionDownloadView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return

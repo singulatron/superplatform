@@ -5,7 +5,7 @@ description: "Retrieve all roles from the user service."
 sidebar_label: "Get all Roles"
 hide_title: true
 hide_table_of_contents: true
-api: eJylVE1v2zgQ/SvEnBXJTbbAQqfNAt0gaIEGcXJYpD5MpLHEliLZIWWvV9B/Xwwlx46dHIq92BTnk2/emwFqChVrH7WzUMI9Rda0IYXGKHaGglqz61RsSfWBWAXija4ohwyYgnc2UIBygMvFQv5eZ/v6GTKonI1ko1jRe6MrFGvxPYjLAKFqqUM5eXaeOOopYSouBx2pC+f2igkj1dcpcdx5ghJCZG0bGLPXfbxh1/Wb1xY7etPgiTsdgnb2tn7d1ZnrfIHMuJPv3tfvNnpwd8/fqYrn8eceo9z9tvhwDvejxT62jvW/VP8K8KdNSYGPb83z1kZii0YtiTfE6hOz4/9XacwgUNWzjjsonwb4k5CJr/vYQvm0GlcZRGwClE/wKPRbTvSDVQYdxdbVUEJDETLwKCFQCEsvZpYWE4mkhPQbUoWejfgVxlVoWhdi+fH3y6sPILX2rSyl44lnxw2d4vGw86S+zS7fQK2dMW5LtXreKVTBY0UKba2i+0FWYfWz10z1QVHpSWF+k/riGm0V2do7baMoTEuRlrAmQXkiJ1zPM04Yw4EvXn+miTDarl2SiLMRqzQW6lDLswMaCn8EbZveYGRn88p1R7nvbtWy996xQDoh1cboy6IIvSf2BuPacZejLs5kBve9Tc+taUPGeRXIrC8EYarV9a1C70Ou/nY9K8+uYew6fDaktL1oXR9I3dw95OqhJfWXZnrGQGrtOAEl0U1aOkZXZEMS6b7nm7svanOVL151HMqi2G63eWP73HFTzHGhwMabi6t8kbexM0lvxF34ut4z6/DgLTYNca5dkVwKwVpHIy7LA4CQgVBrQmCRX6Zt4ULs0B41eUMxrdT7mZAn++lFQL+0gOfJR/onFt6gtmndCATDLIcnOJaD7OxUf5WBjEXswyBAP7IZR7n+2ROLEFcZbJC1zCfpMNvTUBT0g3aCe1WRF5ps0PQTA0+kPx6r9ObTA2SAs44OpJVk2f4g2fcmuzvKfUr6qQX5HbN3QoZhksQ4vvhPpncjXpQ2eQueq3Ec/wOx+HJ7
+api: eJylVE1v2zgQ/SvEnBXJTbbAQqfNAt3AaIEGcXJYpD5MpLHEliLZIWWvV9B/Xwxlx47tHIq92BTnk2/emwFqChVrH7WzUMIDRda0JoXGKHaGglqx61RsSfWBWAXita4ohwyYgnc2UIBygOvZTP7eZvv6GTKonI1ko1jRe6MrFGvxPYjLAKFqqUM5eXaeOOopYSouBx2pC+f2igkj1bcpcdx6ghJCZG0bGLO3fVyw6/ritcWOLhrcxhLPLwd54k6HoJ2d1287PnPdXSAzbuW79/W7jzi4u5fvVMXz+HOPUe5+m304H8WTxT62jvW/VP/KUE6bkgIfL816biOxRaMWxGti9YnZ8f+rNGYQqOpZxy2UzwP8ScjEt31soXxejssMIjYBymd4EmouJmrCMoOOYutqKKGhCBl4lBAohMFXYV0VE7kkvfQaUvaejfgUxlVoWhdi+fH365sPIHX2bSyk24l/x82cYvG49aS+7Vy+gVo5Y9yGavWyVaiCx4oU2lpF94Oswupnr5nqg9LSc8LuPeqLa7RVZGvvtI2iPC1FWsKaBOGJtHC7m2/CFw5c8fozTWTRduWSdJyNWKWRUIdanh3QUPgjaNv0BiM7m1euO8p9P1eL3nvHAueEVBujL4si9J7YG4wrx12OujiTHzz0Nj23pjUZ51Ugs7oShKlWt3OF3odc/e16Vp5dw9h1+GJIaXvVuj6Qurt/zNVjS+ovzfSCgdTKcQJKopu0jIyuyIYk3n3Pd/df1Pomn73pOJRFsdls8sb2ueOm2MWFAhtvrm7yWd7GziStEXfh62rPqsODN9g0xLl2RXIpBGsdjbgsDgBCBkKtCYFZfp02hQuxQ3vU5B3FtGofdoQ82Vuv4vmlxbybfKR/YuENaptWjUAw7KTwDHspyB5PtZcZyEjENgwC8hObcZTrnz2xCHCZwRpZy2yS/rI9BUU9P2grmFcVeaHIGk0/se9E8uOxOu8+PUIGuNPQgbCSLNsfJPveZLdHuU8JP7Ugv2P2TsgwTHIYx1f/yfRuxKvKJm/BcjmO439yWHjG
 sidebar_class_name: "get api-method"
 info_path: docs/singulatron/singulatron
 custom_edit_url: null
@@ -34,7 +34,7 @@ import TabItem from "@theme/TabItem";
 
 <MethodEndpoint
   method={"get"}
-  path={"/user-service/roles"}
+  path={"/user-svc/roles"}
 >
   
 </MethodEndpoint>
@@ -166,6 +166,15 @@ Retrieve all roles from the user service.
                               
                             </SchemaItem><SchemaItem
                               collapsible={false}
+                              name={"ownerId"}
+                              required={false}
+                              schemaName={"string"}
+                              qualifierMessage={undefined}
+                              schema={{"type":"string"}}
+                            >
+                              
+                            </SchemaItem><SchemaItem
+                              collapsible={false}
                               name={"permissionIds"}
                               required={false}
                               schemaName={"string[]"}
@@ -199,7 +208,7 @@ Retrieve all roles from the user service.
                   value={"Example (from schema)"}
                 >
                   <ResponseSamples
-                    responseExample={"{\n  \"roles\": [\n    {\n      \"createdAt\": \"string\",\n      \"description\": \"string\",\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"permissionIds\": [\n        \"string\"\n      ],\n      \"updatedAt\": \"string\"\n    }\n  ]\n}"}
+                    responseExample={"{\n  \"roles\": [\n    {\n      \"createdAt\": \"string\",\n      \"description\": \"string\",\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"ownerId\": \"string\",\n      \"permissionIds\": [\n        \"string\"\n      ],\n      \"updatedAt\": \"string\"\n    }\n  ]\n}"}
                     language={"json"}
                   >
                     

@@ -10,6 +10,7 @@ package userservice
 import (
 	"encoding/json"
 	"net/http"
+	"strings"
 
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
@@ -17,8 +18,11 @@ import (
 // CreateRole creates a new role
 // @Summary Create a New Role
 // @Description Create a new role.
+// @Description <b>The role ID must be prefixed by the callers username (email).</b>
+// @Description Eg. if the owner's email/username is `petstore-svc` the role should look like `petstore-svc:admin`.
+// @Description The user account who creates the role will become the owner of that role, and only the owner will be able to edit the role.
 // @Description
-// @Description Requires the `role.create` permission.
+// @Description Requires the `user-svc:role:create` permission.
 // @Tags User Service
 // @Accept json
 // @Produce json
@@ -28,9 +32,9 @@ import (
 // @Failure 401 {object} usertypes.ErrorResponse "Unauthorized"
 // @Failure 500 {object} usertypes.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
-// @Router /user-service/role [post]
+// @Router /user-svc/role [post]
 func (s *UserService) CreateRole(w http.ResponseWriter, r *http.Request) {
-	_, err := s.isAuthorized(r, usertypes.PermissionRoleCreate.Id, nil)
+	rsp, err := s.isAuthorized(r, usertypes.PermissionRoleCreate.Id, nil)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -44,7 +48,13 @@ func (s *UserService) CreateRole(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	role, err := s.createRole(req.Name, req.Description, req.PermissionIds)
+	ownerUsername := rsp.Email
+	if !strings.HasPrefix(req.Name, ownerUsername) {
+		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
+		return
+	}
+
+	role, err := s.createRole(rsp.Id, req.Name, req.Description, req.PermissionIds)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

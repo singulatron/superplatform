@@ -987,6 +987,8 @@ definitions:
         type: string
       name:
         type: string
+      ownerId:
+        type: string
       permissionIds:
         items:
           type: string
@@ -1051,7 +1053,7 @@ info:
   title: Singulatron
   version: "0.2"
 paths:
-  /chat-service/message/{messageId}:
+  /chat-svc/message/{messageId}:
     delete:
       consumes:
       - application/json
@@ -1087,13 +1089,13 @@ paths:
       summary: Delete a Message
       tags:
       - Chat Service
-  /chat-service/thread:
+  /chat-svc/thread:
     post:
       consumes:
       - application/json
       description: |-
         Create a new chat thread and add the requesting user to it.
-        Requires the `thread.create` permission.
+        Requires the `chat-svc:thread:create` permission.
       parameters:
       - description: Add Thread Request
         in: body
@@ -1125,7 +1127,7 @@ paths:
       summary: Add Thread
       tags:
       - Chat Service
-  /chat-service/thread/{threadId}:
+  /chat-svc/thread/{threadId}:
     delete:
       consumes:
       - application/json
@@ -1235,7 +1237,7 @@ paths:
       summary: Update Thread
       tags:
       - Chat Service
-  /chat-service/thread/{threadId}/message:
+  /chat-svc/thread/{threadId}/message:
     post:
       consumes:
       - application/json
@@ -1277,7 +1279,7 @@ paths:
       summary: Add Message
       tags:
       - Chat Service
-  /chat-service/thread/{threadId}/messages:
+  /chat-svc/thread/{threadId}/messages:
     post:
       consumes:
       - application/json
@@ -1312,7 +1314,7 @@ paths:
       summary: List Messages
       tags:
       - Chat Service
-  /chat-service/threads:
+  /chat-svc/threads:
     post:
       consumes:
       - application/json
@@ -1348,7 +1350,7 @@ paths:
       summary: Get Threads
       tags:
       - Chat Service
-  /config-service/get:
+  /config-svc/get:
     post:
       consumes:
       - application/json
@@ -1380,7 +1382,7 @@ paths:
       summary: Get Config
       tags:
       - Config Service
-  /config-service/save:
+  /config-svc/save:
     post:
       consumes:
       - application/json
@@ -1412,14 +1414,14 @@ paths:
       summary: Save Config
       tags:
       - Config Service
-  /docker-service/container:
+  /docker-svc/container:
     put:
       consumes:
       - application/json
       description: |-
         Launches a Docker container with the specified parameters.
 
-        Requires the `docker.create` permission.
+        Requires the `docker-svc:docker:create` permission.
       parameters:
       - description: Launch Container Request
         in: body
@@ -1451,7 +1453,7 @@ paths:
       summary: Launch a Docker Container
       tags:
       - Docker Service
-  /docker-service/container/{hash}/is-running:
+  /docker-svc/container/{hash}/is-running:
     get:
       consumes:
       - application/json
@@ -1486,7 +1488,7 @@ paths:
       summary: Check If a Container Is Running
       tags:
       - Docker Service
-  /docker-service/container/{hash}/summary/{numberOfLines}:
+  /docker-svc/container/{hash}/summary/{numberOfLines}:
     get:
       consumes:
       - application/json
@@ -1527,7 +1529,7 @@ paths:
       summary: Get Container Summary
       tags:
       - Docker Service
-  /docker-service/host:
+  /docker-svc/host:
     get:
       consumes:
       - application/json
@@ -1552,7 +1554,7 @@ paths:
       summary: Get Docker Host
       tags:
       - Docker Service
-  /docker-service/info:
+  /docker-svc/info:
     get:
       consumes:
       - application/json
@@ -1577,14 +1579,14 @@ paths:
       summary: Get Docker Service Information
       tags:
       - Docker Service
-  /download-service/download:
+  /download-svc/download:
     put:
       consumes:
       - application/json
       description: |-
         Start a download for a specified URL.
 
-        Requires the `download.create` permission.
+        Requires the `download-svc:download:create` permission.
       parameters:
       - description: Download Request
         in: body
@@ -1617,14 +1619,14 @@ paths:
       summary: Download a File
       tags:
       - Download Service
-  /download-service/download/{downloadId}:
+  /download-svc/download/{downloadId}:
     get:
       consumes:
       - application/json
       description: |-
         Get a download by ID.
 
-        Requires the `download.view` permission.
+        Requires the `download-svc:download:view` permission.
       parameters:
       - description: Download ID
         in: path
@@ -1651,14 +1653,14 @@ paths:
       summary: Get a Download
       tags:
       - Download Service
-  /download-service/download/{downloadId}/pause:
+  /download-svc/download/{downloadId}/pause:
     put:
       consumes:
       - application/json
       description: |-
         Pause a download that is currently in progress.
 
-        Requires the `download.edit` permission.
+        Requires the `download-svc:download:edit` permission.
       parameters:
       - description: Download ID
         in: path
@@ -1690,14 +1692,14 @@ paths:
       summary: Pause a Download
       tags:
       - Download Service
-  /download-service/downloads:
+  /download-svc/downloads:
     post:
       consumes:
       - application/json
       description: |-
         Fetch a list of all download details.
 
-        Requires the `download.view` permission.
+        Requires the `download-svc:download:view` permission.
       produces:
       - application/json
       responses:
@@ -1718,7 +1720,7 @@ paths:
       summary: List Downloads
       tags:
       - Download Service
-  /firehose-service/publish:
+  /firehose-svc/publish:
     post:
       consumes:
       - application/json
@@ -1749,7 +1751,7 @@ paths:
       summary: Publish an Event
       tags:
       - Firehose Service
-  /firehose-service/subscribe:
+  /firehose-svc/subscribe:
     get:
       consumes:
       - application/json
@@ -1775,7 +1777,7 @@ paths:
       summary: Subscribe to the Event Stream
       tags:
       - Firehose Service
-  /generic-service/create:
+  /generic-svc/create:
     post:
       consumes:
       - application/json
@@ -1812,7 +1814,7 @@ paths:
       summary: Create a Generic Object
       tags:
       - Generic Service
-  /generic-service/object/{objectId}:
+  /generic-svc/object/{objectId}:
     delete:
       consumes:
       - application/json
@@ -1895,7 +1897,7 @@ paths:
       summary: Upsert a Generic Object
       tags:
       - Generic Service
-  /generic-service/objects:
+  /generic-svc/objects:
     post:
       consumes:
       - application/json
@@ -1935,7 +1937,7 @@ paths:
       summary: Find Generic Objects
       tags:
       - Generic Service
-  /generic-service/objects/update:
+  /generic-svc/objects/update:
     post:
       consumes:
       - application/json
@@ -1972,14 +1974,14 @@ paths:
       summary: Update Generic Objects
       tags:
       - Generic Service
-  /model-service/{id}/status:
+  /model-svc/{id}/status:
     get:
       consumes:
       - application/json
       description: |-
         Retrieves the status of a model by ID.
 
-        Requires the `model.view` permission.
+        Requires the `model-svc:model:view` permission.
       parameters:
       - description: Model ID
         in: path
@@ -2006,7 +2008,7 @@ paths:
       summary: Get Model Status
       tags:
       - Model Service
-  /model-service/{modelId}:
+  /model-svc/{modelId}:
     get:
       consumes:
       - application/json
@@ -2040,7 +2042,7 @@ paths:
       summary: Get a Model
       tags:
       - Model Service
-  /model-service/{modelId}/make-default:
+  /model-svc/{modelId}/make-default:
     put:
       consumes:
       - application/json
@@ -2076,7 +2078,7 @@ paths:
       summary: Make a Model Default
       tags:
       - Model Service
-  /model-service/{modelId}/start:
+  /model-svc/{modelId}/start:
     put:
       consumes:
       - application/json
@@ -2111,14 +2113,14 @@ paths:
       summary: Start a Model
       tags:
       - Model Service
-  /model-service/default/start:
+  /model-svc/default/start:
     put:
       consumes:
       - application/json
       description: |-
         Starts The Default Model.
 
-        Requires the `model.create` permission.
+        Requires the `model-svc:model:create` permission.
       produces:
       - application/json
       responses:
@@ -2143,7 +2145,7 @@ paths:
       summary: Start the Default Model
       tags:
       - Model Service
-  /model-service/models:
+  /model-svc/models:
     get:
       consumes:
       - application/json
@@ -2170,7 +2172,7 @@ paths:
       summary: List Models
       tags:
       - Model Service
-  /prompt-service/{threadId}/subscribe:
+  /prompt-svc/{threadId}/subscribe:
     get:
       description: Subscribe to prompt responses via Server-Sent Events (SSE)
       parameters:
@@ -2195,7 +2197,7 @@ paths:
       summary: Subscribe to Prompt
       tags:
       - Prompt Service
-  /prompt-service/list:
+  /prompt-svc/list:
     post:
       consumes:
       - application/json
@@ -2228,7 +2230,7 @@ paths:
       summary: List Prompts
       tags:
       - Prompt Service
-  /prompt-service/prompt:
+  /prompt-svc/prompt:
     post:
       consumes:
       - application/json
@@ -2263,7 +2265,7 @@ paths:
       summary: Add Prompt
       tags:
       - Prompt Service
-  /prompt-service/remove:
+  /prompt-svc/remove:
     post:
       consumes:
       - application/json
@@ -2297,7 +2299,7 @@ paths:
       summary: Remove Prompt
       tags:
       - Prompt Service
-  /user-service/change-password:
+  /user-svc/change-password:
     post:
       consumes:
       - application/json
@@ -2333,7 +2335,7 @@ paths:
       summary: Change User Password
       tags:
       - User Service
-  /user-service/change-password-admin:
+  /user-svc/change-password-admin:
     post:
       consumes:
       - application/json
@@ -2369,7 +2371,7 @@ paths:
       summary: Change User Password (Admin)
       tags:
       - User Service
-  /user-service/login:
+  /user-svc/login:
     post:
       consumes:
       - application/json
@@ -2399,14 +2401,16 @@ paths:
       summary: Login
       tags:
       - User Service
-  /user-service/permission/{permissionId}:
+  /user-svc/permission/{permissionId}:
     put:
       consumes:
       - application/json
       description: |-
         Creates or updates a permission.
+        <b>The permission ID must be prefixed by the callers username (email).</b>
+        Eg. if the owner's email/username is `petstore-svc` the permission should look like `petstore-svc:pet:edit`.
 
-        Requires the `permission.create` permission.
+        Requires the `user-svc:permission:create` permission.
       parameters:
       - description: Permission ID
         in: path
@@ -2427,7 +2431,7 @@ paths:
           schema:
             $ref: '#/definitions/usertypes.CreateUserResponse'
         "400":
-          description: Bad Request
+          description: 'Bad Request: Invalid JSON or Bad Namespace'
           schema:
             type: string
         "401":
@@ -2443,7 +2447,7 @@ paths:
       summary: Upsert a Permission
       tags:
       - User Service
-  /user-service/permission/{permissionId}/is-authorized:
+  /user-svc/permission/{permissionId}/is-authorized:
     post:
       consumes:
       - application/json
@@ -2480,7 +2484,7 @@ paths:
       summary: Is Authorized
       tags:
       - User Service
-  /user-service/public-key:
+  /user-svc/public-key:
     get:
       consumes:
       - application/json
@@ -2503,7 +2507,7 @@ paths:
       summary: Ge Public Key
       tags:
       - User Service
-  /user-service/register:
+  /user-svc/register:
     post:
       consumes:
       - application/json
@@ -2533,14 +2537,17 @@ paths:
       summary: Register a New User
       tags:
       - User Service
-  /user-service/role:
+  /user-svc/role:
     post:
       consumes:
       - application/json
       description: |-
         Create a new role.
+        <b>The role ID must be prefixed by the callers username (email).</b>
+        Eg. if the owner's email/username is `petstore-svc` the role should look like `petstore-svc:admin`.
+        The user account who creates the role will become the owner of that role, and only the owner will be able to edit the role.
 
-        Requires the `role.create` permission.
+        Requires the `user-svc:role:create` permission.
       parameters:
       - description: Create Role Request
         in: body
@@ -2572,7 +2579,7 @@ paths:
       summary: Create a New Role
       tags:
       - User Service
-  /user-service/role/{roleId}:
+  /user-svc/role/{roleId}:
     delete:
       consumes:
       - application/json
@@ -2607,14 +2614,14 @@ paths:
       summary: Delete a Role
       tags:
       - User Service
-  /user-service/role/{roleId}/permission/{permissionId}:
+  /user-svc/role/{roleId}/permission/{permissionId}:
     put:
       consumes:
       - application/json
       description: |-
         Adds a specific permission to a role identified by roleId.
 
-        Requires the `permission.assign` permission.
+        Requires the `user-svc:permission:assign` permission.
       parameters:
       - description: Role ID
         in: path
@@ -2646,7 +2653,7 @@ paths:
       summary: Add Permission to Role
       tags:
       - User Service
-  /user-service/role/{roleId}/permissions:
+  /user-svc/role/{roleId}/permissions:
     get:
       consumes:
       - application/json
@@ -2684,7 +2691,9 @@ paths:
     put:
       consumes:
       - application/json
-      description: Set permissions for a specified role.
+      description: |-
+        Set permissions for a specified role. The caller can add permissions it owns to any role.
+        If the caller tries to add a permission it doesn't own to a role, `StatusBadRequest` will be returned.
       parameters:
       - description: Role ID
         in: path
@@ -2721,7 +2730,7 @@ paths:
       summary: Set Role Permissions
       tags:
       - User Service
-  /user-service/roles:
+  /user-svc/roles:
     get:
       consumes:
       - application/json
@@ -2746,7 +2755,7 @@ paths:
       summary: Get all Roles
       tags:
       - User Service
-  /user-service/user:
+  /user-svc/user:
     post:
       consumes:
       - application/json
@@ -2783,7 +2792,7 @@ paths:
       summary: Create a New User
       tags:
       - User Service
-  /user-service/user/{userId}:
+  /user-svc/user/{userId}:
     delete:
       consumes:
       - application/json
@@ -2814,7 +2823,7 @@ paths:
       summary: Delete a User
       tags:
       - User Service
-  /user-service/user/by-token:
+  /user-svc/user/by-token:
     post:
       consumes:
       - application/json
@@ -2846,7 +2855,7 @@ paths:
       summary: Read User by Token
       tags:
       - User Service
-  /user-service/users:
+  /user-svc/users:
     post:
       consumes:
       - application/json

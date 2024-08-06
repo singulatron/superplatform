@@ -26,7 +26,7 @@ import (
 // @Failure 401 {object} usertypes.ErrorResponse "Unauthorized"
 // @Failure 500 {object} usertypes.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
-// @Router /user-service/change-password-admin [post]
+// @Router /user-svc/change-password-admin [post]
 func (s *UserService) ChangePasswordAdmin(w http.ResponseWriter, r *http.Request) {
 	_, err := s.isAuthorized(r, usertypes.PermissionUserPasswordChange.Id, nil)
 	if err != nil {

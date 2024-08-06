@@ -17,7 +17,8 @@ import (
 
 // SetRolePermissions sets the permissions for a specified role
 // @Summary Set Role Permissions
-// @Description Set permissions for a specified role.
+// @Description Set permissions for a specified role. The caller can add permissions it owns to any role.
+// @Description If the caller tries to add a permission it doesn't own to a role, `StatusBadRequest` will be returned.
 // @Tags User Service
 // @Accept json
 // @Produce json
@@ -28,11 +29,11 @@ import (
 // @Failure 401 {object} usertypes.ErrorResponse "Unauthorized"
 // @Failure 500 {object} usertypes.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
-// @Router /user-service/role/{roleId}/permissions [put]
+// @Router /user-svc/role/{roleId}/permissions [put]
 func (s *UserService) SetRolePermissions(
 	w http.ResponseWriter,
 	r *http.Request) {
-	_, err := s.isAuthorized(r, usertypes.PermissionRoleEdit.Id, nil)
+	user, err := s.isAuthorized(r, usertypes.PermissionRoleEdit.Id, nil)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -48,7 +49,7 @@ func (s *UserService) SetRolePermissions(
 
 	roleId := mux.Vars(r)["roleId"]
 
-	err = s.setRolePermissions(roleId, req.PermissionIds)
+	err = s.setRolePermissions(user.Id, roleId, req.PermissionIds)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

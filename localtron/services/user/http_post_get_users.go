@@ -27,7 +27,7 @@ import (
 // @Failure 401 {object} usertypes.ErrorResponse "Unauthorized"
 // @Failure 500 {object} usertypes.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
-// @Router /user-service/users [post]
+// @Router /user-svc/users [post]
 func (s *UserService) GetUsers(
 	w http.ResponseWriter,
 	r *http.Request,

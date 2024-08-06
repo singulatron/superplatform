@@ -59,7 +59,7 @@ func NewDockerService(
 }
 
 func (ds *DockerService) Start() error {
-	token, err := sdk.RegisterService("docker-service", "Docker Service", ds.router, ds.credentialStore)
+	token, err := sdk.RegisterService("docker-svc", "Docker Service", ds.router, ds.credentialStore)
 	if err != nil {
 		return err
 	}

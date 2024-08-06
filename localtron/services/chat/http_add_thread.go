@@ -20,7 +20,7 @@ import (
 // @Summary Add Thread
 // @Description Create a new chat thread and add the requesting user to it.
 // @Decription
-// @Description Requires the `thread.create` permission.
+// @Description Requires the `chat-svc:thread:create` permission.
 // @Tags Chat Service
 // @Accept json
 // @Produce json
@@ -30,13 +30,13 @@ import (
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
 // @Security BearerAuth
-// @Router /chat-service/thread [post]
+// @Router /chat-svc/thread [post]
 func (a *ChatService) AddThread(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := a.router.AsRequestMaker(r).Post(r.Context(), "user-service", fmt.Sprintf("/permission/%v/is-authorized", chattypes.PermissionThreadCreate.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	err := a.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", chattypes.PermissionThreadCreate.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
