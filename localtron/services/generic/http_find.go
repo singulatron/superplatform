@@ -12,7 +12,7 @@ import (
 	"fmt"
 	"net/http"
 
-	generictypes "github.com/singulatron/singulatron/localtron/services/generic/types"
+	generic "github.com/singulatron/singulatron/localtron/services/generic/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
@@ -26,11 +26,11 @@ import (
 // @Tags Generic Service
 // @Accept json
 // @Produce json
-// @Param body body generictypes.QueryRequest false "Query Request"
-// @Success 200 {object} generictypes.QueryResponse "Successful retrieval of objects"
-// @Failure 400 {object} generictypes.ErrorResponse "Invalid JSON"
-// @Failure 401 {object} generictypes.ErrorResponse "Unauthorized"
-// @Failure 500 {object} generictypes.ErrorResponse "Internal Server Error"
+// @Param body body generic.QueryRequest false "Query Request"
+// @Success 200 {object} generic.QueryResponse "Successful retrieval of objects"
+// @Failure 400 {object} generic.ErrorResponse "Invalid JSON"
+// @Failure 401 {object} generic.ErrorResponse "Unauthorized"
+// @Failure 500 {object} generic.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
 // @Router /generic-svc/objects [post]
 func (g *GenericService) Find(
@@ -38,7 +38,7 @@ func (g *GenericService) Find(
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := g.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", generictypes.PermissionGenericView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	err := g.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", generic.PermissionGenericView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -48,7 +48,7 @@ func (g *GenericService) Find(
 		return
 	}
 
-	req := &generictypes.QueryRequest{}
+	req := &generic.QueryRequest{}
 	err = json.NewDecoder(r.Body).Decode(req)
 	if err != nil {
 		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
@@ -56,7 +56,7 @@ func (g *GenericService) Find(
 	}
 	defer r.Body.Close()
 
-	objects, err := g.find(generictypes.QueryOptions{
+	objects, err := g.find(generic.QueryOptions{
 		Table:  req.Table,
 		UserId: rsp.User.Id,
 		Public: req.Public,
@@ -67,7 +67,7 @@ func (g *GenericService) Find(
 		return
 	}
 
-	bs, _ := json.Marshal(generictypes.QueryResponse{
+	bs, _ := json.Marshal(generic.QueryResponse{
 		Objects: objects,
 	})
 	w.Write(bs)

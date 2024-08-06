@@ -12,7 +12,7 @@ import (
 	"fmt"
 	"net/http"
 
-	generictypes "github.com/singulatron/singulatron/localtron/services/generic/types"
+	generic "github.com/singulatron/singulatron/localtron/services/generic/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
@@ -23,11 +23,11 @@ import (
 // @Accept      json
 // @Produce     json
 // @Param       objectId  path     string  true  "Object ID"
-// @Param       body      body     generictypes.DeleteRequest true "Delete request payload"
-// @Success     200       {object} generictypes.DeleteResponse "Successful deletion of object"
-// @Failure     400       {object} generictypes.ErrorResponse "Invalid JSON"
-// @Failure     401       {object} generictypes.ErrorResponse "Unauthorized"
-// @Failure     500       {object} generictypes.ErrorResponse "Internal Server Error"
+// @Param       body      body     generic.DeleteRequest true "Delete request payload"
+// @Success     200       {object} generic.DeleteResponse "Successful deletion of object"
+// @Failure     400       {object} generic.ErrorResponse "Invalid JSON"
+// @Failure     401       {object} generic.ErrorResponse "Unauthorized"
+// @Failure     500       {object} generic.ErrorResponse "Internal Server Error"
 // @Security    BearerAuth
 // @Router      /generic-svc/object/{objectId} [delete]
 func (g *GenericService) Delete(
@@ -36,7 +36,7 @@ func (g *GenericService) Delete(
 ) {
 
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := g.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", generictypes.PermissionGenericDelete.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	err := g.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", generic.PermissionGenericDelete.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -46,7 +46,7 @@ func (g *GenericService) Delete(
 		return
 	}
 
-	req := &generictypes.DeleteRequest{}
+	req := &generic.DeleteRequest{}
 	err = json.NewDecoder(r.Body).Decode(req)
 	if err != nil {
 		http.Error(w, `Invalid JSON`, http.StatusBadRequest)

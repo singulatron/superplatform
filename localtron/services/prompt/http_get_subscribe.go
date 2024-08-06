@@ -17,25 +17,26 @@ import (
 	"github.com/singulatron/singulatron/localtron/clients/llm"
 	"github.com/singulatron/singulatron/localtron/logger"
 
-	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
+	prompt "github.com/singulatron/singulatron/localtron/services/prompt/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // Subscribe streams prompt responses to the client
+// @ID subscribe
 // @Summary Subscribe to Prompt
 // @Description Subscribe to prompt responses via Server-Sent Events (SSE)
 // @Tags Prompt Service
 // @Param threadId path string true "Thread ID"
 // @Success 200 {string} string "Streaming response"
-// @Failure 400 {object} prompttypes.ErrorResponse "Missing threadId parameter"
-// @Failure 401 {object} prompttypes.ErrorResponse "Unauthorized"
+// @Failure 400 {object} prompt.ErrorResponse "Missing threadId parameter"
+// @Failure 401 {object} prompt.ErrorResponse "Unauthorized"
 // @Router /prompt-svc/{threadId}/subscribe [get]
 func (p *PromptService) GetSubscribe(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := p.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", prompttypes.PermissionPromptStream.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	err := p.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", prompt.PermissionPromptStream.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return

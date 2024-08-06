@@ -12,7 +12,7 @@ import (
 	"fmt"
 	"net/http"
 
-	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
+	model "github.com/singulatron/singulatron/localtron/services/model/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
@@ -21,7 +21,7 @@ func (ms *ModelService) DefaultStatus(
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := ms.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", modeltypes.PermissionModelView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	err := ms.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", model.PermissionModelView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -37,7 +37,7 @@ func (ms *ModelService) DefaultStatus(
 		return
 	}
 
-	jsonData, _ := json.Marshal(modeltypes.StatusResponse{
+	jsonData, _ := json.Marshal(model.StatusResponse{
 		Status: status,
 	})
 	w.Write(jsonData)

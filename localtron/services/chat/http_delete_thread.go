@@ -18,6 +18,7 @@ import (
 )
 
 // DeleteThread removes a chat thread
+// @ID deleteThread
 // @Summary Delete a Thread
 // @Description Delete a specific chat thread by its ID
 // @Tags Chat Service

@@ -12,28 +12,29 @@ import (
 	"fmt"
 	"net/http"
 
-	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
+	prompt "github.com/singulatron/singulatron/localtron/services/prompt/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // Remove removes a prompt
+// @ID removePrompt
 // @Summary Remove Prompt
 // @Description Remove a prompt by ID.
 // @Tags Prompt Service
 // @Accept json
 // @Produce json
-// @Param request body prompttypes.RemovePromptRequest true "Remove Prompt Request"
-// @Success 200 {object} prompttypes.RemovePromptResponse "{}"
-// @Failure 400 {object} prompttypes.ErrorResponse "Invalid JSON"
-// @Failure 401 {object} prompttypes.ErrorResponse "Unauthorized"
-// @Failure 500 {object} prompttypes.ErrorResponse "Internal Server Error"
+// @Param request body prompt.RemovePromptRequest true "Remove Prompt Request"
+// @Success 200 {object} prompt.RemovePromptResponse "{}"
+// @Failure 400 {object} prompt.ErrorResponse "Invalid JSON"
+// @Failure 401 {object} prompt.ErrorResponse "Unauthorized"
+// @Failure 500 {object} prompt.ErrorResponse "Internal Server Error"
 // @Router /prompt-svc/remove [post]
 func (p *PromptService) RemovePrompt(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := p.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", prompttypes.PermissionPromptCreate.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	err := p.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", prompt.PermissionPromptCreate.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -43,7 +44,7 @@ func (p *PromptService) RemovePrompt(
 		return
 	}
 
-	req := &prompttypes.RemovePromptRequest{}
+	req := &prompt.RemovePromptRequest{}
 	err = json.NewDecoder(r.Body).Decode(req)
 	if err != nil {
 		http.Error(w, `Invalid JSON`, http.StatusBadRequest)

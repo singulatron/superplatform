@@ -917,6 +917,7 @@ const docTemplate = `{
                     "Download Service"
                 ],
                 "summary": "Get a Download",
+                "operationId": "getDownload",
                 "parameters": [
                     {
                         "type": "string",

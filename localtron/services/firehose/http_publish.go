@@ -13,7 +13,7 @@ import (
 	"fmt"
 	"net/http"
 
-	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
+	firehose "github.com/singulatron/singulatron/localtron/services/firehose/types"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
@@ -23,10 +23,10 @@ import (
 // @Tags Firehose Service
 // @Accept json
 // @Produce json
-// @Param event body firehosetypes.PublishRequest true "Event to publish"
+// @Param event body firehose.PublishRequest true "Event to publish"
 // @Success 200 {object} nil "{}"
-// @Failure 400 {object} firehosetypes.ErrorResponse "Invalid JSON"
-// @Failure 401 {object} firehosetypes.ErrorResponse "Unauthorized"
+// @Failure 400 {object} firehose.ErrorResponse "Invalid JSON"
+// @Failure 401 {object} firehose.ErrorResponse "Unauthorized"
 // @Security BearerAuth
 // @Router /firehose-svc/publish [post]
 func (p *FirehoseService) Publish(w http.ResponseWriter,
@@ -42,7 +42,7 @@ func (p *FirehoseService) Publish(w http.ResponseWriter,
 		return
 	}
 
-	req := firehosetypes.PublishRequest{}
+	req := firehose.PublishRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `Invalid JSON`, http.StatusBadRequest)

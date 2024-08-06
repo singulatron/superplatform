@@ -14,10 +14,11 @@ import (
 	"net/url"
 
 	"github.com/gorilla/mux"
-	downloadtypes "github.com/singulatron/singulatron/localtron/services/download/types"
+	download "github.com/singulatron/singulatron/localtron/services/download/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
+// @ID getDownload
 // @Summary Get a Download
 // @Description Get a download by ID.
 // @Description
@@ -26,7 +27,7 @@ import (
 // @Accept json
 // @Produce json
 // @Param downloadId path string true "Download ID"
-// @Success 200 {object} downloadtypes.GetDownloadResponse
+// @Success 200 {object} download.GetDownloadResponse
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
 // @Security BearerAuth
@@ -36,7 +37,7 @@ func (ds *DownloadService) Get(
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := ds.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", downloadtypes.PermissionDownloadView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	err := ds.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", download.PermissionDownloadView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -55,7 +56,7 @@ func (ds *DownloadService) Get(
 
 	dl, exists := ds.getDownload(did)
 
-	jsonData, _ := json.Marshal(downloadtypes.GetDownloadResponse{
+	jsonData, _ := json.Marshal(download.GetDownloadResponse{
 		Exists:   exists,
 		Download: downloadToDownloadDetails(vars["downloadId"], dl),
 	})

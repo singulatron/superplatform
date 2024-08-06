@@ -15,7 +15,7 @@ import (
 
 	"github.com/singulatron/singulatron/localtron/logger"
 
-	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
+	firehose "github.com/singulatron/singulatron/localtron/services/firehose/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
@@ -26,8 +26,8 @@ import (
 // @Accept json
 // @Produce text/event-stream
 // @Success 200 {string} string "Event data"
-// @Failure 401 {object} firehosetypes.ErrorResponse "Unauthorized"
-// @Failure 500 {object} firehosetypes.ErrorResponse "Internal Server Error"
+// @Failure 401 {object} firehose.ErrorResponse "Unauthorized"
+// @Failure 500 {object} firehose.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
 // @Router /firehose-svc/subscribe [get]
 func (p *FirehoseService) Subscribe(
@@ -35,7 +35,7 @@ func (p *FirehoseService) Subscribe(
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := p.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", firehosetypes.PermissionFirehoseView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	err := p.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", firehose.PermissionFirehoseView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -49,8 +49,8 @@ func (p *FirehoseService) Subscribe(
 	w.Header().Set("Cache-Control", "no-cache")
 	w.Header().Set("Connection", "keep-alive")
 
-	eventsChannel := make(chan []*firehosetypes.Event)
-	subscriberID := p.subscribe(func(events []*firehosetypes.Event) {
+	eventsChannel := make(chan []*firehose.Event)
+	subscriberID := p.subscribe(func(events []*firehose.Event) {
 		eventsChannel <- events
 	})
 	defer p.unsubscribe(subscriberID)

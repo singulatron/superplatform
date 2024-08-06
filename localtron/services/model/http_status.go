@@ -14,11 +14,12 @@ import (
 	"net/url"
 
 	"github.com/gorilla/mux"
-	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
+	model "github.com/singulatron/singulatron/localtron/services/model/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // Status godoc
+// @ID getModelStatus
 // @Summary Get Model Status
 // @Description Retrieves the status of a model by ID.
 // @Description
@@ -27,17 +28,17 @@ import (
 // @Accept json
 // @Produce json
 // @Param id path string true "Model ID" // Path parameter for the model ID
-// @Success 200 {object} modeltypes.StatusResponse "Model status retrieved successfully"
+// @Success 200 {object} model.StatusResponse "Model status retrieved successfully"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
 // @Security BearerAuth
-// @Router /model-svc/{id}/status [get]
+// @Router /model-svc/model/{id}/status [get]
 func (ms *ModelService) Status(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := ms.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", modeltypes.PermissionModelView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	err := ms.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", model.PermissionModelView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -60,7 +61,7 @@ func (ms *ModelService) Status(
 		return
 	}
 
-	jsonData, _ := json.Marshal(modeltypes.StatusResponse{
+	jsonData, _ := json.Marshal(model.StatusResponse{
 		Status: status,
 	})
 	w.Write(jsonData)

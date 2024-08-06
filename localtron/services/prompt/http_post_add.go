@@ -12,21 +12,22 @@ import (
 	"fmt"
 	"net/http"
 
-	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
+	prompt "github.com/singulatron/singulatron/localtron/services/prompt/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // Add a new prompt
+// @ID addPrompt
 // @Summary Add Prompt
 // @Description Adds a new prompt to the prompt queue and either waits for the response (if `sync` is set to true), or returns immediately.
 // @Tags Prompt Service
 // @Accept json
 // @Produce json
-// @Param request body prompttypes.AddPromptRequest true "Add Prompt Request"
-// @Success 200 {object} prompttypes.AddPromptResponse
-// @Failure 400 {object} prompttypes.ErrorResponse "Invalid JSON"
-// @Failure 401 {object} prompttypes.ErrorResponse "Unauthorized"
-// @Failure 500 {object} prompttypes.ErrorResponse "Internal Server Error"
+// @Param request body prompt.AddPromptRequest true "Add Prompt Request"
+// @Success 200 {object} prompt.AddPromptResponse
+// @Failure 400 {object} prompt.ErrorResponse "Invalid JSON"
+// @Failure 401 {object} prompt.ErrorResponse "Unauthorized"
+// @Failure 500 {object} prompt.ErrorResponse "Internal Server Error"
 // @Router /prompt-svc/prompt [post]
 func (p *PromptService) Add(
 	w http.ResponseWriter,
@@ -34,7 +35,7 @@ func (p *PromptService) Add(
 ) {
 
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := p.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", prompttypes.PermissionPromptCreate.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	err := p.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", prompt.PermissionPromptCreate.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -44,7 +45,7 @@ func (p *PromptService) Add(
 		return
 	}
 
-	req := &prompttypes.AddPromptRequest{}
+	req := &prompt.AddPromptRequest{}
 	err = json.NewDecoder(r.Body).Decode(req)
 	if err != nil {
 		http.Error(w, `Invalid JSON`, http.StatusBadRequest)

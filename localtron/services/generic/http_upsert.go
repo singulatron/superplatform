@@ -13,7 +13,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	generictypes "github.com/singulatron/singulatron/localtron/services/generic/types"
+	generic "github.com/singulatron/singulatron/localtron/services/generic/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
@@ -24,11 +24,11 @@ import (
 // @Accept json
 // @Produce json
 // @Param objectId path string true  "Object ID"
-// @Param body body generictypes.UpsertRequest true "Upsert request payload"
-// @Success 200 {object} generictypes.UpsertResponse "Successful creation or update of object"
-// @Failure 400 {object} generictypes.ErrorResponse "Invalid JSON"
-// @Failure 401 {object} generictypes.ErrorResponse "Unauthorized"
-// @Failure 500 {object} generictypes.ErrorResponse "Internal Server Error"
+// @Param body body generic.UpsertRequest true "Upsert request payload"
+// @Success 200 {object} generic.UpsertResponse "Successful creation or update of object"
+// @Failure 400 {object} generic.ErrorResponse "Invalid JSON"
+// @Failure 401 {object} generic.ErrorResponse "Unauthorized"
+// @Failure 500 {object} generic.ErrorResponse "Internal Server Error"
 // @Security    BearerAuth
 // @Router /generic-svc/object/{objectId} [put]
 func (g *GenericService) Upsert(
@@ -37,7 +37,7 @@ func (g *GenericService) Upsert(
 ) {
 
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := g.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", generictypes.PermissionGenericCreate.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	err := g.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", generic.PermissionGenericCreate.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -47,7 +47,7 @@ func (g *GenericService) Upsert(
 		return
 	}
 
-	req := &generictypes.UpsertRequest{}
+	req := &generic.UpsertRequest{}
 	err = json.NewDecoder(r.Body).Decode(req)
 	if err != nil {
 		http.Error(w, `Invalid JSON`, http.StatusBadRequest)

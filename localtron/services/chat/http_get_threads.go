@@ -12,18 +12,19 @@ import (
 	"fmt"
 	"net/http"
 
-	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
+	chat "github.com/singulatron/singulatron/localtron/services/chat/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // GetThreads retrieves a list of chat threads for a user
+// @ID getThreads
 // @Summary Get Threads
 // @Description Fetch all chat threads associated with a specific user
 // @Tags Chat Service
 // @Accept json
 // @Produce json
-// @Param request body chattypes.GetThreadsRequest true "Get Threads Request"
-// @Success 200 {object} chattypes.GetThreadsResponse "Threads successfully retrieved"
+// @Param request body chat.GetThreadsRequest true "Get Threads Request"
+// @Success 200 {object} chat.GetThreadsResponse "Threads successfully retrieved"
 // @Failure 400 {string} string "Invalid JSON"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
@@ -34,7 +35,7 @@ func (a *ChatService) GetThreads(
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := a.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", chattypes.PermissionThreadView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	err := a.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", chat.PermissionThreadView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -44,7 +45,7 @@ func (a *ChatService) GetThreads(
 		return
 	}
 
-	req := chattypes.GetThreadsRequest{}
+	req := chat.GetThreadsRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
@@ -58,7 +59,7 @@ func (a *ChatService) GetThreads(
 		return
 	}
 
-	jsonData, _ := json.Marshal(chattypes.GetThreadsResponse{
+	jsonData, _ := json.Marshal(chat.GetThreadsResponse{
 		Threads: threads,
 	})
 	w.Write(jsonData)

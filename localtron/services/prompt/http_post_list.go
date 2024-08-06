@@ -13,28 +13,29 @@ import (
 	"net/http"
 
 	"github.com/singulatron/singulatron/localtron/datastore"
-	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
+	prompt "github.com/singulatron/singulatron/localtron/services/prompt/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // List lists prompts
+// @ID getPrompts
 // @Summary List Prompts
 // @Description List prompts that satisfy a query.
 // @Tags Prompt Service
 // @Accept json
 // @Produce json
-// @Param request body prompttypes.ListPromptsRequest false "List Prompts Request"
-// @Success 200 {object} prompttypes.ListPromptsResponse
-// @Failure 400 {object} prompttypes.ErrorResponse "Invalid JSON"
-// @Failure 401 {object} prompttypes.ErrorResponse "Unauthorized"
-// @Failure 500 {object} prompttypes.ErrorResponse "Internal Server Error"
+// @Param request body prompt.ListPromptsRequest false "List Prompts Request"
+// @Success 200 {object} prompt.ListPromptsResponse
+// @Failure 400 {object} prompt.ErrorResponse "Invalid JSON"
+// @Failure 401 {object} prompt.ErrorResponse "Unauthorized"
+// @Failure 500 {object} prompt.ErrorResponse "Internal Server Error"
 // @Router /prompt-svc/list [post]
 func (p *PromptService) GetPrompts(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := p.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", prompttypes.PermissionPromptView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	err := p.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", prompt.PermissionPromptView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -44,7 +45,7 @@ func (p *PromptService) GetPrompts(
 		return
 	}
 
-	req := prompttypes.ListPromptsRequest{}
+	req := prompt.ListPromptsRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
@@ -52,7 +53,7 @@ func (p *PromptService) GetPrompts(
 	}
 	defer r.Body.Close()
 
-	options := &prompttypes.ListPromptOptions{
+	options := &prompt.ListPromptOptions{
 		Query: req.Query,
 	}
 	if options.Query == nil {
@@ -60,9 +61,9 @@ func (p *PromptService) GetPrompts(
 	}
 
 	if !options.Query.HasFieldCondition("status") {
-		options.Query.Conditions = append(options.Query.Conditions, datastore.Equal(datastore.Field("status"), []prompttypes.PromptStatus{
-			prompttypes.PromptStatusRunning,
-			prompttypes.PromptStatusScheduled,
+		options.Query.Conditions = append(options.Query.Conditions, datastore.Equal(datastore.Field("status"), []prompt.PromptStatus{
+			prompt.PromptStatusRunning,
+			prompt.PromptStatusScheduled,
 		}))
 	}
 	if options.Query.Limit == 0 {
@@ -84,7 +85,7 @@ func (p *PromptService) GetPrompts(
 		}
 	}
 
-	response := prompttypes.ListPromptsResponse{
+	response := prompt.ListPromptsResponse{
 		Prompts: prompts,
 		Count:   count,
 	}

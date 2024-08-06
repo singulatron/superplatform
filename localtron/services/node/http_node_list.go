@@ -12,7 +12,7 @@ import (
 	"fmt"
 	"net/http"
 
-	nodetypes "github.com/singulatron/singulatron/localtron/services/node/types"
+	node "github.com/singulatron/singulatron/localtron/services/node/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
@@ -21,7 +21,7 @@ func (ns *NodeService) List(
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := ns.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", nodetypes.PermissionNodeView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	err := ns.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", node.PermissionNodeView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -31,7 +31,7 @@ func (ns *NodeService) List(
 		return
 	}
 
-	req := nodetypes.ListNodesRequest{}
+	req := node.ListNodesRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
@@ -45,7 +45,7 @@ func (ns *NodeService) List(
 		return
 	}
 
-	response := nodetypes.ListNodesResponse{
+	response := node.ListNodesResponse{
 		Nodes: nodes,
 	}
 

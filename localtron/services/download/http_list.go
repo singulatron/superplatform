@@ -12,11 +12,12 @@ import (
 	"fmt"
 	"net/http"
 
-	downloadtypes "github.com/singulatron/singulatron/localtron/services/download/types"
+	download "github.com/singulatron/singulatron/localtron/services/download/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // List retrieves a list of download details
+// @ID listDownloads
 // @Summary List Downloads
 // @Description Fetch a list of all download details.
 // @Description
@@ -24,7 +25,7 @@ import (
 // @Tags Download Service
 // @Accept json
 // @Produce json
-// @Success 200 {object} downloadtypes.DownloadsResponse "List of downloads"
+// @Success 200 {object} download.DownloadsResponse "List of downloads"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
 // @Security BearerAuth
@@ -34,7 +35,7 @@ func (ds *DownloadService) List(
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := ds.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", downloadtypes.PermissionDownloadView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	err := ds.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", download.PermissionDownloadView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -50,7 +51,7 @@ func (ds *DownloadService) List(
 		return
 	}
 
-	jsonData, _ := json.Marshal(downloadtypes.DownloadsResponse{
+	jsonData, _ := json.Marshal(download.DownloadsResponse{
 		Downloads: details,
 	})
 	w.Write(jsonData)

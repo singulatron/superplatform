@@ -13,11 +13,12 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
+	chat "github.com/singulatron/singulatron/localtron/services/chat/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // DeleteMessage removes a message from a chat thread
+// @ID deleteMessage
 // @Summary Delete a Message
 // @Description Delete a specific message from a chat thread by its ID
 // @Tags Chat Service
@@ -35,7 +36,7 @@ func (a *ChatService) DeleteMessage(
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := a.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", chattypes.PermissionMessageDelete.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	err := a.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", chat.PermissionMessageDelete.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return

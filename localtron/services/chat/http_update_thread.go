@@ -13,19 +13,20 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
+	chat "github.com/singulatron/singulatron/localtron/services/chat/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // UpdateThread updates the details of an existing chat thread
+// @ID updateThread
 // @Summary Update Thread
 // @Description Modify the details of a specific chat thread
 // @Tags Chat Service
 // @Accept json
 // @Produce json
 // @Param threadId path string true "Thread ID"
-// @Param request body chattypes.UpdateThreadRequest true "Update Thread Request"
-// @Success 200 {object} chattypes.AddThreadResponse "Thread successfully updated"
+// @Param request body chat.UpdateThreadRequest true "Update Thread Request"
+// @Success 200 {object} chat.AddThreadResponse "Thread successfully updated"
 // @Failure 400 {string} string "Invalid JSON"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
@@ -36,7 +37,7 @@ func (a *ChatService) UpdateThread(
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := a.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", chattypes.PermissionThreadCreate.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	err := a.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", chat.PermissionThreadCreate.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -46,7 +47,7 @@ func (a *ChatService) UpdateThread(
 		return
 	}
 
-	req := chattypes.UpdateThreadRequest{}
+	req := chat.UpdateThreadRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
@@ -62,7 +63,7 @@ func (a *ChatService) UpdateThread(
 		return
 	}
 
-	jsonData, _ := json.Marshal(chattypes.AddThreadResponse{
+	jsonData, _ := json.Marshal(chat.AddThreadResponse{
 		Thread: thread,
 	})
 	w.Write(jsonData)

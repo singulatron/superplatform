@@ -13,18 +13,19 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
+	chat "github.com/singulatron/singulatron/localtron/services/chat/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // GetThread retrieves details of a specific chat thread
+// @ID getThread
 // @Summary Get Thread
 // @Description Fetch information about a specific chat thread by its ID
 // @Tags Chat Service
 // @Accept json
 // @Produce json
 // @Param threadId path string true "Thread ID"
-// @Success 200 {object} chattypes.GetThreadResponse "Thread details successfully retrieved"
+// @Success 200 {object} chat.GetThreadResponse "Thread details successfully retrieved"
 // @Failure 400 {string} string "Invalid JSON"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
@@ -35,7 +36,7 @@ func (a *ChatService) GetThread(
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := a.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", chattypes.PermissionThreadCreate.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	err := a.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", chat.PermissionThreadCreate.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -54,7 +55,7 @@ func (a *ChatService) GetThread(
 		return
 	}
 
-	jsonData, _ := json.Marshal(chattypes.GetThreadResponse{
+	jsonData, _ := json.Marshal(chat.GetThreadResponse{
 		Exists: found,
 		Thread: thread,
 	})

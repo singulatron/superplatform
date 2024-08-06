@@ -1627,6 +1627,7 @@ paths:
         Get a download by ID.
 
         Requires the `download-svc:download:view` permission.
+      operationId: getDownload
       parameters:
       - description: Download ID
         in: path

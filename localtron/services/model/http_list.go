@@ -12,20 +12,21 @@ import (
 	"fmt"
 	"net/http"
 
-	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
+	model "github.com/singulatron/singulatron/localtron/services/model/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // List godoc
+// @ID listModels
 // @Summary List Models
 // @Description Retrieves a list of models after checking authorization
 // @Description Requires "model.view" permission.
 // @Tags Model Service
 // @Accept json
 // @Produce json
-// @Success 200 {object} modeltypes.ListResponse
-// @Failure 401 {object} modeltypes.ErrorResponse "Unauthorized"
-// @Failure 500 {object} modeltypes.ErrorResponse "Internal Server Error"
+// @Success 200 {object} model.ListResponse
+// @Failure 401 {object} model.ErrorResponse "Unauthorized"
+// @Failure 500 {object} model.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
 // @Router /model-svc/models [get]
 func (ms *ModelService) List(
@@ -33,7 +34,7 @@ func (ms *ModelService) List(
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := ms.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", modeltypes.PermissionModelView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	err := ms.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", model.PermissionModelView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -49,7 +50,7 @@ func (ms *ModelService) List(
 		return
 	}
 
-	jsonData, _ := json.Marshal(modeltypes.ListResponse{
+	jsonData, _ := json.Marshal(model.ListResponse{
 		Models: models,
 	})
 	w.Write(jsonData)

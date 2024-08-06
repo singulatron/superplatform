@@ -13,11 +13,12 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	downloadtypes "github.com/singulatron/singulatron/localtron/services/download/types"
+	download "github.com/singulatron/singulatron/localtron/services/download/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // Pause pauses an ongoing download
+// @ID pause
 // @Summary Pause a Download
 // @Description Pause a download that is currently in progress.
 // @Description
@@ -38,7 +39,7 @@ func (ds *DownloadService) Pause(
 
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := ds.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", downloadtypes.PermissionDownloadEdit.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	err := ds.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", download.PermissionDownloadEdit.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
