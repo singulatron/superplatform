@@ -14,6 +14,7 @@ import (
 func (us *UserService) registerPermissions() error {
 	for _, permission := range append(usertypes.UserPermissions, usertypes.AdminPermissions...) {
 		_, err := us.upsertPermission(
+			"user-svc",
 			permission.Id,
 			permission.Name,
 			permission.Description,

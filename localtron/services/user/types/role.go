@@ -10,14 +10,14 @@ package usertypes
 import "time"
 
 var RoleAdmin = &Role{
-	Id:            "role.admin",
-	Name:          "Admin Role",
+	Id:            "user-svc:admin",
+	Name:          "User Service - Admin Role",
 	PermissionIds: []string{},
 }
 
 var RoleUser = &Role{
-	Id:            "role.user",
-	Name:          "User Role",
+	Id:            "user-svc:user",
+	Name:          "User Service - User Role",
 	PermissionIds: []string{},
 }
 
@@ -27,8 +27,9 @@ type Role struct {
 	UpdatedAt time.Time `json:"updatedAt,omitempty"`
 
 	Name          string   `json:"name"`
-	Description   string   `json:"description"`
-	PermissionIds []string `json:"permissionIds"`
+	Description   string   `json:"description,omitempty"`
+	OwnerId       string   `json:"ownerId,omitempty"`
+	PermissionIds []string `json:"permissionIds,omitempty"`
 }
 
 func (c *Role) GetId() string {

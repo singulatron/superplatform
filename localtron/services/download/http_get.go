@@ -21,7 +21,7 @@ import (
 // @Summary Get a Download
 // @Description Get a download by ID.
 // @Description
-// @Description Requires the `download.view` permission.
+// @Description Requires the `download-svc:download:view` permission.
 // @Tags Download Service
 // @Accept json
 // @Produce json

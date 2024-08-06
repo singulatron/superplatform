@@ -10,6 +10,7 @@ package userservice
 import (
 	"encoding/json"
 	"net/http"
+	"strings"
 
 	"github.com/gorilla/mux"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
@@ -19,15 +20,18 @@ import (
 //
 // @Summary Upsert a Permission
 // @Description Creates or updates a permission.
+// @Description <b>The permission ID must be prefixed by the callers username (email).</b>
+// @Description Eg. if the owner's email/username is `petstore-svc` the permission should look like `petstore-svc:pet:edit`.
+// @Descripion The user account who creates the permission will become the owner of that permission, and only the owner will be able to edit the permission.
 // @Description
-// @Description Requires the `permission.create` permission.
+// @Description Requires the `user-svc:permission:create` permission.
 // @Tags User Service
 // @Accept json
 // @Produce json
 // @Param permissionId path string true "Permission ID"
 // @Param requestBody body usertypes.UpserPermissionRequest true "Permission Details"
 // @Success 200 {object} usertypes.CreateUserResponse
-// @Failure 400 {string} string "Bad Request"
+// @Failure 400 {string} string "Bad Request: Invalid JSON or Bad Namespace"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
 // @Security BearerAuth
@@ -37,7 +41,7 @@ func (s *UserService) UpsertPermission(
 	r *http.Request,
 ) {
 	// @todo add proper permission here
-	_, err := s.isAuthorized(r, usertypes.PermissionPermissionCreate.Id, nil)
+	usr, err := s.isAuthorized(r, usertypes.PermissionPermissionCreate.Id, nil)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -53,7 +57,12 @@ func (s *UserService) UpsertPermission(
 
 	vars := mux.Vars(r)
 
-	_, err = s.upsertPermission(vars["permissionId"], req.Permission.Name, req.Permission.Description)
+	if !strings.HasPrefix(vars["permissionId"], usr.Email) {
+		http.Error(w, `Bad Namespace`, http.StatusBadRequest)
+		return
+	}
+
+	_, err = s.upsertPermission(usr.Id, vars["permissionId"], req.Permission.Name, req.Permission.Description)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

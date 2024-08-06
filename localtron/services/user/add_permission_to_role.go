@@ -27,6 +27,9 @@ func (s *UserService) addPermissionToRole(userId, roleId, permissionId string) e
 		return fmt.Errorf("cannot find role %v", roleId)
 	}
 	role := roleI.(*usertypes.Role)
+	if role.OwnerId != userId {
+		return fmt.Errorf("cannot edit role that is not owned")
+	}
 
 	permQ := s.permissionsStore.Query(
 		datastore.Id(permissionId),

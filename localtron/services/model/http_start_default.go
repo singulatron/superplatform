@@ -20,7 +20,7 @@ import (
 // @Summary Start the Default Model
 // @Description Starts The Default Model.
 // @Description
-// @Description Requires the `model.create` permission.
+// @Description Requires the `model-svc:model:create` permission.
 // @Tags Model Service
 // @Accept json
 // @Produce json

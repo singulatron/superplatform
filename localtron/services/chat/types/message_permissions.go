@@ -13,27 +13,27 @@ import (
 )
 
 var PermissionMessageCreate = usertypes.Permission{
-	Id:   "message.create",
+	Id:   "chat-svc:message:create",
 	Name: "Message Create",
 }
 
 var PermissionMessageView = usertypes.Permission{
-	Id:   "message.view",
+	Id:   "chat-svc:message:view",
 	Name: "Message View",
 }
 
 var PermissionMessageEdit = usertypes.Permission{
-	Id:   "message.edit",
+	Id:   "chat-svc:message:edit",
 	Name: "Message Edit",
 }
 
 var PermissionMessageDelete = usertypes.Permission{
-	Id:   "message.delete",
+	Id:   "chat-svc:message:delete",
 	Name: "Message Delete",
 }
 
 var PermissionMessageStream = usertypes.Permission{
-	Id:   "message.stream",
+	Id:   "chat-svc:message:stream",
 	Name: "Message Stream",
 }
 

@@ -20,7 +20,7 @@ import (
 // @Summary Add Permission to Role
 // @Description Adds a specific permission to a role identified by roleId.
 // @Description
-// @Description Requires the `permission.assign` permission.
+// @Description Requires the `user-svc:permission:assign` permission.
 // @Tags User Service
 // @Accept json
 // @Produce json

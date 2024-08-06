@@ -14,7 +14,7 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func (s *UserService) setRolePermissions(roleId string, permissionIds []string) error {
+func (s *UserService) setRolePermissions(userId, roleId string, permissionIds []string) error {
 	q := s.rolesStore.Query(
 		datastore.Id(roleId),
 	)
@@ -23,9 +23,12 @@ func (s *UserService) setRolePermissions(roleId string, permissionIds []string) 
 		return err
 	}
 	if !found {
-		return fmt.Errorf("Cannot find role %v", roleId)
+		return fmt.Errorf("cannot find role %v", roleId)
 	}
 	role := roleI.(*usertypes.Role)
+	if role.OwnerId != userId {
+		return fmt.Errorf("cannot add permission to unowned role")
+	}
 
 	perms, err := s.permissionsStore.Query(
 		datastore.Equal(datastore.Field("id"), permissionIds),

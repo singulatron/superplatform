@@ -20,7 +20,7 @@ import (
 // @Summary List Downloads
 // @Description Fetch a list of all download details.
 // @Description
-// @Description Requires the `download.view` permission.
+// @Description Requires the `download-svc:download:view` permission.
 // @Tags Download Service
 // @Accept json
 // @Produce json

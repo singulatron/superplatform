@@ -13,27 +13,27 @@ import (
 )
 
 var PermissionConfigCreate = usertypes.Permission{
-	Id:   "config.create",
+	Id:   "config-svc:config:create",
 	Name: "Config Create",
 }
 
 var PermissionConfigView = usertypes.Permission{
-	Id:   "config.view",
+	Id:   "config-svc:config:view",
 	Name: "Config View",
 }
 
 var PermissionConfigEdit = usertypes.Permission{
-	Id:   "config.edit",
+	Id:   "config-svc:config:edit",
 	Name: "Config Edit",
 }
 
 var PermissionConfigDelete = usertypes.Permission{
-	Id:   "config.delete",
+	Id:   "config-svc:config:delete",
 	Name: "Config Delete",
 }
 
 var PermissionConfigStream = usertypes.Permission{
-	Id:   "config.stream",
+	Id:   "config-svc:config:stream",
 	Name: "Config Stream",
 }
 

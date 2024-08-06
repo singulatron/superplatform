@@ -20,7 +20,7 @@ import (
 // @Summary Download a File
 // @Description Start a download for a specified URL.
 // @Description
-// @Description Requires the `download.create` permission.
+// @Description Requires the `download-svc:download:create` permission.
 // @Tags Download Service
 // @Accept json
 // @Produce json

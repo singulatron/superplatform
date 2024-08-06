@@ -20,7 +20,7 @@ import (
 // @Summary Add Thread
 // @Description Create a new chat thread and add the requesting user to it.
 // @Decription
-// @Description Requires the `thread.create` permission.
+// @Description Requires the `chat-svc:thread:create` permission.
 // @Tags Chat Service
 // @Accept json
 // @Produce json

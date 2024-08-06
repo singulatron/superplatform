@@ -13,23 +13,23 @@ import (
 )
 
 var PermissionDownloadCreate = usertypes.Permission{
-	Id:   "download.create",
-	Name: "Download Create",
+	Id:   "download-svc:download:create",
+	Name: "Download Service - Download Create",
 }
 
 var PermissionDownloadView = usertypes.Permission{
-	Id:   "download.view",
-	Name: "Download View",
+	Id:   "download-svc:download:view",
+	Name: "Download Service - Download View",
 }
 
 var PermissionDownloadEdit = usertypes.Permission{
-	Id:   "download.edit",
-	Name: "Download Edit",
+	Id:   "download-svc:download:edit",
+	Name: "Download Service - Download Edit",
 }
 
 var PermissionDownloadDelete = usertypes.Permission{
-	Id:   "download.delete",
-	Name: "Download Delete",
+	Id:   "download-svc:download:delete",
+	Name: "Download Service - Download Delete",
 }
 
 var DownloadPermissions = []usertypes.Permission{

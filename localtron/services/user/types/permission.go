@@ -69,63 +69,63 @@ type AddPermissionToRoleRequest struct {
 type AddPermissionToRoleResponse struct{}
 
 var PermissionUserCreate = Permission{
-	Id:   "user.create",
-	Name: "User Create",
+	Id:   "user-svc:user:create",
+	Name: "User Service - User Create",
 }
 
 var PermissionUserView = Permission{
-	Id:   "user.view",
-	Name: "User View",
+	Id:   "user-svc:user:view",
+	Name: "User Service - User View",
 }
 
 var PermissionUserEdit = Permission{
-	Id:   "user.edit",
-	Name: "User Edit",
+	Id:   "user-svc:user:edit",
+	Name: "User Service - User Edit",
 }
 
 var PermissionUserDelete = Permission{
-	Id:   "user.delete",
-	Name: "User Delete",
+	Id:   "user-svc:user:delete",
+	Name: "User Service - User Delete",
 }
 
 var PermissionUserPasswordChange = Permission{
-	Id:   "user.passwordChange",
-	Name: "User Password Change",
+	Id:   "user-svc:user:passwordChange",
+	Name: "User Service - User Password Change",
 }
 
 var PermissionRoleCreate = Permission{
-	Id:   "role.create",
-	Name: "Role Create",
+	Id:   "user-svc:role:create",
+	Name: "User Service - Role Create",
 }
 
 var PermissionRoleView = Permission{
-	Id:   "role.view",
-	Name: "Role View",
+	Id:   "user-svc:role:view",
+	Name: "User Service - Role View",
 }
 
 var PermissionRoleEdit = Permission{
-	Id:   "role.edit",
-	Name: "Role Edit",
+	Id:   "user-svc:role:edit",
+	Name: "User Service - Role Edit",
 }
 
 var PermissionRoleDelete = Permission{
-	Id:   "role.delete",
-	Name: "Role Delete",
+	Id:   "user-svc:role:delete",
+	Name: "User Service - Role Delete",
 }
 
 var PermissionPermissionCreate = Permission{
-	Id:   "permission.create",
-	Name: "Permission Create",
+	Id:   "user-svc:permission:create",
+	Name: "User Service - Permission Create",
 }
 
 var PermissionPermissionEdit = Permission{
-	Id:   "permission.edit",
-	Name: "Permission Edit",
+	Id:   "user-svc:permission:edit",
+	Name: "User Service - Permission Edit",
 }
 
 var PermissionPermissionAssign = Permission{
-	Id:   "permission.assign",
-	Name: "Permission Assign",
+	Id:   "user-svc:permission:assign",
+	Name: "User Service - Permission Assign",
 }
 
 var UserPermissions = []Permission{

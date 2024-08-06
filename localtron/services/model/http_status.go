@@ -22,7 +22,7 @@ import (
 // @Summary Get Model Status
 // @Description Retrieves the status of a model by ID.
 // @Description
-// @Description Requires the `model.view` permission.
+// @Description Requires the `model-svc:model:view` permission.
 // @Tags Model Service
 // @Accept json
 // @Produce json

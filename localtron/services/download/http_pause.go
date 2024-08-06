@@ -21,7 +21,7 @@ import (
 // @Summary Pause a Download
 // @Description Pause a download that is currently in progress.
 // @Description
-// @Description Requires the `download.edit` permission.
+// @Description Requires the `download-svc:download:edit` permission.
 // @Tags Download Service
 // @Accept json
 // @Produce json

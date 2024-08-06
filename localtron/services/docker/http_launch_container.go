@@ -19,7 +19,7 @@ import (
 // @Summary Launch a Docker Container
 // @Description Launches a Docker container with the specified parameters.
 // @Description
-// @Description Requires the `docker.create` permission.
+// @Description Requires the `docker-svc:docker:create` permission.
 // @Tags Docker Service
 // @Accept json
 // @Produce json
