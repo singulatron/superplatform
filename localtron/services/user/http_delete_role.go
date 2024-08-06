@@ -12,24 +12,25 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
+	user "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // DeleteRole handles the deletion of a role by role ID.
+// @ID deleteRole
 // @Summary Delete a Role
 // @Description Delete a role based on the role ID.
 // @Tags User Service
 // @Accept  json
 // @Produce  json
 // @Param   roleId     path    string  true  "Role ID"
-// @Success 200 {object} usertypes.DeleteRoleResponse
+// @Success 200 {object} user.DeleteRoleResponse
 // @Failure 400 {string} string "Invalid JSON"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
 // @Security BearerAuth
 // @Router /user-svc/role/{roleId} [delete]
 func (s *UserService) DeleteRole(w http.ResponseWriter, r *http.Request) {
-	_, err := s.isAuthorized(r, usertypes.PermissionRoleDelete.Id, nil)
+	_, err := s.isAuthorized(r, user.PermissionRoleDelete.Id, nil)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -43,6 +44,6 @@ func (s *UserService) DeleteRole(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	bs, _ := json.Marshal(usertypes.DeleteRoleResponse{})
+	bs, _ := json.Marshal(user.DeleteRoleResponse{})
 	w.Write(bs)
 }

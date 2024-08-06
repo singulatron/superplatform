@@ -11,23 +11,24 @@ import (
 	"encoding/json"
 	"net/http"
 
-	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
+	user "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
+// @ID getPublicKey
 // @Summary Ge Public Key
 // @Description Get the public key to descrypt the JWT.
 // @Tags User Service
 // @Accept json
 // @Produce json
-// @Success 200 {object} usertypes.GetPublicKeyResponse
-// @Failure 400 {object} usertypes.ErrorResponse "Invalid JSON or missing permission id"
-// @Failure 401 {object} usertypes.ErrorResponse "Unauthorized"
+// @Success 200 {object} user.GetPublicKeyResponse
+// @Failure 400 {object} user.ErrorResponse "Invalid JSON or missing permission id"
+// @Failure 401 {object} user.ErrorResponse "Unauthorized"
 // @Router /user-svc/public-key [get]
 func (s *UserService) GetPublicKey(
 	w http.ResponseWriter,
 	r *http.Request) {
 
-	bs, _ := json.Marshal(usertypes.GetPublicKeyResponse{
+	bs, _ := json.Marshal(user.GetPublicKeyResponse{
 		PublicKey: s.publicKeyPem,
 	})
 	w.Write(bs)

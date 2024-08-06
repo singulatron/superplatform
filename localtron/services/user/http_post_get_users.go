@@ -12,33 +12,34 @@ import (
 	"net/http"
 
 	"github.com/singulatron/singulatron/localtron/datastore"
-	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
+	user "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // GetUsers retrieves a list of users based on query parameters
+// @ID getUsers
 // @Summary List Users
 // @Description Fetches a list of users with optional query filters and pagination.
 // @Tags User Service
 // @Accept json
 // @Produce json
-// @Param request body usertypes.GetUsersRequest false "Get Users Request"
-// @Success 200 {object} usertypes.GetUsersResponse "List of users retrieved successfully"
-// @Failure 400 {object} usertypes.ErrorResponse "Invalid JSON"
-// @Failure 401 {object} usertypes.ErrorResponse "Unauthorized"
-// @Failure 500 {object} usertypes.ErrorResponse "Internal Server Error"
+// @Param request body user.GetUsersRequest false "Get Users Request"
+// @Success 200 {object} user.GetUsersResponse "List of users retrieved successfully"
+// @Failure 400 {object} user.ErrorResponse "Invalid JSON"
+// @Failure 401 {object} user.ErrorResponse "Unauthorized"
+// @Failure 500 {object} user.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
 // @Router /user-svc/users [post]
 func (s *UserService) GetUsers(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	_, err := s.isAuthorized(r, usertypes.PermissionUserView.Id, nil)
+	_, err := s.isAuthorized(r, user.PermissionUserView.Id, nil)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 
-	req := usertypes.GetUsersRequest{}
+	req := user.GetUsersRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
@@ -46,7 +47,7 @@ func (s *UserService) GetUsers(
 	}
 	defer r.Body.Close()
 
-	options := &usertypes.GetUsersOptions{
+	options := &user.GetUsersOptions{
 		Query: req.Query,
 	}
 	if options.Query == nil {
@@ -66,7 +67,7 @@ func (s *UserService) GetUsers(
 		users[i].PasswordHash = ""
 	}
 
-	bs, _ := json.Marshal(usertypes.GetUsersResponse{
+	bs, _ := json.Marshal(user.GetUsersResponse{
 		Users: users,
 		Count: count,
 	})

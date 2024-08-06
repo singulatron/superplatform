@@ -11,30 +11,31 @@ import (
 	"encoding/json"
 	"net/http"
 
-	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
+	user "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // ChangePassword allows a user to update their own password
+// @ID changePassword
 // @Summary Change User Password
 // @Description Allows an authenticated user to change their own password.
 // @Tags User Service
 // @Accept json
 // @Produce json
-// @Param request body usertypes.ChangePasswordRequest true "Change Password Request"
-// @Success 200 {object} usertypes.ChangePasswordResponse "Password changed successfully"
-// @Failure 400 {object} usertypes.ErrorResponse "Invalid JSON"
-// @Failure 401 {object} usertypes.ErrorResponse "Unauthorized"
-// @Failure 500 {object} usertypes.ErrorResponse "Internal Server Error"
+// @Param request body user.ChangePasswordRequest true "Change Password Request"
+// @Success 200 {object} user.ChangePasswordResponse "Password changed successfully"
+// @Failure 400 {object} user.ErrorResponse "Invalid JSON"
+// @Failure 401 {object} user.ErrorResponse "Unauthorized"
+// @Failure 500 {object} user.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
 // @Router /user-svc/change-password [post]
 func (s *UserService) ChangePassword(w http.ResponseWriter, r *http.Request) {
-	_, err := s.isAuthorized(r, usertypes.PermissionUserPasswordChange.Id, nil)
+	_, err := s.isAuthorized(r, user.PermissionUserPasswordChange.Id, nil)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 
-	req := usertypes.ChangePasswordRequest{}
+	req := user.ChangePasswordRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
@@ -48,6 +49,6 @@ func (s *UserService) ChangePassword(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	bs, _ := json.Marshal(usertypes.ChangePasswordResponse{})
+	bs, _ := json.Marshal(user.ChangePasswordResponse{})
 	w.Write(bs)
 }

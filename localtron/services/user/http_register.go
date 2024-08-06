@@ -11,21 +11,22 @@ import (
 	"encoding/json"
 	"net/http"
 
-	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
+	user "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
+// @ID register
 // @Summary Register a New User
 // @Description Register a new user with a name, email, and password.
 // @Tags User Service
 // @Accept json
 // @Produce json
-// @Param body body usertypes.RegisterRequest true "Register Request"
-// @Success 200 {object} usertypes.RegisterResponse
-// @Failure 400 {object} usertypes.ErrorResponse "Invalid JSON"
-// @Failure 500 {object} usertypes.ErrorResponse "Internal Server Error"
+// @Param body body user.RegisterRequest true "Register Request"
+// @Success 200 {object} user.RegisterResponse
+// @Failure 400 {object} user.ErrorResponse "Invalid JSON"
+// @Failure 500 {object} user.ErrorResponse "Internal Server Error"
 // @Router /user-svc/register [post]
 func (s *UserService) Register(w http.ResponseWriter, r *http.Request) {
-	req := usertypes.RegisterRequest{}
+	req := user.RegisterRequest{}
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
@@ -33,15 +34,15 @@ func (s *UserService) Register(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	err = s.createUser(&usertypes.User{
+	err = s.createUser(&user.User{
 		Name:  req.Name,
 		Email: req.Email,
-	}, req.Password, []string{usertypes.RoleUser.Id})
+	}, req.Password, []string{user.RoleUser.Id})
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	bs, _ := json.Marshal(usertypes.RegisterResponse{})
+	bs, _ := json.Marshal(user.RegisterResponse{})
 	w.Write(bs)
 }

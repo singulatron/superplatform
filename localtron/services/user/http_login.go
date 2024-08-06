@@ -11,22 +11,23 @@ import (
 	"encoding/json"
 	"net/http"
 
-	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
+	user "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // Login handles user authentication
+// @ID login
 // @Summary Login
 // @Description Authenticates a user and returns a token.
 // @Tags User Service
 // @Accept json
 // @Produce json
-// @Param request body usertypes.LoginRequest true "Login Request"
-// @Success 200 {object} usertypes.LoginResponse "Login successful"
-// @Failure 400 {object} usertypes.ErrorResponse "Invalid JSON"
-// @Failure 500 {object} usertypes.ErrorResponse "Internal Server Error"
+// @Param request body user.LoginRequest true "Login Request"
+// @Success 200 {object} user.LoginResponse "Login successful"
+// @Failure 400 {object} user.ErrorResponse "Invalid JSON"
+// @Failure 500 {object} user.ErrorResponse "Internal Server Error"
 // @Router /user-svc/login [post]
 func (s *UserService) Login(w http.ResponseWriter, r *http.Request) {
-	req := usertypes.LoginRequest{}
+	req := user.LoginRequest{}
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
@@ -40,7 +41,7 @@ func (s *UserService) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	bs, _ := json.Marshal(usertypes.LoginResponse{
+	bs, _ := json.Marshal(user.LoginResponse{
 		Token: token,
 	})
 	w.Write(bs)

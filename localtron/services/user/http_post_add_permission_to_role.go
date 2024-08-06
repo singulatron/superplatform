@@ -12,11 +12,11 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
+	user "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // AddPermissionToRole handles the addition of a permission to a role
-//
+// @ID addPermissionToRole
 // @Summary Add Permission to Role
 // @Description Adds a specific permission to a role identified by roleId.
 // @Description
@@ -26,9 +26,9 @@ import (
 // @Produce json
 // @Param roleId path string true "Role ID"
 // @Param permissionId path string true "Permission ID"
-// @Success 200 {object} usertypes.CreateUserResponse
-// @Failure 401 {object} usertypes.ErrorResponse "Unauthorized"
-// @Failure 500 {object} usertypes.ErrorResponse "Internal Server Error"
+// @Success 200 {object} user.CreateUserResponse
+// @Failure 401 {object} user.ErrorResponse "Unauthorized"
+// @Failure 500 {object} user.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
 // @Router /user-svc/role/{roleId}/permission/{permissionId} [put]
 func (s *UserService) AddPermissionToRole(
@@ -36,13 +36,13 @@ func (s *UserService) AddPermissionToRole(
 	r *http.Request,
 ) {
 	// @todo add proper permission here
-	_, err := s.isAuthorized(r, usertypes.PermissionPermissionAssign.Id, nil)
+	_, err := s.isAuthorized(r, user.PermissionPermissionAssign.Id, nil)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 
-	user, err := s.getUserFromRequest(r)
+	usr, err := s.getUserFromRequest(r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -50,12 +50,12 @@ func (s *UserService) AddPermissionToRole(
 
 	vars := mux.Vars(r)
 
-	err = s.addPermissionToRole(user.Id, vars["roleId"], vars["permissionId"])
+	err = s.addPermissionToRole(usr.Id, vars["roleId"], vars["permissionId"])
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	bs, _ := json.Marshal(usertypes.CreateUserResponse{})
+	bs, _ := json.Marshal(user.CreateUserResponse{})
 	w.Write(bs)
 }
