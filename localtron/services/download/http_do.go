@@ -12,11 +12,12 @@ import (
 	"fmt"
 	"net/http"
 
-	downloadtypes "github.com/singulatron/singulatron/localtron/services/download/types"
+	download "github.com/singulatron/singulatron/localtron/services/download/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // Do initiates a download request
+// @ID download
 // @Summary Download a File
 // @Description Start a download for a specified URL.
 // @Description
@@ -24,11 +25,11 @@ import (
 // @Tags Download Service
 // @Accept json
 // @Produce json
-// @Param request body downloadtypes.DownloadRequest true "Download Request"
+// @Param request body download.DownloadRequest true "Download Request"
 // @Success 200 {object} map[string]any "Download initiated successfully"
-// @Failure 400 {object} downloadtypes.ErrorResponse "Invalid JSON"
-// @Failure 401 {object} downloadtypes.ErrorResponse "Unauthorized"
-// @Failure 500 {object} downloadtypes.ErrorResponse "Internal Server Error"
+// @Failure 400 {object} download.ErrorResponse "Invalid JSON"
+// @Failure 401 {object} download.ErrorResponse "Unauthorized"
+// @Failure 500 {object} download.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
 // @Router /download-svc/download [put]
 func (ds *DownloadService) Do(
@@ -36,7 +37,7 @@ func (ds *DownloadService) Do(
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := ds.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", downloadtypes.PermissionDownloadCreate.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	err := ds.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", download.PermissionDownloadCreate.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -46,7 +47,7 @@ func (ds *DownloadService) Do(
 		return
 	}
 
-	req := downloadtypes.DownloadRequest{}
+	req := download.DownloadRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `Invalid JSON`, http.StatusBadRequest)

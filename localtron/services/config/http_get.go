@@ -12,18 +12,19 @@ import (
 	"fmt"
 	"net/http"
 
-	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
+	config "github.com/singulatron/singulatron/localtron/services/config/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // Get retrieves the current configuration
+// @Id getConfig
 // @Summary Get Config
 // @Description Fetch the current configuration from the server
 // @Tags Config Service
 // @Accept json
 // @Produce json
-// @Param request body configtypes.GetConfigRequest true "Get Config Request"
-// @Success 200 {object} configtypes.GetConfigResponse "Current configuration retrieved successfully"
+// @Param request body config.GetConfigRequest true "Get Config Request"
+// @Success 200 {object} config.GetConfigResponse "Current configuration retrieved successfully"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
 // @Security BearerAuth
@@ -33,7 +34,7 @@ func (cs *ConfigService) Get(
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := cs.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", configtypes.PermissionConfigView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	err := cs.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", config.PermissionConfigView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -49,7 +50,7 @@ func (cs *ConfigService) Get(
 		return
 	}
 
-	jsonData, _ := json.Marshal(configtypes.GetConfigResponse{
+	jsonData, _ := json.Marshal(config.GetConfigResponse{
 		Config: &conf,
 	})
 	w.Write(jsonData)

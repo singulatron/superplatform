@@ -13,23 +13,24 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
+	model "github.com/singulatron/singulatron/localtron/services/model/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // StartSpecific godoc
+// @ID startModel
 // @Summary Start a Model
 // @Description Starts a model by ID
 // @Tags Model Service
 // @Accept json
 // @Produce json
 // @Param modelId path string true "Model ID"
-// @Success 200 {object} modeltypes.StartResponse
-// @Failure 400 {object} modeltypes.ErrorResponse "Invalid JSON"
-// @Failure 401 {object} modeltypes.ErrorResponse "Unauthorized"
-// @Failure 500 {object} modeltypes.ErrorResponse "Internal Server Error"
+// @Success 200 {object} model.StartResponse
+// @Failure 400 {object} model.ErrorResponse "Invalid JSON"
+// @Failure 401 {object} model.ErrorResponse "Unauthorized"
+// @Failure 500 {object} model.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
-// @Router /model-svc/{modelId}/start [put]
+// @Router /model-svc/model/{modelId}/start [put]
 func (ms *ModelService) StartSpecific(
 	w http.ResponseWriter,
 	r *http.Request,
@@ -41,7 +42,7 @@ func (ms *ModelService) StartSpecific(
 	}
 
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := ms.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", modeltypes.PermissionModelCreate.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	err := ms.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", model.PermissionModelCreate.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -51,7 +52,7 @@ func (ms *ModelService) StartSpecific(
 		return
 	}
 
-	req := modeltypes.StartRequest{}
+	req := model.StartRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
@@ -65,6 +66,6 @@ func (ms *ModelService) StartSpecific(
 		return
 	}
 
-	jsonData, _ := json.Marshal(modeltypes.StartResponse{})
+	jsonData, _ := json.Marshal(model.StartResponse{})
 	w.Write(jsonData)
 }

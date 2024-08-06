@@ -12,11 +12,12 @@ import (
 	"fmt"
 	"net/http"
 
-	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
+	chat "github.com/singulatron/singulatron/localtron/services/chat/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // AddThread creates a new chat thread
+// @ID addThread
 // @Summary Add Thread
 // @Description Create a new chat thread and add the requesting user to it.
 // @Decription
@@ -24,8 +25,8 @@ import (
 // @Tags Chat Service
 // @Accept json
 // @Produce json
-// @Param request body chattypes.AddThreadRequest true "Add Thread Request"
-// @Success 200 {object} chattypes.AddThreadResponse "Thread successfully created"
+// @Param request body chat.AddThreadRequest true "Add Thread Request"
+// @Success 200 {object} chat.AddThreadResponse "Thread successfully created"
 // @Failure 400 {string} string "Invalid JSON"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
@@ -36,7 +37,7 @@ func (a *ChatService) AddThread(
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := a.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", chattypes.PermissionThreadCreate.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	err := a.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", chat.PermissionThreadCreate.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -46,7 +47,7 @@ func (a *ChatService) AddThread(
 		return
 	}
 
-	req := chattypes.AddThreadRequest{}
+	req := chat.AddThreadRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
@@ -67,7 +68,7 @@ func (a *ChatService) AddThread(
 		return
 	}
 
-	jsonData, _ := json.Marshal(chattypes.AddThreadResponse{
+	jsonData, _ := json.Marshal(chat.AddThreadResponse{
 		Thread: thread,
 	})
 	w.Write(jsonData)

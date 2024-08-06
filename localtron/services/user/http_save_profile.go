@@ -11,17 +11,17 @@ import (
 	"encoding/json"
 	"net/http"
 
-	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
+	user "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 func (s *UserService) SaveProfile(w http.ResponseWriter, r *http.Request) {
-	_, err := s.isAuthorized(r, usertypes.PermissionUserEdit.Id, nil)
+	_, err := s.isAuthorized(r, user.PermissionUserEdit.Id, nil)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 
-	req := usertypes.SaveProfileRequest{}
+	req := user.SaveProfileRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
@@ -35,6 +35,6 @@ func (s *UserService) SaveProfile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	bs, _ := json.Marshal(usertypes.SaveProfileResponse{})
+	bs, _ := json.Marshal(user.SaveProfileResponse{})
 	w.Write(bs)
 }

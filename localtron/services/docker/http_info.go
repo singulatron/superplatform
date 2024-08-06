@@ -12,18 +12,19 @@ import (
 	"fmt"
 	"net/http"
 
-	dockertypes "github.com/singulatron/singulatron/localtron/services/docker/types"
+	docker "github.com/singulatron/singulatron/localtron/services/docker/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
+// @ID getInfo
 // @Summary      Get Docker Service Information
 // @Description  Retrieve detailed information about the Docker service
 // @Tags         Docker Service
 // @Accept       json
 // @Produce      json
-// @Success      200   {object} dockertypes.GetInfoResponse "Service Information"
-// @Failure      401   {object} dockertypes.ErrorResponse  "Unauthorized"
-// @Failure      500   {object} dockertypes.ErrorResponse  "Internal Server Error"
+// @Success      200   {object} docker.GetInfoResponse "Service Information"
+// @Failure      401   {object} docker.ErrorResponse  "Unauthorized"
+// @Failure      500   {object} docker.ErrorResponse  "Internal Server Error"
 // @Security BearerAuth
 // @Router       /docker-svc/info [get]
 func (dm *DockerService) Info(
@@ -31,7 +32,7 @@ func (dm *DockerService) Info(
 	req *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := dm.router.AsRequestMaker(req).Post(req.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", dockertypes.PermissionDockerView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	err := dm.router.AsRequestMaker(req).Post(req.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", docker.PermissionDockerView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -47,7 +48,7 @@ func (dm *DockerService) Info(
 		return
 	}
 
-	jsonData, _ := json.Marshal(dockertypes.GetInfoResponse{
+	jsonData, _ := json.Marshal(docker.GetInfoResponse{
 		Info: di,
 	})
 	w.Write(jsonData)

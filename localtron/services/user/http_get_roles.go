@@ -12,16 +12,17 @@ import (
 	"fmt"
 	"net/http"
 
-	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
+	user "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // GetRoles handles the retrieval of all roles.
+// @ID getRoles
 // @Summary Get all Roles
 // @Description Retrieve all roles from the user service.
 // @Tags User Service
 // @Accept json
 // @Produce json
-// @Success 200 {object} usertypes.GetRolesResponse
+// @Success 200 {object} user.GetRolesResponse
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
 // @Security BearerAuth
@@ -29,8 +30,8 @@ import (
 func (s *UserService) GetRoles(
 	w http.ResponseWriter,
 	r *http.Request) {
-	rsp := &usertypes.IsAuthorizedResponse{}
-	err := s.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", usertypes.PermissionRoleView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	rsp := &user.IsAuthorizedResponse{}
+	err := s.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", user.PermissionRoleView.Id), &user.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -46,7 +47,7 @@ func (s *UserService) GetRoles(
 		return
 	}
 
-	bs, _ := json.Marshal(usertypes.GetRolesResponse{
+	bs, _ := json.Marshal(user.GetRolesResponse{
 		Roles: roles,
 	})
 	w.Write(bs)

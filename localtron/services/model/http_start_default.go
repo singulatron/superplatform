@@ -12,11 +12,12 @@ import (
 	"fmt"
 	"net/http"
 
-	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
+	model "github.com/singulatron/singulatron/localtron/services/model/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // StartDefault godoc
+// @ID startDefaultModel
 // @Summary Start the Default Model
 // @Description Starts The Default Model.
 // @Description
@@ -24,10 +25,10 @@ import (
 // @Tags Model Service
 // @Accept json
 // @Produce json
-// @Success 200 {object} modeltypes.StartResponse
-// @Failure 400 {object} modeltypes.ErrorResponse "Invalid JSON"
-// @Failure 401 {object} modeltypes.ErrorResponse "Unauthorized"
-// @Failure 500 {object} modeltypes.ErrorResponse "Internal Server Error"
+// @Success 200 {object} model.StartResponse
+// @Failure 400 {object} model.ErrorResponse "Invalid JSON"
+// @Failure 401 {object} model.ErrorResponse "Unauthorized"
+// @Failure 500 {object} model.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
 // @Router /model-svc/default/start [put]
 func (ms *ModelService) StartDefault(
@@ -35,7 +36,7 @@ func (ms *ModelService) StartDefault(
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := ms.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", modeltypes.PermissionModelCreate.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	err := ms.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", model.PermissionModelCreate.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -51,6 +52,6 @@ func (ms *ModelService) StartDefault(
 		return
 	}
 
-	jsonData, _ := json.Marshal(modeltypes.StartResponse{})
+	jsonData, _ := json.Marshal(model.StartResponse{})
 	w.Write(jsonData)
 }

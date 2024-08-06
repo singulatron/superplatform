@@ -14,10 +14,11 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
-	dockertypes "github.com/singulatron/singulatron/localtron/services/docker/types"
+	docker "github.com/singulatron/singulatron/localtron/services/docker/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
+// @ID getContainerSummary
 // @Summary      Get Container Summary
 // @Description  Get a summary of the Docker container identified by the hash, limited to a specified number of lines
 // @Tags         Docker Service
@@ -25,10 +26,10 @@ import (
 // @Produce      json
 // @Param        hash           path     string  true  "Container Hash"
 // @Param        numberOfLines  path     int     true  "Number of Lines"
-// @Success      200            {object} dockertypes.GetContainerSummaryResponse
-// @Failure      400            {object} dockertypes.ErrorResponse  "Invalid JSON"
-// @Failure      401            {object} dockertypes.ErrorResponse  "Unauthorized"
-// @Failure      500            {object} dockertypes.ErrorResponse  "Internal Server Error"
+// @Success      200            {object} docker.GetContainerSummaryResponse
+// @Failure      400            {object} docker.ErrorResponse  "Invalid JSON"
+// @Failure      401            {object} docker.ErrorResponse  "Unauthorized"
+// @Failure      500            {object} docker.ErrorResponse  "Internal Server Error"
 // @Security BearerAuth
 // @Router       /docker-svc/container/{hash}/summary/{numberOfLines} [get]
 func (dm *DockerService) Summary(
@@ -36,7 +37,7 @@ func (dm *DockerService) Summary(
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := dm.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", dockertypes.PermissionDockerView.Id), &usertypes.IsAuthorizedRequest{
+	err := dm.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", docker.PermissionDockerView.Id), &usertypes.IsAuthorizedRequest{
 		EmailsGranted: []string{"model-svc"},
 	}, rsp)
 	if err != nil {
@@ -62,7 +63,7 @@ func (dm *DockerService) Summary(
 		return
 	}
 
-	jsonData, _ := json.Marshal(&dockertypes.GetContainerSummaryResponse{
+	jsonData, _ := json.Marshal(&docker.GetContainerSummaryResponse{
 		Summary: summary,
 	})
 	w.Write(jsonData)

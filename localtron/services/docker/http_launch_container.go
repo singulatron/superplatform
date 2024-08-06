@@ -12,10 +12,11 @@ import (
 	"fmt"
 	"net/http"
 
-	dockertypes "github.com/singulatron/singulatron/localtron/services/docker/types"
+	docker "github.com/singulatron/singulatron/localtron/services/docker/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
+// @ID launchContainer
 // @Summary Launch a Docker Container
 // @Description Launches a Docker container with the specified parameters.
 // @Description
@@ -23,11 +24,11 @@ import (
 // @Tags Docker Service
 // @Accept json
 // @Produce json
-// @Param request body dockertypes.LaunchContainerRequest true "Launch Container Request"
-// @Success 200 {object} dockertypes.LaunchContainerResponse
-// @Failure 400 {object} dockertypes.ErrorResponse "Invalid JSON"
-// @Failure 401 {object} dockertypes.ErrorResponse "Unauthorized"
-// @Failure 500 {object} dockertypes.ErrorResponse "Internal Server Error"
+// @Param request body docker.LaunchContainerRequest true "Launch Container Request"
+// @Success 200 {object} docker.LaunchContainerResponse
+// @Failure 400 {object} docker.ErrorResponse "Invalid JSON"
+// @Failure 401 {object} docker.ErrorResponse "Unauthorized"
+// @Failure 500 {object} docker.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
 // @Router /docker-svc/container [put]
 func (dm *DockerService) LaunchContainer(
@@ -35,7 +36,7 @@ func (dm *DockerService) LaunchContainer(
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := dm.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", dockertypes.PermissionDockerCreate.Id), &usertypes.IsAuthorizedRequest{
+	err := dm.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", docker.PermissionDockerCreate.Id), &usertypes.IsAuthorizedRequest{
 		EmailsGranted: []string{"model-svc"},
 	}, rsp)
 	if err != nil {
@@ -47,7 +48,7 @@ func (dm *DockerService) LaunchContainer(
 		return
 	}
 
-	req := &dockertypes.LaunchContainerRequest{}
+	req := &docker.LaunchContainerRequest{}
 	err = json.NewDecoder(r.Body).Decode(req)
 	if err != nil {
 		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
@@ -61,7 +62,7 @@ func (dm *DockerService) LaunchContainer(
 		return
 	}
 
-	jsonData, _ := json.Marshal(&dockertypes.LaunchContainerResponse{
+	jsonData, _ := json.Marshal(&docker.LaunchContainerResponse{
 		Info: di,
 	})
 	w.Write(jsonData)

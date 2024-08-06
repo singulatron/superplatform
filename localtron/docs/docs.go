@@ -42,6 +42,7 @@ const docTemplate = `{
                     "Chat Service"
                 ],
                 "summary": "Delete a Message",
+                "operationId": "deleteMessage",
                 "parameters": [
                     {
                         "type": "string",
@@ -98,6 +99,7 @@ const docTemplate = `{
                     "Chat Service"
                 ],
                 "summary": "Add Thread",
+                "operationId": "addThread",
                 "parameters": [
                     {
                         "description": "Add Thread Request",
@@ -155,6 +157,7 @@ const docTemplate = `{
                     "Chat Service"
                 ],
                 "summary": "Get Thread",
+                "operationId": "getThread",
                 "parameters": [
                     {
                         "type": "string",
@@ -208,6 +211,7 @@ const docTemplate = `{
                     "Chat Service"
                 ],
                 "summary": "Update Thread",
+                "operationId": "updateThread",
                 "parameters": [
                     {
                         "type": "string",
@@ -270,6 +274,7 @@ const docTemplate = `{
                     "Chat Service"
                 ],
                 "summary": "Delete a Thread",
+                "operationId": "deleteThread",
                 "parameters": [
                     {
                         "type": "string",
@@ -326,6 +331,7 @@ const docTemplate = `{
                     "Chat Service"
                 ],
                 "summary": "Add Message",
+                "operationId": "addMessage",
                 "parameters": [
                     {
                         "type": "string",
@@ -391,6 +397,7 @@ const docTemplate = `{
                     "Chat Service"
                 ],
                 "summary": "List Messages",
+                "operationId": "getMessages",
                 "parameters": [
                     {
                         "type": "string",
@@ -446,6 +453,7 @@ const docTemplate = `{
                     "Chat Service"
                 ],
                 "summary": "Get Threads",
+                "operationId": "getThreads",
                 "parameters": [
                     {
                         "description": "Get Threads Request",
@@ -503,6 +511,7 @@ const docTemplate = `{
                     "Config Service"
                 ],
                 "summary": "Get Config",
+                "operationId": "getConfig",
                 "parameters": [
                     {
                         "description": "Get Config Request",
@@ -554,6 +563,7 @@ const docTemplate = `{
                     "Config Service"
                 ],
                 "summary": "Save Config",
+                "operationId": "saveConfig",
                 "parameters": [
                     {
                         "description": "Save Config Request",
@@ -605,6 +615,7 @@ const docTemplate = `{
                     "Docker Service"
                 ],
                 "summary": "Launch a Docker Container",
+                "operationId": "launchContainer",
                 "parameters": [
                     {
                         "description": "Launch Container Request",
@@ -662,6 +673,7 @@ const docTemplate = `{
                     "Docker Service"
                 ],
                 "summary": "Check If a Container Is Running",
+                "operationId": "isRunning",
                 "parameters": [
                     {
                         "type": "string",
@@ -717,6 +729,7 @@ const docTemplate = `{
                     "Docker Service"
                 ],
                 "summary": "Get Container Summary",
+                "operationId": "getContainerSummary",
                 "parameters": [
                     {
                         "type": "string",
@@ -779,6 +792,7 @@ const docTemplate = `{
                     "Docker Service"
                 ],
                 "summary": "Get Docker Host",
+                "operationId": "getHost",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -819,6 +833,7 @@ const docTemplate = `{
                     "Docker Service"
                 ],
                 "summary": "Get Docker Service Information",
+                "operationId": "getInfo",
                 "responses": {
                     "200": {
                         "description": "Service Information",
@@ -859,6 +874,7 @@ const docTemplate = `{
                     "Download Service"
                 ],
                 "summary": "Download a File",
+                "operationId": "download",
                 "parameters": [
                     {
                         "description": "Download Request",
@@ -917,6 +933,7 @@ const docTemplate = `{
                     "Download Service"
                 ],
                 "summary": "Get a Download",
+                "operationId": "getDownload",
                 "parameters": [
                     {
                         "type": "string",
@@ -966,6 +983,7 @@ const docTemplate = `{
                     "Download Service"
                 ],
                 "summary": "Pause a Download",
+                "operationId": "pause",
                 "parameters": [
                     {
                         "type": "string",
@@ -1022,6 +1040,7 @@ const docTemplate = `{
                     "Download Service"
                 ],
                 "summary": "List Downloads",
+                "operationId": "listDownloads",
                 "responses": {
                     "200": {
                         "description": "List of downloads",
@@ -1446,6 +1465,219 @@ const docTemplate = `{
                     "Model Service"
                 ],
                 "summary": "Start the Default Model",
+                "operationId": "startDefaultModel",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.StartResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/model-svc/model/{id}/status": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieves the status of a model by ID.\n\nRequires the ` + "`" + `model-svc:model:view` + "`" + ` permission.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Model Service"
+                ],
+                "summary": "Get Model Status",
+                "operationId": "getModelStatus",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Model ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Model status retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.StatusResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/model-svc/model/{modelId}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieves the details of a model by its ID.\n\nthe Requires ` + "`" + `model.view` + "`" + ` permission.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Model Service"
+                ],
+                "summary": "Get a Model",
+                "operationId": "getModel",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Model ID",
+                        "name": "modelId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.GetModelResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/model-svc/model/{modelId}/make-default": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Sets a model as the default model — when prompts are sent without a Model ID, the default model is used.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Model Service"
+                ],
+                "summary": "Make a Model Default",
+                "operationId": "makeDefault",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Model ID",
+                        "name": "modelId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.MakeDefaultResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/modeltypes.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/model-svc/model/{modelId}/start": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Starts a model by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Model Service"
+                ],
+                "summary": "Start a Model",
+                "operationId": "startModel",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Model ID",
+                        "name": "modelId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1492,219 +1724,12 @@ const docTemplate = `{
                     "Model Service"
                 ],
                 "summary": "List Models",
+                "operationId": "listModels",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/modeltypes.ListResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/modeltypes.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/modeltypes.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/model-svc/{id}/status": {
-            "get": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Retrieves the status of a model by ID.\n\nRequires the ` + "`" + `model-svc:model:view` + "`" + ` permission.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Model Service"
-                ],
-                "summary": "Get Model Status",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Model ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Model status retrieved successfully",
-                        "schema": {
-                            "$ref": "#/definitions/modeltypes.StatusResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/model-svc/{modelId}": {
-            "get": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Retrieves the details of a model by its ID.\n\nthe Requires ` + "`" + `model.view` + "`" + ` permission.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Model Service"
-                ],
-                "summary": "Get a Model",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Model ID",
-                        "name": "modelId",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/modeltypes.GetModelResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/modeltypes.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/modeltypes.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/model-svc/{modelId}/make-default": {
-            "put": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Sets a model as the default model — when prompts are sent without a Model ID, the default model is used.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Model Service"
-                ],
-                "summary": "Make a Model Default",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Model ID",
-                        "name": "modelId",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/modeltypes.MakeDefaultResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid JSON",
-                        "schema": {
-                            "$ref": "#/definitions/modeltypes.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/modeltypes.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/modeltypes.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/model-svc/{modelId}/start": {
-            "put": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Starts a model by ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Model Service"
-                ],
-                "summary": "Start a Model",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Model ID",
-                        "name": "modelId",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/modeltypes.StartResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid JSON",
-                        "schema": {
-                            "$ref": "#/definitions/modeltypes.ErrorResponse"
                         }
                     },
                     "401": {
@@ -1735,6 +1760,7 @@ const docTemplate = `{
                     "Prompt Service"
                 ],
                 "summary": "List Prompts",
+                "operationId": "getPrompts",
                 "parameters": [
                     {
                         "description": "List Prompts Request",
@@ -1786,6 +1812,7 @@ const docTemplate = `{
                     "Prompt Service"
                 ],
                 "summary": "Add Prompt",
+                "operationId": "addPrompt",
                 "parameters": [
                     {
                         "description": "Add Prompt Request",
@@ -1838,6 +1865,7 @@ const docTemplate = `{
                     "Prompt Service"
                 ],
                 "summary": "Remove Prompt",
+                "operationId": "removePrompt",
                 "parameters": [
                     {
                         "description": "Remove Prompt Request",
@@ -1884,6 +1912,7 @@ const docTemplate = `{
                     "Prompt Service"
                 ],
                 "summary": "Subscribe to Prompt",
+                "operationId": "subscribe",
                 "parameters": [
                     {
                         "type": "string",
@@ -1933,6 +1962,7 @@ const docTemplate = `{
                     "User Service"
                 ],
                 "summary": "Change User Password",
+                "operationId": "changePassword",
                 "parameters": [
                     {
                         "description": "Change Password Request",
@@ -1990,6 +2020,7 @@ const docTemplate = `{
                     "User Service"
                 ],
                 "summary": "Change User Password (Admin)",
+                "operationId": "changePasswordAdmin",
                 "parameters": [
                     {
                         "description": "Change Password Request",
@@ -2042,6 +2073,7 @@ const docTemplate = `{
                     "User Service"
                 ],
                 "summary": "Login",
+                "operationId": "login",
                 "parameters": [
                     {
                         "description": "Login Request",
@@ -2093,6 +2125,7 @@ const docTemplate = `{
                     "User Service"
                 ],
                 "summary": "Upsert a Permission",
+                "operationId": "upsertPermission",
                 "parameters": [
                     {
                         "type": "string",
@@ -2157,6 +2190,7 @@ const docTemplate = `{
                     "User Service"
                 ],
                 "summary": "Is Authorized",
+                "operationId": "isAuthorized",
                 "parameters": [
                     {
                         "type": "string",
@@ -2210,6 +2244,7 @@ const docTemplate = `{
                     "User Service"
                 ],
                 "summary": "Ge Public Key",
+                "operationId": "getPublicKey",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -2245,6 +2280,7 @@ const docTemplate = `{
                     "User Service"
                 ],
                 "summary": "Register a New User",
+                "operationId": "register",
                 "parameters": [
                     {
                         "description": "Register Request",
@@ -2296,6 +2332,7 @@ const docTemplate = `{
                     "User Service"
                 ],
                 "summary": "Create a New Role",
+                "operationId": "createRole",
                 "parameters": [
                     {
                         "description": "Create Role Request",
@@ -2353,6 +2390,7 @@ const docTemplate = `{
                     "User Service"
                 ],
                 "summary": "Delete a Role",
+                "operationId": "deleteRole",
                 "parameters": [
                     {
                         "type": "string",
@@ -2408,6 +2446,7 @@ const docTemplate = `{
                     "User Service"
                 ],
                 "summary": "Add Permission to Role",
+                "operationId": "addPermissionToRole",
                 "parameters": [
                     {
                         "type": "string",
@@ -2464,6 +2503,7 @@ const docTemplate = `{
                     "User Service"
                 ],
                 "summary": "Get Permissions by Role",
+                "operationId": "getPermissionsByRole",
                 "parameters": [
                     {
                         "type": "integer",
@@ -2517,6 +2557,7 @@ const docTemplate = `{
                     "User Service"
                 ],
                 "summary": "Set Role Permissions",
+                "operationId": "setRolePermission",
                 "parameters": [
                     {
                         "type": "string",
@@ -2581,6 +2622,7 @@ const docTemplate = `{
                     "User Service"
                 ],
                 "summary": "Get all Roles",
+                "operationId": "getRoles",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -2621,6 +2663,7 @@ const docTemplate = `{
                     "User Service"
                 ],
                 "summary": "Create a New User",
+                "operationId": "createUser",
                 "parameters": [
                     {
                         "description": "Create User Request",
@@ -2678,6 +2721,7 @@ const docTemplate = `{
                     "User Service"
                 ],
                 "summary": "Read User by Token",
+                "operationId": "getUserByToken",
                 "parameters": [
                     {
                         "description": "Read User By Token Request",
@@ -2729,6 +2773,7 @@ const docTemplate = `{
                     "User Service"
                 ],
                 "summary": "Delete a User",
+                "operationId": "deleteUser",
                 "parameters": [
                     {
                         "type": "string",
@@ -2778,6 +2823,7 @@ const docTemplate = `{
                     "User Service"
                 ],
                 "summary": "List Users",
+                "operationId": "getUsers",
                 "parameters": [
                     {
                         "description": "Get Users Request",

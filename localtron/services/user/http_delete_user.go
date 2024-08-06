@@ -12,23 +12,24 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
+	user "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // DeleteUser handles the deletion of a user by user ID.
+// @ID deleteUser
 // @Summary Delete a User
 // @Description Delete a user based on the user ID.
 // @Tags User Service
 // @Accept  json
 // @Produce  json
 // @Param   userId     path    string  true  "User ID"
-// @Success 200 {object} usertypes.DeleteUserResponse
+// @Success 200 {object} user.DeleteUserResponse
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
 // @Security BearerAuth
 // @Router /user-svc/user/{userId} [delete]
 func (s *UserService) DeleteUser(w http.ResponseWriter, r *http.Request) {
-	_, err := s.isAuthorized(r, usertypes.PermissionUserDelete.Id, nil)
+	_, err := s.isAuthorized(r, user.PermissionUserDelete.Id, nil)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -42,6 +43,6 @@ func (s *UserService) DeleteUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	bs, _ := json.Marshal(usertypes.DeleteUserResponse{})
+	bs, _ := json.Marshal(user.DeleteUserResponse{})
 	w.Write(bs)
 }

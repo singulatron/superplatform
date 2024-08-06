@@ -19,26 +19,27 @@ import (
 	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/logger"
 
-	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
+	user "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
+// @ID isAuthorized
 // @Summary Is Authorized
 // @Description Check if a user is authorized for a specific permission.
 // @Tags User Service
 // @Accept json
 // @Produce json
 // @Param permissionId path string true "Permission ID"
-// @Param body body usertypes.IsAuthorizedRequest true "Is Authorized Request"
-// @Success 200 {object} usertypes.IsAuthorizedResponse
-// @Failure 400 {object} usertypes.ErrorResponse "Invalid JSON or missing permission id"
-// @Failure 401 {object} usertypes.ErrorResponse "Unauthorized"
+// @Param body body user.IsAuthorizedRequest true "Is Authorized Request"
+// @Success 200 {object} user.IsAuthorizedResponse
+// @Failure 400 {object} user.ErrorResponse "Invalid JSON or missing permission id"
+// @Failure 401 {object} user.ErrorResponse "Unauthorized"
 // @Security BearerAuth
 // @Router /user-svc/permission/{permissionId}/is-authorized [post]
 func (s *UserService) IsAuthorized(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	req := &usertypes.IsAuthorizedRequest{}
+	req := &user.IsAuthorizedRequest{}
 	//m := map[string]string{}
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
@@ -55,48 +56,48 @@ func (s *UserService) IsAuthorized(
 		return
 	}
 
-	user, err := s.isAuthorized(r, permissionId, req.EmailsGranted)
+	usr, err := s.isAuthorized(r, permissionId, req.EmailsGranted)
 	if err != nil {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
 
-	bs, _ := json.Marshal(&usertypes.IsAuthorizedResponse{
+	bs, _ := json.Marshal(&user.IsAuthorizedResponse{
 		Authorized: true,
-		User:       user,
+		User:       usr,
 	})
 
 	w.Write(bs)
 }
 
 func (s *UserService) isAuthorized(r *http.Request, permissionId string,
-	emailsGranted []string) (*usertypes.User, error) {
-	user, err := s.getUserFromRequest(r)
+	emailsGranted []string) (*user.User, error) {
+	usr, err := s.getUserFromRequest(r)
 	if err != nil {
 		return nil, err
 	}
 
 	emailGrant := false
 	for _, v := range emailsGranted {
-		if user.Email == v {
+		if usr.Email == v {
 			emailGrant = true
 		}
 	}
 	if emailGrant {
-		return user, nil
+		return usr, nil
 	}
 
 	roles, err := s.rolesStore.Query(
-		datastore.Equal(datastore.Field("id"), user.RoleIds),
+		datastore.Equal(datastore.Field("id"), usr.RoleIds),
 	).Find()
 	if err != nil {
 		return nil, err
 	}
 
 	for _, role := range roles {
-		for _, permId := range role.(*usertypes.Role).PermissionIds {
+		for _, permId := range role.(*user.Role).PermissionIds {
 			if permId == permissionId {
-				return user, nil
+				return usr, nil
 			}
 		}
 	}
@@ -104,7 +105,7 @@ func (s *UserService) isAuthorized(r *http.Request, permissionId string,
 	return nil, errors.New("unauthorized")
 }
 
-func (s *UserService) getUserFromRequest(r *http.Request) (*usertypes.User, error) {
+func (s *UserService) getUserFromRequest(r *http.Request) (*user.User, error) {
 	authHeader := r.Header.Get("Authorization")
 	authHeader = strings.Replace(authHeader, "Bearer ", "", 1)
 
@@ -122,7 +123,7 @@ func (s *UserService) getUserFromRequest(r *http.Request) (*usertypes.User, erro
 	if !found {
 		return nil, errors.New("unauthorized")
 	}
-	token := tokenI.(*usertypes.AuthToken)
+	token := tokenI.(*user.AuthToken)
 
 	userI, found, err := s.usersStore.Query(
 		datastore.Id(token.UserId),
@@ -137,11 +138,11 @@ func (s *UserService) getUserFromRequest(r *http.Request) (*usertypes.User, erro
 		)
 		return nil, errors.New("unauthorized")
 	}
-	user := userI.(*usertypes.User)
+	user := userI.(*user.User)
 	return user, nil
 }
 
-func (s *UserService) GetUserFromRequest(request *http.Request) (*usertypes.User, bool, error) {
+func (s *UserService) GetUserFromRequest(request *http.Request) (*user.User, bool, error) {
 	authHeader := request.Header.Get("Authorization")
 	if authHeader == "" {
 		return nil, false, nil
@@ -158,7 +159,7 @@ func (s *UserService) GetUserFromRequest(request *http.Request) (*usertypes.User
 	if !found {
 		return nil, false, errors.New("unauthorized")
 	}
-	token := tokenI.(*usertypes.AuthToken)
+	token := tokenI.(*user.AuthToken)
 
 	userI, found, err := s.usersStore.Query(
 		datastore.Id(token.UserId),
@@ -170,6 +171,6 @@ func (s *UserService) GetUserFromRequest(request *http.Request) (*usertypes.User
 		return nil, false, nil
 	}
 
-	user := userI.(*usertypes.User)
+	user := userI.(*user.User)
 	return user, found, nil
 }

@@ -13,20 +13,21 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	dockertypes "github.com/singulatron/singulatron/localtron/services/docker/types"
+	docker "github.com/singulatron/singulatron/localtron/services/docker/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
+// @ID isRunning
 // @Summary      Check If a Container Is Running
 // @Description  Check if a Docker container identified by the hash is running
 // @Tags         Docker Service
 // @Accept       json
 // @Produce      json
 // @Param        hash  path      string  true  "Container Hash"
-// @Success      200   {object}  dockertypes.ContainerIsRunningResponse
-// @Failure      400   {object}  dockertypes.ErrorResponse  "Invalid JSON"
-// @Failure      401   {object}  dockertypes.ErrorResponse  "Unauthorized"
-// @Failure      500   {object}  dockertypes.ErrorResponse  "Internal Server Error"
+// @Success      200   {object}  docker.ContainerIsRunningResponse
+// @Failure      400   {object}  docker.ErrorResponse  "Invalid JSON"
+// @Failure      401   {object}  docker.ErrorResponse  "Unauthorized"
+// @Failure      500   {object}  docker.ErrorResponse  "Internal Server Error"
 // @SecurityDefinitions.bearerAuth BearerAuth
 // @Security     BearerAuth
 // @Router       /docker-svc/container/{hash}/is-running [get]
@@ -35,7 +36,7 @@ func (dm *DockerService) HashIsRunning(
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := dm.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", dockertypes.PermissionDockerView.Id), &usertypes.IsAuthorizedRequest{
+	err := dm.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", docker.PermissionDockerView.Id), &usertypes.IsAuthorizedRequest{
 		EmailsGranted: []string{"model-svc"},
 	}, rsp)
 	if err != nil {
@@ -55,7 +56,7 @@ func (dm *DockerService) HashIsRunning(
 		return
 	}
 
-	jsonData, _ := json.Marshal(&dockertypes.ContainerIsRunningResponse{
+	jsonData, _ := json.Marshal(&docker.ContainerIsRunningResponse{
 		IsRunning: isRunning,
 	})
 	w.Write(jsonData)

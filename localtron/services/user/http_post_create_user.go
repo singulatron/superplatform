@@ -11,32 +11,33 @@ import (
 	"encoding/json"
 	"net/http"
 
-	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
+	user "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // CreateUser allows an administrator to create a new user
+// @ID createUser
 // @Summary Create a New User
 // @Description Allows an authenticated administrator to create a new user with specified details.
 // @Tags User Service
 // @Accept json
 // @Produce json
-// @Param request body usertypes.CreateUserRequest true "Create User Request"
-// @Success 200 {object} usertypes.CreateUserResponse "User created successfully"
-// @Failure 400 {object} usertypes.ErrorResponse "Invalid JSON"
-// @Failure 401 {object} usertypes.ErrorResponse "Unauthorized"
-// @Failure 500 {object} usertypes.ErrorResponse "Internal Server Error"
+// @Param request body user.CreateUserRequest true "Create User Request"
+// @Success 200 {object} user.CreateUserResponse "User created successfully"
+// @Failure 400 {object} user.ErrorResponse "Invalid JSON"
+// @Failure 401 {object} user.ErrorResponse "Unauthorized"
+// @Failure 500 {object} user.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
 // @Router /user-svc/user [post]
 func (s *UserService) CreateUser(
 	w http.ResponseWriter,
 	r *http.Request) {
-	_, err := s.isAuthorized(r, usertypes.PermissionUserCreate.Id, nil)
+	_, err := s.isAuthorized(r, user.PermissionUserCreate.Id, nil)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 
-	req := usertypes.CreateUserRequest{}
+	req := user.CreateUserRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
@@ -50,6 +51,6 @@ func (s *UserService) CreateUser(
 		return
 	}
 
-	bs, _ := json.Marshal(usertypes.CreateUserResponse{})
+	bs, _ := json.Marshal(user.CreateUserResponse{})
 	w.Write(bs)
 }

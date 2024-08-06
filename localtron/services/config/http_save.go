@@ -12,18 +12,19 @@ import (
 	"fmt"
 	"net/http"
 
-	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
+	config "github.com/singulatron/singulatron/localtron/services/config/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // Save saves the configuration
+// @Id saveConfig
 // @Summary Save Config
 // @Description Save the provided configuration to the server
 // @Tags Config Service
 // @Accept json
 // @Produce json
-// @Param request body configtypes.SaveConfigRequest true "Save Config Request"
-// @Success 200 {object} configtypes.SaveConfigResponse "Save Config Response"
+// @Param request body config.SaveConfigRequest true "Save Config Request"
+// @Success 200 {object} config.SaveConfigResponse "Save Config Response"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
 // @Security BearerAuth
@@ -33,7 +34,7 @@ func (cs *ConfigService) Save(
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := cs.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", configtypes.PermissionConfigEdit.Id), &usertypes.IsAuthorizedRequest{
+	err := cs.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", config.PermissionConfigEdit.Id), &usertypes.IsAuthorizedRequest{
 		EmailsGranted: []string{"model-svc"},
 	}, rsp)
 	if err != nil {
@@ -45,7 +46,7 @@ func (cs *ConfigService) Save(
 		return
 	}
 
-	req := &configtypes.SaveConfigRequest{}
+	req := &config.SaveConfigRequest{}
 	err = json.NewDecoder(r.Body).Decode(req)
 	if err != nil {
 		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
@@ -59,6 +60,6 @@ func (cs *ConfigService) Save(
 		return
 	}
 
-	jsonData, _ := json.Marshal(configtypes.SaveConfigResponse{})
+	jsonData, _ := json.Marshal(config.SaveConfigResponse{})
 	w.Write(jsonData)
 }

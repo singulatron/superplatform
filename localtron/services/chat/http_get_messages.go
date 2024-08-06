@@ -13,18 +13,19 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
+	chat "github.com/singulatron/singulatron/localtron/services/chat/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // GetMessages retrieves messages from a chat thread
+// @ID getMessages
 // @Summary List Messages
 // @Description Fetch messages (and associated assets) for a specific chat thread.
 // @Tags Chat Service
 // @Accept json
 // @Produce json
 // @Param threadId path string true "Thread ID"
-// @Success 200 {object} chattypes.GetMessagesResponse "Messages and assets successfully retrieved"
+// @Success 200 {object} chat.GetMessagesResponse "Messages and assets successfully retrieved"
 // @Failure 400 {string} string "Invalid JSON"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
@@ -35,7 +36,7 @@ func (a *ChatService) GetMessages(
 	r *http.Request,
 ) {
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := a.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", chattypes.PermissionMessageView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	err := a.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", chat.PermissionMessageView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -63,7 +64,7 @@ func (a *ChatService) GetMessages(
 		return
 	}
 
-	jsonData, _ := json.Marshal(chattypes.GetMessagesResponse{
+	jsonData, _ := json.Marshal(chat.GetMessagesResponse{
 		Messages: messages,
 		Assets:   assets,
 	})

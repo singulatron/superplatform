@@ -12,10 +12,11 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
+	user "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // SetRolePermissions sets the permissions for a specified role
+// @ID setRolePermission
 // @Summary Set Role Permissions
 // @Description Set permissions for a specified role. The caller can add permissions it owns to any role.
 // @Description If the caller tries to add a permission it doesn't own to a role, `StatusBadRequest` will be returned.
@@ -23,23 +24,23 @@ import (
 // @Accept json
 // @Produce json
 // @Param roleId path string true "Role ID"
-// @Param body body usertypes.SetRolePermissionsRequest true "Set Role Permissions Request"
-// @Success 200 {object} usertypes.SetRolePermissionsResponse
-// @Failure 400 {object} usertypes.ErrorResponse "Invalid JSON"
-// @Failure 401 {object} usertypes.ErrorResponse "Unauthorized"
-// @Failure 500 {object} usertypes.ErrorResponse "Internal Server Error"
+// @Param body body user.SetRolePermissionsRequest true "Set Role Permissions Request"
+// @Success 200 {object} user.SetRolePermissionsResponse
+// @Failure 400 {object} user.ErrorResponse "Invalid JSON"
+// @Failure 401 {object} user.ErrorResponse "Unauthorized"
+// @Failure 500 {object} user.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
 // @Router /user-svc/role/{roleId}/permissions [put]
 func (s *UserService) SetRolePermissions(
 	w http.ResponseWriter,
 	r *http.Request) {
-	user, err := s.isAuthorized(r, usertypes.PermissionRoleEdit.Id, nil)
+	usr, err := s.isAuthorized(r, user.PermissionRoleEdit.Id, nil)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 
-	req := usertypes.SetRolePermissionsRequest{}
+	req := user.SetRolePermissionsRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
@@ -49,12 +50,12 @@ func (s *UserService) SetRolePermissions(
 
 	roleId := mux.Vars(r)["roleId"]
 
-	err = s.setRolePermissions(user.Id, roleId, req.PermissionIds)
+	err = s.setRolePermissions(usr.Id, roleId, req.PermissionIds)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	bs, _ := json.Marshal(usertypes.SetRolePermissionsResponse{})
+	bs, _ := json.Marshal(user.SetRolePermissionsResponse{})
 	w.Write(bs)
 }

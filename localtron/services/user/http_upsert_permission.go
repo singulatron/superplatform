@@ -13,11 +13,11 @@ import (
 	"strings"
 
 	"github.com/gorilla/mux"
-	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
+	user "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
 // UpsertPermission handles the creation or update of a permission
-//
+// @ID upsertPermission
 // @Summary Upsert a Permission
 // @Description Creates or updates a permission.
 // @Description <b>The permission ID must be prefixed by the callers username (email).</b>
@@ -29,8 +29,8 @@ import (
 // @Accept json
 // @Produce json
 // @Param permissionId path string true "Permission ID"
-// @Param requestBody body usertypes.UpserPermissionRequest true "Permission Details"
-// @Success 200 {object} usertypes.CreateUserResponse
+// @Param requestBody body user.UpserPermissionRequest true "Permission Details"
+// @Success 200 {object} user.CreateUserResponse
 // @Failure 400 {string} string "Bad Request: Invalid JSON or Bad Namespace"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
@@ -41,13 +41,13 @@ func (s *UserService) UpsertPermission(
 	r *http.Request,
 ) {
 	// @todo add proper permission here
-	usr, err := s.isAuthorized(r, usertypes.PermissionPermissionCreate.Id, nil)
+	usr, err := s.isAuthorized(r, user.PermissionPermissionCreate.Id, nil)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 
-	req := usertypes.UpserPermissionRequest{}
+	req := user.UpserPermissionRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
@@ -68,6 +68,6 @@ func (s *UserService) UpsertPermission(
 		return
 	}
 
-	bs, _ := json.Marshal(usertypes.CreateUserResponse{})
+	bs, _ := json.Marshal(user.CreateUserResponse{})
 	w.Write(bs)
 }
