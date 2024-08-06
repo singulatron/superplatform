@@ -1058,6 +1058,7 @@ paths:
       consumes:
       - application/json
       description: Delete a specific message from a chat thread by its ID
+      operationId: deleteMessage
       parameters:
       - description: Message ID
         in: path
@@ -1096,6 +1097,7 @@ paths:
       description: |-
         Create a new chat thread and add the requesting user to it.
         Requires the `chat-svc:thread:create` permission.
+      operationId: addThread
       parameters:
       - description: Add Thread Request
         in: body
@@ -1132,6 +1134,7 @@ paths:
       consumes:
       - application/json
       description: Delete a specific chat thread by its ID
+      operationId: deleteThread
       parameters:
       - description: Thread ID
         in: path
@@ -1167,6 +1170,7 @@ paths:
       consumes:
       - application/json
       description: Fetch information about a specific chat thread by its ID
+      operationId: getThread
       parameters:
       - description: Thread ID
         in: path
@@ -1201,6 +1205,7 @@ paths:
       consumes:
       - application/json
       description: Modify the details of a specific chat thread
+      operationId: updateThread
       parameters:
       - description: Thread ID
         in: path
@@ -1242,6 +1247,7 @@ paths:
       consumes:
       - application/json
       description: Add a new message to a specific thread.
+      operationId: addMessage
       parameters:
       - description: Thread ID
         in: path
@@ -1284,6 +1290,7 @@ paths:
       consumes:
       - application/json
       description: Fetch messages (and associated assets) for a specific chat thread.
+      operationId: getMessages
       parameters:
       - description: Thread ID
         in: path
@@ -1319,6 +1326,7 @@ paths:
       consumes:
       - application/json
       description: Fetch all chat threads associated with a specific user
+      operationId: getThreads
       parameters:
       - description: Get Threads Request
         in: body
@@ -1355,6 +1363,7 @@ paths:
       consumes:
       - application/json
       description: Fetch the current configuration from the server
+      operationId: getConfig
       parameters:
       - description: Get Config Request
         in: body
@@ -1387,6 +1396,7 @@ paths:
       consumes:
       - application/json
       description: Save the provided configuration to the server
+      operationId: saveConfig
       parameters:
       - description: Save Config Request
         in: body
@@ -1422,6 +1432,7 @@ paths:
         Launches a Docker container with the specified parameters.
 
         Requires the `docker-svc:docker:create` permission.
+      operationId: launchContainer
       parameters:
       - description: Launch Container Request
         in: body
@@ -1458,6 +1469,7 @@ paths:
       consumes:
       - application/json
       description: Check if a Docker container identified by the hash is running
+      operationId: isRunning
       parameters:
       - description: Container Hash
         in: path
@@ -1494,6 +1506,7 @@ paths:
       - application/json
       description: Get a summary of the Docker container identified by the hash, limited
         to a specified number of lines
+      operationId: getContainerSummary
       parameters:
       - description: Container Hash
         in: path
@@ -1534,6 +1547,7 @@ paths:
       consumes:
       - application/json
       description: Retrieve information about the Docker host
+      operationId: getHost
       produces:
       - application/json
       responses:
@@ -1559,6 +1573,7 @@ paths:
       consumes:
       - application/json
       description: Retrieve detailed information about the Docker service
+      operationId: getInfo
       produces:
       - application/json
       responses:
@@ -1587,6 +1602,7 @@ paths:
         Start a download for a specified URL.
 
         Requires the `download-svc:download:create` permission.
+      operationId: download
       parameters:
       - description: Download Request
         in: body
@@ -1662,6 +1678,7 @@ paths:
         Pause a download that is currently in progress.
 
         Requires the `download-svc:download:edit` permission.
+      operationId: pause
       parameters:
       - description: Download ID
         in: path
@@ -1701,6 +1718,7 @@ paths:
         Fetch a list of all download details.
 
         Requires the `download-svc:download:view` permission.
+      operationId: listDownloads
       produces:
       - application/json
       responses:
@@ -1975,7 +1993,40 @@ paths:
       summary: Update Generic Objects
       tags:
       - Generic Service
-  /model-svc/{id}/status:
+  /model-svc/default/start:
+    put:
+      consumes:
+      - application/json
+      description: |-
+        Starts The Default Model.
+
+        Requires the `model-svc:model:create` permission.
+      operationId: startDefaultModel
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/modeltypes.StartResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/modeltypes.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/modeltypes.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/modeltypes.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Start the Default Model
+      tags:
+      - Model Service
+  /model-svc/model/{id}/status:
     get:
       consumes:
       - application/json
@@ -1983,6 +2034,7 @@ paths:
         Retrieves the status of a model by ID.
 
         Requires the `model-svc:model:view` permission.
+      operationId: getModelStatus
       parameters:
       - description: Model ID
         in: path
@@ -2009,7 +2061,7 @@ paths:
       summary: Get Model Status
       tags:
       - Model Service
-  /model-svc/{modelId}:
+  /model-svc/model/{modelId}:
     get:
       consumes:
       - application/json
@@ -2017,6 +2069,7 @@ paths:
         Retrieves the details of a model by its ID.
 
         the Requires `model.view` permission.
+      operationId: getModel
       parameters:
       - description: Model ID
         in: path
@@ -2043,12 +2096,13 @@ paths:
       summary: Get a Model
       tags:
       - Model Service
-  /model-svc/{modelId}/make-default:
+  /model-svc/model/{modelId}/make-default:
     put:
       consumes:
       - application/json
       description: Sets a model as the default model — when prompts are sent without
         a Model ID, the default model is used.
+      operationId: makeDefault
       parameters:
       - description: Model ID
         in: path
@@ -2079,11 +2133,12 @@ paths:
       summary: Make a Model Default
       tags:
       - Model Service
-  /model-svc/{modelId}/start:
+  /model-svc/model/{modelId}/start:
     put:
       consumes:
       - application/json
       description: Starts a model by ID
+      operationId: startModel
       parameters:
       - description: Model ID
         in: path
@@ -2114,38 +2169,6 @@ paths:
       summary: Start a Model
       tags:
       - Model Service
-  /model-svc/default/start:
-    put:
-      consumes:
-      - application/json
-      description: |-
-        Starts The Default Model.
-
-        Requires the `model-svc:model:create` permission.
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/modeltypes.StartResponse'
-        "400":
-          description: Invalid JSON
-          schema:
-            $ref: '#/definitions/modeltypes.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/modeltypes.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/modeltypes.ErrorResponse'
-      security:
-      - BearerAuth: []
-      summary: Start the Default Model
-      tags:
-      - Model Service
   /model-svc/models:
     get:
       consumes:
@@ -2153,6 +2176,7 @@ paths:
       description: |-
         Retrieves a list of models after checking authorization
         Requires "model.view" permission.
+      operationId: listModels
       produces:
       - application/json
       responses:
@@ -2176,6 +2200,7 @@ paths:
   /prompt-svc/{threadId}/subscribe:
     get:
       description: Subscribe to prompt responses via Server-Sent Events (SSE)
+      operationId: subscribe
       parameters:
       - description: Thread ID
         in: path
@@ -2203,6 +2228,7 @@ paths:
       consumes:
       - application/json
       description: List prompts that satisfy a query.
+      operationId: getPrompts
       parameters:
       - description: List Prompts Request
         in: body
@@ -2237,6 +2263,7 @@ paths:
       - application/json
       description: Adds a new prompt to the prompt queue and either waits for the
         response (if `sync` is set to true), or returns immediately.
+      operationId: addPrompt
       parameters:
       - description: Add Prompt Request
         in: body
@@ -2271,6 +2298,7 @@ paths:
       consumes:
       - application/json
       description: Remove a prompt by ID.
+      operationId: removePrompt
       parameters:
       - description: Remove Prompt Request
         in: body
@@ -2305,6 +2333,7 @@ paths:
       consumes:
       - application/json
       description: Allows an authenticated user to change their own password.
+      operationId: changePassword
       parameters:
       - description: Change Password Request
         in: body
@@ -2341,6 +2370,7 @@ paths:
       consumes:
       - application/json
       description: Allows an administrator to change a user's password.
+      operationId: changePasswordAdmin
       parameters:
       - description: Change Password Request
         in: body
@@ -2377,6 +2407,7 @@ paths:
       consumes:
       - application/json
       description: Authenticates a user and returns a token.
+      operationId: login
       parameters:
       - description: Login Request
         in: body
@@ -2412,6 +2443,7 @@ paths:
         Eg. if the owner's email/username is `petstore-svc` the permission should look like `petstore-svc:pet:edit`.
 
         Requires the `user-svc:permission:create` permission.
+      operationId: upsertPermission
       parameters:
       - description: Permission ID
         in: path
@@ -2453,6 +2485,7 @@ paths:
       consumes:
       - application/json
       description: Check if a user is authorized for a specific permission.
+      operationId: isAuthorized
       parameters:
       - description: Permission ID
         in: path
@@ -2490,6 +2523,7 @@ paths:
       consumes:
       - application/json
       description: Get the public key to descrypt the JWT.
+      operationId: getPublicKey
       produces:
       - application/json
       responses:
@@ -2513,6 +2547,7 @@ paths:
       consumes:
       - application/json
       description: Register a new user with a name, email, and password.
+      operationId: register
       parameters:
       - description: Register Request
         in: body
@@ -2549,6 +2584,7 @@ paths:
         The user account who creates the role will become the owner of that role, and only the owner will be able to edit the role.
 
         Requires the `user-svc:role:create` permission.
+      operationId: createRole
       parameters:
       - description: Create Role Request
         in: body
@@ -2585,6 +2621,7 @@ paths:
       consumes:
       - application/json
       description: Delete a role based on the role ID.
+      operationId: deleteRole
       parameters:
       - description: Role ID
         in: path
@@ -2623,6 +2660,7 @@ paths:
         Adds a specific permission to a role identified by roleId.
 
         Requires the `user-svc:permission:assign` permission.
+      operationId: addPermissionToRole
       parameters:
       - description: Role ID
         in: path
@@ -2659,6 +2697,7 @@ paths:
       consumes:
       - application/json
       description: Retrieve permissions associated with a specific role ID.
+      operationId: getPermissionsByRole
       parameters:
       - description: Role ID
         in: path
@@ -2695,6 +2734,7 @@ paths:
       description: |-
         Set permissions for a specified role. The caller can add permissions it owns to any role.
         If the caller tries to add a permission it doesn't own to a role, `StatusBadRequest` will be returned.
+      operationId: setRolePermission
       parameters:
       - description: Role ID
         in: path
@@ -2736,6 +2776,7 @@ paths:
       consumes:
       - application/json
       description: Retrieve all roles from the user service.
+      operationId: getRoles
       produces:
       - application/json
       responses:
@@ -2762,6 +2803,7 @@ paths:
       - application/json
       description: Allows an authenticated administrator to create a new user with
         specified details.
+      operationId: createUser
       parameters:
       - description: Create User Request
         in: body
@@ -2798,6 +2840,7 @@ paths:
       consumes:
       - application/json
       description: Delete a user based on the user ID.
+      operationId: deleteUser
       parameters:
       - description: User ID
         in: path
@@ -2829,6 +2872,7 @@ paths:
       consumes:
       - application/json
       description: Retrieve user information based on an authentication token.
+      operationId: getUserByToken
       parameters:
       - description: Read User By Token Request
         in: body
@@ -2861,6 +2905,7 @@ paths:
       consumes:
       - application/json
       description: Fetches a list of users with optional query filters and pagination.
+      operationId: getUsers
       parameters:
       - description: Get Users Request
         in: body

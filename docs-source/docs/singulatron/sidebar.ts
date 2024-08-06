@@ -12,7 +12,7 @@ const sidebar: SidebarsConfig = {
       items: [
         {
           type: "doc",
-          id: "singulatron/delete-a-message",
+          id: "singulatron/delete-message",
           label: "Delete a Message",
           className: "api-method delete",
         },
@@ -24,7 +24,7 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
-          id: "singulatron/delete-a-thread",
+          id: "singulatron/delete-thread",
           label: "Delete a Thread",
           className: "api-method delete",
         },
@@ -48,7 +48,7 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
-          id: "singulatron/list-messages",
+          id: "singulatron/get-messages",
           label: "List Messages",
           className: "api-method post",
         },
@@ -84,13 +84,13 @@ const sidebar: SidebarsConfig = {
       items: [
         {
           type: "doc",
-          id: "singulatron/launch-a-docker-container",
+          id: "singulatron/launch-container",
           label: "Launch a Docker Container",
           className: "api-method put",
         },
         {
           type: "doc",
-          id: "singulatron/check-if-a-container-is-running",
+          id: "singulatron/is-running",
           label: "Check If a Container Is Running",
           className: "api-method get",
         },
@@ -102,13 +102,13 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
-          id: "singulatron/get-docker-host",
+          id: "singulatron/get-host",
           label: "Get Docker Host",
           className: "api-method get",
         },
         {
           type: "doc",
-          id: "singulatron/get-docker-service-information",
+          id: "singulatron/get-info",
           label: "Get Docker Service Information",
           className: "api-method get",
         },
@@ -120,19 +120,19 @@ const sidebar: SidebarsConfig = {
       items: [
         {
           type: "doc",
-          id: "singulatron/download-a-file",
+          id: "singulatron/download",
           label: "Download a File",
           className: "api-method put",
         },
         {
           type: "doc",
-          id: "singulatron/get-a-download",
+          id: "singulatron/get-download",
           label: "Get a Download",
           className: "api-method get",
         },
         {
           type: "doc",
-          id: "singulatron/pause-a-download",
+          id: "singulatron/pause",
           label: "Pause a Download",
           className: "api-method put",
         },
@@ -204,32 +204,32 @@ const sidebar: SidebarsConfig = {
       items: [
         {
           type: "doc",
+          id: "singulatron/start-default-model",
+          label: "Start the Default Model",
+          className: "api-method put",
+        },
+        {
+          type: "doc",
           id: "singulatron/get-model-status",
           label: "Get Model Status",
           className: "api-method get",
         },
         {
           type: "doc",
-          id: "singulatron/get-a-model",
+          id: "singulatron/get-model",
           label: "Get a Model",
           className: "api-method get",
         },
         {
           type: "doc",
-          id: "singulatron/make-a-model-default",
+          id: "singulatron/make-default",
           label: "Make a Model Default",
           className: "api-method put",
         },
         {
           type: "doc",
-          id: "singulatron/start-a-model",
+          id: "singulatron/start-model",
           label: "Start a Model",
-          className: "api-method put",
-        },
-        {
-          type: "doc",
-          id: "singulatron/start-the-default-model",
-          label: "Start the Default Model",
           className: "api-method put",
         },
         {
@@ -246,13 +246,13 @@ const sidebar: SidebarsConfig = {
       items: [
         {
           type: "doc",
-          id: "singulatron/subscribe-to-prompt",
+          id: "singulatron/subscribe",
           label: "Subscribe to Prompt",
           className: "api-method get",
         },
         {
           type: "doc",
-          id: "singulatron/list-prompts",
+          id: "singulatron/get-prompts",
           label: "List Prompts",
           className: "api-method post",
         },
@@ -276,13 +276,13 @@ const sidebar: SidebarsConfig = {
       items: [
         {
           type: "doc",
-          id: "singulatron/change-user-password",
+          id: "singulatron/change-password",
           label: "Change User Password",
           className: "api-method post",
         },
         {
           type: "doc",
-          id: "singulatron/change-user-password-admin",
+          id: "singulatron/change-password-admin",
           label: "Change User Password (Admin)",
           className: "api-method post",
         },
@@ -294,7 +294,7 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
-          id: "singulatron/upsert-a-permission",
+          id: "singulatron/upsert-permission",
           label: "Upsert a Permission",
           className: "api-method put",
         },
@@ -306,25 +306,25 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
-          id: "singulatron/ge-public-key",
+          id: "singulatron/get-public-key",
           label: "Ge Public Key",
           className: "api-method get",
         },
         {
           type: "doc",
-          id: "singulatron/register-a-new-user",
+          id: "singulatron/register",
           label: "Register a New User",
           className: "api-method post",
         },
         {
           type: "doc",
-          id: "singulatron/create-a-new-role",
+          id: "singulatron/create-role",
           label: "Create a New Role",
           className: "api-method post",
         },
         {
           type: "doc",
-          id: "singulatron/delete-a-role",
+          id: "singulatron/delete-role",
           label: "Delete a Role",
           className: "api-method delete",
         },
@@ -342,37 +342,37 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
-          id: "singulatron/set-role-permissions",
+          id: "singulatron/set-role-permission",
           label: "Set Role Permissions",
           className: "api-method put",
         },
         {
           type: "doc",
-          id: "singulatron/get-all-roles",
+          id: "singulatron/get-roles",
           label: "Get all Roles",
           className: "api-method get",
         },
         {
           type: "doc",
-          id: "singulatron/create-a-new-user",
+          id: "singulatron/create-user",
           label: "Create a New User",
           className: "api-method post",
         },
         {
           type: "doc",
-          id: "singulatron/delete-a-user",
+          id: "singulatron/delete-user",
           label: "Delete a User",
           className: "api-method delete",
         },
         {
           type: "doc",
-          id: "singulatron/read-user-by-token",
+          id: "singulatron/get-user-by-token",
           label: "Read User by Token",
           className: "api-method post",
         },
         {
           type: "doc",
-          id: "singulatron/list-users",
+          id: "singulatron/get-users",
           label: "List Users",
           className: "api-method post",
         },

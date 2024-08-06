@@ -1,0 +1,323 @@
+---
+id: get-info
+title: "Get Docker Service Information"
+description: "Retrieve detailed information about the Docker service"
+sidebar_label: "Get Docker Service Information"
+hide_title: true
+hide_table_of_contents: true
+api: eJy9VE1v00AQ/SurObt2aEFCPlEEVBFIVLQ9oJLDxJ7YS9e7y+w6IVj+72j8QdLQXjhwSaz5njfvbQclhYK1j9pZyOELRda0JVVSRG2oVNpuHDcofoVr10YVa1LvXPFArALxVhcECThPPAQtS8ihori0GwcJMAXvbKAAeQfni4X8PW55M9ZQy0MjSKBwNpKNEo7eG10Mjux7kJwOQlFTg/LlWVpHPXaQaf+2lsO075AaZy/LkikM5rj3BDmEyNpW0CdAzI6f9NQYxpWPvGvnDKGFvk9mk1t/pyI+aRHby8WLv/e/s9jG2rH+ReW/L/7c6M9M8uqpSyxtJLZolJyEWL0fav6fkfoEAhUt67iH/L6Dt4RMfNnGGvL7Vb9KIGIVIL+HiXoTbWCVQEOxdhPtIAGPkgTZePWzsC0yPZIxDHuFoUHLRoIy4wo0tQsxf/X6/OIFSKt5khvZbFzmeJ5T3G73ntS3KeQbqI0zxu2oVOu9QhU8FqTQliq6B7IKix+tZirVhl0ziOkuiJRmHXxylbaKbOmdtjGFBLQ0qQlLkmtYbAS7y4k0s2AmSNHrj7QfQJ61IOfDYjgfNahl7YCGwpugbdUajOxsWrjmqPb1Ut203jsWPEek6hh9nmWh9cTeYBSxpqgzUcfJG9LaYd2StmScV4HM5kwQplJdLhV6H1L11bWsPLuKsWlwbUhpe1a7NpC6ur5N1W1N6oNmWmMgtXE8ACXZFQkkRhdkA8lO88xX15/U9iJdPJo45Fm22+3Syrap4yqb8kKGlTdnF+kirWNjZIdI3ITPm5lWh4V3WFXEqXbZEJIJ1joaCbk5AAgJCLVGBBbpuZT0LsQG7dGQVxTVY/6ePHuPkOwOyvv3h3niRaSfMfMGtZXJBoC6SSn3cFAKTLRZJSAXE2fXyQ3u2PS9mH+0xCLRVQJbZC2nGxSazAwVcT3QXk5SFOSFQVs07UjOk9ejP1bv1ftbSAAniR34LMWS+UOqzy67P6p9qodxBPntk2dSum5US9//iR9dz2b8EeEYLWCu+r7/DU8ugkc=
+sidebar_class_name: "get api-method"
+info_path: docs/singulatron/singulatron
+custom_edit_url: null
+---
+
+import ApiTabs from "@theme/ApiTabs";
+import DiscriminatorTabs from "@theme/DiscriminatorTabs";
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import SecuritySchemes from "@theme/ApiExplorer/SecuritySchemes";
+import MimeTabs from "@theme/MimeTabs";
+import ParamsItem from "@theme/ParamsItem";
+import ResponseSamples from "@theme/ResponseSamples";
+import SchemaItem from "@theme/SchemaItem";
+import SchemaTabs from "@theme/SchemaTabs";
+import Markdown from "@theme/Markdown";
+import Heading from "@theme/Heading";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Get Docker Service Information"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/docker-svc/info"}
+>
+  
+</MethodEndpoint>
+
+
+
+Retrieve detailed information about the Docker service
+
+<div>
+  <div>
+    <ApiTabs
+      label={undefined}
+      id={undefined}
+    >
+      <TabItem
+        label={"200"}
+        value={"200"}
+      >
+        <div>
+          
+          
+          Service Information
+          
+          
+        </div><div>
+          <MimeTabs
+            className={"openapi-tabs__mime"}
+            schemaType={"response"}
+          >
+            <TabItem
+              label={"application/json"}
+              value={"application/json"}
+            >
+              <SchemaTabs
+                className={"openapi-tabs__schema"}
+              >
+                <TabItem
+                  label={"Schema"}
+                  value={"Schema"}
+                >
+                  <details
+                    style={{}}
+                    className={"openapi-markdown__details response"}
+                    data-collapsed={false}
+                    open={true}
+                  >
+                    <summary
+                      style={{}}
+                      className={"openapi-markdown__details-summary-response"}
+                    >
+                      <strong>
+                        Schema
+                      </strong>
+                    </summary><div
+                      style={{"textAlign":"left","marginLeft":"1rem"}}
+                    >
+                      
+                    </div><ul
+                      style={{"marginLeft":"1rem"}}
+                    >
+                      <SchemaItem
+                        collapsible={true}
+                        className={"schemaItem"}
+                      >
+                        <details
+                          style={{}}
+                          className={"openapi-markdown__details"}
+                        >
+                          <summary
+                            style={{}}
+                          >
+                            <span
+                              className={"openapi-schema__container"}
+                            >
+                              <strong
+                                className={"openapi-schema__property"}
+                              >
+                                info
+                              </strong><span
+                                className={"openapi-schema__name"}
+                              >
+                                 object
+                              </span>
+                            </span>
+                          </summary><div
+                            style={{"marginLeft":"1rem"}}
+                          >
+                            <SchemaItem
+                              collapsible={false}
+                              name={"dockerDaemonAddress"}
+                              required={false}
+                              schemaName={"string"}
+                              qualifierMessage={undefined}
+                              schema={{"type":"string"}}
+                            >
+                              
+                            </SchemaItem><SchemaItem
+                              collapsible={false}
+                              name={"error"}
+                              required={false}
+                              schemaName={"string"}
+                              qualifierMessage={undefined}
+                              schema={{"type":"string"}}
+                            >
+                              
+                            </SchemaItem><SchemaItem
+                              collapsible={false}
+                              name={"hasDocker"}
+                              required={false}
+                              schemaName={"boolean"}
+                              qualifierMessage={undefined}
+                              schema={{"type":"boolean"}}
+                            >
+                              
+                            </SchemaItem>
+                          </div>
+                        </details>
+                      </SchemaItem>
+                    </ul>
+                  </details>
+                </TabItem><TabItem
+                  label={"Example (from schema)"}
+                  value={"Example (from schema)"}
+                >
+                  <ResponseSamples
+                    responseExample={"{\n  \"info\": {\n    \"dockerDaemonAddress\": \"string\",\n    \"error\": \"string\",\n    \"hasDocker\": true\n  }\n}"}
+                    language={"json"}
+                  >
+                    
+                  </ResponseSamples>
+                </TabItem>
+              </SchemaTabs>
+            </TabItem>
+          </MimeTabs>
+        </div>
+      </TabItem><TabItem
+        label={"401"}
+        value={"401"}
+      >
+        <div>
+          
+          
+          Unauthorized
+          
+          
+        </div><div>
+          <MimeTabs
+            className={"openapi-tabs__mime"}
+            schemaType={"response"}
+          >
+            <TabItem
+              label={"application/json"}
+              value={"application/json"}
+            >
+              <SchemaTabs
+                className={"openapi-tabs__schema"}
+              >
+                <TabItem
+                  label={"Schema"}
+                  value={"Schema"}
+                >
+                  <details
+                    style={{}}
+                    className={"openapi-markdown__details response"}
+                    data-collapsed={false}
+                    open={true}
+                  >
+                    <summary
+                      style={{}}
+                      className={"openapi-markdown__details-summary-response"}
+                    >
+                      <strong>
+                        Schema
+                      </strong>
+                    </summary><div
+                      style={{"textAlign":"left","marginLeft":"1rem"}}
+                    >
+                      
+                    </div><ul
+                      style={{"marginLeft":"1rem"}}
+                    >
+                      <SchemaItem
+                        collapsible={false}
+                        name={"error"}
+                        required={false}
+                        schemaName={"string"}
+                        qualifierMessage={undefined}
+                        schema={{"type":"string"}}
+                      >
+                        
+                      </SchemaItem>
+                    </ul>
+                  </details>
+                </TabItem><TabItem
+                  label={"Example (from schema)"}
+                  value={"Example (from schema)"}
+                >
+                  <ResponseSamples
+                    responseExample={"{\n  \"error\": \"string\"\n}"}
+                    language={"json"}
+                  >
+                    
+                  </ResponseSamples>
+                </TabItem>
+              </SchemaTabs>
+            </TabItem>
+          </MimeTabs>
+        </div>
+      </TabItem><TabItem
+        label={"500"}
+        value={"500"}
+      >
+        <div>
+          
+          
+          Internal Server Error
+          
+          
+        </div><div>
+          <MimeTabs
+            className={"openapi-tabs__mime"}
+            schemaType={"response"}
+          >
+            <TabItem
+              label={"application/json"}
+              value={"application/json"}
+            >
+              <SchemaTabs
+                className={"openapi-tabs__schema"}
+              >
+                <TabItem
+                  label={"Schema"}
+                  value={"Schema"}
+                >
+                  <details
+                    style={{}}
+                    className={"openapi-markdown__details response"}
+                    data-collapsed={false}
+                    open={true}
+                  >
+                    <summary
+                      style={{}}
+                      className={"openapi-markdown__details-summary-response"}
+                    >
+                      <strong>
+                        Schema
+                      </strong>
+                    </summary><div
+                      style={{"textAlign":"left","marginLeft":"1rem"}}
+                    >
+                      
+                    </div><ul
+                      style={{"marginLeft":"1rem"}}
+                    >
+                      <SchemaItem
+                        collapsible={false}
+                        name={"error"}
+                        required={false}
+                        schemaName={"string"}
+                        qualifierMessage={undefined}
+                        schema={{"type":"string"}}
+                      >
+                        
+                      </SchemaItem>
+                    </ul>
+                  </details>
+                </TabItem><TabItem
+                  label={"Example (from schema)"}
+                  value={"Example (from schema)"}
+                >
+                  <ResponseSamples
+                    responseExample={"{\n  \"error\": \"string\"\n}"}
+                    language={"json"}
+                  >
+                    
+                  </ResponseSamples>
+                </TabItem>
+              </SchemaTabs>
+            </TabItem>
+          </MimeTabs>
+        </div>
+      </TabItem>
+    </ApiTabs>
+  </div>
+</div>
+      
