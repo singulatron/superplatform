@@ -29,17 +29,7 @@ func RegisterService(serviceEmail, serviceName string, router *router.Router, st
 		email = cred.Email
 		pw = cred.Password
 	} else {
-		logger.Info(fmt.Sprintf("Registering the %v service", serviceEmail))
-
 		pw = uuid.New().String()
-		err = router.Post(context.Background(), "user-svc", "/register", usertypes.RegisterRequest{
-			Email:    email,
-			Name:     serviceName,
-			Password: pw,
-		}, nil)
-		if err != nil {
-			return "", err
-		}
 		err = store.Upsert(&usertypes.Credential{
 			Email:    email,
 			Password: pw,
@@ -49,16 +39,35 @@ func RegisterService(serviceEmail, serviceName string, router *router.Router, st
 		}
 	}
 
-	rsp := usertypes.LoginResponse{}
+	loginRsp := usertypes.LoginResponse{}
 	err = router.Post(context.Background(), "user-svc", "/login", usertypes.LoginRequest{
 		Email:    email,
 		Password: pw,
-	}, &rsp)
+	}, &loginRsp)
+
 	if err != nil {
-		return "", err
+		logger.Info(fmt.Sprintf("Registering the %v service", serviceEmail))
+
+		err = router.Post(context.Background(), "user-svc", "/register", usertypes.RegisterRequest{
+			Email:    email,
+			Name:     serviceName,
+			Password: pw,
+		}, nil)
+		if err != nil {
+			return "", err
+		}
+
+		loginRsp = usertypes.LoginResponse{}
+		err = router.Post(context.Background(), "user-svc", "/login", usertypes.LoginRequest{
+			Email:    email,
+			Password: pw,
+		}, &loginRsp)
+		if err != nil {
+			return "", err
+		}
 	}
 
-	return rsp.Token.Token, nil
+	return loginRsp.Token.Token, nil
 }
 
 func RegisterUser(router *router.Router, email, password, username string) (string, error) {

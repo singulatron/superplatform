@@ -154,41 +154,26 @@ func (s *UserService) bootstrap() error {
 	_, err = s.register("singulatron", "changeme", "Admin", []string{
 		usertypes.RoleAdmin.Id,
 	})
-
-	res, err := s.credentialsStore.Query(datastore.All()).Find()
 	if err != nil {
 		return err
 	}
 
 	// bootstrapping service user
 
+	credentials, err := s.credentialsStore.Query(datastore.All()).Find()
+	if err != nil {
+		return err
+	}
+
 	email := "user-svc"
 	pw := ""
 
-	if len(res) > 0 {
-		cred := res[0].(*usertypes.Credential)
+	if len(credentials) > 0 {
+		cred := credentials[0].(*usertypes.Credential)
 		email = cred.Email
 		pw = cred.Password
-		tok, err := s.login(email, pw)
-		if err != nil {
-			return err
-		}
-		usr, err := s.readUserByToken(tok.Token)
-		if err != nil {
-			return err
-		}
-		s.serviceUserId = usr.Id
 	} else {
-		logger.Info(fmt.Sprintf("Registering the %v service", email))
-
 		pw = uuid.New().String()
-		usr, err := s.register(email, pw,
-			"User Service", []string{
-				usertypes.RoleUser.Id,
-			})
-		if err != nil {
-			return err
-		}
 		err = s.credentialsStore.Upsert(&usertypes.Credential{
 			Email:    email,
 			Password: pw,
@@ -196,10 +181,29 @@ func (s *UserService) bootstrap() error {
 		if err != nil {
 			return err
 		}
+	}
+
+	tok, err := s.login(email, pw)
+	if err != nil {
+		logger.Info(fmt.Sprintf("Registering the %v service", email))
+
+		usr, err := s.register(email, pw,
+			"User Service", []string{
+				usertypes.RoleUser.Id,
+			})
+		if err != nil {
+			return err
+		}
+		s.serviceUserId = usr.Id
+	} else {
+		usr, err := s.readUserByToken(tok.Token)
+		if err != nil {
+			return err
+		}
 		s.serviceUserId = usr.Id
 	}
 
-	return err
+	return nil
 }
 
 func (s *UserService) registerRoles() error {

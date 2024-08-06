@@ -987,6 +987,8 @@ definitions:
         type: string
       name:
         type: string
+      ownerId:
+        type: string
       permissionIds:
         items:
           type: string
@@ -1093,7 +1095,7 @@ paths:
       - application/json
       description: |-
         Create a new chat thread and add the requesting user to it.
-        Requires the `thread.create` permission.
+        Requires the `chat-svc:thread:create` permission.
       parameters:
       - description: Add Thread Request
         in: body
@@ -1419,7 +1421,7 @@ paths:
       description: |-
         Launches a Docker container with the specified parameters.
 
-        Requires the `docker.create` permission.
+        Requires the `docker-svc:docker:create` permission.
       parameters:
       - description: Launch Container Request
         in: body
@@ -1584,7 +1586,7 @@ paths:
       description: |-
         Start a download for a specified URL.
 
-        Requires the `download.create` permission.
+        Requires the `download-svc:download:create` permission.
       parameters:
       - description: Download Request
         in: body
@@ -1624,7 +1626,7 @@ paths:
       description: |-
         Get a download by ID.
 
-        Requires the `download.view` permission.
+        Requires the `download-svc:download:view` permission.
       parameters:
       - description: Download ID
         in: path
@@ -1658,7 +1660,7 @@ paths:
       description: |-
         Pause a download that is currently in progress.
 
-        Requires the `download.edit` permission.
+        Requires the `download-svc:download:edit` permission.
       parameters:
       - description: Download ID
         in: path
@@ -1697,7 +1699,7 @@ paths:
       description: |-
         Fetch a list of all download details.
 
-        Requires the `download.view` permission.
+        Requires the `download-svc:download:view` permission.
       produces:
       - application/json
       responses:
@@ -1979,7 +1981,7 @@ paths:
       description: |-
         Retrieves the status of a model by ID.
 
-        Requires the `model.view` permission.
+        Requires the `model-svc:model:view` permission.
       parameters:
       - description: Model ID
         in: path
@@ -2118,7 +2120,7 @@ paths:
       description: |-
         Starts The Default Model.
 
-        Requires the `model.create` permission.
+        Requires the `model-svc:model:create` permission.
       produces:
       - application/json
       responses:
@@ -2405,8 +2407,10 @@ paths:
       - application/json
       description: |-
         Creates or updates a permission.
+        <b>The permission ID must be prefixed by the callers username (email).</b>
+        Eg. if the owner's email/username is `petstore-svc` the permission should look like `petstore-svc:pet:edit`.
 
-        Requires the `permission.create` permission.
+        Requires the `user-svc:permission:create` permission.
       parameters:
       - description: Permission ID
         in: path
@@ -2427,7 +2431,7 @@ paths:
           schema:
             $ref: '#/definitions/usertypes.CreateUserResponse'
         "400":
-          description: Bad Request
+          description: 'Bad Request: Invalid JSON or Bad Namespace'
           schema:
             type: string
         "401":
@@ -2539,8 +2543,11 @@ paths:
       - application/json
       description: |-
         Create a new role.
+        <b>The role ID must be prefixed by the callers username (email).</b>
+        Eg. if the owner's email/username is `petstore-svc` the role should look like `petstore-svc:admin`.
+        The user account who creates the role will become the owner of that role, and only the owner will be able to edit the role.
 
-        Requires the `role.create` permission.
+        Requires the `user-svc:role:create` permission.
       parameters:
       - description: Create Role Request
         in: body
@@ -2614,7 +2621,7 @@ paths:
       description: |-
         Adds a specific permission to a role identified by roleId.
 
-        Requires the `permission.assign` permission.
+        Requires the `user-svc:permission:assign` permission.
       parameters:
       - description: Role ID
         in: path
@@ -2684,7 +2691,9 @@ paths:
     put:
       consumes:
       - application/json
-      description: Set permissions for a specified role.
+      description: |-
+        Set permissions for a specified role. The caller can add permissions it owns to any role.
+        If the caller tries to add a permission it doesn't own to a role, `StatusBadRequest` will be returned.
       parameters:
       - description: Role ID
         in: path
