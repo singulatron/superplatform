@@ -11,12 +11,19 @@ import { FirehoseService } from './firehose.service';
 import { ReplaySubject } from 'rxjs';
 import { UserService } from './user.service';
 import { first } from 'rxjs';
-import { Config, ConfigGetResponse } from '@singulatron/types';
+import { Config } from '@singulatron/types';
+import {
+	ConfigSvcApi,
+	ConfigSvcGetConfigResponse,
+	Configuration,
+} from '@singulatron/client';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class ConfigService {
+	private configService!: ConfigSvcApi;
+
 	lastConfig!: Config;
 
 	onConfigUpdateSubject = new ReplaySubject<Config>(1);
@@ -31,6 +38,12 @@ export class ConfigService {
 		this.init();
 		this.userService.user$.pipe(first()).subscribe(() => {
 			this.loggedInInit();
+			this.configService = new ConfigSvcApi(
+				new Configuration({
+					basePath: this.localtron.addr(),
+					apiKey: this.localtron.token(),
+				})
+			);
 		});
 	}
 
@@ -39,7 +52,7 @@ export class ConfigService {
 			switch (event.name) {
 				case 'configUpdate': {
 					const rsp = await this.configGet();
-					this.onConfigUpdateSubject.next(rsp.config);
+					this.onConfigUpdateSubject.next(rsp.config!);
 					break;
 				}
 			}
@@ -49,7 +62,7 @@ export class ConfigService {
 	async loggedInInit() {
 		try {
 			const rsp = await this.configGet();
-			this.lastConfig = rsp?.config;
+			this.lastConfig = rsp?.config!;
 			this.onConfigUpdateSubject.next(rsp?.config as Config);
 		} catch (error) {
 			console.error('Error in pollConfig', {
@@ -58,7 +71,7 @@ export class ConfigService {
 		}
 	}
 
-	async configGet(): Promise<ConfigGetResponse> {
-		return await this.localtron.get('/config-svc/config');
+	async configGet(): Promise<ConfigSvcGetConfigResponse> {
+		return await this.configService.getConfig();
 	}
 }

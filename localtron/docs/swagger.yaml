@@ -143,8 +143,6 @@ definitions:
       downloadFolder:
         type: string
     type: object
-  config_svc.GetConfigRequest:
-    type: object
   config_svc.GetConfigResponse:
     properties:
       config:
@@ -650,6 +648,70 @@ definitions:
     properties:
       status:
         $ref: '#/definitions/model_svc.ModelStatus'
+    type: object
+  node_svc.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  node_svc.GPU:
+    properties:
+      busId:
+        type: string
+      computeMode:
+        type: string
+      gpuUtilization:
+        type: number
+      id:
+        description: Id Node.Hostname + IntraNodeId
+        type: string
+      intraNodeId:
+        type: integer
+      memoryTotal:
+        type: integer
+      memoryUsage:
+        type: integer
+      name:
+        type: string
+      performanceState:
+        type: string
+      powerCap:
+        type: number
+      powerUsage:
+        type: number
+      processDetails:
+        items:
+          $ref: '#/definitions/node_svc.Process'
+        type: array
+      temperature:
+        type: number
+    type: object
+  node_svc.ListNodesRequest:
+    type: object
+  node_svc.ListNodesResponse:
+    properties:
+      nodes:
+        items:
+          $ref: '#/definitions/node_svc.Node'
+        type: array
+    type: object
+  node_svc.Node:
+    properties:
+      gpus:
+        items:
+          $ref: '#/definitions/node_svc.GPU'
+        type: array
+      hostname:
+        type: string
+    type: object
+  node_svc.Process:
+    properties:
+      memoryUsage:
+        type: integer
+      pid:
+        type: integer
+      processName:
+        type: string
     type: object
   prompt_svc.AddPromptRequest:
     properties:
@@ -1367,19 +1429,12 @@ paths:
       summary: Get Threads
       tags:
       - Chat Svc
-  /config-svc/get:
-    post:
+  /config-svc/config:
+    get:
       consumes:
       - application/json
       description: Fetch the current configuration from the server
       operationId: getConfig
-      parameters:
-      - description: Get Config Request
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/config_svc.GetConfigRequest'
       produces:
       - application/json
       responses:
@@ -2241,6 +2296,42 @@ paths:
       summary: List Models
       tags:
       - Model Svc
+  /node-svc/nodes:
+    post:
+      consumes:
+      - application/json
+      description: Retrieve a list of nodes.
+      operationId: listNodes
+      parameters:
+      - description: List Nodes Request
+        in: body
+        name: body
+        schema:
+          $ref: '#/definitions/node_svc.ListNodesRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/node_svc.ListNodesResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/node_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/node_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/node_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: List Nodes
+      tags:
+      - Node Svc
   /prompt-svc/{threadId}/subscribe:
     get:
       description: Subscribe to prompt responses via Server-Sent Events (SSE)

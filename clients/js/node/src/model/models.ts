@@ -61,6 +61,11 @@ export * from './modelSvcModel';
 export * from './modelSvcModelStatus';
 export * from './modelSvcPlatform';
 export * from './modelSvcStatusResponse';
+export * from './nodeSvcErrorResponse';
+export * from './nodeSvcGPU';
+export * from './nodeSvcListNodesResponse';
+export * from './nodeSvcNode';
+export * from './nodeSvcProcess';
 export * from './promptSvcAddPromptRequest';
 export * from './promptSvcAddPromptResponse';
 export * from './promptSvcErrorResponse';
@@ -169,6 +174,11 @@ import { ModelSvcModel } from './modelSvcModel';
 import { ModelSvcModelStatus } from './modelSvcModelStatus';
 import { ModelSvcPlatform } from './modelSvcPlatform';
 import { ModelSvcStatusResponse } from './modelSvcStatusResponse';
+import { NodeSvcErrorResponse } from './nodeSvcErrorResponse';
+import { NodeSvcGPU } from './nodeSvcGPU';
+import { NodeSvcListNodesResponse } from './nodeSvcListNodesResponse';
+import { NodeSvcNode } from './nodeSvcNode';
+import { NodeSvcProcess } from './nodeSvcProcess';
 import { PromptSvcAddPromptRequest } from './promptSvcAddPromptRequest';
 import { PromptSvcAddPromptResponse } from './promptSvcAddPromptResponse';
 import { PromptSvcErrorResponse } from './promptSvcErrorResponse';
@@ -281,6 +291,11 @@ let typeMap: {[index: string]: any} = {
     "ModelSvcModelStatus": ModelSvcModelStatus,
     "ModelSvcPlatform": ModelSvcPlatform,
     "ModelSvcStatusResponse": ModelSvcStatusResponse,
+    "NodeSvcErrorResponse": NodeSvcErrorResponse,
+    "NodeSvcGPU": NodeSvcGPU,
+    "NodeSvcListNodesResponse": NodeSvcListNodesResponse,
+    "NodeSvcNode": NodeSvcNode,
+    "NodeSvcProcess": NodeSvcProcess,
     "PromptSvcAddPromptRequest": PromptSvcAddPromptRequest,
     "PromptSvcAddPromptResponse": PromptSvcAddPromptResponse,
     "PromptSvcErrorResponse": PromptSvcErrorResponse,

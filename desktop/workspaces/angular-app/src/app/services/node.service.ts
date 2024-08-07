@@ -7,52 +7,38 @@
  */
 import { Injectable } from '@angular/core';
 import { LocaltronService } from './localtron.service';
+import {
+	NodeSvcApi,
+	NodeSvcListNodesResponse,
+	Configuration,
+} from '@singulatron/client';
+import { UserService } from './user.service';
+import { first } from 'rxjs';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class NodeService {
-	constructor(private localtron: LocaltronService) {}
+	private nodeService!: NodeSvcApi;
 
-	async nodesList(): Promise<ListNodesResponse> {
-		return this.localtron.get('/node-svc/nodes');
+	constructor(
+		private localtron: LocaltronService,
+		private userService: UserService
+	) {
+		this.userService.user$.pipe(first()).subscribe(() => {
+			this.init();
+			this.nodeService = new NodeSvcApi(
+				new Configuration({
+					basePath: this.localtron.addr(),
+					apiKey: this.localtron.token(),
+				})
+			);
+		});
 	}
-}
 
-export interface GPU {
-	id: string;
-	intraNodeId: number;
-	name: string;
-	busId: string;
-	temperature: number;
-	performanceState: string;
-	powerUsage: number;
-	powerCap: number;
-	memoryUsage: number;
-	memoryTotal: number;
-	gpuUtilization: number;
-	computeMode: string;
-	processDetails?: Process[];
-}
+	async nodesList(): Promise<NodeSvcListNodesResponse> {
+		return this.nodeService.listNodes({});
+	}
 
-export interface Process {
-	pid: number;
-	processName: string;
-	nemoryUsage: number;
-}
-
-export interface Node {
-	hostname: string;
-	gpus: GPU[];
-}
-
-export interface Cluster {
-	nodes: Node[];
-}
-
-// eslint-disable-next-line
-export interface ListNodesRequest {}
-
-export interface ListNodesResponse {
-	nodes: Node[];
+	async init() {}
 }

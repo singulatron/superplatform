@@ -11,9 +11,6 @@
  */
 import * as runtime from '../runtime';
 import type { ConfigSvcGetConfigResponse, ConfigSvcSaveConfigRequest } from '../models/index';
-export interface GetConfigRequest {
-    request: object;
-}
 export interface SaveConfigRequest {
     request: ConfigSvcSaveConfigRequest;
 }
@@ -25,12 +22,12 @@ export declare class ConfigSvcApi extends runtime.BaseAPI {
      * Fetch the current configuration from the server
      * Get Config
      */
-    getConfigRaw(requestParameters: GetConfigRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ConfigSvcGetConfigResponse>>;
+    getConfigRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ConfigSvcGetConfigResponse>>;
     /**
      * Fetch the current configuration from the server
      * Get Config
      */
-    getConfig(requestParameters: GetConfigRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ConfigSvcGetConfigResponse>;
+    getConfig(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ConfigSvcGetConfigResponse>;
     /**
      * Save the provided configuration to the server
      * Save Config

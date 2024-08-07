@@ -17,22 +17,22 @@ export interface CompletionChoice {
 	index: number;
 	logprobs: any;
 	finish_reason: string;
-  }
-  
-  export interface CompletionUsage {
+}
+
+export interface CompletionUsage {
 	prompt_tokens: number;
 	completion_tokens: number;
 	total_tokens: number;
-  }
-  
-  export interface CompletionResponse {
+}
+
+export interface CompletionResponse {
 	id: string;
 	object: string;
 	created: number;
 	model: string;
 	choices: CompletionChoice[];
 	usage: CompletionUsage;
-  }
+}
 
 import {
 	PromptSvcApi,

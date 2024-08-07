@@ -7,5 +7,6 @@ export * from './DownloadSvcApi';
 export * from './FirehoseSvcApi';
 export * from './GenericSvcApi';
 export * from './ModelSvcApi';
+export * from './NodeSvcApi';
 export * from './PromptSvcApi';
 export * from './UserSvcApi';

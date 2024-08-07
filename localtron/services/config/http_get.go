@@ -23,12 +23,11 @@ import (
 // @Tags Config Svc
 // @Accept json
 // @Produce json
-// @Param request body config.GetConfigRequest true "Get Config Request"
 // @Success 200 {object} config.GetConfigResponse "Current configuration retrieved successfully"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
 // @Security BearerAuth
-// @Router /config-svc/get [post]
+// @Router /config-svc/config [get]
 func (cs *ConfigService) Get(
 	w http.ResponseWriter,
 	r *http.Request,
