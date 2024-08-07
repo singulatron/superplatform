@@ -33,7 +33,7 @@ func NewGenericService(
 	if err != nil {
 		return nil, err
 	}
-	credentialStore, err := datastoreFactory("chat_credentials", &usertypes.Credential{})
+	credentialStore, err := datastoreFactory("generic_credentials", &usertypes.Credential{})
 	if err != nil {
 		return nil, err
 	}
