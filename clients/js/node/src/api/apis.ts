@@ -2,8 +2,6 @@ export * from './chatSvcApi';
 import { ChatSvcApi } from './chatSvcApi';
 export * from './configSvcApi';
 import { ConfigSvcApi } from './configSvcApi';
-export * from './dockerServiceApi';
-import { DockerServiceApi } from './dockerServiceApi';
 export * from './dockerSvcApi';
 import { DockerSvcApi } from './dockerSvcApi';
 export * from './downloadSvcApi';
@@ -29,4 +27,4 @@ export class HttpError extends Error {
 
 export { RequestFile } from '../model/models';
 
-export const APIS = [ChatSvcApi, ConfigSvcApi, DockerServiceApi, DockerSvcApi, DownloadSvcApi, FirehoseSvcApi, GenericSvcApi, ModelSvcApi, PromptSvcApi, UserSvcApi];
+export const APIS = [ChatSvcApi, ConfigSvcApi, DockerSvcApi, DownloadSvcApi, FirehoseSvcApi, GenericSvcApi, ModelSvcApi, PromptSvcApi, UserSvcApi];

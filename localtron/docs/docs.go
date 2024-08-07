@@ -612,7 +612,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Docker Service"
+                    "Docker Svc"
                 ],
                 "summary": "Launch a Docker Container",
                 "operationId": "launchContainer",

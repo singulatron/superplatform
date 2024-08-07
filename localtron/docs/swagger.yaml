@@ -1463,7 +1463,7 @@ paths:
       - BearerAuth: []
       summary: Launch a Docker Container
       tags:
-      - Docker Service
+      - Docker Svc
   /docker-svc/container/{hash}/is-running:
     get:
       consumes:

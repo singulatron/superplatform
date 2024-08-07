@@ -1,7 +1,6 @@
 export { B as BASE_PATH, a as BaseAPI, e as BlobApiResponse, c as COLLECTION_FORMATS, C as Configuration, D as DefaultConfig, F as FetchError, J as JSONApiResponse, b as RequiredError, R as ResponseError, T as TextApiResponse, V as VoidApiResponse, d as canConsumeForm, m as mapValues, q as querystring } from './runtime2.mjs';
 export { ChatSvcApi } from './ChatSvcApi.mjs';
 export { ConfigSvcApi } from './ConfigSvcApi.mjs';
-export { DockerServiceApi } from './DockerServiceApi.mjs';
 export { DockerSvcApi } from './DockerSvcApi.mjs';
 export { DownloadSvcApi } from './DownloadSvcApi.mjs';
 export { FirehoseSvcApi } from './FirehoseSvcApi.mjs';

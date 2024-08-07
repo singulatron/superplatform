@@ -6,6 +6,9 @@
     "moduleResolution": "node",
     "module": "esnext",
     "target": "es6",
+    "noImplicitAny": false,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "declaration": true,
     "lib": ["esnext"]
   },
