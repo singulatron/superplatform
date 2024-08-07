@@ -10,13 +10,16 @@
  * Do not edit the class manually.
  */
 import * as runtime from '../runtime';
-import type { DockerSvcContainerIsRunningResponse, DockerSvcGetContainerSummaryResponse, DockerSvcGetDockerHostResponse, DockerSvcGetInfoResponse } from '../models/index';
+import type { DockerSvcContainerIsRunningResponse, DockerSvcGetContainerSummaryResponse, DockerSvcGetDockerHostResponse, DockerSvcGetInfoResponse, DockerSvcLaunchContainerRequest, DockerSvcLaunchContainerResponse } from '../models/index';
 export interface GetContainerSummaryRequest {
     hash: string;
     numberOfLines: number;
 }
 export interface IsRunningRequest {
     hash: string;
+}
+export interface LaunchContainerRequest {
+    request: DockerSvcLaunchContainerRequest;
 }
 /**
  *
@@ -62,4 +65,14 @@ export declare class DockerSvcApi extends runtime.BaseAPI {
      * Check If a Container Is Running
      */
     isRunning(requestParameters: IsRunningRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DockerSvcContainerIsRunningResponse>;
+    /**
+     * Launches a Docker container with the specified parameters.  Requires the `docker-svc:docker:create` permission.
+     * Launch a Docker Container
+     */
+    launchContainerRaw(requestParameters: LaunchContainerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DockerSvcLaunchContainerResponse>>;
+    /**
+     * Launches a Docker container with the specified parameters.  Requires the `docker-svc:docker:create` permission.
+     * Launch a Docker Container
+     */
+    launchContainer(requestParameters: LaunchContainerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DockerSvcLaunchContainerResponse>;
 }

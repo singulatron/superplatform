@@ -20,7 +20,7 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        working-directory: ./clients/js/node
+        working-directory: ./clients/js/client
 
       - name: Get current version from npm
         id: get-npm-version
@@ -28,7 +28,7 @@ jobs:
           PACKAGE_NAME=$(node -p "require('./package.json').name")
           NPM_VERSION=$(npm view $PACKAGE_NAME version || echo "0.0.0")
           echo "npm_version=$NPM_VERSION" >> $GITHUB_ENV
-        working-directory: ./clients/js/node
+        working-directory: ./clients/js/client
 
       - name: Authenticate to npm
         run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
@@ -46,6 +46,6 @@ jobs:
           else
             echo "No need to publish. Local version is not greater than published version."
           fi
-        working-directory: ./clients/js/node
+        working-directory: ./clients/js/client
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

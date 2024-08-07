@@ -3,7 +3,6 @@
 var runtime = require('./runtime2.js');
 var ChatSvcApi = require('./ChatSvcApi.js');
 var ConfigSvcApi = require('./ConfigSvcApi.js');
-var DockerServiceApi = require('./DockerServiceApi.js');
 var DockerSvcApi = require('./DockerSvcApi.js');
 var DownloadSvcApi = require('./DownloadSvcApi.js');
 var FirehoseSvcApi = require('./FirehoseSvcApi.js');
@@ -124,7 +123,6 @@ exports.mapValues = runtime.mapValues;
 exports.querystring = runtime.querystring;
 exports.ChatSvcApi = ChatSvcApi.ChatSvcApi;
 exports.ConfigSvcApi = ConfigSvcApi.ConfigSvcApi;
-exports.DockerServiceApi = DockerServiceApi.DockerServiceApi;
 exports.DockerSvcApi = DockerSvcApi.DockerSvcApi;
 exports.DownloadSvcApi = DownloadSvcApi.DownloadSvcApi;
 exports.FirehoseSvcApi = FirehoseSvcApi.FirehoseSvcApi;

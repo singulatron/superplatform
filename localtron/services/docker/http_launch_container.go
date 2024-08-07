@@ -21,7 +21,7 @@ import (
 // @Description Launches a Docker container with the specified parameters.
 // @Description
 // @Description Requires the `docker-svc:docker:create` permission.
-// @Tags Docker Service
+// @Tags Docker Svc
 // @Accept json
 // @Produce json
 // @Param request body docker.LaunchContainerRequest true "Launch Container Request"

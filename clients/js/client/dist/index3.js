@@ -2,7 +2,6 @@
 
 var ChatSvcApi = require('./ChatSvcApi.js');
 var ConfigSvcApi = require('./ConfigSvcApi.js');
-var DockerServiceApi = require('./DockerServiceApi.js');
 var DockerSvcApi = require('./DockerSvcApi.js');
 var DownloadSvcApi = require('./DownloadSvcApi.js');
 var FirehoseSvcApi = require('./FirehoseSvcApi.js');
@@ -27,15 +26,15 @@ require('./ConfigSvcAppServiceConfig.js');
 require('./ConfigSvcModelServiceConfig.js');
 require('./ConfigSvcDownloadServiceConfig.js');
 require('./ConfigSvcSaveConfigRequest.js');
-require('./DockerSvcLaunchContainerRequest.js');
-require('./DockerSvcLaunchOptions.js');
-require('./DockerSvcLaunchContainerResponse.js');
-require('./DockerSvcLaunchInfo.js');
 require('./DockerSvcContainerIsRunningResponse.js');
 require('./DockerSvcGetContainerSummaryResponse.js');
 require('./DockerSvcGetDockerHostResponse.js');
 require('./DockerSvcGetInfoResponse.js');
 require('./DockerSvcDockerInfo.js');
+require('./DockerSvcLaunchContainerRequest.js');
+require('./DockerSvcLaunchOptions.js');
+require('./DockerSvcLaunchContainerResponse.js');
+require('./DockerSvcLaunchInfo.js');
 require('./DownloadSvcDownloadRequest.js');
 require('./DownloadSvcDownloadsResponse.js');
 require('./DownloadSvcDownloadDetails.js');
@@ -102,7 +101,6 @@ require('./UserSvcUpserPermissionRequest.js');
 
 exports.ChatSvcApi = ChatSvcApi.ChatSvcApi;
 exports.ConfigSvcApi = ConfigSvcApi.ConfigSvcApi;
-exports.DockerServiceApi = DockerServiceApi.DockerServiceApi;
 exports.DockerSvcApi = DockerSvcApi.DockerSvcApi;
 exports.DownloadSvcApi = DownloadSvcApi.DownloadSvcApi;
 exports.FirehoseSvcApi = FirehoseSvcApi.FirehoseSvcApi;

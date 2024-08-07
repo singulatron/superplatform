@@ -3,7 +3,11 @@ import { DockerSvcContainerIsRunningResponseFromJSON } from './DockerSvcContaine
 import { DockerSvcGetContainerSummaryResponseFromJSON } from './DockerSvcGetContainerSummaryResponse.mjs';
 import { DockerSvcGetDockerHostResponseFromJSON } from './DockerSvcGetDockerHostResponse.mjs';
 import { DockerSvcGetInfoResponseFromJSON } from './DockerSvcGetInfoResponse.mjs';
+import { DockerSvcLaunchContainerRequestToJSON } from './DockerSvcLaunchContainerRequest.mjs';
+import { DockerSvcLaunchContainerResponseFromJSON } from './DockerSvcLaunchContainerResponse.mjs';
 import './DockerSvcDockerInfo.mjs';
+import './DockerSvcLaunchOptions.mjs';
+import './DockerSvcLaunchInfo.mjs';
 
 /* tslint:disable */
 /* eslint-disable */
@@ -148,6 +152,41 @@ class DockerSvcApi extends BaseAPI {
     isRunning(requestParameters, initOverrides) {
         return __awaiter(this, void 0, void 0, function* () {
             const response = yield this.isRunningRaw(requestParameters, initOverrides);
+            return yield response.value();
+        });
+    }
+    /**
+     * Launches a Docker container with the specified parameters.  Requires the `docker-svc:docker:create` permission.
+     * Launch a Docker Container
+     */
+    launchContainerRaw(requestParameters, initOverrides) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (requestParameters['request'] == null) {
+                throw new RequiredError('request', 'Required parameter "request" was null or undefined when calling launchContainer().');
+            }
+            const queryParameters = {};
+            const headerParameters = {};
+            headerParameters['Content-Type'] = 'application/json';
+            if (this.configuration && this.configuration.apiKey) {
+                headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
+            }
+            const response = yield this.request({
+                path: `/docker-svc/container`,
+                method: 'PUT',
+                headers: headerParameters,
+                query: queryParameters,
+                body: DockerSvcLaunchContainerRequestToJSON(requestParameters['request']),
+            }, initOverrides);
+            return new JSONApiResponse(response, (jsonValue) => DockerSvcLaunchContainerResponseFromJSON(jsonValue));
+        });
+    }
+    /**
+     * Launches a Docker container with the specified parameters.  Requires the `docker-svc:docker:create` permission.
+     * Launch a Docker Container
+     */
+    launchContainer(requestParameters, initOverrides) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const response = yield this.launchContainerRaw(requestParameters, initOverrides);
             return yield response.value();
         });
     }

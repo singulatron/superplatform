@@ -2,7 +2,6 @@
 /* eslint-disable */
 export * from './ChatSvcApi';
 export * from './ConfigSvcApi';
-export * from './DockerServiceApi';
 export * from './DockerSvcApi';
 export * from './DownloadSvcApi';
 export * from './FirehoseSvcApi';
