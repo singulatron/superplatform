@@ -12,7 +12,8 @@ import {
 	ChangeDetectorRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ModelService, Model } from '../../services/model.service';
+import { ModelService } from '../../services/model.service';
+import { ModelSvcModel as Model } from '@singulatron/client';
 import { DownloadService } from '../../services/download.service';
 import { DownloadStatusChangeEvent } from '@singulatron/types';
 import { ConfigService } from '../../services/config.service';
@@ -122,11 +123,11 @@ export class AdvancedModelExplorerComponent {
 			const downloadsResponse = await this.downloadService.downloadList();
 			for (const model of models) {
 				if (
-					downloadsResponse.downloads.some(
+					downloadsResponse.downloads?.some(
 						(download) =>
 							download.status === 'completed' &&
 							model.assets &&
-							Object.values(model.assets)?.includes(download.url)
+							Object.values(model.assets)?.includes(download.url!)
 					)
 				) {
 					downloadedModels.push(model);
@@ -235,7 +236,7 @@ export class AdvancedModelExplorerComponent {
 	}
 
 	async download(model: Model) {
-		const assetURLs = Object.values(model.assets);
+		const assetURLs = Object.values(model.assets!);
 		if (!assetURLs?.length) {
 			throw `No assets to download for ${model.id}`;
 		}
@@ -263,7 +264,7 @@ export class AdvancedModelExplorerComponent {
 			return '';
 		}
 		const maxLength = 0;
-		if (this.expandedStates.get(item.id)) {
+		if (this.expandedStates.get(item.id!)) {
 			return item.description || '';
 		} else {
 			return item.description.length > maxLength

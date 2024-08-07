@@ -459,7 +459,6 @@ const docTemplate = `{
                         "description": "Get Threads Request",
                         "name": "request",
                         "in": "body",
-                        "required": true,
                         "schema": {
                             "$ref": "#/definitions/chat_svc.GetThreadsRequest"
                         }

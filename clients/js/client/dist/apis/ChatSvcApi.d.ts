@@ -31,7 +31,7 @@ export interface GetThreadRequest {
     threadId: string;
 }
 export interface GetThreadsRequest {
-    request: object;
+    request?: object;
 }
 export interface UpdateThreadRequest {
     threadId: string;
@@ -122,7 +122,7 @@ export declare class ChatSvcApi extends runtime.BaseAPI {
      * Fetch all chat threads associated with a specific user
      * Get Threads
      */
-    getThreads(requestParameters: GetThreadsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ChatSvcGetThreadsResponse>;
+    getThreads(requestParameters?: GetThreadsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ChatSvcGetThreadsResponse>;
     /**
      * Modify the details of a specific chat thread
      * Update Thread

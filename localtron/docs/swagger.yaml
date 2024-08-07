@@ -1402,7 +1402,6 @@ paths:
       - description: Get Threads Request
         in: body
         name: request
-        required: true
         schema:
           $ref: '#/definitions/chat_svc.GetThreadsRequest'
       produces:

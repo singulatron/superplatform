@@ -240,9 +240,6 @@ class ChatSvcApi extends runtime.BaseAPI {
      */
     getThreadsRaw(requestParameters, initOverrides) {
         return runtime.__awaiter(this, void 0, void 0, function* () {
-            if (requestParameters['request'] == null) {
-                throw new runtime.RequiredError('request', 'Required parameter "request" was null or undefined when calling getThreads().');
-            }
             const queryParameters = {};
             const headerParameters = {};
             headerParameters['Content-Type'] = 'application/json';
@@ -263,8 +260,8 @@ class ChatSvcApi extends runtime.BaseAPI {
      * Fetch all chat threads associated with a specific user
      * Get Threads
      */
-    getThreads(requestParameters, initOverrides) {
-        return runtime.__awaiter(this, void 0, void 0, function* () {
+    getThreads() {
+        return runtime.__awaiter(this, arguments, void 0, function* (requestParameters = {}, initOverrides) {
             const response = yield this.getThreadsRaw(requestParameters, initOverrides);
             return yield response.value();
         });
