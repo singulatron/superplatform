@@ -56,6 +56,14 @@ export class LocaltronService {
 		return Promise.reject(error);
 	}
 
+	token(): string {
+		return this.cs.get('the_token');
+	}
+
+	addr(): string {
+		return this.config.env.localtronAddress;
+	}
+
 	get(path: string): Promise<any> {
 		const uri = this.config.env.localtronAddress + path;
 		const headers = this.prepareHeaders();

@@ -11,22 +11,28 @@ import { FirehoseService } from './firehose.service';
 import { first } from 'rxjs';
 import { UserService } from './user.service';
 import {
-	GenericObject,
-	Condition,
-	CreateRequest,
-	FindRequest,
-	FindResponse,
-	UpdateRequest,
-	UpdateResponse,
-	UpsertRequest,
-	DeleteRequest,
-	DeleteResponse,
-} from '@singulatron/types';
+	Configuration,
+	GenericSvcApi,
+	DatastoreCondition,
+	GenericSvcCreateObjectRequest as CreateObjectRequest,
+	GenericSvcQueryRequest as QueryRequest,
+	GenericSvcQueryResponse as QueryResponse,
+	GenericSvcGenericObject as GenericObject,
+	GenericSvcUpdateObjectRequest as UpdateObjectRequest,
+	GenericSvcCreateObjectResponse as UpdateObjectResponse,
+	GenericSvcUpsertObjectRequest as UpsertObjectRequest,
+	GenericSvcCreateObjectResponse,
+	GenericSvcUpsertObjectResponse,
+	// GenericSvcDeleteObjectRequest as DeleteObjectRequest,
+	// GenericSvcDeleteObjectResponse as DeleteObjectResponse,
+} from '@singulatron/client';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class GenericService {
+	genericService!: GenericSvcApi;
+
 	constructor(
 		private localtron: LocaltronService,
 		private userService: UserService,
@@ -34,6 +40,12 @@ export class GenericService {
 	) {
 		this.userService.user$.pipe(first()).subscribe(() => {
 			this.init();
+			this.genericService = new GenericSvcApi(
+				new Configuration({
+					apiKey: this.localtron.token(),
+					basePath: this.localtron.addr(),
+				})
+			);
 		});
 	}
 
@@ -45,58 +57,72 @@ export class GenericService {
 		});
 	}
 
-	async create(table: string, object: GenericObject): Promise<void> {
+	async create(
+		table: string,
+		object: GenericObject
+	): Promise<GenericSvcCreateObjectResponse> {
 		object.table = table;
-		const request: CreateRequest = {
+		const request: CreateObjectRequest = {
 			object: object,
 		};
 
-		return this.localtron.post('/generic-svc/object', request);
+		return this.genericService.createObject({ body: request });
 	}
 
-	async find(table: string, conditions: Condition[]): Promise<FindResponse> {
-		const request: FindRequest = {
+	async find(
+		table: string,
+		conditions: DatastoreCondition[]
+	): Promise<QueryResponse> {
+		const request: QueryRequest = {
 			table: table,
 			query: {
 				conditions: conditions,
 			},
 		};
 
-		return this.localtron.post('/generic-svc/objects', request);
+		return this.genericService.query({ body: request });
 	}
 
-	async upsert(table: string, object: GenericObject): Promise<void> {
+	async upsert(
+		table: string,
+		object: GenericObject
+	): Promise<GenericSvcUpsertObjectResponse> {
 		object.table = table;
-		const request: UpsertRequest = {
+		const request: UpsertObjectRequest = {
 			object: object,
 		};
 
-		return this.localtron.put(`/generic-svc/object/${object.id}`, request);
+		return this.genericService.upsertObject({
+			objectId: object.id!,
+			body: request,
+		});
 	}
 
 	async update(
 		table: string,
-		conditions: Condition[],
+		conditions: DatastoreCondition[],
 		object: GenericObject
-	): Promise<UpdateResponse> {
-		const request: UpdateRequest = {
+	): Promise<UpdateObjectResponse> {
+		const request: UpdateObjectRequest = {
 			table: table,
 			conditions: conditions,
 			object: object,
 		};
 
-		return this.localtron.post('/generic-svc/objects/update', request);
+		return this.genericService.updateObjects({
+			body: request,
+		});
 	}
 
-	async delete(
-		table: string,
-		conditions: Condition[]
-	): Promise<DeleteResponse> {
-		const request: DeleteRequest = {
-			table: table,
-			conditions: conditions,
-		};
+	async delete(table: string, conditions: DatastoreCondition[]): Promise<any> {
+		console.log(table, conditions);
 
-		return this.localtron.delete('/generic-svc/objects/delete', request);
+		// const request = {
+		// 	table: table,
+		// 	conditions: conditions,
+		// };
+		//eturn this.genericService.deleteObjects({
+		//	body: request,
+		//);
 	}
 }

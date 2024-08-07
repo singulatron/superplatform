@@ -25,7 +25,7 @@ import { Subscription, filter } from 'rxjs';
 import { LocaltronService } from '../../services/localtron.service';
 import { ChatService } from '../../services/chat.service';
 import { PromptService } from '../../services/prompt.service';
-import { Prompt } from '@singulatron/types';
+import { PromptSvcPrompt as Prompt } from '@singulatron/client';
 import { Thread, Message, Asset } from '@singulatron/types';
 import { ElectronAppService } from '../../services/electron-app.service';
 
@@ -214,7 +214,7 @@ export class ChatBoxComponent implements OnChanges, AfterViewInit, OnDestroy {
 		await this.promptService.promptAdd({
 			id: this.localtron.uuid(),
 			prompt: emitted.message,
-			characterId: emitted.characterId,
+			// characterId: emitted.characterId,
 			template: this.promptTemplate,
 			threadId: this.thread.id as string,
 			modelId: emitted.modelId as string,
@@ -344,7 +344,7 @@ export class ChatBoxComponent implements OnChanges, AfterViewInit, OnDestroy {
 	}
 
 	removePromptFromQueue(prompt: Prompt): void {
-		this.promptService.promptRemove(prompt.id);
+		this.promptService.promptRemove(prompt.id!);
 	}
 
 	private scrollToBottom(): void {

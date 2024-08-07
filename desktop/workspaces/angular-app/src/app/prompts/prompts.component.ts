@@ -14,7 +14,6 @@ import { NgFor, NgIf, NgStyle } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { PromptService } from '../services/prompt.service';
-import { ListPromptsRequest, Prompt } from '@singulatron/types';
 import { UserService } from '../services/user.service';
 import { first } from 'rxjs';
 import { PageComponent } from '../components/page/page.component';
@@ -31,6 +30,11 @@ import {
 	Condition,
 	conditionFieldIs,
 } from '@singulatron/types';
+import {
+	PromptSvcPrompt as Prompt,
+	PromptSvcListPromptsRequest,
+} from '@singulatron/client';
+
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -135,7 +139,7 @@ export class PromptsComponent {
 		}
 		query.orderBys = [{ field: 'createdAt', desc: true }];
 
-		const request: ListPromptsRequest = {
+		const request: PromptSvcListPromptsRequest = {
 			query: query,
 		};
 
@@ -157,7 +161,7 @@ export class PromptsComponent {
 		this.count = response.count || 0;
 
 		// eslint-disable-next-line
-		if (response.after && response.after != `0001-01-01T00:00:00Z`) {
+		if (response.after && response.after != null) {
 			this.after = response.after;
 		} else {
 			this.after = undefined;

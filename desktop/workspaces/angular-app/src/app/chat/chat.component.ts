@@ -18,7 +18,7 @@ import { WindowApiConst } from 'shared-lib';
 import { Subscription } from 'rxjs';
 import { ChatService } from '../services/chat.service';
 import { PromptService } from '../services/prompt.service';
-import { Prompt } from '@singulatron/types';
+import { PromptSvcPrompt as Prompt } from '@singulatron/client';
 import { Thread } from '@singulatron/types';
 import { Model, ModelService } from '../services/model.service';
 import { ConfigService } from '../services/config.service';

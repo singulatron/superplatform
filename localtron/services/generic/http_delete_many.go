@@ -17,7 +17,7 @@ import (
 )
 
 // Delete removes a generic object based on the provided conditions
-// @ID deleteObject
+// @ID deleteObjects
 // @Summary     Delete a Generic Object
 // @Description Removes a generic object from the system based on the provided conditions. Requires authorization and user authentication.
 // @Tags        Generic Svc
@@ -30,7 +30,7 @@ import (
 // @Failure     401       {object} generic.ErrorResponse "Unauthorized"
 // @Failure     500       {object} generic.ErrorResponse "Internal Server Error"
 // @Security    BearerAuth
-// @Router      /generic-svc/object/{objectId} [delete]
+// @Router      /generic-svc/objects/delete [post]
 func (g *GenericService) Delete(
 	w http.ResponseWriter,
 	r *http.Request,

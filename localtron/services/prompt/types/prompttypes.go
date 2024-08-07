@@ -108,9 +108,9 @@ type ListPromptsRequest struct {
 }
 
 type ListPromptsResponse struct {
-	Prompts []*Prompt `json:"prompts"`
-	After   any       `json:"after,omitempty"`
-	Count   int64     `json:"count"`
+	Prompts []*Prompt   `json:"prompts"`
+	After   interface{} `json:"after,omitempty"`
+	Count   int64       `json:"count"`
 }
 
 type RemovePromptRequest struct {
