@@ -19,7 +19,7 @@ import (
 // @ID deleteUser
 // @Summary Delete a User
 // @Description Delete a user based on the user ID.
-// @Tags User Service
+// @Tags User Svc
 // @Accept  json
 // @Produce  json
 // @Param   userId     path    string  true  "User ID"

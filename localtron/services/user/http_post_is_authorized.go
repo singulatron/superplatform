@@ -25,7 +25,7 @@ import (
 // @ID isAuthorized
 // @Summary Is Authorized
 // @Description Check if a user is authorized for a specific permission.
-// @Tags User Service
+// @Tags User Svc
 // @Accept json
 // @Produce json
 // @Param permissionId path string true "Permission ID"

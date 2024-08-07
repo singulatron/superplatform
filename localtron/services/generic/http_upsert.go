@@ -18,14 +18,15 @@ import (
 )
 
 // Upsert creates or updates a generic object based on the provided data
+// @ID upsertObject
 // @Summary Upsert a Generic Object
 // @Description Creates a new generic object or updates an existing one based on the provided data. Requires authorization and user authentication.
-// @Tags Generic Service
+// @Tags Generic Svc
 // @Accept json
 // @Produce json
 // @Param objectId path string true  "Object ID"
-// @Param body body generic.UpsertRequest true "Upsert request payload"
-// @Success 200 {object} generic.UpsertResponse "Successful creation or update of object"
+// @Param body body generic.UpsertObjectRequest true "Upsert request payload"
+// @Success 200 {object} generic.UpsertObjectResponse "Successful creation or update of object"
 // @Failure 400 {object} generic.ErrorResponse "Invalid JSON"
 // @Failure 401 {object} generic.ErrorResponse "Unauthorized"
 // @Failure 500 {object} generic.ErrorResponse "Internal Server Error"
@@ -47,7 +48,7 @@ func (g *GenericService) Upsert(
 		return
 	}
 
-	req := &generic.UpsertRequest{}
+	req := &generic.UpsertObjectRequest{}
 	err = json.NewDecoder(r.Body).Decode(req)
 	if err != nil {
 		http.Error(w, `Invalid JSON`, http.StatusBadRequest)

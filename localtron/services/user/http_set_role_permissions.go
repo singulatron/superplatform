@@ -20,7 +20,7 @@ import (
 // @Summary Set Role Permissions
 // @Description Set permissions for a specified role. The caller can add permissions it owns to any role.
 // @Description If the caller tries to add a permission it doesn't own to a role, `StatusBadRequest` will be returned.
-// @Tags User Service
+// @Tags User Svc
 // @Accept json
 // @Produce json
 // @Param roleId path string true "Role ID"

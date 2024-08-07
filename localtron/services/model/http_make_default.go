@@ -21,7 +21,7 @@ import (
 // @ID makeDefault
 // @Summary Make a Model Default
 // @Description Sets a model as the default model — when prompts are sent without a Model ID, the default model is used.
-// @Tags Model Service
+// @Tags Model Svc
 // @Accept json
 // @Produce json
 // @Param modelId path string true "Model ID"

@@ -1,33 +1,42 @@
-import { GenericService } from "@singulatron/client";
+import { Configuration, GenericSvcApi } from "@singulatron/client";
 
 export async function genericTest(apiKey: string) {
-  const genericService: GenericService = new GenericService({
-    apiKey: apiKey,
-  });
+  const genericService: GenericSvcApi = new GenericSvcApi(
+    new Configuration({
+      apiKey: apiKey,
+      // basePath: "https://demo-api.singulatron.com",
+    })
+  );
 
-  await genericService.create({
-    object: {
-      table: "uzerz",
-      data: {
-        fieldA: "valueA",
+  await genericService.createObject({
+    body: {
+      object: {
+        table: "uzerz",
+        data: {
+          fieldA: "valueA",
+        },
       },
     },
   });
 
-  await genericService.create({
-    object: {
-      table: "uzerz",
-      data: {
-        fieldA: "valueB",
+  await genericService.createObject({
+    body: {
+      object: {
+        table: "uzerz",
+        data: {
+          fieldA: "valueB",
+        },
       },
     },
   });
 
-  let rsp = await genericService.find({
-    table: "uzerz",
+  let rsp = await genericService.query({
+    body: {
+      table: "uzerz",
+    },
   });
 
-  if (rsp.objects.length !== 2) {
+  if (rsp.objects?.length !== 2) {
     throw "expected find length to be 2";
   }
 }

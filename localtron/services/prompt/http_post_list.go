@@ -21,7 +21,7 @@ import (
 // @ID getPrompts
 // @Summary List Prompts
 // @Description List prompts that satisfy a query.
-// @Tags Prompt Service
+// @Tags Prompt Svc
 // @Accept json
 // @Produce json
 // @Param request body prompt.ListPromptsRequest false "List Prompts Request"
@@ -29,6 +29,7 @@ import (
 // @Failure 400 {object} prompt.ErrorResponse "Invalid JSON"
 // @Failure 401 {object} prompt.ErrorResponse "Unauthorized"
 // @Failure 500 {object} prompt.ErrorResponse "Internal Server Error"
+// @Security BearerAuth
 // @Router /prompt-svc/list [post]
 func (p *PromptService) GetPrompts(
 	w http.ResponseWriter,

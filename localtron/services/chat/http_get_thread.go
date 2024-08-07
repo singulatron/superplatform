@@ -21,7 +21,7 @@ import (
 // @ID getThread
 // @Summary Get Thread
 // @Description Fetch information about a specific chat thread by its ID
-// @Tags Chat Service
+// @Tags Chat Svc
 // @Accept json
 // @Produce json
 // @Param threadId path string true "Thread ID"

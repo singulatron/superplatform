@@ -21,7 +21,7 @@ import (
 // @Description Adds a specific permission to a role identified by roleId.
 // @Description
 // @Description Requires the `user-svc:permission:assign` permission.
-// @Tags User Service
+// @Tags User Svc
 // @Accept json
 // @Produce json
 // @Param roleId path string true "Role ID"

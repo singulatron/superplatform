@@ -20,7 +20,7 @@ import (
 
 // @Summary Publish an Event
 // @Description Publishes an event to the firehose service after authorization check
-// @Tags Firehose Service
+// @Tags Firehose Svc
 // @Accept json
 // @Produce json
 // @Param event body firehose.PublishRequest true "Event to publish"

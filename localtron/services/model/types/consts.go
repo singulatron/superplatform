@@ -1,4 +1,4 @@
-package modeltypes
+package model_svc
 
 var PlatformLlamaCpp = Platform{
 	Id: "llama-cpp",

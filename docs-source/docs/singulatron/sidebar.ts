@@ -8,7 +8,7 @@ const sidebar: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "Chat Service",
+      label: "Chat Svc",
       items: [
         {
           type: "doc",
@@ -62,7 +62,7 @@ const sidebar: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "Config Service",
+      label: "Config Svc",
       items: [
         {
           type: "doc",
@@ -88,6 +88,12 @@ const sidebar: SidebarsConfig = {
           label: "Launch a Docker Container",
           className: "api-method put",
         },
+      ],
+    },
+    {
+      type: "category",
+      label: "Docker Svc",
+      items: [
         {
           type: "doc",
           id: "singulatron/is-running",
@@ -116,7 +122,7 @@ const sidebar: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "Download Service",
+      label: "Download Svc",
       items: [
         {
           type: "doc",
@@ -146,7 +152,7 @@ const sidebar: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "Firehose Service",
+      label: "Firehose Svc",
       items: [
         {
           type: "doc",
@@ -164,35 +170,35 @@ const sidebar: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "Generic Service",
+      label: "Generic Svc",
       items: [
         {
           type: "doc",
-          id: "singulatron/create-a-generic-object",
-          label: "Create a Generic Object",
-          className: "api-method post",
-        },
-        {
-          type: "doc",
-          id: "singulatron/delete-a-generic-object",
+          id: "singulatron/delete-object",
           label: "Delete a Generic Object",
           className: "api-method delete",
         },
         {
           type: "doc",
-          id: "singulatron/upsert-a-generic-object",
+          id: "singulatron/upsert-object",
           label: "Upsert a Generic Object",
           className: "api-method put",
         },
         {
           type: "doc",
-          id: "singulatron/find-generic-objects",
+          id: "singulatron/create-object",
+          label: "Create a Generic Object",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "singulatron/query",
           label: "Find Generic Objects",
           className: "api-method post",
         },
         {
           type: "doc",
-          id: "singulatron/update-generic-objects",
+          id: "singulatron/update-objects",
           label: "Update Generic Objects",
           className: "api-method post",
         },
@@ -200,7 +206,7 @@ const sidebar: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "Model Service",
+      label: "Model Svc",
       items: [
         {
           type: "doc",
@@ -242,7 +248,7 @@ const sidebar: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "Prompt Service",
+      label: "Prompt Svc",
       items: [
         {
           type: "doc",
@@ -272,7 +278,7 @@ const sidebar: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "User Service",
+      label: "User Svc",
       items: [
         {
           type: "doc",

@@ -21,7 +21,7 @@ import (
 // @Summary List Models
 // @Description Retrieves a list of models after checking authorization
 // @Description Requires "model.view" permission.
-// @Tags Model Service
+// @Tags Model Svc
 // @Accept json
 // @Produce json
 // @Success 200 {object} model.ListResponse

@@ -18,7 +18,7 @@ import (
 // @ID changePassword
 // @Summary Change User Password
 // @Description Allows an authenticated user to change their own password.
-// @Tags User Service
+// @Tags User Svc
 // @Accept json
 // @Produce json
 // @Param request body user.ChangePasswordRequest true "Change Password Request"

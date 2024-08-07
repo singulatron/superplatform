@@ -60,7 +60,7 @@ func TestCreate(t *testing.T) {
 		CreatedAt: time.Now().String(),
 	}
 
-	err = user1Router.Post(context.Background(), "generic-svc", "/object", &generictypes.CreateRequest{
+	err = user1Router.Post(context.Background(), "generic-svc", "/object", &generictypes.CreateObjectRequest{
 		Object: &obj.GenericObjectCreateFields,
 	}, nil)
 	require.NoError(t, err)
@@ -91,7 +91,7 @@ func TestCreate(t *testing.T) {
 		CreatedAt: time.Now().String(),
 	}
 
-	err = user2Router.Post(context.Background(), "generic-svc", "/object", &generictypes.CreateRequest{
+	err = user2Router.Post(context.Background(), "generic-svc", "/object", &generictypes.CreateObjectRequest{
 		Object: &obj2.GenericObjectCreateFields,
 	}, nil)
 	require.NoError(t, err)
@@ -143,7 +143,7 @@ func TestCreate(t *testing.T) {
 
 	t.Run("already exists", func(t *testing.T) {
 		err = user1Router.Post(context.Background(), "generic-svc", "/create",
-			&generictypes.CreateRequest{
+			&generictypes.CreateObjectRequest{
 				Object: &obj.GenericObjectCreateFields,
 			},
 			nil)
@@ -165,7 +165,7 @@ func TestCreate(t *testing.T) {
 	})
 
 	t.Run("user 2 cannot update record of user 1", func(t *testing.T) {
-		req := &generictypes.UpsertRequest{
+		req := &generictypes.UpsertObjectRequest{
 			Object: &obj.GenericObjectCreateFields,
 		}
 		err = user2Router.Put(context.Background(), "generic-svc", fmt.Sprintf("/object/%v", req.Object.Id), req, nil)
@@ -174,7 +174,7 @@ func TestCreate(t *testing.T) {
 	})
 
 	t.Run("user 1 can upsert its own reord", func(t *testing.T) {
-		req := &generictypes.UpsertRequest{
+		req := &generictypes.UpsertObjectRequest{
 			Object: &obj.GenericObjectCreateFields,
 		}
 		err = user1Router.Put(context.Background(), "generic-svc", fmt.Sprintf("/object/%v", req.Object.Id), req, nil)
@@ -197,7 +197,7 @@ func TestCreate(t *testing.T) {
 	})
 
 	t.Run("user 2 cannot delete user 1's record", func(t *testing.T) {
-		req := generictypes.DeleteRequest{
+		req := generictypes.DeleteObjectRequest{
 			Table: table1,
 			Conditions: []datastore.Condition{
 				datastore.Id(obj.Id),

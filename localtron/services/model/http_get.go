@@ -24,7 +24,7 @@ import (
 // @Description Retrieves the details of a model by its ID.
 // @Description
 // @Description the Requires `model.view` permission.
-// @Tags Model Service
+// @Tags Model Svc
 // @Accept json
 // @Produce json
 // @Param modelId path string true "Model ID"

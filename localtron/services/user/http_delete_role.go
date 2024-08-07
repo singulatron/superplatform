@@ -19,7 +19,7 @@ import (
 // @ID deleteRole
 // @Summary Delete a Role
 // @Description Delete a role based on the role ID.
-// @Tags User Service
+// @Tags User Svc
 // @Accept  json
 // @Produce  json
 // @Param   roleId     path    string  true  "Role ID"

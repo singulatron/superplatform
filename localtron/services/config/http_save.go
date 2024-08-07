@@ -20,7 +20,7 @@ import (
 // @Id saveConfig
 // @Summary Save Config
 // @Description Save the provided configuration to the server
-// @Tags Config Service
+// @Tags Config Svc
 // @Accept json
 // @Produce json
 // @Param request body config.SaveConfigRequest true "Save Config Request"

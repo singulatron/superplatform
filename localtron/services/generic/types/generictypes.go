@@ -1,4 +1,4 @@
-package generictypes
+package generic_svc
 
 import (
 	"github.com/singulatron/singulatron/localtron/datastore"
@@ -17,8 +17,9 @@ type GenericObjectCreateFields struct {
 	// When it's true the entry is visible to everyone.
 	Public bool `json:"public,omitempty"`
 
-	Data   map[string]any `json:"data,omitempty" binding:"required"`
-	UserId string         `json:"userId,omitempty"`
+	Data map[string]interface{} `json:"data,omitempty" binding:"required"`
+
+	UserId string `json:"userId,omitempty"`
 }
 
 func (g GenericObjectCreateFields) GetId() string {
@@ -65,11 +66,11 @@ type QueryResponse struct {
 	Objects []*GenericObject `json:"objects,omitempty"`
 }
 
-type CreateRequest struct {
+type CreateObjectRequest struct {
 	Object *GenericObjectCreateFields `json:"object,omitempty"`
 }
 
-type CreateResponse struct {
+type CreateObjectResponse struct {
 	Object *GenericObject `json:"object,omitempty"`
 }
 
@@ -77,11 +78,11 @@ type CreateManyRequest struct {
 	Objects []*GenericObjectCreateFields `json:"objects,omitempty"`
 }
 
-type UpsertRequest struct {
+type UpsertObjectRequest struct {
 	Object *GenericObjectCreateFields `json:"object,omitempty"`
 }
 
-type UpsertResponse struct {
+type UpsertObjectResponse struct {
 	Object *GenericObject `json:"object,omitempty"`
 }
 
@@ -93,19 +94,19 @@ type UpsertManyResponse struct {
 	Objects []*GenericObject `json:"objects,omitempty"`
 }
 
-type DeleteRequest struct {
+type DeleteObjectRequest struct {
 	Table      string                `json:"table"`
 	Conditions []datastore.Condition `json:"conditions"`
 }
 
-type DeleteResponse struct {
+type DeleteObjectResponse struct {
 }
 
-type UpdateRequest struct {
+type UpdateObjectRequest struct {
 	Table      string                `json:"table,omitempty"`
 	Conditions []datastore.Condition `json:"conditions,omitempty"`
 	Object     *GenericObject        `json:"object,omitempty"`
 }
 
-type UpdateResponse struct {
+type UpdateObjectResponse struct {
 }

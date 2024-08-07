@@ -22,7 +22,7 @@ import (
 // @Description Fetch a list of all download details.
 // @Description
 // @Description Requires the `download-svc:download:view` permission.
-// @Tags Download Service
+// @Tags Download Svc
 // @Accept json
 // @Produce json
 // @Success 200 {object} download.DownloadsResponse "List of downloads"

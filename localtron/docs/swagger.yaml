@@ -1,21 +1,21 @@
 basePath: /
 definitions:
-  chattypes.AddMessageRequest:
+  chat_svc.AddMessageRequest:
     properties:
       message:
-        $ref: '#/definitions/chattypes.Message'
+        $ref: '#/definitions/chat_svc.Message'
     type: object
-  chattypes.AddThreadRequest:
+  chat_svc.AddThreadRequest:
     properties:
       thread:
-        $ref: '#/definitions/chattypes.Thread'
+        $ref: '#/definitions/chat_svc.Thread'
     type: object
-  chattypes.AddThreadResponse:
+  chat_svc.AddThreadResponse:
     properties:
       thread:
-        $ref: '#/definitions/chattypes.Thread'
+        $ref: '#/definitions/chat_svc.Thread'
     type: object
-  chattypes.Asset:
+  chat_svc.Asset:
     properties:
       content:
         description: Content is the base64 encoded binary file direcly embedded in
@@ -35,34 +35,34 @@ definitions:
         description: Url of the asset where
         type: string
     type: object
-  chattypes.GetMessagesResponse:
+  chat_svc.GetMessagesResponse:
     properties:
       assets:
         items:
-          $ref: '#/definitions/chattypes.Asset'
+          $ref: '#/definitions/chat_svc.Asset'
         type: array
       messages:
         items:
-          $ref: '#/definitions/chattypes.Message'
+          $ref: '#/definitions/chat_svc.Message'
         type: array
     type: object
-  chattypes.GetThreadResponse:
+  chat_svc.GetThreadResponse:
     properties:
       exists:
         type: boolean
       thread:
-        $ref: '#/definitions/chattypes.Thread'
+        $ref: '#/definitions/chat_svc.Thread'
     type: object
-  chattypes.GetThreadsRequest:
+  chat_svc.GetThreadsRequest:
     type: object
-  chattypes.GetThreadsResponse:
+  chat_svc.GetThreadsResponse:
     properties:
       threads:
         items:
-          $ref: '#/definitions/chattypes.Thread'
+          $ref: '#/definitions/chat_svc.Thread'
         type: array
     type: object
-  chattypes.Message:
+  chat_svc.Message:
     properties:
       assetIds:
         description: AssetIds defines the attachments the message has.
@@ -87,7 +87,7 @@ definitions:
           For AI messages this field is empty.
         type: string
     type: object
-  chattypes.Thread:
+  chat_svc.Thread:
     properties:
       createdAt:
         type: string
@@ -111,24 +111,24 @@ definitions:
           type: string
         type: array
     type: object
-  chattypes.UpdateThreadRequest:
+  chat_svc.UpdateThreadRequest:
     properties:
       thread:
-        $ref: '#/definitions/chattypes.Thread'
+        $ref: '#/definitions/chat_svc.Thread'
     type: object
-  configtypes.AppServiceConfig:
+  config_svc.AppServiceConfig:
     properties:
       loggingDisabled:
         type: boolean
     type: object
-  configtypes.Config:
+  config_svc.Config:
     properties:
       app:
-        $ref: '#/definitions/configtypes.AppServiceConfig'
+        $ref: '#/definitions/config_svc.AppServiceConfig'
       directory:
         type: string
       download:
-        $ref: '#/definitions/configtypes.DownloadServiceConfig'
+        $ref: '#/definitions/config_svc.DownloadServiceConfig'
       isRuntimeInstalled:
         description: "* This flag drives a minor UX feature:\n\t * if the user has
           not installed the runtime we show an INSTALL\n\t * button, but if the user
@@ -136,31 +136,31 @@ definitions:
           button.\n\t *"
         type: boolean
       model:
-        $ref: '#/definitions/configtypes.ModelServiceConfig'
+        $ref: '#/definitions/config_svc.ModelServiceConfig'
     type: object
-  configtypes.DownloadServiceConfig:
+  config_svc.DownloadServiceConfig:
     properties:
       downloadFolder:
         type: string
     type: object
-  configtypes.GetConfigRequest:
+  config_svc.GetConfigRequest:
     type: object
-  configtypes.GetConfigResponse:
+  config_svc.GetConfigResponse:
     properties:
       config:
-        $ref: '#/definitions/configtypes.Config'
+        $ref: '#/definitions/config_svc.Config'
     type: object
-  configtypes.ModelServiceConfig:
+  config_svc.ModelServiceConfig:
     properties:
       currentModelId:
         type: string
     type: object
-  configtypes.SaveConfigRequest:
+  config_svc.SaveConfigRequest:
     properties:
       config:
-        $ref: '#/definitions/configtypes.Config'
+        $ref: '#/definitions/config_svc.Config'
     type: object
-  configtypes.SaveConfigResponse:
+  config_svc.SaveConfigResponse:
     type: object
   datastore.AllCondition:
     type: object
@@ -267,12 +267,12 @@ definitions:
         description: Selector selects one, more or all fields
       value: {}
     type: object
-  dockertypes.ContainerIsRunningResponse:
+  docker_svc.ContainerIsRunningResponse:
     properties:
       isRunning:
         type: boolean
     type: object
-  dockertypes.DockerInfo:
+  docker_svc.DockerInfo:
     properties:
       dockerDaemonAddress:
         type: string
@@ -281,50 +281,50 @@ definitions:
       hasDocker:
         type: boolean
     type: object
-  dockertypes.ErrorResponse:
+  docker_svc.ErrorResponse:
     properties:
       error:
         type: string
     type: object
-  dockertypes.GetContainerSummaryResponse:
+  docker_svc.GetContainerSummaryResponse:
     properties:
       summary:
         type: string
     type: object
-  dockertypes.GetDockerHostResponse:
+  docker_svc.GetDockerHostResponse:
     properties:
       host:
         type: string
     type: object
-  dockertypes.GetInfoResponse:
+  docker_svc.GetInfoResponse:
     properties:
       info:
-        $ref: '#/definitions/dockertypes.DockerInfo'
+        $ref: '#/definitions/docker_svc.DockerInfo'
     type: object
-  dockertypes.LaunchContainerRequest:
+  docker_svc.LaunchContainerRequest:
     properties:
       hostPort:
         type: integer
       image:
         type: string
       options:
-        $ref: '#/definitions/dockertypes.LaunchOptions'
+        $ref: '#/definitions/docker_svc.LaunchOptions'
       port:
         type: integer
     type: object
-  dockertypes.LaunchContainerResponse:
+  docker_svc.LaunchContainerResponse:
     properties:
       info:
-        $ref: '#/definitions/dockertypes.LaunchInfo'
+        $ref: '#/definitions/docker_svc.LaunchInfo'
     type: object
-  dockertypes.LaunchInfo:
+  docker_svc.LaunchInfo:
     properties:
       newContainerStarted:
         type: boolean
       portNumber:
         type: integer
     type: object
-  dockertypes.LaunchOptions:
+  docker_svc.LaunchOptions:
     properties:
       envs:
         items:
@@ -345,7 +345,7 @@ definitions:
       name:
         type: string
     type: object
-  downloadtypes.DownloadDetails:
+  download_svc.DownloadDetails:
     properties:
       cancelled:
         type: boolean
@@ -372,59 +372,59 @@ definitions:
       url:
         type: string
     type: object
-  downloadtypes.DownloadRequest:
+  download_svc.DownloadRequest:
     properties:
       folderPath:
         type: string
       url:
         type: string
     type: object
-  downloadtypes.DownloadsResponse:
+  download_svc.DownloadsResponse:
     properties:
       downloads:
         items:
-          $ref: '#/definitions/downloadtypes.DownloadDetails'
+          $ref: '#/definitions/download_svc.DownloadDetails'
         type: array
     type: object
-  downloadtypes.ErrorResponse:
+  download_svc.ErrorResponse:
     properties:
       error:
         type: string
     type: object
-  downloadtypes.GetDownloadResponse:
+  download_svc.GetDownloadResponse:
     properties:
       download:
-        $ref: '#/definitions/downloadtypes.DownloadDetails'
+        $ref: '#/definitions/download_svc.DownloadDetails'
       exists:
         type: boolean
     type: object
-  firehosetypes.ErrorResponse:
+  firehose_svc.ErrorResponse:
     properties:
       error:
         type: string
     type: object
-  firehosetypes.Event:
+  firehose_svc.Event:
     properties:
       data: {}
       name:
         type: string
     type: object
-  firehosetypes.PublishRequest:
+  firehose_svc.PublishRequest:
     properties:
       event:
-        $ref: '#/definitions/firehosetypes.Event'
+        $ref: '#/definitions/firehose_svc.Event'
     type: object
-  generictypes.CreateRequest:
+  generic_svc.CreateObjectRequest:
     properties:
       object:
-        $ref: '#/definitions/generictypes.GenericObjectCreateFields'
+        $ref: '#/definitions/generic_svc.GenericObjectCreateFields'
     type: object
-  generictypes.CreateResponse:
+  generic_svc.CreateObjectResponse:
     properties:
       object:
-        $ref: '#/definitions/generictypes.GenericObject'
+        $ref: '#/definitions/generic_svc.GenericObject'
     type: object
-  generictypes.DeleteRequest:
+  generic_svc.DeleteObjectRequest:
     properties:
       conditions:
         items:
@@ -433,19 +433,19 @@ definitions:
       table:
         type: string
     type: object
-  generictypes.DeleteResponse:
+  generic_svc.DeleteObjectResponse:
     type: object
-  generictypes.ErrorResponse:
+  generic_svc.ErrorResponse:
     properties:
       error:
         type: string
     type: object
-  generictypes.GenericObject:
+  generic_svc.GenericObject:
     properties:
       createdAt:
         type: string
       data:
-        additionalProperties: {}
+        additionalProperties: true
         type: object
       id:
         type: string
@@ -465,10 +465,10 @@ definitions:
     - data
     - table
     type: object
-  generictypes.GenericObjectCreateFields:
+  generic_svc.GenericObjectCreateFields:
     properties:
       data:
-        additionalProperties: {}
+        additionalProperties: true
         type: object
       id:
         type: string
@@ -486,7 +486,7 @@ definitions:
     - data
     - table
     type: object
-  generictypes.QueryRequest:
+  generic_svc.QueryRequest:
     properties:
       public:
         type: boolean
@@ -495,44 +495,44 @@ definitions:
       table:
         type: string
     type: object
-  generictypes.QueryResponse:
+  generic_svc.QueryResponse:
     properties:
       objects:
         items:
-          $ref: '#/definitions/generictypes.GenericObject'
+          $ref: '#/definitions/generic_svc.GenericObject'
         type: array
     type: object
-  generictypes.UpdateRequest:
+  generic_svc.UpdateObjectRequest:
     properties:
       conditions:
         items:
           $ref: '#/definitions/datastore.Condition'
         type: array
       object:
-        $ref: '#/definitions/generictypes.GenericObject'
+        $ref: '#/definitions/generic_svc.GenericObject'
       table:
         type: string
     type: object
-  generictypes.UpdateResponse:
+  generic_svc.UpdateObjectResponse:
     type: object
-  generictypes.UpsertRequest:
+  generic_svc.UpsertObjectRequest:
     properties:
       object:
-        $ref: '#/definitions/generictypes.GenericObjectCreateFields'
+        $ref: '#/definitions/generic_svc.GenericObjectCreateFields'
     type: object
-  generictypes.UpsertResponse:
+  generic_svc.UpsertObjectResponse:
     properties:
       object:
-        $ref: '#/definitions/generictypes.GenericObject'
+        $ref: '#/definitions/generic_svc.GenericObject'
     type: object
-  modeltypes.Architectures:
+  model_svc.Architectures:
     properties:
       cuda:
-        $ref: '#/definitions/modeltypes.Container'
+        $ref: '#/definitions/model_svc.Container'
       default:
-        $ref: '#/definitions/modeltypes.Container'
+        $ref: '#/definitions/model_svc.Container'
     type: object
-  modeltypes.Container:
+  model_svc.Container:
     properties:
       envars:
         description: "Envars passed to the container. eg.\n\t'DEVICES=all'"
@@ -550,30 +550,30 @@ definitions:
         description: Port is the internal port of the Container
         type: integer
     type: object
-  modeltypes.ErrorResponse:
+  model_svc.ErrorResponse:
     properties:
       error:
         type: string
     type: object
-  modeltypes.GetModelResponse:
+  model_svc.GetModelResponse:
     properties:
       exists:
         type: boolean
       model:
-        $ref: '#/definitions/modeltypes.Model'
+        $ref: '#/definitions/model_svc.Model'
       platform:
-        $ref: '#/definitions/modeltypes.Platform'
+        $ref: '#/definitions/model_svc.Platform'
     type: object
-  modeltypes.ListResponse:
+  model_svc.ListResponse:
     properties:
       models:
         items:
-          $ref: '#/definitions/modeltypes.Model'
+          $ref: '#/definitions/model_svc.Model'
         type: array
     type: object
-  modeltypes.MakeDefaultResponse:
+  model_svc.MakeDefaultResponse:
     type: object
-  modeltypes.Model:
+  model_svc.Model:
     properties:
       assets:
         additionalProperties:
@@ -622,7 +622,7 @@ definitions:
       version:
         type: string
     type: object
-  modeltypes.ModelStatus:
+  model_svc.ModelStatus:
     properties:
       address:
         type: string
@@ -633,10 +633,10 @@ definitions:
           true when the model is both running and answering\n\t- fully loaded."
         type: boolean
     type: object
-  modeltypes.Platform:
+  model_svc.Platform:
     properties:
       architectures:
-        $ref: '#/definitions/modeltypes.Architectures'
+        $ref: '#/definitions/model_svc.Architectures'
       id:
         type: string
       name:
@@ -644,14 +644,14 @@ definitions:
       version:
         type: integer
     type: object
-  modeltypes.StartResponse:
+  model_svc.StartResponse:
     type: object
-  modeltypes.StatusResponse:
+  model_svc.StatusResponse:
     properties:
       status:
-        $ref: '#/definitions/modeltypes.ModelStatus'
+        $ref: '#/definitions/model_svc.ModelStatus'
     type: object
-  prompttypes.AddPromptRequest:
+  prompt_svc.AddPromptRequest:
     properties:
       id:
         description: Id is the unique ID of the prompt.
@@ -691,34 +691,34 @@ definitions:
     required:
     - prompt
     type: object
-  prompttypes.AddPromptResponse:
+  prompt_svc.AddPromptResponse:
     properties:
       answer:
         type: string
       prompt:
-        $ref: '#/definitions/prompttypes.Prompt'
+        $ref: '#/definitions/prompt_svc.Prompt'
     type: object
-  prompttypes.ErrorResponse:
+  prompt_svc.ErrorResponse:
     properties:
       error:
         type: string
     type: object
-  prompttypes.ListPromptsRequest:
+  prompt_svc.ListPromptsRequest:
     properties:
       query:
         $ref: '#/definitions/datastore.Query'
     type: object
-  prompttypes.ListPromptsResponse:
+  prompt_svc.ListPromptsResponse:
     properties:
       after: {}
       count:
         type: integer
       prompts:
         items:
-          $ref: '#/definitions/prompttypes.Prompt'
+          $ref: '#/definitions/prompt_svc.Prompt'
         type: array
     type: object
-  prompttypes.Prompt:
+  prompt_svc.Prompt:
     properties:
       createdAt:
         description: CreatedAt is the time of the prompt creation.
@@ -751,7 +751,7 @@ definitions:
         type: integer
       status:
         allOf:
-        - $ref: '#/definitions/prompttypes.PromptStatus'
+        - $ref: '#/definitions/prompt_svc.PromptStatus'
         description: Status of the prompt.
       sync:
         description: |-
@@ -781,7 +781,7 @@ definitions:
     required:
     - prompt
     type: object
-  prompttypes.PromptStatus:
+  prompt_svc.PromptStatus:
     enum:
     - scheduled
     - running
@@ -797,14 +797,14 @@ definitions:
     - PromptStatusErrored
     - PromptStatusAbandoned
     - PromptStatusCanceled
-  prompttypes.RemovePromptRequest:
+  prompt_svc.RemovePromptRequest:
     properties:
       promptId:
         type: string
     type: object
-  prompttypes.RemovePromptResponse:
+  prompt_svc.RemovePromptResponse:
     type: object
-  usertypes.AuthToken:
+  user_svc.AuthToken:
     properties:
       createdAt:
         type: string
@@ -819,16 +819,16 @@ definitions:
       userId:
         type: string
     type: object
-  usertypes.ChangePasswordAdminRequest:
+  user_svc.ChangePasswordAdminRequest:
     properties:
       email:
         type: string
       newPassword:
         type: string
     type: object
-  usertypes.ChangePasswordAdminResponse:
+  user_svc.ChangePasswordAdminResponse:
     type: object
-  usertypes.ChangePasswordRequest:
+  user_svc.ChangePasswordRequest:
     properties:
       currentPassword:
         type: string
@@ -837,9 +837,9 @@ definitions:
       newPassword:
         type: string
     type: object
-  usertypes.ChangePasswordResponse:
+  user_svc.ChangePasswordResponse:
     type: object
-  usertypes.CreateRoleRequest:
+  user_svc.CreateRoleRequest:
     properties:
       description:
         type: string
@@ -850,12 +850,12 @@ definitions:
           type: string
         type: array
     type: object
-  usertypes.CreateRoleResponse:
+  user_svc.CreateRoleResponse:
     properties:
       role:
-        $ref: '#/definitions/usertypes.Role'
+        $ref: '#/definitions/user_svc.Role'
     type: object
-  usertypes.CreateUserRequest:
+  user_svc.CreateUserRequest:
     properties:
       password:
         type: string
@@ -864,44 +864,44 @@ definitions:
           type: string
         type: array
       user:
-        $ref: '#/definitions/usertypes.User'
+        $ref: '#/definitions/user_svc.User'
     type: object
-  usertypes.CreateUserResponse:
+  user_svc.CreateUserResponse:
     type: object
-  usertypes.DeleteRoleResponse:
+  user_svc.DeleteRoleResponse:
     type: object
-  usertypes.DeleteUserResponse:
+  user_svc.DeleteUserResponse:
     type: object
-  usertypes.ErrorResponse:
+  user_svc.ErrorResponse:
     properties:
       error:
         type: string
     type: object
-  usertypes.GetPermissionsResponse:
+  user_svc.GetPermissionsResponse:
     properties:
       permissions:
         items:
-          $ref: '#/definitions/usertypes.Permission'
+          $ref: '#/definitions/user_svc.Permission'
         type: array
     type: object
-  usertypes.GetPublicKeyResponse:
+  user_svc.GetPublicKeyResponse:
     properties:
       publicKey:
         type: string
     type: object
-  usertypes.GetRolesResponse:
+  user_svc.GetRolesResponse:
     properties:
       roles:
         items:
-          $ref: '#/definitions/usertypes.Role'
+          $ref: '#/definitions/user_svc.Role'
         type: array
     type: object
-  usertypes.GetUsersRequest:
+  user_svc.GetUsersRequest:
     properties:
       query:
         $ref: '#/definitions/datastore.Query'
     type: object
-  usertypes.GetUsersResponse:
+  user_svc.GetUsersResponse:
     properties:
       after:
         type: string
@@ -909,36 +909,36 @@ definitions:
         type: integer
       users:
         items:
-          $ref: '#/definitions/usertypes.User'
+          $ref: '#/definitions/user_svc.User'
         type: array
     type: object
-  usertypes.IsAuthorizedRequest:
+  user_svc.IsAuthorizedRequest:
     properties:
       emailsGranted:
         items:
           type: string
         type: array
     type: object
-  usertypes.IsAuthorizedResponse:
+  user_svc.IsAuthorizedResponse:
     properties:
       authorized:
         type: boolean
       user:
-        $ref: '#/definitions/usertypes.User'
+        $ref: '#/definitions/user_svc.User'
     type: object
-  usertypes.LoginRequest:
+  user_svc.LoginRequest:
     properties:
       email:
         type: string
       password:
         type: string
     type: object
-  usertypes.LoginResponse:
+  user_svc.LoginResponse:
     properties:
       token:
-        $ref: '#/definitions/usertypes.AuthToken'
+        $ref: '#/definitions/user_svc.AuthToken'
     type: object
-  usertypes.Permission:
+  user_svc.Permission:
     properties:
       createdAt:
         type: string
@@ -956,17 +956,17 @@ definitions:
       updatedAt:
         type: string
     type: object
-  usertypes.ReadUserByTokenRequest:
+  user_svc.ReadUserByTokenRequest:
     properties:
       token:
         type: string
     type: object
-  usertypes.ReadUserByTokenResponse:
+  user_svc.ReadUserByTokenResponse:
     properties:
       user:
-        $ref: '#/definitions/usertypes.User'
+        $ref: '#/definitions/user_svc.User'
     type: object
-  usertypes.RegisterRequest:
+  user_svc.RegisterRequest:
     properties:
       email:
         type: string
@@ -975,9 +975,9 @@ definitions:
       password:
         type: string
     type: object
-  usertypes.RegisterResponse:
+  user_svc.RegisterResponse:
     type: object
-  usertypes.Role:
+  user_svc.Role:
     properties:
       createdAt:
         type: string
@@ -996,21 +996,21 @@ definitions:
       updatedAt:
         type: string
     type: object
-  usertypes.SetRolePermissionsRequest:
+  user_svc.SetRolePermissionsRequest:
     properties:
       permissionIds:
         items:
           type: string
         type: array
     type: object
-  usertypes.SetRolePermissionsResponse:
+  user_svc.SetRolePermissionsResponse:
     type: object
-  usertypes.UpserPermissionRequest:
+  user_svc.UpserPermissionRequest:
     properties:
       permission:
-        $ref: '#/definitions/usertypes.Permission'
+        $ref: '#/definitions/user_svc.Permission'
     type: object
-  usertypes.User:
+  user_svc.User:
     properties:
       createdAt:
         type: string
@@ -1089,7 +1089,7 @@ paths:
       - BearerAuth: []
       summary: Delete a Message
       tags:
-      - Chat Service
+      - Chat Svc
   /chat-svc/thread:
     post:
       consumes:
@@ -1104,14 +1104,14 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/chattypes.AddThreadRequest'
+          $ref: '#/definitions/chat_svc.AddThreadRequest'
       produces:
       - application/json
       responses:
         "200":
           description: Thread successfully created
           schema:
-            $ref: '#/definitions/chattypes.AddThreadResponse'
+            $ref: '#/definitions/chat_svc.AddThreadResponse'
         "400":
           description: Invalid JSON
           schema:
@@ -1128,7 +1128,7 @@ paths:
       - BearerAuth: []
       summary: Add Thread
       tags:
-      - Chat Service
+      - Chat Svc
   /chat-svc/thread/{threadId}:
     delete:
       consumes:
@@ -1165,7 +1165,7 @@ paths:
       - BearerAuth: []
       summary: Delete a Thread
       tags:
-      - Chat Service
+      - Chat Svc
     get:
       consumes:
       - application/json
@@ -1183,7 +1183,7 @@ paths:
         "200":
           description: Thread details successfully retrieved
           schema:
-            $ref: '#/definitions/chattypes.GetThreadResponse'
+            $ref: '#/definitions/chat_svc.GetThreadResponse'
         "400":
           description: Invalid JSON
           schema:
@@ -1200,7 +1200,7 @@ paths:
       - BearerAuth: []
       summary: Get Thread
       tags:
-      - Chat Service
+      - Chat Svc
     put:
       consumes:
       - application/json
@@ -1217,14 +1217,14 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/chattypes.UpdateThreadRequest'
+          $ref: '#/definitions/chat_svc.UpdateThreadRequest'
       produces:
       - application/json
       responses:
         "200":
           description: Thread successfully updated
           schema:
-            $ref: '#/definitions/chattypes.AddThreadResponse'
+            $ref: '#/definitions/chat_svc.AddThreadResponse'
         "400":
           description: Invalid JSON
           schema:
@@ -1241,7 +1241,7 @@ paths:
       - BearerAuth: []
       summary: Update Thread
       tags:
-      - Chat Service
+      - Chat Svc
   /chat-svc/thread/{threadId}/message:
     post:
       consumes:
@@ -1259,7 +1259,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/chattypes.AddMessageRequest'
+          $ref: '#/definitions/chat_svc.AddMessageRequest'
       produces:
       - application/json
       responses:
@@ -1284,7 +1284,7 @@ paths:
       - BearerAuth: []
       summary: Add Message
       tags:
-      - Chat Service
+      - Chat Svc
   /chat-svc/thread/{threadId}/messages:
     post:
       consumes:
@@ -1303,7 +1303,7 @@ paths:
         "200":
           description: Messages and assets successfully retrieved
           schema:
-            $ref: '#/definitions/chattypes.GetMessagesResponse'
+            $ref: '#/definitions/chat_svc.GetMessagesResponse'
         "400":
           description: Invalid JSON
           schema:
@@ -1320,7 +1320,7 @@ paths:
       - BearerAuth: []
       summary: List Messages
       tags:
-      - Chat Service
+      - Chat Svc
   /chat-svc/threads:
     post:
       consumes:
@@ -1333,14 +1333,14 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/chattypes.GetThreadsRequest'
+          $ref: '#/definitions/chat_svc.GetThreadsRequest'
       produces:
       - application/json
       responses:
         "200":
           description: Threads successfully retrieved
           schema:
-            $ref: '#/definitions/chattypes.GetThreadsResponse'
+            $ref: '#/definitions/chat_svc.GetThreadsResponse'
         "400":
           description: Invalid JSON
           schema:
@@ -1357,7 +1357,7 @@ paths:
       - BearerAuth: []
       summary: Get Threads
       tags:
-      - Chat Service
+      - Chat Svc
   /config-svc/get:
     post:
       consumes:
@@ -1370,14 +1370,14 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/configtypes.GetConfigRequest'
+          $ref: '#/definitions/config_svc.GetConfigRequest'
       produces:
       - application/json
       responses:
         "200":
           description: Current configuration retrieved successfully
           schema:
-            $ref: '#/definitions/configtypes.GetConfigResponse'
+            $ref: '#/definitions/config_svc.GetConfigResponse'
         "401":
           description: Unauthorized
           schema:
@@ -1390,7 +1390,7 @@ paths:
       - BearerAuth: []
       summary: Get Config
       tags:
-      - Config Service
+      - Config Svc
   /config-svc/save:
     post:
       consumes:
@@ -1403,14 +1403,14 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/configtypes.SaveConfigRequest'
+          $ref: '#/definitions/config_svc.SaveConfigRequest'
       produces:
       - application/json
       responses:
         "200":
           description: Save Config Response
           schema:
-            $ref: '#/definitions/configtypes.SaveConfigResponse'
+            $ref: '#/definitions/config_svc.SaveConfigResponse'
         "401":
           description: Unauthorized
           schema:
@@ -1423,7 +1423,7 @@ paths:
       - BearerAuth: []
       summary: Save Config
       tags:
-      - Config Service
+      - Config Svc
   /docker-svc/container:
     put:
       consumes:
@@ -1439,26 +1439,26 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/dockertypes.LaunchContainerRequest'
+          $ref: '#/definitions/docker_svc.LaunchContainerRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dockertypes.LaunchContainerResponse'
+            $ref: '#/definitions/docker_svc.LaunchContainerResponse'
         "400":
           description: Invalid JSON
           schema:
-            $ref: '#/definitions/dockertypes.ErrorResponse'
+            $ref: '#/definitions/docker_svc.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/dockertypes.ErrorResponse'
+            $ref: '#/definitions/docker_svc.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/dockertypes.ErrorResponse'
+            $ref: '#/definitions/docker_svc.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Launch a Docker Container
@@ -1482,24 +1482,24 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dockertypes.ContainerIsRunningResponse'
+            $ref: '#/definitions/docker_svc.ContainerIsRunningResponse'
         "400":
           description: Invalid JSON
           schema:
-            $ref: '#/definitions/dockertypes.ErrorResponse'
+            $ref: '#/definitions/docker_svc.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/dockertypes.ErrorResponse'
+            $ref: '#/definitions/docker_svc.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/dockertypes.ErrorResponse'
+            $ref: '#/definitions/docker_svc.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Check If a Container Is Running
       tags:
-      - Docker Service
+      - Docker Svc
   /docker-svc/container/{hash}/summary/{numberOfLines}:
     get:
       consumes:
@@ -1524,24 +1524,24 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dockertypes.GetContainerSummaryResponse'
+            $ref: '#/definitions/docker_svc.GetContainerSummaryResponse'
         "400":
           description: Invalid JSON
           schema:
-            $ref: '#/definitions/dockertypes.ErrorResponse'
+            $ref: '#/definitions/docker_svc.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/dockertypes.ErrorResponse'
+            $ref: '#/definitions/docker_svc.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/dockertypes.ErrorResponse'
+            $ref: '#/definitions/docker_svc.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Get Container Summary
       tags:
-      - Docker Service
+      - Docker Svc
   /docker-svc/host:
     get:
       consumes:
@@ -1554,20 +1554,20 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dockertypes.GetDockerHostResponse'
+            $ref: '#/definitions/docker_svc.GetDockerHostResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/dockertypes.ErrorResponse'
+            $ref: '#/definitions/docker_svc.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/dockertypes.ErrorResponse'
+            $ref: '#/definitions/docker_svc.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Get Docker Host
       tags:
-      - Docker Service
+      - Docker Svc
   /docker-svc/info:
     get:
       consumes:
@@ -1580,20 +1580,20 @@ paths:
         "200":
           description: Service Information
           schema:
-            $ref: '#/definitions/dockertypes.GetInfoResponse'
+            $ref: '#/definitions/docker_svc.GetInfoResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/dockertypes.ErrorResponse'
+            $ref: '#/definitions/docker_svc.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/dockertypes.ErrorResponse'
+            $ref: '#/definitions/docker_svc.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Get Docker Service Information
       tags:
-      - Docker Service
+      - Docker Svc
   /download-svc/download:
     put:
       consumes:
@@ -1609,7 +1609,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/downloadtypes.DownloadRequest'
+          $ref: '#/definitions/download_svc.DownloadRequest'
       produces:
       - application/json
       responses:
@@ -1621,20 +1621,20 @@ paths:
         "400":
           description: Invalid JSON
           schema:
-            $ref: '#/definitions/downloadtypes.ErrorResponse'
+            $ref: '#/definitions/download_svc.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/downloadtypes.ErrorResponse'
+            $ref: '#/definitions/download_svc.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/downloadtypes.ErrorResponse'
+            $ref: '#/definitions/download_svc.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Download a File
       tags:
-      - Download Service
+      - Download Svc
   /download-svc/download/{downloadId}:
     get:
       consumes:
@@ -1656,7 +1656,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/downloadtypes.GetDownloadResponse'
+            $ref: '#/definitions/download_svc.GetDownloadResponse'
         "401":
           description: Unauthorized
           schema:
@@ -1669,7 +1669,7 @@ paths:
       - BearerAuth: []
       summary: Get a Download
       tags:
-      - Download Service
+      - Download Svc
   /download-svc/download/{downloadId}/pause:
     put:
       consumes:
@@ -1709,7 +1709,7 @@ paths:
       - BearerAuth: []
       summary: Pause a Download
       tags:
-      - Download Service
+      - Download Svc
   /download-svc/downloads:
     post:
       consumes:
@@ -1725,7 +1725,7 @@ paths:
         "200":
           description: List of downloads
           schema:
-            $ref: '#/definitions/downloadtypes.DownloadsResponse'
+            $ref: '#/definitions/download_svc.DownloadsResponse'
         "401":
           description: Unauthorized
           schema:
@@ -1738,7 +1738,7 @@ paths:
       - BearerAuth: []
       summary: List Downloads
       tags:
-      - Download Service
+      - Download Svc
   /firehose-svc/publish:
     post:
       consumes:
@@ -1751,7 +1751,7 @@ paths:
         name: event
         required: true
         schema:
-          $ref: '#/definitions/firehosetypes.PublishRequest'
+          $ref: '#/definitions/firehose_svc.PublishRequest'
       produces:
       - application/json
       responses:
@@ -1760,16 +1760,16 @@ paths:
         "400":
           description: Invalid JSON
           schema:
-            $ref: '#/definitions/firehosetypes.ErrorResponse'
+            $ref: '#/definitions/firehose_svc.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/firehosetypes.ErrorResponse'
+            $ref: '#/definitions/firehose_svc.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Publish an Event
       tags:
-      - Firehose Service
+      - Firehose Svc
   /firehose-svc/subscribe:
     get:
       consumes:
@@ -1786,59 +1786,61 @@ paths:
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/firehosetypes.ErrorResponse'
+            $ref: '#/definitions/firehose_svc.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/firehosetypes.ErrorResponse'
+            $ref: '#/definitions/firehose_svc.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Subscribe to the Event Stream
       tags:
-      - Firehose Service
-  /generic-svc/create:
+      - Firehose Svc
+  /generic-svc/object:
     post:
       consumes:
       - application/json
       description: Creates a new object with the provided details. Requires authorization
         and user authentication.
+      operationId: createObject
       parameters:
       - description: Create request payload
         in: body
         name: body
         required: true
         schema:
-          $ref: '#/definitions/generictypes.CreateRequest'
+          $ref: '#/definitions/generic_svc.CreateObjectRequest'
       produces:
       - application/json
       responses:
         "200":
           description: Success
           schema:
-            $ref: '#/definitions/generictypes.CreateResponse'
+            $ref: '#/definitions/generic_svc.CreateObjectResponse'
         "400":
           description: Invalid JSON
           schema:
-            $ref: '#/definitions/generictypes.ErrorResponse'
+            $ref: '#/definitions/generic_svc.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/generictypes.ErrorResponse'
+            $ref: '#/definitions/generic_svc.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/generictypes.ErrorResponse'
+            $ref: '#/definitions/generic_svc.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Create a Generic Object
       tags:
-      - Generic Service
+      - Generic Svc
   /generic-svc/object/{objectId}:
     delete:
       consumes:
       - application/json
       description: Removes a generic object from the system based on the provided
         conditions. Requires authorization and user authentication.
+      operationId: deleteObject
       parameters:
       - description: Object ID
         in: path
@@ -1850,36 +1852,37 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/generictypes.DeleteRequest'
+          $ref: '#/definitions/generic_svc.DeleteObjectRequest'
       produces:
       - application/json
       responses:
         "200":
           description: Successful deletion of object
           schema:
-            $ref: '#/definitions/generictypes.DeleteResponse'
+            $ref: '#/definitions/generic_svc.DeleteObjectResponse'
         "400":
           description: Invalid JSON
           schema:
-            $ref: '#/definitions/generictypes.ErrorResponse'
+            $ref: '#/definitions/generic_svc.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/generictypes.ErrorResponse'
+            $ref: '#/definitions/generic_svc.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/generictypes.ErrorResponse'
+            $ref: '#/definitions/generic_svc.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Delete a Generic Object
       tags:
-      - Generic Service
+      - Generic Svc
     put:
       consumes:
       - application/json
       description: Creates a new generic object or updates an existing one based on
         the provided data. Requires authorization and user authentication.
+      operationId: upsertObject
       parameters:
       - description: Object ID
         in: path
@@ -1891,31 +1894,31 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/generictypes.UpsertRequest'
+          $ref: '#/definitions/generic_svc.UpsertObjectRequest'
       produces:
       - application/json
       responses:
         "200":
           description: Successful creation or update of object
           schema:
-            $ref: '#/definitions/generictypes.UpsertResponse'
+            $ref: '#/definitions/generic_svc.UpsertObjectResponse'
         "400":
           description: Invalid JSON
           schema:
-            $ref: '#/definitions/generictypes.ErrorResponse'
+            $ref: '#/definitions/generic_svc.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/generictypes.ErrorResponse'
+            $ref: '#/definitions/generic_svc.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/generictypes.ErrorResponse'
+            $ref: '#/definitions/generic_svc.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Upsert a Generic Object
       tags:
-      - Generic Service
+      - Generic Svc
   /generic-svc/objects:
     post:
       consumes:
@@ -1926,73 +1929,75 @@ paths:
 
 
         Use helper functions in your respective client library such as condition constructors (`equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
+      operationId: query
       parameters:
       - description: Query Request
         in: body
         name: body
         schema:
-          $ref: '#/definitions/generictypes.QueryRequest'
+          $ref: '#/definitions/generic_svc.QueryRequest'
       produces:
       - application/json
       responses:
         "200":
           description: Successful retrieval of objects
           schema:
-            $ref: '#/definitions/generictypes.QueryResponse'
+            $ref: '#/definitions/generic_svc.QueryResponse'
         "400":
           description: Invalid JSON
           schema:
-            $ref: '#/definitions/generictypes.ErrorResponse'
+            $ref: '#/definitions/generic_svc.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/generictypes.ErrorResponse'
+            $ref: '#/definitions/generic_svc.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/generictypes.ErrorResponse'
+            $ref: '#/definitions/generic_svc.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Find Generic Objects
       tags:
-      - Generic Service
+      - Generic Svc
   /generic-svc/objects/update:
     post:
       consumes:
       - application/json
       description: Updates objects in a specified table based on provided conditions.
         Requires authorization and user authentication.
+      operationId: updateObjects
       parameters:
       - description: Update request payload
         in: body
         name: body
         required: true
         schema:
-          $ref: '#/definitions/generictypes.UpdateRequest'
+          $ref: '#/definitions/generic_svc.UpdateObjectRequest'
       produces:
       - application/json
       responses:
         "200":
           description: Successful update of objects
           schema:
-            $ref: '#/definitions/generictypes.UpdateResponse'
+            $ref: '#/definitions/generic_svc.UpdateObjectResponse'
         "400":
           description: Invalid JSON
           schema:
-            $ref: '#/definitions/generictypes.ErrorResponse'
+            $ref: '#/definitions/generic_svc.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/generictypes.ErrorResponse'
+            $ref: '#/definitions/generic_svc.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/generictypes.ErrorResponse'
+            $ref: '#/definitions/generic_svc.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Update Generic Objects
       tags:
-      - Generic Service
+      - Generic Svc
   /model-svc/default/start:
     put:
       consumes:
@@ -2008,24 +2013,24 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/modeltypes.StartResponse'
+            $ref: '#/definitions/model_svc.StartResponse'
         "400":
           description: Invalid JSON
           schema:
-            $ref: '#/definitions/modeltypes.ErrorResponse'
+            $ref: '#/definitions/model_svc.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/modeltypes.ErrorResponse'
+            $ref: '#/definitions/model_svc.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/modeltypes.ErrorResponse'
+            $ref: '#/definitions/model_svc.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Start the Default Model
       tags:
-      - Model Service
+      - Model Svc
   /model-svc/model/{id}/status:
     get:
       consumes:
@@ -2047,7 +2052,7 @@ paths:
         "200":
           description: Model status retrieved successfully
           schema:
-            $ref: '#/definitions/modeltypes.StatusResponse'
+            $ref: '#/definitions/model_svc.StatusResponse'
         "401":
           description: Unauthorized
           schema:
@@ -2060,7 +2065,7 @@ paths:
       - BearerAuth: []
       summary: Get Model Status
       tags:
-      - Model Service
+      - Model Svc
   /model-svc/model/{modelId}:
     get:
       consumes:
@@ -2082,20 +2087,20 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/modeltypes.GetModelResponse'
+            $ref: '#/definitions/model_svc.GetModelResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/modeltypes.ErrorResponse'
+            $ref: '#/definitions/model_svc.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/modeltypes.ErrorResponse'
+            $ref: '#/definitions/model_svc.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Get a Model
       tags:
-      - Model Service
+      - Model Svc
   /model-svc/model/{modelId}/make-default:
     put:
       consumes:
@@ -2115,24 +2120,24 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/modeltypes.MakeDefaultResponse'
+            $ref: '#/definitions/model_svc.MakeDefaultResponse'
         "400":
           description: Invalid JSON
           schema:
-            $ref: '#/definitions/modeltypes.ErrorResponse'
+            $ref: '#/definitions/model_svc.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/modeltypes.ErrorResponse'
+            $ref: '#/definitions/model_svc.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/modeltypes.ErrorResponse'
+            $ref: '#/definitions/model_svc.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Make a Model Default
       tags:
-      - Model Service
+      - Model Svc
   /model-svc/model/{modelId}/start:
     put:
       consumes:
@@ -2151,24 +2156,24 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/modeltypes.StartResponse'
+            $ref: '#/definitions/model_svc.StartResponse'
         "400":
           description: Invalid JSON
           schema:
-            $ref: '#/definitions/modeltypes.ErrorResponse'
+            $ref: '#/definitions/model_svc.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/modeltypes.ErrorResponse'
+            $ref: '#/definitions/model_svc.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/modeltypes.ErrorResponse'
+            $ref: '#/definitions/model_svc.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Start a Model
       tags:
-      - Model Service
+      - Model Svc
   /model-svc/models:
     get:
       consumes:
@@ -2183,20 +2188,20 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/modeltypes.ListResponse'
+            $ref: '#/definitions/model_svc.ListResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/modeltypes.ErrorResponse'
+            $ref: '#/definitions/model_svc.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/modeltypes.ErrorResponse'
+            $ref: '#/definitions/model_svc.ErrorResponse'
       security:
       - BearerAuth: []
       summary: List Models
       tags:
-      - Model Service
+      - Model Svc
   /prompt-svc/{threadId}/subscribe:
     get:
       description: Subscribe to prompt responses via Server-Sent Events (SSE)
@@ -2215,14 +2220,16 @@ paths:
         "400":
           description: Missing threadId parameter
           schema:
-            $ref: '#/definitions/prompttypes.ErrorResponse'
+            $ref: '#/definitions/prompt_svc.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/prompttypes.ErrorResponse'
+            $ref: '#/definitions/prompt_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Subscribe to Prompt
       tags:
-      - Prompt Service
+      - Prompt Svc
   /prompt-svc/list:
     post:
       consumes:
@@ -2234,29 +2241,31 @@ paths:
         in: body
         name: request
         schema:
-          $ref: '#/definitions/prompttypes.ListPromptsRequest'
+          $ref: '#/definitions/prompt_svc.ListPromptsRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/prompttypes.ListPromptsResponse'
+            $ref: '#/definitions/prompt_svc.ListPromptsResponse'
         "400":
           description: Invalid JSON
           schema:
-            $ref: '#/definitions/prompttypes.ErrorResponse'
+            $ref: '#/definitions/prompt_svc.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/prompttypes.ErrorResponse'
+            $ref: '#/definitions/prompt_svc.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/prompttypes.ErrorResponse'
+            $ref: '#/definitions/prompt_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: List Prompts
       tags:
-      - Prompt Service
+      - Prompt Svc
   /prompt-svc/prompt:
     post:
       consumes:
@@ -2270,29 +2279,31 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/prompttypes.AddPromptRequest'
+          $ref: '#/definitions/prompt_svc.AddPromptRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/prompttypes.AddPromptResponse'
+            $ref: '#/definitions/prompt_svc.AddPromptResponse'
         "400":
           description: Invalid JSON
           schema:
-            $ref: '#/definitions/prompttypes.ErrorResponse'
+            $ref: '#/definitions/prompt_svc.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/prompttypes.ErrorResponse'
+            $ref: '#/definitions/prompt_svc.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/prompttypes.ErrorResponse'
+            $ref: '#/definitions/prompt_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Add Prompt
       tags:
-      - Prompt Service
+      - Prompt Svc
   /prompt-svc/remove:
     post:
       consumes:
@@ -2305,29 +2316,31 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/prompttypes.RemovePromptRequest'
+          $ref: '#/definitions/prompt_svc.RemovePromptRequest'
       produces:
       - application/json
       responses:
         "200":
           description: '{}'
           schema:
-            $ref: '#/definitions/prompttypes.RemovePromptResponse'
+            $ref: '#/definitions/prompt_svc.RemovePromptResponse'
         "400":
           description: Invalid JSON
           schema:
-            $ref: '#/definitions/prompttypes.ErrorResponse'
+            $ref: '#/definitions/prompt_svc.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/prompttypes.ErrorResponse'
+            $ref: '#/definitions/prompt_svc.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/prompttypes.ErrorResponse'
+            $ref: '#/definitions/prompt_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Remove Prompt
       tags:
-      - Prompt Service
+      - Prompt Svc
   /user-svc/change-password:
     post:
       consumes:
@@ -2340,31 +2353,31 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/usertypes.ChangePasswordRequest'
+          $ref: '#/definitions/user_svc.ChangePasswordRequest'
       produces:
       - application/json
       responses:
         "200":
           description: Password changed successfully
           schema:
-            $ref: '#/definitions/usertypes.ChangePasswordResponse'
+            $ref: '#/definitions/user_svc.ChangePasswordResponse'
         "400":
           description: Invalid JSON
           schema:
-            $ref: '#/definitions/usertypes.ErrorResponse'
+            $ref: '#/definitions/user_svc.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/usertypes.ErrorResponse'
+            $ref: '#/definitions/user_svc.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/usertypes.ErrorResponse'
+            $ref: '#/definitions/user_svc.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Change User Password
       tags:
-      - User Service
+      - User Svc
   /user-svc/change-password-admin:
     post:
       consumes:
@@ -2377,31 +2390,31 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/usertypes.ChangePasswordAdminRequest'
+          $ref: '#/definitions/user_svc.ChangePasswordAdminRequest'
       produces:
       - application/json
       responses:
         "200":
           description: Password changed successfully
           schema:
-            $ref: '#/definitions/usertypes.ChangePasswordAdminResponse'
+            $ref: '#/definitions/user_svc.ChangePasswordAdminResponse'
         "400":
           description: Invalid JSON
           schema:
-            $ref: '#/definitions/usertypes.ErrorResponse'
+            $ref: '#/definitions/user_svc.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/usertypes.ErrorResponse'
+            $ref: '#/definitions/user_svc.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/usertypes.ErrorResponse'
+            $ref: '#/definitions/user_svc.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Change User Password (Admin)
       tags:
-      - User Service
+      - User Svc
   /user-svc/login:
     post:
       consumes:
@@ -2414,25 +2427,25 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/usertypes.LoginRequest'
+          $ref: '#/definitions/user_svc.LoginRequest'
       produces:
       - application/json
       responses:
         "200":
           description: Login successful
           schema:
-            $ref: '#/definitions/usertypes.LoginResponse'
+            $ref: '#/definitions/user_svc.LoginResponse'
         "400":
           description: Invalid JSON
           schema:
-            $ref: '#/definitions/usertypes.ErrorResponse'
+            $ref: '#/definitions/user_svc.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/usertypes.ErrorResponse'
+            $ref: '#/definitions/user_svc.ErrorResponse'
       summary: Login
       tags:
-      - User Service
+      - User Svc
   /user-svc/permission/{permissionId}:
     put:
       consumes:
@@ -2455,14 +2468,14 @@ paths:
         name: requestBody
         required: true
         schema:
-          $ref: '#/definitions/usertypes.UpserPermissionRequest'
+          $ref: '#/definitions/user_svc.UpserPermissionRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/usertypes.CreateUserResponse'
+            $ref: '#/definitions/user_svc.CreateUserResponse'
         "400":
           description: 'Bad Request: Invalid JSON or Bad Namespace'
           schema:
@@ -2479,7 +2492,7 @@ paths:
       - BearerAuth: []
       summary: Upsert a Permission
       tags:
-      - User Service
+      - User Svc
   /user-svc/permission/{permissionId}/is-authorized:
     post:
       consumes:
@@ -2497,27 +2510,27 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/usertypes.IsAuthorizedRequest'
+          $ref: '#/definitions/user_svc.IsAuthorizedRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/usertypes.IsAuthorizedResponse'
+            $ref: '#/definitions/user_svc.IsAuthorizedResponse'
         "400":
           description: Invalid JSON or missing permission id
           schema:
-            $ref: '#/definitions/usertypes.ErrorResponse'
+            $ref: '#/definitions/user_svc.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/usertypes.ErrorResponse'
+            $ref: '#/definitions/user_svc.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Is Authorized
       tags:
-      - User Service
+      - User Svc
   /user-svc/public-key:
     get:
       consumes:
@@ -2530,18 +2543,18 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/usertypes.GetPublicKeyResponse'
+            $ref: '#/definitions/user_svc.GetPublicKeyResponse'
         "400":
           description: Invalid JSON or missing permission id
           schema:
-            $ref: '#/definitions/usertypes.ErrorResponse'
+            $ref: '#/definitions/user_svc.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/usertypes.ErrorResponse'
+            $ref: '#/definitions/user_svc.ErrorResponse'
       summary: Ge Public Key
       tags:
-      - User Service
+      - User Svc
   /user-svc/register:
     post:
       consumes:
@@ -2554,25 +2567,25 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/usertypes.RegisterRequest'
+          $ref: '#/definitions/user_svc.RegisterRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/usertypes.RegisterResponse'
+            $ref: '#/definitions/user_svc.RegisterResponse'
         "400":
           description: Invalid JSON
           schema:
-            $ref: '#/definitions/usertypes.ErrorResponse'
+            $ref: '#/definitions/user_svc.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/usertypes.ErrorResponse'
+            $ref: '#/definitions/user_svc.ErrorResponse'
       summary: Register a New User
       tags:
-      - User Service
+      - User Svc
   /user-svc/role:
     post:
       consumes:
@@ -2591,31 +2604,31 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/usertypes.CreateRoleRequest'
+          $ref: '#/definitions/user_svc.CreateRoleRequest'
       produces:
       - application/json
       responses:
         "200":
           description: Role created successfully
           schema:
-            $ref: '#/definitions/usertypes.CreateRoleResponse'
+            $ref: '#/definitions/user_svc.CreateRoleResponse'
         "400":
           description: Invalid JSON
           schema:
-            $ref: '#/definitions/usertypes.ErrorResponse'
+            $ref: '#/definitions/user_svc.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/usertypes.ErrorResponse'
+            $ref: '#/definitions/user_svc.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/usertypes.ErrorResponse'
+            $ref: '#/definitions/user_svc.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Create a New Role
       tags:
-      - User Service
+      - User Svc
   /user-svc/role/{roleId}:
     delete:
       consumes:
@@ -2634,7 +2647,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/usertypes.DeleteRoleResponse'
+            $ref: '#/definitions/user_svc.DeleteRoleResponse'
         "400":
           description: Invalid JSON
           schema:
@@ -2651,7 +2664,7 @@ paths:
       - BearerAuth: []
       summary: Delete a Role
       tags:
-      - User Service
+      - User Svc
   /user-svc/role/{roleId}/permission/{permissionId}:
     put:
       consumes:
@@ -2678,20 +2691,20 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/usertypes.CreateUserResponse'
+            $ref: '#/definitions/user_svc.CreateUserResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/usertypes.ErrorResponse'
+            $ref: '#/definitions/user_svc.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/usertypes.ErrorResponse'
+            $ref: '#/definitions/user_svc.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Add Permission to Role
       tags:
-      - User Service
+      - User Svc
   /user-svc/role/{roleId}/permissions:
     get:
       consumes:
@@ -2710,7 +2723,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/usertypes.GetPermissionsResponse'
+            $ref: '#/definitions/user_svc.GetPermissionsResponse'
         "400":
           description: Invalid JSON
           schema:
@@ -2727,7 +2740,7 @@ paths:
       - BearerAuth: []
       summary: Get Permissions by Role
       tags:
-      - User Service
+      - User Svc
     put:
       consumes:
       - application/json
@@ -2746,31 +2759,31 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/usertypes.SetRolePermissionsRequest'
+          $ref: '#/definitions/user_svc.SetRolePermissionsRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/usertypes.SetRolePermissionsResponse'
+            $ref: '#/definitions/user_svc.SetRolePermissionsResponse'
         "400":
           description: Invalid JSON
           schema:
-            $ref: '#/definitions/usertypes.ErrorResponse'
+            $ref: '#/definitions/user_svc.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/usertypes.ErrorResponse'
+            $ref: '#/definitions/user_svc.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/usertypes.ErrorResponse'
+            $ref: '#/definitions/user_svc.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Set Role Permissions
       tags:
-      - User Service
+      - User Svc
   /user-svc/roles:
     get:
       consumes:
@@ -2783,7 +2796,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/usertypes.GetRolesResponse'
+            $ref: '#/definitions/user_svc.GetRolesResponse'
         "401":
           description: Unauthorized
           schema:
@@ -2796,7 +2809,7 @@ paths:
       - BearerAuth: []
       summary: Get all Roles
       tags:
-      - User Service
+      - User Svc
   /user-svc/user:
     post:
       consumes:
@@ -2810,31 +2823,31 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/usertypes.CreateUserRequest'
+          $ref: '#/definitions/user_svc.CreateUserRequest'
       produces:
       - application/json
       responses:
         "200":
           description: User created successfully
           schema:
-            $ref: '#/definitions/usertypes.CreateUserResponse'
+            $ref: '#/definitions/user_svc.CreateUserResponse'
         "400":
           description: Invalid JSON
           schema:
-            $ref: '#/definitions/usertypes.ErrorResponse'
+            $ref: '#/definitions/user_svc.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/usertypes.ErrorResponse'
+            $ref: '#/definitions/user_svc.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/usertypes.ErrorResponse'
+            $ref: '#/definitions/user_svc.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Create a New User
       tags:
-      - User Service
+      - User Svc
   /user-svc/user/{userId}:
     delete:
       consumes:
@@ -2853,7 +2866,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/usertypes.DeleteUserResponse'
+            $ref: '#/definitions/user_svc.DeleteUserResponse'
         "401":
           description: Unauthorized
           schema:
@@ -2866,40 +2879,40 @@ paths:
       - BearerAuth: []
       summary: Delete a User
       tags:
-      - User Service
+      - User Svc
   /user-svc/user/by-token:
     post:
       consumes:
       - application/json
       description: Retrieve user information based on an authentication token.
-      operationId: getUserByToken
+      operationId: readUserByToken
       parameters:
       - description: Read User By Token Request
         in: body
         name: body
         required: true
         schema:
-          $ref: '#/definitions/usertypes.ReadUserByTokenRequest'
+          $ref: '#/definitions/user_svc.ReadUserByTokenRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/usertypes.ReadUserByTokenResponse'
+            $ref: '#/definitions/user_svc.ReadUserByTokenResponse'
         "400":
           description: Invalid JSON
           schema:
-            $ref: '#/definitions/usertypes.ErrorResponse'
+            $ref: '#/definitions/user_svc.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/usertypes.ErrorResponse'
+            $ref: '#/definitions/user_svc.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Read User by Token
       tags:
-      - User Service
+      - User Svc
   /user-svc/users:
     post:
       consumes:
@@ -2911,31 +2924,31 @@ paths:
         in: body
         name: request
         schema:
-          $ref: '#/definitions/usertypes.GetUsersRequest'
+          $ref: '#/definitions/user_svc.GetUsersRequest'
       produces:
       - application/json
       responses:
         "200":
           description: List of users retrieved successfully
           schema:
-            $ref: '#/definitions/usertypes.GetUsersResponse'
+            $ref: '#/definitions/user_svc.GetUsersResponse'
         "400":
           description: Invalid JSON
           schema:
-            $ref: '#/definitions/usertypes.ErrorResponse'
+            $ref: '#/definitions/user_svc.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/usertypes.ErrorResponse'
+            $ref: '#/definitions/user_svc.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/usertypes.ErrorResponse'
+            $ref: '#/definitions/user_svc.ErrorResponse'
       security:
       - BearerAuth: []
       summary: List Users
       tags:
-      - User Service
+      - User Svc
 securityDefinitions:
   BearerAuth:
     description: Type "Bearer" followed by a space and token acquired from the User

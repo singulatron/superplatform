@@ -20,7 +20,7 @@ import (
 // @ID isRunning
 // @Summary      Check If a Container Is Running
 // @Description  Check if a Docker container identified by the hash is running
-// @Tags         Docker Service
+// @Tags         Docker Svc
 // @Accept       json
 // @Produce      json
 // @Param        hash  path      string  true  "Container Hash"

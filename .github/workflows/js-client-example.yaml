@@ -36,7 +36,7 @@ jobs:
             sleep 1
           done
 
-          sleep 2
+          sleep 5
 
           set -e
           (

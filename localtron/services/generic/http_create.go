@@ -17,18 +17,19 @@ import (
 )
 
 // Create creates a new generic object
+// @ID createObject
 // @Summary Create a Generic Object
 // @Description Creates a new object with the provided details. Requires authorization and user authentication.
-// @Tags Generic Service
+// @Tags Generic Svc
 // @Accept json
 // @Produce json
-// @Param body body generic.CreateRequest true "Create request payload"
-// @Success 200 {object} generic.CreateResponse "Success"
+// @Param body body generic.CreateObjectRequest true "Create request payload"
+// @Success 200 {object} generic.CreateObjectResponse "Success"
 // @Failure 400 {object} generic.ErrorResponse "Invalid JSON"
 // @Failure 401 {object} generic.ErrorResponse "Unauthorized"
 // @Failure 500 {object} generic.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
-// @Router /generic-svc/create [post]
+// @Router /generic-svc/object [post]
 func (g *GenericService) Create(
 	w http.ResponseWriter,
 	r *http.Request,
@@ -44,7 +45,7 @@ func (g *GenericService) Create(
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
-	req := &generic.CreateRequest{}
+	req := &generic.CreateObjectRequest{}
 	err = json.NewDecoder(r.Body).Decode(req)
 	if err != nil {
 		http.Error(w, `Invalid JSON`, http.StatusBadRequest)

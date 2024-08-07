@@ -18,7 +18,7 @@ import (
 // @ID login
 // @Summary Login
 // @Description Authenticates a user and returns a token.
-// @Tags User Service
+// @Tags User Svc
 // @Accept json
 // @Produce json
 // @Param request body user.LoginRequest true "Login Request"

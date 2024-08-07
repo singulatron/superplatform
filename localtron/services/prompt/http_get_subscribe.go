@@ -25,11 +25,12 @@ import (
 // @ID subscribe
 // @Summary Subscribe to Prompt
 // @Description Subscribe to prompt responses via Server-Sent Events (SSE)
-// @Tags Prompt Service
+// @Tags Prompt Svc
 // @Param threadId path string true "Thread ID"
 // @Success 200 {string} string "Streaming response"
 // @Failure 400 {object} prompt.ErrorResponse "Missing threadId parameter"
 // @Failure 401 {object} prompt.ErrorResponse "Unauthorized"
+// @Security BearerAuth
 // @Router /prompt-svc/{threadId}/subscribe [get]
 func (p *PromptService) GetSubscribe(
 	w http.ResponseWriter,

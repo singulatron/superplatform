@@ -14,10 +14,10 @@ import (
 	user "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-// @ID getUserByToken
+// @ID readUserByToken
 // @Summary Read User by Token
 // @Description Retrieve user information based on an authentication token.
-// @Tags User Service
+// @Tags User Svc
 // @Accept json
 // @Produce json
 // @Param body body user.ReadUserByTokenRequest true "Read User By Token Request"

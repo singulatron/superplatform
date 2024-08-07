@@ -24,7 +24,7 @@ import (
 // @Description Retrieves the status of a model by ID.
 // @Description
 // @Description Requires the `model-svc:model:view` permission.
-// @Tags Model Service
+// @Tags Model Svc
 // @Accept json
 // @Produce json
 // @Param id path string true "Model ID" // Path parameter for the model ID

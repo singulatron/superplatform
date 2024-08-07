@@ -19,7 +19,7 @@ import (
 // @ID getRoles
 // @Summary Get all Roles
 // @Description Retrieve all roles from the user service.
-// @Tags User Service
+// @Tags User Svc
 // @Accept json
 // @Produce json
 // @Success 200 {object} user.GetRolesResponse

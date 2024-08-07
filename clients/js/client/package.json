@@ -1,6 +1,6 @@
 {
   "name": "@singulatron/client",
-  "version": "0.0.30",
+  "version": "0.2.0",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -36,45 +36,9 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.js",
       "types": "./dist/index.d.ts"
-    },
-    "./user": {
-      "import": "./dist/user.mjs",
-      "require": "./dist/user.js",
-      "types": "./dist/user.d.ts"
-    },
-    "./chat": {
-      "import": "./dist/chat.mjs",
-      "require": "./dist/chat.js",
-      "types": "./dist/chat.d.ts"
-    },
-    "./config": {
-      "import": "./dist/config.mjs",
-      "require": "./dist/config.js",
-      "types": "./dist/config.d.ts"
-    },
-    "./docker": {
-      "import": "./dist/docker.mjs",
-      "require": "./dist/docker.js",
-      "types": "./dist/docker.d.ts"
-    },
-    "./download": {
-      "import": "./dist/download.mjs",
-      "require": "./dist/download.js",
-      "types": "./dist/download.d.ts"
-    },
-    "./generic": {
-      "import": "./dist/generic.mjs",
-      "require": "./dist/generic.js",
-      "types": "./dist/generic.d.ts"
-    },
-    "./prompt": {
-      "import": "./dist/prompt.mjs",
-      "require": "./dist/prompt.js",
-      "types": "./dist/prompt.d.ts"
     }
   },
   "dependencies": {
-    "@singulatron/types": "^0.0.27",
     "axios": "^1.7.2",
     "glob": "^11.0.0"
   }

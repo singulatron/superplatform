@@ -1,39 +1,104 @@
-import { ChatService } from './chat.mjs';
-import { ConfigService } from './config.mjs';
-import { DockerService } from './docker.mjs';
-import { DownloadService } from './download.mjs';
-import { GenericService } from './generic.mjs';
-import { PromptService } from './prompt.mjs';
-import { UserService } from './user.mjs';
-import './util2.mjs';
-import 'axios';
-import '@singulatron/types';
-
-class Client {
-    constructor(options) {
-        this.options = options;
-    }
-    chatService() {
-        return new ChatService(this.options);
-    }
-    configService() {
-        return new ConfigService(this.options);
-    }
-    dockerService() {
-        return new DockerService(this.options);
-    }
-    downloadService() {
-        return new DownloadService(this.options);
-    }
-    genericService() {
-        return new GenericService(this.options);
-    }
-    promptService() {
-        return new PromptService(this.options);
-    }
-    userService() {
-        return new UserService(this.options);
-    }
-}
-
-export { ChatService, Client, ConfigService, DockerService, DownloadService, GenericService, PromptService, UserService };
+export { B as BASE_PATH, a as BaseAPI, e as BlobApiResponse, c as COLLECTION_FORMATS, C as Configuration, D as DefaultConfig, F as FetchError, J as JSONApiResponse, b as RequiredError, R as ResponseError, T as TextApiResponse, V as VoidApiResponse, d as canConsumeForm, m as mapValues, q as querystring } from './runtime2.mjs';
+export { ChatSvcApi } from './ChatSvcApi.mjs';
+export { ConfigSvcApi } from './ConfigSvcApi.mjs';
+export { DockerServiceApi } from './DockerServiceApi.mjs';
+export { DockerSvcApi } from './DockerSvcApi.mjs';
+export { DownloadSvcApi } from './DownloadSvcApi.mjs';
+export { FirehoseSvcApi } from './FirehoseSvcApi.mjs';
+export { GenericSvcApi } from './GenericSvcApi.mjs';
+export { ModelSvcApi } from './ModelSvcApi.mjs';
+export { PromptSvcApi } from './PromptSvcApi.mjs';
+export { UserSvcApi } from './UserSvcApi.mjs';
+export { ChatSvcAddMessageRequestFromJSON, ChatSvcAddMessageRequestFromJSONTyped, ChatSvcAddMessageRequestToJSON, instanceOfChatSvcAddMessageRequest } from './ChatSvcAddMessageRequest.mjs';
+export { ChatSvcAddThreadRequestFromJSON, ChatSvcAddThreadRequestFromJSONTyped, ChatSvcAddThreadRequestToJSON, instanceOfChatSvcAddThreadRequest } from './ChatSvcAddThreadRequest.mjs';
+export { ChatSvcAddThreadResponseFromJSON, ChatSvcAddThreadResponseFromJSONTyped, ChatSvcAddThreadResponseToJSON, instanceOfChatSvcAddThreadResponse } from './ChatSvcAddThreadResponse.mjs';
+export { ChatSvcAssetFromJSON, ChatSvcAssetFromJSONTyped, ChatSvcAssetToJSON, instanceOfChatSvcAsset } from './ChatSvcAsset.mjs';
+export { ChatSvcGetMessagesResponseFromJSON, ChatSvcGetMessagesResponseFromJSONTyped, ChatSvcGetMessagesResponseToJSON, instanceOfChatSvcGetMessagesResponse } from './ChatSvcGetMessagesResponse.mjs';
+export { ChatSvcGetThreadResponseFromJSON, ChatSvcGetThreadResponseFromJSONTyped, ChatSvcGetThreadResponseToJSON, instanceOfChatSvcGetThreadResponse } from './ChatSvcGetThreadResponse.mjs';
+export { ChatSvcGetThreadsResponseFromJSON, ChatSvcGetThreadsResponseFromJSONTyped, ChatSvcGetThreadsResponseToJSON, instanceOfChatSvcGetThreadsResponse } from './ChatSvcGetThreadsResponse.mjs';
+export { ChatSvcMessageFromJSON, ChatSvcMessageFromJSONTyped, ChatSvcMessageToJSON, instanceOfChatSvcMessage } from './ChatSvcMessage.mjs';
+export { ChatSvcThreadFromJSON, ChatSvcThreadFromJSONTyped, ChatSvcThreadToJSON, instanceOfChatSvcThread } from './ChatSvcThread.mjs';
+export { ChatSvcUpdateThreadRequestFromJSON, ChatSvcUpdateThreadRequestFromJSONTyped, ChatSvcUpdateThreadRequestToJSON, instanceOfChatSvcUpdateThreadRequest } from './ChatSvcUpdateThreadRequest.mjs';
+export { ConfigSvcAppServiceConfigFromJSON, ConfigSvcAppServiceConfigFromJSONTyped, ConfigSvcAppServiceConfigToJSON, instanceOfConfigSvcAppServiceConfig } from './ConfigSvcAppServiceConfig.mjs';
+export { ConfigSvcConfigFromJSON, ConfigSvcConfigFromJSONTyped, ConfigSvcConfigToJSON, instanceOfConfigSvcConfig } from './ConfigSvcConfig.mjs';
+export { ConfigSvcDownloadServiceConfigFromJSON, ConfigSvcDownloadServiceConfigFromJSONTyped, ConfigSvcDownloadServiceConfigToJSON, instanceOfConfigSvcDownloadServiceConfig } from './ConfigSvcDownloadServiceConfig.mjs';
+export { ConfigSvcGetConfigResponseFromJSON, ConfigSvcGetConfigResponseFromJSONTyped, ConfigSvcGetConfigResponseToJSON, instanceOfConfigSvcGetConfigResponse } from './ConfigSvcGetConfigResponse.mjs';
+export { ConfigSvcModelServiceConfigFromJSON, ConfigSvcModelServiceConfigFromJSONTyped, ConfigSvcModelServiceConfigToJSON, instanceOfConfigSvcModelServiceConfig } from './ConfigSvcModelServiceConfig.mjs';
+export { ConfigSvcSaveConfigRequestFromJSON, ConfigSvcSaveConfigRequestFromJSONTyped, ConfigSvcSaveConfigRequestToJSON, instanceOfConfigSvcSaveConfigRequest } from './ConfigSvcSaveConfigRequest.mjs';
+export { DatastoreConditionFromJSON, DatastoreConditionFromJSONTyped, DatastoreConditionToJSON, instanceOfDatastoreCondition } from './DatastoreCondition.mjs';
+export { DatastoreContainsConditionFromJSON, DatastoreContainsConditionFromJSONTyped, DatastoreContainsConditionToJSON, instanceOfDatastoreContainsCondition } from './DatastoreContainsCondition.mjs';
+export { DatastoreEqualConditionFromJSON, DatastoreEqualConditionFromJSONTyped, DatastoreEqualConditionToJSON, instanceOfDatastoreEqualCondition } from './DatastoreEqualCondition.mjs';
+export { DatastoreFieldSelectorFromJSON, DatastoreFieldSelectorFromJSONTyped, DatastoreFieldSelectorToJSON, instanceOfDatastoreFieldSelector } from './DatastoreFieldSelector.mjs';
+export { DatastoreOrderByFromJSON, DatastoreOrderByFromJSONTyped, DatastoreOrderByToJSON, instanceOfDatastoreOrderBy } from './DatastoreOrderBy.mjs';
+export { DatastoreQueryFromJSON, DatastoreQueryFromJSONTyped, DatastoreQueryToJSON, instanceOfDatastoreQuery } from './DatastoreQuery.mjs';
+export { DatastoreStartsWithConditionFromJSON, DatastoreStartsWithConditionFromJSONTyped, DatastoreStartsWithConditionToJSON, instanceOfDatastoreStartsWithCondition } from './DatastoreStartsWithCondition.mjs';
+export { DockerSvcContainerIsRunningResponseFromJSON, DockerSvcContainerIsRunningResponseFromJSONTyped, DockerSvcContainerIsRunningResponseToJSON, instanceOfDockerSvcContainerIsRunningResponse } from './DockerSvcContainerIsRunningResponse.mjs';
+export { DockerSvcDockerInfoFromJSON, DockerSvcDockerInfoFromJSONTyped, DockerSvcDockerInfoToJSON, instanceOfDockerSvcDockerInfo } from './DockerSvcDockerInfo.mjs';
+export { DockerSvcErrorResponseFromJSON, DockerSvcErrorResponseFromJSONTyped, DockerSvcErrorResponseToJSON, instanceOfDockerSvcErrorResponse } from './DockerSvcErrorResponse.mjs';
+export { DockerSvcGetContainerSummaryResponseFromJSON, DockerSvcGetContainerSummaryResponseFromJSONTyped, DockerSvcGetContainerSummaryResponseToJSON, instanceOfDockerSvcGetContainerSummaryResponse } from './DockerSvcGetContainerSummaryResponse.mjs';
+export { DockerSvcGetDockerHostResponseFromJSON, DockerSvcGetDockerHostResponseFromJSONTyped, DockerSvcGetDockerHostResponseToJSON, instanceOfDockerSvcGetDockerHostResponse } from './DockerSvcGetDockerHostResponse.mjs';
+export { DockerSvcGetInfoResponseFromJSON, DockerSvcGetInfoResponseFromJSONTyped, DockerSvcGetInfoResponseToJSON, instanceOfDockerSvcGetInfoResponse } from './DockerSvcGetInfoResponse.mjs';
+export { DockerSvcLaunchContainerRequestFromJSON, DockerSvcLaunchContainerRequestFromJSONTyped, DockerSvcLaunchContainerRequestToJSON, instanceOfDockerSvcLaunchContainerRequest } from './DockerSvcLaunchContainerRequest.mjs';
+export { DockerSvcLaunchContainerResponseFromJSON, DockerSvcLaunchContainerResponseFromJSONTyped, DockerSvcLaunchContainerResponseToJSON, instanceOfDockerSvcLaunchContainerResponse } from './DockerSvcLaunchContainerResponse.mjs';
+export { DockerSvcLaunchInfoFromJSON, DockerSvcLaunchInfoFromJSONTyped, DockerSvcLaunchInfoToJSON, instanceOfDockerSvcLaunchInfo } from './DockerSvcLaunchInfo.mjs';
+export { DockerSvcLaunchOptionsFromJSON, DockerSvcLaunchOptionsFromJSONTyped, DockerSvcLaunchOptionsToJSON, instanceOfDockerSvcLaunchOptions } from './DockerSvcLaunchOptions.mjs';
+export { DownloadSvcDownloadDetailsFromJSON, DownloadSvcDownloadDetailsFromJSONTyped, DownloadSvcDownloadDetailsToJSON, instanceOfDownloadSvcDownloadDetails } from './DownloadSvcDownloadDetails.mjs';
+export { DownloadSvcDownloadRequestFromJSON, DownloadSvcDownloadRequestFromJSONTyped, DownloadSvcDownloadRequestToJSON, instanceOfDownloadSvcDownloadRequest } from './DownloadSvcDownloadRequest.mjs';
+export { DownloadSvcDownloadsResponseFromJSON, DownloadSvcDownloadsResponseFromJSONTyped, DownloadSvcDownloadsResponseToJSON, instanceOfDownloadSvcDownloadsResponse } from './DownloadSvcDownloadsResponse.mjs';
+export { DownloadSvcErrorResponseFromJSON, DownloadSvcErrorResponseFromJSONTyped, DownloadSvcErrorResponseToJSON, instanceOfDownloadSvcErrorResponse } from './DownloadSvcErrorResponse.mjs';
+export { DownloadSvcGetDownloadResponseFromJSON, DownloadSvcGetDownloadResponseFromJSONTyped, DownloadSvcGetDownloadResponseToJSON, instanceOfDownloadSvcGetDownloadResponse } from './DownloadSvcGetDownloadResponse.mjs';
+export { FirehoseSvcErrorResponseFromJSON, FirehoseSvcErrorResponseFromJSONTyped, FirehoseSvcErrorResponseToJSON, instanceOfFirehoseSvcErrorResponse } from './FirehoseSvcErrorResponse.mjs';
+export { FirehoseSvcEventFromJSON, FirehoseSvcEventFromJSONTyped, FirehoseSvcEventToJSON, instanceOfFirehoseSvcEvent } from './FirehoseSvcEvent.mjs';
+export { FirehoseSvcPublishRequestFromJSON, FirehoseSvcPublishRequestFromJSONTyped, FirehoseSvcPublishRequestToJSON, instanceOfFirehoseSvcPublishRequest } from './FirehoseSvcPublishRequest.mjs';
+export { GenericSvcCreateObjectRequestFromJSON, GenericSvcCreateObjectRequestFromJSONTyped, GenericSvcCreateObjectRequestToJSON, instanceOfGenericSvcCreateObjectRequest } from './GenericSvcCreateObjectRequest.mjs';
+export { GenericSvcCreateObjectResponseFromJSON, GenericSvcCreateObjectResponseFromJSONTyped, GenericSvcCreateObjectResponseToJSON, instanceOfGenericSvcCreateObjectResponse } from './GenericSvcCreateObjectResponse.mjs';
+export { GenericSvcDeleteObjectRequestFromJSON, GenericSvcDeleteObjectRequestFromJSONTyped, GenericSvcDeleteObjectRequestToJSON, instanceOfGenericSvcDeleteObjectRequest } from './GenericSvcDeleteObjectRequest.mjs';
+export { GenericSvcErrorResponseFromJSON, GenericSvcErrorResponseFromJSONTyped, GenericSvcErrorResponseToJSON, instanceOfGenericSvcErrorResponse } from './GenericSvcErrorResponse.mjs';
+export { GenericSvcGenericObjectFromJSON, GenericSvcGenericObjectFromJSONTyped, GenericSvcGenericObjectToJSON, instanceOfGenericSvcGenericObject } from './GenericSvcGenericObject.mjs';
+export { GenericSvcGenericObjectCreateFieldsFromJSON, GenericSvcGenericObjectCreateFieldsFromJSONTyped, GenericSvcGenericObjectCreateFieldsToJSON, instanceOfGenericSvcGenericObjectCreateFields } from './GenericSvcGenericObjectCreateFields.mjs';
+export { GenericSvcQueryRequestFromJSON, GenericSvcQueryRequestFromJSONTyped, GenericSvcQueryRequestToJSON, instanceOfGenericSvcQueryRequest } from './GenericSvcQueryRequest.mjs';
+export { GenericSvcQueryResponseFromJSON, GenericSvcQueryResponseFromJSONTyped, GenericSvcQueryResponseToJSON, instanceOfGenericSvcQueryResponse } from './GenericSvcQueryResponse.mjs';
+export { GenericSvcUpdateObjectRequestFromJSON, GenericSvcUpdateObjectRequestFromJSONTyped, GenericSvcUpdateObjectRequestToJSON, instanceOfGenericSvcUpdateObjectRequest } from './GenericSvcUpdateObjectRequest.mjs';
+export { GenericSvcUpsertObjectRequestFromJSON, GenericSvcUpsertObjectRequestFromJSONTyped, GenericSvcUpsertObjectRequestToJSON, instanceOfGenericSvcUpsertObjectRequest } from './GenericSvcUpsertObjectRequest.mjs';
+export { GenericSvcUpsertObjectResponseFromJSON, GenericSvcUpsertObjectResponseFromJSONTyped, GenericSvcUpsertObjectResponseToJSON, instanceOfGenericSvcUpsertObjectResponse } from './GenericSvcUpsertObjectResponse.mjs';
+export { ModelSvcArchitecturesFromJSON, ModelSvcArchitecturesFromJSONTyped, ModelSvcArchitecturesToJSON, instanceOfModelSvcArchitectures } from './ModelSvcArchitectures.mjs';
+export { ModelSvcContainerFromJSON, ModelSvcContainerFromJSONTyped, ModelSvcContainerToJSON, instanceOfModelSvcContainer } from './ModelSvcContainer.mjs';
+export { ModelSvcErrorResponseFromJSON, ModelSvcErrorResponseFromJSONTyped, ModelSvcErrorResponseToJSON, instanceOfModelSvcErrorResponse } from './ModelSvcErrorResponse.mjs';
+export { ModelSvcGetModelResponseFromJSON, ModelSvcGetModelResponseFromJSONTyped, ModelSvcGetModelResponseToJSON, instanceOfModelSvcGetModelResponse } from './ModelSvcGetModelResponse.mjs';
+export { ModelSvcListResponseFromJSON, ModelSvcListResponseFromJSONTyped, ModelSvcListResponseToJSON, instanceOfModelSvcListResponse } from './ModelSvcListResponse.mjs';
+export { ModelSvcModelFromJSON, ModelSvcModelFromJSONTyped, ModelSvcModelToJSON, instanceOfModelSvcModel } from './ModelSvcModel.mjs';
+export { ModelSvcModelStatusFromJSON, ModelSvcModelStatusFromJSONTyped, ModelSvcModelStatusToJSON, instanceOfModelSvcModelStatus } from './ModelSvcModelStatus.mjs';
+export { ModelSvcPlatformFromJSON, ModelSvcPlatformFromJSONTyped, ModelSvcPlatformToJSON, instanceOfModelSvcPlatform } from './ModelSvcPlatform.mjs';
+export { ModelSvcStatusResponseFromJSON, ModelSvcStatusResponseFromJSONTyped, ModelSvcStatusResponseToJSON, instanceOfModelSvcStatusResponse } from './ModelSvcStatusResponse.mjs';
+export { PromptSvcAddPromptRequestFromJSON, PromptSvcAddPromptRequestFromJSONTyped, PromptSvcAddPromptRequestToJSON, instanceOfPromptSvcAddPromptRequest } from './PromptSvcAddPromptRequest.mjs';
+export { PromptSvcAddPromptResponseFromJSON, PromptSvcAddPromptResponseFromJSONTyped, PromptSvcAddPromptResponseToJSON, instanceOfPromptSvcAddPromptResponse } from './PromptSvcAddPromptResponse.mjs';
+export { PromptSvcErrorResponseFromJSON, PromptSvcErrorResponseFromJSONTyped, PromptSvcErrorResponseToJSON, instanceOfPromptSvcErrorResponse } from './PromptSvcErrorResponse.mjs';
+export { PromptSvcListPromptsRequestFromJSON, PromptSvcListPromptsRequestFromJSONTyped, PromptSvcListPromptsRequestToJSON, instanceOfPromptSvcListPromptsRequest } from './PromptSvcListPromptsRequest.mjs';
+export { PromptSvcListPromptsResponseFromJSON, PromptSvcListPromptsResponseFromJSONTyped, PromptSvcListPromptsResponseToJSON, instanceOfPromptSvcListPromptsResponse } from './PromptSvcListPromptsResponse.mjs';
+export { PromptSvcPromptFromJSON, PromptSvcPromptFromJSONTyped, PromptSvcPromptToJSON, instanceOfPromptSvcPrompt } from './PromptSvcPrompt.mjs';
+export { PromptSvcPromptStatus, PromptSvcPromptStatusFromJSON, PromptSvcPromptStatusFromJSONTyped, PromptSvcPromptStatusToJSON, instanceOfPromptSvcPromptStatus } from './PromptSvcPromptStatus.mjs';
+export { PromptSvcRemovePromptRequestFromJSON, PromptSvcRemovePromptRequestFromJSONTyped, PromptSvcRemovePromptRequestToJSON, instanceOfPromptSvcRemovePromptRequest } from './PromptSvcRemovePromptRequest.mjs';
+export { UserSvcAuthTokenFromJSON, UserSvcAuthTokenFromJSONTyped, UserSvcAuthTokenToJSON, instanceOfUserSvcAuthToken } from './UserSvcAuthToken.mjs';
+export { UserSvcChangePasswordAdminRequestFromJSON, UserSvcChangePasswordAdminRequestFromJSONTyped, UserSvcChangePasswordAdminRequestToJSON, instanceOfUserSvcChangePasswordAdminRequest } from './UserSvcChangePasswordAdminRequest.mjs';
+export { UserSvcChangePasswordRequestFromJSON, UserSvcChangePasswordRequestFromJSONTyped, UserSvcChangePasswordRequestToJSON, instanceOfUserSvcChangePasswordRequest } from './UserSvcChangePasswordRequest.mjs';
+export { UserSvcCreateRoleRequestFromJSON, UserSvcCreateRoleRequestFromJSONTyped, UserSvcCreateRoleRequestToJSON, instanceOfUserSvcCreateRoleRequest } from './UserSvcCreateRoleRequest.mjs';
+export { UserSvcCreateRoleResponseFromJSON, UserSvcCreateRoleResponseFromJSONTyped, UserSvcCreateRoleResponseToJSON, instanceOfUserSvcCreateRoleResponse } from './UserSvcCreateRoleResponse.mjs';
+export { UserSvcCreateUserRequestFromJSON, UserSvcCreateUserRequestFromJSONTyped, UserSvcCreateUserRequestToJSON, instanceOfUserSvcCreateUserRequest } from './UserSvcCreateUserRequest.mjs';
+export { UserSvcErrorResponseFromJSON, UserSvcErrorResponseFromJSONTyped, UserSvcErrorResponseToJSON, instanceOfUserSvcErrorResponse } from './UserSvcErrorResponse.mjs';
+export { UserSvcGetPermissionsResponseFromJSON, UserSvcGetPermissionsResponseFromJSONTyped, UserSvcGetPermissionsResponseToJSON, instanceOfUserSvcGetPermissionsResponse } from './UserSvcGetPermissionsResponse.mjs';
+export { UserSvcGetPublicKeyResponseFromJSON, UserSvcGetPublicKeyResponseFromJSONTyped, UserSvcGetPublicKeyResponseToJSON, instanceOfUserSvcGetPublicKeyResponse } from './UserSvcGetPublicKeyResponse.mjs';
+export { UserSvcGetRolesResponseFromJSON, UserSvcGetRolesResponseFromJSONTyped, UserSvcGetRolesResponseToJSON, instanceOfUserSvcGetRolesResponse } from './UserSvcGetRolesResponse.mjs';
+export { UserSvcGetUsersRequestFromJSON, UserSvcGetUsersRequestFromJSONTyped, UserSvcGetUsersRequestToJSON, instanceOfUserSvcGetUsersRequest } from './UserSvcGetUsersRequest.mjs';
+export { UserSvcGetUsersResponseFromJSON, UserSvcGetUsersResponseFromJSONTyped, UserSvcGetUsersResponseToJSON, instanceOfUserSvcGetUsersResponse } from './UserSvcGetUsersResponse.mjs';
+export { UserSvcIsAuthorizedRequestFromJSON, UserSvcIsAuthorizedRequestFromJSONTyped, UserSvcIsAuthorizedRequestToJSON, instanceOfUserSvcIsAuthorizedRequest } from './UserSvcIsAuthorizedRequest.mjs';
+export { UserSvcIsAuthorizedResponseFromJSON, UserSvcIsAuthorizedResponseFromJSONTyped, UserSvcIsAuthorizedResponseToJSON, instanceOfUserSvcIsAuthorizedResponse } from './UserSvcIsAuthorizedResponse.mjs';
+export { UserSvcLoginRequestFromJSON, UserSvcLoginRequestFromJSONTyped, UserSvcLoginRequestToJSON, instanceOfUserSvcLoginRequest } from './UserSvcLoginRequest.mjs';
+export { UserSvcLoginResponseFromJSON, UserSvcLoginResponseFromJSONTyped, UserSvcLoginResponseToJSON, instanceOfUserSvcLoginResponse } from './UserSvcLoginResponse.mjs';
+export { UserSvcPermissionFromJSON, UserSvcPermissionFromJSONTyped, UserSvcPermissionToJSON, instanceOfUserSvcPermission } from './UserSvcPermission.mjs';
+export { UserSvcReadUserByTokenRequestFromJSON, UserSvcReadUserByTokenRequestFromJSONTyped, UserSvcReadUserByTokenRequestToJSON, instanceOfUserSvcReadUserByTokenRequest } from './UserSvcReadUserByTokenRequest.mjs';
+export { UserSvcReadUserByTokenResponseFromJSON, UserSvcReadUserByTokenResponseFromJSONTyped, UserSvcReadUserByTokenResponseToJSON, instanceOfUserSvcReadUserByTokenResponse } from './UserSvcReadUserByTokenResponse.mjs';
+export { UserSvcRegisterRequestFromJSON, UserSvcRegisterRequestFromJSONTyped, UserSvcRegisterRequestToJSON, instanceOfUserSvcRegisterRequest } from './UserSvcRegisterRequest.mjs';
+export { UserSvcRoleFromJSON, UserSvcRoleFromJSONTyped, UserSvcRoleToJSON, instanceOfUserSvcRole } from './UserSvcRole.mjs';
+export { UserSvcSetRolePermissionsRequestFromJSON, UserSvcSetRolePermissionsRequestFromJSONTyped, UserSvcSetRolePermissionsRequestToJSON, instanceOfUserSvcSetRolePermissionsRequest } from './UserSvcSetRolePermissionsRequest.mjs';
+export { UserSvcUpserPermissionRequestFromJSON, UserSvcUpserPermissionRequestFromJSONTyped, UserSvcUpserPermissionRequestToJSON, instanceOfUserSvcUpserPermissionRequest } from './UserSvcUpserPermissionRequest.mjs';
+export { UserSvcUserFromJSON, UserSvcUserFromJSONTyped, UserSvcUserToJSON, instanceOfUserSvcUser } from './UserSvcUser.mjs';

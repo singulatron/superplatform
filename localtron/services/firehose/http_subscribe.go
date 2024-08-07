@@ -22,7 +22,7 @@ import (
 // Subscribe subscribes to a firehose stream and streams events to the client
 // @Summary Subscribe to the Event Stream
 // @Description Establish a subscription to the firehose events and accept a real time stream of them.
-// @Tags Firehose Service
+// @Tags Firehose Svc
 // @Accept json
 // @Produce text/event-stream
 // @Success 200 {string} string "Event data"

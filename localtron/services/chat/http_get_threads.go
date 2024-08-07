@@ -20,7 +20,7 @@ import (
 // @ID getThreads
 // @Summary Get Threads
 // @Description Fetch all chat threads associated with a specific user
-// @Tags Chat Service
+// @Tags Chat Svc
 // @Accept json
 // @Produce json
 // @Param request body chat.GetThreadsRequest true "Get Threads Request"
