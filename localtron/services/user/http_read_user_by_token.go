@@ -14,7 +14,7 @@ import (
 	user "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-// @ID getUserByToken
+// @ID readUserByToken
 // @Summary Read User by Token
 // @Description Retrieve user information based on an authentication token.
 // @Tags User Svc

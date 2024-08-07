@@ -103,7 +103,7 @@ export class GenericSvcApi {
      * @param body Create request payload
      */
     public async createObject (body: GenericSvcCreateObjectRequest, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: GenericSvcCreateObjectResponse;  }> {
-        const localVarPath = this.basePath + '/generic-svc/object/create';
+        const localVarPath = this.basePath + '/generic-svc/object';
         let localVarQueryParameters: any = {};
         let localVarHeaderParams: any = (<any>Object).assign({}, this._defaultHeaders);
         const produces = ['application/json'];

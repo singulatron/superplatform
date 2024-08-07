@@ -36,9 +36,6 @@ export interface DeleteUserRequest {
 export interface GetPermissionsByRoleRequest {
     roleId: number;
 }
-export interface GetUserByTokenRequest {
-    body: UserSvcReadUserByTokenRequest;
-}
 export interface GetUsersRequest {
     request?: UserSvcGetUsersRequest;
 }
@@ -48,6 +45,9 @@ export interface IsAuthorizedRequest {
 }
 export interface LoginRequest {
     request: UserSvcLoginRequest;
+}
+export interface ReadUserByTokenRequest {
+    body: UserSvcReadUserByTokenRequest;
 }
 export interface RegisterRequest {
     body: UserSvcRegisterRequest;
@@ -165,16 +165,6 @@ export declare class UserSvcApi extends runtime.BaseAPI {
      */
     getRoles(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserSvcGetRolesResponse>;
     /**
-     * Retrieve user information based on an authentication token.
-     * Read User by Token
-     */
-    getUserByTokenRaw(requestParameters: GetUserByTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserSvcReadUserByTokenResponse>>;
-    /**
-     * Retrieve user information based on an authentication token.
-     * Read User by Token
-     */
-    getUserByToken(requestParameters: GetUserByTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserSvcReadUserByTokenResponse>;
-    /**
      * Fetches a list of users with optional query filters and pagination.
      * List Users
      */
@@ -204,6 +194,16 @@ export declare class UserSvcApi extends runtime.BaseAPI {
      * Login
      */
     login(requestParameters: LoginRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserSvcLoginResponse>;
+    /**
+     * Retrieve user information based on an authentication token.
+     * Read User by Token
+     */
+    readUserByTokenRaw(requestParameters: ReadUserByTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserSvcReadUserByTokenResponse>>;
+    /**
+     * Retrieve user information based on an authentication token.
+     * Read User by Token
+     */
+    readUserByToken(requestParameters: ReadUserByTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserSvcReadUserByTokenResponse>;
     /**
      * Register a new user with a name, email, and password.
      * Register a New User

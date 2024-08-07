@@ -1796,6 +1796,44 @@ paths:
       summary: Subscribe to the Event Stream
       tags:
       - Firehose Svc
+  /generic-svc/object:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new object with the provided details. Requires authorization
+        and user authentication.
+      operationId: createObject
+      parameters:
+      - description: Create request payload
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/generic_svc.CreateObjectRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/generic_svc.CreateObjectResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/generic_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/generic_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/generic_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create a Generic Object
+      tags:
+      - Generic Svc
   /generic-svc/object/{objectId}:
     delete:
       consumes:
@@ -1879,44 +1917,6 @@ paths:
       security:
       - BearerAuth: []
       summary: Upsert a Generic Object
-      tags:
-      - Generic Svc
-  /generic-svc/object/create:
-    post:
-      consumes:
-      - application/json
-      description: Creates a new object with the provided details. Requires authorization
-        and user authentication.
-      operationId: createObject
-      parameters:
-      - description: Create request payload
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/generic_svc.CreateObjectRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Success
-          schema:
-            $ref: '#/definitions/generic_svc.CreateObjectResponse'
-        "400":
-          description: Invalid JSON
-          schema:
-            $ref: '#/definitions/generic_svc.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/generic_svc.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/generic_svc.ErrorResponse'
-      security:
-      - BearerAuth: []
-      summary: Create a Generic Object
       tags:
       - Generic Svc
   /generic-svc/objects:
@@ -2885,7 +2885,7 @@ paths:
       consumes:
       - application/json
       description: Retrieve user information based on an authentication token.
-      operationId: getUserByToken
+      operationId: readUserByToken
       parameters:
       - description: Read User By Token Request
         in: body

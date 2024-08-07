@@ -1151,7 +1151,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/generic-svc/object/create": {
+        "/generic-svc/object": {
             "post": {
                 "security": [
                     {
@@ -2746,7 +2746,7 @@ const docTemplate = `{
                     "User Svc"
                 ],
                 "summary": "Read User by Token",
-                "operationId": "getUserByToken",
+                "operationId": "readUserByToken",
                 "parameters": [
                     {
                         "description": "Read User By Token Request",

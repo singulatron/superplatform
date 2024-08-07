@@ -29,7 +29,7 @@ import (
 // @Failure 401 {object} generic.ErrorResponse "Unauthorized"
 // @Failure 500 {object} generic.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
-// @Router /generic-svc/object/create [post]
+// @Router /generic-svc/object [post]
 func (g *GenericService) Create(
 	w http.ResponseWriter,
 	r *http.Request,

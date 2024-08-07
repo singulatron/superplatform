@@ -96,7 +96,7 @@ export class GenericSvcApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/generic-svc/object/create`,
+            path: `/generic-svc/object`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,

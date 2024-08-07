@@ -42,7 +42,7 @@ export class GenericSvcApi extends runtime.BaseAPI {
                 headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
             }
             const response = yield this.request({
-                path: `/generic-svc/object/create`,
+                path: `/generic-svc/object`,
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,

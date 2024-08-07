@@ -382,41 +382,6 @@ class UserSvcApi extends runtime.BaseAPI {
         });
     }
     /**
-     * Retrieve user information based on an authentication token.
-     * Read User by Token
-     */
-    getUserByTokenRaw(requestParameters, initOverrides) {
-        return runtime.__awaiter(this, void 0, void 0, function* () {
-            if (requestParameters['body'] == null) {
-                throw new runtime.RequiredError('body', 'Required parameter "body" was null or undefined when calling getUserByToken().');
-            }
-            const queryParameters = {};
-            const headerParameters = {};
-            headerParameters['Content-Type'] = 'application/json';
-            if (this.configuration && this.configuration.apiKey) {
-                headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
-            }
-            const response = yield this.request({
-                path: `/user-svc/user/by-token`,
-                method: 'POST',
-                headers: headerParameters,
-                query: queryParameters,
-                body: UserSvcReadUserByTokenRequest.UserSvcReadUserByTokenRequestToJSON(requestParameters['body']),
-            }, initOverrides);
-            return new runtime.JSONApiResponse(response, (jsonValue) => UserSvcReadUserByTokenResponse.UserSvcReadUserByTokenResponseFromJSON(jsonValue));
-        });
-    }
-    /**
-     * Retrieve user information based on an authentication token.
-     * Read User by Token
-     */
-    getUserByToken(requestParameters, initOverrides) {
-        return runtime.__awaiter(this, void 0, void 0, function* () {
-            const response = yield this.getUserByTokenRaw(requestParameters, initOverrides);
-            return yield response.value();
-        });
-    }
-    /**
      * Fetches a list of users with optional query filters and pagination.
      * List Users
      */
@@ -515,6 +480,41 @@ class UserSvcApi extends runtime.BaseAPI {
     login(requestParameters, initOverrides) {
         return runtime.__awaiter(this, void 0, void 0, function* () {
             const response = yield this.loginRaw(requestParameters, initOverrides);
+            return yield response.value();
+        });
+    }
+    /**
+     * Retrieve user information based on an authentication token.
+     * Read User by Token
+     */
+    readUserByTokenRaw(requestParameters, initOverrides) {
+        return runtime.__awaiter(this, void 0, void 0, function* () {
+            if (requestParameters['body'] == null) {
+                throw new runtime.RequiredError('body', 'Required parameter "body" was null or undefined when calling readUserByToken().');
+            }
+            const queryParameters = {};
+            const headerParameters = {};
+            headerParameters['Content-Type'] = 'application/json';
+            if (this.configuration && this.configuration.apiKey) {
+                headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
+            }
+            const response = yield this.request({
+                path: `/user-svc/user/by-token`,
+                method: 'POST',
+                headers: headerParameters,
+                query: queryParameters,
+                body: UserSvcReadUserByTokenRequest.UserSvcReadUserByTokenRequestToJSON(requestParameters['body']),
+            }, initOverrides);
+            return new runtime.JSONApiResponse(response, (jsonValue) => UserSvcReadUserByTokenResponse.UserSvcReadUserByTokenResponseFromJSON(jsonValue));
+        });
+    }
+    /**
+     * Retrieve user information based on an authentication token.
+     * Read User by Token
+     */
+    readUserByToken(requestParameters, initOverrides) {
+        return runtime.__awaiter(this, void 0, void 0, function* () {
+            const response = yield this.readUserByTokenRaw(requestParameters, initOverrides);
             return yield response.value();
         });
     }

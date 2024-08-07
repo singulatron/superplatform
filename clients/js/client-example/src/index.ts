@@ -16,7 +16,7 @@ async function start() {
     apiKey: token,
   });
 
-  const readTokenResponse = await userService.getUserByToken({
+  const readTokenResponse = await userService.readUserByToken({
     body: { token: token! },
   });
   if (readTokenResponse.user?.email !== "singulatron") {
