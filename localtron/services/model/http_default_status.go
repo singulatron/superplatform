@@ -16,6 +16,20 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
+// DefaultStatus godoc
+// @ID getDefaultModelStatus
+// @Summary Get Default Model Status
+// @Description Retrieves the status of the default model.
+// @Description
+// @Description Requires the `model-svc:model:view` permission.
+// @Tags Model Svc
+// @Accept json
+// @Produce json
+// @Success 200 {object} model.StatusResponse "Model status retrieved successfully"
+// @Failure 401 {string} string "Unauthorized"
+// @Failure 500 {string} string "Internal Server Error"
+// @Security BearerAuth
+// @Router /model-svc/default-model/status [get]
 func (ms *ModelService) DefaultStatus(
 	w http.ResponseWriter,
 	r *http.Request,

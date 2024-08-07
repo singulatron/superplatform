@@ -14,6 +14,20 @@ import (
 	user "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
+// @ID saveUserProfile
+// @Summary Save User Profile
+// @Description Save user profile information based on the provided user ID.
+// @Tags User Svc
+// @Accept json
+// @Produce json
+// @Param userId path string true "User ID"
+// @Param body body user.SaveProfileRequest true "Save Profile Request"
+// @Success 200 {object} user.SaveProfileResponse
+// @Failure 400 {object} user.ErrorResponse "Invalid JSON"
+// @Failure 401 {object} user.ErrorResponse "Unauthorized"
+// @Failure 500 {object} user.ErrorResponse "Internal Server Error"
+// @Security BearerAuth
+// @Router /user-svc/user/{userId} [put]
 func (s *UserService) SaveProfile(w http.ResponseWriter, r *http.Request) {
 	_, err := s.isAuthorized(r, user.PermissionUserEdit.Id, nil)
 	if err != nil {

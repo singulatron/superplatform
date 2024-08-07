@@ -90,6 +90,7 @@ export * from './UserSvcReadUserByTokenRequest';
 export * from './UserSvcReadUserByTokenResponse';
 export * from './UserSvcRegisterRequest';
 export * from './UserSvcRole';
+export * from './UserSvcSaveProfileRequest';
 export * from './UserSvcSetRolePermissionsRequest';
 export * from './UserSvcUpserPermissionRequest';
 export * from './UserSvcUser';

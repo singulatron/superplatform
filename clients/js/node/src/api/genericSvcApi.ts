@@ -175,8 +175,8 @@ export class GenericSvcApi {
      * @param objectId Object ID
      * @param body Delete request payload
      */
-    public async deleteObject (objectId: string, body: GenericSvcDeleteObjectRequest, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: object;  }> {
-        const localVarPath = this.basePath + '/generic-svc/object/{objectId}'
+    public async deleteObjects (objectId: string, body: GenericSvcDeleteObjectRequest, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: object;  }> {
+        const localVarPath = this.basePath + '/generic-svc/objects/delete'
             .replace('{' + 'objectId' + '}', encodeURIComponent(String(objectId)));
         let localVarQueryParameters: any = {};
         let localVarHeaderParams: any = (<any>Object).assign({}, this._defaultHeaders);
@@ -191,12 +191,12 @@ export class GenericSvcApi {
 
         // verify required parameter 'objectId' is not null or undefined
         if (objectId === null || objectId === undefined) {
-            throw new Error('Required parameter objectId was null or undefined when calling deleteObject.');
+            throw new Error('Required parameter objectId was null or undefined when calling deleteObjects.');
         }
 
         // verify required parameter 'body' is not null or undefined
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling deleteObject.');
+            throw new Error('Required parameter body was null or undefined when calling deleteObjects.');
         }
 
         (<any>Object).assign(localVarHeaderParams, options.headers);
@@ -204,7 +204,7 @@ export class GenericSvcApi {
         let localVarUseFormData = false;
 
         let localVarRequestOptions: localVarRequest.Options = {
-            method: 'DELETE',
+            method: 'POST',
             qs: localVarQueryParameters,
             headers: localVarHeaderParams,
             uri: localVarPath,

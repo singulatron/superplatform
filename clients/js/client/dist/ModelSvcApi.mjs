@@ -1,4 +1,4 @@
-import { a as BaseAPI, _ as __awaiter, b as RequiredError, J as JSONApiResponse } from './runtime2.mjs';
+import { a as BaseAPI, _ as __awaiter, J as JSONApiResponse, b as RequiredError } from './runtime2.mjs';
 import { ModelSvcGetModelResponseFromJSON } from './ModelSvcGetModelResponse.mjs';
 import { ModelSvcListResponseFromJSON } from './ModelSvcListResponse.mjs';
 import { ModelSvcStatusResponseFromJSON } from './ModelSvcStatusResponse.mjs';
@@ -25,6 +25,36 @@ import './ModelSvcModelStatus.mjs';
  *
  */
 class ModelSvcApi extends BaseAPI {
+    /**
+     * Retrieves the status of the default model.  Requires the `model-svc:model:view` permission.
+     * Get Default Model Status
+     */
+    getDefaultModelStatusRaw(initOverrides) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const queryParameters = {};
+            const headerParameters = {};
+            if (this.configuration && this.configuration.apiKey) {
+                headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
+            }
+            const response = yield this.request({
+                path: `/model-svc/default-model/status`,
+                method: 'GET',
+                headers: headerParameters,
+                query: queryParameters,
+            }, initOverrides);
+            return new JSONApiResponse(response, (jsonValue) => ModelSvcStatusResponseFromJSON(jsonValue));
+        });
+    }
+    /**
+     * Retrieves the status of the default model.  Requires the `model-svc:model:view` permission.
+     * Get Default Model Status
+     */
+    getDefaultModelStatus(initOverrides) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const response = yield this.getDefaultModelStatusRaw(initOverrides);
+            return yield response.value();
+        });
+    }
     /**
      * Retrieves the details of a model by its ID.  the Requires `model.view` permission.
      * Get a Model
@@ -64,8 +94,8 @@ class ModelSvcApi extends BaseAPI {
      */
     getModelStatusRaw(requestParameters, initOverrides) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (requestParameters['id'] == null) {
-                throw new RequiredError('id', 'Required parameter "id" was null or undefined when calling getModelStatus().');
+            if (requestParameters['modelId'] == null) {
+                throw new RequiredError('modelId', 'Required parameter "modelId" was null or undefined when calling getModelStatus().');
             }
             const queryParameters = {};
             const headerParameters = {};
@@ -73,7 +103,7 @@ class ModelSvcApi extends BaseAPI {
                 headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
             }
             const response = yield this.request({
-                path: `/model-svc/model/{id}/status`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+                path: `/model-svc/model/{modelId}/status`.replace(`{${"modelId"}}`, encodeURIComponent(String(requestParameters['modelId']))),
                 method: 'GET',
                 headers: headerParameters,
                 query: queryParameters,

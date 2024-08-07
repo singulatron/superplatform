@@ -28,6 +28,36 @@ require('./ModelSvcModelStatus.js');
  */
 class ModelSvcApi extends runtime.BaseAPI {
     /**
+     * Retrieves the status of the default model.  Requires the `model-svc:model:view` permission.
+     * Get Default Model Status
+     */
+    getDefaultModelStatusRaw(initOverrides) {
+        return runtime.__awaiter(this, void 0, void 0, function* () {
+            const queryParameters = {};
+            const headerParameters = {};
+            if (this.configuration && this.configuration.apiKey) {
+                headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
+            }
+            const response = yield this.request({
+                path: `/model-svc/default-model/status`,
+                method: 'GET',
+                headers: headerParameters,
+                query: queryParameters,
+            }, initOverrides);
+            return new runtime.JSONApiResponse(response, (jsonValue) => ModelSvcStatusResponse.ModelSvcStatusResponseFromJSON(jsonValue));
+        });
+    }
+    /**
+     * Retrieves the status of the default model.  Requires the `model-svc:model:view` permission.
+     * Get Default Model Status
+     */
+    getDefaultModelStatus(initOverrides) {
+        return runtime.__awaiter(this, void 0, void 0, function* () {
+            const response = yield this.getDefaultModelStatusRaw(initOverrides);
+            return yield response.value();
+        });
+    }
+    /**
      * Retrieves the details of a model by its ID.  the Requires `model.view` permission.
      * Get a Model
      */
@@ -66,8 +96,8 @@ class ModelSvcApi extends runtime.BaseAPI {
      */
     getModelStatusRaw(requestParameters, initOverrides) {
         return runtime.__awaiter(this, void 0, void 0, function* () {
-            if (requestParameters['id'] == null) {
-                throw new runtime.RequiredError('id', 'Required parameter "id" was null or undefined when calling getModelStatus().');
+            if (requestParameters['modelId'] == null) {
+                throw new runtime.RequiredError('modelId', 'Required parameter "modelId" was null or undefined when calling getModelStatus().');
             }
             const queryParameters = {};
             const headerParameters = {};
@@ -75,7 +105,7 @@ class ModelSvcApi extends runtime.BaseAPI {
                 headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
             }
             const response = yield this.request({
-                path: `/model-svc/model/{id}/status`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+                path: `/model-svc/model/{modelId}/status`.replace(`{${"modelId"}}`, encodeURIComponent(String(requestParameters['modelId']))),
                 method: 'GET',
                 headers: headerParameters,
                 query: queryParameters,

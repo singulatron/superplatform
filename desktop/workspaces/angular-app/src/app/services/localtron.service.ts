@@ -64,62 +64,62 @@ export class LocaltronService {
 		return this.config.env.localtronAddress;
 	}
 
-	get(path: string): Promise<any> {
-		const uri = this.config.env.localtronAddress + path;
-		const headers = this.prepareHeaders();
-
-		return firstValueFrom(
-			this.http.get<any>(uri, { headers, responseType: 'text' as 'json' }).pipe(
-				map((response) => JSON.parse(response)),
-				catchError((error) => this.handleError(error))
-			)
-		);
-	}
-
-	post(path: string, request: any): Promise<any> {
-		const uri = this.config.env.localtronAddress + path;
-		const body = JSON.stringify(request);
-		const headers = this.prepareHeaders();
-
-		return firstValueFrom(
-			this.http
-				.post<any>(uri, body, { headers, responseType: 'text' as 'json' })
-				.pipe(
-					map((response) => JSON.parse(response)),
-					catchError((error) => this.handleError(error))
-				)
-		);
-	}
-
-	put(path: string, request: any): Promise<any> {
-		const uri = this.config.env.localtronAddress + path;
-		const body = JSON.stringify(request);
-		const headers = this.prepareHeaders();
-
-		return firstValueFrom(
-			this.http
-				.put<any>(uri, body, { headers, responseType: 'text' as 'json' })
-				.pipe(
-					map((response) => JSON.parse(response)),
-					catchError((error) => this.handleError(error))
-				)
-		);
-	}
-
-	delete(path: string, request?: any): Promise<any> {
-		const uri = this.config.env.localtronAddress + path;
-		const body = JSON.stringify(request);
-		const headers = this.prepareHeaders();
-
-		return firstValueFrom(
-			this.http
-				.delete<any>(uri, { body, headers, responseType: 'text' as 'json' })
-				.pipe(
-					map((response) => JSON.parse(response)),
-					catchError((error) => this.handleError(error))
-				)
-		);
-	}
+	//get(path: string): Promise<any> {
+	//	const uri = this.config.env.localtronAddress + path;
+	//	const headers = this.prepareHeaders();
+//
+	//	return firstValueFrom(
+	//		this.http.get<any>(uri, { headers, responseType: 'text' as 'json' }).pipe(
+	//			map((response) => JSON.parse(response)),
+	//			catchError((error) => this.handleError(error))
+	//		)
+	//	);
+	//}
+//
+	//post(path: string, request: any): Promise<any> {
+	//	const uri = this.config.env.localtronAddress + path;
+	//	const body = JSON.stringify(request);
+	//	const headers = this.prepareHeaders();
+//
+	//	return firstValueFrom(
+	//		this.http
+	//			.post<any>(uri, body, { headers, responseType: 'text' as 'json' })
+	//			.pipe(
+	//				map((response) => JSON.parse(response)),
+	//				catchError((error) => this.handleError(error))
+	//			)
+	//	);
+	//}
+//
+	//put(path: string, request: any): Promise<any> {
+	//	const uri = this.config.env.localtronAddress + path;
+	//	const body = JSON.stringify(request);
+	//	const headers = this.prepareHeaders();
+//
+	//	return firstValueFrom(
+	//		this.http
+	//			.put<any>(uri, body, { headers, responseType: 'text' as 'json' })
+	//			.pipe(
+	//				map((response) => JSON.parse(response)),
+	//				catchError((error) => this.handleError(error))
+	//			)
+	//	);
+	//}
+//
+	//delete(path: string, request?: any): Promise<any> {
+	//	const uri = this.config.env.localtronAddress + path;
+	//	const body = JSON.stringify(request);
+	//	const headers = this.prepareHeaders();
+//
+	//	return firstValueFrom(
+	//		this.http
+	//			.delete<any>(uri, { body, headers, responseType: 'text' as 'json' })
+	//			.pipe(
+	//				map((response) => JSON.parse(response)),
+	//				catchError((error) => this.handleError(error))
+	//			)
+	//	);
+	//}
 
 	uuid() {
 		return (

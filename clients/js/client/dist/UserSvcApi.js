@@ -18,6 +18,7 @@ var UserSvcLoginResponse = require('./UserSvcLoginResponse.js');
 var UserSvcReadUserByTokenRequest = require('./UserSvcReadUserByTokenRequest.js');
 var UserSvcReadUserByTokenResponse = require('./UserSvcReadUserByTokenResponse.js');
 var UserSvcRegisterRequest = require('./UserSvcRegisterRequest.js');
+var UserSvcSaveProfileRequest = require('./UserSvcSaveProfileRequest.js');
 var UserSvcSetRolePermissionsRequest = require('./UserSvcSetRolePermissionsRequest.js');
 var UserSvcUpserPermissionRequest = require('./UserSvcUpserPermissionRequest.js');
 require('./UserSvcRole.js');
@@ -547,6 +548,44 @@ class UserSvcApi extends runtime.BaseAPI {
     register(requestParameters, initOverrides) {
         return runtime.__awaiter(this, void 0, void 0, function* () {
             const response = yield this.registerRaw(requestParameters, initOverrides);
+            return yield response.value();
+        });
+    }
+    /**
+     * Save user profile information based on the provided user ID.
+     * Save User Profile
+     */
+    saveUserProfileRaw(requestParameters, initOverrides) {
+        return runtime.__awaiter(this, void 0, void 0, function* () {
+            if (requestParameters['userId'] == null) {
+                throw new runtime.RequiredError('userId', 'Required parameter "userId" was null or undefined when calling saveUserProfile().');
+            }
+            if (requestParameters['body'] == null) {
+                throw new runtime.RequiredError('body', 'Required parameter "body" was null or undefined when calling saveUserProfile().');
+            }
+            const queryParameters = {};
+            const headerParameters = {};
+            headerParameters['Content-Type'] = 'application/json';
+            if (this.configuration && this.configuration.apiKey) {
+                headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
+            }
+            const response = yield this.request({
+                path: `/user-svc/user/{userId}`.replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId']))),
+                method: 'PUT',
+                headers: headerParameters,
+                query: queryParameters,
+                body: UserSvcSaveProfileRequest.UserSvcSaveProfileRequestToJSON(requestParameters['body']),
+            }, initOverrides);
+            return new runtime.JSONApiResponse(response);
+        });
+    }
+    /**
+     * Save user profile information based on the provided user ID.
+     * Save User Profile
+     */
+    saveUserProfile(requestParameters, initOverrides) {
+        return runtime.__awaiter(this, void 0, void 0, function* () {
+            const response = yield this.saveUserProfileRaw(requestParameters, initOverrides);
             return yield response.value();
         });
     }

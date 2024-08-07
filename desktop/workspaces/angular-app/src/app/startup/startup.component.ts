@@ -11,7 +11,8 @@ import { WindowApiConst } from 'shared-lib';
 import { ElectronAppService } from '../services/electron-app.service';
 import { combineLatest, Subscription } from 'rxjs';
 import { DownloadService } from '../services/download.service';
-import { ModelService, Model } from '../services/model.service';
+import { ModelService } from '../services/model.service';
+import { ModelSvcModel as Model } from '@singulatron/client';
 import { DockerService } from '../services/docker.service';
 import { ConfigService } from '../services/config.service';
 import { Config } from '@singulatron/types';
@@ -197,7 +198,7 @@ export class StartupComponent implements OnInit {
 		if (!model) {
 			throw `Cannot find model with id ${modelId}`;
 		}
-		const assetURLs = Object.values(model.assets);
+		const assetURLs = Object.values(model.assets!);
 
 		if (!assetURLs?.length) {
 			throw `Nothing to download for ${modelId}`;

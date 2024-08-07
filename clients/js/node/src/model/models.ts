@@ -90,6 +90,7 @@ export * from './userSvcReadUserByTokenRequest';
 export * from './userSvcReadUserByTokenResponse';
 export * from './userSvcRegisterRequest';
 export * from './userSvcRole';
+export * from './userSvcSaveProfileRequest';
 export * from './userSvcSetRolePermissionsRequest';
 export * from './userSvcUpserPermissionRequest';
 export * from './userSvcUser';
@@ -197,6 +198,7 @@ import { UserSvcReadUserByTokenRequest } from './userSvcReadUserByTokenRequest';
 import { UserSvcReadUserByTokenResponse } from './userSvcReadUserByTokenResponse';
 import { UserSvcRegisterRequest } from './userSvcRegisterRequest';
 import { UserSvcRole } from './userSvcRole';
+import { UserSvcSaveProfileRequest } from './userSvcSaveProfileRequest';
 import { UserSvcSetRolePermissionsRequest } from './userSvcSetRolePermissionsRequest';
 import { UserSvcUpserPermissionRequest } from './userSvcUpserPermissionRequest';
 import { UserSvcUser } from './userSvcUser';
@@ -307,6 +309,7 @@ let typeMap: {[index: string]: any} = {
     "UserSvcReadUserByTokenResponse": UserSvcReadUserByTokenResponse,
     "UserSvcRegisterRequest": UserSvcRegisterRequest,
     "UserSvcRole": UserSvcRole,
+    "UserSvcSaveProfileRequest": UserSvcSaveProfileRequest,
     "UserSvcSetRolePermissionsRequest": UserSvcSetRolePermissionsRequest,
     "UserSvcUpserPermissionRequest": UserSvcUpserPermissionRequest,
     "UserSvcUser": UserSvcUser,

@@ -21,7 +21,7 @@ import (
 // @Tags User Svc
 // @Accept  json
 // @Produce  json
-// @Param   roleId     path    int     true        "Role ID"
+// @Param   roleId     path    string     true        "Role ID"
 // @Success 200 {object} user.GetPermissionsResponse
 // @Failure 400 {string} string "Invalid JSON"
 // @Failure 401 {string} string "Unauthorized"

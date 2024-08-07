@@ -92,5 +92,6 @@ import './UserSvcAuthToken.mjs';
 import './UserSvcReadUserByTokenRequest.mjs';
 import './UserSvcReadUserByTokenResponse.mjs';
 import './UserSvcRegisterRequest.mjs';
+import './UserSvcSaveProfileRequest.mjs';
 import './UserSvcSetRolePermissionsRequest.mjs';
 import './UserSvcUpserPermissionRequest.mjs';

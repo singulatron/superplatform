@@ -996,6 +996,15 @@ definitions:
       updatedAt:
         type: string
     type: object
+  user_svc.SaveProfileRequest:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+    type: object
+  user_svc.SaveProfileResponse:
+    type: object
   user_svc.SetRolePermissionsRequest:
     properties:
       permissionIds:
@@ -1835,48 +1844,6 @@ paths:
       tags:
       - Generic Svc
   /generic-svc/object/{objectId}:
-    delete:
-      consumes:
-      - application/json
-      description: Removes a generic object from the system based on the provided
-        conditions. Requires authorization and user authentication.
-      operationId: deleteObject
-      parameters:
-      - description: Object ID
-        in: path
-        name: objectId
-        required: true
-        type: string
-      - description: Delete request payload
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/generic_svc.DeleteObjectRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Successful deletion of object
-          schema:
-            $ref: '#/definitions/generic_svc.DeleteObjectResponse'
-        "400":
-          description: Invalid JSON
-          schema:
-            $ref: '#/definitions/generic_svc.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/generic_svc.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/generic_svc.ErrorResponse'
-      security:
-      - BearerAuth: []
-      summary: Delete a Generic Object
-      tags:
-      - Generic Svc
     put:
       consumes:
       - application/json
@@ -1960,6 +1927,49 @@ paths:
       summary: Find Generic Objects
       tags:
       - Generic Svc
+  /generic-svc/objects/delete:
+    post:
+      consumes:
+      - application/json
+      description: Removes a generic object from the system based on the provided
+        conditions. Requires authorization and user authentication.
+      operationId: deleteObjects
+      parameters:
+      - description: Object ID
+        in: path
+        name: objectId
+        required: true
+        type: string
+      - description: Delete request payload
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/generic_svc.DeleteObjectRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful deletion of object
+          schema:
+            $ref: '#/definitions/generic_svc.DeleteObjectResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/generic_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/generic_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/generic_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete a Generic Object
+      tags:
+      - Generic Svc
   /generic-svc/objects/update:
     post:
       consumes:
@@ -1998,6 +2008,35 @@ paths:
       summary: Update Generic Objects
       tags:
       - Generic Svc
+  /model-svc/default-model/status:
+    get:
+      consumes:
+      - application/json
+      description: |-
+        Retrieves the status of the default model.
+
+        Requires the `model-svc:model:view` permission.
+      operationId: getDefaultModelStatus
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Model status retrieved successfully
+          schema:
+            $ref: '#/definitions/model_svc.StatusResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Get Default Model Status
+      tags:
+      - Model Svc
   /model-svc/default/start:
     put:
       consumes:
@@ -2029,41 +2068,6 @@ paths:
       security:
       - BearerAuth: []
       summary: Start the Default Model
-      tags:
-      - Model Svc
-  /model-svc/model/{id}/status:
-    get:
-      consumes:
-      - application/json
-      description: |-
-        Retrieves the status of a model by ID.
-
-        Requires the `model-svc:model:view` permission.
-      operationId: getModelStatus
-      parameters:
-      - description: Model ID
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Model status retrieved successfully
-          schema:
-            $ref: '#/definitions/model_svc.StatusResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            type: string
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      security:
-      - BearerAuth: []
-      summary: Get Model Status
       tags:
       - Model Svc
   /model-svc/model/{modelId}:
@@ -2172,6 +2176,41 @@ paths:
       security:
       - BearerAuth: []
       summary: Start a Model
+      tags:
+      - Model Svc
+  /model-svc/model/{modelId}/status:
+    get:
+      consumes:
+      - application/json
+      description: |-
+        Retrieves the status of a model by ID.
+
+        Requires the `model-svc:model:view` permission.
+      operationId: getModelStatus
+      parameters:
+      - description: Model ID
+        in: path
+        name: modelId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Model status retrieved successfully
+          schema:
+            $ref: '#/definitions/model_svc.StatusResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Get Model Status
       tags:
       - Model Svc
   /model-svc/models:
@@ -2716,7 +2755,7 @@ paths:
         in: path
         name: roleId
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -2878,6 +2917,47 @@ paths:
       security:
       - BearerAuth: []
       summary: Delete a User
+      tags:
+      - User Svc
+    put:
+      consumes:
+      - application/json
+      description: Save user profile information based on the provided user ID.
+      operationId: saveUserProfile
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: string
+      - description: Save Profile Request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/user_svc.SaveProfileRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user_svc.SaveProfileResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Save User Profile
       tags:
       - User Svc
   /user-svc/user/by-token:

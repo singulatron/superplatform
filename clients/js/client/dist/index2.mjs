@@ -88,6 +88,7 @@ export { UserSvcReadUserByTokenRequestFromJSON, UserSvcReadUserByTokenRequestFro
 export { UserSvcReadUserByTokenResponseFromJSON, UserSvcReadUserByTokenResponseFromJSONTyped, UserSvcReadUserByTokenResponseToJSON, instanceOfUserSvcReadUserByTokenResponse } from './UserSvcReadUserByTokenResponse.mjs';
 export { UserSvcRegisterRequestFromJSON, UserSvcRegisterRequestFromJSONTyped, UserSvcRegisterRequestToJSON, instanceOfUserSvcRegisterRequest } from './UserSvcRegisterRequest.mjs';
 export { UserSvcRoleFromJSON, UserSvcRoleFromJSONTyped, UserSvcRoleToJSON, instanceOfUserSvcRole } from './UserSvcRole.mjs';
+export { UserSvcSaveProfileRequestFromJSON, UserSvcSaveProfileRequestFromJSONTyped, UserSvcSaveProfileRequestToJSON, instanceOfUserSvcSaveProfileRequest } from './UserSvcSaveProfileRequest.mjs';
 export { UserSvcSetRolePermissionsRequestFromJSON, UserSvcSetRolePermissionsRequestFromJSONTyped, UserSvcSetRolePermissionsRequestToJSON, instanceOfUserSvcSetRolePermissionsRequest } from './UserSvcSetRolePermissionsRequest.mjs';
 export { UserSvcUpserPermissionRequestFromJSON, UserSvcUpserPermissionRequestFromJSONTyped, UserSvcUpserPermissionRequestToJSON, instanceOfUserSvcUpserPermissionRequest } from './UserSvcUpserPermissionRequest.mjs';
 export { UserSvcUserFromJSON, UserSvcUserFromJSONTyped, UserSvcUserToJSON, instanceOfUserSvcUser } from './UserSvcUser.mjs';

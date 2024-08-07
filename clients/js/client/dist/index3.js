@@ -94,6 +94,7 @@ require('./UserSvcAuthToken.js');
 require('./UserSvcReadUserByTokenRequest.js');
 require('./UserSvcReadUserByTokenResponse.js');
 require('./UserSvcRegisterRequest.js');
+require('./UserSvcSaveProfileRequest.js');
 require('./UserSvcSetRolePermissionsRequest.js');
 require('./UserSvcUpserPermissionRequest.js');
 
