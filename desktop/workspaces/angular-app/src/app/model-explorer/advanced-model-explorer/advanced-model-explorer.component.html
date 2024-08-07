@@ -127,8 +127,8 @@
 						{{ model.parameters }}.
 						{{ getDescription(model) }}
 					</p>
-					<button ion-button clear small (click)="toggleItem(model.id)">
-						{{ expandedStates.get(model.id) ? 'Less' : 'More' }}
+					<button ion-button clear small (click)="toggleItem(model.id!)">
+						{{ expandedStates.get(model.id!) ? 'Less' : 'More' }}
 					</button>
 					<div class="stat">
 						<div class="stat-title">
@@ -179,7 +179,7 @@
 									(configService.onConfigUpdate$ | async)?.model
 										?.currentModelId !== model.id
 								"
-								(click)="makeModelDefault(model.id)"
+								(click)="makeModelDefault(model.id!)"
 								fill="outline"
 								color="secondary"
 							>
@@ -192,7 +192,7 @@
 										?.currentModelId === model.id
 								"
 								color="secondary"
-								(click)="makeModelDefault(model.id)"
+								(click)="makeModelDefault(model.id!)"
 								fill="outline"
 								disabled="true"
 							>
@@ -202,7 +202,7 @@
 						<span style="padding-left: 0.25rem">
 							<app-downloading
 								*ngIf="model?.assets?.MODEL"
-								[url]="model.assets.MODEL"
+								[url]="model.assets!.MODEL"
 							></app-downloading>
 						</span>
 

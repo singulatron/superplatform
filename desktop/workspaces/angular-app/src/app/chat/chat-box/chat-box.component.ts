@@ -26,7 +26,11 @@ import { LocaltronService } from '../../services/localtron.service';
 import { ChatService } from '../../services/chat.service';
 import { PromptService } from '../../services/prompt.service';
 import { PromptSvcPrompt as Prompt } from '@singulatron/client';
-import { Thread, Message, Asset } from '@singulatron/types';
+import {
+	ChatSvcThread as Thread,
+	ChatSvcMessage as Message,
+	ChatSvcAsset as Asset,
+} from '@singulatron/client';
 import { ElectronAppService } from '../../services/electron-app.service';
 
 import { TranslatePipe } from '../../translate.pipe';
@@ -140,8 +144,8 @@ export class ChatBoxComponent implements OnChanges, AfterViewInit, OnDestroy {
 
 		if (this.thread?.id) {
 			const rsp = await this.chatService.chatMessages(this.thread.id);
-			this.messages = rsp.messages;
-			this.assets = rsp.assets;
+			this.messages = rsp.messages!;
+			this.assets = rsp.assets!;
 			// The mutationObserver triggers before the app-messages components are rendered.
 			// This ensures scrollToBottom is called when the app loads for the first time,
 			// after the app-messages have been rendered.
@@ -157,8 +161,8 @@ export class ChatBoxComponent implements OnChanges, AfterViewInit, OnDestroy {
 			this.chatService.onMessageAdded$.subscribe(async (event) => {
 				if (this.thread?.id && this.thread.id == event.threadId) {
 					const rsp = await this.chatService.chatMessages(this.thread?.id);
-					this.messages = rsp.messages;
-					this.assets = rsp.assets;
+					this.messages = rsp.messages!;
+					this.assets = rsp.assets!;
 					this.cd.markForCheck();
 				}
 			})
@@ -203,7 +207,7 @@ export class ChatBoxComponent implements OnChanges, AfterViewInit, OnDestroy {
 	}
 
 	getAssets(message: Message): Asset[] {
-		return this.assets?.filter((a) => message.assetIds?.includes(a.id));
+		return this.assets?.filter((a) => message.assetIds?.includes(a.id!));
 	}
 
 	async handleSend(emitted: SendOutput) {
@@ -252,8 +256,8 @@ export class ChatBoxComponent implements OnChanges, AfterViewInit, OnDestroy {
 			if (this.thread) {
 				threadId = changes.thread.currentValue.id;
 				const rsp = await this.chatService.chatMessages(threadId);
-				this.messages = rsp.messages;
-				this.assets = rsp.assets;
+				this.messages = rsp.messages!;
+				this.assets = rsp.assets!;
 			} else {
 				this.thread = {
 					id: this.localtron.uuid(),
@@ -287,7 +291,7 @@ export class ChatBoxComponent implements OnChanges, AfterViewInit, OnDestroy {
 						response?.choices[0]?.text
 					) {
 						const insidePre =
-							(this.messageCurrentlyStreamed.content.match(/```/g) || [])
+							(this.messageCurrentlyStreamed.content!.match(/```/g) || [])
 								.length %
 								2 ===
 							1;
@@ -311,13 +315,13 @@ export class ChatBoxComponent implements OnChanges, AfterViewInit, OnDestroy {
 						response?.choices[0]?.finish_reason === 'stop'
 					) {
 						if (this.messages?.length == 1) {
-							this.setThreadName(this.messages[0].content);
+							this.setThreadName(this.messages[0].content!);
 						}
 						// @todo might not be needed now we have the `chatMessageAdded`
 						// event coming from the firehose
 						const rsp = await this.chatService.chatMessages(threadId);
-						this.messages = rsp.messages;
-						this.assets = rsp.assets;
+						this.messages = rsp.messages!;
+						this.assets = rsp.assets!;
 
 						this.messageCurrentlyStreamed = {
 							...this.messageCurrentlyStreamed,

@@ -16,7 +16,7 @@ import { ModelSvcModel as Model } from '@singulatron/client';
 import { DockerService } from '../services/docker.service';
 import { ConfigService } from '../services/config.service';
 import { Config } from '@singulatron/types';
-import { DownloadDetails } from '@singulatron/types';
+import { DownloadSvcDownloadDetails as DownloadDetails } from '@singulatron/client';
 import { TranslatePipe } from '../translate.pipe';
 import { TranslateModule } from '@ngx-translate/core';
 import { DownloadingComponent } from '../downloading/downloading.component';

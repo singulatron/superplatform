@@ -8,7 +8,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Subscription, throttleTime } from 'rxjs';
 import { DownloadService } from '../services/download.service';
-import { DownloadDetails } from '@singulatron/types';
+import { DownloadSvcDownloadDetails as DownloadDetails } from '@singulatron/client';
 import { TranslatePipe } from '../translate.pipe';
 import { TranslateModule } from '@ngx-translate/core';
 import { IonicModule } from '@ionic/angular';

@@ -15,7 +15,7 @@ import { CommonModule } from '@angular/common';
 import { ModelService } from '../../services/model.service';
 import { ModelSvcModel as Model } from '@singulatron/client';
 import { DownloadService } from '../../services/download.service';
-import { DownloadStatusChangeEvent } from '@singulatron/types';
+import { DownloadStatusChangeEvent } from '../../services/download.service';
 import { ConfigService } from '../../services/config.service';
 import { IonicModule } from '@ionic/angular';
 import { TranslatePipe } from '../../translate.pipe';
@@ -187,7 +187,7 @@ export class AdvancedModelExplorerComponent {
 		}
 		const c = status?.allDownloads?.find(
 			(download) =>
-				model.assets && Object.values(model.assets).includes(download.url)
+				model.assets && Object.values(model.assets).includes(download.url!)
 		);
 		if (c?.status === 'inProgress' || c?.status === 'paused') {
 			return true;
@@ -223,7 +223,7 @@ export class AdvancedModelExplorerComponent {
 		if (
 			status?.allDownloads?.find(
 				(download) =>
-					model.assets && Object.values(model.assets)?.includes(download.url)
+					model.assets && Object.values(model.assets)?.includes(download.url!)
 			)?.status === 'completed'
 		) {
 			return true;
@@ -317,8 +317,8 @@ export class AdvancedModelExplorerComponent {
 		this.filterModels();
 	}
 
-	trackById(_: number, message: { id: string }): string {
-		return message.id;
+	trackById(_: number, message: { id?: string }): string {
+		return message.id!;
 	}
 }
 
