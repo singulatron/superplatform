@@ -7,7 +7,7 @@
     "module": "esnext",
     "target": "es6",
     "declaration": true,
-    "lib": ["esnext"]
+    "lib": ["esnext", "dom"]
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]

@@ -21,7 +21,7 @@ import (
 // @ID startModel
 // @Summary Start a Model
 // @Description Starts a model by ID
-// @Tags Model Service
+// @Tags Model Svc
 // @Accept json
 // @Produce json
 // @Param modelId path string true "Model ID"

@@ -19,7 +19,7 @@ import (
 // @ID getUsers
 // @Summary List Users
 // @Description Fetches a list of users with optional query filters and pagination.
-// @Tags User Service
+// @Tags User Svc
 // @Accept json
 // @Produce json
 // @Param request body user.GetUsersRequest false "Get Users Request"

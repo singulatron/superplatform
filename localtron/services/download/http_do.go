@@ -22,7 +22,7 @@ import (
 // @Description Start a download for a specified URL.
 // @Description
 // @Description Requires the `download-svc:download:create` permission.
-// @Tags Download Service
+// @Tags Download Svc
 // @Accept json
 // @Produce json
 // @Param request body download.DownloadRequest true "Download Request"

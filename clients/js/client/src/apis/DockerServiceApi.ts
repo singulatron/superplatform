@@ -15,42 +15,21 @@
 
 import * as runtime from '../runtime';
 import type {
-  DockertypesContainerIsRunningResponse,
-  DockertypesErrorResponse,
-  DockertypesGetContainerSummaryResponse,
-  DockertypesGetDockerHostResponse,
-  DockertypesGetInfoResponse,
-  DockertypesLaunchContainerRequest,
-  DockertypesLaunchContainerResponse,
+  DockerSvcErrorResponse,
+  DockerSvcLaunchContainerRequest,
+  DockerSvcLaunchContainerResponse,
 } from '../models/index';
 import {
-    DockertypesContainerIsRunningResponseFromJSON,
-    DockertypesContainerIsRunningResponseToJSON,
-    DockertypesErrorResponseFromJSON,
-    DockertypesErrorResponseToJSON,
-    DockertypesGetContainerSummaryResponseFromJSON,
-    DockertypesGetContainerSummaryResponseToJSON,
-    DockertypesGetDockerHostResponseFromJSON,
-    DockertypesGetDockerHostResponseToJSON,
-    DockertypesGetInfoResponseFromJSON,
-    DockertypesGetInfoResponseToJSON,
-    DockertypesLaunchContainerRequestFromJSON,
-    DockertypesLaunchContainerRequestToJSON,
-    DockertypesLaunchContainerResponseFromJSON,
-    DockertypesLaunchContainerResponseToJSON,
+    DockerSvcErrorResponseFromJSON,
+    DockerSvcErrorResponseToJSON,
+    DockerSvcLaunchContainerRequestFromJSON,
+    DockerSvcLaunchContainerRequestToJSON,
+    DockerSvcLaunchContainerResponseFromJSON,
+    DockerSvcLaunchContainerResponseToJSON,
 } from '../models/index';
 
-export interface GetContainerSummaryRequest {
-    hash: string;
-    numberOfLines: number;
-}
-
-export interface IsRunningRequest {
-    hash: string;
-}
-
 export interface LaunchContainerRequest {
-    request: DockertypesLaunchContainerRequest;
+    request: DockerSvcLaunchContainerRequest;
 }
 
 /**
@@ -59,159 +38,10 @@ export interface LaunchContainerRequest {
 export class DockerServiceApi extends runtime.BaseAPI {
 
     /**
-     * Get a summary of the Docker container identified by the hash, limited to a specified number of lines
-     * Get Container Summary
-     */
-    async getContainerSummaryRaw(requestParameters: GetContainerSummaryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DockertypesGetContainerSummaryResponse>> {
-        if (requestParameters['hash'] == null) {
-            throw new runtime.RequiredError(
-                'hash',
-                'Required parameter "hash" was null or undefined when calling getContainerSummary().'
-            );
-        }
-
-        if (requestParameters['numberOfLines'] == null) {
-            throw new runtime.RequiredError(
-                'numberOfLines',
-                'Required parameter "numberOfLines" was null or undefined when calling getContainerSummary().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = await this.configuration.apiKey("Authorization"); // BearerAuth authentication
-        }
-
-        const response = await this.request({
-            path: `/docker-svc/container/{hash}/summary/{numberOfLines}`.replace(`{${"hash"}}`, encodeURIComponent(String(requestParameters['hash']))).replace(`{${"numberOfLines"}}`, encodeURIComponent(String(requestParameters['numberOfLines']))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => DockertypesGetContainerSummaryResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * Get a summary of the Docker container identified by the hash, limited to a specified number of lines
-     * Get Container Summary
-     */
-    async getContainerSummary(requestParameters: GetContainerSummaryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DockertypesGetContainerSummaryResponse> {
-        const response = await this.getContainerSummaryRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Retrieve information about the Docker host
-     * Get Docker Host
-     */
-    async getHostRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DockertypesGetDockerHostResponse>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = await this.configuration.apiKey("Authorization"); // BearerAuth authentication
-        }
-
-        const response = await this.request({
-            path: `/docker-svc/host`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => DockertypesGetDockerHostResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * Retrieve information about the Docker host
-     * Get Docker Host
-     */
-    async getHost(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DockertypesGetDockerHostResponse> {
-        const response = await this.getHostRaw(initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Retrieve detailed information about the Docker service
-     * Get Docker Service Information
-     */
-    async getInfoRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DockertypesGetInfoResponse>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = await this.configuration.apiKey("Authorization"); // BearerAuth authentication
-        }
-
-        const response = await this.request({
-            path: `/docker-svc/info`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => DockertypesGetInfoResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * Retrieve detailed information about the Docker service
-     * Get Docker Service Information
-     */
-    async getInfo(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DockertypesGetInfoResponse> {
-        const response = await this.getInfoRaw(initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Check if a Docker container identified by the hash is running
-     * Check If a Container Is Running
-     */
-    async isRunningRaw(requestParameters: IsRunningRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DockertypesContainerIsRunningResponse>> {
-        if (requestParameters['hash'] == null) {
-            throw new runtime.RequiredError(
-                'hash',
-                'Required parameter "hash" was null or undefined when calling isRunning().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = await this.configuration.apiKey("Authorization"); // BearerAuth authentication
-        }
-
-        const response = await this.request({
-            path: `/docker-svc/container/{hash}/is-running`.replace(`{${"hash"}}`, encodeURIComponent(String(requestParameters['hash']))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => DockertypesContainerIsRunningResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * Check if a Docker container identified by the hash is running
-     * Check If a Container Is Running
-     */
-    async isRunning(requestParameters: IsRunningRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DockertypesContainerIsRunningResponse> {
-        const response = await this.isRunningRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
      * Launches a Docker container with the specified parameters.  Requires the `docker-svc:docker:create` permission.
      * Launch a Docker Container
      */
-    async launchContainerRaw(requestParameters: LaunchContainerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DockertypesLaunchContainerResponse>> {
+    async launchContainerRaw(requestParameters: LaunchContainerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DockerSvcLaunchContainerResponse>> {
         if (requestParameters['request'] == null) {
             throw new runtime.RequiredError(
                 'request',
@@ -234,17 +64,17 @@ export class DockerServiceApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: DockertypesLaunchContainerRequestToJSON(requestParameters['request']),
+            body: DockerSvcLaunchContainerRequestToJSON(requestParameters['request']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => DockertypesLaunchContainerResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => DockerSvcLaunchContainerResponseFromJSON(jsonValue));
     }
 
     /**
      * Launches a Docker container with the specified parameters.  Requires the `docker-svc:docker:create` permission.
      * Launch a Docker Container
      */
-    async launchContainer(requestParameters: LaunchContainerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DockertypesLaunchContainerResponse> {
+    async launchContainer(requestParameters: LaunchContainerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DockerSvcLaunchContainerResponse> {
         const response = await this.launchContainerRaw(requestParameters, initOverrides);
         return await response.value();
     }

@@ -23,7 +23,7 @@ import (
 // @Description Get a download by ID.
 // @Description
 // @Description Requires the `download-svc:download:view` permission.
-// @Tags Download Service
+// @Tags Download Svc
 // @Accept json
 // @Produce json
 // @Param downloadId path string true "Download ID"

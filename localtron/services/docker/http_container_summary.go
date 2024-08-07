@@ -21,7 +21,7 @@ import (
 // @ID getContainerSummary
 // @Summary      Get Container Summary
 // @Description  Get a summary of the Docker container identified by the hash, limited to a specified number of lines
-// @Tags         Docker Service
+// @Tags         Docker Svc
 // @Accept       json
 // @Produce      json
 // @Param        hash           path     string  true  "Container Hash"

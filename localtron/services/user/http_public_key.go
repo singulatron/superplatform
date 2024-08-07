@@ -17,7 +17,7 @@ import (
 // @ID getPublicKey
 // @Summary Ge Public Key
 // @Description Get the public key to descrypt the JWT.
-// @Tags User Service
+// @Tags User Svc
 // @Accept json
 // @Produce json
 // @Success 200 {object} user.GetPublicKeyResponse

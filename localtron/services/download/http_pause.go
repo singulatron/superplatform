@@ -23,7 +23,7 @@ import (
 // @Description Pause a download that is currently in progress.
 // @Description
 // @Description Requires the `download-svc:download:edit` permission.
-// @Tags Download Service
+// @Tags Download Svc
 // @Accept json
 // @Produce json
 // @Param downloadId path string true "Download ID"

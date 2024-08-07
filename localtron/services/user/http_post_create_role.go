@@ -24,7 +24,7 @@ import (
 // @Description The user account who creates the role will become the owner of that role, and only the owner will be able to edit the role.
 // @Description
 // @Description Requires the `user-svc:role:create` permission.
-// @Tags User Service
+// @Tags User Svc
 // @Accept json
 // @Produce json
 // @Param request body user.CreateRoleRequest true "Create Role Request"

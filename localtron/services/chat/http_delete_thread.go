@@ -21,7 +21,7 @@ import (
 // @ID deleteThread
 // @Summary Delete a Thread
 // @Description Delete a specific chat thread by its ID
-// @Tags Chat Service
+// @Tags Chat Svc
 // @Accept json
 // @Produce json
 // @Param threadId path string true "Thread ID"

@@ -1,4 +1,4 @@
-package prompttypes
+package prompt_svc
 
 const EventPromptAddedName = "promptAdded"
 

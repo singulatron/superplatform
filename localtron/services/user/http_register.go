@@ -17,7 +17,7 @@ import (
 // @ID register
 // @Summary Register a New User
 // @Description Register a new user with a name, email, and password.
-// @Tags User Service
+// @Tags User Svc
 // @Accept json
 // @Produce json
 // @Param body body user.RegisterRequest true "Register Request"

@@ -21,7 +21,7 @@ import (
 // @ID addMessage
 // @Summary Add Message
 // @Description Add a new message to a specific thread.
-// @Tags Chat Service
+// @Tags Chat Svc
 // @Accept json
 // @Produce json
 // @Param threadId path string true "Thread ID"

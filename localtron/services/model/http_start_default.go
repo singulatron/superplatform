@@ -22,7 +22,7 @@ import (
 // @Description Starts The Default Model.
 // @Description
 // @Description Requires the `model-svc:model:create` permission.
-// @Tags Model Service
+// @Tags Model Svc
 // @Accept json
 // @Produce json
 // @Success 200 {object} model.StartResponse

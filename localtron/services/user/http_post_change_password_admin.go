@@ -18,7 +18,7 @@ import (
 // @ID changePasswordAdmin
 // @Summary Change User Password (Admin)
 // @Description Allows an administrator to change a user's password.
-// @Tags User Service
+// @Tags User Svc
 // @Accept json
 // @Produce json
 // @Param request body user.ChangePasswordAdminRequest true "Change Password Request"

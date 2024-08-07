@@ -18,7 +18,7 @@ import (
 // @ID createUser
 // @Summary Create a New User
 // @Description Allows an authenticated administrator to create a new user with specified details.
-// @Tags User Service
+// @Tags User Svc
 // @Accept json
 // @Produce json
 // @Param request body user.CreateUserRequest true "Create User Request"

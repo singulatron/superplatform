@@ -18,7 +18,7 @@ import (
 // @ID getPermissionsByRole
 // @Summary Get Permissions by Role
 // @Description Retrieve permissions associated with a specific role ID.
-// @Tags User Service
+// @Tags User Svc
 // @Accept  json
 // @Produce  json
 // @Param   roleId     path    int     true        "Role ID"

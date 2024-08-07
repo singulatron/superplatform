@@ -21,7 +21,7 @@ import (
 // @ID updateThread
 // @Summary Update Thread
 // @Description Modify the details of a specific chat thread
-// @Tags Chat Service
+// @Tags Chat Svc
 // @Accept json
 // @Produce json
 // @Param threadId path string true "Thread ID"

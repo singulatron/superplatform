@@ -20,7 +20,7 @@ import (
 // @Id getConfig
 // @Summary Get Config
 // @Description Fetch the current configuration from the server
-// @Tags Config Service
+// @Tags Config Svc
 // @Accept json
 // @Produce json
 // @Param request body config.GetConfigRequest true "Get Config Request"

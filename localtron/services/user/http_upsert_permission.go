@@ -25,7 +25,7 @@ import (
 // @Descripion The user account who creates the permission will become the owner of that permission, and only the owner will be able to edit the permission.
 // @Description
 // @Description Requires the `user-svc:permission:create` permission.
-// @Tags User Service
+// @Tags User Svc
 // @Accept json
 // @Produce json
 // @Param permissionId path string true "Permission ID"

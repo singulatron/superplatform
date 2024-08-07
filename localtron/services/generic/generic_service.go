@@ -57,7 +57,7 @@ func (g *GenericService) Start() error {
 	return g.registerPermissions()
 }
 
-func (g *GenericService) create(request *generictypes.CreateRequest) error {
+func (g *GenericService) create(request *generictypes.CreateObjectRequest) error {
 	if request.Object.Id == "" {
 		request.Object.Id = uuid.NewString()
 	}
@@ -73,7 +73,7 @@ func (g *GenericService) createMany(request *generictypes.CreateManyRequest) err
 	return g.store.CreateMany(objectIs)
 }
 
-func (g *GenericService) upsert(request *generictypes.UpsertRequest) error {
+func (g *GenericService) upsert(request *generictypes.UpsertObjectRequest) error {
 	vI, found, err := g.store.Query(
 		datastore.Id(request.Object.Id),
 	).FindOne()

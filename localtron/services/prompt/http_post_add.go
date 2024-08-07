@@ -20,7 +20,7 @@ import (
 // @ID addPrompt
 // @Summary Add Prompt
 // @Description Adds a new prompt to the prompt queue and either waits for the response (if `sync` is set to true), or returns immediately.
-// @Tags Prompt Service
+// @Tags Prompt Svc
 // @Accept json
 // @Produce json
 // @Param request body prompt.AddPromptRequest true "Add Prompt Request"
@@ -28,6 +28,7 @@ import (
 // @Failure 400 {object} prompt.ErrorResponse "Invalid JSON"
 // @Failure 401 {object} prompt.ErrorResponse "Unauthorized"
 // @Failure 500 {object} prompt.ErrorResponse "Internal Server Error"
+// @Security BearerAuth
 // @Router /prompt-svc/prompt [post]
 func (p *PromptService) Add(
 	w http.ResponseWriter,

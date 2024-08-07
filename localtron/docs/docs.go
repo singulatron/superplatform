@@ -39,7 +39,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Chat Service"
+                    "Chat Svc"
                 ],
                 "summary": "Delete a Message",
                 "operationId": "deleteMessage",
@@ -96,7 +96,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Chat Service"
+                    "Chat Svc"
                 ],
                 "summary": "Add Thread",
                 "operationId": "addThread",
@@ -107,7 +107,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/chattypes.AddThreadRequest"
+                            "$ref": "#/definitions/chat_svc.AddThreadRequest"
                         }
                     }
                 ],
@@ -115,7 +115,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Thread successfully created",
                         "schema": {
-                            "$ref": "#/definitions/chattypes.AddThreadResponse"
+                            "$ref": "#/definitions/chat_svc.AddThreadResponse"
                         }
                     },
                     "400": {
@@ -154,7 +154,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Chat Service"
+                    "Chat Svc"
                 ],
                 "summary": "Get Thread",
                 "operationId": "getThread",
@@ -171,7 +171,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Thread details successfully retrieved",
                         "schema": {
-                            "$ref": "#/definitions/chattypes.GetThreadResponse"
+                            "$ref": "#/definitions/chat_svc.GetThreadResponse"
                         }
                     },
                     "400": {
@@ -208,7 +208,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Chat Service"
+                    "Chat Svc"
                 ],
                 "summary": "Update Thread",
                 "operationId": "updateThread",
@@ -226,7 +226,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/chattypes.UpdateThreadRequest"
+                            "$ref": "#/definitions/chat_svc.UpdateThreadRequest"
                         }
                     }
                 ],
@@ -234,7 +234,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Thread successfully updated",
                         "schema": {
-                            "$ref": "#/definitions/chattypes.AddThreadResponse"
+                            "$ref": "#/definitions/chat_svc.AddThreadResponse"
                         }
                     },
                     "400": {
@@ -271,7 +271,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Chat Service"
+                    "Chat Svc"
                 ],
                 "summary": "Delete a Thread",
                 "operationId": "deleteThread",
@@ -328,7 +328,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Chat Service"
+                    "Chat Svc"
                 ],
                 "summary": "Add Message",
                 "operationId": "addMessage",
@@ -346,7 +346,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/chattypes.AddMessageRequest"
+                            "$ref": "#/definitions/chat_svc.AddMessageRequest"
                         }
                     }
                 ],
@@ -394,7 +394,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Chat Service"
+                    "Chat Svc"
                 ],
                 "summary": "List Messages",
                 "operationId": "getMessages",
@@ -411,7 +411,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Messages and assets successfully retrieved",
                         "schema": {
-                            "$ref": "#/definitions/chattypes.GetMessagesResponse"
+                            "$ref": "#/definitions/chat_svc.GetMessagesResponse"
                         }
                     },
                     "400": {
@@ -450,7 +450,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Chat Service"
+                    "Chat Svc"
                 ],
                 "summary": "Get Threads",
                 "operationId": "getThreads",
@@ -461,7 +461,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/chattypes.GetThreadsRequest"
+                            "$ref": "#/definitions/chat_svc.GetThreadsRequest"
                         }
                     }
                 ],
@@ -469,7 +469,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Threads successfully retrieved",
                         "schema": {
-                            "$ref": "#/definitions/chattypes.GetThreadsResponse"
+                            "$ref": "#/definitions/chat_svc.GetThreadsResponse"
                         }
                     },
                     "400": {
@@ -508,7 +508,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Config Service"
+                    "Config Svc"
                 ],
                 "summary": "Get Config",
                 "operationId": "getConfig",
@@ -519,7 +519,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/configtypes.GetConfigRequest"
+                            "$ref": "#/definitions/config_svc.GetConfigRequest"
                         }
                     }
                 ],
@@ -527,7 +527,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Current configuration retrieved successfully",
                         "schema": {
-                            "$ref": "#/definitions/configtypes.GetConfigResponse"
+                            "$ref": "#/definitions/config_svc.GetConfigResponse"
                         }
                     },
                     "401": {
@@ -560,7 +560,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Config Service"
+                    "Config Svc"
                 ],
                 "summary": "Save Config",
                 "operationId": "saveConfig",
@@ -571,7 +571,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/configtypes.SaveConfigRequest"
+                            "$ref": "#/definitions/config_svc.SaveConfigRequest"
                         }
                     }
                 ],
@@ -579,7 +579,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Save Config Response",
                         "schema": {
-                            "$ref": "#/definitions/configtypes.SaveConfigResponse"
+                            "$ref": "#/definitions/config_svc.SaveConfigResponse"
                         }
                     },
                     "401": {
@@ -623,7 +623,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dockertypes.LaunchContainerRequest"
+                            "$ref": "#/definitions/docker_svc.LaunchContainerRequest"
                         }
                     }
                 ],
@@ -631,25 +631,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dockertypes.LaunchContainerResponse"
+                            "$ref": "#/definitions/docker_svc.LaunchContainerResponse"
                         }
                     },
                     "400": {
                         "description": "Invalid JSON",
                         "schema": {
-                            "$ref": "#/definitions/dockertypes.ErrorResponse"
+                            "$ref": "#/definitions/docker_svc.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/dockertypes.ErrorResponse"
+                            "$ref": "#/definitions/docker_svc.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/dockertypes.ErrorResponse"
+                            "$ref": "#/definitions/docker_svc.ErrorResponse"
                         }
                     }
                 }
@@ -670,7 +670,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Docker Service"
+                    "Docker Svc"
                 ],
                 "summary": "Check If a Container Is Running",
                 "operationId": "isRunning",
@@ -687,25 +687,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dockertypes.ContainerIsRunningResponse"
+                            "$ref": "#/definitions/docker_svc.ContainerIsRunningResponse"
                         }
                     },
                     "400": {
                         "description": "Invalid JSON",
                         "schema": {
-                            "$ref": "#/definitions/dockertypes.ErrorResponse"
+                            "$ref": "#/definitions/docker_svc.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/dockertypes.ErrorResponse"
+                            "$ref": "#/definitions/docker_svc.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/dockertypes.ErrorResponse"
+                            "$ref": "#/definitions/docker_svc.ErrorResponse"
                         }
                     }
                 }
@@ -726,7 +726,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Docker Service"
+                    "Docker Svc"
                 ],
                 "summary": "Get Container Summary",
                 "operationId": "getContainerSummary",
@@ -750,25 +750,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dockertypes.GetContainerSummaryResponse"
+                            "$ref": "#/definitions/docker_svc.GetContainerSummaryResponse"
                         }
                     },
                     "400": {
                         "description": "Invalid JSON",
                         "schema": {
-                            "$ref": "#/definitions/dockertypes.ErrorResponse"
+                            "$ref": "#/definitions/docker_svc.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/dockertypes.ErrorResponse"
+                            "$ref": "#/definitions/docker_svc.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/dockertypes.ErrorResponse"
+                            "$ref": "#/definitions/docker_svc.ErrorResponse"
                         }
                     }
                 }
@@ -789,7 +789,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Docker Service"
+                    "Docker Svc"
                 ],
                 "summary": "Get Docker Host",
                 "operationId": "getHost",
@@ -797,19 +797,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dockertypes.GetDockerHostResponse"
+                            "$ref": "#/definitions/docker_svc.GetDockerHostResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/dockertypes.ErrorResponse"
+                            "$ref": "#/definitions/docker_svc.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/dockertypes.ErrorResponse"
+                            "$ref": "#/definitions/docker_svc.ErrorResponse"
                         }
                     }
                 }
@@ -830,7 +830,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Docker Service"
+                    "Docker Svc"
                 ],
                 "summary": "Get Docker Service Information",
                 "operationId": "getInfo",
@@ -838,19 +838,19 @@ const docTemplate = `{
                     "200": {
                         "description": "Service Information",
                         "schema": {
-                            "$ref": "#/definitions/dockertypes.GetInfoResponse"
+                            "$ref": "#/definitions/docker_svc.GetInfoResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/dockertypes.ErrorResponse"
+                            "$ref": "#/definitions/docker_svc.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/dockertypes.ErrorResponse"
+                            "$ref": "#/definitions/docker_svc.ErrorResponse"
                         }
                     }
                 }
@@ -871,7 +871,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Download Service"
+                    "Download Svc"
                 ],
                 "summary": "Download a File",
                 "operationId": "download",
@@ -882,7 +882,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/downloadtypes.DownloadRequest"
+                            "$ref": "#/definitions/download_svc.DownloadRequest"
                         }
                     }
                 ],
@@ -897,19 +897,19 @@ const docTemplate = `{
                     "400": {
                         "description": "Invalid JSON",
                         "schema": {
-                            "$ref": "#/definitions/downloadtypes.ErrorResponse"
+                            "$ref": "#/definitions/download_svc.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/downloadtypes.ErrorResponse"
+                            "$ref": "#/definitions/download_svc.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/downloadtypes.ErrorResponse"
+                            "$ref": "#/definitions/download_svc.ErrorResponse"
                         }
                     }
                 }
@@ -930,7 +930,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Download Service"
+                    "Download Svc"
                 ],
                 "summary": "Get a Download",
                 "operationId": "getDownload",
@@ -947,7 +947,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/downloadtypes.GetDownloadResponse"
+                            "$ref": "#/definitions/download_svc.GetDownloadResponse"
                         }
                     },
                     "401": {
@@ -980,7 +980,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Download Service"
+                    "Download Svc"
                 ],
                 "summary": "Pause a Download",
                 "operationId": "pause",
@@ -1037,7 +1037,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Download Service"
+                    "Download Svc"
                 ],
                 "summary": "List Downloads",
                 "operationId": "listDownloads",
@@ -1045,7 +1045,7 @@ const docTemplate = `{
                     "200": {
                         "description": "List of downloads",
                         "schema": {
-                            "$ref": "#/definitions/downloadtypes.DownloadsResponse"
+                            "$ref": "#/definitions/download_svc.DownloadsResponse"
                         }
                     },
                     "401": {
@@ -1078,7 +1078,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Firehose Service"
+                    "Firehose Svc"
                 ],
                 "summary": "Publish an Event",
                 "parameters": [
@@ -1088,7 +1088,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/firehosetypes.PublishRequest"
+                            "$ref": "#/definitions/firehose_svc.PublishRequest"
                         }
                     }
                 ],
@@ -1099,13 +1099,13 @@ const docTemplate = `{
                     "400": {
                         "description": "Invalid JSON",
                         "schema": {
-                            "$ref": "#/definitions/firehosetypes.ErrorResponse"
+                            "$ref": "#/definitions/firehose_svc.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/firehosetypes.ErrorResponse"
+                            "$ref": "#/definitions/firehose_svc.ErrorResponse"
                         }
                     }
                 }
@@ -1126,7 +1126,7 @@ const docTemplate = `{
                     "text/event-stream"
                 ],
                 "tags": [
-                    "Firehose Service"
+                    "Firehose Svc"
                 ],
                 "summary": "Subscribe to the Event Stream",
                 "responses": {
@@ -1139,19 +1139,19 @@ const docTemplate = `{
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/firehosetypes.ErrorResponse"
+                            "$ref": "#/definitions/firehose_svc.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/firehosetypes.ErrorResponse"
+                            "$ref": "#/definitions/firehose_svc.ErrorResponse"
                         }
                     }
                 }
             }
         },
-        "/generic-svc/create": {
+        "/generic-svc/object/create": {
             "post": {
                 "security": [
                     {
@@ -1166,9 +1166,10 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Generic Service"
+                    "Generic Svc"
                 ],
                 "summary": "Create a Generic Object",
+                "operationId": "createObject",
                 "parameters": [
                     {
                         "description": "Create request payload",
@@ -1176,7 +1177,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/generictypes.CreateRequest"
+                            "$ref": "#/definitions/generic_svc.CreateObjectRequest"
                         }
                     }
                 ],
@@ -1184,25 +1185,25 @@ const docTemplate = `{
                     "200": {
                         "description": "Success",
                         "schema": {
-                            "$ref": "#/definitions/generictypes.CreateResponse"
+                            "$ref": "#/definitions/generic_svc.CreateObjectResponse"
                         }
                     },
                     "400": {
                         "description": "Invalid JSON",
                         "schema": {
-                            "$ref": "#/definitions/generictypes.ErrorResponse"
+                            "$ref": "#/definitions/generic_svc.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/generictypes.ErrorResponse"
+                            "$ref": "#/definitions/generic_svc.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/generictypes.ErrorResponse"
+                            "$ref": "#/definitions/generic_svc.ErrorResponse"
                         }
                     }
                 }
@@ -1223,9 +1224,10 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Generic Service"
+                    "Generic Svc"
                 ],
                 "summary": "Upsert a Generic Object",
+                "operationId": "upsertObject",
                 "parameters": [
                     {
                         "type": "string",
@@ -1240,7 +1242,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/generictypes.UpsertRequest"
+                            "$ref": "#/definitions/generic_svc.UpsertObjectRequest"
                         }
                     }
                 ],
@@ -1248,25 +1250,25 @@ const docTemplate = `{
                     "200": {
                         "description": "Successful creation or update of object",
                         "schema": {
-                            "$ref": "#/definitions/generictypes.UpsertResponse"
+                            "$ref": "#/definitions/generic_svc.UpsertObjectResponse"
                         }
                     },
                     "400": {
                         "description": "Invalid JSON",
                         "schema": {
-                            "$ref": "#/definitions/generictypes.ErrorResponse"
+                            "$ref": "#/definitions/generic_svc.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/generictypes.ErrorResponse"
+                            "$ref": "#/definitions/generic_svc.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/generictypes.ErrorResponse"
+                            "$ref": "#/definitions/generic_svc.ErrorResponse"
                         }
                     }
                 }
@@ -1285,9 +1287,10 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Generic Service"
+                    "Generic Svc"
                 ],
                 "summary": "Delete a Generic Object",
+                "operationId": "deleteObject",
                 "parameters": [
                     {
                         "type": "string",
@@ -1302,7 +1305,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/generictypes.DeleteRequest"
+                            "$ref": "#/definitions/generic_svc.DeleteObjectRequest"
                         }
                     }
                 ],
@@ -1310,25 +1313,25 @@ const docTemplate = `{
                     "200": {
                         "description": "Successful deletion of object",
                         "schema": {
-                            "$ref": "#/definitions/generictypes.DeleteResponse"
+                            "$ref": "#/definitions/generic_svc.DeleteObjectResponse"
                         }
                     },
                     "400": {
                         "description": "Invalid JSON",
                         "schema": {
-                            "$ref": "#/definitions/generictypes.ErrorResponse"
+                            "$ref": "#/definitions/generic_svc.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/generictypes.ErrorResponse"
+                            "$ref": "#/definitions/generic_svc.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/generictypes.ErrorResponse"
+                            "$ref": "#/definitions/generic_svc.ErrorResponse"
                         }
                     }
                 }
@@ -1349,16 +1352,17 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Generic Service"
+                    "Generic Svc"
                 ],
                 "summary": "Find Generic Objects",
+                "operationId": "query",
                 "parameters": [
                     {
                         "description": "Query Request",
                         "name": "body",
                         "in": "body",
                         "schema": {
-                            "$ref": "#/definitions/generictypes.QueryRequest"
+                            "$ref": "#/definitions/generic_svc.QueryRequest"
                         }
                     }
                 ],
@@ -1366,25 +1370,25 @@ const docTemplate = `{
                     "200": {
                         "description": "Successful retrieval of objects",
                         "schema": {
-                            "$ref": "#/definitions/generictypes.QueryResponse"
+                            "$ref": "#/definitions/generic_svc.QueryResponse"
                         }
                     },
                     "400": {
                         "description": "Invalid JSON",
                         "schema": {
-                            "$ref": "#/definitions/generictypes.ErrorResponse"
+                            "$ref": "#/definitions/generic_svc.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/generictypes.ErrorResponse"
+                            "$ref": "#/definitions/generic_svc.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/generictypes.ErrorResponse"
+                            "$ref": "#/definitions/generic_svc.ErrorResponse"
                         }
                     }
                 }
@@ -1405,9 +1409,10 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Generic Service"
+                    "Generic Svc"
                 ],
                 "summary": "Update Generic Objects",
+                "operationId": "updateObjects",
                 "parameters": [
                     {
                         "description": "Update request payload",
@@ -1415,7 +1420,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/generictypes.UpdateRequest"
+                            "$ref": "#/definitions/generic_svc.UpdateObjectRequest"
                         }
                     }
                 ],
@@ -1423,25 +1428,25 @@ const docTemplate = `{
                     "200": {
                         "description": "Successful update of objects",
                         "schema": {
-                            "$ref": "#/definitions/generictypes.UpdateResponse"
+                            "$ref": "#/definitions/generic_svc.UpdateObjectResponse"
                         }
                     },
                     "400": {
                         "description": "Invalid JSON",
                         "schema": {
-                            "$ref": "#/definitions/generictypes.ErrorResponse"
+                            "$ref": "#/definitions/generic_svc.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/generictypes.ErrorResponse"
+                            "$ref": "#/definitions/generic_svc.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/generictypes.ErrorResponse"
+                            "$ref": "#/definitions/generic_svc.ErrorResponse"
                         }
                     }
                 }
@@ -1462,7 +1467,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Model Service"
+                    "Model Svc"
                 ],
                 "summary": "Start the Default Model",
                 "operationId": "startDefaultModel",
@@ -1470,25 +1475,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/modeltypes.StartResponse"
+                            "$ref": "#/definitions/model_svc.StartResponse"
                         }
                     },
                     "400": {
                         "description": "Invalid JSON",
                         "schema": {
-                            "$ref": "#/definitions/modeltypes.ErrorResponse"
+                            "$ref": "#/definitions/model_svc.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/modeltypes.ErrorResponse"
+                            "$ref": "#/definitions/model_svc.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/modeltypes.ErrorResponse"
+                            "$ref": "#/definitions/model_svc.ErrorResponse"
                         }
                     }
                 }
@@ -1509,7 +1514,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Model Service"
+                    "Model Svc"
                 ],
                 "summary": "Get Model Status",
                 "operationId": "getModelStatus",
@@ -1526,7 +1531,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Model status retrieved successfully",
                         "schema": {
-                            "$ref": "#/definitions/modeltypes.StatusResponse"
+                            "$ref": "#/definitions/model_svc.StatusResponse"
                         }
                     },
                     "401": {
@@ -1559,7 +1564,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Model Service"
+                    "Model Svc"
                 ],
                 "summary": "Get a Model",
                 "operationId": "getModel",
@@ -1576,19 +1581,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/modeltypes.GetModelResponse"
+                            "$ref": "#/definitions/model_svc.GetModelResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/modeltypes.ErrorResponse"
+                            "$ref": "#/definitions/model_svc.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/modeltypes.ErrorResponse"
+                            "$ref": "#/definitions/model_svc.ErrorResponse"
                         }
                     }
                 }
@@ -1609,7 +1614,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Model Service"
+                    "Model Svc"
                 ],
                 "summary": "Make a Model Default",
                 "operationId": "makeDefault",
@@ -1626,25 +1631,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/modeltypes.MakeDefaultResponse"
+                            "$ref": "#/definitions/model_svc.MakeDefaultResponse"
                         }
                     },
                     "400": {
                         "description": "Invalid JSON",
                         "schema": {
-                            "$ref": "#/definitions/modeltypes.ErrorResponse"
+                            "$ref": "#/definitions/model_svc.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/modeltypes.ErrorResponse"
+                            "$ref": "#/definitions/model_svc.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/modeltypes.ErrorResponse"
+                            "$ref": "#/definitions/model_svc.ErrorResponse"
                         }
                     }
                 }
@@ -1665,7 +1670,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Model Service"
+                    "Model Svc"
                 ],
                 "summary": "Start a Model",
                 "operationId": "startModel",
@@ -1682,25 +1687,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/modeltypes.StartResponse"
+                            "$ref": "#/definitions/model_svc.StartResponse"
                         }
                     },
                     "400": {
                         "description": "Invalid JSON",
                         "schema": {
-                            "$ref": "#/definitions/modeltypes.ErrorResponse"
+                            "$ref": "#/definitions/model_svc.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/modeltypes.ErrorResponse"
+                            "$ref": "#/definitions/model_svc.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/modeltypes.ErrorResponse"
+                            "$ref": "#/definitions/model_svc.ErrorResponse"
                         }
                     }
                 }
@@ -1721,7 +1726,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Model Service"
+                    "Model Svc"
                 ],
                 "summary": "List Models",
                 "operationId": "listModels",
@@ -1729,19 +1734,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/modeltypes.ListResponse"
+                            "$ref": "#/definitions/model_svc.ListResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/modeltypes.ErrorResponse"
+                            "$ref": "#/definitions/model_svc.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/modeltypes.ErrorResponse"
+                            "$ref": "#/definitions/model_svc.ErrorResponse"
                         }
                     }
                 }
@@ -1749,6 +1754,11 @@ const docTemplate = `{
         },
         "/prompt-svc/list": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "List prompts that satisfy a query.",
                 "consumes": [
                     "application/json"
@@ -1757,7 +1767,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Prompt Service"
+                    "Prompt Svc"
                 ],
                 "summary": "List Prompts",
                 "operationId": "getPrompts",
@@ -1767,7 +1777,7 @@ const docTemplate = `{
                         "name": "request",
                         "in": "body",
                         "schema": {
-                            "$ref": "#/definitions/prompttypes.ListPromptsRequest"
+                            "$ref": "#/definitions/prompt_svc.ListPromptsRequest"
                         }
                     }
                 ],
@@ -1775,25 +1785,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/prompttypes.ListPromptsResponse"
+                            "$ref": "#/definitions/prompt_svc.ListPromptsResponse"
                         }
                     },
                     "400": {
                         "description": "Invalid JSON",
                         "schema": {
-                            "$ref": "#/definitions/prompttypes.ErrorResponse"
+                            "$ref": "#/definitions/prompt_svc.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/prompttypes.ErrorResponse"
+                            "$ref": "#/definitions/prompt_svc.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/prompttypes.ErrorResponse"
+                            "$ref": "#/definitions/prompt_svc.ErrorResponse"
                         }
                     }
                 }
@@ -1801,6 +1811,11 @@ const docTemplate = `{
         },
         "/prompt-svc/prompt": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Adds a new prompt to the prompt queue and either waits for the response (if ` + "`" + `sync` + "`" + ` is set to true), or returns immediately.",
                 "consumes": [
                     "application/json"
@@ -1809,7 +1824,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Prompt Service"
+                    "Prompt Svc"
                 ],
                 "summary": "Add Prompt",
                 "operationId": "addPrompt",
@@ -1820,7 +1835,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/prompttypes.AddPromptRequest"
+                            "$ref": "#/definitions/prompt_svc.AddPromptRequest"
                         }
                     }
                 ],
@@ -1828,25 +1843,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/prompttypes.AddPromptResponse"
+                            "$ref": "#/definitions/prompt_svc.AddPromptResponse"
                         }
                     },
                     "400": {
                         "description": "Invalid JSON",
                         "schema": {
-                            "$ref": "#/definitions/prompttypes.ErrorResponse"
+                            "$ref": "#/definitions/prompt_svc.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/prompttypes.ErrorResponse"
+                            "$ref": "#/definitions/prompt_svc.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/prompttypes.ErrorResponse"
+                            "$ref": "#/definitions/prompt_svc.ErrorResponse"
                         }
                     }
                 }
@@ -1854,6 +1869,11 @@ const docTemplate = `{
         },
         "/prompt-svc/remove": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Remove a prompt by ID.",
                 "consumes": [
                     "application/json"
@@ -1862,7 +1882,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Prompt Service"
+                    "Prompt Svc"
                 ],
                 "summary": "Remove Prompt",
                 "operationId": "removePrompt",
@@ -1873,7 +1893,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/prompttypes.RemovePromptRequest"
+                            "$ref": "#/definitions/prompt_svc.RemovePromptRequest"
                         }
                     }
                 ],
@@ -1881,25 +1901,25 @@ const docTemplate = `{
                     "200": {
                         "description": "{}",
                         "schema": {
-                            "$ref": "#/definitions/prompttypes.RemovePromptResponse"
+                            "$ref": "#/definitions/prompt_svc.RemovePromptResponse"
                         }
                     },
                     "400": {
                         "description": "Invalid JSON",
                         "schema": {
-                            "$ref": "#/definitions/prompttypes.ErrorResponse"
+                            "$ref": "#/definitions/prompt_svc.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/prompttypes.ErrorResponse"
+                            "$ref": "#/definitions/prompt_svc.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/prompttypes.ErrorResponse"
+                            "$ref": "#/definitions/prompt_svc.ErrorResponse"
                         }
                     }
                 }
@@ -1907,9 +1927,14 @@ const docTemplate = `{
         },
         "/prompt-svc/{threadId}/subscribe": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Subscribe to prompt responses via Server-Sent Events (SSE)",
                 "tags": [
-                    "Prompt Service"
+                    "Prompt Svc"
                 ],
                 "summary": "Subscribe to Prompt",
                 "operationId": "subscribe",
@@ -1932,13 +1957,13 @@ const docTemplate = `{
                     "400": {
                         "description": "Missing threadId parameter",
                         "schema": {
-                            "$ref": "#/definitions/prompttypes.ErrorResponse"
+                            "$ref": "#/definitions/prompt_svc.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/prompttypes.ErrorResponse"
+                            "$ref": "#/definitions/prompt_svc.ErrorResponse"
                         }
                     }
                 }
@@ -1959,7 +1984,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User Service"
+                    "User Svc"
                 ],
                 "summary": "Change User Password",
                 "operationId": "changePassword",
@@ -1970,7 +1995,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/usertypes.ChangePasswordRequest"
+                            "$ref": "#/definitions/user_svc.ChangePasswordRequest"
                         }
                     }
                 ],
@@ -1978,25 +2003,25 @@ const docTemplate = `{
                     "200": {
                         "description": "Password changed successfully",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.ChangePasswordResponse"
+                            "$ref": "#/definitions/user_svc.ChangePasswordResponse"
                         }
                     },
                     "400": {
                         "description": "Invalid JSON",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
                         }
                     }
                 }
@@ -2017,7 +2042,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User Service"
+                    "User Svc"
                 ],
                 "summary": "Change User Password (Admin)",
                 "operationId": "changePasswordAdmin",
@@ -2028,7 +2053,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/usertypes.ChangePasswordAdminRequest"
+                            "$ref": "#/definitions/user_svc.ChangePasswordAdminRequest"
                         }
                     }
                 ],
@@ -2036,25 +2061,25 @@ const docTemplate = `{
                     "200": {
                         "description": "Password changed successfully",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.ChangePasswordAdminResponse"
+                            "$ref": "#/definitions/user_svc.ChangePasswordAdminResponse"
                         }
                     },
                     "400": {
                         "description": "Invalid JSON",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
                         }
                     }
                 }
@@ -2070,7 +2095,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User Service"
+                    "User Svc"
                 ],
                 "summary": "Login",
                 "operationId": "login",
@@ -2081,7 +2106,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/usertypes.LoginRequest"
+                            "$ref": "#/definitions/user_svc.LoginRequest"
                         }
                     }
                 ],
@@ -2089,19 +2114,19 @@ const docTemplate = `{
                     "200": {
                         "description": "Login successful",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.LoginResponse"
+                            "$ref": "#/definitions/user_svc.LoginResponse"
                         }
                     },
                     "400": {
                         "description": "Invalid JSON",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
                         }
                     }
                 }
@@ -2122,7 +2147,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User Service"
+                    "User Svc"
                 ],
                 "summary": "Upsert a Permission",
                 "operationId": "upsertPermission",
@@ -2140,7 +2165,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/usertypes.UpserPermissionRequest"
+                            "$ref": "#/definitions/user_svc.UpserPermissionRequest"
                         }
                     }
                 ],
@@ -2148,7 +2173,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.CreateUserResponse"
+                            "$ref": "#/definitions/user_svc.CreateUserResponse"
                         }
                     },
                     "400": {
@@ -2187,7 +2212,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User Service"
+                    "User Svc"
                 ],
                 "summary": "Is Authorized",
                 "operationId": "isAuthorized",
@@ -2205,7 +2230,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/usertypes.IsAuthorizedRequest"
+                            "$ref": "#/definitions/user_svc.IsAuthorizedRequest"
                         }
                     }
                 ],
@@ -2213,19 +2238,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.IsAuthorizedResponse"
+                            "$ref": "#/definitions/user_svc.IsAuthorizedResponse"
                         }
                     },
                     "400": {
                         "description": "Invalid JSON or missing permission id",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
                         }
                     }
                 }
@@ -2241,7 +2266,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User Service"
+                    "User Svc"
                 ],
                 "summary": "Ge Public Key",
                 "operationId": "getPublicKey",
@@ -2249,19 +2274,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.GetPublicKeyResponse"
+                            "$ref": "#/definitions/user_svc.GetPublicKeyResponse"
                         }
                     },
                     "400": {
                         "description": "Invalid JSON or missing permission id",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
                         }
                     }
                 }
@@ -2277,7 +2302,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User Service"
+                    "User Svc"
                 ],
                 "summary": "Register a New User",
                 "operationId": "register",
@@ -2288,7 +2313,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/usertypes.RegisterRequest"
+                            "$ref": "#/definitions/user_svc.RegisterRequest"
                         }
                     }
                 ],
@@ -2296,19 +2321,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.RegisterResponse"
+                            "$ref": "#/definitions/user_svc.RegisterResponse"
                         }
                     },
                     "400": {
                         "description": "Invalid JSON",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
                         }
                     }
                 }
@@ -2329,7 +2354,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User Service"
+                    "User Svc"
                 ],
                 "summary": "Create a New Role",
                 "operationId": "createRole",
@@ -2340,7 +2365,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/usertypes.CreateRoleRequest"
+                            "$ref": "#/definitions/user_svc.CreateRoleRequest"
                         }
                     }
                 ],
@@ -2348,25 +2373,25 @@ const docTemplate = `{
                     "200": {
                         "description": "Role created successfully",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.CreateRoleResponse"
+                            "$ref": "#/definitions/user_svc.CreateRoleResponse"
                         }
                     },
                     "400": {
                         "description": "Invalid JSON",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
                         }
                     }
                 }
@@ -2387,7 +2412,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User Service"
+                    "User Svc"
                 ],
                 "summary": "Delete a Role",
                 "operationId": "deleteRole",
@@ -2404,7 +2429,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.DeleteRoleResponse"
+                            "$ref": "#/definitions/user_svc.DeleteRoleResponse"
                         }
                     },
                     "400": {
@@ -2443,7 +2468,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User Service"
+                    "User Svc"
                 ],
                 "summary": "Add Permission to Role",
                 "operationId": "addPermissionToRole",
@@ -2467,19 +2492,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.CreateUserResponse"
+                            "$ref": "#/definitions/user_svc.CreateUserResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
                         }
                     }
                 }
@@ -2500,7 +2525,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User Service"
+                    "User Svc"
                 ],
                 "summary": "Get Permissions by Role",
                 "operationId": "getPermissionsByRole",
@@ -2517,7 +2542,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.GetPermissionsResponse"
+                            "$ref": "#/definitions/user_svc.GetPermissionsResponse"
                         }
                     },
                     "400": {
@@ -2554,7 +2579,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User Service"
+                    "User Svc"
                 ],
                 "summary": "Set Role Permissions",
                 "operationId": "setRolePermission",
@@ -2572,7 +2597,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/usertypes.SetRolePermissionsRequest"
+                            "$ref": "#/definitions/user_svc.SetRolePermissionsRequest"
                         }
                     }
                 ],
@@ -2580,25 +2605,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.SetRolePermissionsResponse"
+                            "$ref": "#/definitions/user_svc.SetRolePermissionsResponse"
                         }
                     },
                     "400": {
                         "description": "Invalid JSON",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
                         }
                     }
                 }
@@ -2619,7 +2644,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User Service"
+                    "User Svc"
                 ],
                 "summary": "Get all Roles",
                 "operationId": "getRoles",
@@ -2627,7 +2652,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.GetRolesResponse"
+                            "$ref": "#/definitions/user_svc.GetRolesResponse"
                         }
                     },
                     "401": {
@@ -2660,7 +2685,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User Service"
+                    "User Svc"
                 ],
                 "summary": "Create a New User",
                 "operationId": "createUser",
@@ -2671,7 +2696,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/usertypes.CreateUserRequest"
+                            "$ref": "#/definitions/user_svc.CreateUserRequest"
                         }
                     }
                 ],
@@ -2679,25 +2704,25 @@ const docTemplate = `{
                     "200": {
                         "description": "User created successfully",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.CreateUserResponse"
+                            "$ref": "#/definitions/user_svc.CreateUserResponse"
                         }
                     },
                     "400": {
                         "description": "Invalid JSON",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
                         }
                     }
                 }
@@ -2718,7 +2743,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User Service"
+                    "User Svc"
                 ],
                 "summary": "Read User by Token",
                 "operationId": "getUserByToken",
@@ -2729,7 +2754,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/usertypes.ReadUserByTokenRequest"
+                            "$ref": "#/definitions/user_svc.ReadUserByTokenRequest"
                         }
                     }
                 ],
@@ -2737,19 +2762,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.ReadUserByTokenResponse"
+                            "$ref": "#/definitions/user_svc.ReadUserByTokenResponse"
                         }
                     },
                     "400": {
                         "description": "Invalid JSON",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
                         }
                     }
                 }
@@ -2770,7 +2795,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User Service"
+                    "User Svc"
                 ],
                 "summary": "Delete a User",
                 "operationId": "deleteUser",
@@ -2787,7 +2812,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.DeleteUserResponse"
+                            "$ref": "#/definitions/user_svc.DeleteUserResponse"
                         }
                     },
                     "401": {
@@ -2820,7 +2845,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User Service"
+                    "User Svc"
                 ],
                 "summary": "List Users",
                 "operationId": "getUsers",
@@ -2830,7 +2855,7 @@ const docTemplate = `{
                         "name": "request",
                         "in": "body",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.GetUsersRequest"
+                            "$ref": "#/definitions/user_svc.GetUsersRequest"
                         }
                     }
                 ],
@@ -2838,25 +2863,25 @@ const docTemplate = `{
                     "200": {
                         "description": "List of users retrieved successfully",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.GetUsersResponse"
+                            "$ref": "#/definitions/user_svc.GetUsersResponse"
                         }
                     },
                     "400": {
                         "description": "Invalid JSON",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/usertypes.ErrorResponse"
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
                         }
                     }
                 }
@@ -2864,31 +2889,31 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "chattypes.AddMessageRequest": {
+        "chat_svc.AddMessageRequest": {
             "type": "object",
             "properties": {
                 "message": {
-                    "$ref": "#/definitions/chattypes.Message"
+                    "$ref": "#/definitions/chat_svc.Message"
                 }
             }
         },
-        "chattypes.AddThreadRequest": {
+        "chat_svc.AddThreadRequest": {
             "type": "object",
             "properties": {
                 "thread": {
-                    "$ref": "#/definitions/chattypes.Thread"
+                    "$ref": "#/definitions/chat_svc.Thread"
                 }
             }
         },
-        "chattypes.AddThreadResponse": {
+        "chat_svc.AddThreadResponse": {
             "type": "object",
             "properties": {
                 "thread": {
-                    "$ref": "#/definitions/chattypes.Thread"
+                    "$ref": "#/definitions/chat_svc.Thread"
                 }
             }
         },
-        "chattypes.Asset": {
+        "chat_svc.Asset": {
             "type": "object",
             "properties": {
                 "content": {
@@ -2916,49 +2941,49 @@ const docTemplate = `{
                 }
             }
         },
-        "chattypes.GetMessagesResponse": {
+        "chat_svc.GetMessagesResponse": {
             "type": "object",
             "properties": {
                 "assets": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/chattypes.Asset"
+                        "$ref": "#/definitions/chat_svc.Asset"
                     }
                 },
                 "messages": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/chattypes.Message"
+                        "$ref": "#/definitions/chat_svc.Message"
                     }
                 }
             }
         },
-        "chattypes.GetThreadResponse": {
+        "chat_svc.GetThreadResponse": {
             "type": "object",
             "properties": {
                 "exists": {
                     "type": "boolean"
                 },
                 "thread": {
-                    "$ref": "#/definitions/chattypes.Thread"
+                    "$ref": "#/definitions/chat_svc.Thread"
                 }
             }
         },
-        "chattypes.GetThreadsRequest": {
+        "chat_svc.GetThreadsRequest": {
             "type": "object"
         },
-        "chattypes.GetThreadsResponse": {
+        "chat_svc.GetThreadsResponse": {
             "type": "object",
             "properties": {
                 "threads": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/chattypes.Thread"
+                        "$ref": "#/definitions/chat_svc.Thread"
                     }
                 }
             }
         },
-        "chattypes.Message": {
+        "chat_svc.Message": {
             "type": "object",
             "properties": {
                 "assetIds": {
@@ -2991,7 +3016,7 @@ const docTemplate = `{
                 }
             }
         },
-        "chattypes.Thread": {
+        "chat_svc.Thread": {
             "type": "object",
             "properties": {
                 "createdAt": {
@@ -3023,15 +3048,15 @@ const docTemplate = `{
                 }
             }
         },
-        "chattypes.UpdateThreadRequest": {
+        "chat_svc.UpdateThreadRequest": {
             "type": "object",
             "properties": {
                 "thread": {
-                    "$ref": "#/definitions/chattypes.Thread"
+                    "$ref": "#/definitions/chat_svc.Thread"
                 }
             }
         },
-        "configtypes.AppServiceConfig": {
+        "config_svc.AppServiceConfig": {
             "type": "object",
             "properties": {
                 "loggingDisabled": {
@@ -3039,28 +3064,28 @@ const docTemplate = `{
                 }
             }
         },
-        "configtypes.Config": {
+        "config_svc.Config": {
             "type": "object",
             "properties": {
                 "app": {
-                    "$ref": "#/definitions/configtypes.AppServiceConfig"
+                    "$ref": "#/definitions/config_svc.AppServiceConfig"
                 },
                 "directory": {
                     "type": "string"
                 },
                 "download": {
-                    "$ref": "#/definitions/configtypes.DownloadServiceConfig"
+                    "$ref": "#/definitions/config_svc.DownloadServiceConfig"
                 },
                 "isRuntimeInstalled": {
                     "description": "* This flag drives a minor UX feature:\n\t * if the user has not installed the runtime we show an INSTALL\n\t * button, but if the user has already installed the runtime we show\n\t * we show a START runtime button.\n\t *",
                     "type": "boolean"
                 },
                 "model": {
-                    "$ref": "#/definitions/configtypes.ModelServiceConfig"
+                    "$ref": "#/definitions/config_svc.ModelServiceConfig"
                 }
             }
         },
-        "configtypes.DownloadServiceConfig": {
+        "config_svc.DownloadServiceConfig": {
             "type": "object",
             "properties": {
                 "downloadFolder": {
@@ -3068,18 +3093,18 @@ const docTemplate = `{
                 }
             }
         },
-        "configtypes.GetConfigRequest": {
+        "config_svc.GetConfigRequest": {
             "type": "object"
         },
-        "configtypes.GetConfigResponse": {
+        "config_svc.GetConfigResponse": {
             "type": "object",
             "properties": {
                 "config": {
-                    "$ref": "#/definitions/configtypes.Config"
+                    "$ref": "#/definitions/config_svc.Config"
                 }
             }
         },
-        "configtypes.ModelServiceConfig": {
+        "config_svc.ModelServiceConfig": {
             "type": "object",
             "properties": {
                 "currentModelId": {
@@ -3087,15 +3112,15 @@ const docTemplate = `{
                 }
             }
         },
-        "configtypes.SaveConfigRequest": {
+        "config_svc.SaveConfigRequest": {
             "type": "object",
             "properties": {
                 "config": {
-                    "$ref": "#/definitions/configtypes.Config"
+                    "$ref": "#/definitions/config_svc.Config"
                 }
             }
         },
-        "configtypes.SaveConfigResponse": {
+        "config_svc.SaveConfigResponse": {
             "type": "object"
         },
         "datastore.AllCondition": {
@@ -3249,7 +3274,7 @@ const docTemplate = `{
                 "value": {}
             }
         },
-        "dockertypes.ContainerIsRunningResponse": {
+        "docker_svc.ContainerIsRunningResponse": {
             "type": "object",
             "properties": {
                 "isRunning": {
@@ -3257,7 +3282,7 @@ const docTemplate = `{
                 }
             }
         },
-        "dockertypes.DockerInfo": {
+        "docker_svc.DockerInfo": {
             "type": "object",
             "properties": {
                 "dockerDaemonAddress": {
@@ -3271,7 +3296,7 @@ const docTemplate = `{
                 }
             }
         },
-        "dockertypes.ErrorResponse": {
+        "docker_svc.ErrorResponse": {
             "type": "object",
             "properties": {
                 "error": {
@@ -3279,7 +3304,7 @@ const docTemplate = `{
                 }
             }
         },
-        "dockertypes.GetContainerSummaryResponse": {
+        "docker_svc.GetContainerSummaryResponse": {
             "type": "object",
             "properties": {
                 "summary": {
@@ -3287,7 +3312,7 @@ const docTemplate = `{
                 }
             }
         },
-        "dockertypes.GetDockerHostResponse": {
+        "docker_svc.GetDockerHostResponse": {
             "type": "object",
             "properties": {
                 "host": {
@@ -3295,15 +3320,15 @@ const docTemplate = `{
                 }
             }
         },
-        "dockertypes.GetInfoResponse": {
+        "docker_svc.GetInfoResponse": {
             "type": "object",
             "properties": {
                 "info": {
-                    "$ref": "#/definitions/dockertypes.DockerInfo"
+                    "$ref": "#/definitions/docker_svc.DockerInfo"
                 }
             }
         },
-        "dockertypes.LaunchContainerRequest": {
+        "docker_svc.LaunchContainerRequest": {
             "type": "object",
             "properties": {
                 "hostPort": {
@@ -3313,22 +3338,22 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "options": {
-                    "$ref": "#/definitions/dockertypes.LaunchOptions"
+                    "$ref": "#/definitions/docker_svc.LaunchOptions"
                 },
                 "port": {
                     "type": "integer"
                 }
             }
         },
-        "dockertypes.LaunchContainerResponse": {
+        "docker_svc.LaunchContainerResponse": {
             "type": "object",
             "properties": {
                 "info": {
-                    "$ref": "#/definitions/dockertypes.LaunchInfo"
+                    "$ref": "#/definitions/docker_svc.LaunchInfo"
                 }
             }
         },
-        "dockertypes.LaunchInfo": {
+        "docker_svc.LaunchInfo": {
             "type": "object",
             "properties": {
                 "newContainerStarted": {
@@ -3339,7 +3364,7 @@ const docTemplate = `{
                 }
             }
         },
-        "dockertypes.LaunchOptions": {
+        "docker_svc.LaunchOptions": {
             "type": "object",
             "properties": {
                 "envs": {
@@ -3371,7 +3396,7 @@ const docTemplate = `{
                 }
             }
         },
-        "downloadtypes.DownloadDetails": {
+        "download_svc.DownloadDetails": {
             "type": "object",
             "properties": {
                 "cancelled": {
@@ -3412,7 +3437,7 @@ const docTemplate = `{
                 }
             }
         },
-        "downloadtypes.DownloadRequest": {
+        "download_svc.DownloadRequest": {
             "type": "object",
             "properties": {
                 "folderPath": {
@@ -3423,18 +3448,18 @@ const docTemplate = `{
                 }
             }
         },
-        "downloadtypes.DownloadsResponse": {
+        "download_svc.DownloadsResponse": {
             "type": "object",
             "properties": {
                 "downloads": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/downloadtypes.DownloadDetails"
+                        "$ref": "#/definitions/download_svc.DownloadDetails"
                     }
                 }
             }
         },
-        "downloadtypes.ErrorResponse": {
+        "download_svc.ErrorResponse": {
             "type": "object",
             "properties": {
                 "error": {
@@ -3442,18 +3467,18 @@ const docTemplate = `{
                 }
             }
         },
-        "downloadtypes.GetDownloadResponse": {
+        "download_svc.GetDownloadResponse": {
             "type": "object",
             "properties": {
                 "download": {
-                    "$ref": "#/definitions/downloadtypes.DownloadDetails"
+                    "$ref": "#/definitions/download_svc.DownloadDetails"
                 },
                 "exists": {
                     "type": "boolean"
                 }
             }
         },
-        "firehosetypes.ErrorResponse": {
+        "firehose_svc.ErrorResponse": {
             "type": "object",
             "properties": {
                 "error": {
@@ -3461,7 +3486,7 @@ const docTemplate = `{
                 }
             }
         },
-        "firehosetypes.Event": {
+        "firehose_svc.Event": {
             "type": "object",
             "properties": {
                 "data": {},
@@ -3470,31 +3495,31 @@ const docTemplate = `{
                 }
             }
         },
-        "firehosetypes.PublishRequest": {
+        "firehose_svc.PublishRequest": {
             "type": "object",
             "properties": {
                 "event": {
-                    "$ref": "#/definitions/firehosetypes.Event"
+                    "$ref": "#/definitions/firehose_svc.Event"
                 }
             }
         },
-        "generictypes.CreateRequest": {
+        "generic_svc.CreateObjectRequest": {
             "type": "object",
             "properties": {
                 "object": {
-                    "$ref": "#/definitions/generictypes.GenericObjectCreateFields"
+                    "$ref": "#/definitions/generic_svc.GenericObjectCreateFields"
                 }
             }
         },
-        "generictypes.CreateResponse": {
+        "generic_svc.CreateObjectResponse": {
             "type": "object",
             "properties": {
                 "object": {
-                    "$ref": "#/definitions/generictypes.GenericObject"
+                    "$ref": "#/definitions/generic_svc.GenericObject"
                 }
             }
         },
-        "generictypes.DeleteRequest": {
+        "generic_svc.DeleteObjectRequest": {
             "type": "object",
             "properties": {
                 "conditions": {
@@ -3508,10 +3533,10 @@ const docTemplate = `{
                 }
             }
         },
-        "generictypes.DeleteResponse": {
+        "generic_svc.DeleteObjectResponse": {
             "type": "object"
         },
-        "generictypes.ErrorResponse": {
+        "generic_svc.ErrorResponse": {
             "type": "object",
             "properties": {
                 "error": {
@@ -3519,7 +3544,7 @@ const docTemplate = `{
                 }
             }
         },
-        "generictypes.GenericObject": {
+        "generic_svc.GenericObject": {
             "type": "object",
             "required": [
                 "data",
@@ -3531,7 +3556,7 @@ const docTemplate = `{
                 },
                 "data": {
                     "type": "object",
-                    "additionalProperties": {}
+                    "additionalProperties": true
                 },
                 "id": {
                     "type": "string"
@@ -3551,7 +3576,7 @@ const docTemplate = `{
                 }
             }
         },
-        "generictypes.GenericObjectCreateFields": {
+        "generic_svc.GenericObjectCreateFields": {
             "type": "object",
             "required": [
                 "data",
@@ -3560,7 +3585,7 @@ const docTemplate = `{
             "properties": {
                 "data": {
                     "type": "object",
-                    "additionalProperties": {}
+                    "additionalProperties": true
                 },
                 "id": {
                     "type": "string"
@@ -3577,7 +3602,7 @@ const docTemplate = `{
                 }
             }
         },
-        "generictypes.QueryRequest": {
+        "generic_svc.QueryRequest": {
             "type": "object",
             "properties": {
                 "public": {
@@ -3591,18 +3616,18 @@ const docTemplate = `{
                 }
             }
         },
-        "generictypes.QueryResponse": {
+        "generic_svc.QueryResponse": {
             "type": "object",
             "properties": {
                 "objects": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/generictypes.GenericObject"
+                        "$ref": "#/definitions/generic_svc.GenericObject"
                     }
                 }
             }
         },
-        "generictypes.UpdateRequest": {
+        "generic_svc.UpdateObjectRequest": {
             "type": "object",
             "properties": {
                 "conditions": {
@@ -3612,44 +3637,44 @@ const docTemplate = `{
                     }
                 },
                 "object": {
-                    "$ref": "#/definitions/generictypes.GenericObject"
+                    "$ref": "#/definitions/generic_svc.GenericObject"
                 },
                 "table": {
                     "type": "string"
                 }
             }
         },
-        "generictypes.UpdateResponse": {
+        "generic_svc.UpdateObjectResponse": {
             "type": "object"
         },
-        "generictypes.UpsertRequest": {
+        "generic_svc.UpsertObjectRequest": {
             "type": "object",
             "properties": {
                 "object": {
-                    "$ref": "#/definitions/generictypes.GenericObjectCreateFields"
+                    "$ref": "#/definitions/generic_svc.GenericObjectCreateFields"
                 }
             }
         },
-        "generictypes.UpsertResponse": {
+        "generic_svc.UpsertObjectResponse": {
             "type": "object",
             "properties": {
                 "object": {
-                    "$ref": "#/definitions/generictypes.GenericObject"
+                    "$ref": "#/definitions/generic_svc.GenericObject"
                 }
             }
         },
-        "modeltypes.Architectures": {
+        "model_svc.Architectures": {
             "type": "object",
             "properties": {
                 "cuda": {
-                    "$ref": "#/definitions/modeltypes.Container"
+                    "$ref": "#/definitions/model_svc.Container"
                 },
                 "default": {
-                    "$ref": "#/definitions/modeltypes.Container"
+                    "$ref": "#/definitions/model_svc.Container"
                 }
             }
         },
-        "modeltypes.Container": {
+        "model_svc.Container": {
             "type": "object",
             "properties": {
                 "envars": {
@@ -3675,7 +3700,7 @@ const docTemplate = `{
                 }
             }
         },
-        "modeltypes.ErrorResponse": {
+        "model_svc.ErrorResponse": {
             "type": "object",
             "properties": {
                 "error": {
@@ -3683,35 +3708,35 @@ const docTemplate = `{
                 }
             }
         },
-        "modeltypes.GetModelResponse": {
+        "model_svc.GetModelResponse": {
             "type": "object",
             "properties": {
                 "exists": {
                     "type": "boolean"
                 },
                 "model": {
-                    "$ref": "#/definitions/modeltypes.Model"
+                    "$ref": "#/definitions/model_svc.Model"
                 },
                 "platform": {
-                    "$ref": "#/definitions/modeltypes.Platform"
+                    "$ref": "#/definitions/model_svc.Platform"
                 }
             }
         },
-        "modeltypes.ListResponse": {
+        "model_svc.ListResponse": {
             "type": "object",
             "properties": {
                 "models": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/modeltypes.Model"
+                        "$ref": "#/definitions/model_svc.Model"
                     }
                 }
             }
         },
-        "modeltypes.MakeDefaultResponse": {
+        "model_svc.MakeDefaultResponse": {
             "type": "object"
         },
-        "modeltypes.Model": {
+        "model_svc.Model": {
             "type": "object",
             "properties": {
                 "assets": {
@@ -3785,7 +3810,7 @@ const docTemplate = `{
                 }
             }
         },
-        "modeltypes.ModelStatus": {
+        "model_svc.ModelStatus": {
             "type": "object",
             "properties": {
                 "address": {
@@ -3800,11 +3825,11 @@ const docTemplate = `{
                 }
             }
         },
-        "modeltypes.Platform": {
+        "model_svc.Platform": {
             "type": "object",
             "properties": {
                 "architectures": {
-                    "$ref": "#/definitions/modeltypes.Architectures"
+                    "$ref": "#/definitions/model_svc.Architectures"
                 },
                 "id": {
                     "type": "string"
@@ -3817,18 +3842,18 @@ const docTemplate = `{
                 }
             }
         },
-        "modeltypes.StartResponse": {
+        "model_svc.StartResponse": {
             "type": "object"
         },
-        "modeltypes.StatusResponse": {
+        "model_svc.StatusResponse": {
             "type": "object",
             "properties": {
                 "status": {
-                    "$ref": "#/definitions/modeltypes.ModelStatus"
+                    "$ref": "#/definitions/model_svc.ModelStatus"
                 }
             }
         },
-        "prompttypes.AddPromptRequest": {
+        "prompt_svc.AddPromptRequest": {
             "type": "object",
             "required": [
                 "prompt"
@@ -3868,18 +3893,18 @@ const docTemplate = `{
                 }
             }
         },
-        "prompttypes.AddPromptResponse": {
+        "prompt_svc.AddPromptResponse": {
             "type": "object",
             "properties": {
                 "answer": {
                     "type": "string"
                 },
                 "prompt": {
-                    "$ref": "#/definitions/prompttypes.Prompt"
+                    "$ref": "#/definitions/prompt_svc.Prompt"
                 }
             }
         },
-        "prompttypes.ErrorResponse": {
+        "prompt_svc.ErrorResponse": {
             "type": "object",
             "properties": {
                 "error": {
@@ -3887,7 +3912,7 @@ const docTemplate = `{
                 }
             }
         },
-        "prompttypes.ListPromptsRequest": {
+        "prompt_svc.ListPromptsRequest": {
             "type": "object",
             "properties": {
                 "query": {
@@ -3895,7 +3920,7 @@ const docTemplate = `{
                 }
             }
         },
-        "prompttypes.ListPromptsResponse": {
+        "prompt_svc.ListPromptsResponse": {
             "type": "object",
             "properties": {
                 "after": {},
@@ -3905,12 +3930,12 @@ const docTemplate = `{
                 "prompts": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/prompttypes.Prompt"
+                        "$ref": "#/definitions/prompt_svc.Prompt"
                     }
                 }
             }
         },
-        "prompttypes.Prompt": {
+        "prompt_svc.Prompt": {
             "type": "object",
             "required": [
                 "prompt"
@@ -3955,7 +3980,7 @@ const docTemplate = `{
                     "description": "Status of the prompt.",
                     "allOf": [
                         {
-                            "$ref": "#/definitions/prompttypes.PromptStatus"
+                            "$ref": "#/definitions/prompt_svc.PromptStatus"
                         }
                     ]
                 },
@@ -3982,7 +4007,7 @@ const docTemplate = `{
                 }
             }
         },
-        "prompttypes.PromptStatus": {
+        "prompt_svc.PromptStatus": {
             "type": "string",
             "enum": [
                 "scheduled",
@@ -4001,7 +4026,7 @@ const docTemplate = `{
                 "PromptStatusCanceled"
             ]
         },
-        "prompttypes.RemovePromptRequest": {
+        "prompt_svc.RemovePromptRequest": {
             "type": "object",
             "properties": {
                 "promptId": {
@@ -4009,10 +4034,10 @@ const docTemplate = `{
                 }
             }
         },
-        "prompttypes.RemovePromptResponse": {
+        "prompt_svc.RemovePromptResponse": {
             "type": "object"
         },
-        "usertypes.AuthToken": {
+        "user_svc.AuthToken": {
             "type": "object",
             "properties": {
                 "createdAt": {
@@ -4035,7 +4060,7 @@ const docTemplate = `{
                 }
             }
         },
-        "usertypes.ChangePasswordAdminRequest": {
+        "user_svc.ChangePasswordAdminRequest": {
             "type": "object",
             "properties": {
                 "email": {
@@ -4046,10 +4071,10 @@ const docTemplate = `{
                 }
             }
         },
-        "usertypes.ChangePasswordAdminResponse": {
+        "user_svc.ChangePasswordAdminResponse": {
             "type": "object"
         },
-        "usertypes.ChangePasswordRequest": {
+        "user_svc.ChangePasswordRequest": {
             "type": "object",
             "properties": {
                 "currentPassword": {
@@ -4063,10 +4088,10 @@ const docTemplate = `{
                 }
             }
         },
-        "usertypes.ChangePasswordResponse": {
+        "user_svc.ChangePasswordResponse": {
             "type": "object"
         },
-        "usertypes.CreateRoleRequest": {
+        "user_svc.CreateRoleRequest": {
             "type": "object",
             "properties": {
                 "description": {
@@ -4083,15 +4108,15 @@ const docTemplate = `{
                 }
             }
         },
-        "usertypes.CreateRoleResponse": {
+        "user_svc.CreateRoleResponse": {
             "type": "object",
             "properties": {
                 "role": {
-                    "$ref": "#/definitions/usertypes.Role"
+                    "$ref": "#/definitions/user_svc.Role"
                 }
             }
         },
-        "usertypes.CreateUserRequest": {
+        "user_svc.CreateUserRequest": {
             "type": "object",
             "properties": {
                 "password": {
@@ -4104,20 +4129,20 @@ const docTemplate = `{
                     }
                 },
                 "user": {
-                    "$ref": "#/definitions/usertypes.User"
+                    "$ref": "#/definitions/user_svc.User"
                 }
             }
         },
-        "usertypes.CreateUserResponse": {
+        "user_svc.CreateUserResponse": {
             "type": "object"
         },
-        "usertypes.DeleteRoleResponse": {
+        "user_svc.DeleteRoleResponse": {
             "type": "object"
         },
-        "usertypes.DeleteUserResponse": {
+        "user_svc.DeleteUserResponse": {
             "type": "object"
         },
-        "usertypes.ErrorResponse": {
+        "user_svc.ErrorResponse": {
             "type": "object",
             "properties": {
                 "error": {
@@ -4125,18 +4150,18 @@ const docTemplate = `{
                 }
             }
         },
-        "usertypes.GetPermissionsResponse": {
+        "user_svc.GetPermissionsResponse": {
             "type": "object",
             "properties": {
                 "permissions": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/usertypes.Permission"
+                        "$ref": "#/definitions/user_svc.Permission"
                     }
                 }
             }
         },
-        "usertypes.GetPublicKeyResponse": {
+        "user_svc.GetPublicKeyResponse": {
             "type": "object",
             "properties": {
                 "publicKey": {
@@ -4144,18 +4169,18 @@ const docTemplate = `{
                 }
             }
         },
-        "usertypes.GetRolesResponse": {
+        "user_svc.GetRolesResponse": {
             "type": "object",
             "properties": {
                 "roles": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/usertypes.Role"
+                        "$ref": "#/definitions/user_svc.Role"
                     }
                 }
             }
         },
-        "usertypes.GetUsersRequest": {
+        "user_svc.GetUsersRequest": {
             "type": "object",
             "properties": {
                 "query": {
@@ -4163,7 +4188,7 @@ const docTemplate = `{
                 }
             }
         },
-        "usertypes.GetUsersResponse": {
+        "user_svc.GetUsersResponse": {
             "type": "object",
             "properties": {
                 "after": {
@@ -4175,12 +4200,12 @@ const docTemplate = `{
                 "users": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/usertypes.User"
+                        "$ref": "#/definitions/user_svc.User"
                     }
                 }
             }
         },
-        "usertypes.IsAuthorizedRequest": {
+        "user_svc.IsAuthorizedRequest": {
             "type": "object",
             "properties": {
                 "emailsGranted": {
@@ -4191,18 +4216,18 @@ const docTemplate = `{
                 }
             }
         },
-        "usertypes.IsAuthorizedResponse": {
+        "user_svc.IsAuthorizedResponse": {
             "type": "object",
             "properties": {
                 "authorized": {
                     "type": "boolean"
                 },
                 "user": {
-                    "$ref": "#/definitions/usertypes.User"
+                    "$ref": "#/definitions/user_svc.User"
                 }
             }
         },
-        "usertypes.LoginRequest": {
+        "user_svc.LoginRequest": {
             "type": "object",
             "properties": {
                 "email": {
@@ -4213,15 +4238,15 @@ const docTemplate = `{
                 }
             }
         },
-        "usertypes.LoginResponse": {
+        "user_svc.LoginResponse": {
             "type": "object",
             "properties": {
                 "token": {
-                    "$ref": "#/definitions/usertypes.AuthToken"
+                    "$ref": "#/definitions/user_svc.AuthToken"
                 }
             }
         },
-        "usertypes.Permission": {
+        "user_svc.Permission": {
             "type": "object",
             "properties": {
                 "createdAt": {
@@ -4247,7 +4272,7 @@ const docTemplate = `{
                 }
             }
         },
-        "usertypes.ReadUserByTokenRequest": {
+        "user_svc.ReadUserByTokenRequest": {
             "type": "object",
             "properties": {
                 "token": {
@@ -4255,15 +4280,15 @@ const docTemplate = `{
                 }
             }
         },
-        "usertypes.ReadUserByTokenResponse": {
+        "user_svc.ReadUserByTokenResponse": {
             "type": "object",
             "properties": {
                 "user": {
-                    "$ref": "#/definitions/usertypes.User"
+                    "$ref": "#/definitions/user_svc.User"
                 }
             }
         },
-        "usertypes.RegisterRequest": {
+        "user_svc.RegisterRequest": {
             "type": "object",
             "properties": {
                 "email": {
@@ -4277,10 +4302,10 @@ const docTemplate = `{
                 }
             }
         },
-        "usertypes.RegisterResponse": {
+        "user_svc.RegisterResponse": {
             "type": "object"
         },
-        "usertypes.Role": {
+        "user_svc.Role": {
             "type": "object",
             "properties": {
                 "createdAt": {
@@ -4309,7 +4334,7 @@ const docTemplate = `{
                 }
             }
         },
-        "usertypes.SetRolePermissionsRequest": {
+        "user_svc.SetRolePermissionsRequest": {
             "type": "object",
             "properties": {
                 "permissionIds": {
@@ -4320,18 +4345,18 @@ const docTemplate = `{
                 }
             }
         },
-        "usertypes.SetRolePermissionsResponse": {
+        "user_svc.SetRolePermissionsResponse": {
             "type": "object"
         },
-        "usertypes.UpserPermissionRequest": {
+        "user_svc.UpserPermissionRequest": {
             "type": "object",
             "properties": {
                 "permission": {
-                    "$ref": "#/definitions/usertypes.Permission"
+                    "$ref": "#/definitions/user_svc.Permission"
                 }
             }
         },
-        "usertypes.User": {
+        "user_svc.User": {
             "type": "object",
             "properties": {
                 "createdAt": {
