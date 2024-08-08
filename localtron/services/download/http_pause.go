@@ -11,6 +11,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 
 	"github.com/gorilla/mux"
 	download "github.com/singulatron/singulatron/localtron/services/download/types"
@@ -49,7 +50,11 @@ func (ds *DownloadService) Pause(
 		return
 	}
 
-	downloadId := mux.Vars(r)["downloadId"]
+	downloadId, err := url.PathUnescape(mux.Vars(r)["downloadId"])
+	if err != nil {
+		http.Error(w, "Download ID in path is not URL encoded", http.StatusBadRequest)
+		return
+	}
 
 	err = ds.pause(downloadId)
 	if err != nil {
