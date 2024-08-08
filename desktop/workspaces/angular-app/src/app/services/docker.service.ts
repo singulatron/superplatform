@@ -51,7 +51,7 @@ export class DockerService {
 			const rsp = await this.dockerInfo();
 
 			this.onDockerInfoSubject.next({
-				hasDocker: rsp?.info?.hasDocker!,
+				hasDocker: rsp?.info?.hasDocker || false,
 			});
 		} catch (error) {
 			console.error('Error in docker.service init', {

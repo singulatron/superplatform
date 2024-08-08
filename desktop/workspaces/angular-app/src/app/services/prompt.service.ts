@@ -107,7 +107,7 @@ export class PromptService {
 		});
 	}
 
-	async promptRemove(promptId: string): Promise<Object> {
+	async promptRemove(promptId: string): Promise<object> {
 		return this.promptService.removePrompt({
 			request: {
 				promptId: promptId,
