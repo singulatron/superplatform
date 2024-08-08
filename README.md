@@ -15,17 +15,27 @@
 ![backend build](https://github.com/singulatron/singulatron/actions/workflows/backend-build-github.yaml/badge.svg)
 ![frontend build](https://github.com/singulatron/singulatron/actions/workflows/frontend-container-build-github.yaml/badge.svg)
 
-Singulatron is a rapid prototyping environment for the AI age. It lets you self-host and interact with LLMs, and provides a framework and ecosystem for swiftly creating AI-based applications. It aims to serve the hackers who embark on transforming the world with AI over the next decade.
+Singulatron is a rapid prototyping environment for the AI age.
 
-During his 20+ years of building hundreds of different projects, the author was always drawn to building development platforms ([micro](https://github.com/micro/micro), [1backend](https://github.com/1backend/1backend)), ORMs ([gocassa](https://github.com/gocassa/gocassa)) and various other productivity tools ([ok-borg](https://github.com/ok-borg/borg)).
-Singulatron is a bit of all of those.
+It allows you to self-host and work with LLMs and other AI technologies, offering a comprehensive framework and ecosystem for rapidly building AI-driven applications.
 
 ## Primary Use Cases
 
-- [x] Run AI models on a self-hosted Singulatron instance to ensure privacy.
-- [x] Develop backendless applications with access to prompting, datastore, and other features in Singulatron.
-- [ ] Extend the Singulatron backend with custom endpoints written in any language - in other words deploy new apps on Singulatron.
-- [ ] Run apps written by others on your own instance.
+### Run AI Models [x]
+
+Run open-source AI models privately on your own infrastructure, ensuring that your data and operations remain fully under your control.
+
+### Quickly Build Backendless AI Apps [x]
+
+Build backendless application by using Singulatron as a database and AI prompting API.
+
+### Develop Microservices-Based AI Applications [ ]
+
+Singulatron itself is built on a microservices architecture. The platform's built-in services communicate with each other through the same APIs that you'll use to build apps on top of Singulatron.
+
+### Deploy Third-Party AI Apps Easily [ ]
+
+Singulatron is designed to make deploying third-party AI applications straightforward. With its focus on virtualization and containers (primarily Docker) and a microservices, API-first approach (using OpenAPI), Singulatron seamlessly integrates other applications into its ecosystem.
 
 <p align="center">
   <a href="https://singulatron.com/assets/chat.png?refresh=3" target="_blank">
