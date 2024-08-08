@@ -1,4 +1,4 @@
-import { a as BaseAPI, _ as __awaiter, b as RequiredError, J as JSONApiResponse } from './runtime2.mjs';
+import { a as BaseAPI, _ as __awaiter, J as JSONApiResponse, b as RequiredError } from './runtime2.mjs';
 import { ConfigSvcGetConfigResponseFromJSON } from './ConfigSvcGetConfigResponse.mjs';
 import { ConfigSvcSaveConfigRequestToJSON } from './ConfigSvcSaveConfigRequest.mjs';
 import './ConfigSvcConfig.mjs';
@@ -27,23 +27,18 @@ class ConfigSvcApi extends BaseAPI {
      * Fetch the current configuration from the server
      * Get Config
      */
-    getConfigRaw(requestParameters, initOverrides) {
+    getConfigRaw(initOverrides) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (requestParameters['request'] == null) {
-                throw new RequiredError('request', 'Required parameter "request" was null or undefined when calling getConfig().');
-            }
             const queryParameters = {};
             const headerParameters = {};
-            headerParameters['Content-Type'] = 'application/json';
             if (this.configuration && this.configuration.apiKey) {
                 headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
             }
             const response = yield this.request({
-                path: `/config-svc/get`,
-                method: 'POST',
+                path: `/config-svc/config`,
+                method: 'GET',
                 headers: headerParameters,
                 query: queryParameters,
-                body: requestParameters['request'],
             }, initOverrides);
             return new JSONApiResponse(response, (jsonValue) => ConfigSvcGetConfigResponseFromJSON(jsonValue));
         });
@@ -52,9 +47,9 @@ class ConfigSvcApi extends BaseAPI {
      * Fetch the current configuration from the server
      * Get Config
      */
-    getConfig(requestParameters, initOverrides) {
+    getConfig(initOverrides) {
         return __awaiter(this, void 0, void 0, function* () {
-            const response = yield this.getConfigRaw(requestParameters, initOverrides);
+            const response = yield this.getConfigRaw(initOverrides);
             return yield response.value();
         });
     }

@@ -78,11 +78,10 @@ export class ConfigSvcApi {
     /**
      * Fetch the current configuration from the server
      * @summary Get Config
-     * @param request Get Config Request
      */
-    getConfig(request_1) {
-        return __awaiter(this, arguments, void 0, function* (request, options = { headers: {} }) {
-            const localVarPath = this.basePath + '/config-svc/get';
+    getConfig() {
+        return __awaiter(this, arguments, void 0, function* (options = { headers: {} }) {
+            const localVarPath = this.basePath + '/config-svc/config';
             let localVarQueryParameters = {};
             let localVarHeaderParams = Object.assign({}, this._defaultHeaders);
             const produces = ['application/json'];
@@ -94,20 +93,15 @@ export class ConfigSvcApi {
                 localVarHeaderParams.Accept = produces.join(',');
             }
             let localVarFormParams = {};
-            // verify required parameter 'request' is not null or undefined
-            if (request === null || request === undefined) {
-                throw new Error('Required parameter request was null or undefined when calling getConfig.');
-            }
             Object.assign(localVarHeaderParams, options.headers);
             let localVarUseFormData = false;
             let localVarRequestOptions = {
-                method: 'POST',
+                method: 'GET',
                 qs: localVarQueryParameters,
                 headers: localVarHeaderParams,
                 uri: localVarPath,
                 useQuerystring: this._useQuerystring,
                 json: true,
-                body: ObjectSerializer.serialize(request, "object")
             };
             let authenticationPromise = Promise.resolve();
             if (this.authentications.BearerAuth.apiKey) {

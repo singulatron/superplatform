@@ -25,10 +25,6 @@ import {
     ConfigSvcSaveConfigRequestToJSON,
 } from '../models/index';
 
-export interface GetConfigRequest {
-    request: object;
-}
-
 export interface SaveConfigRequest {
     request: ConfigSvcSaveConfigRequest;
 }
@@ -42,30 +38,20 @@ export class ConfigSvcApi extends runtime.BaseAPI {
      * Fetch the current configuration from the server
      * Get Config
      */
-    async getConfigRaw(requestParameters: GetConfigRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ConfigSvcGetConfigResponse>> {
-        if (requestParameters['request'] == null) {
-            throw new runtime.RequiredError(
-                'request',
-                'Required parameter "request" was null or undefined when calling getConfig().'
-            );
-        }
-
+    async getConfigRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ConfigSvcGetConfigResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.apiKey) {
             headerParameters["Authorization"] = await this.configuration.apiKey("Authorization"); // BearerAuth authentication
         }
 
         const response = await this.request({
-            path: `/config-svc/get`,
-            method: 'POST',
+            path: `/config-svc/config`,
+            method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['request'] as any,
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ConfigSvcGetConfigResponseFromJSON(jsonValue));
@@ -75,8 +61,8 @@ export class ConfigSvcApi extends runtime.BaseAPI {
      * Fetch the current configuration from the server
      * Get Config
      */
-    async getConfig(requestParameters: GetConfigRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ConfigSvcGetConfigResponse> {
-        const response = await this.getConfigRaw(requestParameters, initOverrides);
+    async getConfig(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ConfigSvcGetConfigResponse> {
+        const response = await this.getConfigRaw(initOverrides);
         return await response.value();
     }
 

@@ -9,12 +9,18 @@ import { Injectable } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { OnDockerInfo } from 'shared-lib/models/event-request-response';
 import { LocaltronService } from './localtron.service';
-import { DockerInfoResponse } from '@singulatron/types';
+import {
+	DockerSvcApi,
+	Configuration,
+	DockerSvcGetInfoResponse,
+} from '@singulatron/client';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class DockerService {
+	private dockerService!: DockerSvcApi;
+
 	onDockerInfoSubject = new ReplaySubject<OnDockerInfo>(1);
 	onDockerInfo$ = this.onDockerInfoSubject.asObservable();
 
@@ -33,11 +39,19 @@ export class DockerService {
 				return;
 			}
 			this.initInProgress = true;
+			if (!this.dockerService) {
+				this.dockerService = new DockerSvcApi(
+					new Configuration({
+						basePath: this.localtron.addr(),
+						apiKey: this.localtron.token(),
+					})
+				);
+			}
 
 			const rsp = await this.dockerInfo();
 
 			this.onDockerInfoSubject.next({
-				hasDocker: rsp?.info?.hasDocker,
+				hasDocker: rsp?.info?.hasDocker || false,
 			});
 		} catch (error) {
 			console.error('Error in docker.service init', {
@@ -48,7 +62,7 @@ export class DockerService {
 		}
 	}
 
-	async dockerInfo(): Promise<DockerInfoResponse> {
-		return this.localtron.get('/docker-svc/info');
+	async dockerInfo(): Promise<DockerSvcGetInfoResponse> {
+		return this.dockerService.getInfo();
 	}
 }

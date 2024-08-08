@@ -55,7 +55,7 @@ func NewUserService(
 	if err != nil {
 		return nil, err
 	}
-	credentialsStore, err := datastoreFactory("user_credetentials", &usertypes.Permission{})
+	credentialsStore, err := datastoreFactory("user_credetentials", &usertypes.Credential{})
 	if err != nil {
 		return nil, err
 	}

@@ -65,13 +65,13 @@ export class GenericSvcApi extends runtime.BaseAPI {
      * Removes a generic object from the system based on the provided conditions. Requires authorization and user authentication.
      * Delete a Generic Object
      */
-    deleteObjectRaw(requestParameters, initOverrides) {
+    deleteObjectsRaw(requestParameters, initOverrides) {
         return __awaiter(this, void 0, void 0, function* () {
             if (requestParameters['objectId'] == null) {
-                throw new runtime.RequiredError('objectId', 'Required parameter "objectId" was null or undefined when calling deleteObject().');
+                throw new runtime.RequiredError('objectId', 'Required parameter "objectId" was null or undefined when calling deleteObjects().');
             }
             if (requestParameters['body'] == null) {
-                throw new runtime.RequiredError('body', 'Required parameter "body" was null or undefined when calling deleteObject().');
+                throw new runtime.RequiredError('body', 'Required parameter "body" was null or undefined when calling deleteObjects().');
             }
             const queryParameters = {};
             const headerParameters = {};
@@ -80,8 +80,8 @@ export class GenericSvcApi extends runtime.BaseAPI {
                 headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
             }
             const response = yield this.request({
-                path: `/generic-svc/object/{objectId}`.replace(`{${"objectId"}}`, encodeURIComponent(String(requestParameters['objectId']))),
-                method: 'DELETE',
+                path: `/generic-svc/objects/delete`.replace(`{${"objectId"}}`, encodeURIComponent(String(requestParameters['objectId']))),
+                method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,
                 body: GenericSvcDeleteObjectRequestToJSON(requestParameters['body']),
@@ -93,9 +93,9 @@ export class GenericSvcApi extends runtime.BaseAPI {
      * Removes a generic object from the system based on the provided conditions. Requires authorization and user authentication.
      * Delete a Generic Object
      */
-    deleteObject(requestParameters, initOverrides) {
+    deleteObjects(requestParameters, initOverrides) {
         return __awaiter(this, void 0, void 0, function* () {
-            const response = yield this.deleteObjectRaw(requestParameters, initOverrides);
+            const response = yield this.deleteObjectsRaw(requestParameters, initOverrides);
             return yield response.value();
         });
     }

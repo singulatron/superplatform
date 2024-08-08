@@ -27,12 +27,12 @@ import (
 // @Tags Model Svc
 // @Accept json
 // @Produce json
-// @Param id path string true "Model ID" // Path parameter for the model ID
+// @Param modelId path string true "Model ID" // Path parameter for the model ID
 // @Success 200 {object} model.StatusResponse "Model status retrieved successfully"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
 // @Security BearerAuth
-// @Router /model-svc/model/{id}/status [get]
+// @Router /model-svc/model/{modelId}/status [get]
 func (ms *ModelService) Status(
 	w http.ResponseWriter,
 	r *http.Request,

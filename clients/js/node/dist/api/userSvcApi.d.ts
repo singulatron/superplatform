@@ -27,6 +27,7 @@ import { UserSvcLoginResponse } from '../model/userSvcLoginResponse';
 import { UserSvcReadUserByTokenRequest } from '../model/userSvcReadUserByTokenRequest';
 import { UserSvcReadUserByTokenResponse } from '../model/userSvcReadUserByTokenResponse';
 import { UserSvcRegisterRequest } from '../model/userSvcRegisterRequest';
+import { UserSvcSaveProfileRequest } from '../model/userSvcSaveProfileRequest';
 import { UserSvcSetRolePermissionsRequest } from '../model/userSvcSetRolePermissionsRequest';
 import { UserSvcUpserPermissionRequest } from '../model/userSvcUpserPermissionRequest';
 import { Authentication, Interceptor } from '../model/models';
@@ -149,7 +150,7 @@ export declare class UserSvcApi {
      * @summary Get Permissions by Role
      * @param roleId Role ID
      */
-    getPermissionsByRole(roleId: number, options?: {
+    getPermissionsByRole(roleId: string, options?: {
         headers: {
             [name: string]: string;
         };
@@ -240,6 +241,20 @@ export declare class UserSvcApi {
      * @param body Register Request
      */
     register(body: UserSvcRegisterRequest, options?: {
+        headers: {
+            [name: string]: string;
+        };
+    }): Promise<{
+        response: http.IncomingMessage;
+        body: object;
+    }>;
+    /**
+     * Save user profile information based on the provided user ID.
+     * @summary Save User Profile
+     * @param userId User ID
+     * @param body Save Profile Request
+     */
+    saveUserProfile(userId: string, body: UserSvcSaveProfileRequest, options?: {
         headers: {
             [name: string]: string;
         };

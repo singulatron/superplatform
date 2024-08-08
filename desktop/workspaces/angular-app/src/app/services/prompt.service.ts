@@ -11,18 +11,45 @@ import { ReplaySubject, Observable, catchError } from 'rxjs';
 import { FirehoseService } from './firehose.service';
 import { first } from 'rxjs';
 import { UserService } from './user.service';
+
+export interface CompletionChoice {
+	text: string;
+	index: number;
+	logprobs: any;
+	finish_reason: string;
+}
+
+export interface CompletionUsage {
+	prompt_tokens: number;
+	completion_tokens: number;
+	total_tokens: number;
+}
+
+export interface CompletionResponse {
+	id: string;
+	object: string;
+	created: number;
+	model: string;
+	choices: CompletionChoice[];
+	usage: CompletionUsage;
+}
+
 import {
-	Prompt,
-	AddPromptRequest,
-	ListPromptsRequest,
-	ListPromptsResponse,
-	CompletionResponse,
-} from '@singulatron/types';
+	PromptSvcApi,
+	PromptSvcPrompt as Prompt,
+	Configuration,
+	PromptSvcAddPromptRequest,
+	PromptSvcAddPromptResponse,
+	PromptSvcListPromptsRequest,
+	PromptSvcListPromptsResponse,
+} from '@singulatron/client';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class PromptService {
+	promptService!: PromptSvcApi;
+
 	onPromptListUpdateSubject = new ReplaySubject<Prompt[]>(1);
 	onPromptListUpdate$ = this.onPromptListUpdateSubject.asObservable();
 
@@ -31,6 +58,13 @@ export class PromptService {
 		private userService: UserService,
 		private firehoseService: FirehoseService
 	) {
+		this.promptService = new PromptSvcApi(
+			new Configuration({
+				basePath: this.localtron.addr(),
+				apiKey: this.localtron.token(),
+			})
+		);
+
 		this.userService.user$.pipe(first()).subscribe(() => {
 			this.init();
 		});
@@ -44,7 +78,7 @@ export class PromptService {
 				case 'promptProcessingFinished':
 				case 'promptAdded': {
 					const rsp = await this.promptList({});
-					this.onPromptListUpdateSubject.next(rsp.prompts);
+					this.onPromptListUpdateSubject.next(rsp.prompts!);
 					break;
 				}
 			}
@@ -54,7 +88,7 @@ export class PromptService {
 		try {
 			const rsp = await this.promptList({});
 
-			this.onPromptListUpdateSubject.next(rsp.prompts);
+			this.onPromptListUpdateSubject.next(rsp.prompts!);
 		} catch (error) {
 			console.error('Error in pollPromptList', {
 				error: JSON.stringify(error),
@@ -62,20 +96,31 @@ export class PromptService {
 		}
 	}
 
-	async promptAdd(prompt: Prompt): Promise<void> {
+	async promptAdd(prompt: Prompt): Promise<PromptSvcAddPromptResponse> {
 		if (!prompt.id) {
 			prompt.id = this.localtron.uuid();
 		}
-		const request: AddPromptRequest = prompt;
-		return this.localtron.post(`/prompt-svc/prompt`, request);
+		const request: PromptSvcAddPromptRequest = prompt;
+
+		return this.promptService.addPrompt({
+			request: request,
+		});
 	}
 
-	async promptRemove(promptId: string): Promise<void> {
-		return this.localtron.delete(`/prompt-svc/prompt/${promptId}`);
+	async promptRemove(promptId: string): Promise<object> {
+		return this.promptService.removePrompt({
+			request: {
+				promptId: promptId,
+			},
+		});
 	}
 
-	async promptList(request: ListPromptsRequest): Promise<ListPromptsResponse> {
-		return this.localtron.post(`/prompt-svc/prompts`, request);
+	async promptList(
+		request: PromptSvcListPromptsRequest
+	): Promise<PromptSvcListPromptsResponse> {
+		return this.promptService.getPrompts({
+			request: request,
+		});
 	}
 
 	private resubCount = 0;

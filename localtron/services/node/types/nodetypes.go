@@ -8,6 +8,10 @@
 
 package node_svc
 
+type ErrorResponse struct {
+	Error string `json:"error"`
+}
+
 type Cluster struct {
 	Nodes []Node `json:"nodes"`
 }

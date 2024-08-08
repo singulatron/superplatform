@@ -60,7 +60,7 @@ export declare class GenericSvcApi {
      * @param objectId Object ID
      * @param body Delete request payload
      */
-    deleteObject(objectId: string, body: GenericSvcDeleteObjectRequest, options?: {
+    deleteObjects(objectId: string, body: GenericSvcDeleteObjectRequest, options?: {
         headers: {
             [name: string]: string;
         };

@@ -22,7 +22,9 @@
 		<ion-item *ngIf="prompt.userId">
 			<ion-label>
 				<h2>User ID</h2>
-				<p><a href="/prompts?userId={{ prompt.userId }}">{{ prompt.userId }}</a></p>
+				<p>
+					<a href="/prompts?userId={{ prompt.userId }}">{{ prompt.userId }}</a>
+				</p>
 			</ion-label>
 		</ion-item>
 		<ion-item *ngIf="expanded">
@@ -37,12 +39,12 @@
 				<p>{{ prompt.template }}</p>
 			</ion-label>
 		</ion-item>
-		<ion-item *ngIf="expanded && prompt.characterId">
+		<!-- <ion-item *ngIf="expanded && prompt.characterId">
 			<ion-label>
 				<h2>Character ID</h2>
 				<p>{{ prompt.characterId }}</p>
 			</ion-label>
-		</ion-item>
+		</ion-item> -->
 		<ion-item *ngIf="prompt.modelId">
 			<ion-label>
 				<h2>Model ID</h2>

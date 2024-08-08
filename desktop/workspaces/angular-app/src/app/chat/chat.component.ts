@@ -18,9 +18,12 @@ import { WindowApiConst } from 'shared-lib';
 import { Subscription } from 'rxjs';
 import { ChatService } from '../services/chat.service';
 import { PromptService } from '../services/prompt.service';
-import { Prompt } from '@singulatron/types';
-import { Thread } from '@singulatron/types';
-import { Model, ModelService } from '../services/model.service';
+import { PromptSvcPrompt as Prompt } from '@singulatron/client';
+import { ModelService } from '../services/model.service';
+import {
+	ChatSvcThread as Thread,
+	ModelSvcModel as Model,
+} from '@singulatron/client';
 import { ConfigService } from '../services/config.service';
 import { ChatBoxComponent } from './chat-box/chat-box.component';
 import { CenteredComponent } from '../components/centered/centered.component';
@@ -170,7 +173,7 @@ export class ChatComponent implements OnInit {
 
 	public async refreshThreadList() {
 		const rsp = await this.chatService.chatThreads();
-		this.chatThreads = rsp.threads;
+		this.chatThreads = rsp.threads!;
 		if (!this.chatThreads?.length) {
 			this.chatThreads = [];
 		}

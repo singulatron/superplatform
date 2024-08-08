@@ -10,7 +10,7 @@
  * Do not edit the class manually.
  */
 import * as runtime from '../runtime';
-import type { UserSvcChangePasswordAdminRequest, UserSvcChangePasswordRequest, UserSvcCreateRoleRequest, UserSvcCreateRoleResponse, UserSvcCreateUserRequest, UserSvcGetPermissionsResponse, UserSvcGetPublicKeyResponse, UserSvcGetRolesResponse, UserSvcGetUsersRequest, UserSvcGetUsersResponse, UserSvcIsAuthorizedRequest, UserSvcIsAuthorizedResponse, UserSvcLoginRequest, UserSvcLoginResponse, UserSvcReadUserByTokenRequest, UserSvcReadUserByTokenResponse, UserSvcRegisterRequest, UserSvcSetRolePermissionsRequest, UserSvcUpserPermissionRequest } from '../models/index';
+import type { UserSvcChangePasswordAdminRequest, UserSvcChangePasswordRequest, UserSvcCreateRoleRequest, UserSvcCreateRoleResponse, UserSvcCreateUserRequest, UserSvcGetPermissionsResponse, UserSvcGetPublicKeyResponse, UserSvcGetRolesResponse, UserSvcGetUsersRequest, UserSvcGetUsersResponse, UserSvcIsAuthorizedRequest, UserSvcIsAuthorizedResponse, UserSvcLoginRequest, UserSvcLoginResponse, UserSvcReadUserByTokenRequest, UserSvcReadUserByTokenResponse, UserSvcRegisterRequest, UserSvcSaveProfileRequest, UserSvcSetRolePermissionsRequest, UserSvcUpserPermissionRequest } from '../models/index';
 export interface AddPermissionToRoleRequest {
     roleId: string;
     permissionId: string;
@@ -34,7 +34,7 @@ export interface DeleteUserRequest {
     userId: string;
 }
 export interface GetPermissionsByRoleRequest {
-    roleId: number;
+    roleId: string;
 }
 export interface GetUsersRequest {
     request?: UserSvcGetUsersRequest;
@@ -51,6 +51,10 @@ export interface ReadUserByTokenRequest {
 }
 export interface RegisterRequest {
     body: UserSvcRegisterRequest;
+}
+export interface SaveUserProfileRequest {
+    userId: string;
+    body: UserSvcSaveProfileRequest;
 }
 export interface SetRolePermissionRequest {
     roleId: string;
@@ -214,6 +218,16 @@ export declare class UserSvcApi extends runtime.BaseAPI {
      * Register a New User
      */
     register(requestParameters: RegisterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
+    /**
+     * Save user profile information based on the provided user ID.
+     * Save User Profile
+     */
+    saveUserProfileRaw(requestParameters: SaveUserProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
+    /**
+     * Save user profile information based on the provided user ID.
+     * Save User Profile
+     */
+    saveUserProfile(requestParameters: SaveUserProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
     /**
      * Set permissions for a specified role. The caller can add permissions it owns to any role. If the caller tries to add a permission it doesn\'t own to a role, `StatusBadRequest` will be returned.
      * Set Role Permissions

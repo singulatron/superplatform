@@ -21,7 +21,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import * as runtime from '../runtime';
-import { UserSvcChangePasswordAdminRequestToJSON, UserSvcChangePasswordRequestToJSON, UserSvcCreateRoleRequestToJSON, UserSvcCreateRoleResponseFromJSON, UserSvcCreateUserRequestToJSON, UserSvcGetPermissionsResponseFromJSON, UserSvcGetPublicKeyResponseFromJSON, UserSvcGetRolesResponseFromJSON, UserSvcGetUsersRequestToJSON, UserSvcGetUsersResponseFromJSON, UserSvcIsAuthorizedRequestToJSON, UserSvcIsAuthorizedResponseFromJSON, UserSvcLoginRequestToJSON, UserSvcLoginResponseFromJSON, UserSvcReadUserByTokenRequestToJSON, UserSvcReadUserByTokenResponseFromJSON, UserSvcRegisterRequestToJSON, UserSvcSetRolePermissionsRequestToJSON, UserSvcUpserPermissionRequestToJSON, } from '../models/index';
+import { UserSvcChangePasswordAdminRequestToJSON, UserSvcChangePasswordRequestToJSON, UserSvcCreateRoleRequestToJSON, UserSvcCreateRoleResponseFromJSON, UserSvcCreateUserRequestToJSON, UserSvcGetPermissionsResponseFromJSON, UserSvcGetPublicKeyResponseFromJSON, UserSvcGetRolesResponseFromJSON, UserSvcGetUsersRequestToJSON, UserSvcGetUsersResponseFromJSON, UserSvcIsAuthorizedRequestToJSON, UserSvcIsAuthorizedResponseFromJSON, UserSvcLoginRequestToJSON, UserSvcLoginResponseFromJSON, UserSvcReadUserByTokenRequestToJSON, UserSvcReadUserByTokenResponseFromJSON, UserSvcRegisterRequestToJSON, UserSvcSaveProfileRequestToJSON, UserSvcSetRolePermissionsRequestToJSON, UserSvcUpserPermissionRequestToJSON, } from '../models/index';
 /**
  *
  */
@@ -524,6 +524,44 @@ export class UserSvcApi extends runtime.BaseAPI {
     register(requestParameters, initOverrides) {
         return __awaiter(this, void 0, void 0, function* () {
             const response = yield this.registerRaw(requestParameters, initOverrides);
+            return yield response.value();
+        });
+    }
+    /**
+     * Save user profile information based on the provided user ID.
+     * Save User Profile
+     */
+    saveUserProfileRaw(requestParameters, initOverrides) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (requestParameters['userId'] == null) {
+                throw new runtime.RequiredError('userId', 'Required parameter "userId" was null or undefined when calling saveUserProfile().');
+            }
+            if (requestParameters['body'] == null) {
+                throw new runtime.RequiredError('body', 'Required parameter "body" was null or undefined when calling saveUserProfile().');
+            }
+            const queryParameters = {};
+            const headerParameters = {};
+            headerParameters['Content-Type'] = 'application/json';
+            if (this.configuration && this.configuration.apiKey) {
+                headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
+            }
+            const response = yield this.request({
+                path: `/user-svc/user/{userId}`.replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId']))),
+                method: 'PUT',
+                headers: headerParameters,
+                query: queryParameters,
+                body: UserSvcSaveProfileRequestToJSON(requestParameters['body']),
+            }, initOverrides);
+            return new runtime.JSONApiResponse(response);
+        });
+    }
+    /**
+     * Save user profile information based on the provided user ID.
+     * Save User Profile
+     */
+    saveUserProfile(requestParameters, initOverrides) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const response = yield this.saveUserProfileRaw(requestParameters, initOverrides);
             return yield response.value();
         });
     }

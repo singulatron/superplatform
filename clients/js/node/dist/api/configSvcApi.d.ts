@@ -38,9 +38,8 @@ export declare class ConfigSvcApi {
     /**
      * Fetch the current configuration from the server
      * @summary Get Config
-     * @param request Get Config Request
      */
-    getConfig(request: object, options?: {
+    getConfig(options?: {
         headers: {
             [name: string]: string;
         };

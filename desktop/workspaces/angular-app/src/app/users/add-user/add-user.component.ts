@@ -14,7 +14,7 @@ import {
 	ReactiveFormsModule,
 } from '@angular/forms';
 import { UserService } from '../../services/user.service';
-import { User, Role } from '@singulatron/types';
+import { UserSvcUser as User, UserSvcRole as Role } from '@singulatron/client';
 import { first } from 'rxjs';
 import { ToastController, IonicModule } from '@ionic/angular';
 import { TranslatePipe } from '../../translate.pipe';
@@ -70,7 +70,7 @@ export class AddUserComponent implements OnInit {
 
 	async loggedInInit() {
 		const rsp = await this.userService.getRoles();
-		this.roles = rsp.roles;
+		this.roles = rsp.roles!;
 		this.cd.markForCheck();
 	}
 

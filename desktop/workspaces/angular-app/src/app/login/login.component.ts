@@ -7,7 +7,7 @@
  */
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { UserService } from '../services/user.service';
-import { LoginResponse } from '@singulatron/types';
+import { UserSvcLoginResponse as LoginResponse } from '@singulatron/client';
 import { ToastController, IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
@@ -62,7 +62,7 @@ export class LoginComponent {
 		} finally {
 			this.loginButtonDisabled = false;
 		}
-		if (!rsp?.token.token) {
+		if (!rsp?.token!.token) {
 			const toast = await this.toast.create({
 				message: 'Login failure: no token in response',
 				duration: 5000,

@@ -539,7 +539,7 @@ export class ChatSvcApi {
      * @summary Get Threads
      * @param request Get Threads Request
      */
-    public async getThreads (request: object, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: ChatSvcGetThreadsResponse;  }> {
+    public async getThreads (request?: object, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: ChatSvcGetThreadsResponse;  }> {
         const localVarPath = this.basePath + '/chat-svc/threads';
         let localVarQueryParameters: any = {};
         let localVarHeaderParams: any = (<any>Object).assign({}, this._defaultHeaders);
@@ -551,11 +551,6 @@ export class ChatSvcApi {
             localVarHeaderParams.Accept = produces.join(',');
         }
         let localVarFormParams: any = {};
-
-        // verify required parameter 'request' is not null or undefined
-        if (request === null || request === undefined) {
-            throw new Error('Required parameter request was null or undefined when calling getThreads.');
-        }
 
         (<any>Object).assign(localVarHeaderParams, options.headers);
 

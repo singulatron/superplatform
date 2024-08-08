@@ -28,7 +28,8 @@ import {
 	Character,
 } from '../../../services/character.service';
 import { CharacterComponent } from '../../character/character.component';
-import { ModelService, Model } from '../../../services/model.service';
+import { ModelService } from '../../../services/model.service';
+import { ModelSvcModel as Model } from '@singulatron/client';
 import { ConfigService } from '../../../services/config.service';
 import { ChatService } from '../../../services/chat.service';
 

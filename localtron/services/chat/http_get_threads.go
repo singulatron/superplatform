@@ -23,7 +23,7 @@ import (
 // @Tags Chat Svc
 // @Accept json
 // @Produce json
-// @Param request body chat.GetThreadsRequest true "Get Threads Request"
+// @Param request body chat.GetThreadsRequest false "Get Threads Request"
 // @Success 200 {object} chat.GetThreadsResponse "Threads successfully retrieved"
 // @Failure 400 {string} string "Invalid JSON"
 // @Failure 401 {string} string "Unauthorized"
@@ -44,14 +44,6 @@ func (a *ChatService) GetThreads(
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
-
-	req := chat.GetThreadsRequest{}
-	err = json.NewDecoder(r.Body).Decode(&req)
-	if err != nil {
-		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
-		return
-	}
-	defer r.Body.Close()
 
 	threads, err := a.getThreads(rsp.User.Id)
 	if err != nil {

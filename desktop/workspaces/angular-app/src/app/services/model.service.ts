@@ -10,6 +10,13 @@ import { LocaltronService } from './localtron.service';
 import { DockerService } from './docker.service';
 import { ReplaySubject, combineLatest } from 'rxjs';
 import {
+	ModelSvcApi,
+	ModelSvcModel as Model,
+	ModelSvcListResponse as GetModelsResponse,
+	Configuration,
+	ModelSvcStatusResponse,
+} from '@singulatron/client';
+import {
 	OnModelLaunch,
 	OnModelCheck,
 } from 'shared-lib/models/event-request-response';
@@ -18,6 +25,8 @@ import {
 	providedIn: 'root',
 })
 export class ModelService {
+	private modelService!: ModelSvcApi;
+
 	private initInProgress: boolean = false;
 
 	private onModelCheckSubject = new ReplaySubject<OnModelCheck>(1);
@@ -35,6 +44,13 @@ export class ModelService {
 		private localtron: LocaltronService,
 		private dockerService: DockerService
 	) {
+		this.modelService = new ModelSvcApi(
+			new Configuration({
+				basePath: this.localtron.addr(),
+				apiKey: this.localtron.token(),
+			})
+		);
+
 		// @todo nothing to trigger model start so we resolve to polling
 		setInterval(() => {
 			this.init();
@@ -50,11 +66,8 @@ export class ModelService {
 			return this.models;
 		}
 
-		const rsp: GetModelsResponse = await this.localtron.post(
-			'/model-svc/models',
-			{}
-		);
-		return rsp.models;
+		const rsp: GetModelsResponse = await this.modelService.listModels();
+		return rsp.models!;
 	}
 
 	private listenToModelReady(): void {
@@ -99,24 +112,30 @@ export class ModelService {
 		}
 	}
 
-	async modelStatus(modelId?: string): Promise<ModelStatusResponse> {
+	async modelStatus(modelId?: string): Promise<ModelSvcStatusResponse> {
 		if (modelId) {
-			return this.localtron.get(`/model-svc/model/${modelId}/status`);
+			return await this.modelService.getModelStatus({
+				modelId: modelId,
+			});
 		}
 
-		return this.localtron.get('/model-svc/default-model/status');
+		return this.modelService.getDefaultModelStatus();
 	}
 
 	async modelStart(modelId?: string): Promise<ModelStartResponse> {
 		if (modelId) {
-			return this.localtron.put(`/model-svc/model/${modelId}/start`, {});
+			return this.modelService.startModel({
+				modelId: modelId,
+			});
 		}
 
-		return this.localtron.put('/model-svc/default-model/start', {});
+		return this.modelService.startDefaultModel();
 	}
 
 	async makeDefault(id: string) {
-		this.localtron.put(`/model-svc/${id}/make-default`, {});
+		this.modelService.makeDefault({
+			modelId: id,
+		});
 	}
 }
 
@@ -124,70 +143,5 @@ export interface OnModelReady {
 	modelReady: boolean;
 }
 
-interface ModelStatus {
-	assetsReady: boolean;
-	/** Running triggers onModelLaunch on the frontend.
-	 * Running is true when the model is both running and answering
-	 * - fully loaded.
-	 */
-	running: boolean;
-	address: string;
-}
-
-interface ModelStatusResponse {
-	status: ModelStatus | null;
-}
-
 // eslint-disable-next-line
 interface ModelStartResponse {}
-
-export interface Platform {
-	id: string;
-	name?: string;
-	version?: number;
-	container: PlatformContainer;
-}
-
-export interface PlatformContainer {
-	/** Internal port */
-	port: number;
-	images: PlatformImages;
-}
-
-export interface PlatformImages {
-	default: string;
-	cuda?: string;
-}
-
-export interface Model {
-	id: string;
-	platformId: string;
-	name: string;
-	parameters?: string;
-	flavour?: string;
-	version?: string;
-	quality?: string;
-	extension?: string;
-	fullName?: string;
-	tags?: string[];
-	mirrors?: string[];
-	size?: number;
-	uncensored?: boolean;
-	maxRam?: number;
-	description?: string;
-	promptTemplate?: string;
-	quantComment?: string;
-	maxBits?: number;
-	bits?: number;
-	/** Asset maps asset name to URL, eg:
-	 * 	MODEL: "https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q2_K.gguf"
-	 *
-	 *  The asset will be downloaded and passed in to the container
-	 * as an envar (under the name MODEL).
-	 */
-	assets: { [key: string]: string };
-}
-
-export interface GetModelsResponse {
-	models: Model[];
-}

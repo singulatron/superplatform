@@ -66,7 +66,7 @@ export interface GetThreadRequest {
 }
 
 export interface GetThreadsRequest {
-    request: object;
+    request?: object;
 }
 
 export interface UpdateThreadRequest {
@@ -331,13 +331,6 @@ export class ChatSvcApi extends runtime.BaseAPI {
      * Get Threads
      */
     async getThreadsRaw(requestParameters: GetThreadsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ChatSvcGetThreadsResponse>> {
-        if (requestParameters['request'] == null) {
-            throw new runtime.RequiredError(
-                'request',
-                'Required parameter "request" was null or undefined when calling getThreads().'
-            );
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -363,7 +356,7 @@ export class ChatSvcApi extends runtime.BaseAPI {
      * Fetch all chat threads associated with a specific user
      * Get Threads
      */
-    async getThreads(requestParameters: GetThreadsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ChatSvcGetThreadsResponse> {
+    async getThreads(requestParameters: GetThreadsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ChatSvcGetThreadsResponse> {
         const response = await this.getThreadsRaw(requestParameters, initOverrides);
         return await response.value();
     }

@@ -459,7 +459,6 @@ const docTemplate = `{
                         "description": "Get Threads Request",
                         "name": "request",
                         "in": "body",
-                        "required": true,
                         "schema": {
                             "$ref": "#/definitions/chat_svc.GetThreadsRequest"
                         }
@@ -493,8 +492,8 @@ const docTemplate = `{
                 }
             }
         },
-        "/config-svc/get": {
-            "post": {
+        "/config-svc/config": {
+            "get": {
                 "security": [
                     {
                         "BearerAuth": []
@@ -512,17 +511,6 @@ const docTemplate = `{
                 ],
                 "summary": "Get Config",
                 "operationId": "getConfig",
-                "parameters": [
-                    {
-                        "description": "Get Config Request",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/config_svc.GetConfigRequest"
-                        }
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "Current configuration retrieved successfully",
@@ -1272,69 +1260,6 @@ const docTemplate = `{
                         }
                     }
                 }
-            },
-            "delete": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Removes a generic object from the system based on the provided conditions. Requires authorization and user authentication.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Generic Svc"
-                ],
-                "summary": "Delete a Generic Object",
-                "operationId": "deleteObject",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Object ID",
-                        "name": "objectId",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Delete request payload",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/generic_svc.DeleteObjectRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful deletion of object",
-                        "schema": {
-                            "$ref": "#/definitions/generic_svc.DeleteObjectResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid JSON",
-                        "schema": {
-                            "$ref": "#/definitions/generic_svc.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/generic_svc.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/generic_svc.ErrorResponse"
-                        }
-                    }
-                }
             }
         },
         "/generic-svc/objects": {
@@ -1371,6 +1296,71 @@ const docTemplate = `{
                         "description": "Successful retrieval of objects",
                         "schema": {
                             "$ref": "#/definitions/generic_svc.QueryResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/generic_svc.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/generic_svc.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/generic_svc.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/generic-svc/objects/delete": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Removes a generic object from the system based on the provided conditions. Requires authorization and user authentication.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Generic Svc"
+                ],
+                "summary": "Delete a Generic Object",
+                "operationId": "deleteObjects",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Object ID",
+                        "name": "objectId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Delete request payload",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/generic_svc.DeleteObjectRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful deletion of object",
+                        "schema": {
+                            "$ref": "#/definitions/generic_svc.DeleteObjectResponse"
                         }
                     },
                     "400": {
@@ -1452,7 +1442,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/model-svc/default/start": {
+        "/model-svc/default-model/start": {
             "put": {
                 "security": [
                     {
@@ -1499,14 +1489,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/model-svc/model/{id}/status": {
+        "/model-svc/default-model/status": {
             "get": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "Retrieves the status of a model by ID.\n\nRequires the ` + "`" + `model-svc:model:view` + "`" + ` permission.",
+                "description": "Retrieves the status of the default model.\n\nRequires the ` + "`" + `model-svc:model:view` + "`" + ` permission.",
                 "consumes": [
                     "application/json"
                 ],
@@ -1516,17 +1506,8 @@ const docTemplate = `{
                 "tags": [
                     "Model Svc"
                 ],
-                "summary": "Get Model Status",
-                "operationId": "getModelStatus",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Model ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
+                "summary": "Get Default Model Status",
+                "operationId": "getDefaultModelStatus",
                 "responses": {
                     "200": {
                         "description": "Model status retrieved successfully",
@@ -1711,14 +1692,64 @@ const docTemplate = `{
                 }
             }
         },
-        "/model-svc/models": {
+        "/model-svc/model/{modelId}/status": {
             "get": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "Retrieves a list of models after checking authorization\nRequires \"model.view\" permission.",
+                "description": "Retrieves the status of a model by ID.\n\nRequires the ` + "`" + `model-svc:model:view` + "`" + ` permission.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Model Svc"
+                ],
+                "summary": "Get Model Status",
+                "operationId": "getModelStatus",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Model ID",
+                        "name": "modelId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Model status retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/model_svc.StatusResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/model-svc/models": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieves a list of models.\n\nRequires ` + "`" + `model-svc:model:view` + "`" + ` permission.",
                 "consumes": [
                     "application/json"
                 ],
@@ -1752,14 +1783,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/prompt-svc/list": {
+        "/node-svc/nodes": {
             "post": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "List prompts that satisfy a query.",
+                "description": "Retrieve a list of nodes.",
                 "consumes": [
                     "application/json"
                 ],
@@ -1767,17 +1798,17 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Prompt Svc"
+                    "Node Svc"
                 ],
-                "summary": "List Prompts",
-                "operationId": "getPrompts",
+                "summary": "List Nodes",
+                "operationId": "listNodes",
                 "parameters": [
                     {
-                        "description": "List Prompts Request",
-                        "name": "request",
+                        "description": "List Nodes Request",
+                        "name": "body",
                         "in": "body",
                         "schema": {
-                            "$ref": "#/definitions/prompt_svc.ListPromptsRequest"
+                            "$ref": "#/definitions/node_svc.ListNodesRequest"
                         }
                     }
                 ],
@@ -1785,25 +1816,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/prompt_svc.ListPromptsResponse"
+                            "$ref": "#/definitions/node_svc.ListNodesResponse"
                         }
                     },
                     "400": {
                         "description": "Invalid JSON",
                         "schema": {
-                            "$ref": "#/definitions/prompt_svc.ErrorResponse"
+                            "$ref": "#/definitions/node_svc.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/prompt_svc.ErrorResponse"
+                            "$ref": "#/definitions/node_svc.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/prompt_svc.ErrorResponse"
+                            "$ref": "#/definitions/node_svc.ErrorResponse"
                         }
                     }
                 }
@@ -1844,6 +1875,63 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/prompt_svc.AddPromptResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/prompt_svc.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/prompt_svc.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/prompt_svc.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/prompt-svc/prompts": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "List prompts that satisfy a query.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Prompt Svc"
+                ],
+                "summary": "List Prompts",
+                "operationId": "getPrompts",
+                "parameters": [
+                    {
+                        "description": "List Prompts Request",
+                        "name": "request",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/prompt_svc.ListPromptsRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/prompt_svc.ListPromptsResponse"
                         }
                     },
                     "400": {
@@ -2531,7 +2619,7 @@ const docTemplate = `{
                 "operationId": "getPermissionsByRole",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "Role ID",
                         "name": "roleId",
                         "in": "path",
@@ -2781,6 +2869,69 @@ const docTemplate = `{
             }
         },
         "/user-svc/user/{userId}": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Save user profile information based on the provided user ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Svc"
+                ],
+                "summary": "Save User Profile",
+                "operationId": "saveUserProfile",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Save Profile Request",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user_svc.SaveProfileRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/user_svc.SaveProfileResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
+                        }
+                    }
+                }
+            },
             "delete": {
                 "security": [
                     {
@@ -3092,9 +3243,6 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
-        },
-        "config_svc.GetConfigRequest": {
-            "type": "object"
         },
         "config_svc.GetConfigResponse": {
             "type": "object",
@@ -3853,6 +4001,104 @@ const docTemplate = `{
                 }
             }
         },
+        "node_svc.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "node_svc.GPU": {
+            "type": "object",
+            "properties": {
+                "busId": {
+                    "type": "string"
+                },
+                "computeMode": {
+                    "type": "string"
+                },
+                "gpuUtilization": {
+                    "type": "number"
+                },
+                "id": {
+                    "description": "Id Node.Hostname + IntraNodeId",
+                    "type": "string"
+                },
+                "intraNodeId": {
+                    "type": "integer"
+                },
+                "memoryTotal": {
+                    "type": "integer"
+                },
+                "memoryUsage": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "performanceState": {
+                    "type": "string"
+                },
+                "powerCap": {
+                    "type": "number"
+                },
+                "powerUsage": {
+                    "type": "number"
+                },
+                "processDetails": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/node_svc.Process"
+                    }
+                },
+                "temperature": {
+                    "type": "number"
+                }
+            }
+        },
+        "node_svc.ListNodesRequest": {
+            "type": "object"
+        },
+        "node_svc.ListNodesResponse": {
+            "type": "object",
+            "properties": {
+                "nodes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/node_svc.Node"
+                    }
+                }
+            }
+        },
+        "node_svc.Node": {
+            "type": "object",
+            "properties": {
+                "gpus": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/node_svc.GPU"
+                    }
+                },
+                "hostname": {
+                    "type": "string"
+                }
+            }
+        },
+        "node_svc.Process": {
+            "type": "object",
+            "properties": {
+                "memoryUsage": {
+                    "type": "integer"
+                },
+                "pid": {
+                    "type": "integer"
+                },
+                "processName": {
+                    "type": "string"
+                }
+            }
+        },
         "prompt_svc.AddPromptRequest": {
             "type": "object",
             "required": [
@@ -4333,6 +4579,20 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        },
+        "user_svc.SaveProfileRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "user_svc.SaveProfileResponse": {
+            "type": "object"
         },
         "user_svc.SetRolePermissionsRequest": {
             "type": "object",

@@ -16,6 +16,19 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
+// @ID listNodes
+// @Summary List Nodes
+// @Description Retrieve a list of nodes.
+// @Tags Node Svc
+// @Accept json
+// @Produce json
+// @Param body body node.ListNodesRequest false "List Nodes Request"
+// @Success 200 {object} node.ListNodesResponse
+// @Failure 400 {object} node.ErrorResponse "Invalid JSON"
+// @Failure 401 {object} node.ErrorResponse "Unauthorized"
+// @Failure 500 {object} node.ErrorResponse "Internal Server Error"
+// @Security BearerAuth
+// @Router /node-svc/nodes [post]
 func (ns *NodeService) List(
 	w http.ResponseWriter,
 	r *http.Request,

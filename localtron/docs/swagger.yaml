@@ -143,8 +143,6 @@ definitions:
       downloadFolder:
         type: string
     type: object
-  config_svc.GetConfigRequest:
-    type: object
   config_svc.GetConfigResponse:
     properties:
       config:
@@ -651,6 +649,70 @@ definitions:
       status:
         $ref: '#/definitions/model_svc.ModelStatus'
     type: object
+  node_svc.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  node_svc.GPU:
+    properties:
+      busId:
+        type: string
+      computeMode:
+        type: string
+      gpuUtilization:
+        type: number
+      id:
+        description: Id Node.Hostname + IntraNodeId
+        type: string
+      intraNodeId:
+        type: integer
+      memoryTotal:
+        type: integer
+      memoryUsage:
+        type: integer
+      name:
+        type: string
+      performanceState:
+        type: string
+      powerCap:
+        type: number
+      powerUsage:
+        type: number
+      processDetails:
+        items:
+          $ref: '#/definitions/node_svc.Process'
+        type: array
+      temperature:
+        type: number
+    type: object
+  node_svc.ListNodesRequest:
+    type: object
+  node_svc.ListNodesResponse:
+    properties:
+      nodes:
+        items:
+          $ref: '#/definitions/node_svc.Node'
+        type: array
+    type: object
+  node_svc.Node:
+    properties:
+      gpus:
+        items:
+          $ref: '#/definitions/node_svc.GPU'
+        type: array
+      hostname:
+        type: string
+    type: object
+  node_svc.Process:
+    properties:
+      memoryUsage:
+        type: integer
+      pid:
+        type: integer
+      processName:
+        type: string
+    type: object
   prompt_svc.AddPromptRequest:
     properties:
       id:
@@ -996,6 +1058,15 @@ definitions:
       updatedAt:
         type: string
     type: object
+  user_svc.SaveProfileRequest:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+    type: object
+  user_svc.SaveProfileResponse:
+    type: object
   user_svc.SetRolePermissionsRequest:
     properties:
       permissionIds:
@@ -1331,7 +1402,6 @@ paths:
       - description: Get Threads Request
         in: body
         name: request
-        required: true
         schema:
           $ref: '#/definitions/chat_svc.GetThreadsRequest'
       produces:
@@ -1358,19 +1428,12 @@ paths:
       summary: Get Threads
       tags:
       - Chat Svc
-  /config-svc/get:
-    post:
+  /config-svc/config:
+    get:
       consumes:
       - application/json
       description: Fetch the current configuration from the server
       operationId: getConfig
-      parameters:
-      - description: Get Config Request
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/config_svc.GetConfigRequest'
       produces:
       - application/json
       responses:
@@ -1835,48 +1898,6 @@ paths:
       tags:
       - Generic Svc
   /generic-svc/object/{objectId}:
-    delete:
-      consumes:
-      - application/json
-      description: Removes a generic object from the system based on the provided
-        conditions. Requires authorization and user authentication.
-      operationId: deleteObject
-      parameters:
-      - description: Object ID
-        in: path
-        name: objectId
-        required: true
-        type: string
-      - description: Delete request payload
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/generic_svc.DeleteObjectRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Successful deletion of object
-          schema:
-            $ref: '#/definitions/generic_svc.DeleteObjectResponse'
-        "400":
-          description: Invalid JSON
-          schema:
-            $ref: '#/definitions/generic_svc.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/generic_svc.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/generic_svc.ErrorResponse'
-      security:
-      - BearerAuth: []
-      summary: Delete a Generic Object
-      tags:
-      - Generic Svc
     put:
       consumes:
       - application/json
@@ -1960,6 +1981,49 @@ paths:
       summary: Find Generic Objects
       tags:
       - Generic Svc
+  /generic-svc/objects/delete:
+    post:
+      consumes:
+      - application/json
+      description: Removes a generic object from the system based on the provided
+        conditions. Requires authorization and user authentication.
+      operationId: deleteObjects
+      parameters:
+      - description: Object ID
+        in: path
+        name: objectId
+        required: true
+        type: string
+      - description: Delete request payload
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/generic_svc.DeleteObjectRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful deletion of object
+          schema:
+            $ref: '#/definitions/generic_svc.DeleteObjectResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/generic_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/generic_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/generic_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete a Generic Object
+      tags:
+      - Generic Svc
   /generic-svc/objects/update:
     post:
       consumes:
@@ -1998,7 +2062,7 @@ paths:
       summary: Update Generic Objects
       tags:
       - Generic Svc
-  /model-svc/default/start:
+  /model-svc/default-model/start:
     put:
       consumes:
       - application/json
@@ -2031,21 +2095,15 @@ paths:
       summary: Start the Default Model
       tags:
       - Model Svc
-  /model-svc/model/{id}/status:
+  /model-svc/default-model/status:
     get:
       consumes:
       - application/json
       description: |-
-        Retrieves the status of a model by ID.
+        Retrieves the status of the default model.
 
         Requires the `model-svc:model:view` permission.
-      operationId: getModelStatus
-      parameters:
-      - description: Model ID
-        in: path
-        name: id
-        required: true
-        type: string
+      operationId: getDefaultModelStatus
       produces:
       - application/json
       responses:
@@ -2063,7 +2121,7 @@ paths:
             type: string
       security:
       - BearerAuth: []
-      summary: Get Model Status
+      summary: Get Default Model Status
       tags:
       - Model Svc
   /model-svc/model/{modelId}:
@@ -2174,13 +2232,49 @@ paths:
       summary: Start a Model
       tags:
       - Model Svc
-  /model-svc/models:
+  /model-svc/model/{modelId}/status:
     get:
       consumes:
       - application/json
       description: |-
-        Retrieves a list of models after checking authorization
-        Requires "model.view" permission.
+        Retrieves the status of a model by ID.
+
+        Requires the `model-svc:model:view` permission.
+      operationId: getModelStatus
+      parameters:
+      - description: Model ID
+        in: path
+        name: modelId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Model status retrieved successfully
+          schema:
+            $ref: '#/definitions/model_svc.StatusResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Get Model Status
+      tags:
+      - Model Svc
+  /model-svc/models:
+    post:
+      consumes:
+      - application/json
+      description: |-
+        Retrieves a list of models.
+
+        Requires `model-svc:model:view` permission.
       operationId: listModels
       produces:
       - application/json
@@ -2202,6 +2296,42 @@ paths:
       summary: List Models
       tags:
       - Model Svc
+  /node-svc/nodes:
+    post:
+      consumes:
+      - application/json
+      description: Retrieve a list of nodes.
+      operationId: listNodes
+      parameters:
+      - description: List Nodes Request
+        in: body
+        name: body
+        schema:
+          $ref: '#/definitions/node_svc.ListNodesRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/node_svc.ListNodesResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/node_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/node_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/node_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: List Nodes
+      tags:
+      - Node Svc
   /prompt-svc/{threadId}/subscribe:
     get:
       description: Subscribe to prompt responses via Server-Sent Events (SSE)
@@ -2228,42 +2358,6 @@ paths:
       security:
       - BearerAuth: []
       summary: Subscribe to Prompt
-      tags:
-      - Prompt Svc
-  /prompt-svc/list:
-    post:
-      consumes:
-      - application/json
-      description: List prompts that satisfy a query.
-      operationId: getPrompts
-      parameters:
-      - description: List Prompts Request
-        in: body
-        name: request
-        schema:
-          $ref: '#/definitions/prompt_svc.ListPromptsRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/prompt_svc.ListPromptsResponse'
-        "400":
-          description: Invalid JSON
-          schema:
-            $ref: '#/definitions/prompt_svc.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/prompt_svc.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/prompt_svc.ErrorResponse'
-      security:
-      - BearerAuth: []
-      summary: List Prompts
       tags:
       - Prompt Svc
   /prompt-svc/prompt:
@@ -2302,6 +2396,42 @@ paths:
       security:
       - BearerAuth: []
       summary: Add Prompt
+      tags:
+      - Prompt Svc
+  /prompt-svc/prompts:
+    post:
+      consumes:
+      - application/json
+      description: List prompts that satisfy a query.
+      operationId: getPrompts
+      parameters:
+      - description: List Prompts Request
+        in: body
+        name: request
+        schema:
+          $ref: '#/definitions/prompt_svc.ListPromptsRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/prompt_svc.ListPromptsResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/prompt_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/prompt_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/prompt_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: List Prompts
       tags:
       - Prompt Svc
   /prompt-svc/remove:
@@ -2716,7 +2846,7 @@ paths:
         in: path
         name: roleId
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -2878,6 +3008,47 @@ paths:
       security:
       - BearerAuth: []
       summary: Delete a User
+      tags:
+      - User Svc
+    put:
+      consumes:
+      - application/json
+      description: Save user profile information based on the provided user ID.
+      operationId: saveUserProfile
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: string
+      - description: Save Profile Request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/user_svc.SaveProfileRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user_svc.SaveProfileResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Save User Profile
       tags:
       - User Svc
   /user-svc/user/by-token:

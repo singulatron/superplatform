@@ -93,10 +93,9 @@ export class ConfigSvcApi {
     /**
      * Fetch the current configuration from the server
      * @summary Get Config
-     * @param request Get Config Request
      */
-    public async getConfig (request: object, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: ConfigSvcGetConfigResponse;  }> {
-        const localVarPath = this.basePath + '/config-svc/get';
+    public async getConfig (options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: ConfigSvcGetConfigResponse;  }> {
+        const localVarPath = this.basePath + '/config-svc/config';
         let localVarQueryParameters: any = {};
         let localVarHeaderParams: any = (<any>Object).assign({}, this._defaultHeaders);
         const produces = ['application/json'];
@@ -108,23 +107,17 @@ export class ConfigSvcApi {
         }
         let localVarFormParams: any = {};
 
-        // verify required parameter 'request' is not null or undefined
-        if (request === null || request === undefined) {
-            throw new Error('Required parameter request was null or undefined when calling getConfig.');
-        }
-
         (<any>Object).assign(localVarHeaderParams, options.headers);
 
         let localVarUseFormData = false;
 
         let localVarRequestOptions: localVarRequest.Options = {
-            method: 'POST',
+            method: 'GET',
             qs: localVarQueryParameters,
             headers: localVarHeaderParams,
             uri: localVarPath,
             useQuerystring: this._useQuerystring,
             json: true,
-            body: ObjectSerializer.serialize(request, "object")
         };
 
         let authenticationPromise = Promise.resolve();

@@ -93,6 +93,71 @@ export class ModelSvcApi {
     }
 
     /**
+     * Retrieves the status of the default model.  Requires the `model-svc:model:view` permission.
+     * @summary Get Default Model Status
+     */
+    public async getDefaultModelStatus (options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: ModelSvcStatusResponse;  }> {
+        const localVarPath = this.basePath + '/model-svc/default-model/status';
+        let localVarQueryParameters: any = {};
+        let localVarHeaderParams: any = (<any>Object).assign({}, this._defaultHeaders);
+        const produces = ['application/json'];
+        // give precedence to 'application/json'
+        if (produces.indexOf('application/json') >= 0) {
+            localVarHeaderParams.Accept = 'application/json';
+        } else {
+            localVarHeaderParams.Accept = produces.join(',');
+        }
+        let localVarFormParams: any = {};
+
+        (<any>Object).assign(localVarHeaderParams, options.headers);
+
+        let localVarUseFormData = false;
+
+        let localVarRequestOptions: localVarRequest.Options = {
+            method: 'GET',
+            qs: localVarQueryParameters,
+            headers: localVarHeaderParams,
+            uri: localVarPath,
+            useQuerystring: this._useQuerystring,
+            json: true,
+        };
+
+        let authenticationPromise = Promise.resolve();
+        if (this.authentications.BearerAuth.apiKey) {
+            authenticationPromise = authenticationPromise.then(() => this.authentications.BearerAuth.applyToRequest(localVarRequestOptions));
+        }
+        authenticationPromise = authenticationPromise.then(() => this.authentications.default.applyToRequest(localVarRequestOptions));
+
+        let interceptorPromise = authenticationPromise;
+        for (const interceptor of this.interceptors) {
+            interceptorPromise = interceptorPromise.then(() => interceptor(localVarRequestOptions));
+        }
+
+        return interceptorPromise.then(() => {
+            if (Object.keys(localVarFormParams).length) {
+                if (localVarUseFormData) {
+                    (<any>localVarRequestOptions).formData = localVarFormParams;
+                } else {
+                    localVarRequestOptions.form = localVarFormParams;
+                }
+            }
+            return new Promise<{ response: http.IncomingMessage; body: ModelSvcStatusResponse;  }>((resolve, reject) => {
+                localVarRequest(localVarRequestOptions, (error, response, body) => {
+                    if (error) {
+                        reject(error);
+                    } else {
+                        if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
+                            body = ObjectSerializer.deserialize(body, "ModelSvcStatusResponse");
+                            resolve({ response: response, body: body });
+                        } else {
+                            reject(new HttpError(response, body, response.statusCode));
+                        }
+                    }
+                });
+            });
+        });
+    }
+    /**
      * Retrieves the details of a model by its ID.  the Requires `model.view` permission.
      * @summary Get a Model
      * @param modelId Model ID
@@ -167,11 +232,11 @@ export class ModelSvcApi {
     /**
      * Retrieves the status of a model by ID.  Requires the `model-svc:model:view` permission.
      * @summary Get Model Status
-     * @param id Model ID
+     * @param modelId Model ID
      */
-    public async getModelStatus (id: string, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: ModelSvcStatusResponse;  }> {
-        const localVarPath = this.basePath + '/model-svc/model/{id}/status'
-            .replace('{' + 'id' + '}', encodeURIComponent(String(id)));
+    public async getModelStatus (modelId: string, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: ModelSvcStatusResponse;  }> {
+        const localVarPath = this.basePath + '/model-svc/model/{modelId}/status'
+            .replace('{' + 'modelId' + '}', encodeURIComponent(String(modelId)));
         let localVarQueryParameters: any = {};
         let localVarHeaderParams: any = (<any>Object).assign({}, this._defaultHeaders);
         const produces = ['application/json'];
@@ -183,9 +248,9 @@ export class ModelSvcApi {
         }
         let localVarFormParams: any = {};
 
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling getModelStatus.');
+        // verify required parameter 'modelId' is not null or undefined
+        if (modelId === null || modelId === undefined) {
+            throw new Error('Required parameter modelId was null or undefined when calling getModelStatus.');
         }
 
         (<any>Object).assign(localVarHeaderParams, options.headers);
@@ -237,7 +302,7 @@ export class ModelSvcApi {
         });
     }
     /**
-     * Retrieves a list of models after checking authorization Requires \"model.view\" permission.
+     * Retrieves a list of models.  Requires `model-svc:model:view` permission.
      * @summary List Models
      */
     public async listModels (options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: ModelSvcListResponse;  }> {
@@ -258,7 +323,7 @@ export class ModelSvcApi {
         let localVarUseFormData = false;
 
         let localVarRequestOptions: localVarRequest.Options = {
-            method: 'GET',
+            method: 'POST',
             qs: localVarQueryParameters,
             headers: localVarHeaderParams,
             uri: localVarPath,
@@ -378,7 +443,7 @@ export class ModelSvcApi {
      * @summary Start the Default Model
      */
     public async startDefaultModel (options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: object;  }> {
-        const localVarPath = this.basePath + '/model-svc/default/start';
+        const localVarPath = this.basePath + '/model-svc/default-model/start';
         let localVarQueryParameters: any = {};
         let localVarHeaderParams: any = (<any>Object).assign({}, this._defaultHeaders);
         const produces = ['application/json'];

@@ -6,24 +6,19 @@
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
 import { Injectable } from '@angular/core';
-import { LocaltronService } from './localtron.service';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class LogService {
-	constructor(private localtron: LocaltronService) {}
+	constructor() {}
 
-	async logDisable(): Promise<void> {
-		return this.localtron.post('/app/log/disable', {});
-	}
+	async logDisable(): Promise<void> {}
 
-	async logEnable(): Promise<void> {
-		return this.localtron.post('/app/log/enable', {});
-	}
+	async logEnable(): Promise<void> {}
 
 	async logStatus(): Promise<LoggingStatus> {
-		return this.localtron.post('/app/log/status', {});
+		return {} as any;
 	}
 }
 

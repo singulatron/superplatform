@@ -16,8 +16,9 @@ import { PageComponent } from '../components/page/page.component';
 import { IconMenuComponent } from '../components/icon-menu/icon-menu.component';
 import { CenteredComponent } from '../components/centered/centered.component';
 import { DatePipe } from '@angular/common';
-import { NodeService, Node } from '../services/node.service';
+import { NodeService } from '../services/node.service';
 import { UserService } from '../services/user.service';
+import { NodeSvcNode as Node } from "@singulatron/client"
 
 @Component({
 	selector: 'app-nodes',
@@ -56,7 +57,7 @@ export class NodesComponent {
 			const rsp = await this.nodeService.nodesList();
 			// const rsp = fixture
 
-			this.nodes = rsp.nodes;
+			this.nodes = rsp.nodes!;
 			await this.nodeService.nodesList();
 		} catch (error) {
 			this.error = JSON.parse(error as string)?.error;

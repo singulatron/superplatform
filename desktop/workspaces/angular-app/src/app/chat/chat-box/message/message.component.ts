@@ -13,7 +13,10 @@ import {
 	ChangeDetectionStrategy,
 } from '@angular/core';
 import { ChatService } from '../../../services/chat.service';
-import { Message, Asset } from '@singulatron/types';
+import {
+	ChatSvcMessage as Message,
+	ChatSvcAsset as Asset,
+} from '@singulatron/client';
 import { PromptService } from '../../../services/prompt.service';
 import { LocaltronService } from '../../../services/localtron.service';
 import { MarkdownComponent } from 'ngx-markdown';
@@ -60,7 +63,7 @@ export class MessageComponent {
 
 		await this.promptService.promptAdd({
 			id: this.localtron.uuid(),
-			prompt: message.content,
+			prompt: message.content!,
 			threadId: message.threadId as string,
 			modelId: this.modelId as string,
 		});
@@ -68,7 +71,7 @@ export class MessageComponent {
 
 	asset(message: Message): string {
 		return ('data:image/png;base64,' +
-			this.assets.find((a) => message.assetIds?.includes(a.id))
+			this.assets.find((a) => message.assetIds?.includes(a.id!))
 				?.content) as string;
 	}
 

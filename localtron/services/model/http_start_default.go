@@ -30,7 +30,7 @@ import (
 // @Failure 401 {object} model.ErrorResponse "Unauthorized"
 // @Failure 500 {object} model.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
-// @Router /model-svc/default/start [put]
+// @Router /model-svc/default-model/start [put]
 func (ms *ModelService) StartDefault(
 	w http.ResponseWriter,
 	r *http.Request,

@@ -18,19 +18,32 @@ import {
 import { Router } from '@angular/router';
 import { equal, field } from '@singulatron/types';
 import * as user from '@singulatron/types';
+import {
+	Configuration,
+	UserSvcApi,
+	UserSvcGetPermissionsResponse,
+	UserSvcGetRolesResponse,
+	UserSvcGetUsersResponse,
+	UserSvcLoginResponse,
+	UserSvcReadUserByTokenResponse,
+	UserSvcUser,
+} from '@singulatron/client';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class UserService {
+	private userService!: UserSvcApi;
+
 	private token: string = '';
 
-	private userSubject = new ReplaySubject<user.User>(1);
+	private userSubject = new ReplaySubject<UserSvcUser>(1);
 	/** Current logged in user */
 	public user$ = this.userSubject.asObservable();
 
-	private userCache: { [id: string]: BehaviorSubject<user.User | undefined> } =
-		{};
+	private userCache: {
+		[id: string]: BehaviorSubject<UserSvcUser | undefined>;
+	} = {};
 
 	constructor(
 		private localtron: LocaltronService,
@@ -48,7 +61,7 @@ export class UserService {
 		if (!this.hasToken()) {
 			try {
 				const rsp = await this.login('singulatron', 'changeme');
-				this.setToken(rsp.token.token as string);
+				this.setToken(rsp.token!.token as string);
 			} catch {
 				console.error('Login with default credentials failed');
 				this.router.navigateByUrl('/login');
@@ -63,10 +76,16 @@ export class UserService {
 		}
 
 		try {
+			this.userService = new UserSvcApi(
+				new Configuration({
+					basePath: this.localtron.addr(),
+					apiKey: this.localtron.token(),
+				})
+			);
 			const rsp = await this.readUserByToken(this.token);
-			this.userSubject.next(rsp.user);
-		} catch {
-			console.error('Cannot read user even with a token');
+			this.userSubject.next(rsp.user!);
+		} catch (error) {
+			console.error('Cannot read user even with a token', error);
 			this.router.navigateByUrl('/login');
 		}
 	}
@@ -105,43 +124,51 @@ export class UserService {
 		return !!t;
 	}
 
-	login(email: string, password: string): Promise<user.LoginResponse> {
-		return this.localtron.post('/user-svc/login', {
-			email: email,
-			password: password,
+	login(email: string, password: string): Promise<UserSvcLoginResponse> {
+		return this.userService.login({
+			request: { email: email, password: password },
 		});
 	}
 
-	readUserByToken(token: string): Promise<user.ReadUserByTokenResponse> {
-		return this.localtron.post('/user-svc/user/by-token', {
-			token: token,
+	readUserByToken(token: string): Promise<UserSvcReadUserByTokenResponse> {
+		return this.userService.readUserByToken({
+			body: {
+				token: token,
+			},
 		});
 	}
 
-	getUsers(request: user.GetUsersRequest): Promise<user.GetUsersResponse> {
-		return this.localtron.post('/user-svc/users', request);
+	getUsers(request: user.GetUsersRequest): Promise<UserSvcGetUsersResponse> {
+		return this.userService.getUsers({
+			request: request,
+		});
 	}
 
 	/** Save profile on behalf of a user */
-	saveProfile(email: string, name: string): Promise<user.SaveProfileResponse> {
+	saveProfile(email: string, name: string): Promise<object> {
 		const request: user.SaveProfileRequest = {
 			email: email,
 			name: name,
 		};
-		return this.localtron.put(`/user-svc/user/${email}`, request);
+		return this.userService.saveUserProfile({
+			userId: '@thisIsFakeYetItWorks',
+			body: request,
+		});
 	}
 
 	changePassword(
 		email: string,
 		currentPassword: string,
 		newPassword: string
-	): Promise<user.ChangePasswordResponse> {
+	): Promise<object> {
 		const request: user.ChangePasswordRequest = {
 			email: email,
 			currentPassword: currentPassword,
 			newPassword: newPassword,
 		};
-		return this.localtron.post('/user-serviec/change-password', request);
+		return this.userService.changePassword({
+			request: request,
+		});
 	}
 
 	changePasswordAdmin(
@@ -152,51 +179,57 @@ export class UserService {
 			email: email,
 			newPassword: newPassword,
 		};
-		return this.localtron.post('/user-svc/change-password-admin', request);
+		return this.userService.changePasswordAdmin({
+			request: request,
+		});
 	}
 
 	/** Create a user - alternative to registration
 	 */
 	createUser(
-		user: user.User,
+		user: UserSvcUser,
 		password: string,
 		roleIds: string[]
 	): Promise<user.CreateUserResponse> {
-		const request: user.CreateUserRequest = {
-			user: user,
-			password: password,
-			roleIds: roleIds,
-		};
-		return this.localtron.post('/user-svc/user', request);
+		return this.userService.createUser({
+			request: {
+				user: user,
+				password: password,
+				roleIds: roleIds,
+			},
+		});
 	}
 
-	getRoles(): Promise<user.GetRolesResposne> {
-		return this.localtron.get('/user-svc/roles');
+	getRoles(): Promise<UserSvcGetRolesResponse> {
+		return this.userService.getRoles();
 	}
 
-	getPermissions(roleId: string): Promise<user.GetPermissionsResposne> {
-		return this.localtron.get(`/user-svc/role/${roleId}/permissions`);
+	getPermissions(roleId: string): Promise<UserSvcGetPermissionsResponse> {
+		return this.userService.getPermissionsByRole({
+			roleId: roleId,
+		});
 	}
 
-	setRolePermissions(
-		roleId: string,
-		permissionIds: string[]
-	): Promise<user.SetRolePermissionsResponse> {
+	setRolePermissions(roleId: string, permissionIds: string[]): Promise<object> {
 		const request: user.SetRolePermissionsRequest = {
 			permissionIds: permissionIds,
 		};
-		return this.localtron.put(
-			`/user-svc/role/${roleId}/permissions`,
-			request
-		);
+		return this.userService.setRolePermission({
+			roleId: roleId,
+			body: request,
+		});
 	}
 
 	deleteRole(roleId: string): Promise<user.DeleteRoleResponse> {
-		return this.localtron.delete(`/user-svc/role/${roleId}`);
+		return this.userService.deleteRole({
+			roleId: roleId,
+		});
 	}
 
 	deleteUser(userId: string): Promise<user.DeleteUserResponse> {
-		return this.localtron.delete(`/user-svc/user/${userId}`);
+		return this.userService.deleteUser({
+			userId: userId,
+		});
 	}
 
 	async getUserId(): Promise<string> {
@@ -209,9 +242,9 @@ export class UserService {
 		}
 	}
 
-	getUser(id: string): Observable<user.User | undefined> {
+	getUser(id: string): Observable<UserSvcUser | undefined> {
 		if (!this.userCache[id]) {
-			this.userCache[id] = new BehaviorSubject<user.User | undefined>(
+			this.userCache[id] = new BehaviorSubject<UserSvcUser | undefined>(
 				undefined
 			);
 			this.getUsers({
@@ -219,7 +252,7 @@ export class UserService {
 					conditions: [equal(field('id'), id)],
 				},
 			}).then((rsp) => {
-				this.userCache[id].next(rsp.users[0]);
+				this.userCache[id].next(rsp.users![0]);
 			});
 		}
 

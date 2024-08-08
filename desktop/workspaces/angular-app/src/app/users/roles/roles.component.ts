@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { UserService } from '../../services/user.service';
-import { Role, Permission } from '@singulatron/types';
+import {
+	UserSvcRole as Role,
+	UserSvcPermission as Permission,
+} from '@singulatron/client';
 import { first } from 'rxjs';
 import { NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -44,7 +47,7 @@ export class RolesComponent {
 
 	async loggedInInit() {
 		const rsp = await this.userService.getRoles();
-		this.roles = await rsp.roles;
+		this.roles = await rsp.roles!;
 
 		this.cd.markForCheck();
 	}
@@ -57,7 +60,7 @@ export class RolesComponent {
 	async loadRolePermissions(role: Role) {
 		this.selectedRolePermissions.clear();
 		const rsp = await this.userService.getPermissions(role.id!);
-		this.permissions = rsp.permissions;
+		this.permissions = rsp.permissions!;
 		if (role.permissionIds) {
 			for (const id of role.permissionIds) {
 				this.selectedRolePermissions.add(id);
@@ -92,8 +95,8 @@ export class RolesComponent {
 
 	filteredPermissions() {
 		return this.permissions.filter((permission) =>
-			permission.name
-				.toLowerCase()
+			permission
+				.name!.toLowerCase()
 				.includes(this.permissionSearchQuery.toLowerCase())
 		);
 	}

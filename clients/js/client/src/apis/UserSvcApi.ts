@@ -33,6 +33,7 @@ import type {
   UserSvcReadUserByTokenRequest,
   UserSvcReadUserByTokenResponse,
   UserSvcRegisterRequest,
+  UserSvcSaveProfileRequest,
   UserSvcSetRolePermissionsRequest,
   UserSvcUpserPermissionRequest,
 } from '../models/index';
@@ -73,6 +74,8 @@ import {
     UserSvcReadUserByTokenResponseToJSON,
     UserSvcRegisterRequestFromJSON,
     UserSvcRegisterRequestToJSON,
+    UserSvcSaveProfileRequestFromJSON,
+    UserSvcSaveProfileRequestToJSON,
     UserSvcSetRolePermissionsRequestFromJSON,
     UserSvcSetRolePermissionsRequestToJSON,
     UserSvcUpserPermissionRequestFromJSON,
@@ -109,7 +112,7 @@ export interface DeleteUserRequest {
 }
 
 export interface GetPermissionsByRoleRequest {
-    roleId: number;
+    roleId: string;
 }
 
 export interface GetUsersRequest {
@@ -131,6 +134,11 @@ export interface ReadUserByTokenRequest {
 
 export interface RegisterRequest {
     body: UserSvcRegisterRequest;
+}
+
+export interface SaveUserProfileRequest {
+    userId: string;
+    body: UserSvcSaveProfileRequest;
 }
 
 export interface SetRolePermissionRequest {
@@ -738,6 +746,55 @@ export class UserSvcApi extends runtime.BaseAPI {
      */
     async register(requestParameters: RegisterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
         const response = await this.registerRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Save user profile information based on the provided user ID.
+     * Save User Profile
+     */
+    async saveUserProfileRaw(requestParameters: SaveUserProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
+        if (requestParameters['userId'] == null) {
+            throw new runtime.RequiredError(
+                'userId',
+                'Required parameter "userId" was null or undefined when calling saveUserProfile().'
+            );
+        }
+
+        if (requestParameters['body'] == null) {
+            throw new runtime.RequiredError(
+                'body',
+                'Required parameter "body" was null or undefined when calling saveUserProfile().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = await this.configuration.apiKey("Authorization"); // BearerAuth authentication
+        }
+
+        const response = await this.request({
+            path: `/user-svc/user/{userId}`.replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UserSvcSaveProfileRequestToJSON(requestParameters['body']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * Save user profile information based on the provided user ID.
+     * Save User Profile
+     */
+    async saveUserProfile(requestParameters: SaveUserProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
+        const response = await this.saveUserProfileRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

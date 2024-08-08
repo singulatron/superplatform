@@ -11,15 +11,22 @@ import { FirehoseService } from './firehose.service';
 import { ReplaySubject, first } from 'rxjs';
 import { UserService } from './user.service';
 import {
-	DownloadStatusChangeEvent,
-	DownloadDetails,
-	DownloadsResponse,
-} from '@singulatron/types';
+	DownloadSvcApi,
+	Configuration,
+	DownloadSvcDownloadDetails as DownloadDetails,
+	DownloadSvcDownloadsResponse,
+} from '@singulatron/client';
+
+export interface DownloadStatusChangeEvent {
+	allDownloads: DownloadDetails[];
+}
 
 @Injectable({
 	providedIn: 'root',
 })
 export class DownloadService {
+	downloadService!: DownloadSvcApi;
+
 	onFileDownloadStatusSubject = new ReplaySubject<DownloadStatusChangeEvent>(1);
 	onFileDownloadStatus$ = this.onFileDownloadStatusSubject.asObservable();
 
@@ -30,6 +37,12 @@ export class DownloadService {
 	) {
 		this.init();
 		this.userService.user$.pipe(first()).subscribe(() => {
+			this.downloadService = new DownloadSvcApi(
+				new Configuration({
+					basePath: this.localtron.addr(),
+					apiKey: this.localtron.token(),
+				})
+			);
 			this.loggedInInit();
 		});
 	}
@@ -40,7 +53,7 @@ export class DownloadService {
 				case 'downloadStatusChange': {
 					const rsp = await this.downloadList();
 					this.onFileDownloadStatusSubject.next({
-						allDownloads: rsp.downloads,
+						allDownloads: rsp?.downloads || [],
 					});
 					break;
 				}
@@ -62,17 +75,20 @@ export class DownloadService {
 	}
 
 	async downloadDo(url: string) {
-		this.localtron.put('/download-svc/download', { url: url });
+		this.downloadService.download({
+			request: {
+				url: url,
+			},
+		});
 	}
 
 	async downloadPause(url: string) {
-		this.localtron.put(
-			`/download-svc/${encodeURIComponent(url)}/pause`,
-			{}
-		);
+		this.downloadService.pause({
+			downloadId: encodeURIComponent(url),
+		});
 	}
 
-	async downloadList(): Promise<DownloadsResponse> {
-		return this.localtron.post('/download-svc/downloads', {});
+	async downloadList(): Promise<DownloadSvcDownloadsResponse> {
+		return this.downloadService.listDownloads();
 	}
 }

@@ -15,7 +15,7 @@ export interface GetModelRequest {
     modelId: string;
 }
 export interface GetModelStatusRequest {
-    id: string;
+    modelId: string;
 }
 export interface MakeDefaultRequest {
     modelId: string;
@@ -27,6 +27,16 @@ export interface StartModelRequest {
  *
  */
 export declare class ModelSvcApi extends runtime.BaseAPI {
+    /**
+     * Retrieves the status of the default model.  Requires the `model-svc:model:view` permission.
+     * Get Default Model Status
+     */
+    getDefaultModelStatusRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ModelSvcStatusResponse>>;
+    /**
+     * Retrieves the status of the default model.  Requires the `model-svc:model:view` permission.
+     * Get Default Model Status
+     */
+    getDefaultModelStatus(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ModelSvcStatusResponse>;
     /**
      * Retrieves the details of a model by its ID.  the Requires `model.view` permission.
      * Get a Model
@@ -48,12 +58,12 @@ export declare class ModelSvcApi extends runtime.BaseAPI {
      */
     getModelStatus(requestParameters: GetModelStatusRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ModelSvcStatusResponse>;
     /**
-     * Retrieves a list of models after checking authorization Requires \"model.view\" permission.
+     * Retrieves a list of models.  Requires `model-svc:model:view` permission.
      * List Models
      */
     listModelsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ModelSvcListResponse>>;
     /**
-     * Retrieves a list of models after checking authorization Requires \"model.view\" permission.
+     * Retrieves a list of models.  Requires `model-svc:model:view` permission.
      * List Models
      */
     listModels(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ModelSvcListResponse>;

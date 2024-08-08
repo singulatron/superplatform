@@ -36,7 +36,7 @@ export interface GetModelRequest {
 }
 
 export interface GetModelStatusRequest {
-    id: string;
+    modelId: string;
 }
 
 export interface MakeDefaultRequest {
@@ -51,6 +51,38 @@ export interface StartModelRequest {
  * 
  */
 export class ModelSvcApi extends runtime.BaseAPI {
+
+    /**
+     * Retrieves the status of the default model.  Requires the `model-svc:model:view` permission.
+     * Get Default Model Status
+     */
+    async getDefaultModelStatusRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ModelSvcStatusResponse>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = await this.configuration.apiKey("Authorization"); // BearerAuth authentication
+        }
+
+        const response = await this.request({
+            path: `/model-svc/default-model/status`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ModelSvcStatusResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Retrieves the status of the default model.  Requires the `model-svc:model:view` permission.
+     * Get Default Model Status
+     */
+    async getDefaultModelStatus(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ModelSvcStatusResponse> {
+        const response = await this.getDefaultModelStatusRaw(initOverrides);
+        return await response.value();
+    }
 
     /**
      * Retrieves the details of a model by its ID.  the Requires `model.view` permission.
@@ -96,10 +128,10 @@ export class ModelSvcApi extends runtime.BaseAPI {
      * Get Model Status
      */
     async getModelStatusRaw(requestParameters: GetModelStatusRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ModelSvcStatusResponse>> {
-        if (requestParameters['id'] == null) {
+        if (requestParameters['modelId'] == null) {
             throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling getModelStatus().'
+                'modelId',
+                'Required parameter "modelId" was null or undefined when calling getModelStatus().'
             );
         }
 
@@ -112,7 +144,7 @@ export class ModelSvcApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/model-svc/model/{id}/status`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/model-svc/model/{modelId}/status`.replace(`{${"modelId"}}`, encodeURIComponent(String(requestParameters['modelId']))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -131,7 +163,7 @@ export class ModelSvcApi extends runtime.BaseAPI {
     }
 
     /**
-     * Retrieves a list of models after checking authorization Requires \"model.view\" permission.
+     * Retrieves a list of models.  Requires `model-svc:model:view` permission.
      * List Models
      */
     async listModelsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ModelSvcListResponse>> {
@@ -145,7 +177,7 @@ export class ModelSvcApi extends runtime.BaseAPI {
 
         const response = await this.request({
             path: `/model-svc/models`,
-            method: 'GET',
+            method: 'POST',
             headers: headerParameters,
             query: queryParameters,
         }, initOverrides);
@@ -154,7 +186,7 @@ export class ModelSvcApi extends runtime.BaseAPI {
     }
 
     /**
-     * Retrieves a list of models after checking authorization Requires \"model.view\" permission.
+     * Retrieves a list of models.  Requires `model-svc:model:view` permission.
      * List Models
      */
     async listModels(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ModelSvcListResponse> {
@@ -215,7 +247,7 @@ export class ModelSvcApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/model-svc/default/start`,
+            path: `/model-svc/default-model/start`,
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
