@@ -1,6 +1,6 @@
 {
   "name": "@singulatron/node",
-  "version": "0.2.0",
+  "version": "0.2.3",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",

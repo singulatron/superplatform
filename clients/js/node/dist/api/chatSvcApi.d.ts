@@ -130,7 +130,7 @@ export declare class ChatSvcApi {
      * @summary Get Threads
      * @param request Get Threads Request
      */
-    getThreads(request: object, options?: {
+    getThreads(request?: object, options?: {
         headers: {
             [name: string]: string;
         };

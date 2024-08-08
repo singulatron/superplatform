@@ -10,14 +10,13 @@
  * Do not edit the class manually.
  */
 import http from 'http';
-import { ConfigSvcGetConfigResponse } from '../model/configSvcGetConfigResponse';
-import { ConfigSvcSaveConfigRequest } from '../model/configSvcSaveConfigRequest';
+import { NodeSvcListNodesResponse } from '../model/nodeSvcListNodesResponse';
 import { Authentication, Interceptor } from '../model/models';
 import { ApiKeyAuth } from '../model/models';
-export declare enum ConfigSvcApiApiKeys {
+export declare enum NodeSvcApiApiKeys {
     BearerAuth = 0
 }
-export declare class ConfigSvcApi {
+export declare class NodeSvcApi {
     protected _basePath: string;
     protected _defaultHeaders: any;
     protected _useQuerystring: boolean;
@@ -33,31 +32,19 @@ export declare class ConfigSvcApi {
     get defaultHeaders(): any;
     get basePath(): string;
     setDefaultAuthentication(auth: Authentication): void;
-    setApiKey(key: ConfigSvcApiApiKeys, value: string): void;
+    setApiKey(key: NodeSvcApiApiKeys, value: string): void;
     addInterceptor(interceptor: Interceptor): void;
     /**
-     * Fetch the current configuration from the server
-     * @summary Get Config
+     * Retrieve a list of nodes.
+     * @summary List Nodes
+     * @param body List Nodes Request
      */
-    getConfig(options?: {
+    listNodes(body?: object, options?: {
         headers: {
             [name: string]: string;
         };
     }): Promise<{
         response: http.IncomingMessage;
-        body: ConfigSvcGetConfigResponse;
-    }>;
-    /**
-     * Save the provided configuration to the server
-     * @summary Save Config
-     * @param request Save Config Request
-     */
-    saveConfig(request: ConfigSvcSaveConfigRequest, options?: {
-        headers: {
-            [name: string]: string;
-        };
-    }): Promise<{
-        response: http.IncomingMessage;
-        body: object;
+        body: NodeSvcListNodesResponse;
     }>;
 }

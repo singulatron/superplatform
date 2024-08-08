@@ -526,10 +526,6 @@ export class ChatSvcApi {
                 localVarHeaderParams.Accept = produces.join(',');
             }
             let localVarFormParams = {};
-            // verify required parameter 'request' is not null or undefined
-            if (request === null || request === undefined) {
-                throw new Error('Required parameter request was null or undefined when calling getThreads.');
-            }
             Object.assign(localVarHeaderParams, options.headers);
             let localVarUseFormData = false;
             let localVarRequestOptions = {

@@ -152,9 +152,9 @@ export class GenericSvcApi {
      * @param objectId Object ID
      * @param body Delete request payload
      */
-    deleteObject(objectId_1, body_1) {
+    deleteObjects(objectId_1, body_1) {
         return __awaiter(this, arguments, void 0, function* (objectId, body, options = { headers: {} }) {
-            const localVarPath = this.basePath + '/generic-svc/object/{objectId}'
+            const localVarPath = this.basePath + '/generic-svc/objects/delete'
                 .replace('{' + 'objectId' + '}', encodeURIComponent(String(objectId)));
             let localVarQueryParameters = {};
             let localVarHeaderParams = Object.assign({}, this._defaultHeaders);
@@ -169,16 +169,16 @@ export class GenericSvcApi {
             let localVarFormParams = {};
             // verify required parameter 'objectId' is not null or undefined
             if (objectId === null || objectId === undefined) {
-                throw new Error('Required parameter objectId was null or undefined when calling deleteObject.');
+                throw new Error('Required parameter objectId was null or undefined when calling deleteObjects.');
             }
             // verify required parameter 'body' is not null or undefined
             if (body === null || body === undefined) {
-                throw new Error('Required parameter body was null or undefined when calling deleteObject.');
+                throw new Error('Required parameter body was null or undefined when calling deleteObjects.');
             }
             Object.assign(localVarHeaderParams, options.headers);
             let localVarUseFormData = false;
             let localVarRequestOptions = {
-                method: 'DELETE',
+                method: 'POST',
                 qs: localVarQueryParameters,
                 headers: localVarHeaderParams,
                 uri: localVarPath,

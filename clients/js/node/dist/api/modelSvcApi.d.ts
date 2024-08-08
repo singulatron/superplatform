@@ -37,6 +37,18 @@ export declare class ModelSvcApi {
     setApiKey(key: ModelSvcApiApiKeys, value: string): void;
     addInterceptor(interceptor: Interceptor): void;
     /**
+     * Retrieves the status of the default model.  Requires the `model-svc:model:view` permission.
+     * @summary Get Default Model Status
+     */
+    getDefaultModelStatus(options?: {
+        headers: {
+            [name: string]: string;
+        };
+    }): Promise<{
+        response: http.IncomingMessage;
+        body: ModelSvcStatusResponse;
+    }>;
+    /**
      * Retrieves the details of a model by its ID.  the Requires `model.view` permission.
      * @summary Get a Model
      * @param modelId Model ID
@@ -52,9 +64,9 @@ export declare class ModelSvcApi {
     /**
      * Retrieves the status of a model by ID.  Requires the `model-svc:model:view` permission.
      * @summary Get Model Status
-     * @param id Model ID
+     * @param modelId Model ID
      */
-    getModelStatus(id: string, options?: {
+    getModelStatus(modelId: string, options?: {
         headers: {
             [name: string]: string;
         };
@@ -63,7 +75,7 @@ export declare class ModelSvcApi {
         body: ModelSvcStatusResponse;
     }>;
     /**
-     * Retrieves a list of models after checking authorization Requires \"model.view\" permission.
+     * Retrieves a list of models.  Requires `model-svc:model:view` permission.
      * @summary List Models
      */
     listModels(options?: {
