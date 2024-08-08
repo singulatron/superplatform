@@ -76,16 +76,16 @@ export class UserService {
 		}
 
 		try {
-			const rsp = await this.readUserByToken(this.token);
 			this.userService = new UserSvcApi(
 				new Configuration({
 					basePath: this.localtron.addr(),
 					apiKey: this.localtron.token(),
 				})
 			);
+			const rsp = await this.readUserByToken(this.token);
 			this.userSubject.next(rsp.user!);
-		} catch {
-			console.error('Cannot read user even with a token');
+		} catch (error) {
+			console.error('Cannot read user even with a token', error);
 			this.router.navigateByUrl('/login');
 		}
 	}

@@ -124,7 +124,7 @@ class ModelSvcApi extends runtime.BaseAPI {
         });
     }
     /**
-     * Retrieves a list of models after checking authorization Requires \"model.view\" permission.
+     * Retrieves a list of models.  Requires `model-svc:model:view` permission.
      * List Models
      */
     listModelsRaw(initOverrides) {
@@ -136,7 +136,7 @@ class ModelSvcApi extends runtime.BaseAPI {
             }
             const response = yield this.request({
                 path: `/model-svc/models`,
-                method: 'GET',
+                method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,
             }, initOverrides);
@@ -144,7 +144,7 @@ class ModelSvcApi extends runtime.BaseAPI {
         });
     }
     /**
-     * Retrieves a list of models after checking authorization Requires \"model.view\" permission.
+     * Retrieves a list of models.  Requires `model-svc:model:view` permission.
      * List Models
      */
     listModels(initOverrides) {
@@ -198,7 +198,7 @@ class ModelSvcApi extends runtime.BaseAPI {
                 headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
             }
             const response = yield this.request({
-                path: `/model-svc/default/start`,
+                path: `/model-svc/default-model/start`,
                 method: 'PUT',
                 headers: headerParameters,
                 query: queryParameters,

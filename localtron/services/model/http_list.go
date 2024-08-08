@@ -19,8 +19,9 @@ import (
 // List godoc
 // @ID listModels
 // @Summary List Models
-// @Description Retrieves a list of models after checking authorization
-// @Description Requires "model.view" permission.
+// @Description Retrieves a list of models.
+// @Description
+// @Description Requires `model-svc:model:view` permission.
 // @Tags Model Svc
 // @Accept json
 // @Produce json
@@ -28,7 +29,7 @@ import (
 // @Failure 401 {object} model.ErrorResponse "Unauthorized"
 // @Failure 500 {object} model.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
-// @Router /model-svc/models [get]
+// @Router /model-svc/models [post]
 func (ms *ModelService) List(
 	w http.ResponseWriter,
 	r *http.Request,

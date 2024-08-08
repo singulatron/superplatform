@@ -2062,36 +2062,7 @@ paths:
       summary: Update Generic Objects
       tags:
       - Generic Svc
-  /model-svc/default-model/status:
-    get:
-      consumes:
-      - application/json
-      description: |-
-        Retrieves the status of the default model.
-
-        Requires the `model-svc:model:view` permission.
-      operationId: getDefaultModelStatus
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Model status retrieved successfully
-          schema:
-            $ref: '#/definitions/model_svc.StatusResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            type: string
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      security:
-      - BearerAuth: []
-      summary: Get Default Model Status
-      tags:
-      - Model Svc
-  /model-svc/default/start:
+  /model-svc/default-model/start:
     put:
       consumes:
       - application/json
@@ -2122,6 +2093,35 @@ paths:
       security:
       - BearerAuth: []
       summary: Start the Default Model
+      tags:
+      - Model Svc
+  /model-svc/default-model/status:
+    get:
+      consumes:
+      - application/json
+      description: |-
+        Retrieves the status of the default model.
+
+        Requires the `model-svc:model:view` permission.
+      operationId: getDefaultModelStatus
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Model status retrieved successfully
+          schema:
+            $ref: '#/definitions/model_svc.StatusResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Get Default Model Status
       tags:
       - Model Svc
   /model-svc/model/{modelId}:
@@ -2268,12 +2268,13 @@ paths:
       tags:
       - Model Svc
   /model-svc/models:
-    get:
+    post:
       consumes:
       - application/json
       description: |-
-        Retrieves a list of models after checking authorization
-        Requires "model.view" permission.
+        Retrieves a list of models.
+
+        Requires `model-svc:model:view` permission.
       operationId: listModels
       produces:
       - application/json
@@ -2359,42 +2360,6 @@ paths:
       summary: Subscribe to Prompt
       tags:
       - Prompt Svc
-  /prompt-svc/list:
-    post:
-      consumes:
-      - application/json
-      description: List prompts that satisfy a query.
-      operationId: getPrompts
-      parameters:
-      - description: List Prompts Request
-        in: body
-        name: request
-        schema:
-          $ref: '#/definitions/prompt_svc.ListPromptsRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/prompt_svc.ListPromptsResponse'
-        "400":
-          description: Invalid JSON
-          schema:
-            $ref: '#/definitions/prompt_svc.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/prompt_svc.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/prompt_svc.ErrorResponse'
-      security:
-      - BearerAuth: []
-      summary: List Prompts
-      tags:
-      - Prompt Svc
   /prompt-svc/prompt:
     post:
       consumes:
@@ -2431,6 +2396,42 @@ paths:
       security:
       - BearerAuth: []
       summary: Add Prompt
+      tags:
+      - Prompt Svc
+  /prompt-svc/prompts:
+    post:
+      consumes:
+      - application/json
+      description: List prompts that satisfy a query.
+      operationId: getPrompts
+      parameters:
+      - description: List Prompts Request
+        in: body
+        name: request
+        schema:
+          $ref: '#/definitions/prompt_svc.ListPromptsRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/prompt_svc.ListPromptsResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/prompt_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/prompt_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/prompt_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: List Prompts
       tags:
       - Prompt Svc
   /prompt-svc/remove:

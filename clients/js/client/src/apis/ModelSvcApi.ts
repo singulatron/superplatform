@@ -163,7 +163,7 @@ export class ModelSvcApi extends runtime.BaseAPI {
     }
 
     /**
-     * Retrieves a list of models after checking authorization Requires \"model.view\" permission.
+     * Retrieves a list of models.  Requires `model-svc:model:view` permission.
      * List Models
      */
     async listModelsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ModelSvcListResponse>> {
@@ -177,7 +177,7 @@ export class ModelSvcApi extends runtime.BaseAPI {
 
         const response = await this.request({
             path: `/model-svc/models`,
-            method: 'GET',
+            method: 'POST',
             headers: headerParameters,
             query: queryParameters,
         }, initOverrides);
@@ -186,7 +186,7 @@ export class ModelSvcApi extends runtime.BaseAPI {
     }
 
     /**
-     * Retrieves a list of models after checking authorization Requires \"model.view\" permission.
+     * Retrieves a list of models.  Requires `model-svc:model:view` permission.
      * List Models
      */
     async listModels(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ModelSvcListResponse> {
@@ -247,7 +247,7 @@ export class ModelSvcApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/model-svc/default/start`,
+            path: `/model-svc/default-model/start`,
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,

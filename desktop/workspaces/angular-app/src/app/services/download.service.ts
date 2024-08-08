@@ -37,13 +37,13 @@ export class DownloadService {
 	) {
 		this.init();
 		this.userService.user$.pipe(first()).subscribe(() => {
-			this.loggedInInit();
 			this.downloadService = new DownloadSvcApi(
 				new Configuration({
 					basePath: this.localtron.addr(),
 					apiKey: this.localtron.token(),
 				})
 			);
+			this.loggedInInit();
 		});
 	}
 

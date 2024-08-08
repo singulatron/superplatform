@@ -81,7 +81,7 @@ class PromptSvcApi extends runtime.BaseAPI {
                 headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
             }
             const response = yield this.request({
-                path: `/prompt-svc/list`,
+                path: `/prompt-svc/prompts`,
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,

@@ -116,7 +116,7 @@ export class PromptSvcApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/prompt-svc/list`,
+            path: `/prompt-svc/prompts`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,

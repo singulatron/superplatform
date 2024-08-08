@@ -48,14 +48,15 @@ export class ChatService {
 		private userService: UserService,
 		private firehoseService: FirehoseService
 	) {
+		this.chatService = new ChatSvcApi(
+			new Configuration({
+				basePath: this.localtron.addr(),
+				apiKey: this.localtron.token(),
+			})
+		);
+		
 		this.userService.user$.pipe(first()).subscribe(() => {
 			this.init();
-			this.chatService = new ChatSvcApi(
-				new Configuration({
-					basePath: this.localtron.addr(),
-					apiKey: this.localtron.token(),
-				})
-			);
 		});
 	}
 

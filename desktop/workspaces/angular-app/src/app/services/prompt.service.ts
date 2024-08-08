@@ -58,14 +58,15 @@ export class PromptService {
 		private userService: UserService,
 		private firehoseService: FirehoseService
 	) {
+		this.promptService = new PromptSvcApi(
+			new Configuration({
+				basePath: this.localtron.addr(),
+				apiKey: this.localtron.token(),
+			})
+		);
+
 		this.userService.user$.pipe(first()).subscribe(() => {
 			this.init();
-			this.promptService = new PromptSvcApi(
-				new Configuration({
-					basePath: this.localtron.addr(),
-					apiKey: this.localtron.token(),
-				})
-			);
 		});
 	}
 

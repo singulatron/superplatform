@@ -58,12 +58,12 @@ export declare class ModelSvcApi extends runtime.BaseAPI {
      */
     getModelStatus(requestParameters: GetModelStatusRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ModelSvcStatusResponse>;
     /**
-     * Retrieves a list of models after checking authorization Requires \"model.view\" permission.
+     * Retrieves a list of models.  Requires `model-svc:model:view` permission.
      * List Models
      */
     listModelsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ModelSvcListResponse>>;
     /**
-     * Retrieves a list of models after checking authorization Requires \"model.view\" permission.
+     * Retrieves a list of models.  Requires `model-svc:model:view` permission.
      * List Models
      */
     listModels(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ModelSvcListResponse>;

@@ -37,13 +37,13 @@ export class ConfigService {
 	) {
 		this.init();
 		this.userService.user$.pipe(first()).subscribe(() => {
-			this.loggedInInit();
 			this.configService = new ConfigSvcApi(
 				new Configuration({
 					basePath: this.localtron.addr(),
 					apiKey: this.localtron.token(),
 				})
 			);
+			this.loggedInInit();
 		});
 	}
 
@@ -65,6 +65,7 @@ export class ConfigService {
 			this.lastConfig = rsp?.config!;
 			this.onConfigUpdateSubject.next(rsp?.config as Config);
 		} catch (error) {
+			console.log(error);
 			console.error('Error in pollConfig', {
 				error: JSON.stringify(error),
 			});

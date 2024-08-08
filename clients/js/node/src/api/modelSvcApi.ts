@@ -302,7 +302,7 @@ export class ModelSvcApi {
         });
     }
     /**
-     * Retrieves a list of models after checking authorization Requires \"model.view\" permission.
+     * Retrieves a list of models.  Requires `model-svc:model:view` permission.
      * @summary List Models
      */
     public async listModels (options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: ModelSvcListResponse;  }> {
@@ -323,7 +323,7 @@ export class ModelSvcApi {
         let localVarUseFormData = false;
 
         let localVarRequestOptions: localVarRequest.Options = {
-            method: 'GET',
+            method: 'POST',
             qs: localVarQueryParameters,
             headers: localVarHeaderParams,
             uri: localVarPath,
@@ -443,7 +443,7 @@ export class ModelSvcApi {
      * @summary Start the Default Model
      */
     public async startDefaultModel (options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: object;  }> {
-        const localVarPath = this.basePath + '/model-svc/default/start';
+        const localVarPath = this.basePath + '/model-svc/default-model/start';
         let localVarQueryParameters: any = {};
         let localVarHeaderParams: any = (<any>Object).assign({}, this._defaultHeaders);
         const produces = ['application/json'];

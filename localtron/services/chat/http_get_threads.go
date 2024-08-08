@@ -45,14 +45,6 @@ func (a *ChatService) GetThreads(
 		return
 	}
 
-	req := chat.GetThreadsRequest{}
-	err = json.NewDecoder(r.Body).Decode(&req)
-	if err != nil {
-		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
-		return
-	}
-	defer r.Body.Close()
-
 	threads, err := a.getThreads(rsp.User.Id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

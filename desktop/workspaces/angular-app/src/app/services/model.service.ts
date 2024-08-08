@@ -44,6 +44,13 @@ export class ModelService {
 		private localtron: LocaltronService,
 		private dockerService: DockerService
 	) {
+		this.modelService = new ModelSvcApi(
+			new Configuration({
+				basePath: this.localtron.addr(),
+				apiKey: this.localtron.token(),
+			})
+		);
+
 		// @todo nothing to trigger model start so we resolve to polling
 		setInterval(() => {
 			this.init();
@@ -80,14 +87,6 @@ export class ModelService {
 				return;
 			}
 			this.initInProgress = true;
-			if (!this.modelService) {
-				this.modelService = new ModelSvcApi(
-					new Configuration({
-						basePath: this.localtron.addr(),
-						apiKey: this.localtron.token(),
-					})
-				);
-			}
 
 			this.models = await this.getModels();
 			const rsp = await this.modelStatus();
@@ -136,7 +135,7 @@ export class ModelService {
 	async makeDefault(id: string) {
 		this.modelService.makeDefault({
 			modelId: id,
-		})
+		});
 	}
 }
 

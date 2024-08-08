@@ -1442,48 +1442,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/model-svc/default-model/status": {
-            "get": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Retrieves the status of the default model.\n\nRequires the ` + "`" + `model-svc:model:view` + "`" + ` permission.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Model Svc"
-                ],
-                "summary": "Get Default Model Status",
-                "operationId": "getDefaultModelStatus",
-                "responses": {
-                    "200": {
-                        "description": "Model status retrieved successfully",
-                        "schema": {
-                            "$ref": "#/definitions/model_svc.StatusResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/model-svc/default/start": {
+        "/model-svc/default-model/start": {
             "put": {
                 "security": [
                     {
@@ -1525,6 +1484,47 @@ const docTemplate = `{
                         "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/model_svc.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/model-svc/default-model/status": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieves the status of the default model.\n\nRequires the ` + "`" + `model-svc:model:view` + "`" + ` permission.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Model Svc"
+                ],
+                "summary": "Get Default Model Status",
+                "operationId": "getDefaultModelStatus",
+                "responses": {
+                    "200": {
+                        "description": "Model status retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/model_svc.StatusResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }
@@ -1743,13 +1743,13 @@ const docTemplate = `{
             }
         },
         "/model-svc/models": {
-            "get": {
+            "post": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "Retrieves a list of models after checking authorization\nRequires \"model.view\" permission.",
+                "description": "Retrieves a list of models.\n\nRequires ` + "`" + `model-svc:model:view` + "`" + ` permission.",
                 "consumes": [
                     "application/json"
                 ],
@@ -1840,63 +1840,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/prompt-svc/list": {
-            "post": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "List prompts that satisfy a query.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Prompt Svc"
-                ],
-                "summary": "List Prompts",
-                "operationId": "getPrompts",
-                "parameters": [
-                    {
-                        "description": "List Prompts Request",
-                        "name": "request",
-                        "in": "body",
-                        "schema": {
-                            "$ref": "#/definitions/prompt_svc.ListPromptsRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/prompt_svc.ListPromptsResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid JSON",
-                        "schema": {
-                            "$ref": "#/definitions/prompt_svc.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/prompt_svc.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/prompt_svc.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
         "/prompt-svc/prompt": {
             "post": {
                 "security": [
@@ -1932,6 +1875,63 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/prompt_svc.AddPromptResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/prompt_svc.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/prompt_svc.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/prompt_svc.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/prompt-svc/prompts": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "List prompts that satisfy a query.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Prompt Svc"
+                ],
+                "summary": "List Prompts",
+                "operationId": "getPrompts",
+                "parameters": [
+                    {
+                        "description": "List Prompts Request",
+                        "name": "request",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/prompt_svc.ListPromptsRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/prompt_svc.ListPromptsResponse"
                         }
                     },
                     "400": {

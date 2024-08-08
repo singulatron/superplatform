@@ -172,7 +172,7 @@ export class PromptSvcApi {
      * @param request List Prompts Request
      */
     public async getPrompts (request?: PromptSvcListPromptsRequest, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: PromptSvcListPromptsResponse;  }> {
-        const localVarPath = this.basePath + '/prompt-svc/list';
+        const localVarPath = this.basePath + '/prompt-svc/prompts';
         let localVarQueryParameters: any = {};
         let localVarHeaderParams: any = (<any>Object).assign({}, this._defaultHeaders);
         const produces = ['application/json'];

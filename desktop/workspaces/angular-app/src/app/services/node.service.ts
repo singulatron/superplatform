@@ -25,14 +25,15 @@ export class NodeService {
 		private localtron: LocaltronService,
 		private userService: UserService
 	) {
+		this.nodeService = new NodeSvcApi(
+			new Configuration({
+				basePath: this.localtron.addr(),
+				apiKey: this.localtron.token(),
+			})
+		);
+
 		this.userService.user$.pipe(first()).subscribe(() => {
 			this.init();
-			this.nodeService = new NodeSvcApi(
-				new Configuration({
-					basePath: this.localtron.addr(),
-					apiKey: this.localtron.token(),
-				})
-			);
 		});
 	}
 
