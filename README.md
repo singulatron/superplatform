@@ -27,11 +27,11 @@ Run open-source AI models privately on your own infrastructure, ensuring that yo
 
 ### Quickly Build Backendless AI Apps [x]
 
-Build backendless application by using Singulatron as a database and AI prompting API.
+Build backendless application by using Singulatron as a database and AI prompting API. Like Firebase, but with a focus on AI.
 
 ### Develop Microservices-Based AI Applications [ ]
 
-Singulatron itself is built on a microservices architecture. The platform's built-in services communicate with each other through the same APIs that you'll use to build apps on top of Singulatron.
+Build your own backend services around Singulatron, which itself is built on a microservices architecture. Run these services outside or inside the Singulatron platform.
 
 ### Deploy Third-Party AI Apps Easily [ ]
 
