@@ -89,8 +89,8 @@ export class ConfigSvcApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/config-svc/save`,
-            method: 'POST',
+            path: `/config-svc/config`,
+            method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
             body: ConfigSvcSaveConfigRequestToJSON(requestParameters['request']),

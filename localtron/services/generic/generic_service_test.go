@@ -204,7 +204,7 @@ func TestCreate(t *testing.T) {
 			},
 		}
 
-		err = user2Router.Delete(context.Background(), "generic-svc", "/objects/delete", req, nil)
+		err = user2Router.Post(context.Background(), "generic-svc", "/objects/delete", req, nil)
 		// no unauthorized but no error either...
 		require.NoError(t, err)
 	})
