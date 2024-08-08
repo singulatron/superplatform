@@ -1454,8 +1454,7 @@ paths:
       summary: Get Config
       tags:
       - Config Svc
-  /config-svc/save:
-    post:
+    put:
       consumes:
       - application/json
       description: Save the provided configuration to the server

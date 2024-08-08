@@ -531,10 +531,8 @@ const docTemplate = `{
                         }
                     }
                 }
-            }
-        },
-        "/config-svc/save": {
-            "post": {
+            },
+            "put": {
                 "security": [
                     {
                         "BearerAuth": []

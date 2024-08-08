@@ -11,6 +11,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 
 	"github.com/gorilla/mux"
 	model "github.com/singulatron/singulatron/localtron/services/model/types"
@@ -47,8 +48,13 @@ func (ms *ModelService) MakeDefault(
 	}
 
 	vars := mux.Vars(r)
+	modelId, err := url.PathUnescape(vars["modelId"])
+	if err != nil {
+		http.Error(w, "Model ID in path is not URL encoded", http.StatusBadRequest)
+		return
+	}
 
-	err = ms.makeDefault(vars["modelId"])
+	err = ms.makeDefault(modelId)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

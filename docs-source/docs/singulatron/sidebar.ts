@@ -68,24 +68,12 @@ const sidebar: SidebarsConfig = {
           type: "doc",
           id: "singulatron/get-config",
           label: "Get Config",
-          className: "api-method post",
+          className: "api-method get",
         },
         {
           type: "doc",
           id: "singulatron/save-config",
           label: "Save Config",
-          className: "api-method post",
-        },
-      ],
-    },
-    {
-      type: "category",
-      label: "Docker Service",
-      items: [
-        {
-          type: "doc",
-          id: "singulatron/launch-container",
-          label: "Launch a Docker Container",
           className: "api-method put",
         },
       ],
@@ -94,6 +82,12 @@ const sidebar: SidebarsConfig = {
       type: "category",
       label: "Docker Svc",
       items: [
+        {
+          type: "doc",
+          id: "singulatron/launch-container",
+          label: "Launch a Docker Container",
+          className: "api-method put",
+        },
         {
           type: "doc",
           id: "singulatron/is-running",
@@ -174,9 +168,9 @@ const sidebar: SidebarsConfig = {
       items: [
         {
           type: "doc",
-          id: "singulatron/delete-object",
-          label: "Delete a Generic Object",
-          className: "api-method delete",
+          id: "singulatron/create-object",
+          label: "Create a Generic Object",
+          className: "api-method post",
         },
         {
           type: "doc",
@@ -186,14 +180,14 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
-          id: "singulatron/create-object",
-          label: "Create a Generic Object",
+          id: "singulatron/query",
+          label: "Find Generic Objects",
           className: "api-method post",
         },
         {
           type: "doc",
-          id: "singulatron/query",
-          label: "Find Generic Objects",
+          id: "singulatron/delete-objects",
+          label: "Delete a Generic Object",
           className: "api-method post",
         },
         {
@@ -216,8 +210,8 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
-          id: "singulatron/get-model-status",
-          label: "Get Model Status",
+          id: "singulatron/get-default-model-status",
+          label: "Get Default Model Status",
           className: "api-method get",
         },
         {
@@ -240,9 +234,27 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
+          id: "singulatron/get-model-status",
+          label: "Get Model Status",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
           id: "singulatron/list-models",
           label: "List Models",
-          className: "api-method get",
+          className: "api-method post",
+        },
+      ],
+    },
+    {
+      type: "category",
+      label: "Node Svc",
+      items: [
+        {
+          type: "doc",
+          id: "singulatron/list-nodes",
+          label: "List Nodes",
+          className: "api-method post",
         },
       ],
     },
@@ -258,14 +270,14 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
-          id: "singulatron/get-prompts",
-          label: "List Prompts",
+          id: "singulatron/add-prompt",
+          label: "Add Prompt",
           className: "api-method post",
         },
         {
           type: "doc",
-          id: "singulatron/add-prompt",
-          label: "Add Prompt",
+          id: "singulatron/get-prompts",
+          label: "List Prompts",
           className: "api-method post",
         },
         {
@@ -372,7 +384,13 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
-          id: "singulatron/get-user-by-token",
+          id: "singulatron/save-user-profile",
+          label: "Save User Profile",
+          className: "api-method put",
+        },
+        {
+          type: "doc",
+          id: "singulatron/read-user-by-token",
           label: "Read User by Token",
           className: "api-method post",
         },

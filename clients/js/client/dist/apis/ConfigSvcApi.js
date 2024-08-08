@@ -72,8 +72,8 @@ export class ConfigSvcApi extends runtime.BaseAPI {
                 headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
             }
             const response = yield this.request({
-                path: `/config-svc/save`,
-                method: 'POST',
+                path: `/config-svc/config`,
+                method: 'PUT',
                 headers: headerParameters,
                 query: queryParameters,
                 body: ConfigSvcSaveConfigRequestToJSON(requestParameters['request']),

@@ -161,7 +161,7 @@ export class ConfigSvcApi {
      * @param request Save Config Request
      */
     public async saveConfig (request: ConfigSvcSaveConfigRequest, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: object;  }> {
-        const localVarPath = this.basePath + '/config-svc/save';
+        const localVarPath = this.basePath + '/config-svc/config';
         let localVarQueryParameters: any = {};
         let localVarHeaderParams: any = (<any>Object).assign({}, this._defaultHeaders);
         const produces = ['application/json'];
@@ -183,7 +183,7 @@ export class ConfigSvcApi {
         let localVarUseFormData = false;
 
         let localVarRequestOptions: localVarRequest.Options = {
-            method: 'POST',
+            method: 'PUT',
             qs: localVarQueryParameters,
             headers: localVarHeaderParams,
             uri: localVarPath,

@@ -525,10 +525,8 @@
                         }
                     }
                 }
-            }
-        },
-        "/config-svc/save": {
-            "post": {
+            },
+            "put": {
                 "security": [
                     {
                         "BearerAuth": []

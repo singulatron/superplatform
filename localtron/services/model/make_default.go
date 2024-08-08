@@ -31,7 +31,7 @@ func (ms *ModelService) makeDefault(modelId string) error {
 
 	rsp.Config.Model.CurrentModelId = modelId
 
-	return ms.router.Post(context.Background(), "config", "/save", &configtypes.SaveConfigRequest{
+	return ms.router.Put(context.Background(), "config-svc", "/config", &configtypes.SaveConfigRequest{
 		Config: rsp.Config,
 	}, nil)
 }
