@@ -56,6 +56,34 @@ Singulatron is designed to make deploying third-party AI applications straightfo
 
 See [this page](https://superplatform.ai/docs/category/start) to help you get started.
 
+## Main Services
+
+https://superplatform.ai/docs/category/singulatron-api
+
+### Download svc
+
+Start, pause, restart large file downloads to enable you to manage your AI models.
+
+### Prompt svc
+
+Sync or async prompting. Dump tens of thousands of prompts into the system and let the prompt queue process it.
+
+### Chat svc
+
+Manage threads, messages, assets (generated images etc.).
+
+### User svc
+
+Role-based access control, JWT, fine tuned permissions and a unique ownership model that lets you build microservices based AI apps.
+
+### Node svc
+
+Get information about your nodes and GPUs like temperature, VRAM usage etc.
+
+### Generic svc
+
+A generic datastore service that lets you piggyback on Singulatron's database. Lets you build backendless applications on top of Singulatorn. Think Firebase but for AI.
+
 ## Run On Your Laptop/PC
 
 Download as a binary for your laptop or PC for Windows or Linux from the website: https://singulatron.com/home  
