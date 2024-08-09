@@ -59,7 +59,7 @@ docker compose up
 
 ## Once it's running
 
-After the containers successfully start, you can go to `127.0.0.1:3901` and log in with the [Default Credentials](/docs/start/using#default-credentials).
+After the containers successfully start, you can go to `127.0.0.1:3901` and log in with the [Default Credentials](/docs/running/using#default-credentials).
 
 Please keep in mind that this will store data locally on your machine in as gzipped JSON because Singulatron defaults to local file storage.
 
