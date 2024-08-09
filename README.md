@@ -60,13 +60,13 @@ See [this page](https://superplatform.ai/docs/category/start) to help you get st
 
 https://superplatform.ai/docs/category/singulatron-api
 
-### Download svc
-
-Start, pause, restart large file downloads to enable you to manage your AI models.
-
 ### Prompt svc
 
 Sync or async, streamed or request/response prompting. Dump tens of thousands of prompts into the system and let the prompt queue process it.
+
+### Download svc
+
+Start, pause, restart large file downloads to enable you to manage your AI models.
 
 ### Chat svc
 
