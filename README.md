@@ -66,7 +66,7 @@ Start, pause, restart large file downloads to enable you to manage your AI model
 
 ### Prompt svc
 
-Sync or async prompting. Dump tens of thousands of prompts into the system and let the prompt queue process it.
+Sync or async, streamed or request/response prompting. Dump tens of thousands of prompts into the system and let the prompt queue process it.
 
 ### Chat svc
 
