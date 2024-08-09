@@ -1,7 +1,7 @@
 ---
 sidebar_position: 1
 tags:
-  - test
+  - intro
 ---
 
 # Welcome to Singulatron
@@ -14,7 +14,7 @@ It allows you to self-host and work with LLMs and other AI technologies, offerin
 
 ## It lets you:
 
-### Run AI Models Privately [x]
+### Run AI Models [x]
 
 Run open-source AI models privately on your own infrastructure, ensuring that your data and operations remain fully under your control.
 
@@ -30,9 +30,9 @@ Singulatron itself is built on a microservices architecture. The platform's buil
 
 Singulatron is designed to make deploying third-party AI applications straightforward. With its focus on virtualization and containers (primarily Docker) and a microservices, API-first approach (using OpenAPI), Singulatron seamlessly integrates other applications into its ecosystem.
 
-## Start
+## Run
 
-To deploy Singulatron on your servers, or even to lauch on your own laptop, see [Start](./category/start/).
+To run Singulatron on your servers, or even to lauch on your own laptop, see [Start](./category/start/).
 
 ## Privacy Notice
 

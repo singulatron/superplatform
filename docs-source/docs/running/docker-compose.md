@@ -1,10 +1,13 @@
 ---
-sidebar_position: 1
+sidebar_position: 2
 tags:
-  - test
+  - run
+  - deploy
 ---
 
 # Docker Compose
+
+This deployment method is one step above local development in terms of sophistication. It’s suitable for a development server or simple production environments.
 
 This snippet will give you a quick idea about how to deploy the frontend and backend containers so they play nicely together:
 
