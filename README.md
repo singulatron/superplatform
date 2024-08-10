@@ -15,7 +15,7 @@
 ![backend build](https://github.com/singulatron/singulatron/actions/workflows/backend-build-github.yaml/badge.svg)
 ![frontend build](https://github.com/singulatron/singulatron/actions/workflows/frontend-container-build-github.yaml/badge.svg)
 
-Singulatron lets you host LLMs/AIs yourself and build apps with them.
+Singulatron lets you host AIs yourself and build apps with them.
 
 ## Primary Use Cases
 
