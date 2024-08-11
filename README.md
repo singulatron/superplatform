@@ -15,7 +15,7 @@
 ![backend build](https://github.com/singulatron/singulatron/actions/workflows/backend-build-github.yaml/badge.svg)
 ![frontend build](https://github.com/singulatron/singulatron/actions/workflows/frontend-container-build-github.yaml/badge.svg)
 
-Singulatron lets you self-host AI models and build apps with them.
+Singulatron enables you to self-host AI models, develop apps in any language, and leverage a microservices-based communal backend designed to support a diverse range of projects.
 
 ## Primary Use Cases
 
