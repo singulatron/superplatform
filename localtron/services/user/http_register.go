@@ -15,7 +15,7 @@ import (
 )
 
 // @ID register
-// @Summary Register a New User
+// @Summary Register
 // @Description Register a new user with a name, email, and password.
 // @Tags User Svc
 // @Accept json

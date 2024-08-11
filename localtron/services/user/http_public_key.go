@@ -15,7 +15,7 @@ import (
 )
 
 // @ID getPublicKey
-// @Summary Ge Public Key
+// @Summary Get Public Key
 // @Description Get the public key to descrypt the JWT.
 // @Tags User Svc
 // @Accept json
