@@ -36,6 +36,7 @@ func (s *UserService) Register(w http.ResponseWriter, r *http.Request) {
 
 	err = s.createUser(&user.User{
 		Name:     req.Name,
+		Slug:     req.Slug,
 		Contacts: []user.Contact{req.Contact},
 	}, req.Password, []string{user.RoleUser.Id})
 	if err != nil {

@@ -15,9 +15,9 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func (s *UserService) changePassword(email, currentPassword, newPassword string) error {
+func (s *UserService) changePassword(slug, currentPassword, newPassword string) error {
 	q := s.usersStore.Query(
-		datastore.Equal(datastore.Field("email"), email),
+		datastore.Equal(datastore.Field("slug"), slug),
 	)
 	userI, found, err := q.FindOne()
 	if err != nil {
@@ -42,9 +42,9 @@ func (s *UserService) changePassword(email, currentPassword, newPassword string)
 	return q.Update(user)
 }
 
-func (s *UserService) changePasswordAdmin(email, newPassword string) error {
+func (s *UserService) changePasswordAdmin(slug, newPassword string) error {
 	q := s.usersStore.Query(
-		datastore.Equal(datastore.Field("email"), email),
+		datastore.Equal(datastore.Field("slug"), slug),
 	)
 	userI, found, err := q.FindOne()
 	if err != nil {
