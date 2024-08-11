@@ -124,9 +124,9 @@ export class UserService {
 		return !!t;
 	}
 
-	login(email: string, password: string): Promise<UserSvcLoginResponse> {
+	login(slug: string, password: string): Promise<UserSvcLoginResponse> {
 		return this.userService.login({
-			request: { email: email, password: password },
+			request: { slug: slug, password: password },
 		});
 	}
 

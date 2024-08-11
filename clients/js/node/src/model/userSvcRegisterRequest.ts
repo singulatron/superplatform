@@ -11,19 +11,21 @@
  */
 
 import { RequestFile } from './models';
+import { UserSvcContact } from './userSvcContact';
 
 export class UserSvcRegisterRequest {
-    'email'?: string;
+    'contact'?: UserSvcContact;
     'name'?: string;
     'password'?: string;
+    'slug'?: string;
 
     static discriminator: string | undefined = undefined;
 
     static attributeTypeMap: Array<{name: string, baseName: string, type: string}> = [
         {
-            "name": "email",
-            "baseName": "email",
-            "type": "string"
+            "name": "contact",
+            "baseName": "contact",
+            "type": "UserSvcContact"
         },
         {
             "name": "name",
@@ -33,6 +35,11 @@ export class UserSvcRegisterRequest {
         {
             "name": "password",
             "baseName": "password",
+            "type": "string"
+        },
+        {
+            "name": "slug",
+            "baseName": "slug",
             "type": "string"
         }    ];
 

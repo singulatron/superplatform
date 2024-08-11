@@ -1,3 +1,5 @@
+import { UserSvcContactFromJSON, UserSvcContactToJSON } from './UserSvcContact.mjs';
+
 /* tslint:disable */
 /* eslint-disable */
 /**
@@ -25,14 +27,15 @@ function UserSvcUserFromJSONTyped(json, ignoreDiscriminator) {
         return json;
     }
     return {
+        'contact': json['contact'] == null ? undefined : (json['contact'].map(UserSvcContactFromJSON)),
         'createdAt': json['createdAt'] == null ? undefined : json['createdAt'],
         'deletedAt': json['deletedAt'] == null ? undefined : json['deletedAt'],
-        'email': json['email'] == null ? undefined : json['email'],
         'id': json['id'] == null ? undefined : json['id'],
-        'isService': json['isService'] == null ? undefined : json['isService'],
         'name': json['name'] == null ? undefined : json['name'],
+        'organizationIds': json['organizationIds'] == null ? undefined : json['organizationIds'],
         'passwordHash': json['passwordHash'] == null ? undefined : json['passwordHash'],
         'roleIds': json['roleIds'] == null ? undefined : json['roleIds'],
+        'slug': json['slug'] == null ? undefined : json['slug'],
         'updatedAt': json['updatedAt'] == null ? undefined : json['updatedAt'],
     };
 }
@@ -41,14 +44,15 @@ function UserSvcUserToJSON(value) {
         return value;
     }
     return {
+        'contact': value['contact'] == null ? undefined : (value['contact'].map(UserSvcContactToJSON)),
         'createdAt': value['createdAt'],
         'deletedAt': value['deletedAt'],
-        'email': value['email'],
         'id': value['id'],
-        'isService': value['isService'],
         'name': value['name'],
+        'organizationIds': value['organizationIds'],
         'passwordHash': value['passwordHash'],
         'roleIds': value['roleIds'],
+        'slug': value['slug'],
         'updatedAt': value['updatedAt'],
     };
 }

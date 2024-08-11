@@ -38,7 +38,7 @@
 							>
 								<ion-label>
 									{{ users[i].name }}
-									<span style="color: #666">({{ users[i].email }})</span>
+									<span style="color: #666">({{ users[i].slug }})</span>
 								</ion-label>
 								<ion-icon
 									(click)="deleteUser($event, users[i].id || '')"

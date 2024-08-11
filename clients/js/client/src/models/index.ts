@@ -77,6 +77,7 @@ export * from './PromptSvcRemovePromptRequest';
 export * from './UserSvcAuthToken';
 export * from './UserSvcChangePasswordAdminRequest';
 export * from './UserSvcChangePasswordRequest';
+export * from './UserSvcContact';
 export * from './UserSvcCreateRoleRequest';
 export * from './UserSvcCreateRoleResponse';
 export * from './UserSvcCreateUserRequest';

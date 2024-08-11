@@ -20,13 +20,13 @@ export interface UserSvcSaveProfileRequest {
      * @type {string}
      * @memberof UserSvcSaveProfileRequest
      */
-    email?: string;
+    name?: string;
     /**
      *
      * @type {string}
      * @memberof UserSvcSaveProfileRequest
      */
-    name?: string;
+    slug?: string;
 }
 /**
  * Check if a given object implements the UserSvcSaveProfileRequest interface.

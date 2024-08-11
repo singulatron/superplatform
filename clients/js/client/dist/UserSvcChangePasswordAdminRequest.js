@@ -27,8 +27,8 @@ function UserSvcChangePasswordAdminRequestFromJSONTyped(json, ignoreDiscriminato
         return json;
     }
     return {
-        'email': json['email'] == null ? undefined : json['email'],
         'newPassword': json['newPassword'] == null ? undefined : json['newPassword'],
+        'slug': json['slug'] == null ? undefined : json['slug'],
     };
 }
 function UserSvcChangePasswordAdminRequestToJSON(value) {
@@ -36,8 +36,8 @@ function UserSvcChangePasswordAdminRequestToJSON(value) {
         return value;
     }
     return {
-        'email': value['email'],
         'newPassword': value['newPassword'],
+        'slug': value['slug'],
     };
 }
 

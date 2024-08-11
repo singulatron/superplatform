@@ -325,13 +325,13 @@ const sidebar: SidebarsConfig = {
         {
           type: "doc",
           id: "singulatron/get-public-key",
-          label: "Ge Public Key",
+          label: "Get Public Key",
           className: "api-method get",
         },
         {
           type: "doc",
           id: "singulatron/register",
-          label: "Register a New User",
+          label: "Register",
           className: "api-method post",
         },
         {

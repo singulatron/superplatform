@@ -79,7 +79,7 @@ export class UsersComponent {
 
 		this.queryParser = new QueryParser();
 		this.queryParser.defaultConditionFunc = (value: any): Condition => {
-			return contains(fields(['name', 'email']), value);
+			return contains(fields(['name', 'slug']), value);
 		};
 
 		this.userService.user$.pipe(first()).subscribe(() => {
@@ -174,7 +174,7 @@ export class UsersComponent {
 	createUserForm(user: UserVisible): FormGroup {
 		return this.fb.group({
 			name: [user.name, Validators.required],
-			email: [user.email, [Validators.required]],
+			slug: [user.slug, [Validators.required]],
 			password: [''],
 			passwordConfirmation: [''],
 			createdAt: [{ value: user.createdAt, disabled: true }],
@@ -193,7 +193,7 @@ export class UsersComponent {
 			return;
 		}
 
-		const { name, email, password, passwordConfirmation } = userForm.value;
+		const { name, slug, password, passwordConfirmation } = userForm.value;
 
 		if (password && password !== passwordConfirmation) {
 			const toast = await this.toast.create({
@@ -209,11 +209,11 @@ export class UsersComponent {
 
 		try {
 			let toastMessage = `Profile ${name} saved`;
-			await this.userService.saveProfile(email, name);
+			await this.userService.saveProfile(slug, name);
 
 			if (password) {
 				toastMessage += ' and password changed';
-				await this.userService.changePasswordAdmin(email, password);
+				await this.userService.changePasswordAdmin(slug, password);
 			}
 
 			const toast = await this.toast.create({

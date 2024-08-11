@@ -24,7 +24,13 @@ export interface UserSvcIsAuthorizedRequest {
      * @type {Array<string>}
      * @memberof UserSvcIsAuthorizedRequest
      */
-    emailsGranted?: Array<string>;
+    contactsGranted?: Array<string>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof UserSvcIsAuthorizedRequest
+     */
+    slugsGranted?: Array<string>;
 }
 
 /**
@@ -44,7 +50,8 @@ export function UserSvcIsAuthorizedRequestFromJSONTyped(json: any, ignoreDiscrim
     }
     return {
         
-        'emailsGranted': json['emailsGranted'] == null ? undefined : json['emailsGranted'],
+        'contactsGranted': json['contactsGranted'] == null ? undefined : json['contactsGranted'],
+        'slugsGranted': json['slugsGranted'] == null ? undefined : json['slugsGranted'],
     };
 }
 
@@ -54,7 +61,8 @@ export function UserSvcIsAuthorizedRequestToJSON(value?: UserSvcIsAuthorizedRequ
     }
     return {
         
-        'emailsGranted': value['emailsGranted'],
+        'contactsGranted': value['contactsGranted'],
+        'slugsGranted': value['slugsGranted'],
     };
 }
 

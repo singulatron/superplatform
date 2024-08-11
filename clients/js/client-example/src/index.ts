@@ -5,7 +5,7 @@ async function start() {
   let userService = new UserSvcApi();
   let loginResponse = await userService.login({
     request: {
-      email: "singulatron",
+      slug: "singulatron",
       password: "changeme",
     },
   });
@@ -19,7 +19,7 @@ async function start() {
   const readTokenResponse = await userService.readUserByToken({
     body: { token: token! },
   });
-  if (readTokenResponse.user?.email !== "singulatron") {
+  if (readTokenResponse.user?.slug !== "singulatron") {
     process.exit(1);
   }
 

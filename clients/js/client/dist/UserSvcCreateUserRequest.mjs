@@ -1,4 +1,5 @@
 import { UserSvcUserFromJSON, UserSvcUserToJSON } from './UserSvcUser.mjs';
+import './UserSvcContact.mjs';
 
 /* tslint:disable */
 /* eslint-disable */

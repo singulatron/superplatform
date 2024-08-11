@@ -30,13 +30,13 @@ export interface UserSvcChangePasswordRequest {
      * @type {string}
      * @memberof UserSvcChangePasswordRequest
      */
-    email?: string;
+    newPassword?: string;
     /**
      * 
      * @type {string}
      * @memberof UserSvcChangePasswordRequest
      */
-    newPassword?: string;
+    slug?: string;
 }
 
 /**
@@ -57,8 +57,8 @@ export function UserSvcChangePasswordRequestFromJSONTyped(json: any, ignoreDiscr
     return {
         
         'currentPassword': json['currentPassword'] == null ? undefined : json['currentPassword'],
-        'email': json['email'] == null ? undefined : json['email'],
         'newPassword': json['newPassword'] == null ? undefined : json['newPassword'],
+        'slug': json['slug'] == null ? undefined : json['slug'],
     };
 }
 
@@ -69,8 +69,8 @@ export function UserSvcChangePasswordRequestToJSON(value?: UserSvcChangePassword
     return {
         
         'currentPassword': value['currentPassword'],
-        'email': value['email'],
         'newPassword': value['newPassword'],
+        'slug': value['slug'],
     };
 }
 

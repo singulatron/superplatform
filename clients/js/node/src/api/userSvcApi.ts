@@ -333,7 +333,7 @@ export class UserSvcApi {
         });
     }
     /**
-     * Create a new role. <b>The role ID must be prefixed by the callers username (email).</b> Eg. if the owner\'s email/username is `petstore-svc` the role should look like `petstore-svc:admin`. The user account who creates the role will become the owner of that role, and only the owner will be able to edit the role.  Requires the `user-svc:role:create` permission.
+     * Create a new role. <b>The role ID must be prefixed by the callers username (email).</b> Eg. if the owner\'s slug is `petstore-svc` the role should look like `petstore-svc:admin`. The user account who creates the role will become the owner of that role, and only the owner will be able to edit the role.  Requires the `user-svc:role:create` permission.
      * @summary Create a New Role
      * @param request Create Role Request
      */
@@ -694,7 +694,7 @@ export class UserSvcApi {
     }
     /**
      * Get the public key to descrypt the JWT.
-     * @summary Ge Public Key
+     * @summary Get Public Key
      */
     public async getPublicKey (options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: UserSvcGetPublicKeyResponse;  }> {
         const localVarPath = this.basePath + '/user-svc/public-key';
@@ -1108,7 +1108,7 @@ export class UserSvcApi {
     }
     /**
      * Register a new user with a name, email, and password.
-     * @summary Register a New User
+     * @summary Register
      * @param body Register Request
      */
     public async register (body: UserSvcRegisterRequest, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: object;  }> {

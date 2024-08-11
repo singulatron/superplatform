@@ -85,6 +85,7 @@ require('./UserSvcCreateRoleResponse.js');
 require('./UserSvcRole.js');
 require('./UserSvcCreateUserRequest.js');
 require('./UserSvcUser.js');
+require('./UserSvcContact.js');
 require('./UserSvcGetPermissionsResponse.js');
 require('./UserSvcPermission.js');
 require('./UserSvcGetPublicKeyResponse.js');

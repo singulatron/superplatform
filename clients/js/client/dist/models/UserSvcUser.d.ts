@@ -9,12 +9,19 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import type { UserSvcContact } from './UserSvcContact';
 /**
  *
  * @export
  * @interface UserSvcUser
  */
 export interface UserSvcUser {
+    /**
+     * Contacts are used for login and identification purposes.
+     * @type {Array<UserSvcContact>}
+     * @memberof UserSvcUser
+     */
+    contact?: Array<UserSvcContact>;
     /**
      *
      * @type {string}
@@ -28,29 +35,23 @@ export interface UserSvcUser {
      */
     deletedAt?: string;
     /**
-     * Email or username
-     * @type {string}
-     * @memberof UserSvcUser
-     */
-    email?: string;
-    /**
      *
      * @type {string}
      * @memberof UserSvcUser
      */
     id?: string;
     /**
-     *
-     * @type {boolean}
-     * @memberof UserSvcUser
-     */
-    isService?: boolean;
-    /**
-     *
+     * Full name of the organization
      * @type {string}
      * @memberof UserSvcUser
      */
     name?: string;
+    /**
+     * Many to many relationship between User and Organization
+     * @type {Array<string>}
+     * @memberof UserSvcUser
+     */
+    organizationIds?: Array<string>;
     /**
      *
      * @type {string}
@@ -63,6 +64,12 @@ export interface UserSvcUser {
      * @memberof UserSvcUser
      */
     roleIds?: Array<string>;
+    /**
+     * URL-friendly unique (inside the Singularon platform) identifier for the `user`.
+     * @type {string}
+     * @memberof UserSvcUser
+     */
+    slug?: string;
     /**
      *
      * @type {string}

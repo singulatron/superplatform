@@ -24,13 +24,19 @@ export interface UserSvcLoginRequest {
      * @type {string}
      * @memberof UserSvcLoginRequest
      */
-    email?: string;
+    contact?: string;
     /**
      * 
      * @type {string}
      * @memberof UserSvcLoginRequest
      */
     password?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserSvcLoginRequest
+     */
+    slug?: string;
 }
 
 /**
@@ -50,8 +56,9 @@ export function UserSvcLoginRequestFromJSONTyped(json: any, ignoreDiscriminator:
     }
     return {
         
-        'email': json['email'] == null ? undefined : json['email'],
+        'contact': json['contact'] == null ? undefined : json['contact'],
         'password': json['password'] == null ? undefined : json['password'],
+        'slug': json['slug'] == null ? undefined : json['slug'],
     };
 }
 
@@ -61,8 +68,9 @@ export function UserSvcLoginRequestToJSON(value?: UserSvcLoginRequest | null): a
     }
     return {
         
-        'email': value['email'],
+        'contact': value['contact'],
         'password': value['password'],
+        'slug': value['slug'],
     };
 }
 

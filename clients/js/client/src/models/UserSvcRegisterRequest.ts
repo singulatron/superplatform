@@ -13,6 +13,13 @@
  */
 
 import { mapValues } from '../runtime';
+import type { UserSvcContact } from './UserSvcContact';
+import {
+    UserSvcContactFromJSON,
+    UserSvcContactFromJSONTyped,
+    UserSvcContactToJSON,
+} from './UserSvcContact';
+
 /**
  * 
  * @export
@@ -21,10 +28,10 @@ import { mapValues } from '../runtime';
 export interface UserSvcRegisterRequest {
     /**
      * 
-     * @type {string}
+     * @type {UserSvcContact}
      * @memberof UserSvcRegisterRequest
      */
-    email?: string;
+    contact?: UserSvcContact;
     /**
      * 
      * @type {string}
@@ -37,6 +44,12 @@ export interface UserSvcRegisterRequest {
      * @memberof UserSvcRegisterRequest
      */
     password?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserSvcRegisterRequest
+     */
+    slug?: string;
 }
 
 /**
@@ -56,9 +69,10 @@ export function UserSvcRegisterRequestFromJSONTyped(json: any, ignoreDiscriminat
     }
     return {
         
-        'email': json['email'] == null ? undefined : json['email'],
+        'contact': json['contact'] == null ? undefined : UserSvcContactFromJSON(json['contact']),
         'name': json['name'] == null ? undefined : json['name'],
         'password': json['password'] == null ? undefined : json['password'],
+        'slug': json['slug'] == null ? undefined : json['slug'],
     };
 }
 
@@ -68,9 +82,10 @@ export function UserSvcRegisterRequestToJSON(value?: UserSvcRegisterRequest | nu
     }
     return {
         
-        'email': value['email'],
+        'contact': UserSvcContactToJSON(value['contact']),
         'name': value['name'],
         'password': value['password'],
+        'slug': value['slug'],
     };
 }
 

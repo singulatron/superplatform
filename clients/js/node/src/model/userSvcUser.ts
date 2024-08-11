@@ -11,27 +11,43 @@
  */
 
 import { RequestFile } from './models';
+import { UserSvcContact } from './userSvcContact';
 
 export class UserSvcUser {
+    /**
+    * Contacts are used for login and identification purposes.
+    */
+    'contact'?: Array<UserSvcContact>;
     'createdAt'?: string;
     'deletedAt'?: string;
-    /**
-    * Email or username
-    */
-    'email'?: string;
     'id'?: string;
-    'isService'?: boolean;
+    /**
+    * Full name of the organization
+    */
     'name'?: string;
+    /**
+    * Many to many relationship between User and Organization
+    */
+    'organizationIds'?: Array<string>;
     'passwordHash'?: string;
     /**
     * Many to many relationship between User and Role
     */
     'roleIds'?: Array<string>;
+    /**
+    * URL-friendly unique (inside the Singularon platform) identifier for the `user`.
+    */
+    'slug'?: string;
     'updatedAt'?: string;
 
     static discriminator: string | undefined = undefined;
 
     static attributeTypeMap: Array<{name: string, baseName: string, type: string}> = [
+        {
+            "name": "contact",
+            "baseName": "contact",
+            "type": "Array<UserSvcContact>"
+        },
         {
             "name": "createdAt",
             "baseName": "createdAt",
@@ -43,24 +59,19 @@ export class UserSvcUser {
             "type": "string"
         },
         {
-            "name": "email",
-            "baseName": "email",
-            "type": "string"
-        },
-        {
             "name": "id",
             "baseName": "id",
             "type": "string"
         },
         {
-            "name": "isService",
-            "baseName": "isService",
-            "type": "boolean"
-        },
-        {
             "name": "name",
             "baseName": "name",
             "type": "string"
+        },
+        {
+            "name": "organizationIds",
+            "baseName": "organizationIds",
+            "type": "Array<string>"
         },
         {
             "name": "passwordHash",
@@ -71,6 +82,11 @@ export class UserSvcUser {
             "name": "roleIds",
             "baseName": "roleIds",
             "type": "Array<string>"
+        },
+        {
+            "name": "slug",
+            "baseName": "slug",
+            "type": "string"
         },
         {
             "name": "updatedAt",

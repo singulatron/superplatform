@@ -13,20 +13,20 @@
 import { RequestFile } from './models';
 
 export class UserSvcChangePasswordAdminRequest {
-    'email'?: string;
     'newPassword'?: string;
+    'slug'?: string;
 
     static discriminator: string | undefined = undefined;
 
     static attributeTypeMap: Array<{name: string, baseName: string, type: string}> = [
         {
-            "name": "email",
-            "baseName": "email",
+            "name": "newPassword",
+            "baseName": "newPassword",
             "type": "string"
         },
         {
-            "name": "newPassword",
-            "baseName": "newPassword",
+            "name": "slug",
+            "baseName": "slug",
             "type": "string"
         }    ];
 

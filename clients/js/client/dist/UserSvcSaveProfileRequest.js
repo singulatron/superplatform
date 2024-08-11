@@ -27,8 +27,8 @@ function UserSvcSaveProfileRequestFromJSONTyped(json, ignoreDiscriminator) {
         return json;
     }
     return {
-        'email': json['email'] == null ? undefined : json['email'],
         'name': json['name'] == null ? undefined : json['name'],
+        'slug': json['slug'] == null ? undefined : json['slug'],
     };
 }
 function UserSvcSaveProfileRequestToJSON(value) {
@@ -36,8 +36,8 @@ function UserSvcSaveProfileRequestToJSON(value) {
         return value;
     }
     return {
-        'email': value['email'],
         'name': value['name'],
+        'slug': value['slug'],
     };
 }
 

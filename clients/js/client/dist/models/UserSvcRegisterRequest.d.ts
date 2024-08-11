@@ -9,6 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import type { UserSvcContact } from './UserSvcContact';
 /**
  *
  * @export
@@ -17,10 +18,10 @@
 export interface UserSvcRegisterRequest {
     /**
      *
-     * @type {string}
+     * @type {UserSvcContact}
      * @memberof UserSvcRegisterRequest
      */
-    email?: string;
+    contact?: UserSvcContact;
     /**
      *
      * @type {string}
@@ -33,6 +34,12 @@ export interface UserSvcRegisterRequest {
      * @memberof UserSvcRegisterRequest
      */
     password?: string;
+    /**
+     *
+     * @type {string}
+     * @memberof UserSvcRegisterRequest
+     */
+    slug?: string;
 }
 /**
  * Check if a given object implements the UserSvcRegisterRequest interface.

@@ -14,8 +14,8 @@ import { RequestFile } from './models';
 
 export class UserSvcChangePasswordRequest {
     'currentPassword'?: string;
-    'email'?: string;
     'newPassword'?: string;
+    'slug'?: string;
 
     static discriminator: string | undefined = undefined;
 
@@ -26,13 +26,13 @@ export class UserSvcChangePasswordRequest {
             "type": "string"
         },
         {
-            "name": "email",
-            "baseName": "email",
+            "name": "newPassword",
+            "baseName": "newPassword",
             "type": "string"
         },
         {
-            "name": "newPassword",
-            "baseName": "newPassword",
+            "name": "slug",
+            "baseName": "slug",
             "type": "string"
         }    ];
 

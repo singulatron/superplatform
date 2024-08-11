@@ -1,6 +1,7 @@
 'use strict';
 
 var UserSvcUser = require('./UserSvcUser.js');
+require('./UserSvcContact.js');
 
 /* tslint:disable */
 /* eslint-disable */

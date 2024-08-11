@@ -79,7 +79,7 @@ export class AddUserComponent implements OnInit {
 			return;
 		}
 
-		const { email, name, password, passwordConfirmation, roles } =
+		const { slug, name, password, passwordConfirmation, roles } =
 			this.addUserForm.value;
 
 		if (password !== passwordConfirmation) {
@@ -94,12 +94,12 @@ export class AddUserComponent implements OnInit {
 			return;
 		}
 
-		const user: User = { email, name, roleIds: roles };
+		const user: User = { slug, name, roleIds: roles };
 
 		try {
 			await this.userService.createUser(user, password, roles);
 			const toast = await this.toast.create({
-				message: `User ${email} saved`,
+				message: `User ${slug} saved`,
 				duration: 5000,
 				color: 'secondary',
 				position: 'middle',

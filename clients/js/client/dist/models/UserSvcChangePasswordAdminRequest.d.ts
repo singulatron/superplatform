@@ -20,13 +20,13 @@ export interface UserSvcChangePasswordAdminRequest {
      * @type {string}
      * @memberof UserSvcChangePasswordAdminRequest
      */
-    email?: string;
+    newPassword?: string;
     /**
      *
      * @type {string}
      * @memberof UserSvcChangePasswordAdminRequest
      */
-    newPassword?: string;
+    slug?: string;
 }
 /**
  * Check if a given object implements the UserSvcChangePasswordAdminRequest interface.
