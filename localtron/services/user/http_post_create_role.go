@@ -20,7 +20,7 @@ import (
 // @Summary Create a New Role
 // @Description Create a new role.
 // @Description <b>The role ID must be prefixed by the callers username (email).</b>
-// @Description Eg. if the owner's email/username is `petstore-svc` the role should look like `petstore-svc:admin`.
+// @Description Eg. if the owner's slug is `petstore-svc` the role should look like `petstore-svc:admin`.
 // @Description The user account who creates the role will become the owner of that role, and only the owner will be able to edit the role.
 // @Description
 // @Description Requires the `user-svc:role:create` permission.
@@ -35,7 +35,7 @@ import (
 // @Security BearerAuth
 // @Router /user-svc/role [post]
 func (s *UserService) CreateRole(w http.ResponseWriter, r *http.Request) {
-	rsp, err := s.isAuthorized(r, user.PermissionRoleCreate.Id, nil)
+	rsp, err := s.isAuthorized(r, user.PermissionRoleCreate.Id, nil, nil)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -49,7 +49,7 @@ func (s *UserService) CreateRole(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	ownerUsername := rsp.Email
+	ownerUsername := rsp.Slug
 	if !strings.HasPrefix(req.Name, ownerUsername) {
 		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
 		return

@@ -35,8 +35,8 @@ func (s *UserService) Register(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 
 	err = s.createUser(&user.User{
-		Name:  req.Name,
-		Email: req.Email,
+		Name:     req.Name,
+		Contacts: []user.Contact{req.Contact},
 	}, req.Password, []string{user.RoleUser.Id})
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

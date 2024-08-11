@@ -18,15 +18,15 @@ import (
 	"github.com/pkg/errors"
 )
 
-func (s *UserService) login(email, password string) (*usertypes.AuthToken, error) {
+func (s *UserService) login(slug, password string) (*usertypes.AuthToken, error) {
 	userI, found, err := s.usersStore.Query(
-		datastore.Equal(datastore.Field("email"), email),
+		datastore.Equal(datastore.Field("slug"), slug),
 	).FindOne()
 	if err != nil {
 		return nil, err
 	}
 	if !found {
-		return nil, errors.New("unauthorized")
+		return nil, errors.New("slug not found")
 	}
 	user := userI.(*usertypes.User)
 

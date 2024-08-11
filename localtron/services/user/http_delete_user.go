@@ -29,7 +29,7 @@ import (
 // @Security BearerAuth
 // @Router /user-svc/user/{userId} [delete]
 func (s *UserService) DeleteUser(w http.ResponseWriter, r *http.Request) {
-	_, err := s.isAuthorized(r, user.PermissionUserDelete.Id, nil)
+	_, err := s.isAuthorized(r, user.PermissionUserDelete.Id, nil, nil)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return

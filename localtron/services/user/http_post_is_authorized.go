@@ -56,7 +56,7 @@ func (s *UserService) IsAuthorized(
 		return
 	}
 
-	usr, err := s.isAuthorized(r, permissionId, req.EmailsGranted)
+	usr, err := s.isAuthorized(r, permissionId, req.SlugsGranted, nil)
 	if err != nil {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
@@ -71,19 +71,19 @@ func (s *UserService) IsAuthorized(
 }
 
 func (s *UserService) isAuthorized(r *http.Request, permissionId string,
-	emailsGranted []string) (*user.User, error) {
+	slugsGranted, contactsGranted []string) (*user.User, error) {
 	usr, err := s.getUserFromRequest(r)
 	if err != nil {
 		return nil, err
 	}
 
-	emailGrant := false
-	for _, v := range emailsGranted {
-		if usr.Email == v {
-			emailGrant = true
+	slugGrant := false
+	for _, v := range slugsGranted {
+		if usr.Slug == v {
+			slugGrant = true
 		}
 	}
-	if emailGrant {
+	if slugGrant {
 		return usr, nil
 	}
 

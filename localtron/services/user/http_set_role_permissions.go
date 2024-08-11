@@ -34,7 +34,7 @@ import (
 func (s *UserService) SetRolePermissions(
 	w http.ResponseWriter,
 	r *http.Request) {
-	usr, err := s.isAuthorized(r, user.PermissionRoleEdit.Id, nil)
+	usr, err := s.isAuthorized(r, user.PermissionRoleEdit.Id, nil, nil)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return

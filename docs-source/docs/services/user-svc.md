@@ -25,4 +25,4 @@ All of this should happen through the Singulatron API, or a language specific cl
 
 ### Defining your permissions
 
-Let's say your service is `petstore-svc`. Singulatron prefers fine-grained access control, so you are free to define your own permissions, such as `petstore-svc:read` or `petstore-svc:pet:read`. The permission names are up to you, but 
+Let's say your service is `petstore-svc`. Singulatron prefers fine-grained access control, so you are free to define your own permissions, such as `petstore-svc:read` or `petstore-svc:pet:read`. The permission names are up to you, but

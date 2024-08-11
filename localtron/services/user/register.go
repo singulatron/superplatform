@@ -19,17 +19,17 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func (s *UserService) register(email, password, name string, roleIds []string) (*usertypes.AuthToken, error) {
+func (s *UserService) register(slug, password, name string, roleIds []string) (*usertypes.AuthToken, error) {
 	logger.Info("Registering user", slog.String("name", name))
 
 	_, alreadyExists, err := s.usersStore.Query(
-		datastore.Equal(datastore.Field("email"), email),
+		datastore.Equal(datastore.Field("slug"), slug),
 	).FindOne()
 	if err != nil {
 		return nil, err
 	}
 	if alreadyExists {
-		return nil, errors.New("email already exists")
+		return nil, errors.New("slug already exists")
 	}
 
 	passwordHash, err := hashPassword(password)
@@ -42,7 +42,7 @@ func (s *UserService) register(email, password, name string, roleIds []string) (
 		CreatedAt:    time.Now(),
 		UpdatedAt:    time.Now(),
 		Name:         name,
-		Email:        email,
+		Slug:         slug,
 		PasswordHash: passwordHash,
 		RoleIds:      roleIds,
 	}

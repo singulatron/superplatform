@@ -31,7 +31,7 @@ import (
 func (s *UserService) CreateUser(
 	w http.ResponseWriter,
 	r *http.Request) {
-	_, err := s.isAuthorized(r, user.PermissionUserCreate.Id, nil)
+	_, err := s.isAuthorized(r, user.PermissionUserCreate.Id, nil, nil)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return

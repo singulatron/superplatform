@@ -41,7 +41,7 @@ func (s *UserService) UpsertPermission(
 	r *http.Request,
 ) {
 	// @todo add proper permission here
-	usr, err := s.isAuthorized(r, user.PermissionPermissionCreate.Id, nil)
+	usr, err := s.isAuthorized(r, user.PermissionPermissionCreate.Id, nil, nil)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -57,7 +57,7 @@ func (s *UserService) UpsertPermission(
 
 	vars := mux.Vars(r)
 
-	if !strings.HasPrefix(vars["permissionId"], usr.Email) {
+	if !strings.HasPrefix(vars["permissionId"], usr.Slug) {
 		http.Error(w, `Bad Namespace`, http.StatusBadRequest)
 		return
 	}

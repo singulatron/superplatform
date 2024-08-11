@@ -23,12 +23,14 @@ import (
 type UserService struct {
 	router *router.Router
 
-	usersStore       datastore.DataStore
-	rolesStore       datastore.DataStore
-	permissionsStore datastore.DataStore
-	credentialsStore datastore.DataStore
-	authTokensStore  datastore.DataStore
-	keyPairsStore    datastore.DataStore
+	usersStore         datastore.DataStore
+	rolesStore         datastore.DataStore
+	permissionsStore   datastore.DataStore
+	credentialsStore   datastore.DataStore
+	authTokensStore    datastore.DataStore
+	keyPairsStore      datastore.DataStore
+	contactsStore      datastore.DataStore
+	organizationsStore datastore.DataStore
 
 	privateKey    *rsa.PrivateKey
 	publicKeyPem  string
@@ -63,15 +65,25 @@ func NewUserService(
 	if err != nil {
 		return nil, err
 	}
+	contactsStore, err := datastoreFactory("contacts", &usertypes.Contact{})
+	if err != nil {
+		return nil, err
+	}
+	organizationsStore, err := datastoreFactory("contacts", &usertypes.Contact{})
+	if err != nil {
+		return nil, err
+	}
 
 	service := &UserService{
-		router:           router,
-		usersStore:       usersStore,
-		rolesStore:       rolesStore,
-		authTokensStore:  authTokensStore,
-		permissionsStore: permissionsStore,
-		credentialsStore: credentialsStore,
-		keyPairsStore:    keyPairsStore,
+		router:             router,
+		usersStore:         usersStore,
+		rolesStore:         rolesStore,
+		authTokensStore:    authTokensStore,
+		permissionsStore:   permissionsStore,
+		credentialsStore:   credentialsStore,
+		keyPairsStore:      keyPairsStore,
+		contactsStore:      contactsStore,
+		organizationsStore: organizationsStore,
 	}
 
 	err = service.registerRoles()
@@ -165,17 +177,17 @@ func (s *UserService) bootstrap() error {
 		return err
 	}
 
-	email := "user-svc"
+	slug := "user-svc"
 	pw := ""
 
 	if len(credentials) > 0 {
 		cred := credentials[0].(*usertypes.Credential)
-		email = cred.Email
+		slug = cred.Slug
 		pw = cred.Password
 	} else {
 		pw = uuid.New().String()
 		err = s.credentialsStore.Upsert(&usertypes.Credential{
-			Email:    email,
+			Slug:     slug,
 			Password: pw,
 		})
 		if err != nil {
@@ -183,12 +195,12 @@ func (s *UserService) bootstrap() error {
 		}
 	}
 
-	tok, err := s.login(email, pw)
+	tok, err := s.login(slug, pw)
 	if err != nil {
-		logger.Info(fmt.Sprintf("Registering the %v service", email))
+		logger.Info(fmt.Sprintf("Registering the %v service", slug))
 
-		usr, err := s.register(email, pw,
-			"User Service", []string{
+		usr, err := s.register(slug, pw,
+			"User Svc", []string{
 				usertypes.RoleUser.Id,
 			})
 		if err != nil {

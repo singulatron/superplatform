@@ -29,7 +29,7 @@ import (
 // @Security BearerAuth
 // @Router /user-svc/change-password-admin [post]
 func (s *UserService) ChangePasswordAdmin(w http.ResponseWriter, r *http.Request) {
-	_, err := s.isAuthorized(r, user.PermissionUserPasswordChange.Id, nil)
+	_, err := s.isAuthorized(r, user.PermissionUserPasswordChange.Id, nil, nil)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -43,7 +43,7 @@ func (s *UserService) ChangePasswordAdmin(w http.ResponseWriter, r *http.Request
 	}
 	defer r.Body.Close()
 
-	err = s.changePasswordAdmin(req.Email, req.NewPassword)
+	err = s.changePasswordAdmin(req.Slug, req.NewPassword)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

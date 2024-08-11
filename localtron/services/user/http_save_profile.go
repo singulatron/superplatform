@@ -29,7 +29,7 @@ import (
 // @Security BearerAuth
 // @Router /user-svc/user/{userId} [put]
 func (s *UserService) SaveProfile(w http.ResponseWriter, r *http.Request) {
-	_, err := s.isAuthorized(r, user.PermissionUserEdit.Id, nil)
+	_, err := s.isAuthorized(r, user.PermissionUserEdit.Id, nil, nil)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -43,7 +43,7 @@ func (s *UserService) SaveProfile(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	err = s.saveProfile(req.Email, req.Name)
+	err = s.saveProfile(req.Slug, req.Name)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
