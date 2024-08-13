@@ -52,7 +52,7 @@ Singulatron is designed to make deploying third-party AI applications straightfo
 
 ## Run On Your Servers
 
-See [this page](https://superplatform.ai/docs/category/start) to help you get started.
+See [this page](https://superplatform.ai/docs/category/running) to help you get started.
 
 ## Main Services
 
