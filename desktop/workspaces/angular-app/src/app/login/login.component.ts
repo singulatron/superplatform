@@ -31,7 +31,7 @@ import { IconMenuComponent } from '../components/icon-menu/icon-menu.component';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent {
-	email: string = '';
+	slug: string = '';
 	name: string = '';
 	password: string = '';
 	passwordConfirmation: string = '';
@@ -48,7 +48,7 @@ export class LoginComponent {
 		this.loginButtonDisabled = true;
 		let rsp: LoginResponse;
 		try {
-			rsp = await this.userService.login(this.email, this.password);
+			rsp = await this.userService.login(this.slug, this.password);
 		} catch (error) {
 			const toast = await this.toast.create({
 				cssClass: 'white-text',

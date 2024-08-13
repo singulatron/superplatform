@@ -20,22 +20,25 @@ func (s *UserService) createUser(user *usertypes.User, password string, roleIds 
 	if user.Name == "" {
 		return errors.New("username missing")
 	}
-	if user.Email == "" {
-		return errors.New("email missing")
+	if len(user.Contacts) == 0 {
+		return errors.New("contact missing")
+	}
+	if len(user.Contacts) > 1 {
+		return errors.New("more than one contact")
 	}
 	if password == "" {
 		return errors.New("password missing")
 	}
 
-	_, emailExists, err := s.usersStore.Query(
-		datastore.Equal(datastore.Field("email"), user.Email),
+	_, contactExists, err := s.contactsStore.Query(
+		datastore.Equal(datastore.Field("id"), user.Contacts[0]),
 	).FindOne()
 	if err != nil {
 		return err
 	}
 
-	if emailExists {
-		return errors.New("email already exists")
+	if contactExists {
+		return errors.New("contact already exists")
 	}
 
 	passwordHash, err := hashPassword(password)
@@ -54,7 +57,6 @@ func (s *UserService) createUser(user *usertypes.User, password string, roleIds 
 	}
 
 	user.PasswordHash = passwordHash
-	user.RoleIds = roleIds
 	if user.Id == "" {
 		user.Id = uuid.NewString()
 	}
@@ -63,5 +65,17 @@ func (s *UserService) createUser(user *usertypes.User, password string, roleIds 
 	user.UpdatedAt = now
 	user.CreatedAt = now
 
-	return s.usersStore.Create(user)
+	err = s.usersStore.Create(user)
+	if err != nil {
+		return nil
+	}
+
+	for _, roleId := range roleIds {
+		err = s.addRoleToUser(user.Id, roleId)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }

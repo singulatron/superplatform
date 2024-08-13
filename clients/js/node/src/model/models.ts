@@ -77,6 +77,7 @@ export * from './promptSvcRemovePromptRequest';
 export * from './userSvcAuthToken';
 export * from './userSvcChangePasswordAdminRequest';
 export * from './userSvcChangePasswordRequest';
+export * from './userSvcContact';
 export * from './userSvcCreateRoleRequest';
 export * from './userSvcCreateRoleResponse';
 export * from './userSvcCreateUserRequest';
@@ -190,6 +191,7 @@ import { PromptSvcRemovePromptRequest } from './promptSvcRemovePromptRequest';
 import { UserSvcAuthToken } from './userSvcAuthToken';
 import { UserSvcChangePasswordAdminRequest } from './userSvcChangePasswordAdminRequest';
 import { UserSvcChangePasswordRequest } from './userSvcChangePasswordRequest';
+import { UserSvcContact } from './userSvcContact';
 import { UserSvcCreateRoleRequest } from './userSvcCreateRoleRequest';
 import { UserSvcCreateRoleResponse } from './userSvcCreateRoleResponse';
 import { UserSvcCreateUserRequest } from './userSvcCreateUserRequest';
@@ -306,6 +308,7 @@ let typeMap: {[index: string]: any} = {
     "UserSvcAuthToken": UserSvcAuthToken,
     "UserSvcChangePasswordAdminRequest": UserSvcChangePasswordAdminRequest,
     "UserSvcChangePasswordRequest": UserSvcChangePasswordRequest,
+    "UserSvcContact": UserSvcContact,
     "UserSvcCreateRoleRequest": UserSvcCreateRoleRequest,
     "UserSvcCreateRoleResponse": UserSvcCreateRoleResponse,
     "UserSvcCreateUserRequest": UserSvcCreateUserRequest,

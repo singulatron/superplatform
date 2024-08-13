@@ -35,7 +35,7 @@ func (s *UserService) Login(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	token, err := s.login(req.Email, req.Password)
+	token, err := s.login(req.Slug, req.Password)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

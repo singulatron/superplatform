@@ -26,8 +26,8 @@ export function UserSvcChangePasswordRequestFromJSONTyped(json, ignoreDiscrimina
     }
     return {
         'currentPassword': json['currentPassword'] == null ? undefined : json['currentPassword'],
-        'email': json['email'] == null ? undefined : json['email'],
         'newPassword': json['newPassword'] == null ? undefined : json['newPassword'],
+        'slug': json['slug'] == null ? undefined : json['slug'],
     };
 }
 export function UserSvcChangePasswordRequestToJSON(value) {
@@ -36,7 +36,7 @@ export function UserSvcChangePasswordRequestToJSON(value) {
     }
     return {
         'currentPassword': value['currentPassword'],
-        'email': value['email'],
         'newPassword': value['newPassword'],
+        'slug': value['slug'],
     };
 }

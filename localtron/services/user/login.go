@@ -18,15 +18,15 @@ import (
 	"github.com/pkg/errors"
 )
 
-func (s *UserService) login(email, password string) (*usertypes.AuthToken, error) {
+func (s *UserService) login(slug, password string) (*usertypes.AuthToken, error) {
 	userI, found, err := s.usersStore.Query(
-		datastore.Equal(datastore.Field("email"), email),
+		datastore.Equal(datastore.Field("slug"), slug),
 	).FindOne()
 	if err != nil {
 		return nil, err
 	}
 	if !found {
-		return nil, errors.New("unauthorized")
+		return nil, errors.New("slug not found")
 	}
 	user := userI.(*usertypes.User)
 
@@ -64,7 +64,18 @@ func checkPasswordHash(password, hash string) bool {
 }
 
 func (s *UserService) generateAuthToken(user *usertypes.User) (*usertypes.AuthToken, error) {
-	token, err := generateJWT(user, s.privateKey)
+	roleLinks, err := s.userRoleLinksStore.Query(
+		datastore.Equal(datastore.Field("userId"), user.Id),
+	).Find()
+	if err != nil {
+		return nil, err
+	}
+	roleIds := []string{}
+	for _, roleLink := range roleLinks {
+		roleIds = append(roleIds, roleLink.(*usertypes.UserRoleLink).RoleId)
+	}
+
+	token, err := generateJWT(user, roleIds, s.privateKey)
 	if err != nil {
 		return nil, err
 	}

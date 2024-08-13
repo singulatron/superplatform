@@ -15,51 +15,51 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func (s *UserService) UpsertRole(id, name, description string, permissionIds []string) (*usertypes.Role, error) {
+func (s *UserService) UpsertRole(userId, id, name, description string, permissionIds []string) error {
 	permissions, err := s.permissionsStore.Query(
 		datastore.Equal(datastore.Field("id"), permissionIds),
 	).Find()
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	if len(permissions) < len(permissionIds) {
-		return nil, errors.New("nonexistent permissions")
+		return errors.New("nonexistent permissions")
 	}
 
 	roleI, found, err := s.rolesStore.Query(
 		datastore.Equal(datastore.Field("id"), id),
 	).FindOne()
 	if err != nil {
-		return nil, err
+		return err
 	}
 	if !found {
 		role := &usertypes.Role{
-			Id:            id,
-			CreatedAt:     time.Now(),
-			UpdatedAt:     time.Now(),
-			Name:          name,
-			Description:   description,
-			PermissionIds: permissionIds,
+			Id:          id,
+			CreatedAt:   time.Now(),
+			UpdatedAt:   time.Now(),
+			Name:        name,
+			Description: description,
 		}
-		return role, s.rolesStore.Create(role)
-	}
-
-	role := roleI.(*usertypes.Role)
-
-	existingPermissionIdIndex := map[string]struct{}{}
-	for _, permissionId := range role.PermissionIds {
-		existingPermissionIdIndex[permissionId] = struct{}{}
+		err = s.rolesStore.Create(role)
+		if err != nil {
+			return err
+		}
+	} else {
+		err = s.rolesStore.Query(
+			datastore.Equal(datastore.Field("id"), id),
+		).Update(roleI)
+		if err != nil {
+			return err
+		}
 	}
 
 	for _, permissionId := range permissionIds {
-		_, ok := existingPermissionIdIndex[permissionId]
-		if !ok {
-			role.PermissionIds = append(role.PermissionIds, permissionId)
+		err = s.addPermissionToRole(userId, roleI.GetId(), permissionId)
+		if err != nil {
+			return err
 		}
 	}
 
-	return role, s.rolesStore.Query(
-		datastore.Equal(datastore.Field("id"), id),
-	).Update(role)
+	return nil
 }

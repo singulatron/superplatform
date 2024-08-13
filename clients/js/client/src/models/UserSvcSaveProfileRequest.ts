@@ -24,13 +24,13 @@ export interface UserSvcSaveProfileRequest {
      * @type {string}
      * @memberof UserSvcSaveProfileRequest
      */
-    email?: string;
+    name?: string;
     /**
      * 
      * @type {string}
      * @memberof UserSvcSaveProfileRequest
      */
-    name?: string;
+    slug?: string;
 }
 
 /**
@@ -50,8 +50,8 @@ export function UserSvcSaveProfileRequestFromJSONTyped(json: any, ignoreDiscrimi
     }
     return {
         
-        'email': json['email'] == null ? undefined : json['email'],
         'name': json['name'] == null ? undefined : json['name'],
+        'slug': json['slug'] == null ? undefined : json['slug'],
     };
 }
 
@@ -61,8 +61,8 @@ export function UserSvcSaveProfileRequestToJSON(value?: UserSvcSaveProfileReques
     }
     return {
         
-        'email': value['email'],
         'name': value['name'],
+        'slug': value['slug'],
     };
 }
 

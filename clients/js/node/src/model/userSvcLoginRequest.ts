@@ -13,20 +13,26 @@
 import { RequestFile } from './models';
 
 export class UserSvcLoginRequest {
-    'email'?: string;
+    'contact'?: string;
     'password'?: string;
+    'slug'?: string;
 
     static discriminator: string | undefined = undefined;
 
     static attributeTypeMap: Array<{name: string, baseName: string, type: string}> = [
         {
-            "name": "email",
-            "baseName": "email",
+            "name": "contact",
+            "baseName": "contact",
             "type": "string"
         },
         {
             "name": "password",
             "baseName": "password",
+            "type": "string"
+        },
+        {
+            "name": "slug",
+            "baseName": "slug",
             "type": "string"
         }    ];
 

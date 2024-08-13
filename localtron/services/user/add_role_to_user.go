@@ -9,13 +9,13 @@ package userservice
 
 import (
 	"errors"
-	"time"
+	"fmt"
 
 	"github.com/singulatron/singulatron/localtron/datastore"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func (s *UserService) addRole(userId string, role *usertypes.Role) error {
+func (s *UserService) addRoleToUser(userId string, roleId string) error {
 	q := s.usersStore.Query(
 		datastore.Id(userId),
 	)
@@ -28,17 +28,26 @@ func (s *UserService) addRole(userId string, role *usertypes.Role) error {
 	}
 	user := userI.(*usertypes.User)
 
+	roleLinks, err := s.userRoleLinksStore.Query(
+		datastore.Equal(datastore.Field("userId"), userId),
+	).Find()
+	if err != nil {
+		return err
+	}
+
 	alreadyHasRole := false
-	for _, v := range user.RoleIds {
-		if v == role.Id {
+	for _, v := range roleLinks {
+		if v.(*usertypes.UserRoleLink).RoleId == roleId {
 			alreadyHasRole = true
 		}
 	}
 	if alreadyHasRole {
 		return nil
 	}
-	user.RoleIds = append(user.RoleIds, role.Id)
-	user.UpdatedAt = time.Now()
 
-	return q.Update(user)
+	return s.userRoleLinksStore.Upsert(&usertypes.UserRoleLink{
+		Id:     fmt.Sprintf("%v:%v", userId, roleId),
+		RoleId: roleId,
+		UserId: user.Id,
+	})
 }

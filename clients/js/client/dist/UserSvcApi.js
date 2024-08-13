@@ -23,6 +23,7 @@ var UserSvcSetRolePermissionsRequest = require('./UserSvcSetRolePermissionsReque
 var UserSvcUpserPermissionRequest = require('./UserSvcUpserPermissionRequest.js');
 require('./UserSvcRole.js');
 require('./UserSvcUser.js');
+require('./UserSvcContact.js');
 require('./UserSvcPermission.js');
 require('./DatastoreQuery.js');
 require('./DatastoreCondition.js');
@@ -157,7 +158,7 @@ class UserSvcApi extends runtime.BaseAPI {
         });
     }
     /**
-     * Create a new role. <b>The role ID must be prefixed by the callers username (email).</b> Eg. if the owner\'s email/username is `petstore-svc` the role should look like `petstore-svc:admin`. The user account who creates the role will become the owner of that role, and only the owner will be able to edit the role.  Requires the `user-svc:role:create` permission.
+     * Create a new role. <b>The role ID must be prefixed by the callers username (email).</b> Eg. if the owner\'s slug is `petstore-svc` the role should look like `petstore-svc:admin`. The user account who creates the role will become the owner of that role, and only the owner will be able to edit the role.  Requires the `user-svc:role:create` permission.
      * Create a New Role
      */
     createRoleRaw(requestParameters, initOverrides) {
@@ -182,7 +183,7 @@ class UserSvcApi extends runtime.BaseAPI {
         });
     }
     /**
-     * Create a new role. <b>The role ID must be prefixed by the callers username (email).</b> Eg. if the owner\'s email/username is `petstore-svc` the role should look like `petstore-svc:admin`. The user account who creates the role will become the owner of that role, and only the owner will be able to edit the role.  Requires the `user-svc:role:create` permission.
+     * Create a new role. <b>The role ID must be prefixed by the callers username (email).</b> Eg. if the owner\'s slug is `petstore-svc` the role should look like `petstore-svc:admin`. The user account who creates the role will become the owner of that role, and only the owner will be able to edit the role.  Requires the `user-svc:role:create` permission.
      * Create a New Role
      */
     createRole(requestParameters, initOverrides) {
@@ -327,7 +328,7 @@ class UserSvcApi extends runtime.BaseAPI {
     }
     /**
      * Get the public key to descrypt the JWT.
-     * Ge Public Key
+     * Get Public Key
      */
     getPublicKeyRaw(initOverrides) {
         return runtime.__awaiter(this, void 0, void 0, function* () {
@@ -344,7 +345,7 @@ class UserSvcApi extends runtime.BaseAPI {
     }
     /**
      * Get the public key to descrypt the JWT.
-     * Ge Public Key
+     * Get Public Key
      */
     getPublicKey(initOverrides) {
         return runtime.__awaiter(this, void 0, void 0, function* () {
@@ -521,7 +522,7 @@ class UserSvcApi extends runtime.BaseAPI {
     }
     /**
      * Register a new user with a name, email, and password.
-     * Register a New User
+     * Register
      */
     registerRaw(requestParameters, initOverrides) {
         return runtime.__awaiter(this, void 0, void 0, function* () {
@@ -543,7 +544,7 @@ class UserSvcApi extends runtime.BaseAPI {
     }
     /**
      * Register a new user with a name, email, and password.
-     * Register a New User
+     * Register
      */
     register(requestParameters, initOverrides) {
         return runtime.__awaiter(this, void 0, void 0, function* () {

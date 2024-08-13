@@ -9,7 +9,6 @@ import (
 	"log"
 
 	"github.com/golang-jwt/jwt/v4"
-	sdk "github.com/singulatron/singulatron/localtron/sdk/go"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
@@ -52,10 +51,11 @@ func privateKeyFromString(privateKeyPem string) (*rsa.PrivateKey, error) {
 	return privateKey, nil
 }
 
-func generateJWT(user *usertypes.User, privateKey *rsa.PrivateKey) (string, error) {
-	claims := &sdk.Claims{
+func generateJWT(user *usertypes.User, roleIds []string, privateKey *rsa.PrivateKey) (string, error) {
+	claims := &usertypes.Claims{
 		UserId:           user.Id,
-		RoleIds:          user.RoleIds,
+		Slug:             user.Slug,
+		RoleIds:          roleIds,
 		RegisteredClaims: jwt.RegisteredClaims{},
 	}
 

@@ -36,7 +36,7 @@ func TestRegistration(t *testing.T) {
 
 	t.Run("user password change", func(t *testing.T) {
 		req := usertypes.LoginRequest{
-			Email:    "singulatron",
+			Slug:     "singulatron",
 			Password: "changeme",
 		}
 		rsp := usertypes.LoginResponse{}
@@ -56,11 +56,10 @@ func TestRegistration(t *testing.T) {
 		}, &byTokenRsp)
 		require.NoError(t, err)
 
-		require.Equal(t, "singulatron", byTokenRsp.User.Email)
+		require.Equal(t, "singulatron", byTokenRsp.User.Slug)
 		require.Equal(t, "", byTokenRsp.User.PasswordHash)
 
 		require.Equal(t, claim.UserId, byTokenRsp.User.Id)
-		require.Equal(t, claim.RoleIds, byTokenRsp.User.RoleIds)
 
 		//err = router.Post(context.Background(), "user-svc", "/change-password-admin", usertypes.ChangePasswordAdminRequest{
 		//	Email:       "singulatron",
@@ -80,7 +79,7 @@ func TestRegistration(t *testing.T) {
 		//require.NoError(t, err)
 
 		changePassReq := usertypes.ChangePasswordRequest{
-			Email:           "singulatron",
+			Slug:            "singulatron",
 			CurrentPassword: "changeme",
 			NewPassword:     "yo",
 		}

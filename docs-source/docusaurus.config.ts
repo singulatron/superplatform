@@ -29,7 +29,7 @@ const config: Config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            "https://github.com/singulatron/singulatron/tree/main/docs-source/docs/",
+            "https://github.com/singulatron/singulatron/tree/main/docs-source/",
           docItemComponent: "@theme/ApiItem", // Derived from docusaurus-theme-openapi
         },
         blog: {
@@ -37,7 +37,7 @@ const config: Config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            "https://github.com/singulatron/singulatron/tree/main/docs-source/docs/",
+            "https://github.com/singulatron/singulatron/tree/main/docs-source/",
         },
         theme: {
           customCss: require.resolve("./src/css/custom.css"),

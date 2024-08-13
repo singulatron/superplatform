@@ -29,9 +29,20 @@ import (
 // @Security BearerAuth
 // @Router /user-svc/user/{userId} [delete]
 func (s *UserService) DeleteUser(w http.ResponseWriter, r *http.Request) {
-	_, err := s.isAuthorized(r, user.PermissionUserDelete.Id, nil)
+	usr, err := s.isAuthorized(r, user.PermissionUserDelete.Id, nil, nil)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+
+	callerUserId := usr.Id
+	isAdmin, err := s.isAdmin(callerUserId)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if !isAdmin {
+		http.Error(w, `Unauthorized`, http.StatusBadRequest)
 		return
 	}
 

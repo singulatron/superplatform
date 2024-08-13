@@ -1,5 +1,7 @@
 'use strict';
 
+var UserSvcContact = require('./UserSvcContact.js');
+
 /* tslint:disable */
 /* eslint-disable */
 /**
@@ -27,9 +29,10 @@ function UserSvcRegisterRequestFromJSONTyped(json, ignoreDiscriminator) {
         return json;
     }
     return {
-        'email': json['email'] == null ? undefined : json['email'],
+        'contact': json['contact'] == null ? undefined : UserSvcContact.UserSvcContactFromJSON(json['contact']),
         'name': json['name'] == null ? undefined : json['name'],
         'password': json['password'] == null ? undefined : json['password'],
+        'slug': json['slug'] == null ? undefined : json['slug'],
     };
 }
 function UserSvcRegisterRequestToJSON(value) {
@@ -37,9 +40,10 @@ function UserSvcRegisterRequestToJSON(value) {
         return value;
     }
     return {
-        'email': value['email'],
+        'contact': UserSvcContact.UserSvcContactToJSON(value['contact']),
         'name': value['name'],
         'password': value['password'],
+        'slug': value['slug'],
     };
 }
 

@@ -23,12 +23,17 @@ import (
 type UserService struct {
 	router *router.Router
 
-	usersStore       datastore.DataStore
-	rolesStore       datastore.DataStore
-	permissionsStore datastore.DataStore
-	credentialsStore datastore.DataStore
-	authTokensStore  datastore.DataStore
-	keyPairsStore    datastore.DataStore
+	usersStore                 datastore.DataStore
+	rolesStore                 datastore.DataStore
+	permissionsStore           datastore.DataStore
+	credentialsStore           datastore.DataStore
+	authTokensStore            datastore.DataStore
+	keyPairsStore              datastore.DataStore
+	contactsStore              datastore.DataStore
+	organizationsStore         datastore.DataStore
+	organizationUserLinksStore datastore.DataStore
+	userRoleLinksStore         datastore.DataStore
+	permissionRoleLinksStore   datastore.DataStore
 
 	privateKey    *rsa.PrivateKey
 	publicKeyPem  string
@@ -55,7 +60,7 @@ func NewUserService(
 	if err != nil {
 		return nil, err
 	}
-	credentialsStore, err := datastoreFactory("user_credetentials", &usertypes.Credential{})
+	credentialsStore, err := datastoreFactory("userCredetentials", &usertypes.Credential{})
 	if err != nil {
 		return nil, err
 	}
@@ -63,15 +68,40 @@ func NewUserService(
 	if err != nil {
 		return nil, err
 	}
+	contactsStore, err := datastoreFactory("contacts", &usertypes.Contact{})
+	if err != nil {
+		return nil, err
+	}
+	organizationsStore, err := datastoreFactory("organizations", &usertypes.Organization{})
+	if err != nil {
+		return nil, err
+	}
+	organizationUserLinksStore, err := datastoreFactory("organizationUserLinks", &usertypes.OrganizationUserLink{})
+	if err != nil {
+		return nil, err
+	}
+	userRoleLinksStore, err := datastoreFactory("userRoleLinks", &usertypes.UserRoleLink{})
+	if err != nil {
+		return nil, err
+	}
+	permissionRoleLinksStore, err := datastoreFactory("permissionRoleLinks", &usertypes.PermissionRoleLink{})
+	if err != nil {
+		return nil, err
+	}
 
 	service := &UserService{
-		router:           router,
-		usersStore:       usersStore,
-		rolesStore:       rolesStore,
-		authTokensStore:  authTokensStore,
-		permissionsStore: permissionsStore,
-		credentialsStore: credentialsStore,
-		keyPairsStore:    keyPairsStore,
+		router:                     router,
+		usersStore:                 usersStore,
+		rolesStore:                 rolesStore,
+		authTokensStore:            authTokensStore,
+		permissionsStore:           permissionsStore,
+		credentialsStore:           credentialsStore,
+		keyPairsStore:              keyPairsStore,
+		contactsStore:              contactsStore,
+		organizationsStore:         organizationsStore,
+		organizationUserLinksStore: organizationUserLinksStore,
+		userRoleLinksStore:         userRoleLinksStore,
+		permissionRoleLinksStore:   permissionRoleLinksStore,
 	}
 
 	err = service.registerRoles()
@@ -165,17 +195,17 @@ func (s *UserService) bootstrap() error {
 		return err
 	}
 
-	email := "user-svc"
+	slug := "user-svc"
 	pw := ""
 
 	if len(credentials) > 0 {
 		cred := credentials[0].(*usertypes.Credential)
-		email = cred.Email
+		slug = cred.Slug
 		pw = cred.Password
 	} else {
 		pw = uuid.New().String()
 		err = s.credentialsStore.Upsert(&usertypes.Credential{
-			Email:    email,
+			Slug:     slug,
 			Password: pw,
 		})
 		if err != nil {
@@ -183,12 +213,12 @@ func (s *UserService) bootstrap() error {
 		}
 	}
 
-	tok, err := s.login(email, pw)
+	tok, err := s.login(slug, pw)
 	if err != nil {
-		logger.Info(fmt.Sprintf("Registering the %v service", email))
+		logger.Info(fmt.Sprintf("Registering the %v service", slug))
 
-		usr, err := s.register(email, pw,
-			"User Service", []string{
+		usr, err := s.register(slug, pw,
+			"User Svc", []string{
 				usertypes.RoleUser.Id,
 			})
 		if err != nil {
@@ -207,21 +237,23 @@ func (s *UserService) bootstrap() error {
 }
 
 func (s *UserService) registerRoles() error {
-	_, err := s.UpsertRole(
+	err := s.UpsertRole(
+		s.serviceUserId,
 		usertypes.RoleAdmin.Id,
 		usertypes.RoleAdmin.Name,
 		"",
-		usertypes.RoleAdmin.PermissionIds,
+		[]string{},
 	)
 	if err != nil {
 		return err
 	}
 
-	_, err = s.UpsertRole(
+	err = s.UpsertRole(
+		s.serviceUserId,
 		usertypes.RoleUser.Id,
 		usertypes.RoleUser.Name,
 		"",
-		usertypes.RoleUser.PermissionIds,
+		[]string{},
 	)
 	if err != nil {
 		return err

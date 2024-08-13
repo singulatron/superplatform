@@ -287,7 +287,7 @@ export class UserSvcApi extends runtime.BaseAPI {
     }
 
     /**
-     * Create a new role. <b>The role ID must be prefixed by the callers username (email).</b> Eg. if the owner\'s email/username is `petstore-svc` the role should look like `petstore-svc:admin`. The user account who creates the role will become the owner of that role, and only the owner will be able to edit the role.  Requires the `user-svc:role:create` permission.
+     * Create a new role. <b>The role ID must be prefixed by the callers username (email).</b> Eg. if the owner\'s slug is `petstore-svc` the role should look like `petstore-svc:admin`. The user account who creates the role will become the owner of that role, and only the owner will be able to edit the role.  Requires the `user-svc:role:create` permission.
      * Create a New Role
      */
     async createRoleRaw(requestParameters: CreateRoleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserSvcCreateRoleResponse>> {
@@ -320,7 +320,7 @@ export class UserSvcApi extends runtime.BaseAPI {
     }
 
     /**
-     * Create a new role. <b>The role ID must be prefixed by the callers username (email).</b> Eg. if the owner\'s email/username is `petstore-svc` the role should look like `petstore-svc:admin`. The user account who creates the role will become the owner of that role, and only the owner will be able to edit the role.  Requires the `user-svc:role:create` permission.
+     * Create a new role. <b>The role ID must be prefixed by the callers username (email).</b> Eg. if the owner\'s slug is `petstore-svc` the role should look like `petstore-svc:admin`. The user account who creates the role will become the owner of that role, and only the owner will be able to edit the role.  Requires the `user-svc:role:create` permission.
      * Create a New Role
      */
     async createRole(requestParameters: CreateRoleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserSvcCreateRoleResponse> {
@@ -489,7 +489,7 @@ export class UserSvcApi extends runtime.BaseAPI {
 
     /**
      * Get the public key to descrypt the JWT.
-     * Ge Public Key
+     * Get Public Key
      */
     async getPublicKeyRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserSvcGetPublicKeyResponse>> {
         const queryParameters: any = {};
@@ -508,7 +508,7 @@ export class UserSvcApi extends runtime.BaseAPI {
 
     /**
      * Get the public key to descrypt the JWT.
-     * Ge Public Key
+     * Get Public Key
      */
     async getPublicKey(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserSvcGetPublicKeyResponse> {
         const response = await this.getPublicKeyRaw(initOverrides);
@@ -713,7 +713,7 @@ export class UserSvcApi extends runtime.BaseAPI {
 
     /**
      * Register a new user with a name, email, and password.
-     * Register a New User
+     * Register
      */
     async registerRaw(requestParameters: RegisterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
         if (requestParameters['body'] == null) {
@@ -742,7 +742,7 @@ export class UserSvcApi extends runtime.BaseAPI {
 
     /**
      * Register a new user with a name, email, and password.
-     * Register a New User
+     * Register
      */
     async register(requestParameters: RegisterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
         const response = await this.registerRaw(requestParameters, initOverrides);

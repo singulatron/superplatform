@@ -14,7 +14,7 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func (s *UserService) setRolePermissions(userId, roleId string, permissionIds []string) error {
+func (s *UserService) overwriteRolePermissions(userId, roleId string, permissionIds []string) error {
 	q := s.rolesStore.Query(
 		datastore.Id(roleId),
 	)
@@ -40,7 +40,19 @@ func (s *UserService) setRolePermissions(userId, roleId string, permissionIds []
 		return fmt.Errorf("cannot find some permissions")
 	}
 
-	role.PermissionIds = permissionIds
+	err = s.userRoleLinksStore.Query(
+		datastore.Equal(datastore.Field("roleId"), roleId),
+	).Delete()
+	if err != nil {
+		return err
+	}
 
-	return q.Update(role)
+	for _, permissionId := range permissionIds {
+		err = s.addPermissionToRole(userId, roleId, permissionId)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }

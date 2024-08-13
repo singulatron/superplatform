@@ -20,13 +20,19 @@ export interface UserSvcLoginRequest {
      * @type {string}
      * @memberof UserSvcLoginRequest
      */
-    email?: string;
+    contact?: string;
     /**
      *
      * @type {string}
      * @memberof UserSvcLoginRequest
      */
     password?: string;
+    /**
+     *
+     * @type {string}
+     * @memberof UserSvcLoginRequest
+     */
+    slug?: string;
 }
 /**
  * Check if a given object implements the UserSvcLoginRequest interface.

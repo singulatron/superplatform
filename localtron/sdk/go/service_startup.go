@@ -15,23 +15,23 @@ import (
 // from the credentials store.
 // Every service should have a user account in the user service and this method creates
 // that user account.
-func RegisterService(serviceEmail, serviceName string, router *router.Router, store datastore.DataStore) (string, error) {
+func RegisterService(serviceSlug, serviceName string, router *router.Router, store datastore.DataStore) (string, error) {
 	res, err := store.Query(datastore.All()).Find()
 	if err != nil {
 		return "", err
 	}
 
-	email := serviceEmail
+	slug := serviceSlug
 	pw := ""
 
 	if len(res) > 0 {
 		cred := res[0].(*usertypes.Credential)
-		email = cred.Email
+		slug = cred.Slug
 		pw = cred.Password
 	} else {
 		pw = uuid.New().String()
 		err = store.Upsert(&usertypes.Credential{
-			Email:    email,
+			Slug:     slug,
 			Password: pw,
 		})
 		if err != nil {
@@ -41,15 +41,15 @@ func RegisterService(serviceEmail, serviceName string, router *router.Router, st
 
 	loginRsp := usertypes.LoginResponse{}
 	err = router.Post(context.Background(), "user-svc", "/login", usertypes.LoginRequest{
-		Email:    email,
+		Slug:     slug,
 		Password: pw,
 	}, &loginRsp)
 
 	if err != nil {
-		logger.Info(fmt.Sprintf("Registering the %v service", serviceEmail))
+		logger.Info(fmt.Sprintf("Registering the %v service", serviceSlug))
 
 		err = router.Post(context.Background(), "user-svc", "/register", usertypes.RegisterRequest{
-			Email:    email,
+			Slug:     slug,
 			Name:     serviceName,
 			Password: pw,
 		}, nil)
@@ -59,7 +59,7 @@ func RegisterService(serviceEmail, serviceName string, router *router.Router, st
 
 		loginRsp = usertypes.LoginResponse{}
 		err = router.Post(context.Background(), "user-svc", "/login", usertypes.LoginRequest{
-			Email:    email,
+			Slug:     slug,
 			Password: pw,
 		}, &loginRsp)
 		if err != nil {
@@ -70,9 +70,9 @@ func RegisterService(serviceEmail, serviceName string, router *router.Router, st
 	return loginRsp.Token.Token, nil
 }
 
-func RegisterUser(router *router.Router, email, password, username string) (string, error) {
+func RegisterUser(router *router.Router, slug, password, username string) (string, error) {
 	err := router.Post(context.Background(), "user-svc", "/register", &usertypes.RegisterRequest{
-		Email:    email,
+		Slug:     slug,
 		Password: password,
 		Name:     username,
 	}, nil)
@@ -82,7 +82,7 @@ func RegisterUser(router *router.Router, email, password, username string) (stri
 
 	loginRsp := usertypes.LoginResponse{}
 	err = router.Post(context.Background(), "user-svc", "/login", &usertypes.LoginRequest{
-		Email:    email,
+		Slug:     slug,
 		Password: password,
 	}, &loginRsp)
 	if err != nil {

@@ -1,0 +1,8 @@
+{
+  "label": "Services",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "description": "Documentation of services that come with Singulatron."
+  }
+}

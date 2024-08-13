@@ -41,10 +41,10 @@ func (s *UserService) readUserByToken(token string) (*usertypes.User, error) {
 	ret := &usertypes.User{
 		Id:        user.Id,
 		Name:      user.Name,
-		Email:     user.Email,
+		Slug:      user.Slug,
+		Contacts:  user.Contacts,
 		CreatedAt: user.CreatedAt,
 		UpdatedAt: user.UpdatedAt,
-		RoleIds:   user.RoleIds,
 	}
 	return ret, nil
 }

@@ -2354,7 +2354,7 @@ const docTemplate = `{
                 "tags": [
                     "User Svc"
                 ],
-                "summary": "Ge Public Key",
+                "summary": "Get Public Key",
                 "operationId": "getPublicKey",
                 "responses": {
                     "200": {
@@ -2390,7 +2390,7 @@ const docTemplate = `{
                 "tags": [
                     "User Svc"
                 ],
-                "summary": "Register a New User",
+                "summary": "Register",
                 "operationId": "register",
                 "parameters": [
                     {
@@ -2432,7 +2432,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Create a new role.\n\u003cb\u003eThe role ID must be prefixed by the callers username (email).\u003c/b\u003e\nEg. if the owner's email/username is ` + "`" + `petstore-svc` + "`" + ` the role should look like ` + "`" + `petstore-svc:admin` + "`" + `.\nThe user account who creates the role will become the owner of that role, and only the owner will be able to edit the role.\n\nRequires the ` + "`" + `user-svc:role:create` + "`" + ` permission.",
+                "description": "Create a new role.\n\u003cb\u003eThe role ID must be prefixed by the callers username (email).\u003c/b\u003e\nEg. if the owner's slug is ` + "`" + `petstore-svc` + "`" + ` the role should look like ` + "`" + `petstore-svc:admin` + "`" + `.\nThe user account who creates the role will become the owner of that role, and only the owner will be able to edit the role.\n\nRequires the ` + "`" + `user-svc:role:create` + "`" + ` permission.",
                 "consumes": [
                     "application/json"
                 ],
@@ -4307,10 +4307,10 @@ const docTemplate = `{
         "user_svc.ChangePasswordAdminRequest": {
             "type": "object",
             "properties": {
-                "email": {
+                "newPassword": {
                     "type": "string"
                 },
-                "newPassword": {
+                "slug": {
                     "type": "string"
                 }
             }
@@ -4324,16 +4324,56 @@ const docTemplate = `{
                 "currentPassword": {
                     "type": "string"
                 },
-                "email": {
+                "newPassword": {
                     "type": "string"
                 },
-                "newPassword": {
+                "slug": {
                     "type": "string"
                 }
             }
         },
         "user_svc.ChangePasswordResponse": {
             "type": "object"
+        },
+        "user_svc.Contact": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "description": "The unique identifier, which can be a URL.\n\nExample values: \"joe12\" (singulatron username), \"twitter.com/thejoe\" (twitter url), \"joe@joesdomain.com\" (email)",
+                    "type": "string",
+                    "example": "twitter.com/thejoe"
+                },
+                "platform": {
+                    "description": "Platform of the contact (e.g., \"email\", \"phone\", \"twitter\")",
+                    "type": "string",
+                    "example": "twitter"
+                },
+                "primary": {
+                    "description": "If this is the primary contact method",
+                    "type": "boolean"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "string"
+                },
+                "value": {
+                    "description": "Value is the platform local unique identifier.\nIe. while the ` + "`" + `id` + "`" + ` of a Twitter contact is ` + "`" + `twitter.com/thejoe` + "`" + `, the value will be only ` + "`" + `thejoe` + "`" + `.\nFor email and phones the ` + "`" + `id` + "`" + ` and the ` + "`" + `value` + "`" + ` will be the same.\nThis field mostly exists for display purposes.\n\nExample values: \"joe12\" (singulatron username), \"thejoe\" (twitter username), \"joe@joesdomain.com\" (email)",
+                    "type": "string",
+                    "example": "thejoe"
+                },
+                "verified": {
+                    "description": "Whether the contact is verified",
+                    "type": "boolean"
+                }
+            }
         },
         "user_svc.CreateRoleRequest": {
             "type": "object",
@@ -4452,7 +4492,13 @@ const docTemplate = `{
         "user_svc.IsAuthorizedRequest": {
             "type": "object",
             "properties": {
-                "emailsGranted": {
+                "contactsGranted": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "slugsGranted": {
                     "type": "array",
                     "items": {
                         "type": "string"
@@ -4474,10 +4520,13 @@ const docTemplate = `{
         "user_svc.LoginRequest": {
             "type": "object",
             "properties": {
-                "email": {
+                "contact": {
                     "type": "string"
                 },
                 "password": {
+                    "type": "string"
+                },
+                "slug": {
                     "type": "string"
                 }
             }
@@ -4535,13 +4584,16 @@ const docTemplate = `{
         "user_svc.RegisterRequest": {
             "type": "object",
             "properties": {
-                "email": {
-                    "type": "string"
+                "contact": {
+                    "$ref": "#/definitions/user_svc.Contact"
                 },
                 "name": {
                     "type": "string"
                 },
                 "password": {
+                    "type": "string"
+                },
+                "slug": {
                     "type": "string"
                 }
             }
@@ -4581,10 +4633,10 @@ const docTemplate = `{
         "user_svc.SaveProfileRequest": {
             "type": "object",
             "properties": {
-                "email": {
+                "name": {
                     "type": "string"
                 },
-                "name": {
+                "slug": {
                     "type": "string"
                 }
             }
@@ -4617,24 +4669,32 @@ const docTemplate = `{
         "user_svc.User": {
             "type": "object",
             "properties": {
+                "contact": {
+                    "description": "Contacts are used for login and identification purposes.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/user_svc.Contact"
+                    }
+                },
                 "createdAt": {
                     "type": "string"
                 },
                 "deletedAt": {
                     "type": "string"
                 },
-                "email": {
-                    "description": "Email or username",
-                    "type": "string"
-                },
                 "id": {
                     "type": "string"
                 },
-                "isService": {
-                    "type": "boolean"
-                },
                 "name": {
+                    "description": "Full name of the organization",
                     "type": "string"
+                },
+                "organizationIds": {
+                    "description": "Many to many relationship between User and Organization",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "passwordHash": {
                     "type": "string"
@@ -4645,6 +4705,10 @@ const docTemplate = `{
                     "items": {
                         "type": "string"
                     }
+                },
+                "slug": {
+                    "description": "URL-friendly unique (inside the Singularon platform) identifier for the ` + "`" + `user` + "`" + `.",
+                    "type": "string"
                 },
                 "updatedAt": {
                     "type": "string"

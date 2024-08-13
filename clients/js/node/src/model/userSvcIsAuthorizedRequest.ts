@@ -13,14 +13,20 @@
 import { RequestFile } from './models';
 
 export class UserSvcIsAuthorizedRequest {
-    'emailsGranted'?: Array<string>;
+    'contactsGranted'?: Array<string>;
+    'slugsGranted'?: Array<string>;
 
     static discriminator: string | undefined = undefined;
 
     static attributeTypeMap: Array<{name: string, baseName: string, type: string}> = [
         {
-            "name": "emailsGranted",
-            "baseName": "emailsGranted",
+            "name": "contactsGranted",
+            "baseName": "contactsGranted",
+            "type": "Array<string>"
+        },
+        {
+            "name": "slugsGranted",
+            "baseName": "slugsGranted",
             "type": "Array<string>"
         }    ];
 

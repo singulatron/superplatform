@@ -83,6 +83,7 @@ import './UserSvcCreateRoleResponse.mjs';
 import './UserSvcRole.mjs';
 import './UserSvcCreateUserRequest.mjs';
 import './UserSvcUser.mjs';
+import './UserSvcContact.mjs';
 import './UserSvcGetPermissionsResponse.mjs';
 import './UserSvcPermission.mjs';
 import './UserSvcGetPublicKeyResponse.mjs';

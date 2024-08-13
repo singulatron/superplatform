@@ -9,6 +9,7 @@ package userservice
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/singulatron/singulatron/localtron/datastore"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
@@ -21,25 +22,22 @@ func (s *UserService) deleteUser(userId string) error {
 	q := s.usersStore.Query(
 		datastore.Id(userId),
 	)
-	userI, found, err := q.FindOne()
+	_, found, err := q.FindOne()
 	if err != nil {
 		return err
 	}
 	if !found {
 		return errors.New("user not found")
 	}
-	user := userI.(*usertypes.User)
 
-	isAdminUser := false
-	for _, roleId := range user.RoleIds {
-		if roleId == usertypes.RoleAdmin.Id {
-			isAdminUser = true
-		}
+	isAdminUser, err := s.isAdmin(userId)
+	if err != nil {
+		return err
 	}
 
 	if isAdminUser {
-		adminUsers, err := s.usersStore.Query(
-			datastore.Equal(datastore.Field("roleIds"), usertypes.RoleAdmin.Id),
+		adminUsers, err := s.userRoleLinksStore.Query(
+			datastore.Equal(datastore.Field("roleId"), usertypes.RoleAdmin.Id),
 		).Find()
 		if err != nil {
 			return err
@@ -53,4 +51,15 @@ func (s *UserService) deleteUser(userId string) error {
 	}
 
 	return q.Delete()
+}
+
+func (s *UserService) isAdmin(userId string) (bool, error) {
+	_, isAdminUser, err := s.userRoleLinksStore.Query(
+		datastore.Id(fmt.Sprintf("%v:%v", userId, usertypes.RoleAdmin.Id)),
+	).FindOne()
+	if err != nil {
+		return false, err
+	}
+
+	return isAdminUser, nil
 }

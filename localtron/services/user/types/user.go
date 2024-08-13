@@ -27,18 +27,102 @@ type User struct {
 	UpdatedAt time.Time `json:"updatedAt,omitempty"`
 
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	Name      string     `json:"name,omitempty"`
 
-	// Email or username
-	Email string `json:"email,omitempty"`
+	// Full name of the organization.
+	Name string `json:"name,omitempty" example:"Jane Doe"`
+
+	// URL-friendly unique (inside the Singularon platform) identifier for the `user`.
+	Slug string `json:"slug,omitempty" example:"jane-doe"`
+
+	// Contacts are used for login and identification purposes.
+	Contacts []Contact `json:"contact,omitempty"`
 
 	PasswordHash string `json:"passwordHash,omitempty"`
-
-	/* Many to many relationship between User and Role */
-	RoleIds []string `json:"roleIds,omitempty"`
-
-	IsService bool `json:"isService,omitempty"`
 }
+
+type Contact struct {
+	// The unique identifier, which can be a URL.
+	//
+	// Example values: "joe12" (singulatron username), "twitter.com/thejoe" (twitter url), "joe@joesdomain.com" (email)
+	Id string `json:"id,omitempty" example:"twitter.com/thejoe"`
+
+	CreatedAt time.Time  `json:"createdAt,omitempty"`
+	UpdatedAt time.Time  `json:"updatedAt,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+
+	UserId string `json:"userId,omitempty"`
+
+	// Platform of the contact (e.g., "email", "phone", "twitter")
+	Platform string `json:"platform,omitempty" example:"twitter"`
+
+	// Value is the platform local unique identifier.
+	// Ie. while the `id` of a Twitter contact is `twitter.com/thejoe`, the value will be only `thejoe`.
+	// For email and phones the `id` and the `value` will be the same.
+	// This field mostly exists for display purposes.
+	//
+	// Example values: "joe12" (singulatron username), "thejoe" (twitter username), "joe@joesdomain.com" (email)
+	Value string `json:"value,omitempty" example:"thejoe"`
+
+	// Whether the contact is verified
+	Verified bool `json:"verified,omitempty"`
+
+	// If this is the primary contact method
+	Primary bool `json:"primary,omitempty"`
+}
+
+type UserRoleLink struct {
+	// userId:roleId
+	Id string `json:"id,omitempty"`
+
+	CreatedAt time.Time  `json:"createdAt,omitempty"`
+	UpdatedAt time.Time  `json:"updatedAt,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+
+	RoleId string `json:"roleId,omitempty"`
+	UserId string `json:"userId,omitempty"`
+}
+
+func (u *UserRoleLink) GetId() string {
+	return u.Id
+}
+
+type OrganizationUserLink struct {
+	// organizationId:userId
+	Id string `json:"id,omitempty"`
+
+	CreatedAt time.Time  `json:"createdAt,omitempty"`
+	UpdatedAt time.Time  `json:"updatedAt,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+
+	OrganizationId string `json:"organizationId,omitempty"`
+	UserId         string `json:"userId,omitempty"`
+}
+
+type Organization struct {
+	Id        string     `json:"id,omitempty"`
+	CreatedAt time.Time  `json:"createdAt,omitempty"`
+	UpdatedAt time.Time  `json:"updatedAt,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+
+	// Full name of the organization
+	Name string `json:"name,omitempty" example:"Acme Corporation"`
+
+	// URL-friendly unique (inside the Singularon platform) identifier for the `organization`.
+	Slug string `json:"slug,omitempty" example:"acme-corporation"`
+}
+
+func (o *Organization) GetId() string {
+	return o.Id
+}
+
+type ContactPlatform string
+
+const (
+	ContactPlatformEmail    ContactPlatform = "email"
+	ContactPlatformPhone    ContactPlatform = "phone"
+	ContactPlatformTwitter  ContactPlatform = "twitter"
+	ContactPlatformLinkedIn ContactPlatform = "linkedin"
+)
 
 type KeyPair struct {
 	Id        string    `json:"id,omitempty"`
@@ -70,16 +154,18 @@ type ReadUserByTokenResponse struct {
 }
 
 type RegisterRequest struct {
-	Name     string `json:"name,omitempty"`
-	Email    string `json:"email,omitempty"`
-	Password string `json:"password,omitempty"`
+	Name     string  `json:"name,omitempty"`
+	Slug     string  `json:"slug,omitempty"`
+	Contact  Contact `json:"contact,omitempty"`
+	Password string  `json:"password,omitempty"`
 }
 
 type RegisterResponse struct {
 }
 
 type LoginRequest struct {
-	Email    string `json:"email,omitempty"`
+	Slug     string `json:"slug,omitempty"`
+	Contact  string `json:"contact,omitempty"`
 	Password string `json:"password,omitempty"`
 }
 
@@ -88,15 +174,15 @@ type LoginResponse struct {
 }
 
 type SaveProfileRequest struct {
-	Email string `json:"email,omitempty"`
-	Name  string `json:"name,omitempty"`
+	Slug string `json:"slug,omitempty"`
+	Name string `json:"name,omitempty"`
 }
 
 type SaveProfileResponse struct {
 }
 
 type ChangePasswordRequest struct {
-	Email           string `json:"email,omitempty"`
+	Slug            string `json:"slug,omitempty"`
 	CurrentPassword string `json:"currentPassword,omitempty"`
 	NewPassword     string `json:"newPassword,omitempty"`
 }
@@ -104,7 +190,7 @@ type ChangePasswordRequest struct {
 type ChangePasswordResponse struct{}
 
 type ChangePasswordAdminRequest struct {
-	Email       string `json:"email,omitempty"`
+	Slug        string `json:"slug,omitempty"`
 	NewPassword string `json:"newPassword,omitempty"`
 }
 
@@ -136,15 +222,26 @@ type DeleteUserRequest struct {
 type DeleteUserResponse struct{}
 
 type Credential struct {
-	Email    string `json:"email,omitempty"`
+	Slug     string `json:"slug,omitempty"`
+	Contact  string `json:"contact,omitempty"`
 	Password string `json:"password,omitempty"`
 }
 
 func (c *Credential) GetId() string {
-	return c.Email
+	return c.Contact
 }
 
 type GetPublicKeyRequest struct{}
 type GetPublicKeyResponse struct {
 	PublicKey string `json:"publicKey,omitempty"`
 }
+
+type CreateOrganizationRequest struct {
+	// Full name of the organization.
+	Name string `json:"name,omitempty"`
+
+	// URL-friendly unique (inside the Singularon platform) identifier for the `organization`.
+	Slug string `json:"slug,omitempty"`
+}
+
+type CreateOrganizationResponse struct{}

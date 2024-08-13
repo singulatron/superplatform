@@ -24,13 +24,13 @@ export interface UserSvcChangePasswordAdminRequest {
      * @type {string}
      * @memberof UserSvcChangePasswordAdminRequest
      */
-    email?: string;
+    newPassword?: string;
     /**
      * 
      * @type {string}
      * @memberof UserSvcChangePasswordAdminRequest
      */
-    newPassword?: string;
+    slug?: string;
 }
 
 /**
@@ -50,8 +50,8 @@ export function UserSvcChangePasswordAdminRequestFromJSONTyped(json: any, ignore
     }
     return {
         
-        'email': json['email'] == null ? undefined : json['email'],
         'newPassword': json['newPassword'] == null ? undefined : json['newPassword'],
+        'slug': json['slug'] == null ? undefined : json['slug'],
     };
 }
 
@@ -61,8 +61,8 @@ export function UserSvcChangePasswordAdminRequestToJSON(value?: UserSvcChangePas
     }
     return {
         
-        'email': value['email'],
         'newPassword': value['newPassword'],
+        'slug': value['slug'],
     };
 }
 

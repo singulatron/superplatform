@@ -883,9 +883,9 @@ definitions:
     type: object
   user_svc.ChangePasswordAdminRequest:
     properties:
-      email:
-        type: string
       newPassword:
+        type: string
+      slug:
         type: string
     type: object
   user_svc.ChangePasswordAdminResponse:
@@ -894,12 +894,50 @@ definitions:
     properties:
       currentPassword:
         type: string
-      email:
-        type: string
       newPassword:
+        type: string
+      slug:
         type: string
     type: object
   user_svc.ChangePasswordResponse:
+    type: object
+  user_svc.Contact:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      id:
+        description: |-
+          The unique identifier, which can be a URL.
+
+          Example values: "joe12" (singulatron username), "twitter.com/thejoe" (twitter url), "joe@joesdomain.com" (email)
+        example: twitter.com/thejoe
+        type: string
+      platform:
+        description: Platform of the contact (e.g., "email", "phone", "twitter")
+        example: twitter
+        type: string
+      primary:
+        description: If this is the primary contact method
+        type: boolean
+      updatedAt:
+        type: string
+      userId:
+        type: string
+      value:
+        description: |-
+          Value is the platform local unique identifier.
+          Ie. while the `id` of a Twitter contact is `twitter.com/thejoe`, the value will be only `thejoe`.
+          For email and phones the `id` and the `value` will be the same.
+          This field mostly exists for display purposes.
+
+          Example values: "joe12" (singulatron username), "thejoe" (twitter username), "joe@joesdomain.com" (email)
+        example: thejoe
+        type: string
+      verified:
+        description: Whether the contact is verified
+        type: boolean
     type: object
   user_svc.CreateRoleRequest:
     properties:
@@ -976,7 +1014,11 @@ definitions:
     type: object
   user_svc.IsAuthorizedRequest:
     properties:
-      emailsGranted:
+      contactsGranted:
+        items:
+          type: string
+        type: array
+      slugsGranted:
         items:
           type: string
         type: array
@@ -990,9 +1032,11 @@ definitions:
     type: object
   user_svc.LoginRequest:
     properties:
-      email:
+      contact:
         type: string
       password:
+        type: string
+      slug:
         type: string
     type: object
   user_svc.LoginResponse:
@@ -1030,11 +1074,13 @@ definitions:
     type: object
   user_svc.RegisterRequest:
     properties:
-      email:
-        type: string
+      contact:
+        $ref: '#/definitions/user_svc.Contact'
       name:
         type: string
       password:
+        type: string
+      slug:
         type: string
     type: object
   user_svc.RegisterResponse:
@@ -1060,9 +1106,9 @@ definitions:
     type: object
   user_svc.SaveProfileRequest:
     properties:
-      email:
-        type: string
       name:
+        type: string
+      slug:
         type: string
     type: object
   user_svc.SaveProfileResponse:
@@ -1083,19 +1129,25 @@ definitions:
     type: object
   user_svc.User:
     properties:
+      contact:
+        description: Contacts are used for login and identification purposes.
+        items:
+          $ref: '#/definitions/user_svc.Contact'
+        type: array
       createdAt:
         type: string
       deletedAt:
         type: string
-      email:
-        description: Email or username
-        type: string
       id:
         type: string
-      isService:
-        type: boolean
       name:
+        description: Full name of the organization
         type: string
+      organizationIds:
+        description: Many to many relationship between User and Organization
+        items:
+          type: string
+        type: array
       passwordHash:
         type: string
       roleIds:
@@ -1103,6 +1155,10 @@ definitions:
         items:
           type: string
         type: array
+      slug:
+        description: URL-friendly unique (inside the Singularon platform) identifier
+          for the `user`.
+        type: string
       updatedAt:
         type: string
     type: object
@@ -2681,7 +2737,7 @@ paths:
           description: Unauthorized
           schema:
             $ref: '#/definitions/user_svc.ErrorResponse'
-      summary: Ge Public Key
+      summary: Get Public Key
       tags:
       - User Svc
   /user-svc/register:
@@ -2712,7 +2768,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/user_svc.ErrorResponse'
-      summary: Register a New User
+      summary: Register
       tags:
       - User Svc
   /user-svc/role:
@@ -2722,7 +2778,7 @@ paths:
       description: |-
         Create a new role.
         <b>The role ID must be prefixed by the callers username (email).</b>
-        Eg. if the owner's email/username is `petstore-svc` the role should look like `petstore-svc:admin`.
+        Eg. if the owner's slug is `petstore-svc` the role should look like `petstore-svc:admin`.
         The user account who creates the role will become the owner of that role, and only the owner will be able to edit the role.
 
         Requires the `user-svc:role:create` permission.

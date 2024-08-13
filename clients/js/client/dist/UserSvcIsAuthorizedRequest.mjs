@@ -25,7 +25,8 @@ function UserSvcIsAuthorizedRequestFromJSONTyped(json, ignoreDiscriminator) {
         return json;
     }
     return {
-        'emailsGranted': json['emailsGranted'] == null ? undefined : json['emailsGranted'],
+        'contactsGranted': json['contactsGranted'] == null ? undefined : json['contactsGranted'],
+        'slugsGranted': json['slugsGranted'] == null ? undefined : json['slugsGranted'],
     };
 }
 function UserSvcIsAuthorizedRequestToJSON(value) {
@@ -33,7 +34,8 @@ function UserSvcIsAuthorizedRequestToJSON(value) {
         return value;
     }
     return {
-        'emailsGranted': value['emailsGranted'],
+        'contactsGranted': value['contactsGranted'],
+        'slugsGranted': value['slugsGranted'],
     };
 }
 

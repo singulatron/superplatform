@@ -27,12 +27,23 @@ func (s *UserService) createRole(ownerId, name, description string, permissionId
 	}
 
 	role := &usertypes.Role{
-		Id:            uuid.New().String(),
-		Name:          name,
-		Description:   description,
-		OwnerId:       ownerId,
-		PermissionIds: permissionIds,
+		Id:          uuid.New().String(),
+		Name:        name,
+		Description: description,
+		OwnerId:     ownerId,
 	}
 
-	return role, s.rolesStore.Create(role)
+	err = s.rolesStore.Upsert(role)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, permissionId := range permissionIds {
+		err = s.addPermissionToRole(ownerId, role.Id, permissionId)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return role, nil
 }

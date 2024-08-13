@@ -13,20 +13,20 @@
 import { RequestFile } from './models';
 
 export class UserSvcSaveProfileRequest {
-    'email'?: string;
     'name'?: string;
+    'slug'?: string;
 
     static discriminator: string | undefined = undefined;
 
     static attributeTypeMap: Array<{name: string, baseName: string, type: string}> = [
         {
-            "name": "email",
-            "baseName": "email",
+            "name": "name",
+            "baseName": "name",
             "type": "string"
         },
         {
-            "name": "name",
-            "baseName": "name",
+            "name": "slug",
+            "baseName": "slug",
             "type": "string"
         }    ];
 
