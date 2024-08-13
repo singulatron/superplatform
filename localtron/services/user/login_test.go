@@ -97,16 +97,11 @@ func TestOrganization(t *testing.T) {
 	err = starterFunc()
 	require.NoError(t, err)
 
-	t.Run("claim contains new organization admin role after creating organization", func(t *testing.T) {
-		req := usertypes.LoginRequest{
-			Slug:     "singulatron",
-			Password: "changeme",
-		}
-		rsp := usertypes.LoginResponse{}
-		err := router.Post(context.Background(), "user-svc", "/login", req, &rsp)
-		require.NoError(t, err)
+	token, err := sdk.RegisterUser(router, "someuser", "pw123", "Some name")
+	require.NoError(t, err)
+	loggedInRouter := router.SetBearerToken(token)
 
-		loggedInRouter := router.SetBearerToken(rsp.Token.Token)
+	t.Run("claim contains new organization admin role after creating organization", func(t *testing.T) {
 
 		orgCreateRsp := &usertypes.CreateOrganizationResponse{}
 		err = loggedInRouter.Post(context.Background(), "user-svc", "/organization", usertypes.CreateOrganizationRequest{
@@ -119,11 +114,18 @@ func TestOrganization(t *testing.T) {
 		err = router.Get(context.Background(), "user-svc", "/public-key", nil, &pkrsp)
 		require.NoError(t, err)
 
-		claim, err := sdk.DecodeJWT(rsp.Token.Token, pkrsp.PublicKey)
+		claim, err := sdk.DecodeJWT(token, pkrsp.PublicKey)
 		require.NoError(t, err)
 		require.NotNil(t, claim)
 		require.Equal(t, 1, len(claim.RoleIds), claim.RoleIds)
 
+		req := usertypes.LoginRequest{
+			Slug:     "someuser",
+			Password: "pw123",
+		}
+		rsp := usertypes.LoginResponse{}
+		err = router.Post(context.Background(), "user-svc", "/login", req, &rsp)
+		require.NoError(t, err)
 		err = router.Post(context.Background(), "user-svc", "/login", req, &rsp)
 		require.NoError(t, err)
 

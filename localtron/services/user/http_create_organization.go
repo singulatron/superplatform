@@ -33,7 +33,7 @@ import (
 func (s *UserService) CreateOrganization(
 	w http.ResponseWriter,
 	r *http.Request) {
-	usr, err := s.isAuthorized(r, user.PermissionUserCreate.Id, nil, nil)
+	usr, err := s.isAuthorized(r, user.PermissionOrganizationCreate.Id, nil, nil)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return

@@ -71,68 +71,74 @@ type AddPermissionToRoleResponse struct{}
 
 var PermissionUserCreate = Permission{
 	Id:   "user-svc:user:create",
-	Name: "User Service - User Create",
+	Name: "User Svc - User Create",
 }
 
 var PermissionUserView = Permission{
 	Id:   "user-svc:user:view",
-	Name: "User Service - User View",
+	Name: "User Svc - User View",
 }
 
 var PermissionUserEdit = Permission{
 	Id:   "user-svc:user:edit",
-	Name: "User Service - User Edit",
+	Name: "User Svc - User Edit",
 }
 
 var PermissionUserDelete = Permission{
 	Id:   "user-svc:user:delete",
-	Name: "User Service - User Delete",
+	Name: "User Svc - User Delete",
 }
 
 var PermissionUserPasswordChange = Permission{
 	Id:   "user-svc:user:passwordChange",
-	Name: "User Service - User Password Change",
+	Name: "User Svc - User Password Change",
 }
 
 var PermissionRoleCreate = Permission{
 	Id:   "user-svc:role:create",
-	Name: "User Service - Role Create",
+	Name: "User Svc - Role Create",
 }
 
 var PermissionRoleView = Permission{
 	Id:   "user-svc:role:view",
-	Name: "User Service - Role View",
+	Name: "User Svc - Role View",
 }
 
 var PermissionRoleEdit = Permission{
 	Id:   "user-svc:role:edit",
-	Name: "User Service - Role Edit",
+	Name: "User Svc - Role Edit",
 }
 
 var PermissionRoleDelete = Permission{
 	Id:   "user-svc:role:delete",
-	Name: "User Service - Role Delete",
+	Name: "User Svc - Role Delete",
 }
 
 var PermissionPermissionCreate = Permission{
 	Id:   "user-svc:permission:create",
-	Name: "User Service - Permission Create",
+	Name: "User Svc - Permission Create",
 }
 
 var PermissionPermissionEdit = Permission{
 	Id:   "user-svc:permission:edit",
-	Name: "User Service - Permission Edit",
+	Name: "User Svc - Permission Edit",
 }
 
 var PermissionPermissionAssign = Permission{
 	Id:   "user-svc:permission:assign",
-	Name: "User Service - Permission Assign",
+	Name: "User Svc - Permission Assign",
+}
+
+var PermissionOrganizationCreate = Permission{
+	Id:   "user-svc:organiztation:create",
+	Name: "User Svc - Organization Create",
 }
 
 var UserPermissions = []Permission{
 	PermissionPermissionCreate,
 	PermissionPermissionEdit,
 	PermissionPermissionAssign,
+	PermissionOrganizationCreate,
 }
 
 var AdminPermissions = []Permission{
