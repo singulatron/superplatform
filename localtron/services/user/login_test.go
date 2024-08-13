@@ -30,10 +30,6 @@ func TestRegistration(t *testing.T) {
 	err = starterFunc()
 	require.NoError(t, err)
 
-	// tk, err := usertypes.RegisterUser(router, "someuser", "pw123", "Some name")
-	// require.NoError(t, err)
-	// router = router.SetBearerToken(tk)
-
 	t.Run("user password change", func(t *testing.T) {
 		req := usertypes.LoginRequest{
 			Slug:     "singulatron",
@@ -61,23 +57,6 @@ func TestRegistration(t *testing.T) {
 
 		require.Equal(t, claim.UserId, byTokenRsp.User.Id)
 
-		//err = router.Post(context.Background(), "user-svc", "/change-password-admin", usertypes.ChangePasswordAdminRequest{
-		//	Email:       "singulatron",
-		//	NewPassword: "yo",
-		//}, nil)
-		//require.NoError(t, err)
-		//
-		//loginReq := usertypes.LoginRequest{
-		//	Email:    "singulatron",
-		//	Password: "changeme",
-		//}
-		//err = router.Post(context.Background(), "user-svc", "/login", loginReq, &rsp)
-		//require.Error(t, err)
-		//
-		//loginReq.Password = "yo"
-		//err = router.Post(context.Background(), "user-svc", "/login", loginReq, &rsp)
-		//require.NoError(t, err)
-
 		changePassReq := usertypes.ChangePasswordRequest{
 			Slug:            "singulatron",
 			CurrentPassword: "changeme",
@@ -97,5 +76,61 @@ func TestRegistration(t *testing.T) {
 		changePassReq.NewPassword = "yo1"
 		err = loggedInRouter.Post(context.Background(), "user-svc", "/change-password", changePassReq, nil)
 		require.Error(t, err)
+	})
+}
+
+func TestOrganization(t *testing.T) {
+	hs := &di.HandlerSwitcher{}
+	server := httptest.NewServer(hs)
+	defer server.Close()
+
+	options := &di.Options{
+		Test: true,
+		Url:  server.URL,
+	}
+	universe, starterFunc, err := di.BigBang(options)
+	require.NoError(t, err)
+
+	hs.UpdateHandler(universe)
+	router := options.Router
+
+	err = starterFunc()
+	require.NoError(t, err)
+
+	t.Run("claim contains new organization admin role after creating organization", func(t *testing.T) {
+		req := usertypes.LoginRequest{
+			Slug:     "singulatron",
+			Password: "changeme",
+		}
+		rsp := usertypes.LoginResponse{}
+		err := router.Post(context.Background(), "user-svc", "/login", req, &rsp)
+		require.NoError(t, err)
+
+		loggedInRouter := router.SetBearerToken(rsp.Token.Token)
+
+		orgCreateRsp := &usertypes.CreateOrganizationResponse{}
+		err = loggedInRouter.Post(context.Background(), "user-svc", "/organization", usertypes.CreateOrganizationRequest{
+			Slug: "test-org",
+			Name: "Test Org",
+		}, orgCreateRsp)
+		require.NoError(t, err)
+
+		pkrsp := usertypes.GetPublicKeyResponse{}
+		err = router.Get(context.Background(), "user-svc", "/public-key", nil, &pkrsp)
+		require.NoError(t, err)
+
+		claim, err := sdk.DecodeJWT(rsp.Token.Token, pkrsp.PublicKey)
+		require.NoError(t, err)
+		require.NotNil(t, claim)
+		require.Equal(t, 1, len(claim.RoleIds), claim.RoleIds)
+
+		err = router.Post(context.Background(), "user-svc", "/login", req, &rsp)
+		require.NoError(t, err)
+
+		claim, err = sdk.DecodeJWT(rsp.Token.Token, pkrsp.PublicKey)
+		require.NoError(t, err)
+		require.NotNil(t, claim)
+		require.Equal(t, 2, len(claim.RoleIds), claim.RoleIds)
+		require.Contains(t, claim.RoleIds, "user-svc:org:test-org:admin", claim.RoleIds)
 	})
 }

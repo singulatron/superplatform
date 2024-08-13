@@ -34,17 +34,6 @@ func (s *UserService) login(slug, password string) (*usertypes.AuthToken, error)
 		return nil, errors.New("unauthorized")
 	}
 
-	tokens, err := s.authTokensStore.Query(
-		datastore.Equal(datastore.Field("userId"), user.Id),
-	).OrderBy(datastore.OrderByField("createdAt", true)).Find()
-	if err != nil {
-		return nil, err
-	}
-
-	if len(tokens) > 0 {
-		return tokens[0].(*usertypes.AuthToken), nil
-	}
-
 	token, err := s.generateAuthToken(user)
 	if err != nil {
 		return nil, err
