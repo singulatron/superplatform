@@ -57,7 +57,6 @@ func (s *UserService) createUser(user *usertypes.User, password string, roleIds 
 	}
 
 	user.PasswordHash = passwordHash
-	user.RoleIds = roleIds
 	if user.Id == "" {
 		user.Id = uuid.NewString()
 	}
@@ -66,5 +65,17 @@ func (s *UserService) createUser(user *usertypes.User, password string, roleIds 
 	user.UpdatedAt = now
 	user.CreatedAt = now
 
-	return s.usersStore.Create(user)
+	err = s.usersStore.Create(user)
+	if err != nil {
+		return nil
+	}
+
+	for _, roleId := range roleIds {
+		err = s.addRoleToUser(user.Id, roleId)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }

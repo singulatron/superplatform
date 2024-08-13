@@ -50,7 +50,7 @@ func (s *UserService) SetRolePermissions(
 
 	roleId := mux.Vars(r)["roleId"]
 
-	err = s.setRolePermissions(usr.Id, roleId, req.PermissionIds)
+	err = s.overwriteRolePermissions(usr.Id, roleId, req.PermissionIds)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

@@ -9,7 +9,7 @@ package userservice
 
 import (
 	"errors"
-	"time"
+	"fmt"
 
 	"github.com/singulatron/singulatron/localtron/datastore"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
@@ -28,12 +28,8 @@ func (s *UserService) RemoveRole(userId string, roleId string) error {
 	}
 	user := userI.(*usertypes.User)
 
-	for i, existingRoleId := range user.RoleIds {
-		if existingRoleId == roleId {
-			user.RoleIds = append(user.RoleIds[:i], user.RoleIds[i+1:]...)
-			user.UpdatedAt = time.Now()
-		}
-	}
+	return s.userRoleLinksStore.Query(
+		datastore.Id(fmt.Sprintf("%v:%v", user.Id, roleId)),
+	).Delete()
 
-	return query.Update(user)
 }

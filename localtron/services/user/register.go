@@ -44,12 +44,18 @@ func (s *UserService) register(slug, password, name string, roleIds []string) (*
 		Name:         name,
 		Slug:         slug,
 		PasswordHash: passwordHash,
-		RoleIds:      roleIds,
 	}
 
 	err = s.usersStore.Create(user)
 	if err != nil {
 		return nil, err
+	}
+
+	for _, roleId := range roleIds {
+		err = s.addRoleToUser(user.Id, roleId)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	token, err := s.generateAuthToken(user)

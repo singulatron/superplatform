@@ -10,6 +10,7 @@ package userservice
 import (
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/singulatron/singulatron/localtron/datastore"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
@@ -44,18 +45,11 @@ func (s *UserService) addPermissionToRole(userId, roleId, permissionId string) e
 		return errors.New("not an owner of the permission")
 	}
 
-	exists := false
-	for _, v := range role.PermissionIds {
-		if v == permissionId {
-			exists = true
-		}
-	}
+	return s.permissionRoleLinksStore.Upsert(&usertypes.PermissionRoleLink{
+		Id:        fmt.Sprintf("%v:%v", permission.Id, role.Id),
+		CreatedAt: time.Now(),
 
-	if exists {
-		return nil
-	}
-
-	role.PermissionIds = append(role.PermissionIds, permissionId)
-
-	return roleQ.Update(role)
+		RoleId:       roleId,
+		PermissionId: permissionId,
+	})
 }

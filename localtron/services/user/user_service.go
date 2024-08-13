@@ -23,14 +23,17 @@ import (
 type UserService struct {
 	router *router.Router
 
-	usersStore         datastore.DataStore
-	rolesStore         datastore.DataStore
-	permissionsStore   datastore.DataStore
-	credentialsStore   datastore.DataStore
-	authTokensStore    datastore.DataStore
-	keyPairsStore      datastore.DataStore
-	contactsStore      datastore.DataStore
-	organizationsStore datastore.DataStore
+	usersStore                 datastore.DataStore
+	rolesStore                 datastore.DataStore
+	permissionsStore           datastore.DataStore
+	credentialsStore           datastore.DataStore
+	authTokensStore            datastore.DataStore
+	keyPairsStore              datastore.DataStore
+	contactsStore              datastore.DataStore
+	organizationsStore         datastore.DataStore
+	organizationUserLinksStore datastore.DataStore
+	userRoleLinksStore         datastore.DataStore
+	permissionRoleLinksStore   datastore.DataStore
 
 	privateKey    *rsa.PrivateKey
 	publicKeyPem  string
@@ -57,7 +60,7 @@ func NewUserService(
 	if err != nil {
 		return nil, err
 	}
-	credentialsStore, err := datastoreFactory("user_credetentials", &usertypes.Credential{})
+	credentialsStore, err := datastoreFactory("userCredetentials", &usertypes.Credential{})
 	if err != nil {
 		return nil, err
 	}
@@ -69,21 +72,36 @@ func NewUserService(
 	if err != nil {
 		return nil, err
 	}
-	organizationsStore, err := datastoreFactory("contacts", &usertypes.Contact{})
+	organizationsStore, err := datastoreFactory("organizations", &usertypes.Organization{})
+	if err != nil {
+		return nil, err
+	}
+	organizationUserLinksStore, err := datastoreFactory("organizationUserLinks", &usertypes.OrganizationUserLink{})
+	if err != nil {
+		return nil, err
+	}
+	userRoleLinksStore, err := datastoreFactory("userRoleLinks", &usertypes.UserRoleLink{})
+	if err != nil {
+		return nil, err
+	}
+	permissionRoleLinksStore, err := datastoreFactory("permissionRoleLinks", &usertypes.PermissionRoleLink{})
 	if err != nil {
 		return nil, err
 	}
 
 	service := &UserService{
-		router:             router,
-		usersStore:         usersStore,
-		rolesStore:         rolesStore,
-		authTokensStore:    authTokensStore,
-		permissionsStore:   permissionsStore,
-		credentialsStore:   credentialsStore,
-		keyPairsStore:      keyPairsStore,
-		contactsStore:      contactsStore,
-		organizationsStore: organizationsStore,
+		router:                     router,
+		usersStore:                 usersStore,
+		rolesStore:                 rolesStore,
+		authTokensStore:            authTokensStore,
+		permissionsStore:           permissionsStore,
+		credentialsStore:           credentialsStore,
+		keyPairsStore:              keyPairsStore,
+		contactsStore:              contactsStore,
+		organizationsStore:         organizationsStore,
+		organizationUserLinksStore: organizationUserLinksStore,
+		userRoleLinksStore:         userRoleLinksStore,
+		permissionRoleLinksStore:   permissionRoleLinksStore,
 	}
 
 	err = service.registerRoles()
@@ -219,21 +237,23 @@ func (s *UserService) bootstrap() error {
 }
 
 func (s *UserService) registerRoles() error {
-	_, err := s.UpsertRole(
+	err := s.UpsertRole(
+		s.serviceUserId,
 		usertypes.RoleAdmin.Id,
 		usertypes.RoleAdmin.Name,
 		"",
-		usertypes.RoleAdmin.PermissionIds,
+		[]string{},
 	)
 	if err != nil {
 		return err
 	}
 
-	_, err = s.UpsertRole(
+	err = s.UpsertRole(
+		s.serviceUserId,
 		usertypes.RoleUser.Id,
 		usertypes.RoleUser.Name,
 		"",
-		usertypes.RoleUser.PermissionIds,
+		[]string{},
 	)
 	if err != nil {
 		return err

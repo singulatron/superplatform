@@ -60,7 +60,6 @@ func TestRegistration(t *testing.T) {
 		require.Equal(t, "", byTokenRsp.User.PasswordHash)
 
 		require.Equal(t, claim.UserId, byTokenRsp.User.Id)
-		require.Equal(t, claim.RoleIds, byTokenRsp.User.RoleIds)
 
 		//err = router.Post(context.Background(), "user-svc", "/change-password-admin", usertypes.ChangePasswordAdminRequest{
 		//	Email:       "singulatron",

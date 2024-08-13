@@ -8,21 +8,17 @@ import (
 
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/pkg/errors"
+
+	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-type Claims struct {
-	UserId  string   `json:"sui"` // `sui`: singulatron user ids
-	RoleIds []string `json:"sri"` // `sri`: singulatron role ids
-	jwt.RegisteredClaims
-}
-
-func DecodeJWT(tokenString string, publicKeyString string) (*Claims, error) {
+func DecodeJWT(tokenString string, publicKeyString string) (*usertypes.Claims, error) {
 	publicKey, err := PublicKeyFromString(publicKeyString)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to get public key from string")
 	}
 
-	token, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &usertypes.Claims{}, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodRSA); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
@@ -33,7 +29,7 @@ func DecodeJWT(tokenString string, publicKeyString string) (*Claims, error) {
 		return nil, fmt.Errorf("failed to parse JWT: %v", err)
 	}
 
-	if claims, ok := token.Claims.(*Claims); ok && token.Valid {
+	if claims, ok := token.Claims.(*usertypes.Claims); ok && token.Valid {
 		return claims, nil
 	}
 

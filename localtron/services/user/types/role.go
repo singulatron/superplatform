@@ -10,15 +10,13 @@ package user_svc
 import "time"
 
 var RoleAdmin = &Role{
-	Id:            "user-svc:admin",
-	Name:          "User Service - Admin Role",
-	PermissionIds: []string{},
+	Id:   "user-svc:admin",
+	Name: "User Service - Admin Role",
 }
 
 var RoleUser = &Role{
-	Id:            "user-svc:user",
-	Name:          "User Service - User Role",
-	PermissionIds: []string{},
+	Id:   "user-svc:user",
+	Name: "User Service - User Role",
 }
 
 type Role struct {
@@ -26,10 +24,23 @@ type Role struct {
 	CreatedAt time.Time `json:"createdAt,omitempty"`
 	UpdatedAt time.Time `json:"updatedAt,omitempty"`
 
-	Name          string   `json:"name"`
-	Description   string   `json:"description,omitempty"`
-	OwnerId       string   `json:"ownerId,omitempty"`
-	PermissionIds []string `json:"permissionIds,omitempty"`
+	Name        string `json:"name"`
+	Description string `json:"description,omitempty"`
+	OwnerId     string `json:"ownerId,omitempty"`
+}
+
+type PermissionRoleLink struct {
+	// permissionId:roleId
+	Id        string    `json:"id,omitempty"`
+	CreatedAt time.Time `json:"createdAt,omitempty"`
+	UpdatedAt time.Time `json:"updatedAt,omitempty"`
+
+	PermissionId string `json:"permissionId,omitempty"`
+	RoleId       string `json:"roleId,omitempty"`
+}
+
+func (c *PermissionRoleLink) GetId() string {
+	return c.Id
 }
 
 func (c *Role) GetId() string {

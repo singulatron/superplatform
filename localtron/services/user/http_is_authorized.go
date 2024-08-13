@@ -86,20 +86,29 @@ func (s *UserService) isAuthorized(r *http.Request, permissionId string,
 	if slugGrant {
 		return usr, nil
 	}
+	roleLinks, err := s.userRoleLinksStore.Query(
+		datastore.Equal(datastore.Field("userId"), usr.Id),
+	).Find()
+	if err != nil {
+		return nil, err
+	}
+	roleIds := []string{}
+	for _, role := range roleLinks {
+		roleIds = append(roleIds, role.(*user.UserRoleLink).RoleId)
+	}
 
-	roles, err := s.rolesStore.Query(
-		datastore.Equal(datastore.Field("id"), usr.RoleIds),
+	permissionLinks, err := s.permissionRoleLinksStore.Query(
+		datastore.Equal(datastore.Field("roleId"), roleIds),
 	).Find()
 	if err != nil {
 		return nil, err
 	}
 
-	for _, role := range roles {
-		for _, permId := range role.(*user.Role).PermissionIds {
-			if permId == permissionId {
-				return usr, nil
-			}
+	for _, permissionLink := range permissionLinks {
+		if permissionLink.(*user.PermissionRoleLink).PermissionId == permissionId {
+			return usr, nil
 		}
+
 	}
 
 	return nil, errors.New("unauthorized")

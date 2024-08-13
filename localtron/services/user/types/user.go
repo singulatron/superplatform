@@ -28,22 +28,16 @@ type User struct {
 
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 
-	// Full name of the organization
-	Name string `json:"name,omitempty"`
+	// Full name of the organization.
+	Name string `json:"name,omitempty" example:"Jane Doe"`
 
 	// URL-friendly unique (inside the Singularon platform) identifier for the `user`.
-	Slug string `json:"slug,omitempty"`
+	Slug string `json:"slug,omitempty" example:"jane-doe"`
 
 	// Contacts are used for login and identification purposes.
 	Contacts []Contact `json:"contact,omitempty"`
 
 	PasswordHash string `json:"passwordHash,omitempty"`
-
-	/* Many to many relationship between User and Role */
-	RoleIds []string `json:"roleIds,omitempty"`
-
-	/* Many to many relationship between User and Organization */
-	OrganizationIds []string `json:"organizationIds,omitempty"`
 }
 
 type Contact struct {
@@ -56,8 +50,10 @@ type Contact struct {
 	UpdatedAt time.Time  `json:"updatedAt,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 
-	UserId   string `json:"userId,omitempty"`
-	Platform string `json:"platform,omitempty" example:"twitter"` // Platform of the contact (e.g., "email", "phone", "twitter")
+	UserId string `json:"userId,omitempty"`
+
+	// Platform of the contact (e.g., "email", "phone", "twitter")
+	Platform string `json:"platform,omitempty" example:"twitter"`
 
 	// Value is the platform local unique identifier.
 	// Ie. while the `id` of a Twitter contact is `twitter.com/thejoe`, the value will be only `thejoe`.
@@ -67,8 +63,39 @@ type Contact struct {
 	// Example values: "joe12" (singulatron username), "thejoe" (twitter username), "joe@joesdomain.com" (email)
 	Value string `json:"value,omitempty" example:"thejoe"`
 
-	Verified bool `json:"verified,omitempty"` // Whether the contact is verified
-	Primary  bool `json:"primary,omitempty"`  // If this is the primary contact method
+	// Whether the contact is verified
+	Verified bool `json:"verified,omitempty"`
+
+	// If this is the primary contact method
+	Primary bool `json:"primary,omitempty"`
+}
+
+type UserRoleLink struct {
+	// userId:roleId
+	Id string `json:"id,omitempty"`
+
+	CreatedAt time.Time  `json:"createdAt,omitempty"`
+	UpdatedAt time.Time  `json:"updatedAt,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+
+	RoleId string `json:"roleId,omitempty"`
+	UserId string `json:"userId,omitempty"`
+}
+
+func (u *UserRoleLink) GetId() string {
+	return u.Id
+}
+
+type OrganizationUserLink struct {
+	// organizationId:userId
+	Id string `json:"id,omitempty"`
+
+	CreatedAt time.Time  `json:"createdAt,omitempty"`
+	UpdatedAt time.Time  `json:"updatedAt,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+
+	OrganizationId string `json:"organizationId,omitempty"`
+	UserId         string `json:"userId,omitempty"`
 }
 
 type Organization struct {
@@ -78,10 +105,14 @@ type Organization struct {
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 
 	// Full name of the organization
-	Name string `json:"name,omitempty"`
+	Name string `json:"name,omitempty" example:"Acme Corporation"`
 
 	// URL-friendly unique (inside the Singularon platform) identifier for the `organization`.
-	Slug string `json:"slug,omitempty"`
+	Slug string `json:"slug,omitempty" example:"acme-corporation"`
+}
+
+func (o *Organization) GetId() string {
+	return o.Id
 }
 
 type ContactPlatform string
@@ -204,3 +235,13 @@ type GetPublicKeyRequest struct{}
 type GetPublicKeyResponse struct {
 	PublicKey string `json:"publicKey,omitempty"`
 }
+
+type CreateOrganizationRequest struct {
+	// Full name of the organization.
+	Name string `json:"name,omitempty"`
+
+	// URL-friendly unique (inside the Singularon platform) identifier for the `organization`.
+	Slug string `json:"slug,omitempty"`
+}
+
+type CreateOrganizationResponse struct{}
