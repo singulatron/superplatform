@@ -28,15 +28,6 @@ jobs:
           go install github.com/swaggo/swag/cmd/swag@latest
           npm install @openapitools/openapi-generator-cli -g
           bash gen.sh
-
-          cd client
-          npm install
-          npm run build
-          cd ..
-
-          cd node
-          npm install
-          npm run build
         working-directory: ./clients/js
 
       - name: Build TS client
