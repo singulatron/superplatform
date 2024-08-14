@@ -32,14 +32,16 @@ func (s *UserService) Login(w http.ResponseWriter, r *http.Request) {
 	req := user.LoginRequest{}
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
-		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(`Invalid JSON`))
 		return
 	}
 	defer r.Body.Close()
 
 	token, err := s.login(req.Slug, req.Password)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
 		return
 	}
 

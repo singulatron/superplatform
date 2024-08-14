@@ -27,9 +27,12 @@ import (
 // @Router /user-svc/register [post]
 func (s *UserService) Register(w http.ResponseWriter, r *http.Request) {
 	req := user.RegisterRequest{}
+	w.Header().Set("Content-Type", "application/json")
+
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
-		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(`Invalid JSON`))
 		return
 	}
 	defer r.Body.Close()
@@ -40,7 +43,8 @@ func (s *UserService) Register(w http.ResponseWriter, r *http.Request) {
 		Contacts: []user.Contact{req.Contact},
 	}, req.Password, []string{user.RoleUser.Id})
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
 		return
 	}
 
