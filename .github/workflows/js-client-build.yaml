@@ -46,6 +46,7 @@ jobs:
         run: |
           if [ -n "$(git status --porcelain)" ]; then
             echo "Uncommitted changes detected. Failing the build."
+            git status
             exit 1
           else
             echo "No changes detected."
