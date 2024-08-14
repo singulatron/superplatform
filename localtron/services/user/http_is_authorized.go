@@ -114,12 +114,27 @@ func (s *UserService) isAuthorized(r *http.Request, permissionId string,
 	return nil, errors.New("unauthorized")
 }
 
+func (s *UserService) getRoleIdsByUserId(userId string) ([]string, error) {
+	roleLinks, err := s.userRoleLinksStore.Query(
+		datastore.Equal(datastore.Field("userId"), userId),
+	).Find()
+	if err != nil {
+		return nil, err
+	}
+	roleIds := []string{}
+	for _, role := range roleLinks {
+		roleIds = append(roleIds, role.(*user.UserRoleLink).RoleId)
+	}
+
+	return roleIds, nil
+}
+
 func (s *UserService) getUserFromRequest(r *http.Request) (*user.User, error) {
 	authHeader := r.Header.Get("Authorization")
 	authHeader = strings.Replace(authHeader, "Bearer ", "", 1)
 
-	if authHeader == "" {
-		return nil, fmt.Errorf("Unauthorized")
+	if authHeader == "" || authHeader == "Bearer" {
+		return nil, fmt.Errorf("no auth header")
 	}
 
 	tokenI, found, err := s.authTokensStore.Query(
@@ -130,7 +145,7 @@ func (s *UserService) getUserFromRequest(r *http.Request) (*user.User, error) {
 	}
 
 	if !found {
-		return nil, errors.New("unauthorized")
+		return nil, errors.New("token not found")
 	}
 	token := tokenI.(*user.AuthToken)
 
@@ -145,7 +160,7 @@ func (s *UserService) getUserFromRequest(r *http.Request) (*user.User, error) {
 			slog.String("userId", token.UserId),
 			slog.String("tokenId", token.Id),
 		)
-		return nil, errors.New("unauthorized")
+		return nil, errors.New("token user does not exist")
 	}
 	user := userI.(*user.User)
 	return user, nil

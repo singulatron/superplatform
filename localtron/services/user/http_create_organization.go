@@ -47,7 +47,7 @@ func (s *UserService) CreateOrganization(
 	}
 	defer r.Body.Close()
 
-	err = s.createOrganization(usr.Id, req.Name, req.Slug)
+	err = s.createOrganization(usr.Id, req.Id, req.Name, req.Slug)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

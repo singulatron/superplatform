@@ -2,6 +2,8 @@ module github.com/singulatron/singulatron/localtron
 
 go 1.21
 
+replace github.com/singulatron/singulatron/clients/go => ../clients/go
+
 require (
 	github.com/andybalholm/brotli v1.1.0
 	github.com/docker/docker v26.0.0+incompatible

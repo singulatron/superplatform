@@ -130,8 +130,18 @@ var PermissionPermissionAssign = Permission{
 }
 
 var PermissionOrganizationCreate = Permission{
-	Id:   "user-svc:organiztation:create",
+	Id:   "user-svc:organization:create",
 	Name: "User Svc - Organization Create",
+}
+
+var PermissionOrganizationAddUser = Permission{
+	Id:   "user-svc:organization:add-user",
+	Name: "User Svc - Organization Add User",
+}
+
+var PermissionOrganizationRemoveUser = Permission{
+	Id:   "user-svc:organization:remove-user",
+	Name: "User Svc - Organization Remove User",
 }
 
 var UserPermissions = []Permission{
@@ -139,6 +149,8 @@ var UserPermissions = []Permission{
 	PermissionPermissionEdit,
 	PermissionPermissionAssign,
 	PermissionOrganizationCreate,
+	PermissionOrganizationAddUser,
+	PermissionOrganizationRemoveUser,
 }
 
 var AdminPermissions = []Permission{
@@ -154,4 +166,7 @@ var AdminPermissions = []Permission{
 	PermissionPermissionCreate,
 	PermissionPermissionEdit,
 	PermissionPermissionAssign,
+	PermissionOrganizationCreate,
+	PermissionOrganizationAddUser,
+	PermissionOrganizationRemoveUser,
 }

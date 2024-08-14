@@ -27,6 +27,7 @@ import (
 func (s *UserService) GetPublicKey(
 	w http.ResponseWriter,
 	r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 
 	bs, _ := json.Marshal(user.GetPublicKeyResponse{
 		PublicKey: s.publicKeyPem,

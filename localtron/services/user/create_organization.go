@@ -17,7 +17,7 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-func (s *UserService) createOrganization(userId, name, slug string) error {
+func (s *UserService) createOrganization(userId, orgId, name, slug string) error {
 	_, exists, err := s.contactsStore.Query(
 		datastore.Equal(datastore.Field("slug"), slug),
 	).FindOne()
@@ -30,6 +30,7 @@ func (s *UserService) createOrganization(userId, name, slug string) error {
 	}
 
 	org := &usertypes.Organization{
+		Id:   orgId,
 		Name: name,
 		Slug: slug,
 	}

@@ -166,7 +166,7 @@ type RegisterResponse struct {
 type LoginRequest struct {
 	Slug     string `json:"slug,omitempty"`
 	Contact  string `json:"contact,omitempty"`
-	Password string `json:"password,omitempty"`
+	Password string `json:"password"`
 }
 
 type LoginResponse struct {
@@ -237,6 +237,8 @@ type GetPublicKeyResponse struct {
 }
 
 type CreateOrganizationRequest struct {
+	Id string `json:"id,omitempty"`
+
 	// Full name of the organization.
 	Name string `json:"name,omitempty"`
 
@@ -245,3 +247,16 @@ type CreateOrganizationRequest struct {
 }
 
 type CreateOrganizationResponse struct{}
+
+type AddUserToOrganizationRequest struct {
+	UserId string `json:"userId,omitempty"`
+}
+
+type AddUserToOrganizationResponse struct {
+}
+
+type RemoveUserFromOrganizationRequest struct {
+}
+
+type RemoveUserFromOrganizationResponse struct {
+}

@@ -35,6 +35,8 @@ func (s *UserService) AddPermissionToRole(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
+	w.Header().Set("Content-Type", "application/json")
+
 	// @todo add proper permission here
 	_, err := s.isAuthorized(r, user.PermissionPermissionAssign.Id, nil, nil)
 	if err != nil {
