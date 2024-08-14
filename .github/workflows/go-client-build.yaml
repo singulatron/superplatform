@@ -28,7 +28,7 @@ jobs:
           go install github.com/swaggo/swag/cmd/swag@latest
           npm install @openapitools/openapi-generator-cli -g
           bash gen.sh
-
+          go build
         working-directory: ./clients/go
 
       - name: Check for uncommitted changes
