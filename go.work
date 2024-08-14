@@ -1,4 +1,7 @@
 go 1.21
 
 use ./localtron
+
 use ./dapper
+
+use ./clients/go

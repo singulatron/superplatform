@@ -27,6 +27,8 @@ import (
 // @Security BearerAuth
 // @Router /user-svc/user/by-token [post]
 func (s *UserService) ReadUserByToken(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
 	req := user.ReadUserByTokenRequest{}
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {

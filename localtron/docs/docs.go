@@ -2218,6 +2218,224 @@ const docTemplate = `{
                 }
             }
         },
+        "/user-svc/organization": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Allows a logged-in user to create a new organization. The user initiating the request will be assigned the role of admin for that organization.\nThe initiating user will receive a dynamic role in the format ` + "`" + `user-svc:org:$organization-slug:admin` + "`" + `, where ` + "`" + `$organization-slug` + "`" + ` is a unique identifier for the created organization.\nDynamic roles are generated based on specific user-resource associations, offering more flexible permission management compared to static roles.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Svc"
+                ],
+                "summary": "Create an Organization",
+                "operationId": "createOrganization",
+                "parameters": [
+                    {
+                        "description": "Create User Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user_svc.CreateOrganizationRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User created successfully",
+                        "schema": {
+                            "$ref": "#/definitions/user_svc.CreateOrganizationResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/user-svc/organization/{organizationId}/user": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Allows an authorized user to add another user to a specific organization. The user will be assigned a specific role within the organization.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Svc"
+                ],
+                "summary": "Add a User to an Organization",
+                "operationId": "addUserToOrganization",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Organization ID",
+                        "name": "organizationId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Add User to Organization Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user_svc.AddUserToOrganizationRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User added successfully",
+                        "schema": {
+                            "$ref": "#/definitions/user_svc.AddUserToOrganizationResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Organization/User not found",
+                        "schema": {
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/user-svc/organization/{organizationId}/user/{userId}": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Allows an authorized user to add another user to a specific organization. The user will be assigned a specific role within the organization.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Svc"
+                ],
+                "summary": "Remove a User from an Organization",
+                "operationId": "removeUserFromOrganization",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Organization ID",
+                        "name": "organizationId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Add User to Organization Request",
+                        "name": "request",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/user_svc.RemoveUserFromOrganizationRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User added successfully",
+                        "schema": {
+                            "$ref": "#/definitions/user_svc.RemoveUserFromOrganizationResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Organization/User not found",
+                        "schema": {
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/user_svc.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/user-svc/permission/{permissionId}": {
             "put": {
                 "security": [
@@ -4281,6 +4499,17 @@ const docTemplate = `{
         "prompt_svc.RemovePromptResponse": {
             "type": "object"
         },
+        "user_svc.AddUserToOrganizationRequest": {
+            "type": "object",
+            "properties": {
+                "userId": {
+                    "type": "string"
+                }
+            }
+        },
+        "user_svc.AddUserToOrganizationResponse": {
+            "type": "object"
+        },
         "user_svc.AuthToken": {
             "type": "object",
             "properties": {
@@ -4374,6 +4603,25 @@ const docTemplate = `{
                     "type": "boolean"
                 }
             }
+        },
+        "user_svc.CreateOrganizationRequest": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "description": "Full name of the organization.",
+                    "type": "string"
+                },
+                "slug": {
+                    "description": "URL-friendly unique (inside the Singularon platform) identifier for the ` + "`" + `organization` + "`" + `.",
+                    "type": "string"
+                }
+            }
+        },
+        "user_svc.CreateOrganizationResponse": {
+            "type": "object"
         },
         "user_svc.CreateRoleRequest": {
             "type": "object",
@@ -4601,6 +4849,12 @@ const docTemplate = `{
         "user_svc.RegisterResponse": {
             "type": "object"
         },
+        "user_svc.RemoveUserFromOrganizationRequest": {
+            "type": "object"
+        },
+        "user_svc.RemoveUserFromOrganizationResponse": {
+            "type": "object"
+        },
         "user_svc.Role": {
             "type": "object",
             "properties": {
@@ -4618,12 +4872,6 @@ const docTemplate = `{
                 },
                 "ownerId": {
                     "type": "string"
-                },
-                "permissionIds": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
                 },
                 "updatedAt": {
                     "type": "string"
@@ -4686,29 +4934,17 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "name": {
-                    "description": "Full name of the organization",
-                    "type": "string"
-                },
-                "organizationIds": {
-                    "description": "Many to many relationship between User and Organization",
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
+                    "description": "Full name of the organization.",
+                    "type": "string",
+                    "example": "Jane Doe"
                 },
                 "passwordHash": {
                     "type": "string"
                 },
-                "roleIds": {
-                    "description": "Many to many relationship between User and Role",
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
                 "slug": {
                     "description": "URL-friendly unique (inside the Singularon platform) identifier for the ` + "`" + `user` + "`" + `.",
-                    "type": "string"
+                    "type": "string",
+                    "example": "jane-doe"
                 },
                 "updatedAt": {
                     "type": "string"

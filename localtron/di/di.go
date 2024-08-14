@@ -336,6 +336,12 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 	router.HandleFunc("/user-svc/organization", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.CreateOrganization(w, r)
 	})).Methods("OPTIONS", "POST")
+	router.HandleFunc("/user-svc/organization/{organizationId}/user", appl(func(w http.ResponseWriter, r *http.Request) {
+		userService.AddUserToOrganization(w, r)
+	})).Methods("OPTIONS", "POST")
+	router.HandleFunc("/user-svc/organization/{organizationId}/user/{userId}", appl(func(w http.ResponseWriter, r *http.Request) {
+		userService.RemoveUserFromOrganization(w, r)
+	})).Methods("OPTIONS", "DELETE")
 	router.HandleFunc("/user-svc/user", appl(func(w http.ResponseWriter, r *http.Request) {
 		userService.CreateUser(w, r)
 	})).Methods("OPTIONS", "POST")

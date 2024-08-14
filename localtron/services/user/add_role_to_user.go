@@ -51,3 +51,39 @@ func (s *UserService) addRoleToUser(userId string, roleId string) error {
 		UserId: user.Id,
 	})
 }
+
+func (s *UserService) removeRoleFromUser(userId string, roleId string) error {
+	q := s.usersStore.Query(
+		datastore.Id(userId),
+	)
+	userI, found, err := q.FindOne()
+	if err != nil {
+		return nil
+	}
+	if !found {
+		return errors.New("user not found")
+	}
+	user := userI.(*usertypes.User)
+
+	roleLinks, err := s.userRoleLinksStore.Query(
+		datastore.Equal(datastore.Field("userId"), userId),
+	).Find()
+	if err != nil {
+		return err
+	}
+
+	alreadyHasRole := false
+	for _, v := range roleLinks {
+		if v.(*usertypes.UserRoleLink).RoleId == roleId {
+			alreadyHasRole = true
+		}
+	}
+	if !alreadyHasRole {
+		return nil
+	}
+
+	return s.userRoleLinksStore.Query(
+		datastore.Id(
+			fmt.Sprintf("%v:%v", user.Id, roleId))).Delete()
+
+}
