@@ -9,10 +9,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { UserSvcContact } from './userSvcContact';
 export declare class UserSvcRegisterRequest {
-    'email'?: string;
+    'contact'?: UserSvcContact;
     'name'?: string;
     'password'?: string;
+    'slug'?: string;
     static discriminator: string | undefined;
     static attributeTypeMap: Array<{
         name: string;

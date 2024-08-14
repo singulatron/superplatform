@@ -17,6 +17,11 @@ export class UserSvcUser {
 UserSvcUser.discriminator = undefined;
 UserSvcUser.attributeTypeMap = [
     {
+        "name": "contact",
+        "baseName": "contact",
+        "type": "Array<UserSvcContact>"
+    },
+    {
         "name": "createdAt",
         "baseName": "createdAt",
         "type": "string"
@@ -27,19 +32,9 @@ UserSvcUser.attributeTypeMap = [
         "type": "string"
     },
     {
-        "name": "email",
-        "baseName": "email",
-        "type": "string"
-    },
-    {
         "name": "id",
         "baseName": "id",
         "type": "string"
-    },
-    {
-        "name": "isService",
-        "baseName": "isService",
-        "type": "boolean"
     },
     {
         "name": "name",
@@ -52,9 +47,9 @@ UserSvcUser.attributeTypeMap = [
         "type": "string"
     },
     {
-        "name": "roleIds",
-        "baseName": "roleIds",
-        "type": "Array<string>"
+        "name": "slug",
+        "baseName": "slug",
+        "type": "string"
     },
     {
         "name": "updatedAt",

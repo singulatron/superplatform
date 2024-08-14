@@ -42,11 +42,6 @@ UserSvcRole.attributeTypeMap = [
         "type": "string"
     },
     {
-        "name": "permissionIds",
-        "baseName": "permissionIds",
-        "type": "Array<string>"
-    },
-    {
         "name": "updatedAt",
         "baseName": "updatedAt",
         "type": "string"

@@ -30,7 +30,6 @@ function UserSvcRoleFromJSONTyped(json, ignoreDiscriminator) {
         'id': json['id'] == null ? undefined : json['id'],
         'name': json['name'] == null ? undefined : json['name'],
         'ownerId': json['ownerId'] == null ? undefined : json['ownerId'],
-        'permissionIds': json['permissionIds'] == null ? undefined : json['permissionIds'],
         'updatedAt': json['updatedAt'] == null ? undefined : json['updatedAt'],
     };
 }
@@ -44,7 +43,6 @@ function UserSvcRoleToJSON(value) {
         'id': value['id'],
         'name': value['name'],
         'ownerId': value['ownerId'],
-        'permissionIds': value['permissionIds'],
         'updatedAt': value['updatedAt'],
     };
 }

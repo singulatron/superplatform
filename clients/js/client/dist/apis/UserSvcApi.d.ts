@@ -10,16 +10,23 @@
  * Do not edit the class manually.
  */
 import * as runtime from '../runtime';
-import type { UserSvcChangePasswordAdminRequest, UserSvcChangePasswordRequest, UserSvcCreateRoleRequest, UserSvcCreateRoleResponse, UserSvcCreateUserRequest, UserSvcGetPermissionsResponse, UserSvcGetPublicKeyResponse, UserSvcGetRolesResponse, UserSvcGetUsersRequest, UserSvcGetUsersResponse, UserSvcIsAuthorizedRequest, UserSvcIsAuthorizedResponse, UserSvcLoginRequest, UserSvcLoginResponse, UserSvcReadUserByTokenRequest, UserSvcReadUserByTokenResponse, UserSvcRegisterRequest, UserSvcSaveProfileRequest, UserSvcSetRolePermissionsRequest, UserSvcUpserPermissionRequest } from '../models/index';
+import type { UserSvcAddUserToOrganizationRequest, UserSvcChangePasswordAdminRequest, UserSvcChangePasswordRequest, UserSvcCreateOrganizationRequest, UserSvcCreateRoleRequest, UserSvcCreateRoleResponse, UserSvcCreateUserRequest, UserSvcGetPermissionsResponse, UserSvcGetPublicKeyResponse, UserSvcGetRolesResponse, UserSvcGetUsersRequest, UserSvcGetUsersResponse, UserSvcIsAuthorizedRequest, UserSvcIsAuthorizedResponse, UserSvcLoginRequest, UserSvcLoginResponse, UserSvcReadUserByTokenRequest, UserSvcReadUserByTokenResponse, UserSvcRegisterRequest, UserSvcSaveProfileRequest, UserSvcSetRolePermissionsRequest, UserSvcUpserPermissionRequest } from '../models/index';
 export interface AddPermissionToRoleRequest {
     roleId: string;
     permissionId: string;
+}
+export interface AddUserToOrganizationRequest {
+    organizationId: string;
+    request: UserSvcAddUserToOrganizationRequest;
 }
 export interface ChangePasswordRequest {
     request: UserSvcChangePasswordRequest;
 }
 export interface ChangePasswordAdminRequest {
     request: UserSvcChangePasswordAdminRequest;
+}
+export interface CreateOrganizationRequest {
+    request: UserSvcCreateOrganizationRequest;
 }
 export interface CreateRoleRequest {
     request: UserSvcCreateRoleRequest;
@@ -52,6 +59,11 @@ export interface ReadUserByTokenRequest {
 export interface RegisterRequest {
     body: UserSvcRegisterRequest;
 }
+export interface RemoveUserFromOrganizationRequest {
+    organizationId: string;
+    userId: string;
+    request?: object;
+}
 export interface SaveUserProfileRequest {
     userId: string;
     body: UserSvcSaveProfileRequest;
@@ -79,6 +91,16 @@ export declare class UserSvcApi extends runtime.BaseAPI {
      */
     addPermissionToRole(requestParameters: AddPermissionToRoleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
     /**
+     * Allows an authorized user to add another user to a specific organization. The user will be assigned a specific role within the organization.
+     * Add a User to an Organization
+     */
+    addUserToOrganizationRaw(requestParameters: AddUserToOrganizationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
+    /**
+     * Allows an authorized user to add another user to a specific organization. The user will be assigned a specific role within the organization.
+     * Add a User to an Organization
+     */
+    addUserToOrganization(requestParameters: AddUserToOrganizationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
+    /**
      * Allows an authenticated user to change their own password.
      * Change User Password
      */
@@ -98,6 +120,16 @@ export declare class UserSvcApi extends runtime.BaseAPI {
      * Change User Password (Admin)
      */
     changePasswordAdmin(requestParameters: ChangePasswordAdminRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
+    /**
+     * Allows a logged-in user to create a new organization. The user initiating the request will be assigned the role of admin for that organization. The initiating user will receive a dynamic role in the format `user-svc:org:$organization-slug:admin`, where `$organization-slug` is a unique identifier for the created organization. Dynamic roles are generated based on specific user-resource associations, offering more flexible permission management compared to static roles.
+     * Create an Organization
+     */
+    createOrganizationRaw(requestParameters: CreateOrganizationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
+    /**
+     * Allows a logged-in user to create a new organization. The user initiating the request will be assigned the role of admin for that organization. The initiating user will receive a dynamic role in the format `user-svc:org:$organization-slug:admin`, where `$organization-slug` is a unique identifier for the created organization. Dynamic roles are generated based on specific user-resource associations, offering more flexible permission management compared to static roles.
+     * Create an Organization
+     */
+    createOrganization(requestParameters: CreateOrganizationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
     /**
      * Create a new role. <b>The role ID must be prefixed by the callers username (email).</b> Eg. if the owner\'s slug is `petstore-svc` the role should look like `petstore-svc:admin`. The user account who creates the role will become the owner of that role, and only the owner will be able to edit the role.  Requires the `user-svc:role:create` permission.
      * Create a New Role
@@ -218,6 +250,16 @@ export declare class UserSvcApi extends runtime.BaseAPI {
      * Register
      */
     register(requestParameters: RegisterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
+    /**
+     * Allows an authorized user to add another user to a specific organization. The user will be assigned a specific role within the organization.
+     * Remove a User from an Organization
+     */
+    removeUserFromOrganizationRaw(requestParameters: RemoveUserFromOrganizationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
+    /**
+     * Allows an authorized user to add another user to a specific organization. The user will be assigned a specific role within the organization.
+     * Remove a User from an Organization
+     */
+    removeUserFromOrganization(requestParameters: RemoveUserFromOrganizationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
     /**
      * Save user profile information based on the provided user ID.
      * Save User Profile

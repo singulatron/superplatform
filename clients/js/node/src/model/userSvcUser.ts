@@ -22,18 +22,10 @@ export class UserSvcUser {
     'deletedAt'?: string;
     'id'?: string;
     /**
-    * Full name of the organization
+    * Full name of the organization.
     */
     'name'?: string;
-    /**
-    * Many to many relationship between User and Organization
-    */
-    'organizationIds'?: Array<string>;
     'passwordHash'?: string;
-    /**
-    * Many to many relationship between User and Role
-    */
-    'roleIds'?: Array<string>;
     /**
     * URL-friendly unique (inside the Singularon platform) identifier for the `user`.
     */
@@ -69,19 +61,9 @@ export class UserSvcUser {
             "type": "string"
         },
         {
-            "name": "organizationIds",
-            "baseName": "organizationIds",
-            "type": "Array<string>"
-        },
-        {
             "name": "passwordHash",
             "baseName": "passwordHash",
             "type": "string"
-        },
-        {
-            "name": "roleIds",
-            "baseName": "roleIds",
-            "type": "Array<string>"
         },
         {
             "name": "slug",

@@ -17,13 +17,13 @@ export class UserSvcSaveProfileRequest {
 UserSvcSaveProfileRequest.discriminator = undefined;
 UserSvcSaveProfileRequest.attributeTypeMap = [
     {
-        "name": "email",
-        "baseName": "email",
+        "name": "name",
+        "baseName": "name",
         "type": "string"
     },
     {
-        "name": "name",
-        "baseName": "name",
+        "name": "slug",
+        "baseName": "slug",
         "type": "string"
     }
 ];

@@ -10,8 +10,10 @@
  * Do not edit the class manually.
  */
 import http from 'http';
+import { UserSvcAddUserToOrganizationRequest } from '../model/userSvcAddUserToOrganizationRequest';
 import { UserSvcChangePasswordAdminRequest } from '../model/userSvcChangePasswordAdminRequest';
 import { UserSvcChangePasswordRequest } from '../model/userSvcChangePasswordRequest';
+import { UserSvcCreateOrganizationRequest } from '../model/userSvcCreateOrganizationRequest';
 import { UserSvcCreateRoleRequest } from '../model/userSvcCreateRoleRequest';
 import { UserSvcCreateRoleResponse } from '../model/userSvcCreateRoleResponse';
 import { UserSvcCreateUserRequest } from '../model/userSvcCreateUserRequest';
@@ -68,6 +70,20 @@ export declare class UserSvcApi {
         body: object;
     }>;
     /**
+     * Allows an authorized user to add another user to a specific organization. The user will be assigned a specific role within the organization.
+     * @summary Add a User to an Organization
+     * @param organizationId Organization ID
+     * @param request Add User to Organization Request
+     */
+    addUserToOrganization(organizationId: string, request: UserSvcAddUserToOrganizationRequest, options?: {
+        headers: {
+            [name: string]: string;
+        };
+    }): Promise<{
+        response: http.IncomingMessage;
+        body: object;
+    }>;
+    /**
      * Allows an authenticated user to change their own password.
      * @summary Change User Password
      * @param request Change Password Request
@@ -94,7 +110,20 @@ export declare class UserSvcApi {
         body: object;
     }>;
     /**
-     * Create a new role. <b>The role ID must be prefixed by the callers username (email).</b> Eg. if the owner\'s email/username is `petstore-svc` the role should look like `petstore-svc:admin`. The user account who creates the role will become the owner of that role, and only the owner will be able to edit the role.  Requires the `user-svc:role:create` permission.
+     * Allows a logged-in user to create a new organization. The user initiating the request will be assigned the role of admin for that organization. The initiating user will receive a dynamic role in the format `user-svc:org:$organization-slug:admin`, where `$organization-slug` is a unique identifier for the created organization. Dynamic roles are generated based on specific user-resource associations, offering more flexible permission management compared to static roles.
+     * @summary Create an Organization
+     * @param request Create User Request
+     */
+    createOrganization(request: UserSvcCreateOrganizationRequest, options?: {
+        headers: {
+            [name: string]: string;
+        };
+    }): Promise<{
+        response: http.IncomingMessage;
+        body: object;
+    }>;
+    /**
+     * Create a new role. <b>The role ID must be prefixed by the callers username (email).</b> Eg. if the owner\'s slug is `petstore-svc` the role should look like `petstore-svc:admin`. The user account who creates the role will become the owner of that role, and only the owner will be able to edit the role.  Requires the `user-svc:role:create` permission.
      * @summary Create a New Role
      * @param request Create Role Request
      */
@@ -160,7 +189,7 @@ export declare class UserSvcApi {
     }>;
     /**
      * Get the public key to descrypt the JWT.
-     * @summary Ge Public Key
+     * @summary Get Public Key
      */
     getPublicKey(options?: {
         headers: {
@@ -237,10 +266,25 @@ export declare class UserSvcApi {
     }>;
     /**
      * Register a new user with a name, email, and password.
-     * @summary Register a New User
+     * @summary Register
      * @param body Register Request
      */
     register(body: UserSvcRegisterRequest, options?: {
+        headers: {
+            [name: string]: string;
+        };
+    }): Promise<{
+        response: http.IncomingMessage;
+        body: object;
+    }>;
+    /**
+     * Allows an authorized user to add another user to a specific organization. The user will be assigned a specific role within the organization.
+     * @summary Remove a User from an Organization
+     * @param organizationId Organization ID
+     * @param userId User ID
+     * @param request Add User to Organization Request
+     */
+    removeUserFromOrganization(organizationId: string, userId: string, request?: object, options?: {
         headers: {
             [name: string]: string;
         };

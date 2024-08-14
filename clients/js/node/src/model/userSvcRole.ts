@@ -18,7 +18,6 @@ export class UserSvcRole {
     'id'?: string;
     'name'?: string;
     'ownerId'?: string;
-    'permissionIds'?: Array<string>;
     'updatedAt'?: string;
 
     static discriminator: string | undefined = undefined;
@@ -48,11 +47,6 @@ export class UserSvcRole {
             "name": "ownerId",
             "baseName": "ownerId",
             "type": "string"
-        },
-        {
-            "name": "permissionIds",
-            "baseName": "permissionIds",
-            "type": "Array<string>"
         },
         {
             "name": "updatedAt",

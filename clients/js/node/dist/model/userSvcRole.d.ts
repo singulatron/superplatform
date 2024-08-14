@@ -15,7 +15,6 @@ export declare class UserSvcRole {
     'id'?: string;
     'name'?: string;
     'ownerId'?: string;
-    'permissionIds'?: Array<string>;
     'updatedAt'?: string;
     static discriminator: string | undefined;
     static attributeTypeMap: Array<{

@@ -32,9 +32,7 @@ function UserSvcUserFromJSONTyped(json, ignoreDiscriminator) {
         'deletedAt': json['deletedAt'] == null ? undefined : json['deletedAt'],
         'id': json['id'] == null ? undefined : json['id'],
         'name': json['name'] == null ? undefined : json['name'],
-        'organizationIds': json['organizationIds'] == null ? undefined : json['organizationIds'],
         'passwordHash': json['passwordHash'] == null ? undefined : json['passwordHash'],
-        'roleIds': json['roleIds'] == null ? undefined : json['roleIds'],
         'slug': json['slug'] == null ? undefined : json['slug'],
         'updatedAt': json['updatedAt'] == null ? undefined : json['updatedAt'],
     };
@@ -49,9 +47,7 @@ function UserSvcUserToJSON(value) {
         'deletedAt': value['deletedAt'],
         'id': value['id'],
         'name': value['name'],
-        'organizationIds': value['organizationIds'],
         'passwordHash': value['passwordHash'],
-        'roleIds': value['roleIds'],
         'slug': value['slug'],
         'updatedAt': value['updatedAt'],
     };

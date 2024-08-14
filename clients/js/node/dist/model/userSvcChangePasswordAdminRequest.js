@@ -17,13 +17,13 @@ export class UserSvcChangePasswordAdminRequest {
 UserSvcChangePasswordAdminRequest.discriminator = undefined;
 UserSvcChangePasswordAdminRequest.attributeTypeMap = [
     {
-        "name": "email",
-        "baseName": "email",
+        "name": "newPassword",
+        "baseName": "newPassword",
         "type": "string"
     },
     {
-        "name": "newPassword",
-        "baseName": "newPassword",
+        "name": "slug",
+        "baseName": "slug",
         "type": "string"
     }
 ];

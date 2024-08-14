@@ -17,8 +17,13 @@ export class UserSvcIsAuthorizedRequest {
 UserSvcIsAuthorizedRequest.discriminator = undefined;
 UserSvcIsAuthorizedRequest.attributeTypeMap = [
     {
-        "name": "emailsGranted",
-        "baseName": "emailsGranted",
+        "name": "contactsGranted",
+        "baseName": "contactsGranted",
+        "type": "Array<string>"
+    },
+    {
+        "name": "slugsGranted",
+        "baseName": "slugsGranted",
         "type": "Array<string>"
     }
 ];
