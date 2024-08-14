@@ -147,7 +147,7 @@ export class ConfigSvcApi {
      */
     saveConfig(request_1) {
         return __awaiter(this, arguments, void 0, function* (request, options = { headers: {} }) {
-            const localVarPath = this.basePath + '/config-svc/save';
+            const localVarPath = this.basePath + '/config-svc/config';
             let localVarQueryParameters = {};
             let localVarHeaderParams = Object.assign({}, this._defaultHeaders);
             const produces = ['application/json'];
@@ -166,7 +166,7 @@ export class ConfigSvcApi {
             Object.assign(localVarHeaderParams, options.headers);
             let localVarUseFormData = false;
             let localVarRequestOptions = {
-                method: 'POST',
+                method: 'PUT',
                 qs: localVarQueryParameters,
                 headers: localVarHeaderParams,
                 uri: localVarPath,

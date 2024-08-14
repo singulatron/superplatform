@@ -51,29 +51,17 @@ export interface UserSvcUser {
      */
     id?: string;
     /**
-     * Full name of the organization
+     * Full name of the organization.
      * @type {string}
      * @memberof UserSvcUser
      */
     name?: string;
-    /**
-     * Many to many relationship between User and Organization
-     * @type {Array<string>}
-     * @memberof UserSvcUser
-     */
-    organizationIds?: Array<string>;
     /**
      * 
      * @type {string}
      * @memberof UserSvcUser
      */
     passwordHash?: string;
-    /**
-     * Many to many relationship between User and Role
-     * @type {Array<string>}
-     * @memberof UserSvcUser
-     */
-    roleIds?: Array<string>;
     /**
      * URL-friendly unique (inside the Singularon platform) identifier for the `user`.
      * @type {string}
@@ -110,9 +98,7 @@ export function UserSvcUserFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'deletedAt': json['deletedAt'] == null ? undefined : json['deletedAt'],
         'id': json['id'] == null ? undefined : json['id'],
         'name': json['name'] == null ? undefined : json['name'],
-        'organizationIds': json['organizationIds'] == null ? undefined : json['organizationIds'],
         'passwordHash': json['passwordHash'] == null ? undefined : json['passwordHash'],
-        'roleIds': json['roleIds'] == null ? undefined : json['roleIds'],
         'slug': json['slug'] == null ? undefined : json['slug'],
         'updatedAt': json['updatedAt'] == null ? undefined : json['updatedAt'],
     };
@@ -129,9 +115,7 @@ export function UserSvcUserToJSON(value?: UserSvcUser | null): any {
         'deletedAt': value['deletedAt'],
         'id': value['id'],
         'name': value['name'],
-        'organizationIds': value['organizationIds'],
         'passwordHash': value['passwordHash'],
-        'roleIds': value['roleIds'],
         'slug': value['slug'],
         'updatedAt': value['updatedAt'],
     };

@@ -9,21 +9,21 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-export class UserSvcRole {
+export class UserSvcContact {
     static getAttributeTypeMap() {
-        return UserSvcRole.attributeTypeMap;
+        return UserSvcContact.attributeTypeMap;
     }
 }
-UserSvcRole.discriminator = undefined;
-UserSvcRole.attributeTypeMap = [
+UserSvcContact.discriminator = undefined;
+UserSvcContact.attributeTypeMap = [
     {
         "name": "createdAt",
         "baseName": "createdAt",
         "type": "string"
     },
     {
-        "name": "description",
-        "baseName": "description",
+        "name": "deletedAt",
+        "baseName": "deletedAt",
         "type": "string"
     },
     {
@@ -32,18 +32,33 @@ UserSvcRole.attributeTypeMap = [
         "type": "string"
     },
     {
-        "name": "name",
-        "baseName": "name",
+        "name": "platform",
+        "baseName": "platform",
         "type": "string"
     },
     {
-        "name": "ownerId",
-        "baseName": "ownerId",
-        "type": "string"
+        "name": "primary",
+        "baseName": "primary",
+        "type": "boolean"
     },
     {
         "name": "updatedAt",
         "baseName": "updatedAt",
         "type": "string"
+    },
+    {
+        "name": "userId",
+        "baseName": "userId",
+        "type": "string"
+    },
+    {
+        "name": "value",
+        "baseName": "value",
+        "type": "string"
+    },
+    {
+        "name": "verified",
+        "baseName": "verified",
+        "type": "boolean"
     }
 ];

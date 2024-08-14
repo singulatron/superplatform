@@ -9,13 +9,8 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-export declare class UserSvcRole {
-    'createdAt'?: string;
-    'description'?: string;
-    'id'?: string;
-    'name'?: string;
-    'ownerId'?: string;
-    'updatedAt'?: string;
+export declare class UserSvcAddUserToOrganizationRequest {
+    'userId'?: string;
     static discriminator: string | undefined;
     static attributeTypeMap: Array<{
         name: string;

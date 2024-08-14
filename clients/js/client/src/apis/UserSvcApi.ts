@@ -15,8 +15,10 @@
 
 import * as runtime from '../runtime';
 import type {
+  UserSvcAddUserToOrganizationRequest,
   UserSvcChangePasswordAdminRequest,
   UserSvcChangePasswordRequest,
+  UserSvcCreateOrganizationRequest,
   UserSvcCreateRoleRequest,
   UserSvcCreateRoleResponse,
   UserSvcCreateUserRequest,
@@ -38,10 +40,14 @@ import type {
   UserSvcUpserPermissionRequest,
 } from '../models/index';
 import {
+    UserSvcAddUserToOrganizationRequestFromJSON,
+    UserSvcAddUserToOrganizationRequestToJSON,
     UserSvcChangePasswordAdminRequestFromJSON,
     UserSvcChangePasswordAdminRequestToJSON,
     UserSvcChangePasswordRequestFromJSON,
     UserSvcChangePasswordRequestToJSON,
+    UserSvcCreateOrganizationRequestFromJSON,
+    UserSvcCreateOrganizationRequestToJSON,
     UserSvcCreateRoleRequestFromJSON,
     UserSvcCreateRoleRequestToJSON,
     UserSvcCreateRoleResponseFromJSON,
@@ -87,12 +93,21 @@ export interface AddPermissionToRoleRequest {
     permissionId: string;
 }
 
+export interface AddUserToOrganizationRequest {
+    organizationId: string;
+    request: UserSvcAddUserToOrganizationRequest;
+}
+
 export interface ChangePasswordRequest {
     request: UserSvcChangePasswordRequest;
 }
 
 export interface ChangePasswordAdminRequest {
     request: UserSvcChangePasswordAdminRequest;
+}
+
+export interface CreateOrganizationRequest {
+    request: UserSvcCreateOrganizationRequest;
 }
 
 export interface CreateRoleRequest {
@@ -134,6 +149,12 @@ export interface ReadUserByTokenRequest {
 
 export interface RegisterRequest {
     body: UserSvcRegisterRequest;
+}
+
+export interface RemoveUserFromOrganizationRequest {
+    organizationId: string;
+    userId: string;
+    request?: object;
 }
 
 export interface SaveUserProfileRequest {
@@ -199,6 +220,55 @@ export class UserSvcApi extends runtime.BaseAPI {
      */
     async addPermissionToRole(requestParameters: AddPermissionToRoleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
         const response = await this.addPermissionToRoleRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Allows an authorized user to add another user to a specific organization. The user will be assigned a specific role within the organization.
+     * Add a User to an Organization
+     */
+    async addUserToOrganizationRaw(requestParameters: AddUserToOrganizationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
+        if (requestParameters['organizationId'] == null) {
+            throw new runtime.RequiredError(
+                'organizationId',
+                'Required parameter "organizationId" was null or undefined when calling addUserToOrganization().'
+            );
+        }
+
+        if (requestParameters['request'] == null) {
+            throw new runtime.RequiredError(
+                'request',
+                'Required parameter "request" was null or undefined when calling addUserToOrganization().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = await this.configuration.apiKey("Authorization"); // BearerAuth authentication
+        }
+
+        const response = await this.request({
+            path: `/user-svc/organization/{organizationId}/user`.replace(`{${"organizationId"}}`, encodeURIComponent(String(requestParameters['organizationId']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UserSvcAddUserToOrganizationRequestToJSON(requestParameters['request']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * Allows an authorized user to add another user to a specific organization. The user will be assigned a specific role within the organization.
+     * Add a User to an Organization
+     */
+    async addUserToOrganization(requestParameters: AddUserToOrganizationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
+        const response = await this.addUserToOrganizationRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -283,6 +353,48 @@ export class UserSvcApi extends runtime.BaseAPI {
      */
     async changePasswordAdmin(requestParameters: ChangePasswordAdminRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
         const response = await this.changePasswordAdminRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Allows a logged-in user to create a new organization. The user initiating the request will be assigned the role of admin for that organization. The initiating user will receive a dynamic role in the format `user-svc:org:$organization-slug:admin`, where `$organization-slug` is a unique identifier for the created organization. Dynamic roles are generated based on specific user-resource associations, offering more flexible permission management compared to static roles.
+     * Create an Organization
+     */
+    async createOrganizationRaw(requestParameters: CreateOrganizationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
+        if (requestParameters['request'] == null) {
+            throw new runtime.RequiredError(
+                'request',
+                'Required parameter "request" was null or undefined when calling createOrganization().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = await this.configuration.apiKey("Authorization"); // BearerAuth authentication
+        }
+
+        const response = await this.request({
+            path: `/user-svc/organization`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UserSvcCreateOrganizationRequestToJSON(requestParameters['request']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * Allows a logged-in user to create a new organization. The user initiating the request will be assigned the role of admin for that organization. The initiating user will receive a dynamic role in the format `user-svc:org:$organization-slug:admin`, where `$organization-slug` is a unique identifier for the created organization. Dynamic roles are generated based on specific user-resource associations, offering more flexible permission management compared to static roles.
+     * Create an Organization
+     */
+    async createOrganization(requestParameters: CreateOrganizationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
+        const response = await this.createOrganizationRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -746,6 +858,55 @@ export class UserSvcApi extends runtime.BaseAPI {
      */
     async register(requestParameters: RegisterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
         const response = await this.registerRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Allows an authorized user to add another user to a specific organization. The user will be assigned a specific role within the organization.
+     * Remove a User from an Organization
+     */
+    async removeUserFromOrganizationRaw(requestParameters: RemoveUserFromOrganizationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
+        if (requestParameters['organizationId'] == null) {
+            throw new runtime.RequiredError(
+                'organizationId',
+                'Required parameter "organizationId" was null or undefined when calling removeUserFromOrganization().'
+            );
+        }
+
+        if (requestParameters['userId'] == null) {
+            throw new runtime.RequiredError(
+                'userId',
+                'Required parameter "userId" was null or undefined when calling removeUserFromOrganization().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = await this.configuration.apiKey("Authorization"); // BearerAuth authentication
+        }
+
+        const response = await this.request({
+            path: `/user-svc/organization/{organizationId}/user/{userId}`.replace(`{${"organizationId"}}`, encodeURIComponent(String(requestParameters['organizationId']))).replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['request'] as any,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * Allows an authorized user to add another user to a specific organization. The user will be assigned a specific role within the organization.
+     * Remove a User from an Organization
+     */
+    async removeUserFromOrganization(requestParameters: RemoveUserFromOrganizationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
+        const response = await this.removeUserFromOrganizationRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

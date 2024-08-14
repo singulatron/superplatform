@@ -12,27 +12,20 @@
 
 import { RequestFile } from './models';
 
-export class UserSvcRole {
-    'createdAt'?: string;
-    'description'?: string;
+export class UserSvcCreateOrganizationRequest {
     'id'?: string;
+    /**
+    * Full name of the organization.
+    */
     'name'?: string;
-    'ownerId'?: string;
-    'updatedAt'?: string;
+    /**
+    * URL-friendly unique (inside the Singularon platform) identifier for the `organization`.
+    */
+    'slug'?: string;
 
     static discriminator: string | undefined = undefined;
 
     static attributeTypeMap: Array<{name: string, baseName: string, type: string}> = [
-        {
-            "name": "createdAt",
-            "baseName": "createdAt",
-            "type": "string"
-        },
-        {
-            "name": "description",
-            "baseName": "description",
-            "type": "string"
-        },
         {
             "name": "id",
             "baseName": "id",
@@ -44,18 +37,13 @@ export class UserSvcRole {
             "type": "string"
         },
         {
-            "name": "ownerId",
-            "baseName": "ownerId",
-            "type": "string"
-        },
-        {
-            "name": "updatedAt",
-            "baseName": "updatedAt",
+            "name": "slug",
+            "baseName": "slug",
             "type": "string"
         }    ];
 
     static getAttributeTypeMap() {
-        return UserSvcRole.attributeTypeMap;
+        return UserSvcCreateOrganizationRequest.attributeTypeMap;
     }
 }
 

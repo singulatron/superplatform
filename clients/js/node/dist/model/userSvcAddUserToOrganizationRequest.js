@@ -9,21 +9,16 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-export class UserSvcChangePasswordAdminRequest {
+export class UserSvcAddUserToOrganizationRequest {
     static getAttributeTypeMap() {
-        return UserSvcChangePasswordAdminRequest.attributeTypeMap;
+        return UserSvcAddUserToOrganizationRequest.attributeTypeMap;
     }
 }
-UserSvcChangePasswordAdminRequest.discriminator = undefined;
-UserSvcChangePasswordAdminRequest.attributeTypeMap = [
+UserSvcAddUserToOrganizationRequest.discriminator = undefined;
+UserSvcAddUserToOrganizationRequest.attributeTypeMap = [
     {
-        "name": "newPassword",
-        "baseName": "newPassword",
-        "type": "string"
-    },
-    {
-        "name": "slug",
-        "baseName": "slug",
+        "name": "userId",
+        "baseName": "userId",
         "type": "string"
     }
 ];

@@ -51,12 +51,6 @@ export interface UserSvcRole {
     ownerId?: string;
     /**
      * 
-     * @type {Array<string>}
-     * @memberof UserSvcRole
-     */
-    permissionIds?: Array<string>;
-    /**
-     * 
      * @type {string}
      * @memberof UserSvcRole
      */
@@ -85,7 +79,6 @@ export function UserSvcRoleFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'id': json['id'] == null ? undefined : json['id'],
         'name': json['name'] == null ? undefined : json['name'],
         'ownerId': json['ownerId'] == null ? undefined : json['ownerId'],
-        'permissionIds': json['permissionIds'] == null ? undefined : json['permissionIds'],
         'updatedAt': json['updatedAt'] == null ? undefined : json['updatedAt'],
     };
 }
@@ -101,7 +94,6 @@ export function UserSvcRoleToJSON(value?: UserSvcRole | null): any {
         'id': value['id'],
         'name': value['name'],
         'ownerId': value['ownerId'],
-        'permissionIds': value['permissionIds'],
         'updatedAt': value['updatedAt'],
     };
 }

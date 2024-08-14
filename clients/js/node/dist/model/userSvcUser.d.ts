@@ -9,21 +9,24 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { UserSvcContact } from './userSvcContact';
 export declare class UserSvcUser {
+    /**
+    * Contacts are used for login and identification purposes.
+    */
+    'contact'?: Array<UserSvcContact>;
     'createdAt'?: string;
     'deletedAt'?: string;
-    /**
-    * Email or username
-    */
-    'email'?: string;
     'id'?: string;
-    'isService'?: boolean;
+    /**
+    * Full name of the organization.
+    */
     'name'?: string;
     'passwordHash'?: string;
     /**
-    * Many to many relationship between User and Role
+    * URL-friendly unique (inside the Singularon platform) identifier for the `user`.
     */
-    'roleIds'?: Array<string>;
+    'slug'?: string;
     'updatedAt'?: string;
     static discriminator: string | undefined;
     static attributeTypeMap: Array<{

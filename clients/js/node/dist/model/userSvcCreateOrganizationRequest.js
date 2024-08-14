@@ -9,23 +9,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-export class UserSvcRole {
+export class UserSvcCreateOrganizationRequest {
     static getAttributeTypeMap() {
-        return UserSvcRole.attributeTypeMap;
+        return UserSvcCreateOrganizationRequest.attributeTypeMap;
     }
 }
-UserSvcRole.discriminator = undefined;
-UserSvcRole.attributeTypeMap = [
-    {
-        "name": "createdAt",
-        "baseName": "createdAt",
-        "type": "string"
-    },
-    {
-        "name": "description",
-        "baseName": "description",
-        "type": "string"
-    },
+UserSvcCreateOrganizationRequest.discriminator = undefined;
+UserSvcCreateOrganizationRequest.attributeTypeMap = [
     {
         "name": "id",
         "baseName": "id",
@@ -37,13 +27,8 @@ UserSvcRole.attributeTypeMap = [
         "type": "string"
     },
     {
-        "name": "ownerId",
-        "baseName": "ownerId",
-        "type": "string"
-    },
-    {
-        "name": "updatedAt",
-        "baseName": "updatedAt",
+        "name": "slug",
+        "baseName": "slug",
         "type": "string"
     }
 ];

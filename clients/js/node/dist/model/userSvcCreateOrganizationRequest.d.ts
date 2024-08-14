@@ -9,13 +9,16 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-export declare class UserSvcRole {
-    'createdAt'?: string;
-    'description'?: string;
+export declare class UserSvcCreateOrganizationRequest {
     'id'?: string;
+    /**
+    * Full name of the organization.
+    */
     'name'?: string;
-    'ownerId'?: string;
-    'updatedAt'?: string;
+    /**
+    * URL-friendly unique (inside the Singularon platform) identifier for the `organization`.
+    */
+    'slug'?: string;
     static discriminator: string | undefined;
     static attributeTypeMap: Array<{
         name: string;

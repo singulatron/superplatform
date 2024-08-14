@@ -10,8 +10,8 @@
  * Do not edit the class manually.
  */
 export declare class UserSvcChangePasswordAdminRequest {
-    'email'?: string;
     'newPassword'?: string;
+    'slug'?: string;
     static discriminator: string | undefined;
     static attributeTypeMap: Array<{
         name: string;

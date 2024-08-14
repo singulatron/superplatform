@@ -72,9 +72,12 @@ export * from './promptSvcListPromptsResponse';
 export * from './promptSvcPrompt';
 export * from './promptSvcPromptStatus';
 export * from './promptSvcRemovePromptRequest';
+export * from './userSvcAddUserToOrganizationRequest';
 export * from './userSvcAuthToken';
 export * from './userSvcChangePasswordAdminRequest';
 export * from './userSvcChangePasswordRequest';
+export * from './userSvcContact';
+export * from './userSvcCreateOrganizationRequest';
 export * from './userSvcCreateRoleRequest';
 export * from './userSvcCreateRoleResponse';
 export * from './userSvcCreateUserRequest';
@@ -171,9 +174,12 @@ import { PromptSvcListPromptsResponse } from './promptSvcListPromptsResponse';
 import { PromptSvcPrompt } from './promptSvcPrompt';
 import { PromptSvcPromptStatus } from './promptSvcPromptStatus';
 import { PromptSvcRemovePromptRequest } from './promptSvcRemovePromptRequest';
+import { UserSvcAddUserToOrganizationRequest } from './userSvcAddUserToOrganizationRequest';
 import { UserSvcAuthToken } from './userSvcAuthToken';
 import { UserSvcChangePasswordAdminRequest } from './userSvcChangePasswordAdminRequest';
 import { UserSvcChangePasswordRequest } from './userSvcChangePasswordRequest';
+import { UserSvcContact } from './userSvcContact';
+import { UserSvcCreateOrganizationRequest } from './userSvcCreateOrganizationRequest';
 import { UserSvcCreateRoleRequest } from './userSvcCreateRoleRequest';
 import { UserSvcCreateRoleResponse } from './userSvcCreateRoleResponse';
 import { UserSvcCreateUserRequest } from './userSvcCreateUserRequest';
@@ -284,9 +290,12 @@ let typeMap = {
     "PromptSvcListPromptsResponse": PromptSvcListPromptsResponse,
     "PromptSvcPrompt": PromptSvcPrompt,
     "PromptSvcRemovePromptRequest": PromptSvcRemovePromptRequest,
+    "UserSvcAddUserToOrganizationRequest": UserSvcAddUserToOrganizationRequest,
     "UserSvcAuthToken": UserSvcAuthToken,
     "UserSvcChangePasswordAdminRequest": UserSvcChangePasswordAdminRequest,
     "UserSvcChangePasswordRequest": UserSvcChangePasswordRequest,
+    "UserSvcContact": UserSvcContact,
+    "UserSvcCreateOrganizationRequest": UserSvcCreateOrganizationRequest,
     "UserSvcCreateRoleRequest": UserSvcCreateRoleRequest,
     "UserSvcCreateRoleResponse": UserSvcCreateRoleResponse,
     "UserSvcCreateUserRequest": UserSvcCreateUserRequest,

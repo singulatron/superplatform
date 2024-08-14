@@ -17,9 +17,9 @@ export class UserSvcRegisterRequest {
 UserSvcRegisterRequest.discriminator = undefined;
 UserSvcRegisterRequest.attributeTypeMap = [
     {
-        "name": "email",
-        "baseName": "email",
-        "type": "string"
+        "name": "contact",
+        "baseName": "contact",
+        "type": "UserSvcContact"
     },
     {
         "name": "name",
@@ -29,6 +29,11 @@ UserSvcRegisterRequest.attributeTypeMap = [
     {
         "name": "password",
         "baseName": "password",
+        "type": "string"
+    },
+    {
+        "name": "slug",
+        "baseName": "slug",
         "type": "string"
     }
 ];
