@@ -1,7 +1,5 @@
 'use strict';
 
-var chatSvcApi = require('./apis.js');
-var models = require('./models.js');
 var chatSvcAddMessageRequest = require('./chatSvcAddMessageRequest.js');
 var chatSvcAddThreadRequest = require('./chatSvcAddThreadRequest.js');
 var chatSvcAddThreadResponse = require('./chatSvcAddThreadResponse.js');
@@ -104,83 +102,308 @@ var userSvcSaveProfileRequest = require('./userSvcSaveProfileRequest.js');
 var userSvcSetRolePermissionsRequest = require('./userSvcSetRolePermissionsRequest.js');
 var userSvcUpserPermissionRequest = require('./userSvcUpserPermissionRequest.js');
 var userSvcUser = require('./userSvcUser.js');
-require('net');
-require('url');
-require('util');
-require('punycode');
-require('crypto');
-require('buffer');
-require('http');
-require('https');
-require('stream');
-require('zlib');
-require('querystring');
-require('assert');
-require('path');
-require('tls');
-require('fs');
-require('events');
 
+/* tslint:disable:no-unused-variable */
+let primitives = [
+    "string",
+    "boolean",
+    "double",
+    "integer",
+    "long",
+    "float",
+    "number",
+    "any"
+];
+let enumsMap = {
+    "PromptSvcPromptStatus": promptSvcPromptStatus.PromptSvcPromptStatus,
+};
+let typeMap = {
+    "ChatSvcAddMessageRequest": chatSvcAddMessageRequest.ChatSvcAddMessageRequest,
+    "ChatSvcAddThreadRequest": chatSvcAddThreadRequest.ChatSvcAddThreadRequest,
+    "ChatSvcAddThreadResponse": chatSvcAddThreadResponse.ChatSvcAddThreadResponse,
+    "ChatSvcAsset": chatSvcAsset.ChatSvcAsset,
+    "ChatSvcGetMessagesResponse": chatSvcGetMessagesResponse.ChatSvcGetMessagesResponse,
+    "ChatSvcGetThreadResponse": chatSvcGetThreadResponse.ChatSvcGetThreadResponse,
+    "ChatSvcGetThreadsResponse": chatSvcGetThreadsResponse.ChatSvcGetThreadsResponse,
+    "ChatSvcMessage": chatSvcMessage.ChatSvcMessage,
+    "ChatSvcThread": chatSvcThread.ChatSvcThread,
+    "ChatSvcUpdateThreadRequest": chatSvcUpdateThreadRequest.ChatSvcUpdateThreadRequest,
+    "ConfigSvcAppServiceConfig": configSvcAppServiceConfig.ConfigSvcAppServiceConfig,
+    "ConfigSvcConfig": configSvcConfig.ConfigSvcConfig,
+    "ConfigSvcDownloadServiceConfig": configSvcDownloadServiceConfig.ConfigSvcDownloadServiceConfig,
+    "ConfigSvcGetConfigResponse": configSvcGetConfigResponse.ConfigSvcGetConfigResponse,
+    "ConfigSvcModelServiceConfig": configSvcModelServiceConfig.ConfigSvcModelServiceConfig,
+    "ConfigSvcSaveConfigRequest": configSvcSaveConfigRequest.ConfigSvcSaveConfigRequest,
+    "DatastoreCondition": datastoreCondition.DatastoreCondition,
+    "DatastoreContainsCondition": datastoreContainsCondition.DatastoreContainsCondition,
+    "DatastoreEqualCondition": datastoreEqualCondition.DatastoreEqualCondition,
+    "DatastoreFieldSelector": datastoreFieldSelector.DatastoreFieldSelector,
+    "DatastoreOrderBy": datastoreOrderBy.DatastoreOrderBy,
+    "DatastoreQuery": datastoreQuery.DatastoreQuery,
+    "DatastoreStartsWithCondition": datastoreStartsWithCondition.DatastoreStartsWithCondition,
+    "DockerSvcContainerIsRunningResponse": dockerSvcContainerIsRunningResponse.DockerSvcContainerIsRunningResponse,
+    "DockerSvcDockerInfo": dockerSvcDockerInfo.DockerSvcDockerInfo,
+    "DockerSvcErrorResponse": dockerSvcErrorResponse.DockerSvcErrorResponse,
+    "DockerSvcGetContainerSummaryResponse": dockerSvcGetContainerSummaryResponse.DockerSvcGetContainerSummaryResponse,
+    "DockerSvcGetDockerHostResponse": dockerSvcGetDockerHostResponse.DockerSvcGetDockerHostResponse,
+    "DockerSvcGetInfoResponse": dockerSvcGetInfoResponse.DockerSvcGetInfoResponse,
+    "DockerSvcLaunchContainerRequest": dockerSvcLaunchContainerRequest.DockerSvcLaunchContainerRequest,
+    "DockerSvcLaunchContainerResponse": dockerSvcLaunchContainerResponse.DockerSvcLaunchContainerResponse,
+    "DockerSvcLaunchInfo": dockerSvcLaunchInfo.DockerSvcLaunchInfo,
+    "DockerSvcLaunchOptions": dockerSvcLaunchOptions.DockerSvcLaunchOptions,
+    "DownloadSvcDownloadDetails": downloadSvcDownloadDetails.DownloadSvcDownloadDetails,
+    "DownloadSvcDownloadRequest": downloadSvcDownloadRequest.DownloadSvcDownloadRequest,
+    "DownloadSvcDownloadsResponse": downloadSvcDownloadsResponse.DownloadSvcDownloadsResponse,
+    "DownloadSvcErrorResponse": downloadSvcErrorResponse.DownloadSvcErrorResponse,
+    "DownloadSvcGetDownloadResponse": downloadSvcGetDownloadResponse.DownloadSvcGetDownloadResponse,
+    "FirehoseSvcErrorResponse": firehoseSvcErrorResponse.FirehoseSvcErrorResponse,
+    "FirehoseSvcEvent": firehoseSvcEvent.FirehoseSvcEvent,
+    "FirehoseSvcPublishRequest": firehoseSvcPublishRequest.FirehoseSvcPublishRequest,
+    "GenericSvcCreateObjectRequest": genericSvcCreateObjectRequest.GenericSvcCreateObjectRequest,
+    "GenericSvcCreateObjectResponse": genericSvcCreateObjectResponse.GenericSvcCreateObjectResponse,
+    "GenericSvcDeleteObjectRequest": genericSvcDeleteObjectRequest.GenericSvcDeleteObjectRequest,
+    "GenericSvcErrorResponse": genericSvcErrorResponse.GenericSvcErrorResponse,
+    "GenericSvcGenericObject": genericSvcGenericObject.GenericSvcGenericObject,
+    "GenericSvcGenericObjectCreateFields": genericSvcGenericObjectCreateFields.GenericSvcGenericObjectCreateFields,
+    "GenericSvcQueryRequest": genericSvcQueryRequest.GenericSvcQueryRequest,
+    "GenericSvcQueryResponse": genericSvcQueryResponse.GenericSvcQueryResponse,
+    "GenericSvcUpdateObjectRequest": genericSvcUpdateObjectRequest.GenericSvcUpdateObjectRequest,
+    "GenericSvcUpsertObjectRequest": genericSvcUpsertObjectRequest.GenericSvcUpsertObjectRequest,
+    "GenericSvcUpsertObjectResponse": genericSvcUpsertObjectResponse.GenericSvcUpsertObjectResponse,
+    "ModelSvcArchitectures": modelSvcArchitectures.ModelSvcArchitectures,
+    "ModelSvcContainer": modelSvcContainer.ModelSvcContainer,
+    "ModelSvcErrorResponse": modelSvcErrorResponse.ModelSvcErrorResponse,
+    "ModelSvcGetModelResponse": modelSvcGetModelResponse.ModelSvcGetModelResponse,
+    "ModelSvcListResponse": modelSvcListResponse.ModelSvcListResponse,
+    "ModelSvcModel": modelSvcModel.ModelSvcModel,
+    "ModelSvcModelStatus": modelSvcModelStatus.ModelSvcModelStatus,
+    "ModelSvcPlatform": modelSvcPlatform.ModelSvcPlatform,
+    "ModelSvcStatusResponse": modelSvcStatusResponse.ModelSvcStatusResponse,
+    "NodeSvcErrorResponse": nodeSvcErrorResponse.NodeSvcErrorResponse,
+    "NodeSvcGPU": nodeSvcGPU.NodeSvcGPU,
+    "NodeSvcListNodesResponse": nodeSvcListNodesResponse.NodeSvcListNodesResponse,
+    "NodeSvcNode": nodeSvcNode.NodeSvcNode,
+    "NodeSvcProcess": nodeSvcProcess.NodeSvcProcess,
+    "PromptSvcAddPromptRequest": promptSvcAddPromptRequest.PromptSvcAddPromptRequest,
+    "PromptSvcAddPromptResponse": promptSvcAddPromptResponse.PromptSvcAddPromptResponse,
+    "PromptSvcErrorResponse": promptSvcErrorResponse.PromptSvcErrorResponse,
+    "PromptSvcListPromptsRequest": promptSvcListPromptsRequest.PromptSvcListPromptsRequest,
+    "PromptSvcListPromptsResponse": promptSvcListPromptsResponse.PromptSvcListPromptsResponse,
+    "PromptSvcPrompt": promptSvcPrompt.PromptSvcPrompt,
+    "PromptSvcRemovePromptRequest": promptSvcRemovePromptRequest.PromptSvcRemovePromptRequest,
+    "UserSvcAddUserToOrganizationRequest": userSvcAddUserToOrganizationRequest.UserSvcAddUserToOrganizationRequest,
+    "UserSvcAuthToken": userSvcAuthToken.UserSvcAuthToken,
+    "UserSvcChangePasswordAdminRequest": userSvcChangePasswordAdminRequest.UserSvcChangePasswordAdminRequest,
+    "UserSvcChangePasswordRequest": userSvcChangePasswordRequest.UserSvcChangePasswordRequest,
+    "UserSvcContact": userSvcContact.UserSvcContact,
+    "UserSvcCreateOrganizationRequest": userSvcCreateOrganizationRequest.UserSvcCreateOrganizationRequest,
+    "UserSvcCreateRoleRequest": userSvcCreateRoleRequest.UserSvcCreateRoleRequest,
+    "UserSvcCreateRoleResponse": userSvcCreateRoleResponse.UserSvcCreateRoleResponse,
+    "UserSvcCreateUserRequest": userSvcCreateUserRequest.UserSvcCreateUserRequest,
+    "UserSvcErrorResponse": userSvcErrorResponse.UserSvcErrorResponse,
+    "UserSvcGetPermissionsResponse": userSvcGetPermissionsResponse.UserSvcGetPermissionsResponse,
+    "UserSvcGetPublicKeyResponse": userSvcGetPublicKeyResponse.UserSvcGetPublicKeyResponse,
+    "UserSvcGetRolesResponse": userSvcGetRolesResponse.UserSvcGetRolesResponse,
+    "UserSvcGetUsersRequest": userSvcGetUsersRequest.UserSvcGetUsersRequest,
+    "UserSvcGetUsersResponse": userSvcGetUsersResponse.UserSvcGetUsersResponse,
+    "UserSvcIsAuthorizedRequest": userSvcIsAuthorizedRequest.UserSvcIsAuthorizedRequest,
+    "UserSvcIsAuthorizedResponse": userSvcIsAuthorizedResponse.UserSvcIsAuthorizedResponse,
+    "UserSvcLoginRequest": userSvcLoginRequest.UserSvcLoginRequest,
+    "UserSvcLoginResponse": userSvcLoginResponse.UserSvcLoginResponse,
+    "UserSvcPermission": userSvcPermission.UserSvcPermission,
+    "UserSvcReadUserByTokenRequest": userSvcReadUserByTokenRequest.UserSvcReadUserByTokenRequest,
+    "UserSvcReadUserByTokenResponse": userSvcReadUserByTokenResponse.UserSvcReadUserByTokenResponse,
+    "UserSvcRegisterRequest": userSvcRegisterRequest.UserSvcRegisterRequest,
+    "UserSvcRole": userSvcRole.UserSvcRole,
+    "UserSvcSaveProfileRequest": userSvcSaveProfileRequest.UserSvcSaveProfileRequest,
+    "UserSvcSetRolePermissionsRequest": userSvcSetRolePermissionsRequest.UserSvcSetRolePermissionsRequest,
+    "UserSvcUpserPermissionRequest": userSvcUpserPermissionRequest.UserSvcUpserPermissionRequest,
+    "UserSvcUser": userSvcUser.UserSvcUser,
+};
+class ObjectSerializer {
+    static findCorrectType(data, expectedType) {
+        if (data == undefined) {
+            return expectedType;
+        }
+        else if (primitives.indexOf(expectedType.toLowerCase()) !== -1) {
+            return expectedType;
+        }
+        else if (expectedType === "Date") {
+            return expectedType;
+        }
+        else {
+            if (enumsMap[expectedType]) {
+                return expectedType;
+            }
+            if (!typeMap[expectedType]) {
+                return expectedType; // w/e we don't know the type
+            }
+            // Check the discriminator
+            let discriminatorProperty = typeMap[expectedType].discriminator;
+            if (discriminatorProperty == null) {
+                return expectedType; // the type does not have a discriminator. use it.
+            }
+            else {
+                if (data[discriminatorProperty]) {
+                    var discriminatorType = data[discriminatorProperty];
+                    if (typeMap[discriminatorType]) {
+                        return discriminatorType; // use the type given in the discriminator
+                    }
+                    else {
+                        return expectedType; // discriminator did not map to a type
+                    }
+                }
+                else {
+                    return expectedType; // discriminator was not present (or an empty string)
+                }
+            }
+        }
+    }
+    static serialize(data, type) {
+        if (data == undefined) {
+            return data;
+        }
+        else if (primitives.indexOf(type.toLowerCase()) !== -1) {
+            return data;
+        }
+        else if (type.lastIndexOf("Array<", 0) === 0) { // string.startsWith pre es6
+            let subType = type.replace("Array<", ""); // Array<Type> => Type>
+            subType = subType.substring(0, subType.length - 1); // Type> => Type
+            let transformedData = [];
+            for (let index = 0; index < data.length; index++) {
+                let datum = data[index];
+                transformedData.push(ObjectSerializer.serialize(datum, subType));
+            }
+            return transformedData;
+        }
+        else if (type === "Date") {
+            return data.toISOString();
+        }
+        else {
+            if (enumsMap[type]) {
+                return data;
+            }
+            if (!typeMap[type]) { // in case we dont know the type
+                return data;
+            }
+            // Get the actual type of this object
+            type = this.findCorrectType(data, type);
+            // get the map for the correct type.
+            let attributeTypes = typeMap[type].getAttributeTypeMap();
+            let instance = {};
+            for (let index = 0; index < attributeTypes.length; index++) {
+                let attributeType = attributeTypes[index];
+                instance[attributeType.baseName] = ObjectSerializer.serialize(data[attributeType.name], attributeType.type);
+            }
+            return instance;
+        }
+    }
+    static deserialize(data, type) {
+        // polymorphism may change the actual type.
+        type = ObjectSerializer.findCorrectType(data, type);
+        if (data == undefined) {
+            return data;
+        }
+        else if (primitives.indexOf(type.toLowerCase()) !== -1) {
+            return data;
+        }
+        else if (type.lastIndexOf("Array<", 0) === 0) { // string.startsWith pre es6
+            let subType = type.replace("Array<", ""); // Array<Type> => Type>
+            subType = subType.substring(0, subType.length - 1); // Type> => Type
+            let transformedData = [];
+            for (let index = 0; index < data.length; index++) {
+                let datum = data[index];
+                transformedData.push(ObjectSerializer.deserialize(datum, subType));
+            }
+            return transformedData;
+        }
+        else if (type === "Date") {
+            return new Date(data);
+        }
+        else {
+            if (enumsMap[type]) { // is Enum
+                return data;
+            }
+            if (!typeMap[type]) { // dont know the type
+                return data;
+            }
+            let instance = new typeMap[type]();
+            let attributeTypes = typeMap[type].getAttributeTypeMap();
+            for (let index = 0; index < attributeTypes.length; index++) {
+                let attributeType = attributeTypes[index];
+                instance[attributeType.name] = ObjectSerializer.deserialize(data[attributeType.baseName], attributeType.type);
+            }
+            return instance;
+        }
+    }
+}
+class HttpBasicAuth {
+    constructor() {
+        this.username = '';
+        this.password = '';
+    }
+    applyToRequest(requestOptions) {
+        requestOptions.auth = {
+            username: this.username, password: this.password
+        };
+    }
+}
+class HttpBearerAuth {
+    constructor() {
+        this.accessToken = '';
+    }
+    applyToRequest(requestOptions) {
+        if (requestOptions && requestOptions.headers) {
+            const accessToken = typeof this.accessToken === 'function'
+                ? this.accessToken()
+                : this.accessToken;
+            requestOptions.headers["Authorization"] = "Bearer " + accessToken;
+        }
+    }
+}
+class ApiKeyAuth {
+    constructor(location, paramName) {
+        this.location = location;
+        this.paramName = paramName;
+        this.apiKey = '';
+    }
+    applyToRequest(requestOptions) {
+        if (this.location == "query") {
+            requestOptions.qs[this.paramName] = this.apiKey;
+        }
+        else if (this.location == "header" && requestOptions && requestOptions.headers) {
+            requestOptions.headers[this.paramName] = this.apiKey;
+        }
+        else if (this.location == 'cookie' && requestOptions && requestOptions.headers) {
+            if (requestOptions.headers['Cookie']) {
+                requestOptions.headers['Cookie'] += '; ' + this.paramName + '=' + encodeURIComponent(this.apiKey);
+            }
+            else {
+                requestOptions.headers['Cookie'] = this.paramName + '=' + encodeURIComponent(this.apiKey);
+            }
+        }
+    }
+}
+class OAuth {
+    constructor() {
+        this.accessToken = '';
+    }
+    applyToRequest(requestOptions) {
+        if (requestOptions && requestOptions.headers) {
+            requestOptions.headers["Authorization"] = "Bearer " + this.accessToken;
+        }
+    }
+}
+class VoidAuth {
+    constructor() {
+        this.username = '';
+        this.password = '';
+    }
+    applyToRequest(_) {
+        // Do nothing
+    }
+}
 
-
-exports.APIS = chatSvcApi.APIS;
-exports.ChatSvcApi = chatSvcApi.ChatSvcApi;
-Object.defineProperty(exports, 'ChatSvcApiApiKeys', {
-	enumerable: true,
-	get: function () { return chatSvcApi.ChatSvcApiApiKeys; }
-});
-exports.ConfigSvcApi = chatSvcApi.ConfigSvcApi;
-Object.defineProperty(exports, 'ConfigSvcApiApiKeys', {
-	enumerable: true,
-	get: function () { return chatSvcApi.ConfigSvcApiApiKeys; }
-});
-exports.DockerSvcApi = chatSvcApi.DockerSvcApi;
-Object.defineProperty(exports, 'DockerSvcApiApiKeys', {
-	enumerable: true,
-	get: function () { return chatSvcApi.DockerSvcApiApiKeys; }
-});
-exports.DownloadSvcApi = chatSvcApi.DownloadSvcApi;
-Object.defineProperty(exports, 'DownloadSvcApiApiKeys', {
-	enumerable: true,
-	get: function () { return chatSvcApi.DownloadSvcApiApiKeys; }
-});
-exports.FirehoseSvcApi = chatSvcApi.FirehoseSvcApi;
-Object.defineProperty(exports, 'FirehoseSvcApiApiKeys', {
-	enumerable: true,
-	get: function () { return chatSvcApi.FirehoseSvcApiApiKeys; }
-});
-exports.GenericSvcApi = chatSvcApi.GenericSvcApi;
-Object.defineProperty(exports, 'GenericSvcApiApiKeys', {
-	enumerable: true,
-	get: function () { return chatSvcApi.GenericSvcApiApiKeys; }
-});
-exports.HttpError = chatSvcApi.HttpError;
-exports.ModelSvcApi = chatSvcApi.ModelSvcApi;
-Object.defineProperty(exports, 'ModelSvcApiApiKeys', {
-	enumerable: true,
-	get: function () { return chatSvcApi.ModelSvcApiApiKeys; }
-});
-exports.NodeSvcApi = chatSvcApi.NodeSvcApi;
-Object.defineProperty(exports, 'NodeSvcApiApiKeys', {
-	enumerable: true,
-	get: function () { return chatSvcApi.NodeSvcApiApiKeys; }
-});
-exports.PromptSvcApi = chatSvcApi.PromptSvcApi;
-Object.defineProperty(exports, 'PromptSvcApiApiKeys', {
-	enumerable: true,
-	get: function () { return chatSvcApi.PromptSvcApiApiKeys; }
-});
-exports.UserSvcApi = chatSvcApi.UserSvcApi;
-Object.defineProperty(exports, 'UserSvcApiApiKeys', {
-	enumerable: true,
-	get: function () { return chatSvcApi.UserSvcApiApiKeys; }
-});
-exports.ApiKeyAuth = models.ApiKeyAuth;
-exports.HttpBasicAuth = models.HttpBasicAuth;
-exports.HttpBearerAuth = models.HttpBearerAuth;
-exports.OAuth = models.OAuth;
-exports.ObjectSerializer = models.ObjectSerializer;
-exports.VoidAuth = models.VoidAuth;
 exports.ChatSvcAddMessageRequest = chatSvcAddMessageRequest.ChatSvcAddMessageRequest;
 exports.ChatSvcAddThreadRequest = chatSvcAddThreadRequest.ChatSvcAddThreadRequest;
 exports.ChatSvcAddThreadResponse = chatSvcAddThreadResponse.ChatSvcAddThreadResponse;
@@ -254,8 +477,8 @@ exports.PromptSvcListPromptsRequest = promptSvcListPromptsRequest.PromptSvcListP
 exports.PromptSvcListPromptsResponse = promptSvcListPromptsResponse.PromptSvcListPromptsResponse;
 exports.PromptSvcPrompt = promptSvcPrompt.PromptSvcPrompt;
 Object.defineProperty(exports, 'PromptSvcPromptStatus', {
-	enumerable: true,
-	get: function () { return promptSvcPromptStatus.PromptSvcPromptStatus; }
+    enumerable: true,
+    get: function () { return promptSvcPromptStatus.PromptSvcPromptStatus; }
 });
 exports.PromptSvcRemovePromptRequest = promptSvcRemovePromptRequest.PromptSvcRemovePromptRequest;
 exports.UserSvcAddUserToOrganizationRequest = userSvcAddUserToOrganizationRequest.UserSvcAddUserToOrganizationRequest;
@@ -286,3 +509,9 @@ exports.UserSvcSaveProfileRequest = userSvcSaveProfileRequest.UserSvcSaveProfile
 exports.UserSvcSetRolePermissionsRequest = userSvcSetRolePermissionsRequest.UserSvcSetRolePermissionsRequest;
 exports.UserSvcUpserPermissionRequest = userSvcUpserPermissionRequest.UserSvcUpserPermissionRequest;
 exports.UserSvcUser = userSvcUser.UserSvcUser;
+exports.ApiKeyAuth = ApiKeyAuth;
+exports.HttpBasicAuth = HttpBasicAuth;
+exports.HttpBearerAuth = HttpBearerAuth;
+exports.OAuth = OAuth;
+exports.ObjectSerializer = ObjectSerializer;
+exports.VoidAuth = VoidAuth;

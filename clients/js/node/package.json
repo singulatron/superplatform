@@ -25,6 +25,9 @@
   "license": "AGPL-3.0-only",
   "description": "JS/TS client for Singulatron. Works both from the browser and from Node.js",
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^26.0.1",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^15.2.3",
     "@types/axios": "^0.14.0",
     "rollup": "^3.0.0",
     "rollup-plugin-typescript2": "^0.31.1",
