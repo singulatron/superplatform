@@ -41,29 +41,17 @@ export interface UserSvcUser {
      */
     id?: string;
     /**
-     * Full name of the organization
+     * Full name of the organization.
      * @type {string}
      * @memberof UserSvcUser
      */
     name?: string;
-    /**
-     * Many to many relationship between User and Organization
-     * @type {Array<string>}
-     * @memberof UserSvcUser
-     */
-    organizationIds?: Array<string>;
     /**
      *
      * @type {string}
      * @memberof UserSvcUser
      */
     passwordHash?: string;
-    /**
-     * Many to many relationship between User and Role
-     * @type {Array<string>}
-     * @memberof UserSvcUser
-     */
-    roleIds?: Array<string>;
     /**
      * URL-friendly unique (inside the Singularon platform) identifier for the `user`.
      * @type {string}

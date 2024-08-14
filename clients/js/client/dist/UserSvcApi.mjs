@@ -1,6 +1,8 @@
 import { a as BaseAPI, _ as __awaiter, b as RequiredError, J as JSONApiResponse } from './runtime2.mjs';
+import { UserSvcAddUserToOrganizationRequestToJSON } from './UserSvcAddUserToOrganizationRequest.mjs';
 import { UserSvcChangePasswordAdminRequestToJSON } from './UserSvcChangePasswordAdminRequest.mjs';
 import { UserSvcChangePasswordRequestToJSON } from './UserSvcChangePasswordRequest.mjs';
+import { UserSvcCreateOrganizationRequestToJSON } from './UserSvcCreateOrganizationRequest.mjs';
 import { UserSvcCreateRoleRequestToJSON } from './UserSvcCreateRoleRequest.mjs';
 import { UserSvcCreateRoleResponseFromJSON } from './UserSvcCreateRoleResponse.mjs';
 import { UserSvcCreateUserRequestToJSON } from './UserSvcCreateUserRequest.mjs';
@@ -86,6 +88,44 @@ class UserSvcApi extends BaseAPI {
         });
     }
     /**
+     * Allows an authorized user to add another user to a specific organization. The user will be assigned a specific role within the organization.
+     * Add a User to an Organization
+     */
+    addUserToOrganizationRaw(requestParameters, initOverrides) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (requestParameters['organizationId'] == null) {
+                throw new RequiredError('organizationId', 'Required parameter "organizationId" was null or undefined when calling addUserToOrganization().');
+            }
+            if (requestParameters['request'] == null) {
+                throw new RequiredError('request', 'Required parameter "request" was null or undefined when calling addUserToOrganization().');
+            }
+            const queryParameters = {};
+            const headerParameters = {};
+            headerParameters['Content-Type'] = 'application/json';
+            if (this.configuration && this.configuration.apiKey) {
+                headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
+            }
+            const response = yield this.request({
+                path: `/user-svc/organization/{organizationId}/user`.replace(`{${"organizationId"}}`, encodeURIComponent(String(requestParameters['organizationId']))),
+                method: 'POST',
+                headers: headerParameters,
+                query: queryParameters,
+                body: UserSvcAddUserToOrganizationRequestToJSON(requestParameters['request']),
+            }, initOverrides);
+            return new JSONApiResponse(response);
+        });
+    }
+    /**
+     * Allows an authorized user to add another user to a specific organization. The user will be assigned a specific role within the organization.
+     * Add a User to an Organization
+     */
+    addUserToOrganization(requestParameters, initOverrides) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const response = yield this.addUserToOrganizationRaw(requestParameters, initOverrides);
+            return yield response.value();
+        });
+    }
+    /**
      * Allows an authenticated user to change their own password.
      * Change User Password
      */
@@ -152,6 +192,41 @@ class UserSvcApi extends BaseAPI {
     changePasswordAdmin(requestParameters, initOverrides) {
         return __awaiter(this, void 0, void 0, function* () {
             const response = yield this.changePasswordAdminRaw(requestParameters, initOverrides);
+            return yield response.value();
+        });
+    }
+    /**
+     * Allows a logged-in user to create a new organization. The user initiating the request will be assigned the role of admin for that organization. The initiating user will receive a dynamic role in the format `user-svc:org:$organization-slug:admin`, where `$organization-slug` is a unique identifier for the created organization. Dynamic roles are generated based on specific user-resource associations, offering more flexible permission management compared to static roles.
+     * Create an Organization
+     */
+    createOrganizationRaw(requestParameters, initOverrides) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (requestParameters['request'] == null) {
+                throw new RequiredError('request', 'Required parameter "request" was null or undefined when calling createOrganization().');
+            }
+            const queryParameters = {};
+            const headerParameters = {};
+            headerParameters['Content-Type'] = 'application/json';
+            if (this.configuration && this.configuration.apiKey) {
+                headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
+            }
+            const response = yield this.request({
+                path: `/user-svc/organization`,
+                method: 'POST',
+                headers: headerParameters,
+                query: queryParameters,
+                body: UserSvcCreateOrganizationRequestToJSON(requestParameters['request']),
+            }, initOverrides);
+            return new JSONApiResponse(response);
+        });
+    }
+    /**
+     * Allows a logged-in user to create a new organization. The user initiating the request will be assigned the role of admin for that organization. The initiating user will receive a dynamic role in the format `user-svc:org:$organization-slug:admin`, where `$organization-slug` is a unique identifier for the created organization. Dynamic roles are generated based on specific user-resource associations, offering more flexible permission management compared to static roles.
+     * Create an Organization
+     */
+    createOrganization(requestParameters, initOverrides) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const response = yield this.createOrganizationRaw(requestParameters, initOverrides);
             return yield response.value();
         });
     }
@@ -547,6 +622,44 @@ class UserSvcApi extends BaseAPI {
     register(requestParameters, initOverrides) {
         return __awaiter(this, void 0, void 0, function* () {
             const response = yield this.registerRaw(requestParameters, initOverrides);
+            return yield response.value();
+        });
+    }
+    /**
+     * Allows an authorized user to add another user to a specific organization. The user will be assigned a specific role within the organization.
+     * Remove a User from an Organization
+     */
+    removeUserFromOrganizationRaw(requestParameters, initOverrides) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (requestParameters['organizationId'] == null) {
+                throw new RequiredError('organizationId', 'Required parameter "organizationId" was null or undefined when calling removeUserFromOrganization().');
+            }
+            if (requestParameters['userId'] == null) {
+                throw new RequiredError('userId', 'Required parameter "userId" was null or undefined when calling removeUserFromOrganization().');
+            }
+            const queryParameters = {};
+            const headerParameters = {};
+            headerParameters['Content-Type'] = 'application/json';
+            if (this.configuration && this.configuration.apiKey) {
+                headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
+            }
+            const response = yield this.request({
+                path: `/user-svc/organization/{organizationId}/user/{userId}`.replace(`{${"organizationId"}}`, encodeURIComponent(String(requestParameters['organizationId']))).replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId']))),
+                method: 'DELETE',
+                headers: headerParameters,
+                query: queryParameters,
+                body: requestParameters['request'],
+            }, initOverrides);
+            return new JSONApiResponse(response);
+        });
+    }
+    /**
+     * Allows an authorized user to add another user to a specific organization. The user will be assigned a specific role within the organization.
+     * Remove a User from an Organization
+     */
+    removeUserFromOrganization(requestParameters, initOverrides) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const response = yield this.removeUserFromOrganizationRaw(requestParameters, initOverrides);
             return yield response.value();
         });
     }

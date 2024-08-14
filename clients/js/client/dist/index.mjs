@@ -83,10 +83,12 @@ export { PromptSvcListPromptsResponseFromJSON, PromptSvcListPromptsResponseFromJ
 export { PromptSvcPromptFromJSON, PromptSvcPromptFromJSONTyped, PromptSvcPromptToJSON, instanceOfPromptSvcPrompt } from './PromptSvcPrompt.mjs';
 export { PromptSvcPromptStatus, PromptSvcPromptStatusFromJSON, PromptSvcPromptStatusFromJSONTyped, PromptSvcPromptStatusToJSON, instanceOfPromptSvcPromptStatus } from './PromptSvcPromptStatus.mjs';
 export { PromptSvcRemovePromptRequestFromJSON, PromptSvcRemovePromptRequestFromJSONTyped, PromptSvcRemovePromptRequestToJSON, instanceOfPromptSvcRemovePromptRequest } from './PromptSvcRemovePromptRequest.mjs';
+export { UserSvcAddUserToOrganizationRequestFromJSON, UserSvcAddUserToOrganizationRequestFromJSONTyped, UserSvcAddUserToOrganizationRequestToJSON, instanceOfUserSvcAddUserToOrganizationRequest } from './UserSvcAddUserToOrganizationRequest.mjs';
 export { UserSvcAuthTokenFromJSON, UserSvcAuthTokenFromJSONTyped, UserSvcAuthTokenToJSON, instanceOfUserSvcAuthToken } from './UserSvcAuthToken.mjs';
 export { UserSvcChangePasswordAdminRequestFromJSON, UserSvcChangePasswordAdminRequestFromJSONTyped, UserSvcChangePasswordAdminRequestToJSON, instanceOfUserSvcChangePasswordAdminRequest } from './UserSvcChangePasswordAdminRequest.mjs';
 export { UserSvcChangePasswordRequestFromJSON, UserSvcChangePasswordRequestFromJSONTyped, UserSvcChangePasswordRequestToJSON, instanceOfUserSvcChangePasswordRequest } from './UserSvcChangePasswordRequest.mjs';
 export { UserSvcContactFromJSON, UserSvcContactFromJSONTyped, UserSvcContactToJSON, instanceOfUserSvcContact } from './UserSvcContact.mjs';
+export { UserSvcCreateOrganizationRequestFromJSON, UserSvcCreateOrganizationRequestFromJSONTyped, UserSvcCreateOrganizationRequestToJSON, instanceOfUserSvcCreateOrganizationRequest } from './UserSvcCreateOrganizationRequest.mjs';
 export { UserSvcCreateRoleRequestFromJSON, UserSvcCreateRoleRequestFromJSONTyped, UserSvcCreateRoleRequestToJSON, instanceOfUserSvcCreateRoleRequest } from './UserSvcCreateRoleRequest.mjs';
 export { UserSvcCreateRoleResponseFromJSON, UserSvcCreateRoleResponseFromJSONTyped, UserSvcCreateRoleResponseToJSON, instanceOfUserSvcCreateRoleResponse } from './UserSvcCreateRoleResponse.mjs';
 export { UserSvcCreateUserRequestFromJSON, UserSvcCreateUserRequestFromJSONTyped, UserSvcCreateUserRequestToJSON, instanceOfUserSvcCreateUserRequest } from './UserSvcCreateUserRequest.mjs';

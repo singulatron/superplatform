@@ -47,12 +47,6 @@ export interface UserSvcRole {
     ownerId?: string;
     /**
      *
-     * @type {Array<string>}
-     * @memberof UserSvcRole
-     */
-    permissionIds?: Array<string>;
-    /**
-     *
      * @type {string}
      * @memberof UserSvcRole
      */
