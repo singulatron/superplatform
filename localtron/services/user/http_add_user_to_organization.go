@@ -35,25 +35,30 @@ import (
 // @Security BearerAuth
 // @Router /user-svc/organization/{organizationId}/user [post]
 func (s *UserService) AddUserToOrganization(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
 	organizationId := mux.Vars(r)["organizationId"]
 
 	usr, err := s.isAuthorized(r, user.PermissionOrganizationAddUser.Id, nil, nil)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte(err.Error()))
 		return
 	}
 
 	req := user.AddUserToOrganizationRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
-		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(`Invalid JSON`))
 		return
 	}
 	defer r.Body.Close()
 
 	err = s.addUserToOrganization(usr.Id, req.UserId, organizationId)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
 		return
 	}
 

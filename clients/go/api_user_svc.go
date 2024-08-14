@@ -2606,9 +2606,6 @@ func (a *UserSvcAPIService) RemoveUserFromOrganizationExecute(r ApiRemoveUserFro
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.request == nil {
-		return localVarReturnValue, nil, reportError("request is required and must be specified")
-	}
 
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{"application/json"}

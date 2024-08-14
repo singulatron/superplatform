@@ -2756,7 +2756,6 @@ paths:
       - description: Add User to Organization Request
         in: body
         name: request
-        required: true
         schema:
           $ref: '#/definitions/user_svc.RemoveUserFromOrganizationRequest'
       produces:

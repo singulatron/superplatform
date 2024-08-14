@@ -26,7 +26,7 @@ import (
 // @Produce json
 // @Param organizationId path string true "Organization ID"
 // @Param userId path string true "User ID"
-// @Param request body user.RemoveUserFromOrganizationRequest true "Add User to Organization Request"
+// @Param request body user.RemoveUserFromOrganizationRequest false "Add User to Organization Request"
 // @Success 200 {object} user.RemoveUserFromOrganizationResponse "User added successfully"
 // @Failure 400 {object} user.ErrorResponse "Invalid JSON"
 // @Failure 401 {object} user.ErrorResponse "Unauthorized"
@@ -36,26 +36,31 @@ import (
 // @Security BearerAuth
 // @Router /user-svc/organization/{organizationId}/user/{userId} [delete]
 func (s *UserService) RemoveUserFromOrganization(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
 	organizationId := mux.Vars(r)["organizationId"]
 	userId := mux.Vars(r)["userId"]
 
 	usr, err := s.isAuthorized(r, user.PermissionOrganizationCreate.Id, nil, nil)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte(err.Error()))
 		return
 	}
 
 	req := user.RemoveUserFromOrganizationRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
-		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(`Invalid JSON`))
 		return
 	}
 	defer r.Body.Close()
 
 	err = s.removeUserFromOrganization(usr.Id, userId, organizationId)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
 		return
 	}
 

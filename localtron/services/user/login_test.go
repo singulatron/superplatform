@@ -207,8 +207,8 @@ func TestOrganization(t *testing.T) {
 		require.Equal(t, 1, len(claim.RoleIds), claim.RoleIds)
 
 		loginReq := clients.UserSvcLoginRequest{
-			Slug:     clients.PtrString("someotheruser"),
-			Password: clients.PtrString("pw1233"),
+			Slug:     clients.PtrString("singulatron"),
+			Password: clients.PtrString("changeme"),
 		}
 		loginRsp, _, err := adminClient.UserSvcAPI.Login(context.Background()).Request(loginReq).Execute()
 		require.NoError(t, err)

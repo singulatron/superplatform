@@ -2391,7 +2391,6 @@ const docTemplate = `{
                         "description": "Add User to Organization Request",
                         "name": "request",
                         "in": "body",
-                        "required": true,
                         "schema": {
                             "$ref": "#/definitions/user_svc.RemoveUserFromOrganizationRequest"
                         }
