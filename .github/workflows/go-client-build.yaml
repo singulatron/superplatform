@@ -18,8 +18,14 @@ jobs:
         with:
           node-version: "20"
 
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "^1.22.4"
+
       - name: Build Go client
         run: |
+          go install github.com/swaggo/swag/cmd/swag@latest
           npm install @openapitools/openapi-generator-cli -g
           bash gen.sh
 
