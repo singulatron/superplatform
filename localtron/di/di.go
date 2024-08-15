@@ -22,6 +22,7 @@ import (
 	genericservice "github.com/singulatron/singulatron/localtron/services/generic"
 	modelservice "github.com/singulatron/singulatron/localtron/services/model"
 	nodeservice "github.com/singulatron/singulatron/localtron/services/node"
+	policyservice "github.com/singulatron/singulatron/localtron/services/policy"
 	promptservice "github.com/singulatron/singulatron/localtron/services/prompt"
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
 )
@@ -183,6 +184,12 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 	nodeService, err := nodeservice.NewNodeService(options.Router)
 	if err != nil {
 		logger.Error("Node service creation failed", slog.String("error", err.Error()))
+		os.Exit(1)
+	}
+
+	policyService, err := policyservice.NewPolicyService(options.Router, options.DatastoreFactory)
+	if err != nil {
+		logger.Error("Policy service creation failed", slog.String("error", err.Error()))
 		os.Exit(1)
 	}
 
@@ -429,6 +436,10 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 			return err
 		}
 		err = genericService.Start()
+		if err != nil {
+			return err
+		}
+		err = policyService.Start()
 		if err != nil {
 			return err
 		}

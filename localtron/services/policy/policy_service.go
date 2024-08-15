@@ -8,7 +8,6 @@
 package policyservice
 
 import (
-	"github.com/singulatron/singulatron/localtron/clients/llm"
 	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/router"
 	sdk "github.com/singulatron/singulatron/localtron/sdk/go"
@@ -27,7 +26,6 @@ type PolicyService struct {
 
 func NewPolicyService(
 	router *router.Router,
-	llmClient llm.ClientI,
 	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error),
 ) (*PolicyService, error) {
 	templatesStore, err := datastoreFactory("policyTemplates", &policytypes.Template{})

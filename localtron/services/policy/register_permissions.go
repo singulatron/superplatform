@@ -17,7 +17,7 @@ import (
 )
 
 func (p *PolicyService) registerPermissions() error {
-	for _, permission := range policytypes.Permissions {
+	for _, permission := range append(policytypes.AdminPermissions, policytypes.UserPermissions...) {
 		rsp := &usertypes.UpserPermissionResponse{}
 		err := p.router.Put(context.Background(), "user-svc", fmt.Sprintf("/permission/%v", permission.Id), &usertypes.UpserPermissionRequest{
 			Permission: &usertypes.Permission{
@@ -33,7 +33,20 @@ func (p *PolicyService) registerPermissions() error {
 	for _, role := range []*usertypes.Role{
 		usertypes.RoleAdmin,
 	} {
-		for _, permission := range policytypes.Permissions {
+		for _, permission := range policytypes.AdminPermissions {
+			rsp := &usertypes.AddPermissionToRoleResponse{}
+			err := p.router.Put(context.Background(), "user-svc",
+				fmt.Sprintf("/role/%v/permission/%v", role.Id, permission.Id), &usertypes.AddPermissionToRoleRequest{}, rsp)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	for _, role := range []*usertypes.Role{
+		usertypes.RoleUser,
+	} {
+		for _, permission := range policytypes.UserPermissions {
 			rsp := &usertypes.AddPermissionToRoleResponse{}
 			err := p.router.Put(context.Background(), "user-svc",
 				fmt.Sprintf("/role/%v/permission/%v", role.Id, permission.Id), &usertypes.AddPermissionToRoleRequest{}, rsp)

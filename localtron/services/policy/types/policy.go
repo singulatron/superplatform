@@ -64,6 +64,13 @@ type UpsertInstanceRequest struct {
 	Instance
 }
 
+type CheckRequest struct {
+	Endpoint string `json:"endpoint"`
+	Method   string `json:"method"`
+	Ip       string `json:"ip"`
+	UserId   string `json:"userId"`
+}
+
 type UpsertPolicyInstanceResponse struct {
 	InstanceId string `json:"instanceId"`
 }
@@ -130,7 +137,12 @@ var (
 		Name: "Policy Svc - Instance Delete",
 	}
 
-	Permissions = []user.Permission{
+	PermissionCheckView = user.Permission{
+		Id:   "policy-svc:check:view",
+		Name: "Policy Svc - Check View",
+	}
+
+	AdminPermissions = []user.Permission{
 		PermissionTemplateView,
 		PermissionTemplateCreate,
 		PermissionTemplateEdit,
@@ -139,5 +151,9 @@ var (
 		PermissionInstanceCreate,
 		PermissionInstanceEdit,
 		PermissionInstanceDelete,
+	}
+
+	UserPermissions = []user.Permission{
+		PermissionCheckView,
 	}
 )

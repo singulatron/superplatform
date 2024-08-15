@@ -10,21 +10,21 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-// UpsertPolicyTemplate allows a user to upsert a new policy template
-// @ID upsertPolicyTemplate
-// @Summary Upsert a Policy Template
-// @Description Allows user to upsert a new policy template.
+// Check records a resource access and returns if the access is allowed.
+// @ID check
+// @Summary Check
+// @Description Check records a resource access and returns if the access is allowed.
 // @Tags Policy Svc
 // @Accept json
 // @Produce json
-// @Param request body types.UpsertPolicyTemplateRequest true "Upsert Policy Template Request"
-// @Success 200 {object} policy.UpsertPolicyTemplateResponse "Policy template upserted successfully"
+// @Param request body types.CheckRequest true "Check Request"
+// @Success 200 {object} policy.CheckResponse "Checked successfully"
 // @Failure 400 {object} policy.ErrorResponse "Invalid JSON"
 // @Failure 401 {object} policy.ErrorResponse "Unauthorized"
 // @Failure 500 {object} policy.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
-// @Router /policy-svc/template/{templateId} [put]
-func (s *PolicyService) UpsertTemplate(
+// @Router /policy-svc/check [post]
+func (s *PolicyService) Check(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
@@ -63,6 +63,6 @@ func (s *PolicyService) UpsertTemplate(
 	w.Write(bs)
 }
 
-func (s *PolicyService) upsertTemplate(template *policy.Template) error {
+func (s *PolicyService) check(template *policy.Template) error {
 	return s.templatesStore.Upsert(template)
 }
