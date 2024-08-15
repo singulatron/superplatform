@@ -32,7 +32,7 @@ type FirehoseService struct {
 }
 
 func NewFirehoseService(r *router.Router, datastoreFactory func(tableName string, instance any) (datastore.DataStore, error)) (*FirehoseService, error) {
-	credentialStore, err := datastoreFactory("firehose_credentials", &usertypes.Credential{})
+	credentialStore, err := datastoreFactory("firehoseCredentials", &usertypes.Credential{})
 	if err != nil {
 		return nil, err
 	}

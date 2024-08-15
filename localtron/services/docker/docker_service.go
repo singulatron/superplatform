@@ -41,7 +41,7 @@ func NewDockerService(
 		return nil, err
 	}
 
-	credentialStore, err := datastoreFactory("docker_credentials", &usertypes.Credential{})
+	credentialStore, err := datastoreFactory("dockerCredentials", &usertypes.Credential{})
 	if err != nil {
 		return nil, err
 	}

@@ -37,6 +37,10 @@ func (s *UserService) ChangePassword(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(err.Error()))
 		return
 	}
+	if !rsp.Authorized {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
 	req := user.ChangePasswordRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)

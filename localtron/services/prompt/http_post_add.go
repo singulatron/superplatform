@@ -34,7 +34,6 @@ func (p *PromptService) Add(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-
 	rsp := &usertypes.IsAuthorizedResponse{}
 	err := p.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", prompt.PermissionPromptCreate.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {

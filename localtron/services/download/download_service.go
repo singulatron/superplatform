@@ -46,7 +46,7 @@ func NewDownloadService(
 ) (*DownloadService, error) {
 	home, _ := os.UserHomeDir()
 
-	credentialStore, err := datastoreFactory("download_credentials", &usertypes.Credential{})
+	credentialStore, err := datastoreFactory("downloadCredentials", &usertypes.Credential{})
 	if err != nil {
 		return nil, err
 	}

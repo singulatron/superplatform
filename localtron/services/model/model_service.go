@@ -38,19 +38,19 @@ func NewModelService(
 
 		modelPortMap: map[int]*modeltypes.ModelState{},
 	}
-	modelStore, err := datastoreFactory("models", &modeltypes.Model{})
+	modelStore, err := datastoreFactory("modelModels", &modeltypes.Model{})
 	if err != nil {
 		return nil, err
 	}
 	srv.modelsStore = modelStore
 
-	platformsStore, err := datastoreFactory("platforms", &modeltypes.Platform{})
+	platformsStore, err := datastoreFactory("modelPlatforms", &modeltypes.Platform{})
 	if err != nil {
 		return nil, err
 	}
 	srv.platformsStore = platformsStore
 
-	credentialStore, err := datastoreFactory("model_credentials", &usertypes.Credential{})
+	credentialStore, err := datastoreFactory("modelCredentials", &usertypes.Credential{})
 	if err != nil {
 		return nil, err
 	}

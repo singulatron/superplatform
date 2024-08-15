@@ -5,60 +5,58 @@
  * This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3).
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
-package chatservice
+package policyservice
 
 import (
+	"github.com/singulatron/singulatron/localtron/clients/llm"
 	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/router"
 	sdk "github.com/singulatron/singulatron/localtron/sdk/go"
 
-	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
+	policytypes "github.com/singulatron/singulatron/localtron/services/policy/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-type ChatService struct {
+type PolicyService struct {
 	router *router.Router
 
-	messagesStore   datastore.DataStore
-	threadsStore    datastore.DataStore
-	assetsStore     datastore.DataStore
+	templatesStore  datastore.DataStore
+	instancesStore  datastore.DataStore
 	credentialStore datastore.DataStore
 }
 
-func NewChatService(
+func NewPolicyService(
 	router *router.Router,
+	llmClient llm.ClientI,
 	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error),
-) (*ChatService, error) {
-	threadsStore, err := datastoreFactory("chatThreads", &chattypes.Thread{})
-	if err != nil {
-		return nil, err
-	}
-	messagesStore, err := datastoreFactory("chatMessages", &chattypes.Message{})
-	if err != nil {
-		return nil, err
-	}
-	assetsStore, err := datastoreFactory("chatAssets", &chattypes.Asset{})
-	if err != nil {
-		return nil, err
-	}
-	credentialStore, err := datastoreFactory("chatCredentials", &usertypes.Credential{})
+) (*PolicyService, error) {
+	templatesStore, err := datastoreFactory("policyTemplates", &policytypes.Template{})
 	if err != nil {
 		return nil, err
 	}
 
-	service := &ChatService{
+	instancesStore, err := datastoreFactory("policyInstances", &policytypes.Instance{})
+	if err != nil {
+		return nil, err
+	}
+
+	credentialStore, err := datastoreFactory("policyCredentials", &usertypes.Credential{})
+	if err != nil {
+		return nil, err
+	}
+
+	service := &PolicyService{
 		router:          router,
-		messagesStore:   messagesStore,
-		threadsStore:    threadsStore,
-		assetsStore:     assetsStore,
+		templatesStore:  templatesStore,
+		instancesStore:  instancesStore,
 		credentialStore: credentialStore,
 	}
 
 	return service, nil
 }
 
-func (cs *ChatService) Start() error {
-	token, err := sdk.RegisterService("chat-svc", "Chat Service", cs.router, cs.credentialStore)
+func (cs *PolicyService) Start() error {
+	token, err := sdk.RegisterService("policy-svc", "Policy Service", cs.router, cs.credentialStore)
 	if err != nil {
 		return err
 	}
