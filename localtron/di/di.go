@@ -404,7 +404,15 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 
 	router.HandleFunc("/node-svc/nodes", appl(func(w http.ResponseWriter, r *http.Request) {
 		nodeService.List(w, r)
-	}))
+	})).Methods("OPTIONS", "POST")
+
+	router.HandleFunc("/policy-svc/check", appl(func(w http.ResponseWriter, r *http.Request) {
+		policyService.Check(w, r)
+	})).Methods("OPTIONS", "POST")
+
+	router.HandleFunc("/policy-svc/instance/{instanceId}", appl(func(w http.ResponseWriter, r *http.Request) {
+		policyService.UpsertInstance(w, r)
+	})).Methods("OPTIONS", "PUT")
 
 	return router, func() error {
 		err = configService.Start()

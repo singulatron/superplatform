@@ -21,7 +21,6 @@ import (
 type PolicyService struct {
 	router *router.Router
 
-	templatesStore  datastore.DataStore
 	instancesStore  datastore.DataStore
 	credentialStore datastore.DataStore
 

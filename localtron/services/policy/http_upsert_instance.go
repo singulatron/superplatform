@@ -6,7 +6,6 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/singulatron/singulatron/localtron/datastore"
 	policy "github.com/singulatron/singulatron/localtron/services/policy/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
@@ -67,15 +66,5 @@ func (s *PolicyService) UpsertInstance(
 }
 
 func (s *PolicyService) upsertInstance(instance *policy.Instance) error {
-	_, found, err := s.templatesStore.Query(
-		datastore.Id(instance.TemplateId),
-	).FindOne()
-	if err != nil {
-		return err
-	}
-	if !found {
-		return fmt.Errorf("policy template not foundu")
-	}
-
 	return s.instancesStore.Upsert(instance)
 }

@@ -39,6 +39,24 @@ func TestRateLimiting(t *testing.T) {
 		},
 	})
 
+	adminLoginRsp, _, err := client.UserSvcAPI.Login(context.Background()).Request(clients.UserSvcLoginRequest{
+		Slug:     clients.PtrString("singulatron"),
+		Password: clients.PtrString("changeme"),
+	}).Execute()
+	require.NoError(t, err)
+
+	client = clients.NewAPIClient(&clients.Configuration{
+		Servers: clients.ServerConfigurations{
+			{
+				URL:         server.URL,
+				Description: "Default server",
+			},
+		},
+		DefaultHeader: map[string]string{
+			"Authorization": "Bearer " + *adminLoginRsp.Token.Token,
+		},
+	})
+
 	policySvc := client.PolicySvcAPI
 	instanceId := "instance-1"
 
