@@ -66,5 +66,15 @@ func (s *PolicyService) UpsertInstance(
 }
 
 func (s *PolicyService) upsertInstance(instance *policy.Instance) error {
+	exists := false
+	for _, i := range s.instances {
+		if i.Id == instance.Id {
+			exists = true
+		}
+	}
+	if exists {
+		return nil
+	}
+	s.instances = append(s.instances, instance)
 	return s.instancesStore.Upsert(instance)
 }

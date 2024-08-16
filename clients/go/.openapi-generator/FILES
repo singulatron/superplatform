@@ -92,6 +92,7 @@ docs/NodeSvcProcess.md
 docs/PolicySvcAPI.md
 docs/PolicySvcBlocklistParameters.md
 docs/PolicySvcCheckRequest.md
+docs/PolicySvcCheckResponse.md
 docs/PolicySvcEntity.md
 docs/PolicySvcErrorResponse.md
 docs/PolicySvcInstance.md
@@ -207,6 +208,7 @@ model_node_svc_node.go
 model_node_svc_process.go
 model_policy_svc_blocklist_parameters.go
 model_policy_svc_check_request.go
+model_policy_svc_check_response.go
 model_policy_svc_entity.go
 model_policy_svc_error_response.go
 model_policy_svc_instance.go

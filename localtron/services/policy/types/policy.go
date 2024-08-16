@@ -99,7 +99,9 @@ type CheckRequest struct {
 	UserId   string `json:"userId"`
 }
 
-type CheckResponse struct{}
+type CheckResponse struct {
+	Allowed bool `json:"allowed" binding:"required"`
+}
 
 var (
 	PermissionTemplateView = user.Permission{

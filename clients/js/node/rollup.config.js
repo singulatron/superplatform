@@ -1,7 +1,7 @@
 import typescript from "rollup-plugin-typescript2";
 import commonjs from "@rollup/plugin-commonjs";
 import resolve from "@rollup/plugin-node-resolve";
-import json from '@rollup/plugin-json';
+import json from "@rollup/plugin-json";
 
 import { glob } from "glob";
 
@@ -24,7 +24,7 @@ export default [
         chunkFileNames: "[name].mjs",
       },
     ],
-    plugins: [typescript(), resolve(), commonjs(),  json(),],
+    plugins: [typescript(), resolve(), commonjs(), json()],
     external: [],
   },
 ];

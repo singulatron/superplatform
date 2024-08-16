@@ -51,29 +51,31 @@ func (s *PolicyService) Check(
 	}
 	defer r.Body.Close()
 
-	err = s.check(&req)
+	allowed, err := s.check(&req)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(err.Error()))
 		return
 	}
 
-	bs, _ := json.Marshal(policy.CheckResponse{})
+	bs, _ := json.Marshal(policy.CheckResponse{
+		Allowed: allowed,
+	})
 	w.Write(bs)
 }
 
-func (s *PolicyService) check(request *policy.CheckRequest) error {
+func (s *PolicyService) check(request *policy.CheckRequest) (bool, error) {
 	for _, instance := range s.instances {
+
 		switch instance.TemplateId {
 		case policy.RateLimitPolicyTemplate.GetId():
-			// Extract parameters from the instance
+
 			maxRequests := instance.RateLimitParameters.MaxRequests
 			timeWindow, err := time.ParseDuration(instance.RateLimitParameters.TimeWindow)
 			if err != nil {
-				return err
+				return false, err
 			}
 
-			// Determine the key for the rate limiter based on entity and scope
 			var limiterKey string
 			switch instance.RateLimitParameters.Entity {
 			case policy.EntityUserID:
@@ -81,7 +83,7 @@ func (s *PolicyService) check(request *policy.CheckRequest) error {
 			case policy.EntityIP:
 				limiterKey = request.Ip
 			default:
-				return fmt.Errorf("unknown entity type")
+				return false, fmt.Errorf("unknown entity type")
 			}
 
 			if instance.RateLimitParameters.Scope == policy.ScopeEndpoint {
@@ -97,10 +99,10 @@ func (s *PolicyService) check(request *policy.CheckRequest) error {
 			s.mutex.Unlock()
 
 			if !limiter.(*rate.Limiter).Allow() {
-				return fmt.Errorf("rate limit exceeded")
+				return false, nil
 			}
 		}
 	}
 
-	return nil
+	return true, nil
 }

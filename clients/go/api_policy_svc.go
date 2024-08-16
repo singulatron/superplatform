@@ -36,7 +36,7 @@ func (r ApiCheckRequest) Request(request PolicySvcCheckRequest) ApiCheckRequest 
 	return r
 }
 
-func (r ApiCheckRequest) Execute() (map[string]interface{}, *http.Response, error) {
+func (r ApiCheckRequest) Execute() (*PolicySvcCheckResponse, *http.Response, error) {
 	return r.ApiService.CheckExecute(r)
 }
 
@@ -56,13 +56,13 @@ func (a *PolicySvcAPIService) Check(ctx context.Context) ApiCheckRequest {
 }
 
 // Execute executes the request
-//  @return map[string]interface{}
-func (a *PolicySvcAPIService) CheckExecute(r ApiCheckRequest) (map[string]interface{}, *http.Response, error) {
+//  @return PolicySvcCheckResponse
+func (a *PolicySvcAPIService) CheckExecute(r ApiCheckRequest) (*PolicySvcCheckResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  map[string]interface{}
+		localVarReturnValue  *PolicySvcCheckResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PolicySvcAPIService.Check")

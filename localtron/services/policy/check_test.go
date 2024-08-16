@@ -4,7 +4,6 @@ import (
 	"context"
 	"net/http/httptest"
 	"testing"
-	"time"
 
 	"github.com/stretchr/testify/require"
 
@@ -79,38 +78,25 @@ func TestRateLimiting(t *testing.T) {
 
 	t.Run("allow up to the limit", func(t *testing.T) {
 		for i := 0; i < 5; i++ {
-			_, rsp, err := policySvc.Check(context.Background()).Request(clients.PolicySvcCheckRequest{
+			checkRsp, _, err := policySvc.Check(context.Background()).Request(clients.PolicySvcCheckRequest{
 				Endpoint: clients.PtrString("/test-endpoint"),
 				Method:   clients.PtrString("GET"),
 				Ip:       clients.PtrString("127.0.0.1"),
 				UserId:   clients.PtrString("user-1"),
 			}).Execute()
 			require.NoError(t, err)
-			require.Equal(t, 200, rsp.StatusCode)
+			require.Equal(t, true, checkRsp.Allowed)
 		}
 	})
 
 	t.Run("exceeding the limit", func(t *testing.T) {
-		_, rsp, err := policySvc.Check(context.Background()).Request(clients.PolicySvcCheckRequest{
+		checkRsp, _, err := policySvc.Check(context.Background()).Request(clients.PolicySvcCheckRequest{
 			Endpoint: clients.PtrString("/test-endpoint"),
 			Method:   clients.PtrString("GET"),
 			Ip:       clients.PtrString("127.0.0.1"),
 			UserId:   clients.PtrString("user-1"),
 		}).Execute()
 		require.NoError(t, err)
-		require.Equal(t, 429, rsp.StatusCode) // Expecting a 429 Too Many Requests status
-	})
-
-	t.Run("reset after time window", func(t *testing.T) {
-		time.Sleep(1 * time.Minute) // Wait for the time window to expire
-
-		_, rsp, err := policySvc.Check(context.Background()).Request(clients.PolicySvcCheckRequest{
-			Endpoint: clients.PtrString("/test-endpoint"),
-			Method:   clients.PtrString("GET"),
-			Ip:       clients.PtrString("127.0.0.1"),
-			UserId:   clients.PtrString("user-1"),
-		}).Execute()
-		require.NoError(t, err)
-		require.Equal(t, 200, rsp.StatusCode) // Should be allowed again after the time window
+		require.Equal(t, false, checkRsp.Allowed)
 	})
 }

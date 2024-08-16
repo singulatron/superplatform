@@ -212,6 +212,7 @@ Class | Method | HTTP request | Description
  - [NodeSvcProcess](docs/NodeSvcProcess.md)
  - [PolicySvcBlocklistParameters](docs/PolicySvcBlocklistParameters.md)
  - [PolicySvcCheckRequest](docs/PolicySvcCheckRequest.md)
+ - [PolicySvcCheckResponse](docs/PolicySvcCheckResponse.md)
  - [PolicySvcEntity](docs/PolicySvcEntity.md)
  - [PolicySvcErrorResponse](docs/PolicySvcErrorResponse.md)
  - [PolicySvcInstance](docs/PolicySvcInstance.md)

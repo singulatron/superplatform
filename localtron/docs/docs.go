@@ -4467,7 +4467,15 @@ const docTemplate = `{
             }
         },
         "policy_svc.CheckResponse": {
-            "type": "object"
+            "type": "object",
+            "required": [
+                "allowed"
+            ],
+            "properties": {
+                "allowed": {
+                    "type": "boolean"
+                }
+            }
         },
         "policy_svc.Entity": {
             "type": "string",

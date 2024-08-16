@@ -732,6 +732,11 @@ definitions:
         type: string
     type: object
   policy_svc.CheckResponse:
+    properties:
+      allowed:
+        type: boolean
+    required:
+    - allowed
     type: object
   policy_svc.Entity:
     enum:
