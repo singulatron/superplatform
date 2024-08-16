@@ -84,6 +84,7 @@ export { PolicySvcErrorResponseFromJSON, PolicySvcErrorResponseFromJSONTyped, Po
 export { PolicySvcInstanceFromJSON, PolicySvcInstanceFromJSONTyped, PolicySvcInstanceToJSON, instanceOfPolicySvcInstance } from './PolicySvcInstance.mjs';
 export { PolicySvcRateLimitParametersFromJSON, PolicySvcRateLimitParametersFromJSONTyped, PolicySvcRateLimitParametersToJSON, instanceOfPolicySvcRateLimitParameters } from './PolicySvcRateLimitParameters.mjs';
 export { PolicySvcScope, PolicySvcScopeFromJSON, PolicySvcScopeFromJSONTyped, PolicySvcScopeToJSON, instanceOfPolicySvcScope } from './PolicySvcScope.mjs';
+export { PolicySvcTemplateId, PolicySvcTemplateIdFromJSON, PolicySvcTemplateIdFromJSONTyped, PolicySvcTemplateIdToJSON, instanceOfPolicySvcTemplateId } from './PolicySvcTemplateId.mjs';
 export { PolicySvcUpsertInstanceRequestFromJSON, PolicySvcUpsertInstanceRequestFromJSONTyped, PolicySvcUpsertInstanceRequestToJSON, instanceOfPolicySvcUpsertInstanceRequest } from './PolicySvcUpsertInstanceRequest.mjs';
 export { PromptSvcAddPromptRequestFromJSON, PromptSvcAddPromptRequestFromJSONTyped, PromptSvcAddPromptRequestToJSON, instanceOfPromptSvcAddPromptRequest } from './PromptSvcAddPromptRequest.mjs';
 export { PromptSvcAddPromptResponseFromJSON, PromptSvcAddPromptResponseFromJSONTyped, PromptSvcAddPromptResponseToJSON, instanceOfPromptSvcAddPromptResponse } from './PromptSvcAddPromptResponse.mjs';

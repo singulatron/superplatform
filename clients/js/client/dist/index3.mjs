@@ -77,6 +77,7 @@ import './PolicySvcInstance.mjs';
 import './PolicySvcRateLimitParameters.mjs';
 import './PolicySvcScope.mjs';
 import './PolicySvcEntity.mjs';
+import './PolicySvcTemplateId.mjs';
 import './PolicySvcBlocklistParameters.mjs';
 import './PromptSvcAddPromptRequest.mjs';
 import './PromptSvcAddPromptResponse.mjs';

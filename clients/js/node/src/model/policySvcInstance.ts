@@ -13,17 +13,23 @@
 import { RequestFile } from './models';
 import { PolicySvcBlocklistParameters } from './policySvcBlocklistParameters';
 import { PolicySvcRateLimitParameters } from './policySvcRateLimitParameters';
+import { PolicySvcTemplateId } from './policySvcTemplateId';
 
 export class PolicySvcInstance {
+    'blocklistParameters'?: PolicySvcBlocklistParameters;
     'endpoint'?: string;
     'id'?: string;
-    'ipWhitelistParameters'?: PolicySvcBlocklistParameters;
     'rateLimitParameters'?: PolicySvcRateLimitParameters;
-    'templateId': string;
+    'templateId': PolicySvcTemplateId;
 
     static discriminator: string | undefined = undefined;
 
     static attributeTypeMap: Array<{name: string, baseName: string, type: string}> = [
+        {
+            "name": "blocklistParameters",
+            "baseName": "blocklistParameters",
+            "type": "PolicySvcBlocklistParameters"
+        },
         {
             "name": "endpoint",
             "baseName": "endpoint",
@@ -35,11 +41,6 @@ export class PolicySvcInstance {
             "type": "string"
         },
         {
-            "name": "ipWhitelistParameters",
-            "baseName": "ipWhitelistParameters",
-            "type": "PolicySvcBlocklistParameters"
-        },
-        {
             "name": "rateLimitParameters",
             "baseName": "rateLimitParameters",
             "type": "PolicySvcRateLimitParameters"
@@ -47,7 +48,7 @@ export class PolicySvcInstance {
         {
             "name": "templateId",
             "baseName": "templateId",
-            "type": "string"
+            "type": "PolicySvcTemplateId"
         }    ];
 
     static getAttributeTypeMap() {
@@ -55,3 +56,5 @@ export class PolicySvcInstance {
     }
 }
 
+export namespace PolicySvcInstance {
+}

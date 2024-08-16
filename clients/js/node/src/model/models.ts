@@ -74,6 +74,7 @@ export * from './policySvcErrorResponse';
 export * from './policySvcInstance';
 export * from './policySvcRateLimitParameters';
 export * from './policySvcScope';
+export * from './policySvcTemplateId';
 export * from './policySvcUpsertInstanceRequest';
 export * from './promptSvcAddPromptRequest';
 export * from './promptSvcAddPromptResponse';
@@ -199,6 +200,7 @@ import { PolicySvcErrorResponse } from './policySvcErrorResponse';
 import { PolicySvcInstance } from './policySvcInstance';
 import { PolicySvcRateLimitParameters } from './policySvcRateLimitParameters';
 import { PolicySvcScope } from './policySvcScope';
+import { PolicySvcTemplateId } from './policySvcTemplateId';
 import { PolicySvcUpsertInstanceRequest } from './policySvcUpsertInstanceRequest';
 import { PromptSvcAddPromptRequest } from './promptSvcAddPromptRequest';
 import { PromptSvcAddPromptResponse } from './promptSvcAddPromptResponse';
@@ -252,6 +254,7 @@ let primitives = [
 let enumsMap: {[index: string]: any} = {
         "PolicySvcEntity": PolicySvcEntity,
         "PolicySvcScope": PolicySvcScope,
+        "PolicySvcTemplateId": PolicySvcTemplateId,
         "PromptSvcPromptStatus": PromptSvcPromptStatus,
 }
 

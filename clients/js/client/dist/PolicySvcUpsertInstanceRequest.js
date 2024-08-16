@@ -4,6 +4,7 @@ var PolicySvcInstance = require('./PolicySvcInstance.js');
 require('./PolicySvcRateLimitParameters.js');
 require('./PolicySvcScope.js');
 require('./PolicySvcEntity.js');
+require('./PolicySvcTemplateId.js');
 require('./PolicySvcBlocklistParameters.js');
 
 /* tslint:disable */

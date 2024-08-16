@@ -7,12 +7,11 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Define relevant paths
 LOCALTRON_DIR="$SCRIPT_DIR/../../localtron"
-DOCS_SOURCE_DIR="$SCRIPT_DIR/../../docs-source"
-DOCS_DIR="$SCRIPT_DIR/../../docs"
-BUILD_DIR="$DOCS_SOURCE_DIR/build"
+JS_CLIENT_DIR="$SCRIPT_DIR/../js"
+TYPESCRIPT_CLIENT_DIR="$JS_CLIENT_DIR/client/src"
+TYPESCRIPT_NODE_DIR="$JS_CLIENT_DIR/node/src"
+LIBRARIES_DIR="$SCRIPT_DIR/../libraries"
 SWAGGER_FILE="$LOCALTRON_DIR/docs/swagger.yaml"
-EXAMPLES_DIR="$DOCS_SOURCE_DIR/examples"
-CNAME_FILE="$DOCS_SOURCE_DIR/CNAME"
 
 # Error handler
 trap 'echo "Error occurred in script at line $LINENO"; exit 1' ERR
@@ -22,28 +21,27 @@ echo "Initializing Swagger in $LOCALTRON_DIR"
 cd "$LOCALTRON_DIR"
 swag init
 
-# Copy Swagger file to docs-source examples
-echo "Copying Swagger file to $EXAMPLES_DIR"
-cp "$SWAGGER_FILE" "$EXAMPLES_DIR/singulatron.yaml"
+# Generate TypeScript Fetch client
+echo "Generating TypeScript Fetch client in $TYPESCRIPT_CLIENT_DIR"
+cd "$JS_CLIENT_DIR"
+rm -r "$TYPESCRIPT_CLIENT_DIR"/* || true
+openapi-generator-cli generate -i "$SWAGGER_FILE" -g typescript-fetch -o "$TYPESCRIPT_CLIENT_DIR"
 
-# Clean and generate API documentation
-echo "Cleaning and generating API documentation"
-cd "$DOCS_SOURCE_DIR"
-yarn clean-api-docs singulatron
-yarn gen-api-docs singulatron
+# Generate TypeScript Node client
+echo "Generating TypeScript Node client in $TYPESCRIPT_NODE_DIR"
+rm -r "$TYPESCRIPT_NODE_DIR"/* || true
+openapi-generator-cli generate -i "$SWAGGER_FILE" -g typescript-node -o "$TYPESCRIPT_NODE_DIR"
 
-# Build the project
-echo "Building the project"
+# Step into the node directory, install dependencies and build
+echo "Installing dependencies and building in node directory"
+cd "$JS_CLIENT_DIR/node"
+npm install
 npm run build
 
-# Clean and update docs directory
-echo "Cleaning up old docs in $DOCS_DIR"
-rm -rf "$DOCS_DIR"/*
+# Step into the client directory, install dependencies and build
+echo "Installing dependencies and building in client directory"
+cd "$JS_CLIENT_DIR/client"
+npm install
+npm run build
 
-echo "Copying CNAME file to $DOCS_DIR"
-cp "$CNAME_FILE" "$DOCS_DIR/CNAME"
-
-echo "Copying new build files to $DOCS_DIR"
-cp -r "$BUILD_DIR"/* "$DOCS_DIR/"
-
-echo "Documentation generation complete."
+echo "All operations completed successfully."

@@ -11,12 +11,13 @@
  */
 import { PolicySvcBlocklistParameters } from './policySvcBlocklistParameters';
 import { PolicySvcRateLimitParameters } from './policySvcRateLimitParameters';
+import { PolicySvcTemplateId } from './policySvcTemplateId';
 export declare class PolicySvcInstance {
+    'blocklistParameters'?: PolicySvcBlocklistParameters;
     'endpoint'?: string;
     'id'?: string;
-    'ipWhitelistParameters'?: PolicySvcBlocklistParameters;
     'rateLimitParameters'?: PolicySvcRateLimitParameters;
-    'templateId': string;
+    'templateId': PolicySvcTemplateId;
     static discriminator: string | undefined;
     static attributeTypeMap: Array<{
         name: string;
@@ -28,4 +29,6 @@ export declare class PolicySvcInstance {
         baseName: string;
         type: string;
     }[];
+}
+export declare namespace PolicySvcInstance {
 }

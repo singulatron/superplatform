@@ -2,6 +2,7 @@ import { PolicySvcInstanceFromJSON, PolicySvcInstanceToJSON } from './PolicySvcI
 import './PolicySvcRateLimitParameters.mjs';
 import './PolicySvcScope.mjs';
 import './PolicySvcEntity.mjs';
+import './PolicySvcTemplateId.mjs';
 import './PolicySvcBlocklistParameters.mjs';
 
 /* tslint:disable */

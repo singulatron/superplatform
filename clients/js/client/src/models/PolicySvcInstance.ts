@@ -19,6 +19,12 @@ import {
     PolicySvcRateLimitParametersFromJSONTyped,
     PolicySvcRateLimitParametersToJSON,
 } from './PolicySvcRateLimitParameters';
+import type { PolicySvcTemplateId } from './PolicySvcTemplateId';
+import {
+    PolicySvcTemplateIdFromJSON,
+    PolicySvcTemplateIdFromJSONTyped,
+    PolicySvcTemplateIdToJSON,
+} from './PolicySvcTemplateId';
 import type { PolicySvcBlocklistParameters } from './PolicySvcBlocklistParameters';
 import {
     PolicySvcBlocklistParametersFromJSON,
@@ -34,6 +40,12 @@ import {
 export interface PolicySvcInstance {
     /**
      * 
+     * @type {PolicySvcBlocklistParameters}
+     * @memberof PolicySvcInstance
+     */
+    blocklistParameters?: PolicySvcBlocklistParameters;
+    /**
+     * 
      * @type {string}
      * @memberof PolicySvcInstance
      */
@@ -46,22 +58,16 @@ export interface PolicySvcInstance {
     id?: string;
     /**
      * 
-     * @type {PolicySvcBlocklistParameters}
-     * @memberof PolicySvcInstance
-     */
-    ipWhitelistParameters?: PolicySvcBlocklistParameters;
-    /**
-     * 
      * @type {PolicySvcRateLimitParameters}
      * @memberof PolicySvcInstance
      */
     rateLimitParameters?: PolicySvcRateLimitParameters;
     /**
      * 
-     * @type {string}
+     * @type {PolicySvcTemplateId}
      * @memberof PolicySvcInstance
      */
-    templateId: string;
+    templateId: PolicySvcTemplateId;
 }
 
 /**
@@ -82,11 +88,11 @@ export function PolicySvcInstanceFromJSONTyped(json: any, ignoreDiscriminator: b
     }
     return {
         
+        'blocklistParameters': json['blocklistParameters'] == null ? undefined : PolicySvcBlocklistParametersFromJSON(json['blocklistParameters']),
         'endpoint': json['endpoint'] == null ? undefined : json['endpoint'],
         'id': json['id'] == null ? undefined : json['id'],
-        'ipWhitelistParameters': json['ipWhitelistParameters'] == null ? undefined : PolicySvcBlocklistParametersFromJSON(json['ipWhitelistParameters']),
         'rateLimitParameters': json['rateLimitParameters'] == null ? undefined : PolicySvcRateLimitParametersFromJSON(json['rateLimitParameters']),
-        'templateId': json['templateId'],
+        'templateId': PolicySvcTemplateIdFromJSON(json['templateId']),
     };
 }
 
@@ -96,11 +102,11 @@ export function PolicySvcInstanceToJSON(value?: PolicySvcInstance | null): any {
     }
     return {
         
+        'blocklistParameters': PolicySvcBlocklistParametersToJSON(value['blocklistParameters']),
         'endpoint': value['endpoint'],
         'id': value['id'],
-        'ipWhitelistParameters': PolicySvcBlocklistParametersToJSON(value['ipWhitelistParameters']),
         'rateLimitParameters': PolicySvcRateLimitParametersToJSON(value['rateLimitParameters']),
-        'templateId': value['templateId'],
+        'templateId': PolicySvcTemplateIdToJSON(value['templateId']),
     };
 }
 

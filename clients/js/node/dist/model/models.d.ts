@@ -73,6 +73,7 @@ export * from './policySvcErrorResponse';
 export * from './policySvcInstance';
 export * from './policySvcRateLimitParameters';
 export * from './policySvcScope';
+export * from './policySvcTemplateId';
 export * from './policySvcUpsertInstanceRequest';
 export * from './promptSvcAddPromptRequest';
 export * from './promptSvcAddPromptResponse';

@@ -74,6 +74,7 @@ export { PolicySvcErrorResponse } from './policySvcErrorResponse.mjs';
 export { PolicySvcInstance } from './policySvcInstance.mjs';
 export { PolicySvcRateLimitParameters } from './policySvcRateLimitParameters.mjs';
 export { PolicySvcScope } from './policySvcScope.mjs';
+export { PolicySvcTemplateId } from './policySvcTemplateId.mjs';
 export { PolicySvcUpsertInstanceRequest } from './policySvcUpsertInstanceRequest.mjs';
 export { PromptSvcAddPromptRequest } from './promptSvcAddPromptRequest.mjs';
 export { PromptSvcAddPromptResponse } from './promptSvcAddPromptResponse.mjs';

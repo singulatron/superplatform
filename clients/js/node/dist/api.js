@@ -76,6 +76,7 @@ var policySvcErrorResponse = require('./policySvcErrorResponse.js');
 var policySvcInstance = require('./policySvcInstance.js');
 var policySvcRateLimitParameters = require('./policySvcRateLimitParameters.js');
 var policySvcScope = require('./policySvcScope.js');
+var policySvcTemplateId = require('./policySvcTemplateId.js');
 var policySvcUpsertInstanceRequest = require('./policySvcUpsertInstanceRequest.js');
 var promptSvcAddPromptRequest = require('./promptSvcAddPromptRequest.js');
 var promptSvcAddPromptResponse = require('./promptSvcAddPromptResponse.js');
@@ -274,6 +275,10 @@ exports.PolicySvcRateLimitParameters = policySvcRateLimitParameters.PolicySvcRat
 Object.defineProperty(exports, 'PolicySvcScope', {
 	enumerable: true,
 	get: function () { return policySvcScope.PolicySvcScope; }
+});
+Object.defineProperty(exports, 'PolicySvcTemplateId', {
+	enumerable: true,
+	get: function () { return policySvcTemplateId.PolicySvcTemplateId; }
 });
 exports.PolicySvcUpsertInstanceRequest = policySvcUpsertInstanceRequest.PolicySvcUpsertInstanceRequest;
 exports.PromptSvcAddPromptRequest = promptSvcAddPromptRequest.PromptSvcAddPromptRequest;

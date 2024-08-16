@@ -67,7 +67,7 @@ func (s *PolicyService) Check(
 func (s *PolicyService) check(request *policy.CheckRequest) (bool, error) {
 	for _, instance := range s.instances {
 
-		switch instance.TemplateId {
+		switch string(instance.TemplateId) {
 		case policy.RateLimitPolicyTemplate.GetId():
 
 			maxRequests := instance.RateLimitParameters.MaxRequests

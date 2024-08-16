@@ -64,7 +64,7 @@ func TestRateLimiting(t *testing.T) {
 		Instance: &clients.PolicySvcInstance{
 			Id:         &instanceId,
 			Endpoint:   clients.PtrString("/test-endpoint"),
-			TemplateId: string(policytypes.RateLimitPolicyTemplate.Id),
+			TemplateId: clients.PolicySvcTemplateId(policytypes.RateLimitPolicyTemplate.Id),
 			RateLimitParameters: &clients.PolicySvcRateLimitParameters{
 				MaxRequests: clients.PtrInt32(5),
 				TimeWindow:  clients.PtrString("1m"),

@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 import type { PolicySvcRateLimitParameters } from './PolicySvcRateLimitParameters';
+import type { PolicySvcTemplateId } from './PolicySvcTemplateId';
 import type { PolicySvcBlocklistParameters } from './PolicySvcBlocklistParameters';
 /**
  *
@@ -17,6 +18,12 @@ import type { PolicySvcBlocklistParameters } from './PolicySvcBlocklistParameter
  * @interface PolicySvcInstance
  */
 export interface PolicySvcInstance {
+    /**
+     *
+     * @type {PolicySvcBlocklistParameters}
+     * @memberof PolicySvcInstance
+     */
+    blocklistParameters?: PolicySvcBlocklistParameters;
     /**
      *
      * @type {string}
@@ -31,22 +38,16 @@ export interface PolicySvcInstance {
     id?: string;
     /**
      *
-     * @type {PolicySvcBlocklistParameters}
-     * @memberof PolicySvcInstance
-     */
-    ipWhitelistParameters?: PolicySvcBlocklistParameters;
-    /**
-     *
      * @type {PolicySvcRateLimitParameters}
      * @memberof PolicySvcInstance
      */
     rateLimitParameters?: PolicySvcRateLimitParameters;
     /**
      *
-     * @type {string}
+     * @type {PolicySvcTemplateId}
      * @memberof PolicySvcInstance
      */
-    templateId: string;
+    templateId: PolicySvcTemplateId;
 }
 /**
  * Check if a given object implements the PolicySvcInstance interface.

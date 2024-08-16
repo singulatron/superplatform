@@ -92,6 +92,7 @@ require('./policySvcErrorResponse.js');
 require('./policySvcInstance.js');
 require('./policySvcRateLimitParameters.js');
 require('./policySvcScope.js');
+require('./policySvcTemplateId.js');
 require('./policySvcUpsertInstanceRequest.js');
 require('./promptSvcAddPromptRequest.js');
 require('./promptSvcAddPromptResponse.js');

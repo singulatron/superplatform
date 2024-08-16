@@ -1,4 +1,5 @@
 import { PolicySvcRateLimitParametersFromJSON, PolicySvcRateLimitParametersToJSON } from './PolicySvcRateLimitParameters.mjs';
+import { PolicySvcTemplateIdFromJSON, PolicySvcTemplateIdToJSON } from './PolicySvcTemplateId.mjs';
 import { PolicySvcBlocklistParametersFromJSON, PolicySvcBlocklistParametersToJSON } from './PolicySvcBlocklistParameters.mjs';
 import './PolicySvcScope.mjs';
 import './PolicySvcEntity.mjs';
@@ -32,11 +33,11 @@ function PolicySvcInstanceFromJSONTyped(json, ignoreDiscriminator) {
         return json;
     }
     return {
+        'blocklistParameters': json['blocklistParameters'] == null ? undefined : PolicySvcBlocklistParametersFromJSON(json['blocklistParameters']),
         'endpoint': json['endpoint'] == null ? undefined : json['endpoint'],
         'id': json['id'] == null ? undefined : json['id'],
-        'ipWhitelistParameters': json['ipWhitelistParameters'] == null ? undefined : PolicySvcBlocklistParametersFromJSON(json['ipWhitelistParameters']),
         'rateLimitParameters': json['rateLimitParameters'] == null ? undefined : PolicySvcRateLimitParametersFromJSON(json['rateLimitParameters']),
-        'templateId': json['templateId'],
+        'templateId': PolicySvcTemplateIdFromJSON(json['templateId']),
     };
 }
 function PolicySvcInstanceToJSON(value) {
@@ -44,11 +45,11 @@ function PolicySvcInstanceToJSON(value) {
         return value;
     }
     return {
+        'blocklistParameters': PolicySvcBlocklistParametersToJSON(value['blocklistParameters']),
         'endpoint': value['endpoint'],
         'id': value['id'],
-        'ipWhitelistParameters': PolicySvcBlocklistParametersToJSON(value['ipWhitelistParameters']),
         'rateLimitParameters': PolicySvcRateLimitParametersToJSON(value['rateLimitParameters']),
-        'templateId': value['templateId'],
+        'templateId': PolicySvcTemplateIdToJSON(value['templateId']),
     };
 }
 

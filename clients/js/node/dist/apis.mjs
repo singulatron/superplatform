@@ -89,6 +89,7 @@ import './policySvcErrorResponse.mjs';
 import './policySvcInstance.mjs';
 import './policySvcRateLimitParameters.mjs';
 import './policySvcScope.mjs';
+import './policySvcTemplateId.mjs';
 import './policySvcUpsertInstanceRequest.mjs';
 import './promptSvcAddPromptRequest.mjs';
 import './promptSvcAddPromptResponse.mjs';

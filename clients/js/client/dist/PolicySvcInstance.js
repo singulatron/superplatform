@@ -1,6 +1,7 @@
 'use strict';
 
 var PolicySvcRateLimitParameters = require('./PolicySvcRateLimitParameters.js');
+var PolicySvcTemplateId = require('./PolicySvcTemplateId.js');
 var PolicySvcBlocklistParameters = require('./PolicySvcBlocklistParameters.js');
 require('./PolicySvcScope.js');
 require('./PolicySvcEntity.js');
@@ -34,11 +35,11 @@ function PolicySvcInstanceFromJSONTyped(json, ignoreDiscriminator) {
         return json;
     }
     return {
+        'blocklistParameters': json['blocklistParameters'] == null ? undefined : PolicySvcBlocklistParameters.PolicySvcBlocklistParametersFromJSON(json['blocklistParameters']),
         'endpoint': json['endpoint'] == null ? undefined : json['endpoint'],
         'id': json['id'] == null ? undefined : json['id'],
-        'ipWhitelistParameters': json['ipWhitelistParameters'] == null ? undefined : PolicySvcBlocklistParameters.PolicySvcBlocklistParametersFromJSON(json['ipWhitelistParameters']),
         'rateLimitParameters': json['rateLimitParameters'] == null ? undefined : PolicySvcRateLimitParameters.PolicySvcRateLimitParametersFromJSON(json['rateLimitParameters']),
-        'templateId': json['templateId'],
+        'templateId': PolicySvcTemplateId.PolicySvcTemplateIdFromJSON(json['templateId']),
     };
 }
 function PolicySvcInstanceToJSON(value) {
@@ -46,11 +47,11 @@ function PolicySvcInstanceToJSON(value) {
         return value;
     }
     return {
+        'blocklistParameters': PolicySvcBlocklistParameters.PolicySvcBlocklistParametersToJSON(value['blocklistParameters']),
         'endpoint': value['endpoint'],
         'id': value['id'],
-        'ipWhitelistParameters': PolicySvcBlocklistParameters.PolicySvcBlocklistParametersToJSON(value['ipWhitelistParameters']),
         'rateLimitParameters': PolicySvcRateLimitParameters.PolicySvcRateLimitParametersToJSON(value['rateLimitParameters']),
-        'templateId': value['templateId'],
+        'templateId': PolicySvcTemplateId.PolicySvcTemplateIdToJSON(value['templateId']),
     };
 }
 
