@@ -66,6 +66,16 @@ var nodeSvcGPU = require('./nodeSvcGPU.js');
 var nodeSvcListNodesResponse = require('./nodeSvcListNodesResponse.js');
 var nodeSvcNode = require('./nodeSvcNode.js');
 var nodeSvcProcess = require('./nodeSvcProcess.js');
+var policySvcBlocklistParameters = require('./policySvcBlocklistParameters.js');
+var policySvcCheckRequest = require('./policySvcCheckRequest.js');
+var policySvcCheckResponse = require('./policySvcCheckResponse.js');
+var policySvcEntity = require('./policySvcEntity.js');
+var policySvcErrorResponse = require('./policySvcErrorResponse.js');
+var policySvcInstance = require('./policySvcInstance.js');
+var policySvcRateLimitParameters = require('./policySvcRateLimitParameters.js');
+var policySvcScope = require('./policySvcScope.js');
+var policySvcTemplateId = require('./policySvcTemplateId.js');
+var policySvcUpsertInstanceRequest = require('./policySvcUpsertInstanceRequest.js');
 var promptSvcAddPromptRequest = require('./promptSvcAddPromptRequest.js');
 var promptSvcAddPromptResponse = require('./promptSvcAddPromptResponse.js');
 var promptSvcErrorResponse = require('./promptSvcErrorResponse.js');
@@ -115,6 +125,9 @@ let primitives = [
     "any"
 ];
 let enumsMap = {
+    "PolicySvcEntity": policySvcEntity.PolicySvcEntity,
+    "PolicySvcScope": policySvcScope.PolicySvcScope,
+    "PolicySvcTemplateId": policySvcTemplateId.PolicySvcTemplateId,
     "PromptSvcPromptStatus": promptSvcPromptStatus.PromptSvcPromptStatus,
 };
 let typeMap = {
@@ -184,6 +197,13 @@ let typeMap = {
     "NodeSvcListNodesResponse": nodeSvcListNodesResponse.NodeSvcListNodesResponse,
     "NodeSvcNode": nodeSvcNode.NodeSvcNode,
     "NodeSvcProcess": nodeSvcProcess.NodeSvcProcess,
+    "PolicySvcBlocklistParameters": policySvcBlocklistParameters.PolicySvcBlocklistParameters,
+    "PolicySvcCheckRequest": policySvcCheckRequest.PolicySvcCheckRequest,
+    "PolicySvcCheckResponse": policySvcCheckResponse.PolicySvcCheckResponse,
+    "PolicySvcErrorResponse": policySvcErrorResponse.PolicySvcErrorResponse,
+    "PolicySvcInstance": policySvcInstance.PolicySvcInstance,
+    "PolicySvcRateLimitParameters": policySvcRateLimitParameters.PolicySvcRateLimitParameters,
+    "PolicySvcUpsertInstanceRequest": policySvcUpsertInstanceRequest.PolicySvcUpsertInstanceRequest,
     "PromptSvcAddPromptRequest": promptSvcAddPromptRequest.PromptSvcAddPromptRequest,
     "PromptSvcAddPromptResponse": promptSvcAddPromptResponse.PromptSvcAddPromptResponse,
     "PromptSvcErrorResponse": promptSvcErrorResponse.PromptSvcErrorResponse,
@@ -470,6 +490,25 @@ exports.NodeSvcGPU = nodeSvcGPU.NodeSvcGPU;
 exports.NodeSvcListNodesResponse = nodeSvcListNodesResponse.NodeSvcListNodesResponse;
 exports.NodeSvcNode = nodeSvcNode.NodeSvcNode;
 exports.NodeSvcProcess = nodeSvcProcess.NodeSvcProcess;
+exports.PolicySvcBlocklistParameters = policySvcBlocklistParameters.PolicySvcBlocklistParameters;
+exports.PolicySvcCheckRequest = policySvcCheckRequest.PolicySvcCheckRequest;
+exports.PolicySvcCheckResponse = policySvcCheckResponse.PolicySvcCheckResponse;
+Object.defineProperty(exports, 'PolicySvcEntity', {
+    enumerable: true,
+    get: function () { return policySvcEntity.PolicySvcEntity; }
+});
+exports.PolicySvcErrorResponse = policySvcErrorResponse.PolicySvcErrorResponse;
+exports.PolicySvcInstance = policySvcInstance.PolicySvcInstance;
+exports.PolicySvcRateLimitParameters = policySvcRateLimitParameters.PolicySvcRateLimitParameters;
+Object.defineProperty(exports, 'PolicySvcScope', {
+    enumerable: true,
+    get: function () { return policySvcScope.PolicySvcScope; }
+});
+Object.defineProperty(exports, 'PolicySvcTemplateId', {
+    enumerable: true,
+    get: function () { return policySvcTemplateId.PolicySvcTemplateId; }
+});
+exports.PolicySvcUpsertInstanceRequest = policySvcUpsertInstanceRequest.PolicySvcUpsertInstanceRequest;
 exports.PromptSvcAddPromptRequest = promptSvcAddPromptRequest.PromptSvcAddPromptRequest;
 exports.PromptSvcAddPromptResponse = promptSvcAddPromptResponse.PromptSvcAddPromptResponse;
 exports.PromptSvcErrorResponse = promptSvcErrorResponse.PromptSvcErrorResponse;

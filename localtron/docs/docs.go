@@ -1838,6 +1838,129 @@ const docTemplate = `{
                 }
             }
         },
+        "/policy-svc/check": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Check records a resource access and returns if the access is allowed.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Policy Svc"
+                ],
+                "summary": "Check",
+                "operationId": "check",
+                "parameters": [
+                    {
+                        "description": "Check Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/policy_svc.CheckRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Checked successfully",
+                        "schema": {
+                            "$ref": "#/definitions/policy_svc.CheckResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/policy_svc.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/policy_svc.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/policy_svc.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/policy-svc/instance/{instanceId}": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Allows user to upsert a new policy instance based on a template.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Policy Svc"
+                ],
+                "summary": "Upsert an Instance",
+                "operationId": "upsertInstance",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Instance ID",
+                        "name": "instanceId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Upsert Instance Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/policy_svc.UpsertInstanceRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Instance upserted successfully",
+                        "schema": {
+                            "$ref": "#/definitions/policy_svc.UpsertInstanceResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/policy_svc.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/policy_svc.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/policy_svc.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/prompt-svc/prompt": {
             "post": {
                 "security": [
@@ -4314,6 +4437,155 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        },
+        "policy_svc.BlocklistParameters": {
+            "type": "object",
+            "properties": {
+                "blockedIPs": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "policy_svc.CheckRequest": {
+            "type": "object",
+            "properties": {
+                "endpoint": {
+                    "type": "string"
+                },
+                "ip": {
+                    "type": "string"
+                },
+                "method": {
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "string"
+                }
+            }
+        },
+        "policy_svc.CheckResponse": {
+            "type": "object",
+            "required": [
+                "allowed"
+            ],
+            "properties": {
+                "allowed": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "policy_svc.Entity": {
+            "type": "string",
+            "enum": [
+                "userId",
+                "ip"
+            ],
+            "x-enum-varnames": [
+                "EntityUserID",
+                "EntityIP"
+            ]
+        },
+        "policy_svc.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "policy_svc.Instance": {
+            "type": "object",
+            "required": [
+                "templateId"
+            ],
+            "properties": {
+                "blocklistParameters": {
+                    "$ref": "#/definitions/policy_svc.BlocklistParameters"
+                },
+                "endpoint": {
+                    "type": "string",
+                    "example": "/user-svc/register"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "rateLimitParameters": {
+                    "$ref": "#/definitions/policy_svc.RateLimitParameters"
+                },
+                "templateId": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/policy_svc.TemplateId"
+                        }
+                    ],
+                    "example": "rate-limit"
+                }
+            }
+        },
+        "policy_svc.RateLimitParameters": {
+            "type": "object",
+            "properties": {
+                "entity": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/policy_svc.Entity"
+                        }
+                    ],
+                    "example": "userId"
+                },
+                "maxRequests": {
+                    "type": "integer",
+                    "example": 10
+                },
+                "scope": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/policy_svc.Scope"
+                        }
+                    ],
+                    "example": "endpoint"
+                },
+                "timeWindow": {
+                    "type": "string",
+                    "example": "1m"
+                }
+            }
+        },
+        "policy_svc.Scope": {
+            "type": "string",
+            "enum": [
+                "endpoint",
+                "global"
+            ],
+            "x-enum-varnames": [
+                "ScopeEndpoint",
+                "ScopeGlobal"
+            ]
+        },
+        "policy_svc.TemplateId": {
+            "type": "string",
+            "enum": [
+                "rate-limit",
+                "blocklist"
+            ],
+            "x-enum-varnames": [
+                "TemplateIdRateLimit",
+                "TemplateIdBlocklist"
+            ]
+        },
+        "policy_svc.UpsertInstanceRequest": {
+            "type": "object",
+            "properties": {
+                "instance": {
+                    "$ref": "#/definitions/policy_svc.Instance"
+                }
+            }
+        },
+        "policy_svc.UpsertInstanceResponse": {
+            "type": "object"
         },
         "prompt_svc.AddPromptRequest": {
             "type": "object",

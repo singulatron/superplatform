@@ -1,0 +1,3 @@
+docs/** diff=none
+clients*/dist/** diff=none
+clients/go/**/*.go diff=none

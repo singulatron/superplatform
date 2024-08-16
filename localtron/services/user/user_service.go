@@ -44,19 +44,19 @@ func NewUserService(
 	router *router.Router,
 	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error),
 ) (*UserService, error) {
-	usersStore, err := datastoreFactory("users", &usertypes.User{})
+	usersStore, err := datastoreFactory("userUsers", &usertypes.User{})
 	if err != nil {
 		return nil, err
 	}
-	rolesStore, err := datastoreFactory("roles", &usertypes.Role{})
+	rolesStore, err := datastoreFactory("userRoles", &usertypes.Role{})
 	if err != nil {
 		return nil, err
 	}
-	authTokensStore, err := datastoreFactory("authTokens", &usertypes.AuthToken{})
+	authTokensStore, err := datastoreFactory("userAuthTokens", &usertypes.AuthToken{})
 	if err != nil {
 		return nil, err
 	}
-	permissionsStore, err := datastoreFactory("permissions", &usertypes.Permission{})
+	permissionsStore, err := datastoreFactory("userPermissions", &usertypes.Permission{})
 	if err != nil {
 		return nil, err
 	}
@@ -64,19 +64,19 @@ func NewUserService(
 	if err != nil {
 		return nil, err
 	}
-	keyPairsStore, err := datastoreFactory("keyPairs", &usertypes.KeyPair{})
+	keyPairsStore, err := datastoreFactory("userKeyPairs", &usertypes.KeyPair{})
 	if err != nil {
 		return nil, err
 	}
-	contactsStore, err := datastoreFactory("contacts", &usertypes.Contact{})
+	contactsStore, err := datastoreFactory("userContacts", &usertypes.Contact{})
 	if err != nil {
 		return nil, err
 	}
-	organizationsStore, err := datastoreFactory("organizations", &usertypes.Organization{})
+	organizationsStore, err := datastoreFactory("userOrganizations", &usertypes.Organization{})
 	if err != nil {
 		return nil, err
 	}
-	organizationUserLinksStore, err := datastoreFactory("organizationUserLinks", &usertypes.OrganizationUserLink{})
+	organizationUserLinksStore, err := datastoreFactory("userOrganizationUserLinks", &usertypes.OrganizationUserLink{})
 	if err != nil {
 		return nil, err
 	}
@@ -84,7 +84,7 @@ func NewUserService(
 	if err != nil {
 		return nil, err
 	}
-	permissionRoleLinksStore, err := datastoreFactory("permissionRoleLinks", &usertypes.PermissionRoleLink{})
+	permissionRoleLinksStore, err := datastoreFactory("userPermissionRoleLinks", &usertypes.PermissionRoleLink{})
 	if err != nil {
 		return nil, err
 	}

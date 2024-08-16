@@ -713,6 +713,102 @@ definitions:
       processName:
         type: string
     type: object
+  policy_svc.BlocklistParameters:
+    properties:
+      blockedIPs:
+        items:
+          type: string
+        type: array
+    type: object
+  policy_svc.CheckRequest:
+    properties:
+      endpoint:
+        type: string
+      ip:
+        type: string
+      method:
+        type: string
+      userId:
+        type: string
+    type: object
+  policy_svc.CheckResponse:
+    properties:
+      allowed:
+        type: boolean
+    required:
+    - allowed
+    type: object
+  policy_svc.Entity:
+    enum:
+    - userId
+    - ip
+    type: string
+    x-enum-varnames:
+    - EntityUserID
+    - EntityIP
+  policy_svc.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  policy_svc.Instance:
+    properties:
+      blocklistParameters:
+        $ref: '#/definitions/policy_svc.BlocklistParameters'
+      endpoint:
+        example: /user-svc/register
+        type: string
+      id:
+        type: string
+      rateLimitParameters:
+        $ref: '#/definitions/policy_svc.RateLimitParameters'
+      templateId:
+        allOf:
+        - $ref: '#/definitions/policy_svc.TemplateId'
+        example: rate-limit
+    required:
+    - templateId
+    type: object
+  policy_svc.RateLimitParameters:
+    properties:
+      entity:
+        allOf:
+        - $ref: '#/definitions/policy_svc.Entity'
+        example: userId
+      maxRequests:
+        example: 10
+        type: integer
+      scope:
+        allOf:
+        - $ref: '#/definitions/policy_svc.Scope'
+        example: endpoint
+      timeWindow:
+        example: 1m
+        type: string
+    type: object
+  policy_svc.Scope:
+    enum:
+    - endpoint
+    - global
+    type: string
+    x-enum-varnames:
+    - ScopeEndpoint
+    - ScopeGlobal
+  policy_svc.TemplateId:
+    enum:
+    - rate-limit
+    - blocklist
+    type: string
+    x-enum-varnames:
+    - TemplateIdRateLimit
+    - TemplateIdBlocklist
+  policy_svc.UpsertInstanceRequest:
+    properties:
+      instance:
+        $ref: '#/definitions/policy_svc.Instance'
+    type: object
+  policy_svc.UpsertInstanceResponse:
+    type: object
   prompt_svc.AddPromptRequest:
     properties:
       id:
@@ -2400,6 +2496,85 @@ paths:
       summary: List Nodes
       tags:
       - Node Svc
+  /policy-svc/check:
+    post:
+      consumes:
+      - application/json
+      description: Check records a resource access and returns if the access is allowed.
+      operationId: check
+      parameters:
+      - description: Check Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/policy_svc.CheckRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Checked successfully
+          schema:
+            $ref: '#/definitions/policy_svc.CheckResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/policy_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/policy_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/policy_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Check
+      tags:
+      - Policy Svc
+  /policy-svc/instance/{instanceId}:
+    put:
+      consumes:
+      - application/json
+      description: Allows user to upsert a new policy instance based on a template.
+      operationId: upsertInstance
+      parameters:
+      - description: Instance ID
+        in: path
+        name: instanceId
+        required: true
+        type: string
+      - description: Upsert Instance Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/policy_svc.UpsertInstanceRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Instance upserted successfully
+          schema:
+            $ref: '#/definitions/policy_svc.UpsertInstanceResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/policy_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/policy_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/policy_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Upsert an Instance
+      tags:
+      - Policy Svc
   /prompt-svc/{threadId}/subscribe:
     get:
       description: Subscribe to prompt responses via Server-Sent Events (SSE)

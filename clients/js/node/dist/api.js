@@ -68,6 +68,16 @@ var nodeSvcGPU = require('./nodeSvcGPU.js');
 var nodeSvcListNodesResponse = require('./nodeSvcListNodesResponse.js');
 var nodeSvcNode = require('./nodeSvcNode.js');
 var nodeSvcProcess = require('./nodeSvcProcess.js');
+var policySvcBlocklistParameters = require('./policySvcBlocklistParameters.js');
+var policySvcCheckRequest = require('./policySvcCheckRequest.js');
+var policySvcCheckResponse = require('./policySvcCheckResponse.js');
+var policySvcEntity = require('./policySvcEntity.js');
+var policySvcErrorResponse = require('./policySvcErrorResponse.js');
+var policySvcInstance = require('./policySvcInstance.js');
+var policySvcRateLimitParameters = require('./policySvcRateLimitParameters.js');
+var policySvcScope = require('./policySvcScope.js');
+var policySvcTemplateId = require('./policySvcTemplateId.js');
+var policySvcUpsertInstanceRequest = require('./policySvcUpsertInstanceRequest.js');
 var promptSvcAddPromptRequest = require('./promptSvcAddPromptRequest.js');
 var promptSvcAddPromptResponse = require('./promptSvcAddPromptResponse.js');
 var promptSvcErrorResponse = require('./promptSvcErrorResponse.js');
@@ -165,6 +175,11 @@ Object.defineProperty(exports, 'NodeSvcApiApiKeys', {
 	enumerable: true,
 	get: function () { return chatSvcApi.NodeSvcApiApiKeys; }
 });
+exports.PolicySvcApi = chatSvcApi.PolicySvcApi;
+Object.defineProperty(exports, 'PolicySvcApiApiKeys', {
+	enumerable: true,
+	get: function () { return chatSvcApi.PolicySvcApiApiKeys; }
+});
 exports.PromptSvcApi = chatSvcApi.PromptSvcApi;
 Object.defineProperty(exports, 'PromptSvcApiApiKeys', {
 	enumerable: true,
@@ -247,6 +262,25 @@ exports.NodeSvcGPU = nodeSvcGPU.NodeSvcGPU;
 exports.NodeSvcListNodesResponse = nodeSvcListNodesResponse.NodeSvcListNodesResponse;
 exports.NodeSvcNode = nodeSvcNode.NodeSvcNode;
 exports.NodeSvcProcess = nodeSvcProcess.NodeSvcProcess;
+exports.PolicySvcBlocklistParameters = policySvcBlocklistParameters.PolicySvcBlocklistParameters;
+exports.PolicySvcCheckRequest = policySvcCheckRequest.PolicySvcCheckRequest;
+exports.PolicySvcCheckResponse = policySvcCheckResponse.PolicySvcCheckResponse;
+Object.defineProperty(exports, 'PolicySvcEntity', {
+	enumerable: true,
+	get: function () { return policySvcEntity.PolicySvcEntity; }
+});
+exports.PolicySvcErrorResponse = policySvcErrorResponse.PolicySvcErrorResponse;
+exports.PolicySvcInstance = policySvcInstance.PolicySvcInstance;
+exports.PolicySvcRateLimitParameters = policySvcRateLimitParameters.PolicySvcRateLimitParameters;
+Object.defineProperty(exports, 'PolicySvcScope', {
+	enumerable: true,
+	get: function () { return policySvcScope.PolicySvcScope; }
+});
+Object.defineProperty(exports, 'PolicySvcTemplateId', {
+	enumerable: true,
+	get: function () { return policySvcTemplateId.PolicySvcTemplateId; }
+});
+exports.PolicySvcUpsertInstanceRequest = policySvcUpsertInstanceRequest.PolicySvcUpsertInstanceRequest;
 exports.PromptSvcAddPromptRequest = promptSvcAddPromptRequest.PromptSvcAddPromptRequest;
 exports.PromptSvcAddPromptResponse = promptSvcAddPromptResponse.PromptSvcAddPromptResponse;
 exports.PromptSvcErrorResponse = promptSvcErrorResponse.PromptSvcErrorResponse;

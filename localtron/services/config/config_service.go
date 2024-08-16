@@ -65,7 +65,7 @@ func (cs *ConfigService) Start() error {
 	if cs.datastoreFactory == nil {
 		return errors.New("no datastore factory")
 	}
-	credentialStore, err := cs.datastoreFactory("config_credentials", &usertypes.Credential{})
+	credentialStore, err := cs.datastoreFactory("configCredentials", &usertypes.Credential{})
 	if err != nil {
 		return err
 	}

@@ -29,11 +29,11 @@ func NewGenericService(
 	router *router.Router,
 	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error),
 ) (*GenericService, error) {
-	store, err := datastoreFactory("generic", &generictypes.GenericObject{})
+	store, err := datastoreFactory("genericObjects", &generictypes.GenericObject{})
 	if err != nil {
 		return nil, err
 	}
-	credentialStore, err := datastoreFactory("generic_credentials", &usertypes.Credential{})
+	credentialStore, err := datastoreFactory("genericCredentials", &usertypes.Credential{})
 	if err != nil {
 		return nil, err
 	}

@@ -64,6 +64,16 @@ export * from './nodeSvcGPU';
 export * from './nodeSvcListNodesResponse';
 export * from './nodeSvcNode';
 export * from './nodeSvcProcess';
+export * from './policySvcBlocklistParameters';
+export * from './policySvcCheckRequest';
+export * from './policySvcCheckResponse';
+export * from './policySvcEntity';
+export * from './policySvcErrorResponse';
+export * from './policySvcInstance';
+export * from './policySvcRateLimitParameters';
+export * from './policySvcScope';
+export * from './policySvcTemplateId';
+export * from './policySvcUpsertInstanceRequest';
 export * from './promptSvcAddPromptRequest';
 export * from './promptSvcAddPromptResponse';
 export * from './promptSvcErrorResponse';
@@ -166,6 +176,16 @@ import { NodeSvcGPU } from './nodeSvcGPU';
 import { NodeSvcListNodesResponse } from './nodeSvcListNodesResponse';
 import { NodeSvcNode } from './nodeSvcNode';
 import { NodeSvcProcess } from './nodeSvcProcess';
+import { PolicySvcBlocklistParameters } from './policySvcBlocklistParameters';
+import { PolicySvcCheckRequest } from './policySvcCheckRequest';
+import { PolicySvcCheckResponse } from './policySvcCheckResponse';
+import { PolicySvcEntity } from './policySvcEntity';
+import { PolicySvcErrorResponse } from './policySvcErrorResponse';
+import { PolicySvcInstance } from './policySvcInstance';
+import { PolicySvcRateLimitParameters } from './policySvcRateLimitParameters';
+import { PolicySvcScope } from './policySvcScope';
+import { PolicySvcTemplateId } from './policySvcTemplateId';
+import { PolicySvcUpsertInstanceRequest } from './policySvcUpsertInstanceRequest';
 import { PromptSvcAddPromptRequest } from './promptSvcAddPromptRequest';
 import { PromptSvcAddPromptResponse } from './promptSvcAddPromptResponse';
 import { PromptSvcErrorResponse } from './promptSvcErrorResponse';
@@ -214,6 +234,9 @@ let primitives = [
     "any"
 ];
 let enumsMap = {
+    "PolicySvcEntity": PolicySvcEntity,
+    "PolicySvcScope": PolicySvcScope,
+    "PolicySvcTemplateId": PolicySvcTemplateId,
     "PromptSvcPromptStatus": PromptSvcPromptStatus,
 };
 let typeMap = {
@@ -283,6 +306,13 @@ let typeMap = {
     "NodeSvcListNodesResponse": NodeSvcListNodesResponse,
     "NodeSvcNode": NodeSvcNode,
     "NodeSvcProcess": NodeSvcProcess,
+    "PolicySvcBlocklistParameters": PolicySvcBlocklistParameters,
+    "PolicySvcCheckRequest": PolicySvcCheckRequest,
+    "PolicySvcCheckResponse": PolicySvcCheckResponse,
+    "PolicySvcErrorResponse": PolicySvcErrorResponse,
+    "PolicySvcInstance": PolicySvcInstance,
+    "PolicySvcRateLimitParameters": PolicySvcRateLimitParameters,
+    "PolicySvcUpsertInstanceRequest": PolicySvcUpsertInstanceRequest,
     "PromptSvcAddPromptRequest": PromptSvcAddPromptRequest,
     "PromptSvcAddPromptResponse": PromptSvcAddPromptResponse,
     "PromptSvcErrorResponse": PromptSvcErrorResponse,
