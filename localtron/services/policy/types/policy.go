@@ -35,7 +35,7 @@ type TemplateId string
 
 const (
 	TemplateIdRateLimit TemplateId = "rate-limit"
-	TemplateIdBlocklist TemplateId = "rate-limit"
+	TemplateIdBlocklist TemplateId = "blocklist"
 )
 
 // Parameters for Rate Limit policy instance
@@ -73,12 +73,12 @@ var BlocklistTemplate = Template{
 }
 
 type Instance struct {
-	Id         string `json:"id"`
-	Endpoint   string `json:"endpoint" example:"/user-svc/register"`
-	TemplateId string `json:"templateId" example:"rate-limit" binding:"required"`
+	Id         string     `json:"id"`
+	Endpoint   string     `json:"endpoint" example:"/user-svc/register"`
+	TemplateId TemplateId `json:"templateId" example:"rate-limit" binding:"required"`
 
 	RateLimitParameters *RateLimitParameters `json:"rateLimitParameters,omitempty"`
-	BlocklistParameters *BlocklistParameters `json:"ipWhitelistParameters,omitempty"`
+	BlocklistParameters *BlocklistParameters `json:"blocklistParameters,omitempty"`
 }
 
 func (t *Instance) GetId() string {

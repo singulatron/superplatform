@@ -4502,6 +4502,9 @@ const docTemplate = `{
                 "templateId"
             ],
             "properties": {
+                "blocklistParameters": {
+                    "$ref": "#/definitions/policy_svc.BlocklistParameters"
+                },
                 "endpoint": {
                     "type": "string",
                     "example": "/user-svc/register"
@@ -4509,14 +4512,15 @@ const docTemplate = `{
                 "id": {
                     "type": "string"
                 },
-                "ipWhitelistParameters": {
-                    "$ref": "#/definitions/policy_svc.BlocklistParameters"
-                },
                 "rateLimitParameters": {
                     "$ref": "#/definitions/policy_svc.RateLimitParameters"
                 },
                 "templateId": {
-                    "type": "string",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/policy_svc.TemplateId"
+                        }
+                    ],
                     "example": "rate-limit"
                 }
             }
@@ -4559,6 +4563,17 @@ const docTemplate = `{
             "x-enum-varnames": [
                 "ScopeEndpoint",
                 "ScopeGlobal"
+            ]
+        },
+        "policy_svc.TemplateId": {
+            "type": "string",
+            "enum": [
+                "rate-limit",
+                "blocklist"
+            ],
+            "x-enum-varnames": [
+                "TemplateIdRateLimit",
+                "TemplateIdBlocklist"
             ]
         },
         "policy_svc.UpsertInstanceRequest": {

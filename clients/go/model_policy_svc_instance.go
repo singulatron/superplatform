@@ -22,11 +22,11 @@ var _ MappedNullable = &PolicySvcInstance{}
 
 // PolicySvcInstance struct for PolicySvcInstance
 type PolicySvcInstance struct {
+	BlocklistParameters *PolicySvcBlocklistParameters `json:"blocklistParameters,omitempty"`
 	Endpoint *string `json:"endpoint,omitempty"`
 	Id *string `json:"id,omitempty"`
-	IpWhitelistParameters *PolicySvcBlocklistParameters `json:"ipWhitelistParameters,omitempty"`
 	RateLimitParameters *PolicySvcRateLimitParameters `json:"rateLimitParameters,omitempty"`
-	TemplateId string `json:"templateId"`
+	TemplateId PolicySvcTemplateId `json:"templateId"`
 }
 
 type _PolicySvcInstance PolicySvcInstance
@@ -35,7 +35,7 @@ type _PolicySvcInstance PolicySvcInstance
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewPolicySvcInstance(templateId string) *PolicySvcInstance {
+func NewPolicySvcInstance(templateId PolicySvcTemplateId) *PolicySvcInstance {
 	this := PolicySvcInstance{}
 	this.TemplateId = templateId
 	return &this
@@ -47,6 +47,38 @@ func NewPolicySvcInstance(templateId string) *PolicySvcInstance {
 func NewPolicySvcInstanceWithDefaults() *PolicySvcInstance {
 	this := PolicySvcInstance{}
 	return &this
+}
+
+// GetBlocklistParameters returns the BlocklistParameters field value if set, zero value otherwise.
+func (o *PolicySvcInstance) GetBlocklistParameters() PolicySvcBlocklistParameters {
+	if o == nil || IsNil(o.BlocklistParameters) {
+		var ret PolicySvcBlocklistParameters
+		return ret
+	}
+	return *o.BlocklistParameters
+}
+
+// GetBlocklistParametersOk returns a tuple with the BlocklistParameters field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *PolicySvcInstance) GetBlocklistParametersOk() (*PolicySvcBlocklistParameters, bool) {
+	if o == nil || IsNil(o.BlocklistParameters) {
+		return nil, false
+	}
+	return o.BlocklistParameters, true
+}
+
+// HasBlocklistParameters returns a boolean if a field has been set.
+func (o *PolicySvcInstance) HasBlocklistParameters() bool {
+	if o != nil && !IsNil(o.BlocklistParameters) {
+		return true
+	}
+
+	return false
+}
+
+// SetBlocklistParameters gets a reference to the given PolicySvcBlocklistParameters and assigns it to the BlocklistParameters field.
+func (o *PolicySvcInstance) SetBlocklistParameters(v PolicySvcBlocklistParameters) {
+	o.BlocklistParameters = &v
 }
 
 // GetEndpoint returns the Endpoint field value if set, zero value otherwise.
@@ -113,38 +145,6 @@ func (o *PolicySvcInstance) SetId(v string) {
 	o.Id = &v
 }
 
-// GetIpWhitelistParameters returns the IpWhitelistParameters field value if set, zero value otherwise.
-func (o *PolicySvcInstance) GetIpWhitelistParameters() PolicySvcBlocklistParameters {
-	if o == nil || IsNil(o.IpWhitelistParameters) {
-		var ret PolicySvcBlocklistParameters
-		return ret
-	}
-	return *o.IpWhitelistParameters
-}
-
-// GetIpWhitelistParametersOk returns a tuple with the IpWhitelistParameters field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *PolicySvcInstance) GetIpWhitelistParametersOk() (*PolicySvcBlocklistParameters, bool) {
-	if o == nil || IsNil(o.IpWhitelistParameters) {
-		return nil, false
-	}
-	return o.IpWhitelistParameters, true
-}
-
-// HasIpWhitelistParameters returns a boolean if a field has been set.
-func (o *PolicySvcInstance) HasIpWhitelistParameters() bool {
-	if o != nil && !IsNil(o.IpWhitelistParameters) {
-		return true
-	}
-
-	return false
-}
-
-// SetIpWhitelistParameters gets a reference to the given PolicySvcBlocklistParameters and assigns it to the IpWhitelistParameters field.
-func (o *PolicySvcInstance) SetIpWhitelistParameters(v PolicySvcBlocklistParameters) {
-	o.IpWhitelistParameters = &v
-}
-
 // GetRateLimitParameters returns the RateLimitParameters field value if set, zero value otherwise.
 func (o *PolicySvcInstance) GetRateLimitParameters() PolicySvcRateLimitParameters {
 	if o == nil || IsNil(o.RateLimitParameters) {
@@ -178,9 +178,9 @@ func (o *PolicySvcInstance) SetRateLimitParameters(v PolicySvcRateLimitParameter
 }
 
 // GetTemplateId returns the TemplateId field value
-func (o *PolicySvcInstance) GetTemplateId() string {
+func (o *PolicySvcInstance) GetTemplateId() PolicySvcTemplateId {
 	if o == nil {
-		var ret string
+		var ret PolicySvcTemplateId
 		return ret
 	}
 
@@ -189,7 +189,7 @@ func (o *PolicySvcInstance) GetTemplateId() string {
 
 // GetTemplateIdOk returns a tuple with the TemplateId field value
 // and a boolean to check if the value has been set.
-func (o *PolicySvcInstance) GetTemplateIdOk() (*string, bool) {
+func (o *PolicySvcInstance) GetTemplateIdOk() (*PolicySvcTemplateId, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -197,7 +197,7 @@ func (o *PolicySvcInstance) GetTemplateIdOk() (*string, bool) {
 }
 
 // SetTemplateId sets field value
-func (o *PolicySvcInstance) SetTemplateId(v string) {
+func (o *PolicySvcInstance) SetTemplateId(v PolicySvcTemplateId) {
 	o.TemplateId = v
 }
 
@@ -211,14 +211,14 @@ func (o PolicySvcInstance) MarshalJSON() ([]byte, error) {
 
 func (o PolicySvcInstance) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
+	if !IsNil(o.BlocklistParameters) {
+		toSerialize["blocklistParameters"] = o.BlocklistParameters
+	}
 	if !IsNil(o.Endpoint) {
 		toSerialize["endpoint"] = o.Endpoint
 	}
 	if !IsNil(o.Id) {
 		toSerialize["id"] = o.Id
-	}
-	if !IsNil(o.IpWhitelistParameters) {
-		toSerialize["ipWhitelistParameters"] = o.IpWhitelistParameters
 	}
 	if !IsNil(o.RateLimitParameters) {
 		toSerialize["rateLimitParameters"] = o.RateLimitParameters

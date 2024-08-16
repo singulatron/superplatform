@@ -218,6 +218,7 @@ Class | Method | HTTP request | Description
  - [PolicySvcInstance](docs/PolicySvcInstance.md)
  - [PolicySvcRateLimitParameters](docs/PolicySvcRateLimitParameters.md)
  - [PolicySvcScope](docs/PolicySvcScope.md)
+ - [PolicySvcTemplateId](docs/PolicySvcTemplateId.md)
  - [PolicySvcUpsertInstanceRequest](docs/PolicySvcUpsertInstanceRequest.md)
  - [PromptSvcAddPromptRequest](docs/PromptSvcAddPromptRequest.md)
  - [PromptSvcAddPromptResponse](docs/PromptSvcAddPromptResponse.md)

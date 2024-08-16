@@ -98,6 +98,7 @@ docs/PolicySvcErrorResponse.md
 docs/PolicySvcInstance.md
 docs/PolicySvcRateLimitParameters.md
 docs/PolicySvcScope.md
+docs/PolicySvcTemplateId.md
 docs/PolicySvcUpsertInstanceRequest.md
 docs/PromptSvcAPI.md
 docs/PromptSvcAddPromptRequest.md
@@ -214,6 +215,7 @@ model_policy_svc_error_response.go
 model_policy_svc_instance.go
 model_policy_svc_rate_limit_parameters.go
 model_policy_svc_scope.go
+model_policy_svc_template_id.go
 model_policy_svc_upsert_instance_request.go
 model_prompt_svc_add_prompt_request.go
 model_prompt_svc_add_prompt_response.go

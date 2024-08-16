@@ -753,18 +753,19 @@ definitions:
     type: object
   policy_svc.Instance:
     properties:
+      blocklistParameters:
+        $ref: '#/definitions/policy_svc.BlocklistParameters'
       endpoint:
         example: /user-svc/register
         type: string
       id:
         type: string
-      ipWhitelistParameters:
-        $ref: '#/definitions/policy_svc.BlocklistParameters'
       rateLimitParameters:
         $ref: '#/definitions/policy_svc.RateLimitParameters'
       templateId:
+        allOf:
+        - $ref: '#/definitions/policy_svc.TemplateId'
         example: rate-limit
-        type: string
     required:
     - templateId
     type: object
@@ -793,6 +794,14 @@ definitions:
     x-enum-varnames:
     - ScopeEndpoint
     - ScopeGlobal
+  policy_svc.TemplateId:
+    enum:
+    - rate-limit
+    - blocklist
+    type: string
+    x-enum-varnames:
+    - TemplateIdRateLimit
+    - TemplateIdBlocklist
   policy_svc.UpsertInstanceRequest:
     properties:
       instance:
