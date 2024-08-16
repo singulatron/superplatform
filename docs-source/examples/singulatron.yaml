@@ -713,6 +713,93 @@ definitions:
       processName:
         type: string
     type: object
+  policy_svc.BlocklistParameters:
+    properties:
+      blockedIPs:
+        items:
+          type: string
+        type: array
+    type: object
+  policy_svc.CheckRequest:
+    properties:
+      endpoint:
+        type: string
+      ip:
+        type: string
+      method:
+        type: string
+      userId:
+        type: string
+    type: object
+  policy_svc.CheckResponse:
+    properties:
+      allowed:
+        type: boolean
+    required:
+    - allowed
+    type: object
+  policy_svc.Entity:
+    enum:
+    - userId
+    - ip
+    type: string
+    x-enum-varnames:
+    - EntityUserID
+    - EntityIP
+  policy_svc.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  policy_svc.Instance:
+    properties:
+      endpoint:
+        example: /user-svc/register
+        type: string
+      id:
+        type: string
+      ipWhitelistParameters:
+        $ref: '#/definitions/policy_svc.BlocklistParameters'
+      rateLimitParameters:
+        $ref: '#/definitions/policy_svc.RateLimitParameters'
+      templateId:
+        example: rate-limit
+        type: string
+    required:
+    - templateId
+    type: object
+  policy_svc.RateLimitParameters:
+    properties:
+      entity:
+        allOf:
+        - $ref: '#/definitions/policy_svc.Entity'
+        example: userId
+      maxRequests:
+        example: 10
+        type: integer
+      scope:
+        allOf:
+        - $ref: '#/definitions/policy_svc.Scope'
+        example: endpoint
+      timeWindow:
+        example: 1m
+        type: string
+    type: object
+  policy_svc.Scope:
+    enum:
+    - endpoint
+    - global
+    type: string
+    x-enum-varnames:
+    - ScopeEndpoint
+    - ScopeGlobal
+  policy_svc.UpsertInstanceRequest:
+    properties:
+      instance:
+        $ref: '#/definitions/policy_svc.Instance'
+    type: object
+  policy_svc.UpsertInstanceResponse:
+    type: object
   prompt_svc.AddPromptRequest:
     properties:
       id:
@@ -866,6 +953,13 @@ definitions:
     type: object
   prompt_svc.RemovePromptResponse:
     type: object
+  user_svc.AddUserToOrganizationRequest:
+    properties:
+      userId:
+        type: string
+    type: object
+  user_svc.AddUserToOrganizationResponse:
+    type: object
   user_svc.AuthToken:
     properties:
       createdAt:
@@ -938,6 +1032,20 @@ definitions:
       verified:
         description: Whether the contact is verified
         type: boolean
+    type: object
+  user_svc.CreateOrganizationRequest:
+    properties:
+      id:
+        type: string
+      name:
+        description: Full name of the organization.
+        type: string
+      slug:
+        description: URL-friendly unique (inside the Singularon platform) identifier
+          for the `organization`.
+        type: string
+    type: object
+  user_svc.CreateOrganizationResponse:
     type: object
   user_svc.CreateRoleRequest:
     properties:
@@ -1085,6 +1193,10 @@ definitions:
     type: object
   user_svc.RegisterResponse:
     type: object
+  user_svc.RemoveUserFromOrganizationRequest:
+    type: object
+  user_svc.RemoveUserFromOrganizationResponse:
+    type: object
   user_svc.Role:
     properties:
       createdAt:
@@ -1097,10 +1209,6 @@ definitions:
         type: string
       ownerId:
         type: string
-      permissionIds:
-        items:
-          type: string
-        type: array
       updatedAt:
         type: string
     type: object
@@ -1141,23 +1249,15 @@ definitions:
       id:
         type: string
       name:
-        description: Full name of the organization
+        description: Full name of the organization.
+        example: Jane Doe
         type: string
-      organizationIds:
-        description: Many to many relationship between User and Organization
-        items:
-          type: string
-        type: array
       passwordHash:
         type: string
-      roleIds:
-        description: Many to many relationship between User and Role
-        items:
-          type: string
-        type: array
       slug:
         description: URL-friendly unique (inside the Singularon platform) identifier
           for the `user`.
+        example: jane-doe
         type: string
       updatedAt:
         type: string
@@ -2387,6 +2487,85 @@ paths:
       summary: List Nodes
       tags:
       - Node Svc
+  /policy-svc/check:
+    post:
+      consumes:
+      - application/json
+      description: Check records a resource access and returns if the access is allowed.
+      operationId: check
+      parameters:
+      - description: Check Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/policy_svc.CheckRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Checked successfully
+          schema:
+            $ref: '#/definitions/policy_svc.CheckResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/policy_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/policy_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/policy_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Check
+      tags:
+      - Policy Svc
+  /policy-svc/instance/{instanceId}:
+    put:
+      consumes:
+      - application/json
+      description: Allows user to upsert a new policy instance based on a template.
+      operationId: upsertInstance
+      parameters:
+      - description: Instance ID
+        in: path
+        name: instanceId
+        required: true
+        type: string
+      - description: Upsert Instance Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/policy_svc.UpsertInstanceRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Instance upserted successfully
+          schema:
+            $ref: '#/definitions/policy_svc.UpsertInstanceResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/policy_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/policy_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/policy_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Upsert an Instance
+      tags:
+      - Policy Svc
   /prompt-svc/{threadId}/subscribe:
     get:
       description: Subscribe to prompt responses via Server-Sent Events (SSE)
@@ -2629,6 +2808,152 @@ paths:
           schema:
             $ref: '#/definitions/user_svc.ErrorResponse'
       summary: Login
+      tags:
+      - User Svc
+  /user-svc/organization:
+    post:
+      consumes:
+      - application/json
+      description: |-
+        Allows a logged-in user to create a new organization. The user initiating the request will be assigned the role of admin for that organization.
+        The initiating user will receive a dynamic role in the format `user-svc:org:$organization-slug:admin`, where `$organization-slug` is a unique identifier for the created organization.
+        Dynamic roles are generated based on specific user-resource associations, offering more flexible permission management compared to static roles.
+      operationId: createOrganization
+      parameters:
+      - description: Create User Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/user_svc.CreateOrganizationRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User created successfully
+          schema:
+            $ref: '#/definitions/user_svc.CreateOrganizationResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create an Organization
+      tags:
+      - User Svc
+  /user-svc/organization/{organizationId}/user:
+    post:
+      consumes:
+      - application/json
+      description: Allows an authorized user to add another user to a specific organization.
+        The user will be assigned a specific role within the organization.
+      operationId: addUserToOrganization
+      parameters:
+      - description: Organization ID
+        in: path
+        name: organizationId
+        required: true
+        type: string
+      - description: Add User to Organization Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/user_svc.AddUserToOrganizationRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User added successfully
+          schema:
+            $ref: '#/definitions/user_svc.AddUserToOrganizationResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+        "404":
+          description: Organization/User not found
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Add a User to an Organization
+      tags:
+      - User Svc
+  /user-svc/organization/{organizationId}/user/{userId}:
+    delete:
+      consumes:
+      - application/json
+      description: Allows an authorized user to add another user to a specific organization.
+        The user will be assigned a specific role within the organization.
+      operationId: removeUserFromOrganization
+      parameters:
+      - description: Organization ID
+        in: path
+        name: organizationId
+        required: true
+        type: string
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: string
+      - description: Add User to Organization Request
+        in: body
+        name: request
+        schema:
+          $ref: '#/definitions/user_svc.RemoveUserFromOrganizationRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User added successfully
+          schema:
+            $ref: '#/definitions/user_svc.RemoveUserFromOrganizationResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+        "404":
+          description: Organization/User not found
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Remove a User from an Organization
       tags:
       - User Svc
   /user-svc/permission/{permissionId}:

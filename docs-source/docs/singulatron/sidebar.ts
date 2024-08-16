@@ -260,6 +260,24 @@ const sidebar: SidebarsConfig = {
     },
     {
       type: "category",
+      label: "Policy Svc",
+      items: [
+        {
+          type: "doc",
+          id: "singulatron/check",
+          label: "Check",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "singulatron/upsert-instance",
+          label: "Upsert an Instance",
+          className: "api-method put",
+        },
+      ],
+    },
+    {
+      type: "category",
       label: "Prompt Svc",
       items: [
         {
@@ -309,6 +327,24 @@ const sidebar: SidebarsConfig = {
           id: "singulatron/login",
           label: "Login",
           className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "singulatron/create-organization",
+          label: "Create an Organization",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "singulatron/add-user-to-organization",
+          label: "Add a User to an Organization",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "singulatron/remove-user-from-organization",
+          label: "Remove a User from an Organization",
+          className: "api-method delete",
         },
         {
           type: "doc",
