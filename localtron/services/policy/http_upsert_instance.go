@@ -11,15 +11,16 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )
 
-// UpsertPolicyInstance allows a user to upsert a new policy instance
-// @ID upsertPolicyInstance
-// @Summary Upsert a Policy Instance
+// UpsertInstance allows a user to upsert a new policy instance
+// @ID upsertInstance
+// @Summary Upsert an Instance
 // @Description Allows user to upsert a new policy instance based on a template.
 // @Tags Policy Svc
 // @Accept json
 // @Produce json
-// @Param request body types.UpsertPolicyInstanceRequest true "Upsert Policy Instance Request"
-// @Success 200 {object} policy.UpsertPolicyInstanceResponse "Policy instance upsertd successfully"
+// @Param instanceId path string true "Instance ID"
+// @Param request body policy.UpsertInstanceRequest true "Upsert Instance Request"
+// @Success 200 {object} policy.UpsertInstanceResponse "Instance upserted successfully"
 // @Failure 400 {object} policy.ErrorResponse "Invalid JSON"
 // @Failure 401 {object} policy.ErrorResponse "Unauthorized"
 // @Failure 500 {object} policy.ErrorResponse "Internal Server Error"
@@ -54,14 +55,14 @@ func (s *PolicyService) UpsertInstance(
 
 	req.Instance.Id = mux.Vars(r)["instanceId"]
 
-	err = s.upsertInstance(&req.Instance)
+	err = s.upsertInstance(req.Instance)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(err.Error()))
 		return
 	}
 
-	bs, _ := json.Marshal(policy.UpsertPolicyInstanceResponse{})
+	bs, _ := json.Marshal(policy.UpsertInstanceResponse{})
 	w.Write(bs)
 }
 

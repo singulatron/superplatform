@@ -113,6 +113,8 @@ Class | Method | HTTP request | Description
 *ModelSvcAPI* | [**StartDefaultModel**](docs/ModelSvcAPI.md#startdefaultmodel) | **Put** /model-svc/default-model/start | Start the Default Model
 *ModelSvcAPI* | [**StartModel**](docs/ModelSvcAPI.md#startmodel) | **Put** /model-svc/model/{modelId}/start | Start a Model
 *NodeSvcAPI* | [**ListNodes**](docs/NodeSvcAPI.md#listnodes) | **Post** /node-svc/nodes | List Nodes
+*PolicySvcAPI* | [**Check**](docs/PolicySvcAPI.md#check) | **Post** /policy-svc/check | Check
+*PolicySvcAPI* | [**UpsertInstance**](docs/PolicySvcAPI.md#upsertinstance) | **Put** /policy-svc/instance/{instanceId} | Upsert an Instance
 *PromptSvcAPI* | [**AddPrompt**](docs/PromptSvcAPI.md#addprompt) | **Post** /prompt-svc/prompt | Add Prompt
 *PromptSvcAPI* | [**GetPrompts**](docs/PromptSvcAPI.md#getprompts) | **Post** /prompt-svc/prompts | List Prompts
 *PromptSvcAPI* | [**RemovePrompt**](docs/PromptSvcAPI.md#removeprompt) | **Post** /prompt-svc/remove | Remove Prompt
@@ -208,6 +210,14 @@ Class | Method | HTTP request | Description
  - [NodeSvcListNodesResponse](docs/NodeSvcListNodesResponse.md)
  - [NodeSvcNode](docs/NodeSvcNode.md)
  - [NodeSvcProcess](docs/NodeSvcProcess.md)
+ - [PolicySvcBlocklistParameters](docs/PolicySvcBlocklistParameters.md)
+ - [PolicySvcCheckRequest](docs/PolicySvcCheckRequest.md)
+ - [PolicySvcEntity](docs/PolicySvcEntity.md)
+ - [PolicySvcErrorResponse](docs/PolicySvcErrorResponse.md)
+ - [PolicySvcInstance](docs/PolicySvcInstance.md)
+ - [PolicySvcRateLimitParameters](docs/PolicySvcRateLimitParameters.md)
+ - [PolicySvcScope](docs/PolicySvcScope.md)
+ - [PolicySvcUpsertInstanceRequest](docs/PolicySvcUpsertInstanceRequest.md)
  - [PromptSvcAddPromptRequest](docs/PromptSvcAddPromptRequest.md)
  - [PromptSvcAddPromptResponse](docs/PromptSvcAddPromptResponse.md)
  - [PromptSvcErrorResponse](docs/PromptSvcErrorResponse.md)

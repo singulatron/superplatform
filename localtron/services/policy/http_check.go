@@ -4,10 +4,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"time"
 
-	"github.com/gorilla/mux"
 	policy "github.com/singulatron/singulatron/localtron/services/policy/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
+	"golang.org/x/time/rate"
 )
 
 // Check records a resource access and returns if the access is allowed.
@@ -17,7 +18,7 @@ import (
 // @Tags Policy Svc
 // @Accept json
 // @Produce json
-// @Param request body types.CheckRequest true "Check Request"
+// @Param request body policy.CheckRequest true "Check Request"
 // @Success 200 {object} policy.CheckResponse "Checked successfully"
 // @Failure 400 {object} policy.ErrorResponse "Invalid JSON"
 // @Failure 401 {object} policy.ErrorResponse "Unauthorized"
@@ -41,7 +42,7 @@ func (s *PolicyService) Check(
 		return
 	}
 
-	req := policy.UpsertTemplateRequest{}
+	req := policy.CheckRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -50,19 +51,56 @@ func (s *PolicyService) Check(
 	}
 	defer r.Body.Close()
 
-	req.Template.Id = mux.Vars(r)["templateId"]
-
-	err = s.upsertTemplate(&req.Template)
+	err = s.check(&req)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(err.Error()))
 		return
 	}
 
-	bs, _ := json.Marshal(policy.UpsertTemplateResponse{})
+	bs, _ := json.Marshal(policy.CheckResponse{})
 	w.Write(bs)
 }
 
-func (s *PolicyService) check(template *policy.Template) error {
-	return s.templatesStore.Upsert(template)
+func (s *PolicyService) check(request *policy.CheckRequest) error {
+	for _, instance := range s.instances {
+		switch instance.TemplateId {
+		case policy.RateLimitPolicyTemplate.GetId():
+			// Extract parameters from the instance
+			maxRequests := instance.RateLimitParameters.MaxRequests
+			timeWindow, err := time.ParseDuration(instance.RateLimitParameters.TimeWindow)
+			if err != nil {
+				return err
+			}
+
+			// Determine the key for the rate limiter based on entity and scope
+			var limiterKey string
+			switch instance.RateLimitParameters.Entity {
+			case policy.EntityUserID:
+				limiterKey = request.UserId
+			case policy.EntityIP:
+				limiterKey = request.Ip
+			default:
+				return fmt.Errorf("unknown entity type")
+			}
+
+			if instance.RateLimitParameters.Scope == policy.ScopeEndpoint {
+				limiterKey += ":" + request.Endpoint
+			}
+
+			s.mutex.Lock()
+			limiter, exists := s.rateLimiters.Load(limiterKey)
+			if !exists {
+				limiter = rate.NewLimiter(rate.Every(timeWindow), maxRequests)
+				s.rateLimiters.Store(limiterKey, limiter)
+			}
+			s.mutex.Unlock()
+
+			if !limiter.(*rate.Limiter).Allow() {
+				return fmt.Errorf("rate limit exceeded")
+			}
+		}
+	}
+
+	return nil
 }

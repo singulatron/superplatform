@@ -15,53 +15,81 @@ type ErrorResponse struct {
 	Error string `json:"error"`
 }
 
+// Entity that is being rate limited/policed
+type Entity string
+
+const (
+	EntityUserID Entity = "userId"
+	EntityIP     Entity = "ip"
+)
+
+// Scope is the bucket by which we aggregate
+type Scope string
+
+const (
+	ScopeEndpoint Scope = "endpoint"
+	ScopeGlobal   Scope = "global"
+)
+
+type TemplateId string
+
+const (
+	TemplateIdRateLimit TemplateId = "rate-limit"
+	TemplateIdBlocklist TemplateId = "rate-limit"
+)
+
+// Parameters for Rate Limit policy instance
+type RateLimitParameters struct {
+	MaxRequests int    `json:"maxRequests" example:"10"`
+	TimeWindow  string `json:"timeWindow" example:"1m"`
+	Entity      Entity `json:"entity" example:"userId"`
+	Scope       Scope  `json:"scope" example:"endpoint"`
+}
+
+type BlocklistParameters struct {
+	BlockedIPs []string `json:"blockedIPs"`
+}
+
 type Template struct {
-	// Unique identifier for the policy template.
-	Id string `json:"id" example:"rate-limit"`
-
-	// Human-readable name of the policy.
-	Name string `json:"name" example:"Rate Limit by IP"`
-
-	// Description of the policy.
-	Description string `json:"description" example:"Limits the number of requests from a single IP within a certain time window."`
-
-	// Default parameters for the policy.
-	Parameters map[string]interface{} `json:"parameters"`
+	Id          TemplateId `json:"id" example:"rate-limit"`
+	Name        string     `json:"name" example:"Rate Limit"`
+	Description string     `json:"description" example:"Limits the number of requests based on user ID or IP address."`
 }
 
 func (t *Template) GetId() string {
-	return t.Id
+	return string(t.Id)
+}
+
+var RateLimitPolicyTemplate = Template{
+	Id:          TemplateIdRateLimit,
+	Name:        "Rate Limit",
+	Description: "Limits the number of requests. Aggregate by UserID or IP address.",
+}
+
+var BlocklistTemplate = Template{
+	Id:          TemplateIdBlocklist,
+	Name:        "Blocklist",
+	Description: "Block access by IP, UserID and other parameters.",
 }
 
 type Instance struct {
-	Id string `json:"id"`
-
-	// The endpoint to which the policy is applied.
-	Endpoint string `json:"endpoint" example:"/user-svc/register"`
-
-	// HTTP method (e.g., "GET", "POST").
-	Method string `json:"method" example:"POST"`
-
-	// The ID of the policy template.
+	Id         string `json:"id"`
+	Endpoint   string `json:"endpoint" example:"/user-svc/register"`
 	TemplateId string `json:"templateId" example:"rate-limit" binding:"required"`
 
-	// Additional parameters or overrides for the policy.
-	Parameters map[string]interface{} `json:"parameters"`
+	RateLimitParameters *RateLimitParameters `json:"rateLimitParameters,omitempty"`
+	BlocklistParameters *BlocklistParameters `json:"ipWhitelistParameters,omitempty"`
 }
 
 func (t *Instance) GetId() string {
 	return t.Id
 }
 
-type UpsertTemplateRequest struct {
-	Template
-}
-
-type UpsertTemplateResponse struct {
-}
-
 type UpsertInstanceRequest struct {
-	Instance
+	Instance *Instance
+}
+
+type UpsertInstanceResponse struct {
 }
 
 type CheckRequest struct {
@@ -71,30 +99,7 @@ type CheckRequest struct {
 	UserId   string `json:"userId"`
 }
 
-type UpsertPolicyInstanceResponse struct {
-	InstanceId string `json:"instanceId"`
-}
-
-var (
-	RateLimitPolicyTemplate = Template{
-		Id:          "rate-limit",
-		Name:        "Rate Limit by IP",
-		Description: "Limits the number of requests from a single IP within a certain time window.",
-		Parameters: map[string]interface{}{
-			"maxRequests": 10,
-			"timeWindow":  "1m",
-		},
-	}
-
-	IPWhitelistPolicyTemplate = Template{
-		Id:          "ip-whitelist",
-		Name:        "IP Whitelist",
-		Description: "Allows access only from specific IP addresses.",
-		Parameters: map[string]interface{}{
-			"allowedIPs": []string{"192.168.1.1", "192.168.1.2"},
-		},
-	}
-)
+type CheckResponse struct{}
 
 var (
 	PermissionTemplateView = user.Permission{

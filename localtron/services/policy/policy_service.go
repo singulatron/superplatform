@@ -8,6 +8,8 @@
 package policyservice
 
 import (
+	"sync"
+
 	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/router"
 	sdk "github.com/singulatron/singulatron/localtron/sdk/go"
@@ -22,16 +24,17 @@ type PolicyService struct {
 	templatesStore  datastore.DataStore
 	instancesStore  datastore.DataStore
 	credentialStore datastore.DataStore
+
+	instances []*policytypes.Instance
+
+	rateLimiters sync.Map // Map to store rate limiters
+	mutex        sync.Mutex
 }
 
 func NewPolicyService(
 	router *router.Router,
 	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error),
 ) (*PolicyService, error) {
-	templatesStore, err := datastoreFactory("policyTemplates", &policytypes.Template{})
-	if err != nil {
-		return nil, err
-	}
 
 	instancesStore, err := datastoreFactory("policyInstances", &policytypes.Instance{})
 	if err != nil {
@@ -45,7 +48,6 @@ func NewPolicyService(
 
 	service := &PolicyService{
 		router:          router,
-		templatesStore:  templatesStore,
 		instancesStore:  instancesStore,
 		credentialStore: credentialStore,
 	}
@@ -54,6 +56,15 @@ func NewPolicyService(
 }
 
 func (cs *PolicyService) Start() error {
+	instances, err := cs.instancesStore.Query(datastore.All()).Find()
+	if err != nil {
+		return err
+	}
+	for _, instanceI := range instances {
+		instance := instanceI.(*policytypes.Instance)
+		cs.instances = append(cs.instances, instance)
+	}
+
 	token, err := sdk.RegisterService("policy-svc", "Policy Service", cs.router, cs.credentialStore)
 	if err != nil {
 		return err
