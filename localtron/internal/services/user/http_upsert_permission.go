@@ -40,6 +40,8 @@ func (s *UserService) UpsertPermission(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
+	w.Header().Set("Content-Type", "application/json")
+
 	// @todo add proper permission here
 	usr, err := s.isAuthorized(r, user.PermissionPermissionCreate.Id, nil, nil)
 	if err != nil {
@@ -50,7 +52,8 @@ func (s *UserService) UpsertPermission(
 	req := user.UpserPermissionRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
-		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte(err.Error()))
 		return
 	}
 	defer r.Body.Close()
@@ -58,13 +61,15 @@ func (s *UserService) UpsertPermission(
 	vars := mux.Vars(r)
 
 	if !strings.HasPrefix(vars["permissionId"], usr.Slug) {
-		http.Error(w, `Bad Namespace`, http.StatusBadRequest)
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(`Bad Namespace`))
 		return
 	}
 
 	_, err = s.upsertPermission(usr.Id, vars["permissionId"], req.Permission.Name, req.Permission.Description)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
 		return
 	}
 

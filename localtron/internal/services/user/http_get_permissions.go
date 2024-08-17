@@ -31,15 +31,19 @@ import (
 func (s *UserService) GetPermissions(
 	w http.ResponseWriter,
 	r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
 	_, err := s.isAuthorized(r, user.PermissionRoleView.Id, nil, nil)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte(err.Error()))
 		return
 	}
 
 	permissions, err := s.getPermissions()
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
 		return
 	}
 

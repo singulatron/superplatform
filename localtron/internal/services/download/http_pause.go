@@ -39,26 +39,32 @@ func (ds *DownloadService) Pause(
 	r *http.Request,
 
 ) {
+	w.Header().Set("Content-Type", "application/json")
+
 	rsp := &usertypes.IsAuthorizedResponse{}
 	err := ds.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", download.PermissionDownloadEdit.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
 		return
 	}
 	if !rsp.Authorized {
-		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte(`Unauthorized`))
 		return
 	}
 
 	downloadId, err := url.PathUnescape(mux.Vars(r)["downloadId"])
 	if err != nil {
-		http.Error(w, "Download ID in path is not URL encoded", http.StatusBadRequest)
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("Download ID in path is not URL encoded"))
 		return
 	}
 
 	err = ds.pause(downloadId)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
 		return
 	}
 
