@@ -1277,7 +1277,7 @@ const docTemplate = `{
                 "tags": [
                     "Generic Svc"
                 ],
-                "summary": "Find Generic Objects",
+                "summary": "Query Generic Objects",
                 "operationId": "query",
                 "parameters": [
                     {
@@ -5245,7 +5245,7 @@ var SwaggerInfo = &swag.Spec{
 	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "Singulatron",
-	Description:      "Run and develop self-hosted AI apps. Your programmable in-house GPT. The Firebase for the AI age.",
+	Description:      "AI management and development platform.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

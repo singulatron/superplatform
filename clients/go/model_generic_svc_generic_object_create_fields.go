@@ -1,7 +1,7 @@
 /*
 Singulatron
 
-Run and develop self-hosted AI apps. Your programmable in-house GPT. The Firebase for the AI age.
+AI management and development platform.
 
 API version: 0.2
 Contact: sales@singulatron.com

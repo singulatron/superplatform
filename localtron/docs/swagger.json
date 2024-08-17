@@ -1,7 +1,7 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "Run and develop self-hosted AI apps. Your programmable in-house GPT. The Firebase for the AI age.",
+        "description": "AI management and development platform.",
         "title": "Singulatron",
         "termsOfService": "http://swagger.io/terms/",
         "contact": {
@@ -1271,7 +1271,7 @@
                 "tags": [
                     "Generic Svc"
                 ],
-                "summary": "Find Generic Objects",
+                "summary": "Query Generic Objects",
                 "operationId": "query",
                 "parameters": [
                     {

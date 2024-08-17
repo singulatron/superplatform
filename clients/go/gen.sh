@@ -7,7 +7,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 LOCALTRON_DIR="$SCRIPT_DIR/../../localtron"
 
 cd "$LOCALTRON_DIR"
-swag init
+swag init --parseDependency
 
 cd "$SCRIPT_DIR"
 openapi-generator-cli generate -i "$LOCALTRON_DIR/docs/swagger.yaml" -g go -o .

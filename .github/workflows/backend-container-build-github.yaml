@@ -30,9 +30,9 @@ jobs:
 
       - name: Build Docker image
         run: |
-          DOCKER_BUILDKIT=1 docker build -f ./docker/Dockerfile -t ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest .
+          DOCKER_BUILDKIT=1 docker build -f ./localtron/docker/Dockerfile -t ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest .
           docker push ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
 
-          DOCKER_BUILDKIT=1 docker build -f ./docker/DockerfileNvidia -t ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:nvidia-latest .
+          # The NVIDIA version is needed to interact with the GPUs - for example in the Node Svc
+          DOCKER_BUILDKIT=1 docker build -f ./localtron/docker/DockerfileNvidia -t ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:nvidia-latest .
           docker push ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:nvidia-latest
-        working-directory: ./localtron

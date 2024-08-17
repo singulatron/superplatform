@@ -15,9 +15,9 @@ import (
 	"runtime/debug"
 	"time"
 
-	"github.com/singulatron/singulatron/localtron/di"
-	"github.com/singulatron/singulatron/localtron/logger"
-	"github.com/singulatron/singulatron/localtron/router"
+	"github.com/singulatron/singulatron/localtron/internal/di"
+	"github.com/singulatron/singulatron/sdk/go/logger"
+	"github.com/singulatron/singulatron/sdk/go/router"
 
 	_ "github.com/singulatron/singulatron/localtron/docs"
 	httpSwagger "github.com/swaggo/http-swagger"
@@ -27,7 +27,7 @@ const port = router.DefaultPort
 
 // @title           Singulatron
 // @version         0.2
-// @description     Run and develop self-hosted AI apps. Your programmable in-house GPT. The Firebase for the AI age.
+// @description     AI management and development platform.
 // @termsOfService  http://swagger.io/terms/
 
 // @contact.name   API Support

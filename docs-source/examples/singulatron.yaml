@@ -1280,8 +1280,7 @@ info:
     email: sales@singulatron.com
     name: API Support
     url: http://superplatform.ai/
-  description: Run and develop self-hosted AI apps. Your programmable in-house GPT.
-    The Firebase for the AI age.
+  description: AI management and development platform.
   license:
     name: AGPL v3.0
     url: https://www.gnu.org/licenses/agpl-3.0.html
@@ -2142,7 +2141,7 @@ paths:
             $ref: '#/definitions/generic_svc.ErrorResponse'
       security:
       - BearerAuth: []
-      summary: Find Generic Objects
+      summary: Query Generic Objects
       tags:
       - Generic Svc
   /generic-svc/objects/delete:

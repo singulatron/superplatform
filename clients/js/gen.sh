@@ -19,7 +19,7 @@ trap 'echo "Error occurred in script at line $LINENO"; exit 1' ERR
 # Initialize Swagger in localtron
 echo "Initializing Swagger in $LOCALTRON_DIR"
 cd "$LOCALTRON_DIR"
-swag init
+swag init --parseDependency
 
 # Generate TypeScript Fetch client
 echo "Generating TypeScript Fetch client in $TYPESCRIPT_CLIENT_DIR"

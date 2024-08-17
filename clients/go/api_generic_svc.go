@@ -1,7 +1,7 @@
 /*
 Singulatron
 
-Run and develop self-hosted AI apps. Your programmable in-house GPT. The Firebase for the AI age.
+AI management and development platform.
 
 API version: 0.2
 Contact: sales@singulatron.com
@@ -359,7 +359,7 @@ func (r ApiQueryRequest) Execute() (*GenericSvcQueryResponse, *http.Response, er
 }
 
 /*
-Query Find Generic Objects
+Query Query Generic Objects
 
 Retrieves objects from a specified table based on search criteria.
 Requires authorization and user authentication.
