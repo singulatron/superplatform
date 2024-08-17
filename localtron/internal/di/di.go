@@ -181,7 +181,7 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 		os.Exit(1)
 	}
 
-	nodeService, err := nodeservice.NewNodeService(options.Router)
+	nodeService, err := nodeservice.NewNodeService(options.Router, options.DatastoreFactory)
 	if err != nil {
 		logger.Error("Node service creation failed", slog.String("error", err.Error()))
 		os.Exit(1)
@@ -396,7 +396,7 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 		genericService.Delete(w, r)
 	})).Methods("OPTIONS", "POST")
 	router.HandleFunc("/generic-svc/objects", appl(func(w http.ResponseWriter, r *http.Request) {
-		genericService.Find(w, r)
+		genericService.Query(w, r)
 	})).Methods("OPTIONS", "POST")
 	router.HandleFunc("/generic-svc/object/{objectId}", appl(func(w http.ResponseWriter, r *http.Request) {
 		genericService.Upsert(w, r)
