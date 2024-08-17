@@ -1,22 +1,25 @@
-# Build stage
 FROM golang:1.22.4 as build
 
-WORKDIR /app
+WORKDIR /app/localtron
 
-COPY go.mod go.sum ./
+COPY localtron/go.mod localtron/go.sum ./
+COPY clients/go /app/clients/go
+COPY sdk/go /app/sdk/go
+
 RUN go mod download
 
-COPY . .
+COPY localtron/ .
 
-RUN go build -o main .
+RUN go build -o /app/main .
 
-# Final stage
 FROM nvidia/cuda:12.2.2-base-ubuntu22.04
 
 RUN apt-get update && apt-get install -y \
-    ca-certificates
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
+
 COPY --from=build /app/main .
 
 EXPOSE 58231

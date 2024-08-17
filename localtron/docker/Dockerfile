@@ -1,13 +1,16 @@
 FROM golang:1.22.4 as build
 
-WORKDIR /app
+WORKDIR /app/localtron
 
-COPY go.mod go.sum ./
+COPY localtron/go.mod localtron/go.sum ./
+COPY clients/go /app/clients/go
+COPY sdk/go /app/sdk/go
+
 RUN go mod download
 
-COPY . .
+COPY localtron/ .
 
-RUN go build -o main .
+RUN go build -o /app/main .
 
 FROM ubuntu:latest
 RUN apt-get update && apt-get install -y ca-certificates
