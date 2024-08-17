@@ -50,6 +50,7 @@ export class LoginComponent {
 		try {
 			rsp = await this.userService.login(this.slug, this.password);
 		} catch (error) {
+			console.log(error)
 			const toast = await this.toast.create({
 				cssClass: 'white-text',
 				color: 'danger',

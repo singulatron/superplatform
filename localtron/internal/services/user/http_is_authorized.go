@@ -39,11 +39,14 @@ func (s *UserService) IsAuthorized(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
+	w.Header().Set("Content-Type", "application/json")
+
 	req := &user.IsAuthorizedRequest{}
 	//m := map[string]string{}
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
-		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(`Invalid JSON`))
 		return
 	}
 	defer r.Body.Close()
@@ -52,13 +55,15 @@ func (s *UserService) IsAuthorized(
 	permissionId := vars["permissionId"]
 
 	if permissionId == "" {
-		http.Error(w, `missing permission id`, http.StatusBadRequest)
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(`missing permission id`))
 		return
 	}
 
 	usr, err := s.isAuthorized(r, permissionId, req.SlugsGranted, nil)
 	if err != nil {
-		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte("Unauthorized"))
 		return
 	}
 

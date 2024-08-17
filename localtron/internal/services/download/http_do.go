@@ -36,28 +36,34 @@ func (ds *DownloadService) Do(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
+	w.Header().Set("Content-Type", "application/json")
+
 	rsp := &usertypes.IsAuthorizedResponse{}
 	err := ds.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", download.PermissionDownloadCreate.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte(err.Error()))
 		return
 	}
 	if !rsp.Authorized {
-		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte(`Unauthorized`))
 		return
 	}
 
 	req := download.DownloadRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
-		http.Error(w, `Invalid JSON`, http.StatusBadRequest)
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(`Invalid JSON`))
 		return
 	}
 	defer r.Body.Close()
 
 	err = ds.do(req.URL, req.FolderPath)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
 		return
 	}
 

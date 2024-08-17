@@ -40,13 +40,15 @@ func (s *UserService) AddPermissionToRole(
 	// @todo add proper permission here
 	_, err := s.isAuthorized(r, user.PermissionPermissionAssign.Id, nil, nil)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte(err.Error()))
 		return
 	}
 
 	usr, err := s.getUserFromRequest(r)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte(err.Error()))
 		return
 	}
 
@@ -54,7 +56,8 @@ func (s *UserService) AddPermissionToRole(
 
 	err = s.addPermissionToRole(usr.Id, vars["roleId"], vars["permissionId"])
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
 		return
 	}
 
