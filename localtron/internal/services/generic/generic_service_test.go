@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/singulatron/singulatron/localtron/di"
+	"github.com/singulatron/singulatron/localtron/internal/di"
 	generictypes "github.com/singulatron/singulatron/localtron/internal/services/generic/types"
 	sdk "github.com/singulatron/singulatron/sdk/go"
 	"github.com/singulatron/singulatron/sdk/go/datastore"

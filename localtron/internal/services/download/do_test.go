@@ -19,7 +19,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/singulatron/singulatron/localtron/di"
+	"github.com/singulatron/singulatron/localtron/internal/di"
 	downloadservice "github.com/singulatron/singulatron/localtron/internal/services/download"
 	downloadtypes "github.com/singulatron/singulatron/localtron/internal/services/download/types"
 	types "github.com/singulatron/singulatron/localtron/internal/services/download/types"

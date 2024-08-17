@@ -9,7 +9,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
 
-	"github.com/singulatron/singulatron/localtron/di"
+	"github.com/singulatron/singulatron/localtron/internal/di"
 	chattypes "github.com/singulatron/singulatron/localtron/internal/services/chat/types"
 	sdk "github.com/singulatron/singulatron/sdk/go"
 )

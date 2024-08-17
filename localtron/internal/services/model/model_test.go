@@ -9,7 +9,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/singulatron/singulatron/localtron/di"
+	"github.com/singulatron/singulatron/localtron/internal/di"
 	configservice "github.com/singulatron/singulatron/localtron/internal/services/config"
 	configtypes "github.com/singulatron/singulatron/localtron/internal/services/config/types"
 	modeltypes "github.com/singulatron/singulatron/localtron/internal/services/model/types"

@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	clients "github.com/singulatron/singulatron/clients/go"
-	"github.com/singulatron/singulatron/localtron/di"
+	"github.com/singulatron/singulatron/localtron/internal/di"
 	policytypes "github.com/singulatron/singulatron/localtron/internal/services/policy/types"
 )
 
