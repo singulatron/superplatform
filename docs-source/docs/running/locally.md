@@ -7,11 +7,25 @@ tags:
 
 # Running Locally
 
+## Docker Compose
+
+The easiest way to run this is to clone the repo, step into the repo root and run:
+
+```sh
+docker compose up
+```
+
+or
+
+```sh
+docker compose up -d
+```
+
+to run in the background. The `docker-compose-yaml` in the root folder is designed to build and run the current code. For a more production ready Docker Compose file see the [Docker Compose page](./docker-compose/).
+
+## Natively (Go & Angular)
+
 If you have both Go and Angular installed on your computer, the easiest way to dip your feet into Singulatron is to run things locally.
-
-If you don't have those tools installed, you should probably look into the [Docker Compose example](./docker-compose/).
-
-Without further ado:
 
 ## Backend
 
