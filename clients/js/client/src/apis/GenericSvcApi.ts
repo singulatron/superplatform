@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Singulatron
- * Run and develop self-hosted AI apps. Your programmable in-house GPT. The Firebase for the AI age.
+ * AI management and development platform.
  *
  * The version of the OpenAPI document: 0.2
  * Contact: sales@singulatron.com
@@ -17,8 +17,11 @@ import * as runtime from '../runtime';
 import type {
   GenericSvcCreateObjectRequest,
   GenericSvcCreateObjectResponse,
+  GenericSvcDeleteObjectRequest,
   GenericSvcErrorResponse,
+  GenericSvcQueryRequest,
   GenericSvcQueryResponse,
+  GenericSvcUpdateObjectRequest,
   GenericSvcUpsertObjectRequest,
   GenericSvcUpsertObjectResponse,
 } from '../models/index';
@@ -27,10 +30,16 @@ import {
     GenericSvcCreateObjectRequestToJSON,
     GenericSvcCreateObjectResponseFromJSON,
     GenericSvcCreateObjectResponseToJSON,
+    GenericSvcDeleteObjectRequestFromJSON,
+    GenericSvcDeleteObjectRequestToJSON,
     GenericSvcErrorResponseFromJSON,
     GenericSvcErrorResponseToJSON,
+    GenericSvcQueryRequestFromJSON,
+    GenericSvcQueryRequestToJSON,
     GenericSvcQueryResponseFromJSON,
     GenericSvcQueryResponseToJSON,
+    GenericSvcUpdateObjectRequestFromJSON,
+    GenericSvcUpdateObjectRequestToJSON,
     GenericSvcUpsertObjectRequestFromJSON,
     GenericSvcUpsertObjectRequestToJSON,
     GenericSvcUpsertObjectResponseFromJSON,
@@ -43,15 +52,15 @@ export interface CreateObjectRequest {
 
 export interface DeleteObjectsRequest {
     objectId: string;
-    body: object;
+    body: GenericSvcDeleteObjectRequest;
 }
 
 export interface QueryRequest {
-    body?: object;
+    body?: GenericSvcQueryRequest;
 }
 
 export interface UpdateObjectsRequest {
-    body: object;
+    body: GenericSvcUpdateObjectRequest;
 }
 
 export interface UpsertObjectRequest {
@@ -140,7 +149,7 @@ export class GenericSvcApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
+            body: GenericSvcDeleteObjectRequestToJSON(requestParameters['body']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse<any>(response);
@@ -157,7 +166,7 @@ export class GenericSvcApi extends runtime.BaseAPI {
 
     /**
      * Retrieves objects from a specified table based on search criteria. Requires authorization and user authentication.   Use helper functions in your respective client library such as condition constructors (`equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
-     * Find Generic Objects
+     * Query Generic Objects
      */
     async queryRaw(requestParameters: QueryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GenericSvcQueryResponse>> {
         const queryParameters: any = {};
@@ -175,7 +184,7 @@ export class GenericSvcApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
+            body: GenericSvcQueryRequestToJSON(requestParameters['body']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => GenericSvcQueryResponseFromJSON(jsonValue));
@@ -183,7 +192,7 @@ export class GenericSvcApi extends runtime.BaseAPI {
 
     /**
      * Retrieves objects from a specified table based on search criteria. Requires authorization and user authentication.   Use helper functions in your respective client library such as condition constructors (`equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
-     * Find Generic Objects
+     * Query Generic Objects
      */
     async query(requestParameters: QueryRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GenericSvcQueryResponse> {
         const response = await this.queryRaw(requestParameters, initOverrides);
@@ -217,7 +226,7 @@ export class GenericSvcApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
+            body: GenericSvcUpdateObjectRequestToJSON(requestParameters['body']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse<any>(response);

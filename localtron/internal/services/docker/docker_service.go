@@ -39,7 +39,7 @@ func NewDockerService(
 		return nil, err
 	}
 
-	credentialStore, err := datastoreFactory("dockerCredentials", &sdk.Credential{})
+	credentialStore, err := datastoreFactory("dockerSvcCredentials", &sdk.Credential{})
 	if err != nil {
 		return nil, err
 	}

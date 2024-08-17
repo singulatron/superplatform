@@ -13,7 +13,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/singulatron/singulatron/sdk/go"
+	sdk "github.com/singulatron/singulatron/sdk/go"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
 	"github.com/singulatron/singulatron/sdk/go/logger"
 	"github.com/singulatron/singulatron/sdk/go/router"
@@ -45,47 +45,47 @@ func NewUserService(
 	router *router.Router,
 	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error),
 ) (*UserService, error) {
-	usersStore, err := datastoreFactory("userUsers", &usertypes.User{})
+	usersStore, err := datastoreFactory("userSvcUsers", &usertypes.User{})
 	if err != nil {
 		return nil, err
 	}
-	rolesStore, err := datastoreFactory("userRoles", &usertypes.Role{})
+	rolesStore, err := datastoreFactory("userSvcRoles", &usertypes.Role{})
 	if err != nil {
 		return nil, err
 	}
-	authTokensStore, err := datastoreFactory("userAuthTokens", &usertypes.AuthToken{})
+	authTokensStore, err := datastoreFactory("userSvcAuthTokens", &usertypes.AuthToken{})
 	if err != nil {
 		return nil, err
 	}
-	permissionsStore, err := datastoreFactory("userPermissions", &usertypes.Permission{})
+	permissionsStore, err := datastoreFactory("userSvcPermissions", &usertypes.Permission{})
 	if err != nil {
 		return nil, err
 	}
-	credentialsStore, err := datastoreFactory("userCredetentials", &sdk.Credential{})
+	credentialsStore, err := datastoreFactory("userSvcCredetentials", &sdk.Credential{})
 	if err != nil {
 		return nil, err
 	}
-	keyPairsStore, err := datastoreFactory("userKeyPairs", &usertypes.KeyPair{})
+	keyPairsStore, err := datastoreFactory("userSvcKeyPairs", &usertypes.KeyPair{})
 	if err != nil {
 		return nil, err
 	}
-	contactsStore, err := datastoreFactory("userContacts", &usertypes.Contact{})
+	contactsStore, err := datastoreFactory("userSvcContacts", &usertypes.Contact{})
 	if err != nil {
 		return nil, err
 	}
-	organizationsStore, err := datastoreFactory("userOrganizations", &usertypes.Organization{})
+	organizationsStore, err := datastoreFactory("userSvcOrganizations", &usertypes.Organization{})
 	if err != nil {
 		return nil, err
 	}
-	organizationUserLinksStore, err := datastoreFactory("userOrganizationUserLinks", &usertypes.OrganizationUserLink{})
+	organizationUserLinksStore, err := datastoreFactory("userSvcOrganizationUserLinks", &usertypes.OrganizationUserLink{})
 	if err != nil {
 		return nil, err
 	}
-	userRoleLinksStore, err := datastoreFactory("userRoleLinks", &usertypes.UserRoleLink{})
+	userRoleLinksStore, err := datastoreFactory("userSvcRoleLinks", &usertypes.UserRoleLink{})
 	if err != nil {
 		return nil, err
 	}
-	permissionRoleLinksStore, err := datastoreFactory("userPermissionRoleLinks", &usertypes.PermissionRoleLink{})
+	permissionRoleLinksStore, err := datastoreFactory("userSvcPermissionRoleLinks", &usertypes.PermissionRoleLink{})
 	if err != nil {
 		return nil, err
 	}

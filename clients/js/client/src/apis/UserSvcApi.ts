@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Singulatron
- * Run and develop self-hosted AI apps. Your programmable in-house GPT. The Firebase for the AI age.
+ * AI management and development platform.
  *
  * The version of the OpenAPI document: 0.2
  * Contact: sales@singulatron.com
@@ -26,6 +26,7 @@ import type {
   UserSvcGetPermissionsResponse,
   UserSvcGetPublicKeyResponse,
   UserSvcGetRolesResponse,
+  UserSvcGetUsersRequest,
   UserSvcGetUsersResponse,
   UserSvcIsAuthorizedRequest,
   UserSvcIsAuthorizedResponse,
@@ -61,6 +62,8 @@ import {
     UserSvcGetPublicKeyResponseToJSON,
     UserSvcGetRolesResponseFromJSON,
     UserSvcGetRolesResponseToJSON,
+    UserSvcGetUsersRequestFromJSON,
+    UserSvcGetUsersRequestToJSON,
     UserSvcGetUsersResponseFromJSON,
     UserSvcGetUsersResponseToJSON,
     UserSvcIsAuthorizedRequestFromJSON,
@@ -128,7 +131,7 @@ export interface GetPermissionsByRoleRequest {
 }
 
 export interface GetUsersRequest {
-    request?: object;
+    request?: UserSvcGetUsersRequest;
 }
 
 export interface IsAuthorizedRequest {
@@ -676,7 +679,7 @@ export class UserSvcApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['request'] as any,
+            body: UserSvcGetUsersRequestToJSON(requestParameters['request']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => UserSvcGetUsersResponseFromJSON(jsonValue));

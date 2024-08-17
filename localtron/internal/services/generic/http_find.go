@@ -16,9 +16,9 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
 )
 
-// Find retrieves objects based on provided criteria
+// Query retrieves objects based on provided criteria
 // @ID query
-// @Summary Find Generic Objects
+// @Summary Query Generic Objects
 // @Description Retrieves objects from a specified table based on search criteria.
 // @Description Requires authorization and user authentication.
 // @Description
@@ -34,7 +34,7 @@ import (
 // @Failure 500 {object} generic.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
 // @Router /generic-svc/objects [post]
-func (g *GenericService) Find(
+func (g *GenericService) Query(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {

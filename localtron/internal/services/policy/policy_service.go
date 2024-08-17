@@ -34,12 +34,12 @@ func NewPolicyService(
 	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error),
 ) (*PolicyService, error) {
 
-	instancesStore, err := datastoreFactory("policyInstances", &policytypes.Instance{})
+	instancesStore, err := datastoreFactory("policySvcInstances", &policytypes.Instance{})
 	if err != nil {
 		return nil, err
 	}
 
-	credentialStore, err := datastoreFactory("policyCredentials", &sdk.Credential{})
+	credentialStore, err := datastoreFactory("policySvcCredentials", &sdk.Credential{})
 	if err != nil {
 		return nil, err
 	}

@@ -9,7 +9,7 @@ require('./DatastoreFieldSelector.js');
 /* eslint-disable */
 /**
  * Singulatron
- * Run and develop self-hosted AI apps. Your programmable in-house GPT. The Firebase for the AI age.
+ * AI management and development platform.
  *
  * The version of the OpenAPI document: 0.2
  * Contact: sales@singulatron.com

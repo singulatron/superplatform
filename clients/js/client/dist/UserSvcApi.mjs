@@ -9,6 +9,7 @@ import { UserSvcCreateUserRequestToJSON } from './UserSvcCreateUserRequest.mjs';
 import { UserSvcGetPermissionsResponseFromJSON } from './UserSvcGetPermissionsResponse.mjs';
 import { UserSvcGetPublicKeyResponseFromJSON } from './UserSvcGetPublicKeyResponse.mjs';
 import { UserSvcGetRolesResponseFromJSON } from './UserSvcGetRolesResponse.mjs';
+import { UserSvcGetUsersRequestToJSON } from './UserSvcGetUsersRequest.mjs';
 import { UserSvcGetUsersResponseFromJSON } from './UserSvcGetUsersResponse.mjs';
 import { UserSvcIsAuthorizedRequestToJSON } from './UserSvcIsAuthorizedRequest.mjs';
 import { UserSvcIsAuthorizedResponseFromJSON } from './UserSvcIsAuthorizedResponse.mjs';
@@ -24,13 +25,20 @@ import './UserSvcRole.mjs';
 import './UserSvcUser.mjs';
 import './UserSvcContact.mjs';
 import './UserSvcPermission.mjs';
+import './DatastoreQuery.mjs';
+import './DatastoreCondition.mjs';
+import './DatastoreEqualCondition.mjs';
+import './DatastoreFieldSelector.mjs';
+import './DatastoreContainsCondition.mjs';
+import './DatastoreStartsWithCondition.mjs';
+import './DatastoreOrderBy.mjs';
 import './UserSvcAuthToken.mjs';
 
 /* tslint:disable */
 /* eslint-disable */
 /**
  * Singulatron
- * Run and develop self-hosted AI apps. Your programmable in-house GPT. The Firebase for the AI age.
+ * AI management and development platform.
  *
  * The version of the OpenAPI document: 0.2
  * Contact: sales@singulatron.com
@@ -465,7 +473,7 @@ class UserSvcApi extends BaseAPI {
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,
-                body: requestParameters['request'],
+                body: UserSvcGetUsersRequestToJSON(requestParameters['request']),
             }, initOverrides);
             return new JSONApiResponse(response, (jsonValue) => UserSvcGetUsersResponseFromJSON(jsonValue));
         });

@@ -14,6 +14,13 @@ export * from './configSvcDownloadServiceConfig';
 export * from './configSvcGetConfigResponse';
 export * from './configSvcModelServiceConfig';
 export * from './configSvcSaveConfigRequest';
+export * from './datastoreCondition';
+export * from './datastoreContainsCondition';
+export * from './datastoreEqualCondition';
+export * from './datastoreFieldSelector';
+export * from './datastoreOrderBy';
+export * from './datastoreQuery';
+export * from './datastoreStartsWithCondition';
 export * from './dockerSvcContainerIsRunningResponse';
 export * from './dockerSvcDockerInfo';
 export * from './dockerSvcErrorResponse';
@@ -34,10 +41,13 @@ export * from './firehoseSvcEvent';
 export * from './firehoseSvcPublishRequest';
 export * from './genericSvcCreateObjectRequest';
 export * from './genericSvcCreateObjectResponse';
+export * from './genericSvcDeleteObjectRequest';
 export * from './genericSvcErrorResponse';
 export * from './genericSvcGenericObject';
 export * from './genericSvcGenericObjectCreateFields';
+export * from './genericSvcQueryRequest';
 export * from './genericSvcQueryResponse';
+export * from './genericSvcUpdateObjectRequest';
 export * from './genericSvcUpsertObjectRequest';
 export * from './genericSvcUpsertObjectResponse';
 export * from './modelSvcArchitectures';
@@ -67,6 +77,7 @@ export * from './policySvcUpsertInstanceRequest';
 export * from './promptSvcAddPromptRequest';
 export * from './promptSvcAddPromptResponse';
 export * from './promptSvcErrorResponse';
+export * from './promptSvcListPromptsRequest';
 export * from './promptSvcListPromptsResponse';
 export * from './promptSvcPrompt';
 export * from './promptSvcPromptStatus';
@@ -84,6 +95,7 @@ export * from './userSvcErrorResponse';
 export * from './userSvcGetPermissionsResponse';
 export * from './userSvcGetPublicKeyResponse';
 export * from './userSvcGetRolesResponse';
+export * from './userSvcGetUsersRequest';
 export * from './userSvcGetUsersResponse';
 export * from './userSvcIsAuthorizedRequest';
 export * from './userSvcIsAuthorizedResponse';
@@ -114,6 +126,13 @@ import { ConfigSvcDownloadServiceConfig } from './configSvcDownloadServiceConfig
 import { ConfigSvcGetConfigResponse } from './configSvcGetConfigResponse';
 import { ConfigSvcModelServiceConfig } from './configSvcModelServiceConfig';
 import { ConfigSvcSaveConfigRequest } from './configSvcSaveConfigRequest';
+import { DatastoreCondition } from './datastoreCondition';
+import { DatastoreContainsCondition } from './datastoreContainsCondition';
+import { DatastoreEqualCondition } from './datastoreEqualCondition';
+import { DatastoreFieldSelector } from './datastoreFieldSelector';
+import { DatastoreOrderBy } from './datastoreOrderBy';
+import { DatastoreQuery } from './datastoreQuery';
+import { DatastoreStartsWithCondition } from './datastoreStartsWithCondition';
 import { DockerSvcContainerIsRunningResponse } from './dockerSvcContainerIsRunningResponse';
 import { DockerSvcDockerInfo } from './dockerSvcDockerInfo';
 import { DockerSvcErrorResponse } from './dockerSvcErrorResponse';
@@ -134,10 +153,13 @@ import { FirehoseSvcEvent } from './firehoseSvcEvent';
 import { FirehoseSvcPublishRequest } from './firehoseSvcPublishRequest';
 import { GenericSvcCreateObjectRequest } from './genericSvcCreateObjectRequest';
 import { GenericSvcCreateObjectResponse } from './genericSvcCreateObjectResponse';
+import { GenericSvcDeleteObjectRequest } from './genericSvcDeleteObjectRequest';
 import { GenericSvcErrorResponse } from './genericSvcErrorResponse';
 import { GenericSvcGenericObject } from './genericSvcGenericObject';
 import { GenericSvcGenericObjectCreateFields } from './genericSvcGenericObjectCreateFields';
+import { GenericSvcQueryRequest } from './genericSvcQueryRequest';
 import { GenericSvcQueryResponse } from './genericSvcQueryResponse';
+import { GenericSvcUpdateObjectRequest } from './genericSvcUpdateObjectRequest';
 import { GenericSvcUpsertObjectRequest } from './genericSvcUpsertObjectRequest';
 import { GenericSvcUpsertObjectResponse } from './genericSvcUpsertObjectResponse';
 import { ModelSvcArchitectures } from './modelSvcArchitectures';
@@ -167,6 +189,7 @@ import { PolicySvcUpsertInstanceRequest } from './policySvcUpsertInstanceRequest
 import { PromptSvcAddPromptRequest } from './promptSvcAddPromptRequest';
 import { PromptSvcAddPromptResponse } from './promptSvcAddPromptResponse';
 import { PromptSvcErrorResponse } from './promptSvcErrorResponse';
+import { PromptSvcListPromptsRequest } from './promptSvcListPromptsRequest';
 import { PromptSvcListPromptsResponse } from './promptSvcListPromptsResponse';
 import { PromptSvcPrompt } from './promptSvcPrompt';
 import { PromptSvcPromptStatus } from './promptSvcPromptStatus';
@@ -184,6 +207,7 @@ import { UserSvcErrorResponse } from './userSvcErrorResponse';
 import { UserSvcGetPermissionsResponse } from './userSvcGetPermissionsResponse';
 import { UserSvcGetPublicKeyResponse } from './userSvcGetPublicKeyResponse';
 import { UserSvcGetRolesResponse } from './userSvcGetRolesResponse';
+import { UserSvcGetUsersRequest } from './userSvcGetUsersRequest';
 import { UserSvcGetUsersResponse } from './userSvcGetUsersResponse';
 import { UserSvcIsAuthorizedRequest } from './userSvcIsAuthorizedRequest';
 import { UserSvcIsAuthorizedResponse } from './userSvcIsAuthorizedResponse';
@@ -232,6 +256,13 @@ let typeMap = {
     "ConfigSvcGetConfigResponse": ConfigSvcGetConfigResponse,
     "ConfigSvcModelServiceConfig": ConfigSvcModelServiceConfig,
     "ConfigSvcSaveConfigRequest": ConfigSvcSaveConfigRequest,
+    "DatastoreCondition": DatastoreCondition,
+    "DatastoreContainsCondition": DatastoreContainsCondition,
+    "DatastoreEqualCondition": DatastoreEqualCondition,
+    "DatastoreFieldSelector": DatastoreFieldSelector,
+    "DatastoreOrderBy": DatastoreOrderBy,
+    "DatastoreQuery": DatastoreQuery,
+    "DatastoreStartsWithCondition": DatastoreStartsWithCondition,
     "DockerSvcContainerIsRunningResponse": DockerSvcContainerIsRunningResponse,
     "DockerSvcDockerInfo": DockerSvcDockerInfo,
     "DockerSvcErrorResponse": DockerSvcErrorResponse,
@@ -252,10 +283,13 @@ let typeMap = {
     "FirehoseSvcPublishRequest": FirehoseSvcPublishRequest,
     "GenericSvcCreateObjectRequest": GenericSvcCreateObjectRequest,
     "GenericSvcCreateObjectResponse": GenericSvcCreateObjectResponse,
+    "GenericSvcDeleteObjectRequest": GenericSvcDeleteObjectRequest,
     "GenericSvcErrorResponse": GenericSvcErrorResponse,
     "GenericSvcGenericObject": GenericSvcGenericObject,
     "GenericSvcGenericObjectCreateFields": GenericSvcGenericObjectCreateFields,
+    "GenericSvcQueryRequest": GenericSvcQueryRequest,
     "GenericSvcQueryResponse": GenericSvcQueryResponse,
+    "GenericSvcUpdateObjectRequest": GenericSvcUpdateObjectRequest,
     "GenericSvcUpsertObjectRequest": GenericSvcUpsertObjectRequest,
     "GenericSvcUpsertObjectResponse": GenericSvcUpsertObjectResponse,
     "ModelSvcArchitectures": ModelSvcArchitectures,
@@ -282,6 +316,7 @@ let typeMap = {
     "PromptSvcAddPromptRequest": PromptSvcAddPromptRequest,
     "PromptSvcAddPromptResponse": PromptSvcAddPromptResponse,
     "PromptSvcErrorResponse": PromptSvcErrorResponse,
+    "PromptSvcListPromptsRequest": PromptSvcListPromptsRequest,
     "PromptSvcListPromptsResponse": PromptSvcListPromptsResponse,
     "PromptSvcPrompt": PromptSvcPrompt,
     "PromptSvcRemovePromptRequest": PromptSvcRemovePromptRequest,
@@ -298,6 +333,7 @@ let typeMap = {
     "UserSvcGetPermissionsResponse": UserSvcGetPermissionsResponse,
     "UserSvcGetPublicKeyResponse": UserSvcGetPublicKeyResponse,
     "UserSvcGetRolesResponse": UserSvcGetRolesResponse,
+    "UserSvcGetUsersRequest": UserSvcGetUsersRequest,
     "UserSvcGetUsersResponse": UserSvcGetUsersResponse,
     "UserSvcIsAuthorizedRequest": UserSvcIsAuthorizedRequest,
     "UserSvcIsAuthorizedResponse": UserSvcIsAuthorizedResponse,

@@ -1,7 +1,7 @@
 /*
 Singulatron
 
-Run and develop self-hosted AI apps. Your programmable in-house GPT. The Firebase for the AI age.
+AI management and development platform.
 
 API version: 0.2
 Contact: sales@singulatron.com
@@ -184,11 +184,11 @@ func (a *PromptSvcAPIService) AddPromptExecute(r ApiAddPromptRequest) (*PromptSv
 type ApiGetPromptsRequest struct {
 	ctx context.Context
 	ApiService *PromptSvcAPIService
-	request *map[string]interface{}
+	request *PromptSvcListPromptsRequest
 }
 
 // List Prompts Request
-func (r ApiGetPromptsRequest) Request(request map[string]interface{}) ApiGetPromptsRequest {
+func (r ApiGetPromptsRequest) Request(request PromptSvcListPromptsRequest) ApiGetPromptsRequest {
 	r.request = &request
 	return r
 }

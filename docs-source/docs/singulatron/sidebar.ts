@@ -181,7 +181,7 @@ const sidebar: SidebarsConfig = {
         {
           type: "doc",
           id: "singulatron/query",
-          label: "Find Generic Objects",
+          label: "Query Generic Objects",
           className: "api-method post",
         },
         {

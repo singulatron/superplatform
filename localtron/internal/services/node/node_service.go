@@ -18,6 +18,8 @@ import (
 	"github.com/pkg/errors"
 
 	nodetypes "github.com/singulatron/singulatron/localtron/internal/services/node/types"
+	sdk "github.com/singulatron/singulatron/sdk/go"
+	"github.com/singulatron/singulatron/sdk/go/datastore"
 	"github.com/singulatron/singulatron/sdk/go/router"
 )
 
@@ -25,16 +27,24 @@ type NodeService struct {
 	Hostname string
 
 	router *router.Router
+
+	credentialStore datastore.DataStore
 }
 
-func NewNodeService(router *router.Router) (*NodeService, error) {
+func NewNodeService(router *router.Router, datastoreFactory func(tableName string, instance any) (datastore.DataStore, error)) (*NodeService, error) {
 	hostname, err := os.Hostname()
 	if err != nil {
 		return nil, err
 	}
+	credentialStore, err := datastoreFactory("nodeSvcCredentials", &sdk.Credential{})
+	if err != nil {
+		return nil, err
+	}
+
 	service := &NodeService{
-		Hostname: hostname,
-		router:   router,
+		Hostname:        hostname,
+		router:          router,
+		credentialStore: credentialStore,
 	}
 
 	return service, nil

@@ -1,6 +1,6 @@
 /**
  * Singulatron
- * Run and develop self-hosted AI apps. Your programmable in-house GPT. The Firebase for the AI age.
+ * AI management and development platform.
  *
  * The version of the OpenAPI document: 0.2
  * Contact: sales@singulatron.com
@@ -10,12 +10,12 @@
  * Do not edit the class manually.
  */
 import * as runtime from '../runtime';
-import type { PromptSvcAddPromptRequest, PromptSvcAddPromptResponse, PromptSvcListPromptsResponse, PromptSvcRemovePromptRequest } from '../models/index';
+import type { PromptSvcAddPromptRequest, PromptSvcAddPromptResponse, PromptSvcListPromptsRequest, PromptSvcListPromptsResponse, PromptSvcRemovePromptRequest } from '../models/index';
 export interface AddPromptRequest {
     request: PromptSvcAddPromptRequest;
 }
 export interface GetPromptsRequest {
-    request?: object;
+    request?: PromptSvcListPromptsRequest;
 }
 export interface RemovePromptRequest {
     request: PromptSvcRemovePromptRequest;

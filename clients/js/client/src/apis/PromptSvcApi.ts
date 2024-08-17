@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Singulatron
- * Run and develop self-hosted AI apps. Your programmable in-house GPT. The Firebase for the AI age.
+ * AI management and development platform.
  *
  * The version of the OpenAPI document: 0.2
  * Contact: sales@singulatron.com
@@ -18,6 +18,7 @@ import type {
   PromptSvcAddPromptRequest,
   PromptSvcAddPromptResponse,
   PromptSvcErrorResponse,
+  PromptSvcListPromptsRequest,
   PromptSvcListPromptsResponse,
   PromptSvcRemovePromptRequest,
 } from '../models/index';
@@ -28,6 +29,8 @@ import {
     PromptSvcAddPromptResponseToJSON,
     PromptSvcErrorResponseFromJSON,
     PromptSvcErrorResponseToJSON,
+    PromptSvcListPromptsRequestFromJSON,
+    PromptSvcListPromptsRequestToJSON,
     PromptSvcListPromptsResponseFromJSON,
     PromptSvcListPromptsResponseToJSON,
     PromptSvcRemovePromptRequestFromJSON,
@@ -39,7 +42,7 @@ export interface AddPromptRequest {
 }
 
 export interface GetPromptsRequest {
-    request?: object;
+    request?: PromptSvcListPromptsRequest;
 }
 
 export interface RemovePromptRequest {
@@ -117,7 +120,7 @@ export class PromptSvcApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['request'] as any,
+            body: PromptSvcListPromptsRequestToJSON(requestParameters['request']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => PromptSvcListPromptsResponseFromJSON(jsonValue));

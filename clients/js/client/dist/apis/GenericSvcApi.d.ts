@@ -1,6 +1,6 @@
 /**
  * Singulatron
- * Run and develop self-hosted AI apps. Your programmable in-house GPT. The Firebase for the AI age.
+ * AI management and development platform.
  *
  * The version of the OpenAPI document: 0.2
  * Contact: sales@singulatron.com
@@ -10,19 +10,19 @@
  * Do not edit the class manually.
  */
 import * as runtime from '../runtime';
-import type { GenericSvcCreateObjectRequest, GenericSvcCreateObjectResponse, GenericSvcQueryResponse, GenericSvcUpsertObjectRequest, GenericSvcUpsertObjectResponse } from '../models/index';
+import type { GenericSvcCreateObjectRequest, GenericSvcCreateObjectResponse, GenericSvcDeleteObjectRequest, GenericSvcQueryRequest, GenericSvcQueryResponse, GenericSvcUpdateObjectRequest, GenericSvcUpsertObjectRequest, GenericSvcUpsertObjectResponse } from '../models/index';
 export interface CreateObjectRequest {
     body: GenericSvcCreateObjectRequest;
 }
 export interface DeleteObjectsRequest {
     objectId: string;
-    body: object;
+    body: GenericSvcDeleteObjectRequest;
 }
 export interface QueryRequest {
-    body?: object;
+    body?: GenericSvcQueryRequest;
 }
 export interface UpdateObjectsRequest {
-    body: object;
+    body: GenericSvcUpdateObjectRequest;
 }
 export interface UpsertObjectRequest {
     objectId: string;
@@ -54,12 +54,12 @@ export declare class GenericSvcApi extends runtime.BaseAPI {
     deleteObjects(requestParameters: DeleteObjectsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
     /**
      * Retrieves objects from a specified table based on search criteria. Requires authorization and user authentication.   Use helper functions in your respective client library such as condition constructors (`equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
-     * Find Generic Objects
+     * Query Generic Objects
      */
     queryRaw(requestParameters: QueryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GenericSvcQueryResponse>>;
     /**
      * Retrieves objects from a specified table based on search criteria. Requires authorization and user authentication.   Use helper functions in your respective client library such as condition constructors (`equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
-     * Find Generic Objects
+     * Query Generic Objects
      */
     query(requestParameters?: QueryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GenericSvcQueryResponse>;
     /**

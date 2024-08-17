@@ -1,6 +1,6 @@
 /**
  * Singulatron
- * Run and develop self-hosted AI apps. Your programmable in-house GPT. The Firebase for the AI age.
+ * AI management and development platform.
  *
  * The version of the OpenAPI document: 0.2
  * Contact: sales@singulatron.com
@@ -17,8 +17,11 @@ import http from 'http';
 /* tslint:disable:no-unused-locals */
 import { GenericSvcCreateObjectRequest } from '../model/genericSvcCreateObjectRequest';
 import { GenericSvcCreateObjectResponse } from '../model/genericSvcCreateObjectResponse';
+import { GenericSvcDeleteObjectRequest } from '../model/genericSvcDeleteObjectRequest';
 import { GenericSvcErrorResponse } from '../model/genericSvcErrorResponse';
+import { GenericSvcQueryRequest } from '../model/genericSvcQueryRequest';
 import { GenericSvcQueryResponse } from '../model/genericSvcQueryResponse';
+import { GenericSvcUpdateObjectRequest } from '../model/genericSvcUpdateObjectRequest';
 import { GenericSvcUpsertObjectRequest } from '../model/genericSvcUpsertObjectRequest';
 import { GenericSvcUpsertObjectResponse } from '../model/genericSvcUpsertObjectResponse';
 
@@ -172,7 +175,7 @@ export class GenericSvcApi {
      * @param objectId Object ID
      * @param body Delete request payload
      */
-    public async deleteObjects (objectId: string, body: object, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: object;  }> {
+    public async deleteObjects (objectId: string, body: GenericSvcDeleteObjectRequest, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: object;  }> {
         const localVarPath = this.basePath + '/generic-svc/objects/delete'
             .replace('{' + 'objectId' + '}', encodeURIComponent(String(objectId)));
         let localVarQueryParameters: any = {};
@@ -207,7 +210,7 @@ export class GenericSvcApi {
             uri: localVarPath,
             useQuerystring: this._useQuerystring,
             json: true,
-            body: ObjectSerializer.serialize(body, "object")
+            body: ObjectSerializer.serialize(body, "GenericSvcDeleteObjectRequest")
         };
 
         let authenticationPromise = Promise.resolve();
@@ -247,10 +250,10 @@ export class GenericSvcApi {
     }
     /**
      * Retrieves objects from a specified table based on search criteria. Requires authorization and user authentication.   Use helper functions in your respective client library such as condition constructors (`equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
-     * @summary Find Generic Objects
+     * @summary Query Generic Objects
      * @param body Query Request
      */
-    public async query (body?: object, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: GenericSvcQueryResponse;  }> {
+    public async query (body?: GenericSvcQueryRequest, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: GenericSvcQueryResponse;  }> {
         const localVarPath = this.basePath + '/generic-svc/objects';
         let localVarQueryParameters: any = {};
         let localVarHeaderParams: any = (<any>Object).assign({}, this._defaultHeaders);
@@ -274,7 +277,7 @@ export class GenericSvcApi {
             uri: localVarPath,
             useQuerystring: this._useQuerystring,
             json: true,
-            body: ObjectSerializer.serialize(body, "object")
+            body: ObjectSerializer.serialize(body, "GenericSvcQueryRequest")
         };
 
         let authenticationPromise = Promise.resolve();
@@ -317,7 +320,7 @@ export class GenericSvcApi {
      * @summary Update Generic Objects
      * @param body Update request payload
      */
-    public async updateObjects (body: object, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: object;  }> {
+    public async updateObjects (body: GenericSvcUpdateObjectRequest, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: object;  }> {
         const localVarPath = this.basePath + '/generic-svc/objects/update';
         let localVarQueryParameters: any = {};
         let localVarHeaderParams: any = (<any>Object).assign({}, this._defaultHeaders);
@@ -346,7 +349,7 @@ export class GenericSvcApi {
             uri: localVarPath,
             useQuerystring: this._useQuerystring,
             json: true,
-            body: ObjectSerializer.serialize(body, "object")
+            body: ObjectSerializer.serialize(body, "GenericSvcUpdateObjectRequest")
         };
 
         let authenticationPromise = Promise.resolve();

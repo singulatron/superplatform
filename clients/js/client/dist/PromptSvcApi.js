@@ -3,16 +3,24 @@
 var runtime = require('./runtime2.js');
 var PromptSvcAddPromptRequest = require('./PromptSvcAddPromptRequest.js');
 var PromptSvcAddPromptResponse = require('./PromptSvcAddPromptResponse.js');
+var PromptSvcListPromptsRequest = require('./PromptSvcListPromptsRequest.js');
 var PromptSvcListPromptsResponse = require('./PromptSvcListPromptsResponse.js');
 var PromptSvcRemovePromptRequest = require('./PromptSvcRemovePromptRequest.js');
 require('./PromptSvcPrompt.js');
 require('./PromptSvcPromptStatus.js');
+require('./DatastoreQuery.js');
+require('./DatastoreCondition.js');
+require('./DatastoreEqualCondition.js');
+require('./DatastoreFieldSelector.js');
+require('./DatastoreContainsCondition.js');
+require('./DatastoreStartsWithCondition.js');
+require('./DatastoreOrderBy.js');
 
 /* tslint:disable */
 /* eslint-disable */
 /**
  * Singulatron
- * Run and develop self-hosted AI apps. Your programmable in-house GPT. The Firebase for the AI age.
+ * AI management and development platform.
  *
  * The version of the OpenAPI document: 0.2
  * Contact: sales@singulatron.com
@@ -77,7 +85,7 @@ class PromptSvcApi extends runtime.BaseAPI {
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,
-                body: requestParameters['request'],
+                body: PromptSvcListPromptsRequest.PromptSvcListPromptsRequestToJSON(requestParameters['request']),
             }, initOverrides);
             return new runtime.JSONApiResponse(response, (jsonValue) => PromptSvcListPromptsResponse.PromptSvcListPromptsResponseFromJSON(jsonValue));
         });

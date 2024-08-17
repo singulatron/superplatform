@@ -37,12 +37,12 @@ func NewPromptService(
 	llmClient llm.ClientI,
 	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error),
 ) (*PromptService, error) {
-	promptsStore, err := datastoreFactory("promptPrompts", &prompttypes.Prompt{})
+	promptsStore, err := datastoreFactory("promptSvcPrompts", &prompttypes.Prompt{})
 	if err != nil {
 		return nil, err
 	}
 
-	credentialStore, err := datastoreFactory("promptCredentials", &sdk.Credential{})
+	credentialStore, err := datastoreFactory("promptSvcCredentials", &sdk.Credential{})
 	if err != nil {
 		return nil, err
 	}

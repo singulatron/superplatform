@@ -33,6 +33,13 @@ docs/ConfigSvcDownloadServiceConfig.md
 docs/ConfigSvcGetConfigResponse.md
 docs/ConfigSvcModelServiceConfig.md
 docs/ConfigSvcSaveConfigRequest.md
+docs/DatastoreCondition.md
+docs/DatastoreContainsCondition.md
+docs/DatastoreEqualCondition.md
+docs/DatastoreFieldSelector.md
+docs/DatastoreOrderBy.md
+docs/DatastoreQuery.md
+docs/DatastoreStartsWithCondition.md
 docs/DockerSvcAPI.md
 docs/DockerSvcContainerIsRunningResponse.md
 docs/DockerSvcDockerInfo.md
@@ -57,10 +64,13 @@ docs/FirehoseSvcPublishRequest.md
 docs/GenericSvcAPI.md
 docs/GenericSvcCreateObjectRequest.md
 docs/GenericSvcCreateObjectResponse.md
+docs/GenericSvcDeleteObjectRequest.md
 docs/GenericSvcErrorResponse.md
 docs/GenericSvcGenericObject.md
 docs/GenericSvcGenericObjectCreateFields.md
+docs/GenericSvcQueryRequest.md
 docs/GenericSvcQueryResponse.md
+docs/GenericSvcUpdateObjectRequest.md
 docs/GenericSvcUpsertObjectRequest.md
 docs/GenericSvcUpsertObjectResponse.md
 docs/ModelSvcAPI.md
@@ -94,6 +104,7 @@ docs/PromptSvcAPI.md
 docs/PromptSvcAddPromptRequest.md
 docs/PromptSvcAddPromptResponse.md
 docs/PromptSvcErrorResponse.md
+docs/PromptSvcListPromptsRequest.md
 docs/PromptSvcListPromptsResponse.md
 docs/PromptSvcPrompt.md
 docs/PromptSvcPromptStatus.md
@@ -112,6 +123,7 @@ docs/UserSvcErrorResponse.md
 docs/UserSvcGetPermissionsResponse.md
 docs/UserSvcGetPublicKeyResponse.md
 docs/UserSvcGetRolesResponse.md
+docs/UserSvcGetUsersRequest.md
 docs/UserSvcGetUsersResponse.md
 docs/UserSvcIsAuthorizedRequest.md
 docs/UserSvcIsAuthorizedResponse.md
@@ -145,6 +157,13 @@ model_config_svc_download_service_config.go
 model_config_svc_get_config_response.go
 model_config_svc_model_service_config.go
 model_config_svc_save_config_request.go
+model_datastore_condition.go
+model_datastore_contains_condition.go
+model_datastore_equal_condition.go
+model_datastore_field_selector.go
+model_datastore_order_by.go
+model_datastore_query.go
+model_datastore_starts_with_condition.go
 model_docker_svc_container_is_running_response.go
 model_docker_svc_docker_info.go
 model_docker_svc_error_response.go
@@ -165,10 +184,13 @@ model_firehose_svc_event.go
 model_firehose_svc_publish_request.go
 model_generic_svc_create_object_request.go
 model_generic_svc_create_object_response.go
+model_generic_svc_delete_object_request.go
 model_generic_svc_error_response.go
 model_generic_svc_generic_object.go
 model_generic_svc_generic_object_create_fields.go
+model_generic_svc_query_request.go
 model_generic_svc_query_response.go
+model_generic_svc_update_object_request.go
 model_generic_svc_upsert_object_request.go
 model_generic_svc_upsert_object_response.go
 model_model_svc_architectures.go
@@ -198,6 +220,7 @@ model_policy_svc_upsert_instance_request.go
 model_prompt_svc_add_prompt_request.go
 model_prompt_svc_add_prompt_response.go
 model_prompt_svc_error_response.go
+model_prompt_svc_list_prompts_request.go
 model_prompt_svc_list_prompts_response.go
 model_prompt_svc_prompt.go
 model_prompt_svc_prompt_status.go
@@ -215,6 +238,7 @@ model_user_svc_error_response.go
 model_user_svc_get_permissions_response.go
 model_user_svc_get_public_key_response.go
 model_user_svc_get_roles_response.go
+model_user_svc_get_users_request.go
 model_user_svc_get_users_response.go
 model_user_svc_is_authorized_request.go
 model_user_svc_is_authorized_response.go

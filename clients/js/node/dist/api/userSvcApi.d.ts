@@ -1,6 +1,6 @@
 /**
  * Singulatron
- * Run and develop self-hosted AI apps. Your programmable in-house GPT. The Firebase for the AI age.
+ * AI management and development platform.
  *
  * The version of the OpenAPI document: 0.2
  * Contact: sales@singulatron.com
@@ -20,6 +20,7 @@ import { UserSvcCreateUserRequest } from '../model/userSvcCreateUserRequest';
 import { UserSvcGetPermissionsResponse } from '../model/userSvcGetPermissionsResponse';
 import { UserSvcGetPublicKeyResponse } from '../model/userSvcGetPublicKeyResponse';
 import { UserSvcGetRolesResponse } from '../model/userSvcGetRolesResponse';
+import { UserSvcGetUsersRequest } from '../model/userSvcGetUsersRequest';
 import { UserSvcGetUsersResponse } from '../model/userSvcGetUsersResponse';
 import { UserSvcIsAuthorizedRequest } from '../model/userSvcIsAuthorizedRequest';
 import { UserSvcIsAuthorizedResponse } from '../model/userSvcIsAuthorizedResponse';
@@ -215,7 +216,7 @@ export declare class UserSvcApi {
      * @summary List Users
      * @param request Get Users Request
      */
-    getUsers(request?: object, options?: {
+    getUsers(request?: UserSvcGetUsersRequest, options?: {
         headers: {
             [name: string]: string;
         };

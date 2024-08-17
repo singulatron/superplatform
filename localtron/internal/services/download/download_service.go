@@ -45,7 +45,7 @@ func NewDownloadService(
 ) (*DownloadService, error) {
 	home, _ := os.UserHomeDir()
 
-	credentialStore, err := datastoreFactory("downloadCredentials", &sdk.Credential{})
+	credentialStore, err := datastoreFactory("downloadSvcCredentials", &sdk.Credential{})
 	if err != nil {
 		return nil, err
 	}

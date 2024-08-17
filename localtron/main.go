@@ -27,7 +27,7 @@ const port = router.DefaultPort
 
 // @title           Singulatron
 // @version         0.2
-// @description     Run and develop self-hosted AI apps. Your programmable in-house GPT. The Firebase for the AI age.
+// @description     AI management and development platform.
 // @termsOfService  http://swagger.io/terms/
 
 // @contact.name   API Support

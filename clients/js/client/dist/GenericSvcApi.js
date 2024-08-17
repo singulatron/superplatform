@@ -3,17 +3,27 @@
 var runtime = require('./runtime2.js');
 var GenericSvcCreateObjectRequest = require('./GenericSvcCreateObjectRequest.js');
 var GenericSvcCreateObjectResponse = require('./GenericSvcCreateObjectResponse.js');
+var GenericSvcDeleteObjectRequest = require('./GenericSvcDeleteObjectRequest.js');
+var GenericSvcQueryRequest = require('./GenericSvcQueryRequest.js');
 var GenericSvcQueryResponse = require('./GenericSvcQueryResponse.js');
+var GenericSvcUpdateObjectRequest = require('./GenericSvcUpdateObjectRequest.js');
 var GenericSvcUpsertObjectRequest = require('./GenericSvcUpsertObjectRequest.js');
 var GenericSvcUpsertObjectResponse = require('./GenericSvcUpsertObjectResponse.js');
 require('./GenericSvcGenericObjectCreateFields.js');
 require('./GenericSvcGenericObject.js');
+require('./DatastoreCondition.js');
+require('./DatastoreEqualCondition.js');
+require('./DatastoreFieldSelector.js');
+require('./DatastoreContainsCondition.js');
+require('./DatastoreStartsWithCondition.js');
+require('./DatastoreQuery.js');
+require('./DatastoreOrderBy.js');
 
 /* tslint:disable */
 /* eslint-disable */
 /**
  * Singulatron
- * Run and develop self-hosted AI apps. Your programmable in-house GPT. The Firebase for the AI age.
+ * AI management and development platform.
  *
  * The version of the OpenAPI document: 0.2
  * Contact: sales@singulatron.com
@@ -84,7 +94,7 @@ class GenericSvcApi extends runtime.BaseAPI {
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,
-                body: requestParameters['body'],
+                body: GenericSvcDeleteObjectRequest.GenericSvcDeleteObjectRequestToJSON(requestParameters['body']),
             }, initOverrides);
             return new runtime.JSONApiResponse(response);
         });
@@ -101,7 +111,7 @@ class GenericSvcApi extends runtime.BaseAPI {
     }
     /**
      * Retrieves objects from a specified table based on search criteria. Requires authorization and user authentication.   Use helper functions in your respective client library such as condition constructors (`equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
-     * Find Generic Objects
+     * Query Generic Objects
      */
     queryRaw(requestParameters, initOverrides) {
         return runtime.__awaiter(this, void 0, void 0, function* () {
@@ -116,14 +126,14 @@ class GenericSvcApi extends runtime.BaseAPI {
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,
-                body: requestParameters['body'],
+                body: GenericSvcQueryRequest.GenericSvcQueryRequestToJSON(requestParameters['body']),
             }, initOverrides);
             return new runtime.JSONApiResponse(response, (jsonValue) => GenericSvcQueryResponse.GenericSvcQueryResponseFromJSON(jsonValue));
         });
     }
     /**
      * Retrieves objects from a specified table based on search criteria. Requires authorization and user authentication.   Use helper functions in your respective client library such as condition constructors (`equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
-     * Find Generic Objects
+     * Query Generic Objects
      */
     query() {
         return runtime.__awaiter(this, arguments, void 0, function* (requestParameters = {}, initOverrides) {
@@ -151,7 +161,7 @@ class GenericSvcApi extends runtime.BaseAPI {
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,
-                body: requestParameters['body'],
+                body: GenericSvcUpdateObjectRequest.GenericSvcUpdateObjectRequestToJSON(requestParameters['body']),
             }, initOverrides);
             return new runtime.JSONApiResponse(response);
         });

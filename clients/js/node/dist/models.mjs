@@ -14,6 +14,13 @@ import { ConfigSvcDownloadServiceConfig } from './configSvcDownloadServiceConfig
 import { ConfigSvcGetConfigResponse } from './configSvcGetConfigResponse.mjs';
 import { ConfigSvcModelServiceConfig } from './configSvcModelServiceConfig.mjs';
 import { ConfigSvcSaveConfigRequest } from './configSvcSaveConfigRequest.mjs';
+import { DatastoreCondition } from './datastoreCondition.mjs';
+import { DatastoreContainsCondition } from './datastoreContainsCondition.mjs';
+import { DatastoreEqualCondition } from './datastoreEqualCondition.mjs';
+import { DatastoreFieldSelector } from './datastoreFieldSelector.mjs';
+import { DatastoreOrderBy } from './datastoreOrderBy.mjs';
+import { DatastoreQuery } from './datastoreQuery.mjs';
+import { DatastoreStartsWithCondition } from './datastoreStartsWithCondition.mjs';
 import { DockerSvcContainerIsRunningResponse } from './dockerSvcContainerIsRunningResponse.mjs';
 import { DockerSvcDockerInfo } from './dockerSvcDockerInfo.mjs';
 import { DockerSvcErrorResponse } from './dockerSvcErrorResponse.mjs';
@@ -34,10 +41,13 @@ import { FirehoseSvcEvent } from './firehoseSvcEvent.mjs';
 import { FirehoseSvcPublishRequest } from './firehoseSvcPublishRequest.mjs';
 import { GenericSvcCreateObjectRequest } from './genericSvcCreateObjectRequest.mjs';
 import { GenericSvcCreateObjectResponse } from './genericSvcCreateObjectResponse.mjs';
+import { GenericSvcDeleteObjectRequest } from './genericSvcDeleteObjectRequest.mjs';
 import { GenericSvcErrorResponse } from './genericSvcErrorResponse.mjs';
 import { GenericSvcGenericObject } from './genericSvcGenericObject.mjs';
 import { GenericSvcGenericObjectCreateFields } from './genericSvcGenericObjectCreateFields.mjs';
+import { GenericSvcQueryRequest } from './genericSvcQueryRequest.mjs';
 import { GenericSvcQueryResponse } from './genericSvcQueryResponse.mjs';
+import { GenericSvcUpdateObjectRequest } from './genericSvcUpdateObjectRequest.mjs';
 import { GenericSvcUpsertObjectRequest } from './genericSvcUpsertObjectRequest.mjs';
 import { GenericSvcUpsertObjectResponse } from './genericSvcUpsertObjectResponse.mjs';
 import { ModelSvcArchitectures } from './modelSvcArchitectures.mjs';
@@ -67,6 +77,7 @@ import { PolicySvcUpsertInstanceRequest } from './policySvcUpsertInstanceRequest
 import { PromptSvcAddPromptRequest } from './promptSvcAddPromptRequest.mjs';
 import { PromptSvcAddPromptResponse } from './promptSvcAddPromptResponse.mjs';
 import { PromptSvcErrorResponse } from './promptSvcErrorResponse.mjs';
+import { PromptSvcListPromptsRequest } from './promptSvcListPromptsRequest.mjs';
 import { PromptSvcListPromptsResponse } from './promptSvcListPromptsResponse.mjs';
 import { PromptSvcPrompt } from './promptSvcPrompt.mjs';
 import { PromptSvcPromptStatus } from './promptSvcPromptStatus.mjs';
@@ -84,6 +95,7 @@ import { UserSvcErrorResponse } from './userSvcErrorResponse.mjs';
 import { UserSvcGetPermissionsResponse } from './userSvcGetPermissionsResponse.mjs';
 import { UserSvcGetPublicKeyResponse } from './userSvcGetPublicKeyResponse.mjs';
 import { UserSvcGetRolesResponse } from './userSvcGetRolesResponse.mjs';
+import { UserSvcGetUsersRequest } from './userSvcGetUsersRequest.mjs';
 import { UserSvcGetUsersResponse } from './userSvcGetUsersResponse.mjs';
 import { UserSvcIsAuthorizedRequest } from './userSvcIsAuthorizedRequest.mjs';
 import { UserSvcIsAuthorizedResponse } from './userSvcIsAuthorizedResponse.mjs';
@@ -133,6 +145,13 @@ let typeMap = {
     "ConfigSvcGetConfigResponse": ConfigSvcGetConfigResponse,
     "ConfigSvcModelServiceConfig": ConfigSvcModelServiceConfig,
     "ConfigSvcSaveConfigRequest": ConfigSvcSaveConfigRequest,
+    "DatastoreCondition": DatastoreCondition,
+    "DatastoreContainsCondition": DatastoreContainsCondition,
+    "DatastoreEqualCondition": DatastoreEqualCondition,
+    "DatastoreFieldSelector": DatastoreFieldSelector,
+    "DatastoreOrderBy": DatastoreOrderBy,
+    "DatastoreQuery": DatastoreQuery,
+    "DatastoreStartsWithCondition": DatastoreStartsWithCondition,
     "DockerSvcContainerIsRunningResponse": DockerSvcContainerIsRunningResponse,
     "DockerSvcDockerInfo": DockerSvcDockerInfo,
     "DockerSvcErrorResponse": DockerSvcErrorResponse,
@@ -153,10 +172,13 @@ let typeMap = {
     "FirehoseSvcPublishRequest": FirehoseSvcPublishRequest,
     "GenericSvcCreateObjectRequest": GenericSvcCreateObjectRequest,
     "GenericSvcCreateObjectResponse": GenericSvcCreateObjectResponse,
+    "GenericSvcDeleteObjectRequest": GenericSvcDeleteObjectRequest,
     "GenericSvcErrorResponse": GenericSvcErrorResponse,
     "GenericSvcGenericObject": GenericSvcGenericObject,
     "GenericSvcGenericObjectCreateFields": GenericSvcGenericObjectCreateFields,
+    "GenericSvcQueryRequest": GenericSvcQueryRequest,
     "GenericSvcQueryResponse": GenericSvcQueryResponse,
+    "GenericSvcUpdateObjectRequest": GenericSvcUpdateObjectRequest,
     "GenericSvcUpsertObjectRequest": GenericSvcUpsertObjectRequest,
     "GenericSvcUpsertObjectResponse": GenericSvcUpsertObjectResponse,
     "ModelSvcArchitectures": ModelSvcArchitectures,
@@ -183,6 +205,7 @@ let typeMap = {
     "PromptSvcAddPromptRequest": PromptSvcAddPromptRequest,
     "PromptSvcAddPromptResponse": PromptSvcAddPromptResponse,
     "PromptSvcErrorResponse": PromptSvcErrorResponse,
+    "PromptSvcListPromptsRequest": PromptSvcListPromptsRequest,
     "PromptSvcListPromptsResponse": PromptSvcListPromptsResponse,
     "PromptSvcPrompt": PromptSvcPrompt,
     "PromptSvcRemovePromptRequest": PromptSvcRemovePromptRequest,
@@ -199,6 +222,7 @@ let typeMap = {
     "UserSvcGetPermissionsResponse": UserSvcGetPermissionsResponse,
     "UserSvcGetPublicKeyResponse": UserSvcGetPublicKeyResponse,
     "UserSvcGetRolesResponse": UserSvcGetRolesResponse,
+    "UserSvcGetUsersRequest": UserSvcGetUsersRequest,
     "UserSvcGetUsersResponse": UserSvcGetUsersResponse,
     "UserSvcIsAuthorizedRequest": UserSvcIsAuthorizedRequest,
     "UserSvcIsAuthorizedResponse": UserSvcIsAuthorizedResponse,
@@ -398,4 +422,4 @@ class VoidAuth {
     }
 }
 
-export { ApiKeyAuth, ChatSvcAddMessageRequest, ChatSvcAddThreadRequest, ChatSvcAddThreadResponse, ChatSvcAsset, ChatSvcGetMessagesResponse, ChatSvcGetThreadResponse, ChatSvcGetThreadsResponse, ChatSvcMessage, ChatSvcThread, ChatSvcUpdateThreadRequest, ConfigSvcAppServiceConfig, ConfigSvcConfig, ConfigSvcDownloadServiceConfig, ConfigSvcGetConfigResponse, ConfigSvcModelServiceConfig, ConfigSvcSaveConfigRequest, DockerSvcContainerIsRunningResponse, DockerSvcDockerInfo, DockerSvcErrorResponse, DockerSvcGetContainerSummaryResponse, DockerSvcGetDockerHostResponse, DockerSvcGetInfoResponse, DockerSvcLaunchContainerRequest, DockerSvcLaunchContainerResponse, DockerSvcLaunchInfo, DockerSvcLaunchOptions, DownloadSvcDownloadDetails, DownloadSvcDownloadRequest, DownloadSvcDownloadsResponse, DownloadSvcErrorResponse, DownloadSvcGetDownloadResponse, FirehoseSvcErrorResponse, FirehoseSvcEvent, FirehoseSvcPublishRequest, GenericSvcCreateObjectRequest, GenericSvcCreateObjectResponse, GenericSvcErrorResponse, GenericSvcGenericObject, GenericSvcGenericObjectCreateFields, GenericSvcQueryResponse, GenericSvcUpsertObjectRequest, GenericSvcUpsertObjectResponse, HttpBasicAuth, HttpBearerAuth, ModelSvcArchitectures, ModelSvcContainer, ModelSvcErrorResponse, ModelSvcGetModelResponse, ModelSvcListResponse, ModelSvcModel, ModelSvcModelStatus, ModelSvcPlatform, ModelSvcStatusResponse, NodeSvcErrorResponse, NodeSvcGPU, NodeSvcListNodesResponse, NodeSvcNode, NodeSvcProcess, OAuth, ObjectSerializer, PolicySvcBlocklistParameters, PolicySvcCheckRequest, PolicySvcCheckResponse, PolicySvcEntity, PolicySvcErrorResponse, PolicySvcInstance, PolicySvcRateLimitParameters, PolicySvcScope, PolicySvcTemplateId, PolicySvcUpsertInstanceRequest, PromptSvcAddPromptRequest, PromptSvcAddPromptResponse, PromptSvcErrorResponse, PromptSvcListPromptsResponse, PromptSvcPrompt, PromptSvcPromptStatus, PromptSvcRemovePromptRequest, UserSvcAddUserToOrganizationRequest, UserSvcAuthToken, UserSvcChangePasswordAdminRequest, UserSvcChangePasswordRequest, UserSvcContact, UserSvcCreateOrganizationRequest, UserSvcCreateRoleRequest, UserSvcCreateRoleResponse, UserSvcCreateUserRequest, UserSvcErrorResponse, UserSvcGetPermissionsResponse, UserSvcGetPublicKeyResponse, UserSvcGetRolesResponse, UserSvcGetUsersResponse, UserSvcIsAuthorizedRequest, UserSvcIsAuthorizedResponse, UserSvcLoginRequest, UserSvcLoginResponse, UserSvcPermission, UserSvcReadUserByTokenRequest, UserSvcReadUserByTokenResponse, UserSvcRegisterRequest, UserSvcRole, UserSvcSaveProfileRequest, UserSvcSetRolePermissionsRequest, UserSvcUpserPermissionRequest, UserSvcUser, VoidAuth };
+export { ApiKeyAuth, ChatSvcAddMessageRequest, ChatSvcAddThreadRequest, ChatSvcAddThreadResponse, ChatSvcAsset, ChatSvcGetMessagesResponse, ChatSvcGetThreadResponse, ChatSvcGetThreadsResponse, ChatSvcMessage, ChatSvcThread, ChatSvcUpdateThreadRequest, ConfigSvcAppServiceConfig, ConfigSvcConfig, ConfigSvcDownloadServiceConfig, ConfigSvcGetConfigResponse, ConfigSvcModelServiceConfig, ConfigSvcSaveConfigRequest, DatastoreCondition, DatastoreContainsCondition, DatastoreEqualCondition, DatastoreFieldSelector, DatastoreOrderBy, DatastoreQuery, DatastoreStartsWithCondition, DockerSvcContainerIsRunningResponse, DockerSvcDockerInfo, DockerSvcErrorResponse, DockerSvcGetContainerSummaryResponse, DockerSvcGetDockerHostResponse, DockerSvcGetInfoResponse, DockerSvcLaunchContainerRequest, DockerSvcLaunchContainerResponse, DockerSvcLaunchInfo, DockerSvcLaunchOptions, DownloadSvcDownloadDetails, DownloadSvcDownloadRequest, DownloadSvcDownloadsResponse, DownloadSvcErrorResponse, DownloadSvcGetDownloadResponse, FirehoseSvcErrorResponse, FirehoseSvcEvent, FirehoseSvcPublishRequest, GenericSvcCreateObjectRequest, GenericSvcCreateObjectResponse, GenericSvcDeleteObjectRequest, GenericSvcErrorResponse, GenericSvcGenericObject, GenericSvcGenericObjectCreateFields, GenericSvcQueryRequest, GenericSvcQueryResponse, GenericSvcUpdateObjectRequest, GenericSvcUpsertObjectRequest, GenericSvcUpsertObjectResponse, HttpBasicAuth, HttpBearerAuth, ModelSvcArchitectures, ModelSvcContainer, ModelSvcErrorResponse, ModelSvcGetModelResponse, ModelSvcListResponse, ModelSvcModel, ModelSvcModelStatus, ModelSvcPlatform, ModelSvcStatusResponse, NodeSvcErrorResponse, NodeSvcGPU, NodeSvcListNodesResponse, NodeSvcNode, NodeSvcProcess, OAuth, ObjectSerializer, PolicySvcBlocklistParameters, PolicySvcCheckRequest, PolicySvcCheckResponse, PolicySvcEntity, PolicySvcErrorResponse, PolicySvcInstance, PolicySvcRateLimitParameters, PolicySvcScope, PolicySvcTemplateId, PolicySvcUpsertInstanceRequest, PromptSvcAddPromptRequest, PromptSvcAddPromptResponse, PromptSvcErrorResponse, PromptSvcListPromptsRequest, PromptSvcListPromptsResponse, PromptSvcPrompt, PromptSvcPromptStatus, PromptSvcRemovePromptRequest, UserSvcAddUserToOrganizationRequest, UserSvcAuthToken, UserSvcChangePasswordAdminRequest, UserSvcChangePasswordRequest, UserSvcContact, UserSvcCreateOrganizationRequest, UserSvcCreateRoleRequest, UserSvcCreateRoleResponse, UserSvcCreateUserRequest, UserSvcErrorResponse, UserSvcGetPermissionsResponse, UserSvcGetPublicKeyResponse, UserSvcGetRolesResponse, UserSvcGetUsersRequest, UserSvcGetUsersResponse, UserSvcIsAuthorizedRequest, UserSvcIsAuthorizedResponse, UserSvcLoginRequest, UserSvcLoginResponse, UserSvcPermission, UserSvcReadUserByTokenRequest, UserSvcReadUserByTokenResponse, UserSvcRegisterRequest, UserSvcRole, UserSvcSaveProfileRequest, UserSvcSetRolePermissionsRequest, UserSvcUpserPermissionRequest, UserSvcUser, VoidAuth };

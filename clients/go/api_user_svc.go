@@ -1,7 +1,7 @@
 /*
 Singulatron
 
-Run and develop self-hosted AI apps. Your programmable in-house GPT. The Firebase for the AI age.
+AI management and development platform.
 
 API version: 0.2
 Contact: sales@singulatron.com
@@ -1836,11 +1836,11 @@ func (a *UserSvcAPIService) GetRolesExecute(r ApiGetRolesRequest) (*UserSvcGetRo
 type ApiGetUsersRequest struct {
 	ctx context.Context
 	ApiService *UserSvcAPIService
-	request *map[string]interface{}
+	request *UserSvcGetUsersRequest
 }
 
 // Get Users Request
-func (r ApiGetUsersRequest) Request(request map[string]interface{}) ApiGetUsersRequest {
+func (r ApiGetUsersRequest) Request(request UserSvcGetUsersRequest) ApiGetUsersRequest {
 	r.request = &request
 	return r
 }

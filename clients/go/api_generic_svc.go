@@ -1,7 +1,7 @@
 /*
 Singulatron
 
-Run and develop self-hosted AI apps. Your programmable in-house GPT. The Firebase for the AI age.
+AI management and development platform.
 
 API version: 0.2
 Contact: sales@singulatron.com
@@ -185,11 +185,11 @@ type ApiDeleteObjectsRequest struct {
 	ctx context.Context
 	ApiService *GenericSvcAPIService
 	objectId string
-	body *map[string]interface{}
+	body *GenericSvcDeleteObjectRequest
 }
 
 // Delete request payload
-func (r ApiDeleteObjectsRequest) Body(body map[string]interface{}) ApiDeleteObjectsRequest {
+func (r ApiDeleteObjectsRequest) Body(body GenericSvcDeleteObjectRequest) ApiDeleteObjectsRequest {
 	r.body = &body
 	return r
 }
@@ -345,11 +345,11 @@ func (a *GenericSvcAPIService) DeleteObjectsExecute(r ApiDeleteObjectsRequest) (
 type ApiQueryRequest struct {
 	ctx context.Context
 	ApiService *GenericSvcAPIService
-	body *map[string]interface{}
+	body *GenericSvcQueryRequest
 }
 
 // Query Request
-func (r ApiQueryRequest) Body(body map[string]interface{}) ApiQueryRequest {
+func (r ApiQueryRequest) Body(body GenericSvcQueryRequest) ApiQueryRequest {
 	r.body = &body
 	return r
 }
@@ -359,7 +359,7 @@ func (r ApiQueryRequest) Execute() (*GenericSvcQueryResponse, *http.Response, er
 }
 
 /*
-Query Find Generic Objects
+Query Query Generic Objects
 
 Retrieves objects from a specified table based on search criteria.
 Requires authorization and user authentication.
@@ -503,11 +503,11 @@ func (a *GenericSvcAPIService) QueryExecute(r ApiQueryRequest) (*GenericSvcQuery
 type ApiUpdateObjectsRequest struct {
 	ctx context.Context
 	ApiService *GenericSvcAPIService
-	body *map[string]interface{}
+	body *GenericSvcUpdateObjectRequest
 }
 
 // Update request payload
-func (r ApiUpdateObjectsRequest) Body(body map[string]interface{}) ApiUpdateObjectsRequest {
+func (r ApiUpdateObjectsRequest) Body(body GenericSvcUpdateObjectRequest) ApiUpdateObjectsRequest {
 	r.body = &body
 	return r
 }

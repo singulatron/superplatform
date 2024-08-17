@@ -1,17 +1,27 @@
 import { a as BaseAPI, _ as __awaiter, b as RequiredError, J as JSONApiResponse } from './runtime2.mjs';
 import { GenericSvcCreateObjectRequestToJSON } from './GenericSvcCreateObjectRequest.mjs';
 import { GenericSvcCreateObjectResponseFromJSON } from './GenericSvcCreateObjectResponse.mjs';
+import { GenericSvcDeleteObjectRequestToJSON } from './GenericSvcDeleteObjectRequest.mjs';
+import { GenericSvcQueryRequestToJSON } from './GenericSvcQueryRequest.mjs';
 import { GenericSvcQueryResponseFromJSON } from './GenericSvcQueryResponse.mjs';
+import { GenericSvcUpdateObjectRequestToJSON } from './GenericSvcUpdateObjectRequest.mjs';
 import { GenericSvcUpsertObjectRequestToJSON } from './GenericSvcUpsertObjectRequest.mjs';
 import { GenericSvcUpsertObjectResponseFromJSON } from './GenericSvcUpsertObjectResponse.mjs';
 import './GenericSvcGenericObjectCreateFields.mjs';
 import './GenericSvcGenericObject.mjs';
+import './DatastoreCondition.mjs';
+import './DatastoreEqualCondition.mjs';
+import './DatastoreFieldSelector.mjs';
+import './DatastoreContainsCondition.mjs';
+import './DatastoreStartsWithCondition.mjs';
+import './DatastoreQuery.mjs';
+import './DatastoreOrderBy.mjs';
 
 /* tslint:disable */
 /* eslint-disable */
 /**
  * Singulatron
- * Run and develop self-hosted AI apps. Your programmable in-house GPT. The Firebase for the AI age.
+ * AI management and development platform.
  *
  * The version of the OpenAPI document: 0.2
  * Contact: sales@singulatron.com
@@ -82,7 +92,7 @@ class GenericSvcApi extends BaseAPI {
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,
-                body: requestParameters['body'],
+                body: GenericSvcDeleteObjectRequestToJSON(requestParameters['body']),
             }, initOverrides);
             return new JSONApiResponse(response);
         });
@@ -99,7 +109,7 @@ class GenericSvcApi extends BaseAPI {
     }
     /**
      * Retrieves objects from a specified table based on search criteria. Requires authorization and user authentication.   Use helper functions in your respective client library such as condition constructors (`equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
-     * Find Generic Objects
+     * Query Generic Objects
      */
     queryRaw(requestParameters, initOverrides) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -114,14 +124,14 @@ class GenericSvcApi extends BaseAPI {
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,
-                body: requestParameters['body'],
+                body: GenericSvcQueryRequestToJSON(requestParameters['body']),
             }, initOverrides);
             return new JSONApiResponse(response, (jsonValue) => GenericSvcQueryResponseFromJSON(jsonValue));
         });
     }
     /**
      * Retrieves objects from a specified table based on search criteria. Requires authorization and user authentication.   Use helper functions in your respective client library such as condition constructors (`equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
-     * Find Generic Objects
+     * Query Generic Objects
      */
     query() {
         return __awaiter(this, arguments, void 0, function* (requestParameters = {}, initOverrides) {
@@ -149,7 +159,7 @@ class GenericSvcApi extends BaseAPI {
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,
-                body: requestParameters['body'],
+                body: GenericSvcUpdateObjectRequestToJSON(requestParameters['body']),
             }, initOverrides);
             return new JSONApiResponse(response);
         });

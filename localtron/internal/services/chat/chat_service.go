@@ -28,19 +28,19 @@ func NewChatService(
 	router *router.Router,
 	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error),
 ) (*ChatService, error) {
-	threadsStore, err := datastoreFactory("chatThreads", &chattypes.Thread{})
+	threadsStore, err := datastoreFactory("chatSvcThreads", &chattypes.Thread{})
 	if err != nil {
 		return nil, err
 	}
-	messagesStore, err := datastoreFactory("chatMessages", &chattypes.Message{})
+	messagesStore, err := datastoreFactory("chatSvcMessages", &chattypes.Message{})
 	if err != nil {
 		return nil, err
 	}
-	assetsStore, err := datastoreFactory("chatAssets", &chattypes.Asset{})
+	assetsStore, err := datastoreFactory("chatSvcAssets", &chattypes.Asset{})
 	if err != nil {
 		return nil, err
 	}
-	credentialStore, err := datastoreFactory("chatCredentials", &sdk.Credential{})
+	credentialStore, err := datastoreFactory("chatSvcCredentials", &sdk.Credential{})
 	if err != nil {
 		return nil, err
 	}

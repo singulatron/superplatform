@@ -31,6 +31,13 @@ import './configSvcDownloadServiceConfig.mjs';
 import './configSvcGetConfigResponse.mjs';
 import './configSvcModelServiceConfig.mjs';
 import './configSvcSaveConfigRequest.mjs';
+import './datastoreCondition.mjs';
+import './datastoreContainsCondition.mjs';
+import './datastoreEqualCondition.mjs';
+import './datastoreFieldSelector.mjs';
+import './datastoreOrderBy.mjs';
+import './datastoreQuery.mjs';
+import './datastoreStartsWithCondition.mjs';
 import './dockerSvcContainerIsRunningResponse.mjs';
 import './dockerSvcDockerInfo.mjs';
 import './dockerSvcErrorResponse.mjs';
@@ -51,10 +58,13 @@ import './firehoseSvcEvent.mjs';
 import './firehoseSvcPublishRequest.mjs';
 import './genericSvcCreateObjectRequest.mjs';
 import './genericSvcCreateObjectResponse.mjs';
+import './genericSvcDeleteObjectRequest.mjs';
 import './genericSvcErrorResponse.mjs';
 import './genericSvcGenericObject.mjs';
 import './genericSvcGenericObjectCreateFields.mjs';
+import './genericSvcQueryRequest.mjs';
 import './genericSvcQueryResponse.mjs';
+import './genericSvcUpdateObjectRequest.mjs';
 import './genericSvcUpsertObjectRequest.mjs';
 import './genericSvcUpsertObjectResponse.mjs';
 import './modelSvcArchitectures.mjs';
@@ -84,6 +94,7 @@ import './policySvcUpsertInstanceRequest.mjs';
 import './promptSvcAddPromptRequest.mjs';
 import './promptSvcAddPromptResponse.mjs';
 import './promptSvcErrorResponse.mjs';
+import './promptSvcListPromptsRequest.mjs';
 import './promptSvcListPromptsResponse.mjs';
 import './promptSvcPrompt.mjs';
 import './promptSvcPromptStatus.mjs';
@@ -101,6 +112,7 @@ import './userSvcErrorResponse.mjs';
 import './userSvcGetPermissionsResponse.mjs';
 import './userSvcGetPublicKeyResponse.mjs';
 import './userSvcGetRolesResponse.mjs';
+import './userSvcGetUsersRequest.mjs';
 import './userSvcGetUsersResponse.mjs';
 import './userSvcIsAuthorizedRequest.mjs';
 import './userSvcIsAuthorizedResponse.mjs';
@@ -54047,7 +54059,7 @@ var localVarRequest = /*@__PURE__*/getDefaultExportFromCjs(request_1);
 
 /**
  * Singulatron
- * Run and develop self-hosted AI apps. Your programmable in-house GPT. The Firebase for the AI age.
+ * AI management and development platform.
  *
  * The version of the OpenAPI document: 0.2
  * Contact: sales@singulatron.com
@@ -54657,7 +54669,7 @@ class ChatSvcApi {
 
 /**
  * Singulatron
- * Run and develop self-hosted AI apps. Your programmable in-house GPT. The Firebase for the AI age.
+ * AI management and development platform.
  *
  * The version of the OpenAPI document: 0.2
  * Contact: sales@singulatron.com
@@ -54851,7 +54863,7 @@ class ConfigSvcApi {
 
 /**
  * Singulatron
- * Run and develop self-hosted AI apps. Your programmable in-house GPT. The Firebase for the AI age.
+ * AI management and development platform.
  *
  * The version of the OpenAPI document: 0.2
  * Contact: sales@singulatron.com
@@ -55246,7 +55258,7 @@ class DockerSvcApi {
 
 /**
  * Singulatron
- * Run and develop self-hosted AI apps. Your programmable in-house GPT. The Firebase for the AI age.
+ * AI management and development platform.
  *
  * The version of the OpenAPI document: 0.2
  * Contact: sales@singulatron.com
@@ -55574,7 +55586,7 @@ class DownloadSvcApi {
 
 /**
  * Singulatron
- * Run and develop self-hosted AI apps. Your programmable in-house GPT. The Firebase for the AI age.
+ * AI management and development platform.
  *
  * The version of the OpenAPI document: 0.2
  * Contact: sales@singulatron.com
@@ -55767,7 +55779,7 @@ class FirehoseSvcApi {
 
 /**
  * Singulatron
- * Run and develop self-hosted AI apps. Your programmable in-house GPT. The Firebase for the AI age.
+ * AI management and development platform.
  *
  * The version of the OpenAPI document: 0.2
  * Contact: sales@singulatron.com
@@ -55933,7 +55945,7 @@ class GenericSvcApi {
                 uri: localVarPath,
                 useQuerystring: this._useQuerystring,
                 json: true,
-                body: ObjectSerializer.serialize(body, "object")
+                body: ObjectSerializer.serialize(body, "GenericSvcDeleteObjectRequest")
             };
             let authenticationPromise = Promise.resolve();
             if (this.authentications.BearerAuth.apiKey) {
@@ -55971,7 +55983,7 @@ class GenericSvcApi {
     }
     /**
      * Retrieves objects from a specified table based on search criteria. Requires authorization and user authentication.   Use helper functions in your respective client library such as condition constructors (`equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
-     * @summary Find Generic Objects
+     * @summary Query Generic Objects
      * @param body Query Request
      */
     query(body_1) {
@@ -55996,7 +56008,7 @@ class GenericSvcApi {
                 uri: localVarPath,
                 useQuerystring: this._useQuerystring,
                 json: true,
-                body: ObjectSerializer.serialize(body, "object")
+                body: ObjectSerializer.serialize(body, "GenericSvcQueryRequest")
             };
             let authenticationPromise = Promise.resolve();
             if (this.authentications.BearerAuth.apiKey) {
@@ -56063,7 +56075,7 @@ class GenericSvcApi {
                 uri: localVarPath,
                 useQuerystring: this._useQuerystring,
                 json: true,
-                body: ObjectSerializer.serialize(body, "object")
+                body: ObjectSerializer.serialize(body, "GenericSvcUpdateObjectRequest")
             };
             let authenticationPromise = Promise.resolve();
             if (this.authentications.BearerAuth.apiKey) {
@@ -56176,7 +56188,7 @@ class GenericSvcApi {
 
 /**
  * Singulatron
- * Run and develop self-hosted AI apps. Your programmable in-house GPT. The Firebase for the AI age.
+ * AI management and development platform.
  *
  * The version of the OpenAPI document: 0.2
  * Contact: sales@singulatron.com
@@ -56693,7 +56705,7 @@ class ModelSvcApi {
 
 /**
  * Singulatron
- * Run and develop self-hosted AI apps. Your programmable in-house GPT. The Firebase for the AI age.
+ * AI management and development platform.
  *
  * The version of the OpenAPI document: 0.2
  * Contact: sales@singulatron.com
@@ -56822,7 +56834,7 @@ class NodeSvcApi {
 
 /**
  * Singulatron
- * Run and develop self-hosted AI apps. Your programmable in-house GPT. The Firebase for the AI age.
+ * AI management and development platform.
  *
  * The version of the OpenAPI document: 0.2
  * Contact: sales@singulatron.com
@@ -57028,7 +57040,7 @@ class PolicySvcApi {
 
 /**
  * Singulatron
- * Run and develop self-hosted AI apps. Your programmable in-house GPT. The Firebase for the AI age.
+ * AI management and development platform.
  *
  * The version of the OpenAPI document: 0.2
  * Contact: sales@singulatron.com
@@ -57184,7 +57196,7 @@ class PromptSvcApi {
                 uri: localVarPath,
                 useQuerystring: this._useQuerystring,
                 json: true,
-                body: ObjectSerializer.serialize(request, "object")
+                body: ObjectSerializer.serialize(request, "PromptSvcListPromptsRequest")
             };
             let authenticationPromise = Promise.resolve();
             if (this.authentications.BearerAuth.apiKey) {
@@ -57358,7 +57370,7 @@ class PromptSvcApi {
 
 /**
  * Singulatron
- * Run and develop self-hosted AI apps. Your programmable in-house GPT. The Firebase for the AI age.
+ * AI management and development platform.
  *
  * The version of the OpenAPI document: 0.2
  * Contact: sales@singulatron.com
@@ -58248,7 +58260,7 @@ class UserSvcApi {
                 uri: localVarPath,
                 useQuerystring: this._useQuerystring,
                 json: true,
-                body: ObjectSerializer.serialize(request, "object")
+                body: ObjectSerializer.serialize(request, "UserSvcGetUsersRequest")
             };
             let authenticationPromise = Promise.resolve();
             if (this.authentications.BearerAuth.apiKey) {

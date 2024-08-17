@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Singulatron
- * Run and develop self-hosted AI apps. Your programmable in-house GPT. The Firebase for the AI age.
+ * AI management and development platform.
  *
  * The version of the OpenAPI document: 0.2
  * Contact: sales@singulatron.com
@@ -21,7 +21,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import * as runtime from '../runtime';
-import { PromptSvcAddPromptRequestToJSON, PromptSvcAddPromptResponseFromJSON, PromptSvcListPromptsResponseFromJSON, PromptSvcRemovePromptRequestToJSON, } from '../models/index';
+import { PromptSvcAddPromptRequestToJSON, PromptSvcAddPromptResponseFromJSON, PromptSvcListPromptsRequestToJSON, PromptSvcListPromptsResponseFromJSON, PromptSvcRemovePromptRequestToJSON, } from '../models/index';
 /**
  *
  */
@@ -78,7 +78,7 @@ export class PromptSvcApi extends runtime.BaseAPI {
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,
-                body: requestParameters['request'],
+                body: PromptSvcListPromptsRequestToJSON(requestParameters['request']),
             }, initOverrides);
             return new runtime.JSONApiResponse(response, (jsonValue) => PromptSvcListPromptsResponseFromJSON(jsonValue));
         });
