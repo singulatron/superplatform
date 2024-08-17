@@ -25,7 +25,7 @@ import (
 	"github.com/pkg/errors"
 	ts "github.com/singulatron/singulatron/localtron/internal/services/docker/types"
 
-	"github.com/singulatron/singulatron/localtron/logger"
+	"github.com/singulatron/singulatron/sdk/go/logger"
 )
 
 func (d *DockerService) info() (*ts.DockerInfo, error) {

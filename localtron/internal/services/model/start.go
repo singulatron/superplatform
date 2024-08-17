@@ -24,8 +24,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/singulatron/singulatron/localtron/logger"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
+	"github.com/singulatron/singulatron/sdk/go/logger"
 
 	configtypes "github.com/singulatron/singulatron/localtron/internal/services/config/types"
 	dockertypes "github.com/singulatron/singulatron/localtron/internal/services/docker/types"

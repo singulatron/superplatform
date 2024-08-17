@@ -14,8 +14,8 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/singulatron/singulatron/localtron/clients/llm"
-	"github.com/singulatron/singulatron/localtron/logger"
+	"github.com/singulatron/singulatron/sdk/go/clients/llm"
+	"github.com/singulatron/singulatron/sdk/go/logger"
 
 	apptypes "github.com/singulatron/singulatron/localtron/internal/services/chat/types"
 	chattypes "github.com/singulatron/singulatron/localtron/internal/services/chat/types"

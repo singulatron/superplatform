@@ -11,9 +11,9 @@ import (
 	"sync"
 
 	"github.com/docker/docker/client"
-	"github.com/singulatron/singulatron/localtron/router"
 	sdk "github.com/singulatron/singulatron/sdk/go"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
+	"github.com/singulatron/singulatron/sdk/go/router"
 )
 
 type DockerService struct {

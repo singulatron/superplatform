@@ -18,7 +18,7 @@ import (
 	"github.com/pkg/errors"
 
 	nodetypes "github.com/singulatron/singulatron/localtron/internal/services/node/types"
-	"github.com/singulatron/singulatron/localtron/router"
+	"github.com/singulatron/singulatron/sdk/go/router"
 )
 
 type NodeService struct {

@@ -14,8 +14,8 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/singulatron/singulatron/localtron/clients/llm"
-	"github.com/singulatron/singulatron/localtron/logger"
+	"github.com/singulatron/singulatron/sdk/go/clients/llm"
+	"github.com/singulatron/singulatron/sdk/go/logger"
 
 	prompt "github.com/singulatron/singulatron/localtron/internal/services/prompt/types"
 	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"

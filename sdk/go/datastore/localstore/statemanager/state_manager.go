@@ -23,7 +23,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/singulatron/singulatron/localtron/logger"
+	"github.com/singulatron/singulatron/sdk/go/logger"
 )
 
 type StateFile struct {

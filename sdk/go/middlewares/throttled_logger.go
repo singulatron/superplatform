@@ -15,7 +15,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/singulatron/singulatron/localtron/logger"
+	"github.com/singulatron/singulatron/sdk/go/logger"
 )
 
 // Define constants for log interval

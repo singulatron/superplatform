@@ -6,9 +6,9 @@ import (
 
 	"github.com/google/uuid"
 	client "github.com/singulatron/singulatron/clients/go"
-	"github.com/singulatron/singulatron/localtron/logger"
-	"github.com/singulatron/singulatron/localtron/router"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
+	"github.com/singulatron/singulatron/sdk/go/logger"
+	"github.com/singulatron/singulatron/sdk/go/router"
 )
 
 // RegisterService registers a service or logs in with credentials loaded

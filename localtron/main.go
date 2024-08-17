@@ -15,9 +15,9 @@ import (
 	"runtime/debug"
 	"time"
 
-	"github.com/singulatron/singulatron/localtron/di"
-	"github.com/singulatron/singulatron/localtron/logger"
-	"github.com/singulatron/singulatron/localtron/router"
+	"github.com/singulatron/singulatron/localtron/internal/di"
+	"github.com/singulatron/singulatron/sdk/go/logger"
+	"github.com/singulatron/singulatron/sdk/go/router"
 
 	_ "github.com/singulatron/singulatron/localtron/docs"
 	httpSwagger "github.com/swaggo/http-swagger"

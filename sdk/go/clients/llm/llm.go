@@ -16,7 +16,7 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/singulatron/singulatron/localtron/logger"
+	"github.com/singulatron/singulatron/sdk/go/logger"
 )
 
 type Client struct {

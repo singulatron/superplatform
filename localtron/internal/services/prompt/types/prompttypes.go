@@ -10,7 +10,7 @@ package prompt_svc
 import (
 	"time"
 
-	"github.com/singulatron/singulatron/localtron/clients/llm"
+	"github.com/singulatron/singulatron/sdk/go/clients/llm"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
 )
 

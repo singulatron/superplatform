@@ -19,7 +19,7 @@ import (
 
 	"github.com/pkg/errors"
 	types "github.com/singulatron/singulatron/localtron/internal/services/download/types"
-	"github.com/singulatron/singulatron/localtron/logger"
+	"github.com/singulatron/singulatron/sdk/go/logger"
 )
 
 /*

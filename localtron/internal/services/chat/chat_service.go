@@ -8,9 +8,9 @@
 package chatservice
 
 import (
-	"github.com/singulatron/singulatron/localtron/router"
 	sdk "github.com/singulatron/singulatron/sdk/go"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
+	"github.com/singulatron/singulatron/sdk/go/router"
 
 	chattypes "github.com/singulatron/singulatron/localtron/internal/services/chat/types"
 )

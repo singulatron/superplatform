@@ -19,11 +19,11 @@ import (
 	"gopkg.in/yaml.v2"
 
 	types "github.com/singulatron/singulatron/localtron/internal/services/config/types"
-	"github.com/singulatron/singulatron/localtron/router"
 	sdk "github.com/singulatron/singulatron/sdk/go"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
+	"github.com/singulatron/singulatron/sdk/go/router"
 
-	"github.com/singulatron/singulatron/localtron/logger"
+	"github.com/singulatron/singulatron/sdk/go/logger"
 )
 
 const DefaultModelId = `huggingface/TheBloke/mistral-7b-instruct-v0.2.Q3_K_S.gguf`

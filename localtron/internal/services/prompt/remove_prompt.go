@@ -11,8 +11,8 @@ import (
 	"context"
 	"log/slog"
 
-	"github.com/singulatron/singulatron/localtron/logger"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
+	"github.com/singulatron/singulatron/sdk/go/logger"
 
 	firehosetypes "github.com/singulatron/singulatron/localtron/internal/services/firehose/types"
 	prompttypes "github.com/singulatron/singulatron/localtron/internal/services/prompt/types"

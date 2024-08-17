@@ -16,8 +16,8 @@ import (
 	"strings"
 
 	"github.com/gorilla/mux"
-	"github.com/singulatron/singulatron/localtron/logger"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
+	"github.com/singulatron/singulatron/sdk/go/logger"
 
 	user "github.com/singulatron/singulatron/localtron/internal/services/user/types"
 )

@@ -13,7 +13,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/singulatron/singulatron/localtron/logger"
+	"github.com/singulatron/singulatron/sdk/go/logger"
 
 	firehose "github.com/singulatron/singulatron/localtron/internal/services/firehose/types"
 	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"

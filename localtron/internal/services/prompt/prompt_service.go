@@ -10,10 +10,10 @@ package promptservice
 import (
 	"sync"
 
-	"github.com/singulatron/singulatron/localtron/clients/llm"
-	"github.com/singulatron/singulatron/localtron/router"
 	sdk "github.com/singulatron/singulatron/sdk/go"
+	"github.com/singulatron/singulatron/sdk/go/clients/llm"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
+	"github.com/singulatron/singulatron/sdk/go/router"
 
 	streammanager "github.com/singulatron/singulatron/localtron/internal/services/prompt/sub/stream_manager"
 	prompttypes "github.com/singulatron/singulatron/localtron/internal/services/prompt/types"

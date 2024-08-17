@@ -19,8 +19,8 @@ import (
 	dockertypes "github.com/singulatron/singulatron/localtron/internal/services/docker/types"
 	downloadtypes "github.com/singulatron/singulatron/localtron/internal/services/download/types"
 	modeltypes "github.com/singulatron/singulatron/localtron/internal/services/model/types"
-	"github.com/singulatron/singulatron/localtron/logger"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
+	"github.com/singulatron/singulatron/sdk/go/logger"
 )
 
 func (ms *ModelService) status(modelId string) (*modeltypes.ModelStatus, error) {

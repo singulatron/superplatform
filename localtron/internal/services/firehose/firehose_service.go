@@ -12,10 +12,10 @@ import (
 	"log/slog"
 	"sync"
 
-	"github.com/singulatron/singulatron/localtron/logger"
-	"github.com/singulatron/singulatron/localtron/router"
 	sdk "github.com/singulatron/singulatron/sdk/go"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
+	"github.com/singulatron/singulatron/sdk/go/logger"
+	"github.com/singulatron/singulatron/sdk/go/router"
 
 	firehosetypes "github.com/singulatron/singulatron/localtron/internal/services/firehose/types"
 )

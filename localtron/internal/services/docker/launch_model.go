@@ -18,7 +18,7 @@ import (
 	"github.com/docker/go-connections/nat"
 	"github.com/pkg/errors"
 
-	"github.com/singulatron/singulatron/localtron/logger"
+	"github.com/singulatron/singulatron/sdk/go/logger"
 
 	dockertypes "github.com/singulatron/singulatron/localtron/internal/services/docker/types"
 )

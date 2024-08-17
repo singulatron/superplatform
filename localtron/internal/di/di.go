@@ -8,7 +8,6 @@ import (
 	"sync"
 
 	"github.com/gorilla/mux"
-	"github.com/singulatron/singulatron/localtron/clients/llm"
 	chatservice "github.com/singulatron/singulatron/localtron/internal/services/chat"
 	configservice "github.com/singulatron/singulatron/localtron/internal/services/config"
 	dockerservice "github.com/singulatron/singulatron/localtron/internal/services/docker"
@@ -20,11 +19,12 @@ import (
 	policyservice "github.com/singulatron/singulatron/localtron/internal/services/policy"
 	promptservice "github.com/singulatron/singulatron/localtron/internal/services/prompt"
 	userservice "github.com/singulatron/singulatron/localtron/internal/services/user"
-	"github.com/singulatron/singulatron/localtron/logger"
-	"github.com/singulatron/singulatron/localtron/middlewares"
-	"github.com/singulatron/singulatron/localtron/router"
+	"github.com/singulatron/singulatron/sdk/go/clients/llm"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
 	"github.com/singulatron/singulatron/sdk/go/datastore/localstore"
+	"github.com/singulatron/singulatron/sdk/go/logger"
+	"github.com/singulatron/singulatron/sdk/go/middlewares"
+	"github.com/singulatron/singulatron/sdk/go/router"
 )
 
 const singulatronFolder = ".singulatron"

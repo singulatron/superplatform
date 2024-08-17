@@ -11,9 +11,9 @@ import (
 	"errors"
 
 	"github.com/google/uuid"
-	"github.com/singulatron/singulatron/localtron/router"
 	sdk "github.com/singulatron/singulatron/sdk/go"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
+	"github.com/singulatron/singulatron/sdk/go/router"
 
 	generictypes "github.com/singulatron/singulatron/localtron/internal/services/generic/types"
 )

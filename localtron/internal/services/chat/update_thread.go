@@ -12,8 +12,8 @@ import (
 
 	chattypes "github.com/singulatron/singulatron/localtron/internal/services/chat/types"
 	firehosetypes "github.com/singulatron/singulatron/localtron/internal/services/firehose/types"
-	"github.com/singulatron/singulatron/localtron/logger"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
+	"github.com/singulatron/singulatron/sdk/go/logger"
 )
 
 func (a *ChatService) updateThread(chatThread *chattypes.Thread) (*chattypes.Thread, error) {

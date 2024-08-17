@@ -13,10 +13,10 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/singulatron/singulatron/localtron/logger"
-	"github.com/singulatron/singulatron/localtron/router"
 	"github.com/singulatron/singulatron/sdk/go"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
+	"github.com/singulatron/singulatron/sdk/go/logger"
+	"github.com/singulatron/singulatron/sdk/go/router"
 
 	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
 )

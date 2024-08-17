@@ -15,7 +15,7 @@ import (
 	"github.com/google/uuid"
 	chattypes "github.com/singulatron/singulatron/localtron/internal/services/chat/types"
 	firehosetypes "github.com/singulatron/singulatron/localtron/internal/services/firehose/types"
-	"github.com/singulatron/singulatron/localtron/logger"
+	"github.com/singulatron/singulatron/sdk/go/logger"
 )
 
 func (a *ChatService) addThread(chatThread *chattypes.Thread) (*chattypes.Thread, error) {
