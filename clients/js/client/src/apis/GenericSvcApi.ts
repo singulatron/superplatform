@@ -17,11 +17,8 @@ import * as runtime from '../runtime';
 import type {
   GenericSvcCreateObjectRequest,
   GenericSvcCreateObjectResponse,
-  GenericSvcDeleteObjectRequest,
   GenericSvcErrorResponse,
-  GenericSvcQueryRequest,
   GenericSvcQueryResponse,
-  GenericSvcUpdateObjectRequest,
   GenericSvcUpsertObjectRequest,
   GenericSvcUpsertObjectResponse,
 } from '../models/index';
@@ -30,16 +27,10 @@ import {
     GenericSvcCreateObjectRequestToJSON,
     GenericSvcCreateObjectResponseFromJSON,
     GenericSvcCreateObjectResponseToJSON,
-    GenericSvcDeleteObjectRequestFromJSON,
-    GenericSvcDeleteObjectRequestToJSON,
     GenericSvcErrorResponseFromJSON,
     GenericSvcErrorResponseToJSON,
-    GenericSvcQueryRequestFromJSON,
-    GenericSvcQueryRequestToJSON,
     GenericSvcQueryResponseFromJSON,
     GenericSvcQueryResponseToJSON,
-    GenericSvcUpdateObjectRequestFromJSON,
-    GenericSvcUpdateObjectRequestToJSON,
     GenericSvcUpsertObjectRequestFromJSON,
     GenericSvcUpsertObjectRequestToJSON,
     GenericSvcUpsertObjectResponseFromJSON,
@@ -52,15 +43,15 @@ export interface CreateObjectRequest {
 
 export interface DeleteObjectsRequest {
     objectId: string;
-    body: GenericSvcDeleteObjectRequest;
+    body: object;
 }
 
 export interface QueryRequest {
-    body?: GenericSvcQueryRequest;
+    body?: object;
 }
 
 export interface UpdateObjectsRequest {
-    body: GenericSvcUpdateObjectRequest;
+    body: object;
 }
 
 export interface UpsertObjectRequest {
@@ -149,7 +140,7 @@ export class GenericSvcApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: GenericSvcDeleteObjectRequestToJSON(requestParameters['body']),
+            body: requestParameters['body'] as any,
         }, initOverrides);
 
         return new runtime.JSONApiResponse<any>(response);
@@ -184,7 +175,7 @@ export class GenericSvcApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: GenericSvcQueryRequestToJSON(requestParameters['body']),
+            body: requestParameters['body'] as any,
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => GenericSvcQueryResponseFromJSON(jsonValue));
@@ -226,7 +217,7 @@ export class GenericSvcApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: GenericSvcUpdateObjectRequestToJSON(requestParameters['body']),
+            body: requestParameters['body'] as any,
         }, initOverrides);
 
         return new runtime.JSONApiResponse<any>(response);

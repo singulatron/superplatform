@@ -1836,11 +1836,11 @@ func (a *UserSvcAPIService) GetRolesExecute(r ApiGetRolesRequest) (*UserSvcGetRo
 type ApiGetUsersRequest struct {
 	ctx context.Context
 	ApiService *UserSvcAPIService
-	request *UserSvcGetUsersRequest
+	request *map[string]interface{}
 }
 
 // Get Users Request
-func (r ApiGetUsersRequest) Request(request UserSvcGetUsersRequest) ApiGetUsersRequest {
+func (r ApiGetUsersRequest) Request(request map[string]interface{}) ApiGetUsersRequest {
 	r.request = &request
 	return r
 }

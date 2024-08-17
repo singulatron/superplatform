@@ -18,7 +18,6 @@ import type {
   PromptSvcAddPromptRequest,
   PromptSvcAddPromptResponse,
   PromptSvcErrorResponse,
-  PromptSvcListPromptsRequest,
   PromptSvcListPromptsResponse,
   PromptSvcRemovePromptRequest,
 } from '../models/index';
@@ -29,8 +28,6 @@ import {
     PromptSvcAddPromptResponseToJSON,
     PromptSvcErrorResponseFromJSON,
     PromptSvcErrorResponseToJSON,
-    PromptSvcListPromptsRequestFromJSON,
-    PromptSvcListPromptsRequestToJSON,
     PromptSvcListPromptsResponseFromJSON,
     PromptSvcListPromptsResponseToJSON,
     PromptSvcRemovePromptRequestFromJSON,
@@ -42,7 +39,7 @@ export interface AddPromptRequest {
 }
 
 export interface GetPromptsRequest {
-    request?: PromptSvcListPromptsRequest;
+    request?: object;
 }
 
 export interface RemovePromptRequest {
@@ -120,7 +117,7 @@ export class PromptSvcApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: PromptSvcListPromptsRequestToJSON(requestParameters['request']),
+            body: requestParameters['request'] as any,
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => PromptSvcListPromptsResponseFromJSON(jsonValue));

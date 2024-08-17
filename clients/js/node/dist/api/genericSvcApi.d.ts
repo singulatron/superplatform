@@ -12,10 +12,7 @@
 import http from 'http';
 import { GenericSvcCreateObjectRequest } from '../model/genericSvcCreateObjectRequest';
 import { GenericSvcCreateObjectResponse } from '../model/genericSvcCreateObjectResponse';
-import { GenericSvcDeleteObjectRequest } from '../model/genericSvcDeleteObjectRequest';
-import { GenericSvcQueryRequest } from '../model/genericSvcQueryRequest';
 import { GenericSvcQueryResponse } from '../model/genericSvcQueryResponse';
-import { GenericSvcUpdateObjectRequest } from '../model/genericSvcUpdateObjectRequest';
 import { GenericSvcUpsertObjectRequest } from '../model/genericSvcUpsertObjectRequest';
 import { GenericSvcUpsertObjectResponse } from '../model/genericSvcUpsertObjectResponse';
 import { Authentication, Interceptor } from '../model/models';
@@ -60,7 +57,7 @@ export declare class GenericSvcApi {
      * @param objectId Object ID
      * @param body Delete request payload
      */
-    deleteObjects(objectId: string, body: GenericSvcDeleteObjectRequest, options?: {
+    deleteObjects(objectId: string, body: object, options?: {
         headers: {
             [name: string]: string;
         };
@@ -73,7 +70,7 @@ export declare class GenericSvcApi {
      * @summary Find Generic Objects
      * @param body Query Request
      */
-    query(body?: GenericSvcQueryRequest, options?: {
+    query(body?: object, options?: {
         headers: {
             [name: string]: string;
         };
@@ -86,7 +83,7 @@ export declare class GenericSvcApi {
      * @summary Update Generic Objects
      * @param body Update request payload
      */
-    updateObjects(body: GenericSvcUpdateObjectRequest, options?: {
+    updateObjects(body: object, options?: {
         headers: {
             [name: string]: string;
         };

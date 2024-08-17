@@ -3,21 +3,11 @@
 var runtime = require('./runtime2.js');
 var GenericSvcCreateObjectRequest = require('./GenericSvcCreateObjectRequest.js');
 var GenericSvcCreateObjectResponse = require('./GenericSvcCreateObjectResponse.js');
-var GenericSvcDeleteObjectRequest = require('./GenericSvcDeleteObjectRequest.js');
-var GenericSvcQueryRequest = require('./GenericSvcQueryRequest.js');
 var GenericSvcQueryResponse = require('./GenericSvcQueryResponse.js');
-var GenericSvcUpdateObjectRequest = require('./GenericSvcUpdateObjectRequest.js');
 var GenericSvcUpsertObjectRequest = require('./GenericSvcUpsertObjectRequest.js');
 var GenericSvcUpsertObjectResponse = require('./GenericSvcUpsertObjectResponse.js');
 require('./GenericSvcGenericObjectCreateFields.js');
 require('./GenericSvcGenericObject.js');
-require('./DatastoreCondition.js');
-require('./DatastoreEqualCondition.js');
-require('./DatastoreFieldSelector.js');
-require('./DatastoreContainsCondition.js');
-require('./DatastoreStartsWithCondition.js');
-require('./DatastoreQuery.js');
-require('./DatastoreOrderBy.js');
 
 /* tslint:disable */
 /* eslint-disable */
@@ -94,7 +84,7 @@ class GenericSvcApi extends runtime.BaseAPI {
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,
-                body: GenericSvcDeleteObjectRequest.GenericSvcDeleteObjectRequestToJSON(requestParameters['body']),
+                body: requestParameters['body'],
             }, initOverrides);
             return new runtime.JSONApiResponse(response);
         });
@@ -126,7 +116,7 @@ class GenericSvcApi extends runtime.BaseAPI {
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,
-                body: GenericSvcQueryRequest.GenericSvcQueryRequestToJSON(requestParameters['body']),
+                body: requestParameters['body'],
             }, initOverrides);
             return new runtime.JSONApiResponse(response, (jsonValue) => GenericSvcQueryResponse.GenericSvcQueryResponseFromJSON(jsonValue));
         });
@@ -161,7 +151,7 @@ class GenericSvcApi extends runtime.BaseAPI {
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,
-                body: GenericSvcUpdateObjectRequest.GenericSvcUpdateObjectRequestToJSON(requestParameters['body']),
+                body: requestParameters['body'],
             }, initOverrides);
             return new runtime.JSONApiResponse(response);
         });

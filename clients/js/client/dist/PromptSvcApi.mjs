@@ -1,18 +1,10 @@
 import { a as BaseAPI, _ as __awaiter, b as RequiredError, J as JSONApiResponse, T as TextApiResponse } from './runtime2.mjs';
 import { PromptSvcAddPromptRequestToJSON } from './PromptSvcAddPromptRequest.mjs';
 import { PromptSvcAddPromptResponseFromJSON } from './PromptSvcAddPromptResponse.mjs';
-import { PromptSvcListPromptsRequestToJSON } from './PromptSvcListPromptsRequest.mjs';
 import { PromptSvcListPromptsResponseFromJSON } from './PromptSvcListPromptsResponse.mjs';
 import { PromptSvcRemovePromptRequestToJSON } from './PromptSvcRemovePromptRequest.mjs';
 import './PromptSvcPrompt.mjs';
 import './PromptSvcPromptStatus.mjs';
-import './DatastoreQuery.mjs';
-import './DatastoreCondition.mjs';
-import './DatastoreEqualCondition.mjs';
-import './DatastoreFieldSelector.mjs';
-import './DatastoreContainsCondition.mjs';
-import './DatastoreStartsWithCondition.mjs';
-import './DatastoreOrderBy.mjs';
 
 /* tslint:disable */
 /* eslint-disable */
@@ -83,7 +75,7 @@ class PromptSvcApi extends BaseAPI {
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,
-                body: PromptSvcListPromptsRequestToJSON(requestParameters['request']),
+                body: requestParameters['request'],
             }, initOverrides);
             return new JSONApiResponse(response, (jsonValue) => PromptSvcListPromptsResponseFromJSON(jsonValue));
         });

@@ -20,7 +20,6 @@ import { UserSvcCreateUserRequest } from '../model/userSvcCreateUserRequest';
 import { UserSvcGetPermissionsResponse } from '../model/userSvcGetPermissionsResponse';
 import { UserSvcGetPublicKeyResponse } from '../model/userSvcGetPublicKeyResponse';
 import { UserSvcGetRolesResponse } from '../model/userSvcGetRolesResponse';
-import { UserSvcGetUsersRequest } from '../model/userSvcGetUsersRequest';
 import { UserSvcGetUsersResponse } from '../model/userSvcGetUsersResponse';
 import { UserSvcIsAuthorizedRequest } from '../model/userSvcIsAuthorizedRequest';
 import { UserSvcIsAuthorizedResponse } from '../model/userSvcIsAuthorizedResponse';
@@ -216,7 +215,7 @@ export declare class UserSvcApi {
      * @summary List Users
      * @param request Get Users Request
      */
-    getUsers(request?: UserSvcGetUsersRequest, options?: {
+    getUsers(request?: object, options?: {
         headers: {
             [name: string]: string;
         };

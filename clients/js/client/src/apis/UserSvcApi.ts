@@ -26,7 +26,6 @@ import type {
   UserSvcGetPermissionsResponse,
   UserSvcGetPublicKeyResponse,
   UserSvcGetRolesResponse,
-  UserSvcGetUsersRequest,
   UserSvcGetUsersResponse,
   UserSvcIsAuthorizedRequest,
   UserSvcIsAuthorizedResponse,
@@ -62,8 +61,6 @@ import {
     UserSvcGetPublicKeyResponseToJSON,
     UserSvcGetRolesResponseFromJSON,
     UserSvcGetRolesResponseToJSON,
-    UserSvcGetUsersRequestFromJSON,
-    UserSvcGetUsersRequestToJSON,
     UserSvcGetUsersResponseFromJSON,
     UserSvcGetUsersResponseToJSON,
     UserSvcIsAuthorizedRequestFromJSON,
@@ -131,7 +128,7 @@ export interface GetPermissionsByRoleRequest {
 }
 
 export interface GetUsersRequest {
-    request?: UserSvcGetUsersRequest;
+    request?: object;
 }
 
 export interface IsAuthorizedRequest {
@@ -679,7 +676,7 @@ export class UserSvcApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: UserSvcGetUsersRequestToJSON(requestParameters['request']),
+            body: requestParameters['request'] as any,
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => UserSvcGetUsersResponseFromJSON(jsonValue));

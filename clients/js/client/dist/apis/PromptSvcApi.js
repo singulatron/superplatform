@@ -21,7 +21,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import * as runtime from '../runtime';
-import { PromptSvcAddPromptRequestToJSON, PromptSvcAddPromptResponseFromJSON, PromptSvcListPromptsRequestToJSON, PromptSvcListPromptsResponseFromJSON, PromptSvcRemovePromptRequestToJSON, } from '../models/index';
+import { PromptSvcAddPromptRequestToJSON, PromptSvcAddPromptResponseFromJSON, PromptSvcListPromptsResponseFromJSON, PromptSvcRemovePromptRequestToJSON, } from '../models/index';
 /**
  *
  */
@@ -78,7 +78,7 @@ export class PromptSvcApi extends runtime.BaseAPI {
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,
-                body: PromptSvcListPromptsRequestToJSON(requestParameters['request']),
+                body: requestParameters['request'],
             }, initOverrides);
             return new runtime.JSONApiResponse(response, (jsonValue) => PromptSvcListPromptsResponseFromJSON(jsonValue));
         });

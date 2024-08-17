@@ -3610,157 +3610,6 @@ const docTemplate = `{
         "config_svc.SaveConfigResponse": {
             "type": "object"
         },
-        "datastore.AllCondition": {
-            "type": "object"
-        },
-        "datastore.Condition": {
-            "type": "object",
-            "properties": {
-                "all": {
-                    "description": "All condition returns all objects.",
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/datastore.AllCondition"
-                        }
-                    ]
-                },
-                "contains": {
-                    "description": "Contains condition returns all objects where the field(s) values contain a particular string.",
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/datastore.ContainsCondition"
-                        }
-                    ]
-                },
-                "equal": {
-                    "description": "Equal condition returns objects where value of a field equals (=) to the specified value in the query.",
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/datastore.EqualCondition"
-                        }
-                    ]
-                },
-                "startsWith": {
-                    "description": "StartsWith condition returns all objects where the field(s) values start with a particular string.",
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/datastore.StartsWithCondition"
-                        }
-                    ]
-                }
-            }
-        },
-        "datastore.ContainsCondition": {
-            "type": "object",
-            "properties": {
-                "selector": {
-                    "description": "Selector selects one, more or all fields",
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/datastore.FieldSelector"
-                        }
-                    ]
-                },
-                "value": {}
-            }
-        },
-        "datastore.EqualCondition": {
-            "type": "object",
-            "properties": {
-                "selector": {
-                    "description": "Selector selects one, more or all fields",
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/datastore.FieldSelector"
-                        }
-                    ]
-                },
-                "value": {}
-            }
-        },
-        "datastore.FieldSelector": {
-            "type": "object",
-            "properties": {
-                "any": {
-                    "description": "Any matches any fields in the object",
-                    "type": "boolean"
-                },
-                "field": {
-                    "description": "Field matchies a single field",
-                    "type": "string"
-                },
-                "oneOf": {
-                    "description": "OneOf matches a number of fields",
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                }
-            }
-        },
-        "datastore.OrderBy": {
-            "type": "object",
-            "properties": {
-                "desc": {
-                    "description": "Desc indicates whether the sorting should be in descending order.",
-                    "type": "boolean"
-                },
-                "field": {
-                    "description": "The field by which to order the results",
-                    "type": "string"
-                },
-                "randomize": {
-                    "description": "Randomize indicates that the results should be randomized instead of ordered by the ` + "`" + `field` + "`" + ` and ` + "`" + `desc` + "`" + ` criteria",
-                    "type": "boolean"
-                }
-            }
-        },
-        "datastore.Query": {
-            "type": "object",
-            "properties": {
-                "after": {
-                    "description": "After is used for paginations. Instead of offset-based pagination,\nwe support cursor-based pagination because it works better in a scalable,\ndistributed environment.",
-                    "type": "array",
-                    "items": {}
-                },
-                "conditions": {
-                    "description": "Conditions are filtering options of a query. It is advised to use\nIt's advised to use helper functions in your respective client library such as condition constructors (` + "`" + `all` + "`" + `, ` + "`" + `equal` + "`" + `, ` + "`" + `contains` + "`" + `, ` + "`" + `startsWith` + "`" + `) and field selectors (` + "`" + `field` + "`" + `, ` + "`" + `fields` + "`" + `, ` + "`" + `id` + "`" + `) for easier access.",
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/datastore.Condition"
-                    }
-                },
-                "count": {
-                    "description": "Count true means return the count of the dataset filtered by Conditions\nwithout after or limit.",
-                    "type": "boolean"
-                },
-                "limit": {
-                    "description": "Limit the number of records in the result set.",
-                    "type": "integer"
-                },
-                "orderBys": {
-                    "description": "OrderBys order the result set.",
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/datastore.OrderBy"
-                    }
-                }
-            }
-        },
-        "datastore.StartsWithCondition": {
-            "type": "object",
-            "properties": {
-                "selector": {
-                    "description": "Selector selects one, more or all fields",
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/datastore.FieldSelector"
-                        }
-                    ]
-                },
-                "value": {}
-            }
-        },
         "docker_svc.ContainerIsRunningResponse": {
             "type": "object",
             "properties": {
@@ -4007,18 +3856,7 @@ const docTemplate = `{
             }
         },
         "generic_svc.DeleteObjectRequest": {
-            "type": "object",
-            "properties": {
-                "conditions": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/datastore.Condition"
-                    }
-                },
-                "table": {
-                    "type": "string"
-                }
-            }
+            "type": "object"
         },
         "generic_svc.DeleteObjectResponse": {
             "type": "object"
@@ -4090,18 +3928,7 @@ const docTemplate = `{
             }
         },
         "generic_svc.QueryRequest": {
-            "type": "object",
-            "properties": {
-                "public": {
-                    "type": "boolean"
-                },
-                "query": {
-                    "$ref": "#/definitions/datastore.Query"
-                },
-                "table": {
-                    "type": "string"
-                }
-            }
+            "type": "object"
         },
         "generic_svc.QueryResponse": {
             "type": "object",
@@ -4115,21 +3942,7 @@ const docTemplate = `{
             }
         },
         "generic_svc.UpdateObjectRequest": {
-            "type": "object",
-            "properties": {
-                "conditions": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/datastore.Condition"
-                    }
-                },
-                "object": {
-                    "$ref": "#/definitions/generic_svc.GenericObject"
-                },
-                "table": {
-                    "type": "string"
-                }
-            }
+            "type": "object"
         },
         "generic_svc.UpdateObjectResponse": {
             "type": "object"
@@ -4647,12 +4460,7 @@ const docTemplate = `{
             }
         },
         "prompt_svc.ListPromptsRequest": {
-            "type": "object",
-            "properties": {
-                "query": {
-                    "$ref": "#/definitions/datastore.Query"
-                }
-            }
+            "type": "object"
         },
         "prompt_svc.ListPromptsResponse": {
             "type": "object",
@@ -4985,12 +4793,7 @@ const docTemplate = `{
             }
         },
         "user_svc.GetUsersRequest": {
-            "type": "object",
-            "properties": {
-                "query": {
-                    "$ref": "#/definitions/datastore.Query"
-                }
-            }
+            "type": "object"
         },
         "user_svc.GetUsersResponse": {
             "type": "object",

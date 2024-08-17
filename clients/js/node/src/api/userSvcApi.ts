@@ -26,7 +26,6 @@ import { UserSvcErrorResponse } from '../model/userSvcErrorResponse';
 import { UserSvcGetPermissionsResponse } from '../model/userSvcGetPermissionsResponse';
 import { UserSvcGetPublicKeyResponse } from '../model/userSvcGetPublicKeyResponse';
 import { UserSvcGetRolesResponse } from '../model/userSvcGetRolesResponse';
-import { UserSvcGetUsersRequest } from '../model/userSvcGetUsersRequest';
 import { UserSvcGetUsersResponse } from '../model/userSvcGetUsersResponse';
 import { UserSvcIsAuthorizedRequest } from '../model/userSvcIsAuthorizedRequest';
 import { UserSvcIsAuthorizedResponse } from '../model/userSvcIsAuthorizedResponse';
@@ -977,7 +976,7 @@ export class UserSvcApi {
      * @summary List Users
      * @param request Get Users Request
      */
-    public async getUsers (request?: UserSvcGetUsersRequest, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: UserSvcGetUsersResponse;  }> {
+    public async getUsers (request?: object, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: UserSvcGetUsersResponse;  }> {
         const localVarPath = this.basePath + '/user-svc/users';
         let localVarQueryParameters: any = {};
         let localVarHeaderParams: any = (<any>Object).assign({}, this._defaultHeaders);
@@ -1001,7 +1000,7 @@ export class UserSvcApi {
             uri: localVarPath,
             useQuerystring: this._useQuerystring,
             json: true,
-            body: ObjectSerializer.serialize(request, "UserSvcGetUsersRequest")
+            body: ObjectSerializer.serialize(request, "object")
         };
 
         let authenticationPromise = Promise.resolve();

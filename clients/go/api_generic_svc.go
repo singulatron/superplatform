@@ -185,11 +185,11 @@ type ApiDeleteObjectsRequest struct {
 	ctx context.Context
 	ApiService *GenericSvcAPIService
 	objectId string
-	body *GenericSvcDeleteObjectRequest
+	body *map[string]interface{}
 }
 
 // Delete request payload
-func (r ApiDeleteObjectsRequest) Body(body GenericSvcDeleteObjectRequest) ApiDeleteObjectsRequest {
+func (r ApiDeleteObjectsRequest) Body(body map[string]interface{}) ApiDeleteObjectsRequest {
 	r.body = &body
 	return r
 }
@@ -345,11 +345,11 @@ func (a *GenericSvcAPIService) DeleteObjectsExecute(r ApiDeleteObjectsRequest) (
 type ApiQueryRequest struct {
 	ctx context.Context
 	ApiService *GenericSvcAPIService
-	body *GenericSvcQueryRequest
+	body *map[string]interface{}
 }
 
 // Query Request
-func (r ApiQueryRequest) Body(body GenericSvcQueryRequest) ApiQueryRequest {
+func (r ApiQueryRequest) Body(body map[string]interface{}) ApiQueryRequest {
 	r.body = &body
 	return r
 }
@@ -503,11 +503,11 @@ func (a *GenericSvcAPIService) QueryExecute(r ApiQueryRequest) (*GenericSvcQuery
 type ApiUpdateObjectsRequest struct {
 	ctx context.Context
 	ApiService *GenericSvcAPIService
-	body *GenericSvcUpdateObjectRequest
+	body *map[string]interface{}
 }
 
 // Update request payload
-func (r ApiUpdateObjectsRequest) Body(body GenericSvcUpdateObjectRequest) ApiUpdateObjectsRequest {
+func (r ApiUpdateObjectsRequest) Body(body map[string]interface{}) ApiUpdateObjectsRequest {
 	r.body = &body
 	return r
 }

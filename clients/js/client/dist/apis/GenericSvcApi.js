@@ -21,7 +21,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import * as runtime from '../runtime';
-import { GenericSvcCreateObjectRequestToJSON, GenericSvcCreateObjectResponseFromJSON, GenericSvcDeleteObjectRequestToJSON, GenericSvcQueryRequestToJSON, GenericSvcQueryResponseFromJSON, GenericSvcUpdateObjectRequestToJSON, GenericSvcUpsertObjectRequestToJSON, GenericSvcUpsertObjectResponseFromJSON, } from '../models/index';
+import { GenericSvcCreateObjectRequestToJSON, GenericSvcCreateObjectResponseFromJSON, GenericSvcQueryResponseFromJSON, GenericSvcUpsertObjectRequestToJSON, GenericSvcUpsertObjectResponseFromJSON, } from '../models/index';
 /**
  *
  */
@@ -84,7 +84,7 @@ export class GenericSvcApi extends runtime.BaseAPI {
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,
-                body: GenericSvcDeleteObjectRequestToJSON(requestParameters['body']),
+                body: requestParameters['body'],
             }, initOverrides);
             return new runtime.JSONApiResponse(response);
         });
@@ -116,7 +116,7 @@ export class GenericSvcApi extends runtime.BaseAPI {
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,
-                body: GenericSvcQueryRequestToJSON(requestParameters['body']),
+                body: requestParameters['body'],
             }, initOverrides);
             return new runtime.JSONApiResponse(response, (jsonValue) => GenericSvcQueryResponseFromJSON(jsonValue));
         });
@@ -151,7 +151,7 @@ export class GenericSvcApi extends runtime.BaseAPI {
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,
-                body: GenericSvcUpdateObjectRequestToJSON(requestParameters['body']),
+                body: requestParameters['body'],
             }, initOverrides);
             return new runtime.JSONApiResponse(response);
         });

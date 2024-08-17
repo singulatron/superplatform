@@ -184,11 +184,11 @@ func (a *PromptSvcAPIService) AddPromptExecute(r ApiAddPromptRequest) (*PromptSv
 type ApiGetPromptsRequest struct {
 	ctx context.Context
 	ApiService *PromptSvcAPIService
-	request *PromptSvcListPromptsRequest
+	request *map[string]interface{}
 }
 
 // List Prompts Request
-func (r ApiGetPromptsRequest) Request(request PromptSvcListPromptsRequest) ApiGetPromptsRequest {
+func (r ApiGetPromptsRequest) Request(request map[string]interface{}) ApiGetPromptsRequest {
 	r.request = &request
 	return r
 }

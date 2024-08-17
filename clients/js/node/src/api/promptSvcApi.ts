@@ -18,7 +18,6 @@ import http from 'http';
 import { PromptSvcAddPromptRequest } from '../model/promptSvcAddPromptRequest';
 import { PromptSvcAddPromptResponse } from '../model/promptSvcAddPromptResponse';
 import { PromptSvcErrorResponse } from '../model/promptSvcErrorResponse';
-import { PromptSvcListPromptsRequest } from '../model/promptSvcListPromptsRequest';
 import { PromptSvcListPromptsResponse } from '../model/promptSvcListPromptsResponse';
 import { PromptSvcRemovePromptRequest } from '../model/promptSvcRemovePromptRequest';
 
@@ -171,7 +170,7 @@ export class PromptSvcApi {
      * @summary List Prompts
      * @param request List Prompts Request
      */
-    public async getPrompts (request?: PromptSvcListPromptsRequest, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: PromptSvcListPromptsResponse;  }> {
+    public async getPrompts (request?: object, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: PromptSvcListPromptsResponse;  }> {
         const localVarPath = this.basePath + '/prompt-svc/prompts';
         let localVarQueryParameters: any = {};
         let localVarHeaderParams: any = (<any>Object).assign({}, this._defaultHeaders);
@@ -195,7 +194,7 @@ export class PromptSvcApi {
             uri: localVarPath,
             useQuerystring: this._useQuerystring,
             json: true,
-            body: ObjectSerializer.serialize(request, "PromptSvcListPromptsRequest")
+            body: ObjectSerializer.serialize(request, "object")
         };
 
         let authenticationPromise = Promise.resolve();

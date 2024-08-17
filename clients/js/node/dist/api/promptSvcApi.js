@@ -174,7 +174,7 @@ export class PromptSvcApi {
                 uri: localVarPath,
                 useQuerystring: this._useQuerystring,
                 json: true,
-                body: ObjectSerializer.serialize(request, "PromptSvcListPromptsRequest")
+                body: ObjectSerializer.serialize(request, "object")
             };
             let authenticationPromise = Promise.resolve();
             if (this.authentications.BearerAuth.apiKey) {

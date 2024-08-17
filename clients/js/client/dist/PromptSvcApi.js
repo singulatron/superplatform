@@ -3,18 +3,10 @@
 var runtime = require('./runtime2.js');
 var PromptSvcAddPromptRequest = require('./PromptSvcAddPromptRequest.js');
 var PromptSvcAddPromptResponse = require('./PromptSvcAddPromptResponse.js');
-var PromptSvcListPromptsRequest = require('./PromptSvcListPromptsRequest.js');
 var PromptSvcListPromptsResponse = require('./PromptSvcListPromptsResponse.js');
 var PromptSvcRemovePromptRequest = require('./PromptSvcRemovePromptRequest.js');
 require('./PromptSvcPrompt.js');
 require('./PromptSvcPromptStatus.js');
-require('./DatastoreQuery.js');
-require('./DatastoreCondition.js');
-require('./DatastoreEqualCondition.js');
-require('./DatastoreFieldSelector.js');
-require('./DatastoreContainsCondition.js');
-require('./DatastoreStartsWithCondition.js');
-require('./DatastoreOrderBy.js');
 
 /* tslint:disable */
 /* eslint-disable */
@@ -85,7 +77,7 @@ class PromptSvcApi extends runtime.BaseAPI {
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,
-                body: PromptSvcListPromptsRequest.PromptSvcListPromptsRequestToJSON(requestParameters['request']),
+                body: requestParameters['request'],
             }, initOverrides);
             return new runtime.JSONApiResponse(response, (jsonValue) => PromptSvcListPromptsResponse.PromptSvcListPromptsResponseFromJSON(jsonValue));
         });

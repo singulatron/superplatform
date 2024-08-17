@@ -16,13 +16,6 @@ var configSvcDownloadServiceConfig = require('./configSvcDownloadServiceConfig.j
 var configSvcGetConfigResponse = require('./configSvcGetConfigResponse.js');
 var configSvcModelServiceConfig = require('./configSvcModelServiceConfig.js');
 var configSvcSaveConfigRequest = require('./configSvcSaveConfigRequest.js');
-var datastoreCondition = require('./datastoreCondition.js');
-var datastoreContainsCondition = require('./datastoreContainsCondition.js');
-var datastoreEqualCondition = require('./datastoreEqualCondition.js');
-var datastoreFieldSelector = require('./datastoreFieldSelector.js');
-var datastoreOrderBy = require('./datastoreOrderBy.js');
-var datastoreQuery = require('./datastoreQuery.js');
-var datastoreStartsWithCondition = require('./datastoreStartsWithCondition.js');
 var dockerSvcContainerIsRunningResponse = require('./dockerSvcContainerIsRunningResponse.js');
 var dockerSvcDockerInfo = require('./dockerSvcDockerInfo.js');
 var dockerSvcErrorResponse = require('./dockerSvcErrorResponse.js');
@@ -43,13 +36,10 @@ var firehoseSvcEvent = require('./firehoseSvcEvent.js');
 var firehoseSvcPublishRequest = require('./firehoseSvcPublishRequest.js');
 var genericSvcCreateObjectRequest = require('./genericSvcCreateObjectRequest.js');
 var genericSvcCreateObjectResponse = require('./genericSvcCreateObjectResponse.js');
-var genericSvcDeleteObjectRequest = require('./genericSvcDeleteObjectRequest.js');
 var genericSvcErrorResponse = require('./genericSvcErrorResponse.js');
 var genericSvcGenericObject = require('./genericSvcGenericObject.js');
 var genericSvcGenericObjectCreateFields = require('./genericSvcGenericObjectCreateFields.js');
-var genericSvcQueryRequest = require('./genericSvcQueryRequest.js');
 var genericSvcQueryResponse = require('./genericSvcQueryResponse.js');
-var genericSvcUpdateObjectRequest = require('./genericSvcUpdateObjectRequest.js');
 var genericSvcUpsertObjectRequest = require('./genericSvcUpsertObjectRequest.js');
 var genericSvcUpsertObjectResponse = require('./genericSvcUpsertObjectResponse.js');
 var modelSvcArchitectures = require('./modelSvcArchitectures.js');
@@ -79,7 +69,6 @@ var policySvcUpsertInstanceRequest = require('./policySvcUpsertInstanceRequest.j
 var promptSvcAddPromptRequest = require('./promptSvcAddPromptRequest.js');
 var promptSvcAddPromptResponse = require('./promptSvcAddPromptResponse.js');
 var promptSvcErrorResponse = require('./promptSvcErrorResponse.js');
-var promptSvcListPromptsRequest = require('./promptSvcListPromptsRequest.js');
 var promptSvcListPromptsResponse = require('./promptSvcListPromptsResponse.js');
 var promptSvcPrompt = require('./promptSvcPrompt.js');
 var promptSvcPromptStatus = require('./promptSvcPromptStatus.js');
@@ -97,7 +86,6 @@ var userSvcErrorResponse = require('./userSvcErrorResponse.js');
 var userSvcGetPermissionsResponse = require('./userSvcGetPermissionsResponse.js');
 var userSvcGetPublicKeyResponse = require('./userSvcGetPublicKeyResponse.js');
 var userSvcGetRolesResponse = require('./userSvcGetRolesResponse.js');
-var userSvcGetUsersRequest = require('./userSvcGetUsersRequest.js');
 var userSvcGetUsersResponse = require('./userSvcGetUsersResponse.js');
 var userSvcIsAuthorizedRequest = require('./userSvcIsAuthorizedRequest.js');
 var userSvcIsAuthorizedResponse = require('./userSvcIsAuthorizedResponse.js');
@@ -147,13 +135,6 @@ let typeMap = {
     "ConfigSvcGetConfigResponse": configSvcGetConfigResponse.ConfigSvcGetConfigResponse,
     "ConfigSvcModelServiceConfig": configSvcModelServiceConfig.ConfigSvcModelServiceConfig,
     "ConfigSvcSaveConfigRequest": configSvcSaveConfigRequest.ConfigSvcSaveConfigRequest,
-    "DatastoreCondition": datastoreCondition.DatastoreCondition,
-    "DatastoreContainsCondition": datastoreContainsCondition.DatastoreContainsCondition,
-    "DatastoreEqualCondition": datastoreEqualCondition.DatastoreEqualCondition,
-    "DatastoreFieldSelector": datastoreFieldSelector.DatastoreFieldSelector,
-    "DatastoreOrderBy": datastoreOrderBy.DatastoreOrderBy,
-    "DatastoreQuery": datastoreQuery.DatastoreQuery,
-    "DatastoreStartsWithCondition": datastoreStartsWithCondition.DatastoreStartsWithCondition,
     "DockerSvcContainerIsRunningResponse": dockerSvcContainerIsRunningResponse.DockerSvcContainerIsRunningResponse,
     "DockerSvcDockerInfo": dockerSvcDockerInfo.DockerSvcDockerInfo,
     "DockerSvcErrorResponse": dockerSvcErrorResponse.DockerSvcErrorResponse,
@@ -174,13 +155,10 @@ let typeMap = {
     "FirehoseSvcPublishRequest": firehoseSvcPublishRequest.FirehoseSvcPublishRequest,
     "GenericSvcCreateObjectRequest": genericSvcCreateObjectRequest.GenericSvcCreateObjectRequest,
     "GenericSvcCreateObjectResponse": genericSvcCreateObjectResponse.GenericSvcCreateObjectResponse,
-    "GenericSvcDeleteObjectRequest": genericSvcDeleteObjectRequest.GenericSvcDeleteObjectRequest,
     "GenericSvcErrorResponse": genericSvcErrorResponse.GenericSvcErrorResponse,
     "GenericSvcGenericObject": genericSvcGenericObject.GenericSvcGenericObject,
     "GenericSvcGenericObjectCreateFields": genericSvcGenericObjectCreateFields.GenericSvcGenericObjectCreateFields,
-    "GenericSvcQueryRequest": genericSvcQueryRequest.GenericSvcQueryRequest,
     "GenericSvcQueryResponse": genericSvcQueryResponse.GenericSvcQueryResponse,
-    "GenericSvcUpdateObjectRequest": genericSvcUpdateObjectRequest.GenericSvcUpdateObjectRequest,
     "GenericSvcUpsertObjectRequest": genericSvcUpsertObjectRequest.GenericSvcUpsertObjectRequest,
     "GenericSvcUpsertObjectResponse": genericSvcUpsertObjectResponse.GenericSvcUpsertObjectResponse,
     "ModelSvcArchitectures": modelSvcArchitectures.ModelSvcArchitectures,
@@ -207,7 +185,6 @@ let typeMap = {
     "PromptSvcAddPromptRequest": promptSvcAddPromptRequest.PromptSvcAddPromptRequest,
     "PromptSvcAddPromptResponse": promptSvcAddPromptResponse.PromptSvcAddPromptResponse,
     "PromptSvcErrorResponse": promptSvcErrorResponse.PromptSvcErrorResponse,
-    "PromptSvcListPromptsRequest": promptSvcListPromptsRequest.PromptSvcListPromptsRequest,
     "PromptSvcListPromptsResponse": promptSvcListPromptsResponse.PromptSvcListPromptsResponse,
     "PromptSvcPrompt": promptSvcPrompt.PromptSvcPrompt,
     "PromptSvcRemovePromptRequest": promptSvcRemovePromptRequest.PromptSvcRemovePromptRequest,
@@ -224,7 +201,6 @@ let typeMap = {
     "UserSvcGetPermissionsResponse": userSvcGetPermissionsResponse.UserSvcGetPermissionsResponse,
     "UserSvcGetPublicKeyResponse": userSvcGetPublicKeyResponse.UserSvcGetPublicKeyResponse,
     "UserSvcGetRolesResponse": userSvcGetRolesResponse.UserSvcGetRolesResponse,
-    "UserSvcGetUsersRequest": userSvcGetUsersRequest.UserSvcGetUsersRequest,
     "UserSvcGetUsersResponse": userSvcGetUsersResponse.UserSvcGetUsersResponse,
     "UserSvcIsAuthorizedRequest": userSvcIsAuthorizedRequest.UserSvcIsAuthorizedRequest,
     "UserSvcIsAuthorizedResponse": userSvcIsAuthorizedResponse.UserSvcIsAuthorizedResponse,
@@ -440,13 +416,6 @@ exports.ConfigSvcDownloadServiceConfig = configSvcDownloadServiceConfig.ConfigSv
 exports.ConfigSvcGetConfigResponse = configSvcGetConfigResponse.ConfigSvcGetConfigResponse;
 exports.ConfigSvcModelServiceConfig = configSvcModelServiceConfig.ConfigSvcModelServiceConfig;
 exports.ConfigSvcSaveConfigRequest = configSvcSaveConfigRequest.ConfigSvcSaveConfigRequest;
-exports.DatastoreCondition = datastoreCondition.DatastoreCondition;
-exports.DatastoreContainsCondition = datastoreContainsCondition.DatastoreContainsCondition;
-exports.DatastoreEqualCondition = datastoreEqualCondition.DatastoreEqualCondition;
-exports.DatastoreFieldSelector = datastoreFieldSelector.DatastoreFieldSelector;
-exports.DatastoreOrderBy = datastoreOrderBy.DatastoreOrderBy;
-exports.DatastoreQuery = datastoreQuery.DatastoreQuery;
-exports.DatastoreStartsWithCondition = datastoreStartsWithCondition.DatastoreStartsWithCondition;
 exports.DockerSvcContainerIsRunningResponse = dockerSvcContainerIsRunningResponse.DockerSvcContainerIsRunningResponse;
 exports.DockerSvcDockerInfo = dockerSvcDockerInfo.DockerSvcDockerInfo;
 exports.DockerSvcErrorResponse = dockerSvcErrorResponse.DockerSvcErrorResponse;
@@ -467,13 +436,10 @@ exports.FirehoseSvcEvent = firehoseSvcEvent.FirehoseSvcEvent;
 exports.FirehoseSvcPublishRequest = firehoseSvcPublishRequest.FirehoseSvcPublishRequest;
 exports.GenericSvcCreateObjectRequest = genericSvcCreateObjectRequest.GenericSvcCreateObjectRequest;
 exports.GenericSvcCreateObjectResponse = genericSvcCreateObjectResponse.GenericSvcCreateObjectResponse;
-exports.GenericSvcDeleteObjectRequest = genericSvcDeleteObjectRequest.GenericSvcDeleteObjectRequest;
 exports.GenericSvcErrorResponse = genericSvcErrorResponse.GenericSvcErrorResponse;
 exports.GenericSvcGenericObject = genericSvcGenericObject.GenericSvcGenericObject;
 exports.GenericSvcGenericObjectCreateFields = genericSvcGenericObjectCreateFields.GenericSvcGenericObjectCreateFields;
-exports.GenericSvcQueryRequest = genericSvcQueryRequest.GenericSvcQueryRequest;
 exports.GenericSvcQueryResponse = genericSvcQueryResponse.GenericSvcQueryResponse;
-exports.GenericSvcUpdateObjectRequest = genericSvcUpdateObjectRequest.GenericSvcUpdateObjectRequest;
 exports.GenericSvcUpsertObjectRequest = genericSvcUpsertObjectRequest.GenericSvcUpsertObjectRequest;
 exports.GenericSvcUpsertObjectResponse = genericSvcUpsertObjectResponse.GenericSvcUpsertObjectResponse;
 exports.ModelSvcArchitectures = modelSvcArchitectures.ModelSvcArchitectures;
@@ -512,7 +478,6 @@ exports.PolicySvcUpsertInstanceRequest = policySvcUpsertInstanceRequest.PolicySv
 exports.PromptSvcAddPromptRequest = promptSvcAddPromptRequest.PromptSvcAddPromptRequest;
 exports.PromptSvcAddPromptResponse = promptSvcAddPromptResponse.PromptSvcAddPromptResponse;
 exports.PromptSvcErrorResponse = promptSvcErrorResponse.PromptSvcErrorResponse;
-exports.PromptSvcListPromptsRequest = promptSvcListPromptsRequest.PromptSvcListPromptsRequest;
 exports.PromptSvcListPromptsResponse = promptSvcListPromptsResponse.PromptSvcListPromptsResponse;
 exports.PromptSvcPrompt = promptSvcPrompt.PromptSvcPrompt;
 Object.defineProperty(exports, 'PromptSvcPromptStatus', {
@@ -533,7 +498,6 @@ exports.UserSvcErrorResponse = userSvcErrorResponse.UserSvcErrorResponse;
 exports.UserSvcGetPermissionsResponse = userSvcGetPermissionsResponse.UserSvcGetPermissionsResponse;
 exports.UserSvcGetPublicKeyResponse = userSvcGetPublicKeyResponse.UserSvcGetPublicKeyResponse;
 exports.UserSvcGetRolesResponse = userSvcGetRolesResponse.UserSvcGetRolesResponse;
-exports.UserSvcGetUsersRequest = userSvcGetUsersRequest.UserSvcGetUsersRequest;
 exports.UserSvcGetUsersResponse = userSvcGetUsersResponse.UserSvcGetUsersResponse;
 exports.UserSvcIsAuthorizedRequest = userSvcIsAuthorizedRequest.UserSvcIsAuthorizedRequest;
 exports.UserSvcIsAuthorizedResponse = userSvcIsAuthorizedResponse.UserSvcIsAuthorizedResponse;

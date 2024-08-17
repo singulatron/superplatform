@@ -11,7 +11,6 @@ var UserSvcCreateUserRequest = require('./UserSvcCreateUserRequest.js');
 var UserSvcGetPermissionsResponse = require('./UserSvcGetPermissionsResponse.js');
 var UserSvcGetPublicKeyResponse = require('./UserSvcGetPublicKeyResponse.js');
 var UserSvcGetRolesResponse = require('./UserSvcGetRolesResponse.js');
-var UserSvcGetUsersRequest = require('./UserSvcGetUsersRequest.js');
 var UserSvcGetUsersResponse = require('./UserSvcGetUsersResponse.js');
 var UserSvcIsAuthorizedRequest = require('./UserSvcIsAuthorizedRequest.js');
 var UserSvcIsAuthorizedResponse = require('./UserSvcIsAuthorizedResponse.js');
@@ -27,13 +26,6 @@ require('./UserSvcRole.js');
 require('./UserSvcUser.js');
 require('./UserSvcContact.js');
 require('./UserSvcPermission.js');
-require('./DatastoreQuery.js');
-require('./DatastoreCondition.js');
-require('./DatastoreEqualCondition.js');
-require('./DatastoreFieldSelector.js');
-require('./DatastoreContainsCondition.js');
-require('./DatastoreStartsWithCondition.js');
-require('./DatastoreOrderBy.js');
 require('./UserSvcAuthToken.js');
 
 /* tslint:disable */
@@ -475,7 +467,7 @@ class UserSvcApi extends runtime.BaseAPI {
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,
-                body: UserSvcGetUsersRequest.UserSvcGetUsersRequestToJSON(requestParameters['request']),
+                body: requestParameters['request'],
             }, initOverrides);
             return new runtime.JSONApiResponse(response, (jsonValue) => UserSvcGetUsersResponse.UserSvcGetUsersResponseFromJSON(jsonValue));
         });

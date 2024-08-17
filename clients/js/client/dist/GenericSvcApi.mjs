@@ -1,21 +1,11 @@
 import { a as BaseAPI, _ as __awaiter, b as RequiredError, J as JSONApiResponse } from './runtime2.mjs';
 import { GenericSvcCreateObjectRequestToJSON } from './GenericSvcCreateObjectRequest.mjs';
 import { GenericSvcCreateObjectResponseFromJSON } from './GenericSvcCreateObjectResponse.mjs';
-import { GenericSvcDeleteObjectRequestToJSON } from './GenericSvcDeleteObjectRequest.mjs';
-import { GenericSvcQueryRequestToJSON } from './GenericSvcQueryRequest.mjs';
 import { GenericSvcQueryResponseFromJSON } from './GenericSvcQueryResponse.mjs';
-import { GenericSvcUpdateObjectRequestToJSON } from './GenericSvcUpdateObjectRequest.mjs';
 import { GenericSvcUpsertObjectRequestToJSON } from './GenericSvcUpsertObjectRequest.mjs';
 import { GenericSvcUpsertObjectResponseFromJSON } from './GenericSvcUpsertObjectResponse.mjs';
 import './GenericSvcGenericObjectCreateFields.mjs';
 import './GenericSvcGenericObject.mjs';
-import './DatastoreCondition.mjs';
-import './DatastoreEqualCondition.mjs';
-import './DatastoreFieldSelector.mjs';
-import './DatastoreContainsCondition.mjs';
-import './DatastoreStartsWithCondition.mjs';
-import './DatastoreQuery.mjs';
-import './DatastoreOrderBy.mjs';
 
 /* tslint:disable */
 /* eslint-disable */
@@ -92,7 +82,7 @@ class GenericSvcApi extends BaseAPI {
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,
-                body: GenericSvcDeleteObjectRequestToJSON(requestParameters['body']),
+                body: requestParameters['body'],
             }, initOverrides);
             return new JSONApiResponse(response);
         });
@@ -124,7 +114,7 @@ class GenericSvcApi extends BaseAPI {
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,
-                body: GenericSvcQueryRequestToJSON(requestParameters['body']),
+                body: requestParameters['body'],
             }, initOverrides);
             return new JSONApiResponse(response, (jsonValue) => GenericSvcQueryResponseFromJSON(jsonValue));
         });
@@ -159,7 +149,7 @@ class GenericSvcApi extends BaseAPI {
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,
-                body: GenericSvcUpdateObjectRequestToJSON(requestParameters['body']),
+                body: requestParameters['body'],
             }, initOverrides);
             return new JSONApiResponse(response);
         });

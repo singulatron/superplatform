@@ -10,19 +10,19 @@
  * Do not edit the class manually.
  */
 import * as runtime from '../runtime';
-import type { GenericSvcCreateObjectRequest, GenericSvcCreateObjectResponse, GenericSvcDeleteObjectRequest, GenericSvcQueryRequest, GenericSvcQueryResponse, GenericSvcUpdateObjectRequest, GenericSvcUpsertObjectRequest, GenericSvcUpsertObjectResponse } from '../models/index';
+import type { GenericSvcCreateObjectRequest, GenericSvcCreateObjectResponse, GenericSvcQueryResponse, GenericSvcUpsertObjectRequest, GenericSvcUpsertObjectResponse } from '../models/index';
 export interface CreateObjectRequest {
     body: GenericSvcCreateObjectRequest;
 }
 export interface DeleteObjectsRequest {
     objectId: string;
-    body: GenericSvcDeleteObjectRequest;
+    body: object;
 }
 export interface QueryRequest {
-    body?: GenericSvcQueryRequest;
+    body?: object;
 }
 export interface UpdateObjectsRequest {
-    body: GenericSvcUpdateObjectRequest;
+    body: object;
 }
 export interface UpsertObjectRequest {
     objectId: string;

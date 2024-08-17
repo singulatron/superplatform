@@ -31,13 +31,6 @@ import './configSvcDownloadServiceConfig.mjs';
 import './configSvcGetConfigResponse.mjs';
 import './configSvcModelServiceConfig.mjs';
 import './configSvcSaveConfigRequest.mjs';
-import './datastoreCondition.mjs';
-import './datastoreContainsCondition.mjs';
-import './datastoreEqualCondition.mjs';
-import './datastoreFieldSelector.mjs';
-import './datastoreOrderBy.mjs';
-import './datastoreQuery.mjs';
-import './datastoreStartsWithCondition.mjs';
 import './dockerSvcContainerIsRunningResponse.mjs';
 import './dockerSvcDockerInfo.mjs';
 import './dockerSvcErrorResponse.mjs';
@@ -58,13 +51,10 @@ import './firehoseSvcEvent.mjs';
 import './firehoseSvcPublishRequest.mjs';
 import './genericSvcCreateObjectRequest.mjs';
 import './genericSvcCreateObjectResponse.mjs';
-import './genericSvcDeleteObjectRequest.mjs';
 import './genericSvcErrorResponse.mjs';
 import './genericSvcGenericObject.mjs';
 import './genericSvcGenericObjectCreateFields.mjs';
-import './genericSvcQueryRequest.mjs';
 import './genericSvcQueryResponse.mjs';
-import './genericSvcUpdateObjectRequest.mjs';
 import './genericSvcUpsertObjectRequest.mjs';
 import './genericSvcUpsertObjectResponse.mjs';
 import './modelSvcArchitectures.mjs';
@@ -94,7 +84,6 @@ import './policySvcUpsertInstanceRequest.mjs';
 import './promptSvcAddPromptRequest.mjs';
 import './promptSvcAddPromptResponse.mjs';
 import './promptSvcErrorResponse.mjs';
-import './promptSvcListPromptsRequest.mjs';
 import './promptSvcListPromptsResponse.mjs';
 import './promptSvcPrompt.mjs';
 import './promptSvcPromptStatus.mjs';
@@ -112,7 +101,6 @@ import './userSvcErrorResponse.mjs';
 import './userSvcGetPermissionsResponse.mjs';
 import './userSvcGetPublicKeyResponse.mjs';
 import './userSvcGetRolesResponse.mjs';
-import './userSvcGetUsersRequest.mjs';
 import './userSvcGetUsersResponse.mjs';
 import './userSvcIsAuthorizedRequest.mjs';
 import './userSvcIsAuthorizedResponse.mjs';
@@ -55945,7 +55933,7 @@ class GenericSvcApi {
                 uri: localVarPath,
                 useQuerystring: this._useQuerystring,
                 json: true,
-                body: ObjectSerializer.serialize(body, "GenericSvcDeleteObjectRequest")
+                body: ObjectSerializer.serialize(body, "object")
             };
             let authenticationPromise = Promise.resolve();
             if (this.authentications.BearerAuth.apiKey) {
@@ -56008,7 +55996,7 @@ class GenericSvcApi {
                 uri: localVarPath,
                 useQuerystring: this._useQuerystring,
                 json: true,
-                body: ObjectSerializer.serialize(body, "GenericSvcQueryRequest")
+                body: ObjectSerializer.serialize(body, "object")
             };
             let authenticationPromise = Promise.resolve();
             if (this.authentications.BearerAuth.apiKey) {
@@ -56075,7 +56063,7 @@ class GenericSvcApi {
                 uri: localVarPath,
                 useQuerystring: this._useQuerystring,
                 json: true,
-                body: ObjectSerializer.serialize(body, "GenericSvcUpdateObjectRequest")
+                body: ObjectSerializer.serialize(body, "object")
             };
             let authenticationPromise = Promise.resolve();
             if (this.authentications.BearerAuth.apiKey) {
@@ -57196,7 +57184,7 @@ class PromptSvcApi {
                 uri: localVarPath,
                 useQuerystring: this._useQuerystring,
                 json: true,
-                body: ObjectSerializer.serialize(request, "PromptSvcListPromptsRequest")
+                body: ObjectSerializer.serialize(request, "object")
             };
             let authenticationPromise = Promise.resolve();
             if (this.authentications.BearerAuth.apiKey) {
@@ -58260,7 +58248,7 @@ class UserSvcApi {
                 uri: localVarPath,
                 useQuerystring: this._useQuerystring,
                 json: true,
-                body: ObjectSerializer.serialize(request, "UserSvcGetUsersRequest")
+                body: ObjectSerializer.serialize(request, "object")
             };
             let authenticationPromise = Promise.resolve();
             if (this.authentications.BearerAuth.apiKey) {

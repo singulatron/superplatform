@@ -952,7 +952,7 @@ export class UserSvcApi {
                 uri: localVarPath,
                 useQuerystring: this._useQuerystring,
                 json: true,
-                body: ObjectSerializer.serialize(request, "UserSvcGetUsersRequest")
+                body: ObjectSerializer.serialize(request, "object")
             };
             let authenticationPromise = Promise.resolve();
             if (this.authentications.BearerAuth.apiKey) {

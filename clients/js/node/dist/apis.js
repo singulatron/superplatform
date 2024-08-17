@@ -33,13 +33,6 @@ require('./configSvcDownloadServiceConfig.js');
 require('./configSvcGetConfigResponse.js');
 require('./configSvcModelServiceConfig.js');
 require('./configSvcSaveConfigRequest.js');
-require('./datastoreCondition.js');
-require('./datastoreContainsCondition.js');
-require('./datastoreEqualCondition.js');
-require('./datastoreFieldSelector.js');
-require('./datastoreOrderBy.js');
-require('./datastoreQuery.js');
-require('./datastoreStartsWithCondition.js');
 require('./dockerSvcContainerIsRunningResponse.js');
 require('./dockerSvcDockerInfo.js');
 require('./dockerSvcErrorResponse.js');
@@ -60,13 +53,10 @@ require('./firehoseSvcEvent.js');
 require('./firehoseSvcPublishRequest.js');
 require('./genericSvcCreateObjectRequest.js');
 require('./genericSvcCreateObjectResponse.js');
-require('./genericSvcDeleteObjectRequest.js');
 require('./genericSvcErrorResponse.js');
 require('./genericSvcGenericObject.js');
 require('./genericSvcGenericObjectCreateFields.js');
-require('./genericSvcQueryRequest.js');
 require('./genericSvcQueryResponse.js');
-require('./genericSvcUpdateObjectRequest.js');
 require('./genericSvcUpsertObjectRequest.js');
 require('./genericSvcUpsertObjectResponse.js');
 require('./modelSvcArchitectures.js');
@@ -96,7 +86,6 @@ require('./policySvcUpsertInstanceRequest.js');
 require('./promptSvcAddPromptRequest.js');
 require('./promptSvcAddPromptResponse.js');
 require('./promptSvcErrorResponse.js');
-require('./promptSvcListPromptsRequest.js');
 require('./promptSvcListPromptsResponse.js');
 require('./promptSvcPrompt.js');
 require('./promptSvcPromptStatus.js');
@@ -114,7 +103,6 @@ require('./userSvcErrorResponse.js');
 require('./userSvcGetPermissionsResponse.js');
 require('./userSvcGetPublicKeyResponse.js');
 require('./userSvcGetRolesResponse.js');
-require('./userSvcGetUsersRequest.js');
 require('./userSvcGetUsersResponse.js');
 require('./userSvcIsAuthorizedRequest.js');
 require('./userSvcIsAuthorizedResponse.js');
@@ -55947,7 +55935,7 @@ class GenericSvcApi {
                 uri: localVarPath,
                 useQuerystring: this._useQuerystring,
                 json: true,
-                body: models.ObjectSerializer.serialize(body, "GenericSvcDeleteObjectRequest")
+                body: models.ObjectSerializer.serialize(body, "object")
             };
             let authenticationPromise = Promise.resolve();
             if (this.authentications.BearerAuth.apiKey) {
@@ -56010,7 +55998,7 @@ class GenericSvcApi {
                 uri: localVarPath,
                 useQuerystring: this._useQuerystring,
                 json: true,
-                body: models.ObjectSerializer.serialize(body, "GenericSvcQueryRequest")
+                body: models.ObjectSerializer.serialize(body, "object")
             };
             let authenticationPromise = Promise.resolve();
             if (this.authentications.BearerAuth.apiKey) {
@@ -56077,7 +56065,7 @@ class GenericSvcApi {
                 uri: localVarPath,
                 useQuerystring: this._useQuerystring,
                 json: true,
-                body: models.ObjectSerializer.serialize(body, "GenericSvcUpdateObjectRequest")
+                body: models.ObjectSerializer.serialize(body, "object")
             };
             let authenticationPromise = Promise.resolve();
             if (this.authentications.BearerAuth.apiKey) {
@@ -57198,7 +57186,7 @@ class PromptSvcApi {
                 uri: localVarPath,
                 useQuerystring: this._useQuerystring,
                 json: true,
-                body: models.ObjectSerializer.serialize(request, "PromptSvcListPromptsRequest")
+                body: models.ObjectSerializer.serialize(request, "object")
             };
             let authenticationPromise = Promise.resolve();
             if (this.authentications.BearerAuth.apiKey) {
@@ -58262,7 +58250,7 @@ class UserSvcApi {
                 uri: localVarPath,
                 useQuerystring: this._useQuerystring,
                 json: true,
-                body: models.ObjectSerializer.serialize(request, "UserSvcGetUsersRequest")
+                body: models.ObjectSerializer.serialize(request, "object")
             };
             let authenticationPromise = Promise.resolve();
             if (this.authentications.BearerAuth.apiKey) {

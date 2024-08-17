@@ -9,7 +9,6 @@ import { UserSvcCreateUserRequestToJSON } from './UserSvcCreateUserRequest.mjs';
 import { UserSvcGetPermissionsResponseFromJSON } from './UserSvcGetPermissionsResponse.mjs';
 import { UserSvcGetPublicKeyResponseFromJSON } from './UserSvcGetPublicKeyResponse.mjs';
 import { UserSvcGetRolesResponseFromJSON } from './UserSvcGetRolesResponse.mjs';
-import { UserSvcGetUsersRequestToJSON } from './UserSvcGetUsersRequest.mjs';
 import { UserSvcGetUsersResponseFromJSON } from './UserSvcGetUsersResponse.mjs';
 import { UserSvcIsAuthorizedRequestToJSON } from './UserSvcIsAuthorizedRequest.mjs';
 import { UserSvcIsAuthorizedResponseFromJSON } from './UserSvcIsAuthorizedResponse.mjs';
@@ -25,13 +24,6 @@ import './UserSvcRole.mjs';
 import './UserSvcUser.mjs';
 import './UserSvcContact.mjs';
 import './UserSvcPermission.mjs';
-import './DatastoreQuery.mjs';
-import './DatastoreCondition.mjs';
-import './DatastoreEqualCondition.mjs';
-import './DatastoreFieldSelector.mjs';
-import './DatastoreContainsCondition.mjs';
-import './DatastoreStartsWithCondition.mjs';
-import './DatastoreOrderBy.mjs';
 import './UserSvcAuthToken.mjs';
 
 /* tslint:disable */
@@ -473,7 +465,7 @@ class UserSvcApi extends BaseAPI {
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,
-                body: UserSvcGetUsersRequestToJSON(requestParameters['request']),
+                body: requestParameters['request'],
             }, initOverrides);
             return new JSONApiResponse(response, (jsonValue) => UserSvcGetUsersResponseFromJSON(jsonValue));
         });
