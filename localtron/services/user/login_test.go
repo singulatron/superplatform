@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/singulatron/singulatron/localtron/di"
-	sdk "github.com/singulatron/singulatron/localtron/sdk/go"
+	sdk "github.com/singulatron/singulatron/sdk/go"
 
 	clients "github.com/singulatron/singulatron/clients/go"
 )

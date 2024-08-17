@@ -10,8 +10,8 @@ package chatservice
 import (
 	"time"
 
-	"github.com/singulatron/singulatron/localtron/datastore"
 	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
+	"github.com/singulatron/singulatron/sdk/go/datastore"
 )
 
 func (a *ChatService) UpsertAssets(assets []*chattypes.Asset) error {

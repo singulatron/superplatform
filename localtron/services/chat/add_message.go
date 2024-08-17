@@ -14,8 +14,8 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/logger"
+	"github.com/singulatron/singulatron/sdk/go/datastore"
 
 	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
 	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"

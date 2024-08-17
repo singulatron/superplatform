@@ -10,8 +10,8 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/singulatron/singulatron/localtron/di"
-	sdk "github.com/singulatron/singulatron/localtron/sdk/go"
 	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
+	sdk "github.com/singulatron/singulatron/sdk/go"
 )
 
 func TestMessageCreatesThread(t *testing.T) {

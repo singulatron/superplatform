@@ -10,8 +10,8 @@ package userservice
 import (
 	"fmt"
 
-	"github.com/singulatron/singulatron/localtron/datastore"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
+	"github.com/singulatron/singulatron/sdk/go/datastore"
 )
 
 func (s *UserService) upsertPermission(userId, id, name, description string) (*usertypes.Permission, error) {

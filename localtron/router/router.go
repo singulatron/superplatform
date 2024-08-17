@@ -11,7 +11,7 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/singulatron/singulatron/localtron/datastore"
+	"github.com/singulatron/singulatron/sdk/go/datastore"
 )
 
 const DefaultPort = "58231"

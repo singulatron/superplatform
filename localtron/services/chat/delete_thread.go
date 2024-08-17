@@ -7,7 +7,7 @@
  */
 package chatservice
 
-import "github.com/singulatron/singulatron/localtron/datastore"
+import "github.com/singulatron/singulatron/sdk/go/datastore"
 
 func (a *ChatService) deleteThread(id string) error {
 	return a.threadsStore.Query(

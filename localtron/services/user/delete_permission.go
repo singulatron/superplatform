@@ -8,7 +8,7 @@
 package userservice
 
 import (
-	"github.com/singulatron/singulatron/localtron/datastore"
+	"github.com/singulatron/singulatron/sdk/go/datastore"
 )
 
 func (s *UserService) deletePermission(permissionId string) error {

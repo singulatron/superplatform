@@ -5,3 +5,5 @@ use ./localtron
 use ./dapper
 
 use ./clients/go
+
+use ./sdk/go

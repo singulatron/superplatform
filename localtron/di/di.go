@@ -9,8 +9,6 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/singulatron/singulatron/localtron/clients/llm"
-	"github.com/singulatron/singulatron/localtron/datastore"
-	"github.com/singulatron/singulatron/localtron/datastore/localstore"
 	"github.com/singulatron/singulatron/localtron/logger"
 	"github.com/singulatron/singulatron/localtron/middlewares"
 	"github.com/singulatron/singulatron/localtron/router"
@@ -25,6 +23,8 @@ import (
 	policyservice "github.com/singulatron/singulatron/localtron/services/policy"
 	promptservice "github.com/singulatron/singulatron/localtron/services/prompt"
 	userservice "github.com/singulatron/singulatron/localtron/services/user"
+	"github.com/singulatron/singulatron/sdk/go/datastore"
+	"github.com/singulatron/singulatron/sdk/go/datastore/localstore"
 )
 
 const singulatronFolder = ".singulatron"

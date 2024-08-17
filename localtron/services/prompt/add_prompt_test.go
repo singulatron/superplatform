@@ -18,11 +18,11 @@ import (
 
 	"github.com/singulatron/singulatron/localtron/clients/llm"
 	"github.com/singulatron/singulatron/localtron/di"
-	sdk "github.com/singulatron/singulatron/localtron/sdk/go"
 	configservice "github.com/singulatron/singulatron/localtron/services/config"
 	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
+	sdk "github.com/singulatron/singulatron/sdk/go"
 	"github.com/stretchr/testify/require"
 	"go.uber.org/mock/gomock"
 )

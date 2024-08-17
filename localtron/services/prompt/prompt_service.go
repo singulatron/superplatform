@@ -11,9 +11,9 @@ import (
 	"sync"
 
 	"github.com/singulatron/singulatron/localtron/clients/llm"
-	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/router"
-	sdk "github.com/singulatron/singulatron/localtron/sdk/go"
+	sdk "github.com/singulatron/singulatron/sdk/go"
+	"github.com/singulatron/singulatron/sdk/go/datastore"
 
 	streammanager "github.com/singulatron/singulatron/localtron/services/prompt/sub/stream_manager"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"

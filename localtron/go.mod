@@ -3,6 +3,7 @@ module github.com/singulatron/singulatron/localtron
 go 1.21
 
 replace github.com/singulatron/singulatron/clients/go => ../clients/go
+replace github.com/singulatron/singulatron/sdk/go => ../sdk/go
 
 require (
 	github.com/andybalholm/brotli v1.1.0

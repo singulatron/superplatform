@@ -10,10 +10,10 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/singulatron/singulatron/localtron/di"
-	sdk "github.com/singulatron/singulatron/localtron/sdk/go"
 	configservice "github.com/singulatron/singulatron/localtron/services/config"
 	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
+	sdk "github.com/singulatron/singulatron/sdk/go"
 )
 
 func TestModel(t *testing.T) {

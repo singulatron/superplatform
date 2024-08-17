@@ -10,7 +10,7 @@ package genericservice
 import (
 	"errors"
 
-	"github.com/singulatron/singulatron/localtron/datastore"
+	"github.com/singulatron/singulatron/sdk/go/datastore"
 
 	generictypes "github.com/singulatron/singulatron/localtron/services/generic/types"
 )

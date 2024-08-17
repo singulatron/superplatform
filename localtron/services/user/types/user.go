@@ -10,7 +10,7 @@ package user_svc
 import (
 	"time"
 
-	"github.com/singulatron/singulatron/localtron/datastore"
+	"github.com/singulatron/singulatron/sdk/go/datastore"
 )
 
 type ErrorResponse struct {

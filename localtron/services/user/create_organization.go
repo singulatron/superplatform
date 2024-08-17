@@ -12,7 +12,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/singulatron/singulatron/localtron/datastore"
+	"github.com/singulatron/singulatron/sdk/go/datastore"
 
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 )

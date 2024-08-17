@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/singulatron/singulatron/localtron/clients/llm"
-	"github.com/singulatron/singulatron/localtron/datastore"
+	"github.com/singulatron/singulatron/sdk/go/datastore"
 )
 
 type ErrorResponse struct {

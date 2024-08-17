@@ -1,7 +1,7 @@
 package generic_svc
 
 import (
-	"github.com/singulatron/singulatron/localtron/datastore"
+	"github.com/singulatron/singulatron/sdk/go/datastore"
 )
 
 type ErrorResponse struct {

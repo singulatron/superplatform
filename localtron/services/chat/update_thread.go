@@ -10,10 +10,10 @@ package chatservice
 import (
 	"context"
 
-	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/logger"
 	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
 	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
+	"github.com/singulatron/singulatron/sdk/go/datastore"
 )
 
 func (a *ChatService) updateThread(chatThread *chattypes.Thread) (*chattypes.Thread, error) {

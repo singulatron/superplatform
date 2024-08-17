@@ -11,8 +11,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/singulatron/singulatron/localtron/datastore"
-	localstore "github.com/singulatron/singulatron/localtron/datastore/localstore"
+	"github.com/singulatron/singulatron/sdk/go/datastore"
+	localstore "github.com/singulatron/singulatron/sdk/go/datastore/localstore"
 	"github.com/stretchr/testify/require"
 )
 

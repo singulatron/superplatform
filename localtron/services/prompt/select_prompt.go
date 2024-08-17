@@ -11,7 +11,7 @@ import (
 	"math"
 	"time"
 
-	"github.com/singulatron/singulatron/localtron/datastore"
+	"github.com/singulatron/singulatron/sdk/go/datastore"
 
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"
 )

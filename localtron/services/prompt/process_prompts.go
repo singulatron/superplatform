@@ -21,8 +21,8 @@ import (
 
 	"github.com/singulatron/singulatron/localtron/clients/llm"
 	"github.com/singulatron/singulatron/localtron/clients/stable_diffusion"
-	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/logger"
+	"github.com/singulatron/singulatron/sdk/go/datastore"
 
 	apptypes "github.com/singulatron/singulatron/localtron/services/chat/types"
 	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"

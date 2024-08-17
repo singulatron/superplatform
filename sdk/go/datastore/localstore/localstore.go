@@ -19,9 +19,9 @@ import (
 
 	"github.com/flusflas/dipper"
 	"github.com/google/uuid"
-	"github.com/singulatron/singulatron/localtron/datastore"
-	"github.com/singulatron/singulatron/localtron/datastore/localstore/statemanager"
 	"github.com/singulatron/singulatron/localtron/reflector"
+	"github.com/singulatron/singulatron/sdk/go/datastore"
+	"github.com/singulatron/singulatron/sdk/go/datastore/localstore/statemanager"
 )
 
 type LocalStore struct {

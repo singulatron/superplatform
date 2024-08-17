@@ -12,9 +12,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/singulatron/singulatron/localtron/datastore"
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
+	"github.com/singulatron/singulatron/sdk/go/datastore"
 )
 
 func (p *ModelService) registerPermissions() error {

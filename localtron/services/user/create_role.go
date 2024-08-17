@@ -11,8 +11,8 @@ import (
 	"errors"
 
 	"github.com/google/uuid"
-	"github.com/singulatron/singulatron/localtron/datastore"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
+	"github.com/singulatron/singulatron/sdk/go/datastore"
 )
 
 func (s *UserService) createRole(ownerId, name, description string, permissionIds []string) (*usertypes.Role, error) {

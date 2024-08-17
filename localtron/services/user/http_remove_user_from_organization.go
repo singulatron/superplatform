@@ -13,8 +13,8 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/singulatron/singulatron/localtron/datastore"
 	user "github.com/singulatron/singulatron/localtron/services/user/types"
+	"github.com/singulatron/singulatron/sdk/go/datastore"
 )
 
 // RemoveUserFromOrganization allows an authorized user to add another user to a specific organization.

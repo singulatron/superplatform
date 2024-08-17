@@ -11,8 +11,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/singulatron/singulatron/localtron/datastore"
-	"github.com/singulatron/singulatron/localtron/datastore/localstore"
+	"github.com/singulatron/singulatron/sdk/go/datastore"
+	"github.com/singulatron/singulatron/sdk/go/datastore/localstore"
 
 	promptservice "github.com/singulatron/singulatron/localtron/services/prompt"
 	prompttypes "github.com/singulatron/singulatron/localtron/services/prompt/types"

@@ -16,13 +16,13 @@ import (
 	"sync"
 	"time"
 
-	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/logger"
 	"github.com/singulatron/singulatron/localtron/router"
-	sdk "github.com/singulatron/singulatron/localtron/sdk/go"
 	types "github.com/singulatron/singulatron/localtron/services/download/types"
 	firehosetypes "github.com/singulatron/singulatron/localtron/services/firehose/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
+	sdk "github.com/singulatron/singulatron/sdk/go"
+	"github.com/singulatron/singulatron/sdk/go/datastore"
 )
 
 type DownloadService struct {

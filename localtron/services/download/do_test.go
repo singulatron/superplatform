@@ -20,10 +20,10 @@ import (
 	"time"
 
 	"github.com/singulatron/singulatron/localtron/di"
-	sdk "github.com/singulatron/singulatron/localtron/sdk/go"
 	downloadservice "github.com/singulatron/singulatron/localtron/services/download"
 	downloadtypes "github.com/singulatron/singulatron/localtron/services/download/types"
 	types "github.com/singulatron/singulatron/localtron/services/download/types"
+	sdk "github.com/singulatron/singulatron/sdk/go"
 	"github.com/stretchr/testify/require"
 )
 

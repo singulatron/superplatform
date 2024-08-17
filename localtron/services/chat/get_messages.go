@@ -8,8 +8,8 @@
 package chatservice
 
 import (
-	"github.com/singulatron/singulatron/localtron/datastore"
 	chattypes "github.com/singulatron/singulatron/localtron/services/chat/types"
+	"github.com/singulatron/singulatron/sdk/go/datastore"
 )
 
 func (a *ChatService) getMessages(threadId string) ([]*chattypes.Message, error) {

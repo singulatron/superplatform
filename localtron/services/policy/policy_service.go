@@ -10,9 +10,9 @@ package policyservice
 import (
 	"sync"
 
-	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/router"
-	sdk "github.com/singulatron/singulatron/localtron/sdk/go"
+	sdk "github.com/singulatron/singulatron/sdk/go"
+	"github.com/singulatron/singulatron/sdk/go/datastore"
 
 	policytypes "github.com/singulatron/singulatron/localtron/services/policy/types"
 	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"

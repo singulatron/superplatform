@@ -15,12 +15,12 @@ import (
 	"os"
 
 	"github.com/pkg/errors"
-	"github.com/singulatron/singulatron/localtron/datastore"
 	"github.com/singulatron/singulatron/localtron/logger"
 	configtypes "github.com/singulatron/singulatron/localtron/services/config/types"
 	dockertypes "github.com/singulatron/singulatron/localtron/services/docker/types"
 	downloadtypes "github.com/singulatron/singulatron/localtron/services/download/types"
 	modeltypes "github.com/singulatron/singulatron/localtron/services/model/types"
+	"github.com/singulatron/singulatron/sdk/go/datastore"
 )
 
 func (ms *ModelService) status(modelId string) (*modeltypes.ModelStatus, error) {
