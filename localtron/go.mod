@@ -6,6 +6,9 @@ replace github.com/singulatron/singulatron/clients/go => ../clients/go
 replace github.com/singulatron/singulatron/sdk/go => ../sdk/go
 
 require (
+	github.com/singulatron/singulatron/clients/go v0.0.0
+	github.com/singulatron/singulatron/sdk/go v0.0.0
+	
 	github.com/andybalholm/brotli v1.1.0
 	github.com/docker/docker v26.0.0+incompatible
 	github.com/docker/go-connections v0.5.0

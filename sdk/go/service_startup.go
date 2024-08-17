@@ -5,9 +5,9 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
+	client "github.com/singulatron/singulatron/clients/go"
 	"github.com/singulatron/singulatron/localtron/logger"
 	"github.com/singulatron/singulatron/localtron/router"
-	usertypes "github.com/singulatron/singulatron/localtron/services/user/types"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
 )
 
@@ -25,12 +25,12 @@ func RegisterService(serviceSlug, serviceName string, router *router.Router, sto
 	pw := ""
 
 	if len(res) > 0 {
-		cred := res[0].(*usertypes.Credential)
+		cred := res[0].(*Credential)
 		slug = cred.Slug
 		pw = cred.Password
 	} else {
 		pw = uuid.New().String()
-		err = store.Upsert(&usertypes.Credential{
+		err = store.Upsert(&Credential{
 			Slug:     slug,
 			Password: pw,
 		})
@@ -39,55 +39,55 @@ func RegisterService(serviceSlug, serviceName string, router *router.Router, sto
 		}
 	}
 
-	loginRsp := usertypes.LoginResponse{}
-	err = router.Post(context.Background(), "user-svc", "/login", usertypes.LoginRequest{
-		Slug:     slug,
-		Password: pw,
+	loginRsp := client.UserSvcLoginResponse{}
+	err = router.Post(context.Background(), "user-svc", "/login", client.UserSvcLoginRequest{
+		Slug:     client.PtrString(slug),
+		Password: client.PtrString(pw),
 	}, &loginRsp)
 
 	if err != nil {
 		logger.Info(fmt.Sprintf("Registering the %v service", serviceSlug))
 
-		err = router.Post(context.Background(), "user-svc", "/register", usertypes.RegisterRequest{
-			Slug:     slug,
-			Name:     serviceName,
-			Password: pw,
+		err = router.Post(context.Background(), "user-svc", "/register", client.UserSvcRegisterRequest{
+			Slug:     client.PtrString(slug),
+			Name:     client.PtrString(serviceName),
+			Password: client.PtrString(pw),
 		}, nil)
 		if err != nil {
 			return "", err
 		}
 
-		loginRsp = usertypes.LoginResponse{}
-		err = router.Post(context.Background(), "user-svc", "/login", usertypes.LoginRequest{
-			Slug:     slug,
-			Password: pw,
+		loginRsp = client.UserSvcLoginResponse{}
+		err = router.Post(context.Background(), "user-svc", "/login", client.UserSvcLoginRequest{
+			Slug:     client.PtrString(slug),
+			Password: client.PtrString(pw),
 		}, &loginRsp)
 		if err != nil {
 			return "", err
 		}
 	}
 
-	return loginRsp.Token.Token, nil
+	return *loginRsp.Token.Token, nil
 }
 
 func RegisterUser(router *router.Router, slug, password, username string) (string, error) {
-	err := router.Post(context.Background(), "user-svc", "/register", &usertypes.RegisterRequest{
-		Slug:     slug,
-		Password: password,
-		Name:     username,
+	err := router.Post(context.Background(), "user-svc", "/register", &client.UserSvcRegisterRequest{
+		Slug:     client.PtrString(slug),
+		Password: client.PtrString(password),
+		Name:     client.PtrString(username),
 	}, nil)
 	if err != nil {
 		return "", err
 	}
 
-	loginRsp := usertypes.LoginResponse{}
-	err = router.Post(context.Background(), "user-svc", "/login", &usertypes.LoginRequest{
-		Slug:     slug,
-		Password: password,
+	loginRsp := client.UserSvcLoginResponse{}
+	err = router.Post(context.Background(), "user-svc", "/login", &client.UserSvcLoginRequest{
+		Slug:     client.PtrString(slug),
+		Password: client.PtrString(password),
 	}, &loginRsp)
 	if err != nil {
 		return "", err
 	}
 
-	return loginRsp.Token.Token, nil
+	return *loginRsp.Token.Token, nil
 }
