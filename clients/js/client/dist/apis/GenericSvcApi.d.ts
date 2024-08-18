@@ -54,22 +54,22 @@ export declare class GenericSvcApi extends runtime.BaseAPI {
     deleteObjects(requestParameters: DeleteObjectsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
     /**
      * Retrieves objects from a specified table based on search criteria. Requires authorization and user authentication.   Use helper functions in your respective client library such as condition constructors (`equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
-     * Query Generic Objects
+     * Query Dynamic Objects
      */
     queryRaw(requestParameters: QueryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DynamicSvcQueryResponse>>;
     /**
      * Retrieves objects from a specified table based on search criteria. Requires authorization and user authentication.   Use helper functions in your respective client library such as condition constructors (`equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
-     * Query Generic Objects
+     * Query Dynamic Objects
      */
     query(requestParameters?: QueryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DynamicSvcQueryResponse>;
     /**
      * Updates objects in a specified table based on provided conditions. Requires authorization and user authentication.
-     * Update Generic Objects
+     * Update Dynamic Objects
      */
     updateObjectsRaw(requestParameters: UpdateObjectsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
     /**
      * Updates objects in a specified table based on provided conditions. Requires authorization and user authentication.
-     * Update Generic Objects
+     * Update Dynamic Objects
      */
     updateObjects(requestParameters: UpdateObjectsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
     /**

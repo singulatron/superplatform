@@ -1,6 +1,6 @@
 import { Configuration, DynamicSvcApi } from "@singulatron/client";
 
-export async function genericTest(apiKey: string) {
+export async function dynamicTest(apiKey: string) {
   const dynamicService: DynamicSvcApi = new DynamicSvcApi(
     new Configuration({
       apiKey: apiKey,

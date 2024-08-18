@@ -146,7 +146,7 @@ const sidebar: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "Generic Svc",
+      label: "Dynamic Svc",
       items: [
         {
           type: "doc",
@@ -163,7 +163,7 @@ const sidebar: SidebarsConfig = {
         {
           type: "doc",
           id: "singulatron/query",
-          label: "Query Generic Objects",
+          label: "Query Dynamic Objects",
           className: "api-method post",
         },
         {
@@ -175,7 +175,7 @@ const sidebar: SidebarsConfig = {
         {
           type: "doc",
           id: "singulatron/update-objects",
-          label: "Update Generic Objects",
+          label: "Update Dynamic Objects",
           className: "api-method post",
         },
       ],

@@ -12,22 +12,22 @@ import (
 	"fmt"
 	"net/http"
 
-	generic "github.com/singulatron/singulatron/localtron/internal/services/dynamic/types"
+	dynamic "github.com/singulatron/singulatron/localtron/internal/services/dynamic/types"
 	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
 )
 
-// Update modifies existing generic objects based on given conditions
+// Update modifies existing dynamic objects based on given conditions
 // @ID updateObjects
-// @Summary Update Generic Objects
+// @Summary Update Dynamic Objects
 // @Description Updates objects in a specified table based on provided conditions. Requires authorization and user authentication.
-// @Tags Generic Svc
+// @Tags Dynamic Svc
 // @Accept json
 // @Produce json
-// @Param body body generic.UpdateObjectRequest true "Update request payload"
-// @Success 200 {object} generic.UpdateObjectResponse "Successful update of objects"
-// @Failure 400 {object} generic.ErrorResponse "Invalid JSON"
-// @Failure 401 {object} generic.ErrorResponse "Unauthorized"
-// @Failure 500 {object} generic.ErrorResponse "Internal Server Error"
+// @Param body body dynamic.UpdateObjectRequest true "Update request payload"
+// @Success 200 {object} dynamic.UpdateObjectResponse "Successful update of objects"
+// @Failure 400 {object} dynamic.ErrorResponse "Invalid JSON"
+// @Failure 401 {object} dynamic.ErrorResponse "Unauthorized"
+// @Failure 500 {object} dynamic.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
 // @Router /dynamic-svc/objects/update [post]
 func (g *DynamicService) Update(
@@ -37,7 +37,7 @@ func (g *DynamicService) Update(
 	w.Header().Set("Content-Type", "application/json")
 
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := g.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", generic.PermissionGenericEdit.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	err := g.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", dynamic.PermissionGenericEdit.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(err.Error()))
@@ -49,7 +49,7 @@ func (g *DynamicService) Update(
 		return
 	}
 
-	req := &generic.UpdateObjectRequest{}
+	req := &dynamic.UpdateObjectRequest{}
 	err = json.NewDecoder(r.Body).Decode(req)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)

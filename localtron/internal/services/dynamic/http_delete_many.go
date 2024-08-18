@@ -12,23 +12,23 @@ import (
 	"fmt"
 	"net/http"
 
-	generic "github.com/singulatron/singulatron/localtron/internal/services/dynamic/types"
+	dynamic "github.com/singulatron/singulatron/localtron/internal/services/dynamic/types"
 	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
 )
 
-// Delete removes a generic object based on the provided conditions
+// Delete removes a dynamic object based on the provided conditions
 // @ID deleteObjects
 // @Summary     Delete a Generic Object
-// @Description Removes a generic object from the system based on the provided conditions. Requires authorization and user authentication.
-// @Tags        Generic Svc
+// @Description Removes a dynamic object from the system based on the provided conditions. Requires authorization and user authentication.
+// @Tags        Dynamic Svc
 // @Accept      json
 // @Produce     json
 // @Param       objectId  path     string  true  "Object ID"
-// @Param       body      body     generic.DeleteObjectRequest true "Delete request payload"
-// @Success     200       {object} generic.DeleteObjectResponse "Successful deletion of object"
-// @Failure     400       {object} generic.ErrorResponse "Invalid JSON"
-// @Failure     401       {object} generic.ErrorResponse "Unauthorized"
-// @Failure     500       {object} generic.ErrorResponse "Internal Server Error"
+// @Param       body      body     dynamic.DeleteObjectRequest true "Delete request payload"
+// @Success     200       {object} dynamic.DeleteObjectResponse "Successful deletion of object"
+// @Failure     400       {object} dynamic.ErrorResponse "Invalid JSON"
+// @Failure     401       {object} dynamic.ErrorResponse "Unauthorized"
+// @Failure     500       {object} dynamic.ErrorResponse "Internal Server Error"
 // @Security    BearerAuth
 // @Router      /dynamic-svc/objects/delete [post]
 func (g *DynamicService) Delete(
@@ -37,7 +37,7 @@ func (g *DynamicService) Delete(
 ) {
 
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := g.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", generic.PermissionGenericDelete.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	err := g.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", dynamic.PermissionGenericDelete.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -47,7 +47,7 @@ func (g *DynamicService) Delete(
 		return
 	}
 
-	req := &generic.DeleteObjectRequest{}
+	req := &dynamic.DeleteObjectRequest{}
 	err = json.NewDecoder(r.Body).Decode(req)
 	if err != nil {
 		http.Error(w, `Invalid JSON`, http.StatusBadRequest)

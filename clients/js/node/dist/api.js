@@ -154,15 +154,15 @@ Object.defineProperty(exports, 'DownloadSvcApiApiKeys', {
 	enumerable: true,
 	get: function () { return chatSvcApi.DownloadSvcApiApiKeys; }
 });
+exports.DynamicSvcApi = chatSvcApi.DynamicSvcApi;
+Object.defineProperty(exports, 'DynamicSvcApiApiKeys', {
+	enumerable: true,
+	get: function () { return chatSvcApi.DynamicSvcApiApiKeys; }
+});
 exports.FirehoseSvcApi = chatSvcApi.FirehoseSvcApi;
 Object.defineProperty(exports, 'FirehoseSvcApiApiKeys', {
 	enumerable: true,
 	get: function () { return chatSvcApi.FirehoseSvcApiApiKeys; }
-});
-exports.GenericSvcApi = chatSvcApi.GenericSvcApi;
-Object.defineProperty(exports, 'GenericSvcApiApiKeys', {
-	enumerable: true,
-	get: function () { return chatSvcApi.GenericSvcApiApiKeys; }
 });
 exports.HttpError = chatSvcApi.HttpError;
 exports.ModelSvcApi = chatSvcApi.ModelSvcApi;

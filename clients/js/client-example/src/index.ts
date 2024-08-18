@@ -1,5 +1,5 @@
 import { UserSvcApi } from "@singulatron/client";
-import { dynamicTest } from "./dynamic_example.js";
+import { dynamicTest } from "./dynamic_example";
 
 async function start() {
   let userService = new UserSvcApi();

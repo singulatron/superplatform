@@ -47,7 +47,7 @@ func NewDynamicService(
 }
 
 func (g *DynamicService) Start() error {
-	token, err := sdk.RegisterService("dynamic-svc", "Generic Service", g.router, g.credentialStore)
+	token, err := sdk.RegisterService("dynamic-svc", "Dynamic Svc", g.router, g.credentialStore)
 	if err != nil {
 		return err
 	}

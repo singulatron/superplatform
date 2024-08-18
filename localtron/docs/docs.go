@@ -1064,7 +1064,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Generic Svc"
+                    "Dynamic Svc"
                 ],
                 "summary": "Create a Generic Object",
                 "operationId": "createObject",
@@ -1114,7 +1114,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Creates a new generic object or updates an existing one based on the provided data. Requires authorization and user authentication.",
+                "description": "Creates a new dynamic object or updates an existing one based on the provided data. Requires authorization and user authentication.",
                 "consumes": [
                     "application/json"
                 ],
@@ -1122,7 +1122,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Generic Svc"
+                    "Dynamic Svc"
                 ],
                 "summary": "Upsert a Generic Object",
                 "operationId": "upsertObject",
@@ -1187,9 +1187,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Generic Svc"
+                    "Dynamic Svc"
                 ],
-                "summary": "Query Generic Objects",
+                "summary": "Query Dynamic Objects",
                 "operationId": "query",
                 "parameters": [
                     {
@@ -1236,7 +1236,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Removes a generic object from the system based on the provided conditions. Requires authorization and user authentication.",
+                "description": "Removes a dynamic object from the system based on the provided conditions. Requires authorization and user authentication.",
                 "consumes": [
                     "application/json"
                 ],
@@ -1244,7 +1244,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Generic Svc"
+                    "Dynamic Svc"
                 ],
                 "summary": "Delete a Generic Object",
                 "operationId": "deleteObjects",
@@ -1309,9 +1309,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Generic Svc"
+                    "Dynamic Svc"
                 ],
-                "summary": "Update Generic Objects",
+                "summary": "Update Dynamic Objects",
                 "operationId": "updateObjects",
                 "parameters": [
                     {

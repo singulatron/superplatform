@@ -20,7 +20,7 @@ import (
 // @ID createObject
 // @Summary Create a Generic Object
 // @Description Creates a new object with the provided details. Requires authorization and user authentication.
-// @Tags Generic Svc
+// @Tags Dynamic Svc
 // @Accept json
 // @Produce json
 // @Param body body generic.CreateObjectRequest true "Create request payload"

@@ -98,13 +98,13 @@ Class | Method | HTTP request | Description
 *DownloadSvcAPI* | [**GetDownload**](docs/DownloadSvcAPI.md#getdownload) | **Get** /download-svc/download/{downloadId} | Get a Download
 *DownloadSvcAPI* | [**ListDownloads**](docs/DownloadSvcAPI.md#listdownloads) | **Post** /download-svc/downloads | List Downloads
 *DownloadSvcAPI* | [**Pause**](docs/DownloadSvcAPI.md#pause) | **Put** /download-svc/download/{downloadId}/pause | Pause a Download
+*DynamicSvcAPI* | [**CreateObject**](docs/DynamicSvcAPI.md#createobject) | **Post** /dynamic-svc/object | Create a Generic Object
+*DynamicSvcAPI* | [**DeleteObjects**](docs/DynamicSvcAPI.md#deleteobjects) | **Post** /dynamic-svc/objects/delete | Delete a Generic Object
+*DynamicSvcAPI* | [**Query**](docs/DynamicSvcAPI.md#query) | **Post** /dynamic-svc/objects | Query Dynamic Objects
+*DynamicSvcAPI* | [**UpdateObjects**](docs/DynamicSvcAPI.md#updateobjects) | **Post** /dynamic-svc/objects/update | Update Dynamic Objects
+*DynamicSvcAPI* | [**UpsertObject**](docs/DynamicSvcAPI.md#upsertobject) | **Put** /dynamic-svc/object/{objectId} | Upsert a Generic Object
 *FirehoseSvcAPI* | [**FirehoseSvcPublishPost**](docs/FirehoseSvcAPI.md#firehosesvcpublishpost) | **Post** /firehose-svc/publish | Publish an Event
 *FirehoseSvcAPI* | [**FirehoseSvcSubscribeGet**](docs/FirehoseSvcAPI.md#firehosesvcsubscribeget) | **Get** /firehose-svc/subscribe | Subscribe to the Event Stream
-*GenericSvcAPI* | [**CreateObject**](docs/GenericSvcAPI.md#createobject) | **Post** /dynamic-svc/object | Create a Generic Object
-*GenericSvcAPI* | [**DeleteObjects**](docs/GenericSvcAPI.md#deleteobjects) | **Post** /dynamic-svc/objects/delete | Delete a Generic Object
-*GenericSvcAPI* | [**Query**](docs/GenericSvcAPI.md#query) | **Post** /dynamic-svc/objects | Query Generic Objects
-*GenericSvcAPI* | [**UpdateObjects**](docs/GenericSvcAPI.md#updateobjects) | **Post** /dynamic-svc/objects/update | Update Generic Objects
-*GenericSvcAPI* | [**UpsertObject**](docs/GenericSvcAPI.md#upsertobject) | **Put** /dynamic-svc/object/{objectId} | Upsert a Generic Object
 *ModelSvcAPI* | [**GetDefaultModelStatus**](docs/ModelSvcAPI.md#getdefaultmodelstatus) | **Get** /model-svc/default-model/status | Get Default Model Status
 *ModelSvcAPI* | [**GetModel**](docs/ModelSvcAPI.md#getmodel) | **Get** /model-svc/model/{modelId} | Get a Model
 *ModelSvcAPI* | [**GetModelStatus**](docs/ModelSvcAPI.md#getmodelstatus) | **Get** /model-svc/model/{modelId}/status | Get Model Status

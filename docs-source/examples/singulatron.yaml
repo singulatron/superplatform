@@ -2002,12 +2002,12 @@ paths:
       - BearerAuth: []
       summary: Create a Generic Object
       tags:
-      - Generic Svc
+      - Dynamic Svc
   /dynamic-svc/object/{objectId}:
     put:
       consumes:
       - application/json
-      description: Creates a new generic object or updates an existing one based on
+      description: Creates a new dynamic object or updates an existing one based on
         the provided data. Requires authorization and user authentication.
       operationId: upsertObject
       parameters:
@@ -2045,7 +2045,7 @@ paths:
       - BearerAuth: []
       summary: Upsert a Generic Object
       tags:
-      - Generic Svc
+      - Dynamic Svc
   /dynamic-svc/objects:
     post:
       consumes:
@@ -2084,14 +2084,14 @@ paths:
             $ref: '#/definitions/dynamic_svc.ErrorResponse'
       security:
       - BearerAuth: []
-      summary: Query Generic Objects
+      summary: Query Dynamic Objects
       tags:
-      - Generic Svc
+      - Dynamic Svc
   /dynamic-svc/objects/delete:
     post:
       consumes:
       - application/json
-      description: Removes a generic object from the system based on the provided
+      description: Removes a dynamic object from the system based on the provided
         conditions. Requires authorization and user authentication.
       operationId: deleteObjects
       parameters:
@@ -2129,7 +2129,7 @@ paths:
       - BearerAuth: []
       summary: Delete a Generic Object
       tags:
-      - Generic Svc
+      - Dynamic Svc
   /dynamic-svc/objects/update:
     post:
       consumes:
@@ -2165,9 +2165,9 @@ paths:
             $ref: '#/definitions/dynamic_svc.ErrorResponse'
       security:
       - BearerAuth: []
-      summary: Update Generic Objects
+      summary: Update Dynamic Objects
       tags:
-      - Generic Svc
+      - Dynamic Svc
   /firehose-svc/publish:
     post:
       consumes:

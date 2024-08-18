@@ -18,13 +18,13 @@ import (
 
 // Query retrieves objects based on provided criteria
 // @ID query
-// @Summary Query Generic Objects
+// @Summary Query Dynamic Objects
 // @Description Retrieves objects from a specified table based on search criteria.
 // @Description Requires authorization and user authentication.
 // @Description
 // @Description
 // @Description Use helper functions in your respective client library such as condition constructors (`equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
-// @Tags Generic Svc
+// @Tags Dynamic Svc
 // @Accept json
 // @Produce json
 // @Param body body generic.QueryRequest false "Query Request"

@@ -14,27 +14,27 @@ import (
 
 var PermissionGenericCreate = usertypes.Permission{
 	Id:   "dynamic-svc:object:create",
-	Name: "Generic Service - Object Create",
+	Name: "Dynamic Svc - Object Create",
 }
 
 var PermissionGenericView = usertypes.Permission{
 	Id:   "dynamic-svc:object:view",
-	Name: "Generic Service - Object View",
+	Name: "Dynamic Svc - Object View",
 }
 
 var PermissionGenericEdit = usertypes.Permission{
 	Id:   "dynamic-svc:object:edit",
-	Name: "Generic Service - Object Edit",
+	Name: "Dynamic Svc - Object Edit",
 }
 
 var PermissionGenericDelete = usertypes.Permission{
 	Id:   "dynamic-svc:object:delete",
-	Name: "Generic Service - Object Delete",
+	Name: "Dynamic Svc - Object Delete",
 }
 
 var PermissionGenericStream = usertypes.Permission{
 	Id:   "dynamic-svc:object:stream",
-	Name: "Generic Service - Object Stream",
+	Name: "Dynamic Svc - Object Stream",
 }
 
 var GenericPermissions = []usertypes.Permission{

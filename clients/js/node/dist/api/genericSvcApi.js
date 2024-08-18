@@ -225,7 +225,7 @@ export class GenericSvcApi {
     }
     /**
      * Retrieves objects from a specified table based on search criteria. Requires authorization and user authentication.   Use helper functions in your respective client library such as condition constructors (`equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
-     * @summary Query Generic Objects
+     * @summary Query Dynamic Objects
      * @param body Query Request
      */
     query(body_1) {
@@ -292,7 +292,7 @@ export class GenericSvcApi {
     }
     /**
      * Updates objects in a specified table based on provided conditions. Requires authorization and user authentication.
-     * @summary Update Generic Objects
+     * @summary Update Dynamic Objects
      * @param body Update request payload
      */
     updateObjects(body_1) {

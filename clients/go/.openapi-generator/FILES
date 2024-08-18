@@ -6,8 +6,8 @@ api_chat_svc.go
 api_config_svc.go
 api_docker_svc.go
 api_download_svc.go
+api_dynamic_svc.go
 api_firehose_svc.go
-api_generic_svc.go
 api_model_svc.go
 api_node_svc.go
 api_policy_svc.go
@@ -57,6 +57,7 @@ docs/DownloadSvcDownloadRequest.md
 docs/DownloadSvcDownloadsResponse.md
 docs/DownloadSvcErrorResponse.md
 docs/DownloadSvcGetDownloadResponse.md
+docs/DynamicSvcAPI.md
 docs/DynamicSvcCreateObjectRequest.md
 docs/DynamicSvcCreateObjectResponse.md
 docs/DynamicSvcDeleteObjectRequest.md
@@ -72,7 +73,6 @@ docs/FirehoseSvcAPI.md
 docs/FirehoseSvcErrorResponse.md
 docs/FirehoseSvcEvent.md
 docs/FirehoseSvcPublishRequest.md
-docs/GenericSvcAPI.md
 docs/ModelSvcAPI.md
 docs/ModelSvcArchitectures.md
 docs/ModelSvcContainer.md
@@ -254,4 +254,5 @@ model_user_svc_set_role_permissions_request.go
 model_user_svc_upser_permission_request.go
 model_user_svc_user.go
 response.go
+test/api_dynamic_svc_test.go
 utils.go
