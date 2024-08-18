@@ -1,4 +1,4 @@
-name: Run client-example
+name: Run JS/TS client-example
 
 on:
   push:
@@ -36,7 +36,7 @@ jobs:
             sleep 1
           done
 
-          sleep 7
+          sleep 5
 
           set -e
           (
