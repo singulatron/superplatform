@@ -3,9 +3,8 @@ name: "Go SDK build"
 on:
   push:
     paths:
-      - "dapper/**"
-      - "localtron/**"
-      - ".github/workflows/backend-build-github.yaml"
+      - "sdk/go/**"
+      - ".github/workflows/go-sdk-build.yaml"
 
 jobs:
   test:
