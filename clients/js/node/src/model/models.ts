@@ -38,20 +38,20 @@ export * from './downloadSvcDownloadRequest';
 export * from './downloadSvcDownloadsResponse';
 export * from './downloadSvcErrorResponse';
 export * from './downloadSvcGetDownloadResponse';
+export * from './dynamicSvcCreateObjectRequest';
+export * from './dynamicSvcCreateObjectResponse';
+export * from './dynamicSvcDeleteObjectRequest';
+export * from './dynamicSvcErrorResponse';
+export * from './dynamicSvcGenericObject';
+export * from './dynamicSvcGenericObjectCreateFields';
+export * from './dynamicSvcQueryRequest';
+export * from './dynamicSvcQueryResponse';
+export * from './dynamicSvcUpdateObjectRequest';
+export * from './dynamicSvcUpsertObjectRequest';
+export * from './dynamicSvcUpsertObjectResponse';
 export * from './firehoseSvcErrorResponse';
 export * from './firehoseSvcEvent';
 export * from './firehoseSvcPublishRequest';
-export * from './genericSvcCreateObjectRequest';
-export * from './genericSvcCreateObjectResponse';
-export * from './genericSvcDeleteObjectRequest';
-export * from './genericSvcErrorResponse';
-export * from './genericSvcGenericObject';
-export * from './genericSvcGenericObjectCreateFields';
-export * from './genericSvcQueryRequest';
-export * from './genericSvcQueryResponse';
-export * from './genericSvcUpdateObjectRequest';
-export * from './genericSvcUpsertObjectRequest';
-export * from './genericSvcUpsertObjectResponse';
 export * from './modelSvcArchitectures';
 export * from './modelSvcContainer';
 export * from './modelSvcErrorResponse';
@@ -164,20 +164,20 @@ import { DownloadSvcDownloadRequest } from './downloadSvcDownloadRequest';
 import { DownloadSvcDownloadsResponse } from './downloadSvcDownloadsResponse';
 import { DownloadSvcErrorResponse } from './downloadSvcErrorResponse';
 import { DownloadSvcGetDownloadResponse } from './downloadSvcGetDownloadResponse';
+import { DynamicSvcCreateObjectRequest } from './dynamicSvcCreateObjectRequest';
+import { DynamicSvcCreateObjectResponse } from './dynamicSvcCreateObjectResponse';
+import { DynamicSvcDeleteObjectRequest } from './dynamicSvcDeleteObjectRequest';
+import { DynamicSvcErrorResponse } from './dynamicSvcErrorResponse';
+import { DynamicSvcGenericObject } from './dynamicSvcGenericObject';
+import { DynamicSvcGenericObjectCreateFields } from './dynamicSvcGenericObjectCreateFields';
+import { DynamicSvcQueryRequest } from './dynamicSvcQueryRequest';
+import { DynamicSvcQueryResponse } from './dynamicSvcQueryResponse';
+import { DynamicSvcUpdateObjectRequest } from './dynamicSvcUpdateObjectRequest';
+import { DynamicSvcUpsertObjectRequest } from './dynamicSvcUpsertObjectRequest';
+import { DynamicSvcUpsertObjectResponse } from './dynamicSvcUpsertObjectResponse';
 import { FirehoseSvcErrorResponse } from './firehoseSvcErrorResponse';
 import { FirehoseSvcEvent } from './firehoseSvcEvent';
 import { FirehoseSvcPublishRequest } from './firehoseSvcPublishRequest';
-import { GenericSvcCreateObjectRequest } from './genericSvcCreateObjectRequest';
-import { GenericSvcCreateObjectResponse } from './genericSvcCreateObjectResponse';
-import { GenericSvcDeleteObjectRequest } from './genericSvcDeleteObjectRequest';
-import { GenericSvcErrorResponse } from './genericSvcErrorResponse';
-import { GenericSvcGenericObject } from './genericSvcGenericObject';
-import { GenericSvcGenericObjectCreateFields } from './genericSvcGenericObjectCreateFields';
-import { GenericSvcQueryRequest } from './genericSvcQueryRequest';
-import { GenericSvcQueryResponse } from './genericSvcQueryResponse';
-import { GenericSvcUpdateObjectRequest } from './genericSvcUpdateObjectRequest';
-import { GenericSvcUpsertObjectRequest } from './genericSvcUpsertObjectRequest';
-import { GenericSvcUpsertObjectResponse } from './genericSvcUpsertObjectResponse';
 import { ModelSvcArchitectures } from './modelSvcArchitectures';
 import { ModelSvcContainer } from './modelSvcContainer';
 import { ModelSvcErrorResponse } from './modelSvcErrorResponse';
@@ -297,20 +297,20 @@ let typeMap: {[index: string]: any} = {
     "DownloadSvcDownloadsResponse": DownloadSvcDownloadsResponse,
     "DownloadSvcErrorResponse": DownloadSvcErrorResponse,
     "DownloadSvcGetDownloadResponse": DownloadSvcGetDownloadResponse,
+    "DynamicSvcCreateObjectRequest": DynamicSvcCreateObjectRequest,
+    "DynamicSvcCreateObjectResponse": DynamicSvcCreateObjectResponse,
+    "DynamicSvcDeleteObjectRequest": DynamicSvcDeleteObjectRequest,
+    "DynamicSvcErrorResponse": DynamicSvcErrorResponse,
+    "DynamicSvcGenericObject": DynamicSvcGenericObject,
+    "DynamicSvcGenericObjectCreateFields": DynamicSvcGenericObjectCreateFields,
+    "DynamicSvcQueryRequest": DynamicSvcQueryRequest,
+    "DynamicSvcQueryResponse": DynamicSvcQueryResponse,
+    "DynamicSvcUpdateObjectRequest": DynamicSvcUpdateObjectRequest,
+    "DynamicSvcUpsertObjectRequest": DynamicSvcUpsertObjectRequest,
+    "DynamicSvcUpsertObjectResponse": DynamicSvcUpsertObjectResponse,
     "FirehoseSvcErrorResponse": FirehoseSvcErrorResponse,
     "FirehoseSvcEvent": FirehoseSvcEvent,
     "FirehoseSvcPublishRequest": FirehoseSvcPublishRequest,
-    "GenericSvcCreateObjectRequest": GenericSvcCreateObjectRequest,
-    "GenericSvcCreateObjectResponse": GenericSvcCreateObjectResponse,
-    "GenericSvcDeleteObjectRequest": GenericSvcDeleteObjectRequest,
-    "GenericSvcErrorResponse": GenericSvcErrorResponse,
-    "GenericSvcGenericObject": GenericSvcGenericObject,
-    "GenericSvcGenericObjectCreateFields": GenericSvcGenericObjectCreateFields,
-    "GenericSvcQueryRequest": GenericSvcQueryRequest,
-    "GenericSvcQueryResponse": GenericSvcQueryResponse,
-    "GenericSvcUpdateObjectRequest": GenericSvcUpdateObjectRequest,
-    "GenericSvcUpsertObjectRequest": GenericSvcUpsertObjectRequest,
-    "GenericSvcUpsertObjectResponse": GenericSvcUpsertObjectResponse,
     "ModelSvcArchitectures": ModelSvcArchitectures,
     "ModelSvcContainer": ModelSvcContainer,
     "ModelSvcErrorResponse": ModelSvcErrorResponse,

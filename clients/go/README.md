@@ -100,11 +100,11 @@ Class | Method | HTTP request | Description
 *DownloadSvcAPI* | [**Pause**](docs/DownloadSvcAPI.md#pause) | **Put** /download-svc/download/{downloadId}/pause | Pause a Download
 *FirehoseSvcAPI* | [**FirehoseSvcPublishPost**](docs/FirehoseSvcAPI.md#firehosesvcpublishpost) | **Post** /firehose-svc/publish | Publish an Event
 *FirehoseSvcAPI* | [**FirehoseSvcSubscribeGet**](docs/FirehoseSvcAPI.md#firehosesvcsubscribeget) | **Get** /firehose-svc/subscribe | Subscribe to the Event Stream
-*GenericSvcAPI* | [**CreateObject**](docs/GenericSvcAPI.md#createobject) | **Post** /generic-svc/object | Create a Generic Object
-*GenericSvcAPI* | [**DeleteObjects**](docs/GenericSvcAPI.md#deleteobjects) | **Post** /generic-svc/objects/delete | Delete a Generic Object
-*GenericSvcAPI* | [**Query**](docs/GenericSvcAPI.md#query) | **Post** /generic-svc/objects | Query Generic Objects
-*GenericSvcAPI* | [**UpdateObjects**](docs/GenericSvcAPI.md#updateobjects) | **Post** /generic-svc/objects/update | Update Generic Objects
-*GenericSvcAPI* | [**UpsertObject**](docs/GenericSvcAPI.md#upsertobject) | **Put** /generic-svc/object/{objectId} | Upsert a Generic Object
+*GenericSvcAPI* | [**CreateObject**](docs/GenericSvcAPI.md#createobject) | **Post** /dynamic-svc/object | Create a Generic Object
+*GenericSvcAPI* | [**DeleteObjects**](docs/GenericSvcAPI.md#deleteobjects) | **Post** /dynamic-svc/objects/delete | Delete a Generic Object
+*GenericSvcAPI* | [**Query**](docs/GenericSvcAPI.md#query) | **Post** /dynamic-svc/objects | Query Generic Objects
+*GenericSvcAPI* | [**UpdateObjects**](docs/GenericSvcAPI.md#updateobjects) | **Post** /dynamic-svc/objects/update | Update Generic Objects
+*GenericSvcAPI* | [**UpsertObject**](docs/GenericSvcAPI.md#upsertobject) | **Put** /dynamic-svc/object/{objectId} | Upsert a Generic Object
 *ModelSvcAPI* | [**GetDefaultModelStatus**](docs/ModelSvcAPI.md#getdefaultmodelstatus) | **Get** /model-svc/default-model/status | Get Default Model Status
 *ModelSvcAPI* | [**GetModel**](docs/ModelSvcAPI.md#getmodel) | **Get** /model-svc/model/{modelId} | Get a Model
 *ModelSvcAPI* | [**GetModelStatus**](docs/ModelSvcAPI.md#getmodelstatus) | **Get** /model-svc/model/{modelId}/status | Get Model Status
@@ -182,20 +182,20 @@ Class | Method | HTTP request | Description
  - [DownloadSvcDownloadsResponse](docs/DownloadSvcDownloadsResponse.md)
  - [DownloadSvcErrorResponse](docs/DownloadSvcErrorResponse.md)
  - [DownloadSvcGetDownloadResponse](docs/DownloadSvcGetDownloadResponse.md)
+ - [DynamicSvcCreateObjectRequest](docs/DynamicSvcCreateObjectRequest.md)
+ - [DynamicSvcCreateObjectResponse](docs/DynamicSvcCreateObjectResponse.md)
+ - [DynamicSvcDeleteObjectRequest](docs/DynamicSvcDeleteObjectRequest.md)
+ - [DynamicSvcErrorResponse](docs/DynamicSvcErrorResponse.md)
+ - [DynamicSvcGenericObject](docs/DynamicSvcGenericObject.md)
+ - [DynamicSvcGenericObjectCreateFields](docs/DynamicSvcGenericObjectCreateFields.md)
+ - [DynamicSvcQueryRequest](docs/DynamicSvcQueryRequest.md)
+ - [DynamicSvcQueryResponse](docs/DynamicSvcQueryResponse.md)
+ - [DynamicSvcUpdateObjectRequest](docs/DynamicSvcUpdateObjectRequest.md)
+ - [DynamicSvcUpsertObjectRequest](docs/DynamicSvcUpsertObjectRequest.md)
+ - [DynamicSvcUpsertObjectResponse](docs/DynamicSvcUpsertObjectResponse.md)
  - [FirehoseSvcErrorResponse](docs/FirehoseSvcErrorResponse.md)
  - [FirehoseSvcEvent](docs/FirehoseSvcEvent.md)
  - [FirehoseSvcPublishRequest](docs/FirehoseSvcPublishRequest.md)
- - [GenericSvcCreateObjectRequest](docs/GenericSvcCreateObjectRequest.md)
- - [GenericSvcCreateObjectResponse](docs/GenericSvcCreateObjectResponse.md)
- - [GenericSvcDeleteObjectRequest](docs/GenericSvcDeleteObjectRequest.md)
- - [GenericSvcErrorResponse](docs/GenericSvcErrorResponse.md)
- - [GenericSvcGenericObject](docs/GenericSvcGenericObject.md)
- - [GenericSvcGenericObjectCreateFields](docs/GenericSvcGenericObjectCreateFields.md)
- - [GenericSvcQueryRequest](docs/GenericSvcQueryRequest.md)
- - [GenericSvcQueryResponse](docs/GenericSvcQueryResponse.md)
- - [GenericSvcUpdateObjectRequest](docs/GenericSvcUpdateObjectRequest.md)
- - [GenericSvcUpsertObjectRequest](docs/GenericSvcUpsertObjectRequest.md)
- - [GenericSvcUpsertObjectResponse](docs/GenericSvcUpsertObjectResponse.md)
  - [ModelSvcArchitectures](docs/ModelSvcArchitectures.md)
  - [ModelSvcContainer](docs/ModelSvcContainer.md)
  - [ModelSvcErrorResponse](docs/ModelSvcErrorResponse.md)

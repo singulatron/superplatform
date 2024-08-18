@@ -15,15 +15,15 @@ import localVarRequest from 'request';
 import http from 'http';
 
 /* tslint:disable:no-unused-locals */
-import { GenericSvcCreateObjectRequest } from '../model/genericSvcCreateObjectRequest';
-import { GenericSvcCreateObjectResponse } from '../model/genericSvcCreateObjectResponse';
-import { GenericSvcDeleteObjectRequest } from '../model/genericSvcDeleteObjectRequest';
-import { GenericSvcErrorResponse } from '../model/genericSvcErrorResponse';
-import { GenericSvcQueryRequest } from '../model/genericSvcQueryRequest';
-import { GenericSvcQueryResponse } from '../model/genericSvcQueryResponse';
-import { GenericSvcUpdateObjectRequest } from '../model/genericSvcUpdateObjectRequest';
-import { GenericSvcUpsertObjectRequest } from '../model/genericSvcUpsertObjectRequest';
-import { GenericSvcUpsertObjectResponse } from '../model/genericSvcUpsertObjectResponse';
+import { DynamicSvcCreateObjectRequest } from '../model/dynamicSvcCreateObjectRequest';
+import { DynamicSvcCreateObjectResponse } from '../model/dynamicSvcCreateObjectResponse';
+import { DynamicSvcDeleteObjectRequest } from '../model/dynamicSvcDeleteObjectRequest';
+import { DynamicSvcErrorResponse } from '../model/dynamicSvcErrorResponse';
+import { DynamicSvcQueryRequest } from '../model/dynamicSvcQueryRequest';
+import { DynamicSvcQueryResponse } from '../model/dynamicSvcQueryResponse';
+import { DynamicSvcUpdateObjectRequest } from '../model/dynamicSvcUpdateObjectRequest';
+import { DynamicSvcUpsertObjectRequest } from '../model/dynamicSvcUpsertObjectRequest';
+import { DynamicSvcUpsertObjectResponse } from '../model/dynamicSvcUpsertObjectResponse';
 
 import { ObjectSerializer, Authentication, VoidAuth, Interceptor } from '../model/models';
 import { HttpBasicAuth, HttpBearerAuth, ApiKeyAuth, OAuth } from '../model/models';
@@ -102,8 +102,8 @@ export class GenericSvcApi {
      * @summary Create a Generic Object
      * @param body Create request payload
      */
-    public async createObject (body: GenericSvcCreateObjectRequest, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: GenericSvcCreateObjectResponse;  }> {
-        const localVarPath = this.basePath + '/generic-svc/object';
+    public async createObject (body: DynamicSvcCreateObjectRequest, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: DynamicSvcCreateObjectResponse;  }> {
+        const localVarPath = this.basePath + '/dynamic-svc/object';
         let localVarQueryParameters: any = {};
         let localVarHeaderParams: any = (<any>Object).assign({}, this._defaultHeaders);
         const produces = ['application/json'];
@@ -131,7 +131,7 @@ export class GenericSvcApi {
             uri: localVarPath,
             useQuerystring: this._useQuerystring,
             json: true,
-            body: ObjectSerializer.serialize(body, "GenericSvcCreateObjectRequest")
+            body: ObjectSerializer.serialize(body, "DynamicSvcCreateObjectRequest")
         };
 
         let authenticationPromise = Promise.resolve();
@@ -153,13 +153,13 @@ export class GenericSvcApi {
                     localVarRequestOptions.form = localVarFormParams;
                 }
             }
-            return new Promise<{ response: http.IncomingMessage; body: GenericSvcCreateObjectResponse;  }>((resolve, reject) => {
+            return new Promise<{ response: http.IncomingMessage; body: DynamicSvcCreateObjectResponse;  }>((resolve, reject) => {
                 localVarRequest(localVarRequestOptions, (error, response, body) => {
                     if (error) {
                         reject(error);
                     } else {
                         if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
-                            body = ObjectSerializer.deserialize(body, "GenericSvcCreateObjectResponse");
+                            body = ObjectSerializer.deserialize(body, "DynamicSvcCreateObjectResponse");
                             resolve({ response: response, body: body });
                         } else {
                             reject(new HttpError(response, body, response.statusCode));
@@ -175,8 +175,8 @@ export class GenericSvcApi {
      * @param objectId Object ID
      * @param body Delete request payload
      */
-    public async deleteObjects (objectId: string, body: GenericSvcDeleteObjectRequest, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: object;  }> {
-        const localVarPath = this.basePath + '/generic-svc/objects/delete'
+    public async deleteObjects (objectId: string, body: DynamicSvcDeleteObjectRequest, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: object;  }> {
+        const localVarPath = this.basePath + '/dynamic-svc/objects/delete'
             .replace('{' + 'objectId' + '}', encodeURIComponent(String(objectId)));
         let localVarQueryParameters: any = {};
         let localVarHeaderParams: any = (<any>Object).assign({}, this._defaultHeaders);
@@ -210,7 +210,7 @@ export class GenericSvcApi {
             uri: localVarPath,
             useQuerystring: this._useQuerystring,
             json: true,
-            body: ObjectSerializer.serialize(body, "GenericSvcDeleteObjectRequest")
+            body: ObjectSerializer.serialize(body, "DynamicSvcDeleteObjectRequest")
         };
 
         let authenticationPromise = Promise.resolve();
@@ -253,8 +253,8 @@ export class GenericSvcApi {
      * @summary Query Generic Objects
      * @param body Query Request
      */
-    public async query (body?: GenericSvcQueryRequest, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: GenericSvcQueryResponse;  }> {
-        const localVarPath = this.basePath + '/generic-svc/objects';
+    public async query (body?: DynamicSvcQueryRequest, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: DynamicSvcQueryResponse;  }> {
+        const localVarPath = this.basePath + '/dynamic-svc/objects';
         let localVarQueryParameters: any = {};
         let localVarHeaderParams: any = (<any>Object).assign({}, this._defaultHeaders);
         const produces = ['application/json'];
@@ -277,7 +277,7 @@ export class GenericSvcApi {
             uri: localVarPath,
             useQuerystring: this._useQuerystring,
             json: true,
-            body: ObjectSerializer.serialize(body, "GenericSvcQueryRequest")
+            body: ObjectSerializer.serialize(body, "DynamicSvcQueryRequest")
         };
 
         let authenticationPromise = Promise.resolve();
@@ -299,13 +299,13 @@ export class GenericSvcApi {
                     localVarRequestOptions.form = localVarFormParams;
                 }
             }
-            return new Promise<{ response: http.IncomingMessage; body: GenericSvcQueryResponse;  }>((resolve, reject) => {
+            return new Promise<{ response: http.IncomingMessage; body: DynamicSvcQueryResponse;  }>((resolve, reject) => {
                 localVarRequest(localVarRequestOptions, (error, response, body) => {
                     if (error) {
                         reject(error);
                     } else {
                         if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
-                            body = ObjectSerializer.deserialize(body, "GenericSvcQueryResponse");
+                            body = ObjectSerializer.deserialize(body, "DynamicSvcQueryResponse");
                             resolve({ response: response, body: body });
                         } else {
                             reject(new HttpError(response, body, response.statusCode));
@@ -320,8 +320,8 @@ export class GenericSvcApi {
      * @summary Update Generic Objects
      * @param body Update request payload
      */
-    public async updateObjects (body: GenericSvcUpdateObjectRequest, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: object;  }> {
-        const localVarPath = this.basePath + '/generic-svc/objects/update';
+    public async updateObjects (body: DynamicSvcUpdateObjectRequest, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: object;  }> {
+        const localVarPath = this.basePath + '/dynamic-svc/objects/update';
         let localVarQueryParameters: any = {};
         let localVarHeaderParams: any = (<any>Object).assign({}, this._defaultHeaders);
         const produces = ['application/json'];
@@ -349,7 +349,7 @@ export class GenericSvcApi {
             uri: localVarPath,
             useQuerystring: this._useQuerystring,
             json: true,
-            body: ObjectSerializer.serialize(body, "GenericSvcUpdateObjectRequest")
+            body: ObjectSerializer.serialize(body, "DynamicSvcUpdateObjectRequest")
         };
 
         let authenticationPromise = Promise.resolve();
@@ -393,8 +393,8 @@ export class GenericSvcApi {
      * @param objectId Object ID
      * @param body Upsert request payload
      */
-    public async upsertObject (objectId: string, body: GenericSvcUpsertObjectRequest, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: GenericSvcUpsertObjectResponse;  }> {
-        const localVarPath = this.basePath + '/generic-svc/object/{objectId}'
+    public async upsertObject (objectId: string, body: DynamicSvcUpsertObjectRequest, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: DynamicSvcUpsertObjectResponse;  }> {
+        const localVarPath = this.basePath + '/dynamic-svc/object/{objectId}'
             .replace('{' + 'objectId' + '}', encodeURIComponent(String(objectId)));
         let localVarQueryParameters: any = {};
         let localVarHeaderParams: any = (<any>Object).assign({}, this._defaultHeaders);
@@ -428,7 +428,7 @@ export class GenericSvcApi {
             uri: localVarPath,
             useQuerystring: this._useQuerystring,
             json: true,
-            body: ObjectSerializer.serialize(body, "GenericSvcUpsertObjectRequest")
+            body: ObjectSerializer.serialize(body, "DynamicSvcUpsertObjectRequest")
         };
 
         let authenticationPromise = Promise.resolve();
@@ -450,13 +450,13 @@ export class GenericSvcApi {
                     localVarRequestOptions.form = localVarFormParams;
                 }
             }
-            return new Promise<{ response: http.IncomingMessage; body: GenericSvcUpsertObjectResponse;  }>((resolve, reject) => {
+            return new Promise<{ response: http.IncomingMessage; body: DynamicSvcUpsertObjectResponse;  }>((resolve, reject) => {
                 localVarRequest(localVarRequestOptions, (error, response, body) => {
                     if (error) {
                         reject(error);
                     } else {
                         if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
-                            body = ObjectSerializer.deserialize(body, "GenericSvcUpsertObjectResponse");
+                            body = ObjectSerializer.deserialize(body, "DynamicSvcUpsertObjectResponse");
                             resolve({ response: response, body: body });
                         } else {
                             reject(new HttpError(response, body, response.statusCode));

@@ -1,7 +1,7 @@
 import { c as call, _ as __awaiter } from './util2.mjs';
 import 'axios';
 
-class GenericService {
+class DynamicService {
     constructor(options) {
         this.options = options;
     }
@@ -10,13 +10,13 @@ class GenericService {
     }
     create(request) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.call("/generic-svc/create", request);
+            return this.call("/dynamic-svc/create", request);
         });
     }
     find(options) {
         return __awaiter(this, void 0, void 0, function* () {
             const request = options;
-            return this.call("/generic-svc/find", request);
+            return this.call("/dynamic-svc/find", request);
         });
     }
     upsert(object) {
@@ -24,7 +24,7 @@ class GenericService {
             const request = {
                 object: object,
             };
-            return this.call("/generic-svc/upsert", request);
+            return this.call("/dynamic-svc/upsert", request);
         });
     }
     update(table, conditions, object) {
@@ -34,7 +34,7 @@ class GenericService {
                 conditions: conditions,
                 object: object,
             };
-            return this.call("/generic-svc/update", request);
+            return this.call("/dynamic-svc/update", request);
         });
     }
     delete(table, conditions) {
@@ -43,9 +43,9 @@ class GenericService {
                 table: table,
                 conditions: conditions,
             };
-            return this.call("/generic-svc/delete", request);
+            return this.call("/dynamic-svc/delete", request);
         });
     }
 }
 
-export { GenericService };
+export { DynamicService };

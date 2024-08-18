@@ -10,7 +10,7 @@ import { ChatService } from "./chat";
 import { ConfigService } from "./config";
 import { DockerService } from "./docker";
 import { DownloadService } from "./download";
-import { GenericService } from "./generic";
+import { DynamicService } from "./generic";
 import { PromptService } from "./prompt";
 import { UserService } from "./user";
 export declare class Client {
@@ -20,7 +20,7 @@ export declare class Client {
     configService(): ConfigService;
     dockerService(): DockerService;
     downloadService(): DownloadService;
-    genericService(): GenericService;
+    dynamicService(): DynamicService;
     promptService(): PromptService;
     userService(): UserService;
 }

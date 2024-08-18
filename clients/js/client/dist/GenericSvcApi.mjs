@@ -1,14 +1,14 @@
 import { a as BaseAPI, _ as __awaiter, b as RequiredError, J as JSONApiResponse } from './runtime2.mjs';
-import { GenericSvcCreateObjectRequestToJSON } from './GenericSvcCreateObjectRequest.mjs';
-import { GenericSvcCreateObjectResponseFromJSON } from './GenericSvcCreateObjectResponse.mjs';
-import { GenericSvcDeleteObjectRequestToJSON } from './GenericSvcDeleteObjectRequest.mjs';
-import { GenericSvcQueryRequestToJSON } from './GenericSvcQueryRequest.mjs';
-import { GenericSvcQueryResponseFromJSON } from './GenericSvcQueryResponse.mjs';
-import { GenericSvcUpdateObjectRequestToJSON } from './GenericSvcUpdateObjectRequest.mjs';
-import { GenericSvcUpsertObjectRequestToJSON } from './GenericSvcUpsertObjectRequest.mjs';
-import { GenericSvcUpsertObjectResponseFromJSON } from './GenericSvcUpsertObjectResponse.mjs';
-import './GenericSvcGenericObjectCreateFields.mjs';
-import './GenericSvcGenericObject.mjs';
+import { DynamicSvcCreateObjectRequestToJSON } from './DynamicSvcCreateObjectRequest.mjs';
+import { DynamicSvcCreateObjectResponseFromJSON } from './DynamicSvcCreateObjectResponse.mjs';
+import { DynamicSvcDeleteObjectRequestToJSON } from './DynamicSvcDeleteObjectRequest.mjs';
+import { DynamicSvcQueryRequestToJSON } from './DynamicSvcQueryRequest.mjs';
+import { DynamicSvcQueryResponseFromJSON } from './DynamicSvcQueryResponse.mjs';
+import { DynamicSvcUpdateObjectRequestToJSON } from './DynamicSvcUpdateObjectRequest.mjs';
+import { DynamicSvcUpsertObjectRequestToJSON } from './DynamicSvcUpsertObjectRequest.mjs';
+import { DynamicSvcUpsertObjectResponseFromJSON } from './DynamicSvcUpsertObjectResponse.mjs';
+import './DynamicSvcGenericObjectCreateFields.mjs';
+import './DynamicSvcGenericObject.mjs';
 import './DatastoreCondition.mjs';
 import './DatastoreEqualCondition.mjs';
 import './DatastoreFieldSelector.mjs';
@@ -50,13 +50,13 @@ class GenericSvcApi extends BaseAPI {
                 headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
             }
             const response = yield this.request({
-                path: `/generic-svc/object`,
+                path: `/dynamic-svc/object`,
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,
-                body: GenericSvcCreateObjectRequestToJSON(requestParameters['body']),
+                body: DynamicSvcCreateObjectRequestToJSON(requestParameters['body']),
             }, initOverrides);
-            return new JSONApiResponse(response, (jsonValue) => GenericSvcCreateObjectResponseFromJSON(jsonValue));
+            return new JSONApiResponse(response, (jsonValue) => DynamicSvcCreateObjectResponseFromJSON(jsonValue));
         });
     }
     /**
@@ -88,11 +88,11 @@ class GenericSvcApi extends BaseAPI {
                 headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
             }
             const response = yield this.request({
-                path: `/generic-svc/objects/delete`.replace(`{${"objectId"}}`, encodeURIComponent(String(requestParameters['objectId']))),
+                path: `/dynamic-svc/objects/delete`.replace(`{${"objectId"}}`, encodeURIComponent(String(requestParameters['objectId']))),
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,
-                body: GenericSvcDeleteObjectRequestToJSON(requestParameters['body']),
+                body: DynamicSvcDeleteObjectRequestToJSON(requestParameters['body']),
             }, initOverrides);
             return new JSONApiResponse(response);
         });
@@ -120,13 +120,13 @@ class GenericSvcApi extends BaseAPI {
                 headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
             }
             const response = yield this.request({
-                path: `/generic-svc/objects`,
+                path: `/dynamic-svc/objects`,
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,
-                body: GenericSvcQueryRequestToJSON(requestParameters['body']),
+                body: DynamicSvcQueryRequestToJSON(requestParameters['body']),
             }, initOverrides);
-            return new JSONApiResponse(response, (jsonValue) => GenericSvcQueryResponseFromJSON(jsonValue));
+            return new JSONApiResponse(response, (jsonValue) => DynamicSvcQueryResponseFromJSON(jsonValue));
         });
     }
     /**
@@ -155,11 +155,11 @@ class GenericSvcApi extends BaseAPI {
                 headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
             }
             const response = yield this.request({
-                path: `/generic-svc/objects/update`,
+                path: `/dynamic-svc/objects/update`,
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,
-                body: GenericSvcUpdateObjectRequestToJSON(requestParameters['body']),
+                body: DynamicSvcUpdateObjectRequestToJSON(requestParameters['body']),
             }, initOverrides);
             return new JSONApiResponse(response);
         });
@@ -193,13 +193,13 @@ class GenericSvcApi extends BaseAPI {
                 headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
             }
             const response = yield this.request({
-                path: `/generic-svc/object/{objectId}`.replace(`{${"objectId"}}`, encodeURIComponent(String(requestParameters['objectId']))),
+                path: `/dynamic-svc/object/{objectId}`.replace(`{${"objectId"}}`, encodeURIComponent(String(requestParameters['objectId']))),
                 method: 'PUT',
                 headers: headerParameters,
                 query: queryParameters,
-                body: GenericSvcUpsertObjectRequestToJSON(requestParameters['body']),
+                body: DynamicSvcUpsertObjectRequestToJSON(requestParameters['body']),
             }, initOverrides);
-            return new JSONApiResponse(response, (jsonValue) => GenericSvcUpsertObjectResponseFromJSON(jsonValue));
+            return new JSONApiResponse(response, (jsonValue) => DynamicSvcUpsertObjectResponseFromJSON(jsonValue));
         });
     }
     /**

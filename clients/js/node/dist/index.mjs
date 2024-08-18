@@ -2,7 +2,7 @@ import { ChatService } from './chat.mjs';
 import { ConfigService } from './config.mjs';
 import { DockerService } from './docker.mjs';
 import { DownloadService } from './download.mjs';
-import { GenericService } from './generic.mjs';
+import { DynamicService } from './generic.mjs';
 import { PromptService } from './prompt.mjs';
 import { UserService } from './user.mjs';
 import './util2.mjs';
@@ -25,8 +25,8 @@ class Client {
     downloadService() {
         return new DownloadService(this.options);
     }
-    genericService() {
-        return new GenericService(this.options);
+    dynamicService() {
+        return new DynamicService(this.options);
     }
     promptService() {
         return new PromptService(this.options);
@@ -36,4 +36,4 @@ class Client {
     }
 }
 
-export { ChatService, Client, ConfigService, DockerService, DownloadService, GenericService, PromptService, UserService };
+export { ChatService, Client, ConfigService, DockerService, DownloadService, DynamicService, PromptService, UserService };

@@ -1043,6 +1043,309 @@
                 }
             }
         },
+        "/dynamic-svc/object": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Creates a new object with the provided details. Requires authorization and user authentication.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Generic Svc"
+                ],
+                "summary": "Create a Generic Object",
+                "operationId": "createObject",
+                "parameters": [
+                    {
+                        "description": "Create request payload",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dynamic_svc.CreateObjectRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/dynamic_svc.CreateObjectResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/dynamic_svc.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/dynamic_svc.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/dynamic_svc.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/dynamic-svc/object/{objectId}": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Creates a new generic object or updates an existing one based on the provided data. Requires authorization and user authentication.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Generic Svc"
+                ],
+                "summary": "Upsert a Generic Object",
+                "operationId": "upsertObject",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Object ID",
+                        "name": "objectId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Upsert request payload",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dynamic_svc.UpsertObjectRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful creation or update of object",
+                        "schema": {
+                            "$ref": "#/definitions/dynamic_svc.UpsertObjectResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/dynamic_svc.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/dynamic_svc.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/dynamic_svc.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/dynamic-svc/objects": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieves objects from a specified table based on search criteria.\nRequires authorization and user authentication.\n\n\nUse helper functions in your respective client library such as condition constructors (`equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Generic Svc"
+                ],
+                "summary": "Query Generic Objects",
+                "operationId": "query",
+                "parameters": [
+                    {
+                        "description": "Query Request",
+                        "name": "body",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/dynamic_svc.QueryRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful retrieval of objects",
+                        "schema": {
+                            "$ref": "#/definitions/dynamic_svc.QueryResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/dynamic_svc.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/dynamic_svc.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/dynamic_svc.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/dynamic-svc/objects/delete": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Removes a generic object from the system based on the provided conditions. Requires authorization and user authentication.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Generic Svc"
+                ],
+                "summary": "Delete a Generic Object",
+                "operationId": "deleteObjects",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Object ID",
+                        "name": "objectId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Delete request payload",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dynamic_svc.DeleteObjectRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful deletion of object",
+                        "schema": {
+                            "$ref": "#/definitions/dynamic_svc.DeleteObjectResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/dynamic_svc.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/dynamic_svc.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/dynamic_svc.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/dynamic-svc/objects/update": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Updates objects in a specified table based on provided conditions. Requires authorization and user authentication.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Generic Svc"
+                ],
+                "summary": "Update Generic Objects",
+                "operationId": "updateObjects",
+                "parameters": [
+                    {
+                        "description": "Update request payload",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dynamic_svc.UpdateObjectRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful update of objects",
+                        "schema": {
+                            "$ref": "#/definitions/dynamic_svc.UpdateObjectResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/dynamic_svc.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/dynamic_svc.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/dynamic_svc.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/firehose-svc/publish": {
             "post": {
                 "security": [
@@ -1126,309 +1429,6 @@
                         "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/firehose_svc.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/generic-svc/object": {
-            "post": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Creates a new object with the provided details. Requires authorization and user authentication.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Generic Svc"
-                ],
-                "summary": "Create a Generic Object",
-                "operationId": "createObject",
-                "parameters": [
-                    {
-                        "description": "Create request payload",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/generic_svc.CreateObjectRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success",
-                        "schema": {
-                            "$ref": "#/definitions/generic_svc.CreateObjectResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid JSON",
-                        "schema": {
-                            "$ref": "#/definitions/generic_svc.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/generic_svc.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/generic_svc.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/generic-svc/object/{objectId}": {
-            "put": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Creates a new generic object or updates an existing one based on the provided data. Requires authorization and user authentication.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Generic Svc"
-                ],
-                "summary": "Upsert a Generic Object",
-                "operationId": "upsertObject",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Object ID",
-                        "name": "objectId",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Upsert request payload",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/generic_svc.UpsertObjectRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful creation or update of object",
-                        "schema": {
-                            "$ref": "#/definitions/generic_svc.UpsertObjectResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid JSON",
-                        "schema": {
-                            "$ref": "#/definitions/generic_svc.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/generic_svc.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/generic_svc.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/generic-svc/objects": {
-            "post": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Retrieves objects from a specified table based on search criteria.\nRequires authorization and user authentication.\n\n\nUse helper functions in your respective client library such as condition constructors (`equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Generic Svc"
-                ],
-                "summary": "Query Generic Objects",
-                "operationId": "query",
-                "parameters": [
-                    {
-                        "description": "Query Request",
-                        "name": "body",
-                        "in": "body",
-                        "schema": {
-                            "$ref": "#/definitions/generic_svc.QueryRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful retrieval of objects",
-                        "schema": {
-                            "$ref": "#/definitions/generic_svc.QueryResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid JSON",
-                        "schema": {
-                            "$ref": "#/definitions/generic_svc.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/generic_svc.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/generic_svc.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/generic-svc/objects/delete": {
-            "post": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Removes a generic object from the system based on the provided conditions. Requires authorization and user authentication.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Generic Svc"
-                ],
-                "summary": "Delete a Generic Object",
-                "operationId": "deleteObjects",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Object ID",
-                        "name": "objectId",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Delete request payload",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/generic_svc.DeleteObjectRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful deletion of object",
-                        "schema": {
-                            "$ref": "#/definitions/generic_svc.DeleteObjectResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid JSON",
-                        "schema": {
-                            "$ref": "#/definitions/generic_svc.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/generic_svc.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/generic_svc.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/generic-svc/objects/update": {
-            "post": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Updates objects in a specified table based on provided conditions. Requires authorization and user authentication.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Generic Svc"
-                ],
-                "summary": "Update Generic Objects",
-                "operationId": "updateObjects",
-                "parameters": [
-                    {
-                        "description": "Update request payload",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/generic_svc.UpdateObjectRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful update of objects",
-                        "schema": {
-                            "$ref": "#/definitions/generic_svc.UpdateObjectResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid JSON",
-                        "schema": {
-                            "$ref": "#/definitions/generic_svc.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/generic_svc.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/generic_svc.ErrorResponse"
                         }
                     }
                 }
@@ -3959,48 +3959,23 @@
                 }
             }
         },
-        "firehose_svc.ErrorResponse": {
-            "type": "object",
-            "properties": {
-                "error": {
-                    "type": "string"
-                }
-            }
-        },
-        "firehose_svc.Event": {
-            "type": "object",
-            "properties": {
-                "data": {},
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "firehose_svc.PublishRequest": {
-            "type": "object",
-            "properties": {
-                "event": {
-                    "$ref": "#/definitions/firehose_svc.Event"
-                }
-            }
-        },
-        "generic_svc.CreateObjectRequest": {
+        "dynamic_svc.CreateObjectRequest": {
             "type": "object",
             "properties": {
                 "object": {
-                    "$ref": "#/definitions/generic_svc.GenericObjectCreateFields"
+                    "$ref": "#/definitions/dynamic_svc.GenericObjectCreateFields"
                 }
             }
         },
-        "generic_svc.CreateObjectResponse": {
+        "dynamic_svc.CreateObjectResponse": {
             "type": "object",
             "properties": {
                 "object": {
-                    "$ref": "#/definitions/generic_svc.GenericObject"
+                    "$ref": "#/definitions/dynamic_svc.GenericObject"
                 }
             }
         },
-        "generic_svc.DeleteObjectRequest": {
+        "dynamic_svc.DeleteObjectRequest": {
             "type": "object",
             "properties": {
                 "conditions": {
@@ -4014,10 +3989,10 @@
                 }
             }
         },
-        "generic_svc.DeleteObjectResponse": {
+        "dynamic_svc.DeleteObjectResponse": {
             "type": "object"
         },
-        "generic_svc.ErrorResponse": {
+        "dynamic_svc.ErrorResponse": {
             "type": "object",
             "properties": {
                 "error": {
@@ -4025,7 +4000,7 @@
                 }
             }
         },
-        "generic_svc.GenericObject": {
+        "dynamic_svc.GenericObject": {
             "type": "object",
             "required": [
                 "data",
@@ -4057,7 +4032,7 @@
                 }
             }
         },
-        "generic_svc.GenericObjectCreateFields": {
+        "dynamic_svc.GenericObjectCreateFields": {
             "type": "object",
             "required": [
                 "data",
@@ -4083,7 +4058,7 @@
                 }
             }
         },
-        "generic_svc.QueryRequest": {
+        "dynamic_svc.QueryRequest": {
             "type": "object",
             "properties": {
                 "public": {
@@ -4097,18 +4072,18 @@
                 }
             }
         },
-        "generic_svc.QueryResponse": {
+        "dynamic_svc.QueryResponse": {
             "type": "object",
             "properties": {
                 "objects": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/generic_svc.GenericObject"
+                        "$ref": "#/definitions/dynamic_svc.GenericObject"
                     }
                 }
             }
         },
-        "generic_svc.UpdateObjectRequest": {
+        "dynamic_svc.UpdateObjectRequest": {
             "type": "object",
             "properties": {
                 "conditions": {
@@ -4118,29 +4093,54 @@
                     }
                 },
                 "object": {
-                    "$ref": "#/definitions/generic_svc.GenericObject"
+                    "$ref": "#/definitions/dynamic_svc.GenericObject"
                 },
                 "table": {
                     "type": "string"
                 }
             }
         },
-        "generic_svc.UpdateObjectResponse": {
+        "dynamic_svc.UpdateObjectResponse": {
             "type": "object"
         },
-        "generic_svc.UpsertObjectRequest": {
+        "dynamic_svc.UpsertObjectRequest": {
             "type": "object",
             "properties": {
                 "object": {
-                    "$ref": "#/definitions/generic_svc.GenericObjectCreateFields"
+                    "$ref": "#/definitions/dynamic_svc.GenericObjectCreateFields"
                 }
             }
         },
-        "generic_svc.UpsertObjectResponse": {
+        "dynamic_svc.UpsertObjectResponse": {
             "type": "object",
             "properties": {
                 "object": {
-                    "$ref": "#/definitions/generic_svc.GenericObject"
+                    "$ref": "#/definitions/dynamic_svc.GenericObject"
+                }
+            }
+        },
+        "firehose_svc.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "firehose_svc.Event": {
+            "type": "object",
+            "properties": {
+                "data": {},
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "firehose_svc.PublishRequest": {
+            "type": "object",
+            "properties": {
+                "event": {
+                    "$ref": "#/definitions/firehose_svc.Event"
                 }
             }
         },

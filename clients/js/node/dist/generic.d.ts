@@ -1,6 +1,6 @@
 import { ClientOptions } from "./util";
 import * as generic from "@singulatron/types";
-export declare class GenericService {
+export declare class DynamicService {
     private options;
     constructor(options: ClientOptions);
     call(endpoint: string, request: any): Promise<any>;

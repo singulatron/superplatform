@@ -12,7 +12,7 @@ import {
 	id as idCondition,
 	userId as userIdCondition,
 } from '@singulatron/types';
-import { GenericService } from './generic.service';
+import { DynamicService } from './generic.service';
 import { LocaltronService } from './localtron.service';
 import { UserService } from './user.service';
 import { first } from 'rxjs';
@@ -28,7 +28,7 @@ export class CharacterService {
 
 	constructor(
 		private localtron: LocaltronService,
-		private genericService: GenericService,
+		private dynamicService: DynamicService,
 		private userService: UserService
 	) {
 		this.userService.user$.pipe(first()).subscribe(() => {
@@ -44,7 +44,7 @@ export class CharacterService {
 	}
 
 	async loadCharacters(): Promise<Character[]> {
-		const response = await this.genericService.find(CHARACTERS_TABLE_NAME, [
+		const response = await this.dynamicService.find(CHARACTERS_TABLE_NAME, [
 			all(),
 		]);
 		return response?.objects as Character[];
@@ -61,7 +61,7 @@ export class CharacterService {
 		const id = this.localtron.uuid();
 		const now = new Date().toISOString();
 		character.id = id;
-		await this.genericService.create(CHARACTERS_TABLE_NAME, {
+		await this.dynamicService.create(CHARACTERS_TABLE_NAME, {
 			...character,
 			id,
 			createdAt: now,
@@ -74,7 +74,7 @@ export class CharacterService {
 			this.selectedCharacter = {} as any;
 			await this.deleteCharacterSelection(character.id!);
 		}
-		await this.genericService.delete(CHARACTERS_TABLE_NAME, [
+		await this.dynamicService.delete(CHARACTERS_TABLE_NAME, [
 			idCondition(character.id!),
 		]);
 	}
@@ -82,7 +82,7 @@ export class CharacterService {
 	async updateCharacter(character: Character) {
 		const now = new Date().toISOString();
 		character.updatedAt = now;
-		this.genericService.update(
+		this.dynamicService.update(
 			CHARACTERS_TABLE_NAME,
 			[idCondition(character.id!)],
 			{
@@ -93,7 +93,7 @@ export class CharacterService {
 
 	async getCharacter(characterId: string): Promise<Character | undefined> {
 		try {
-			const response = await this.genericService.find(CHARACTERS_TABLE_NAME, [
+			const response = await this.dynamicService.find(CHARACTERS_TABLE_NAME, [
 				idCondition(characterId),
 			]);
 			return response?.objects?.[0] as any as Character;
@@ -131,14 +131,14 @@ export class CharacterService {
 		}
 		characterSelection.updatedAt = now;
 		characterSelection.data.selectedCharacterId = selectedCharacterId;
-		this.genericService.upsert(SELECTED_CHARACTERS_TABLE_NAME, {
+		this.dynamicService.upsert(SELECTED_CHARACTERS_TABLE_NAME, {
 			...characterSelection,
 		});
 	}
 
 	async getCharacterSelection(): Promise<SelectedCharacter | null> {
 		const userId = await this.userService.getUserId();
-		const response = await this.genericService.find(
+		const response = await this.dynamicService.find(
 			SELECTED_CHARACTERS_TABLE_NAME,
 			[userIdCondition(userId)]
 		);
@@ -149,7 +149,7 @@ export class CharacterService {
 	 * This will remove only the selection from SELECTED_CHARACTERS_TABLE_NAME
 	 */
 	async deleteCharacterSelection(characterId: string) {
-		this.genericService.delete(SELECTED_CHARACTERS_TABLE_NAME, [
+		this.dynamicService.delete(SELECTED_CHARACTERS_TABLE_NAME, [
 			idCondition(characterId),
 		]);
 	}

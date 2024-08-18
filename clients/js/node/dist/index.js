@@ -27,8 +27,8 @@ class Client {
     downloadService() {
         return new download.DownloadService(this.options);
     }
-    genericService() {
-        return new generic.GenericService(this.options);
+    dynamicService() {
+        return new generic.DynamicService(this.options);
     }
     promptService() {
         return new prompt.PromptService(this.options);
@@ -42,7 +42,7 @@ exports.ChatService = chat.ChatService;
 exports.ConfigService = config.ConfigService;
 exports.DockerService = docker.DockerService;
 exports.DownloadService = download.DownloadService;
-exports.GenericService = generic.GenericService;
+exports.DynamicService = generic.DynamicService;
 exports.PromptService = prompt.PromptService;
 exports.UserService = user.UserService;
 exports.Client = Client;

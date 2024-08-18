@@ -12,8 +12,8 @@ import (
 	configservice "github.com/singulatron/singulatron/localtron/internal/services/config"
 	dockerservice "github.com/singulatron/singulatron/localtron/internal/services/docker"
 	downloadservice "github.com/singulatron/singulatron/localtron/internal/services/download"
+	dynamicservice "github.com/singulatron/singulatron/localtron/internal/services/dynamic"
 	firehoseservice "github.com/singulatron/singulatron/localtron/internal/services/firehose"
-	genericservice "github.com/singulatron/singulatron/localtron/internal/services/generic"
 	modelservice "github.com/singulatron/singulatron/localtron/internal/services/model"
 	nodeservice "github.com/singulatron/singulatron/localtron/internal/services/node"
 	policyservice "github.com/singulatron/singulatron/localtron/internal/services/policy"
@@ -172,7 +172,7 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 		os.Exit(1)
 	}
 
-	genericService, err := genericservice.NewGenericService(
+	dynamicService, err := dynamicservice.NewDynamicService(
 		options.Router,
 		options.DatastoreFactory,
 	)
@@ -386,20 +386,20 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 		userService.GetPublicKey(w, r)
 	})).Methods("OPTIONS", "GET")
 
-	router.HandleFunc("/generic-svc/object", appl(func(w http.ResponseWriter, r *http.Request) {
-		genericService.Create(w, r)
+	router.HandleFunc("/dynamic-svc/object", appl(func(w http.ResponseWriter, r *http.Request) {
+		dynamicService.Create(w, r)
 	})).Methods("OPTIONS", "POST")
-	router.HandleFunc("/generic-svc/objects/update", appl(func(w http.ResponseWriter, r *http.Request) {
-		genericService.Update(w, r)
+	router.HandleFunc("/dynamic-svc/objects/update", appl(func(w http.ResponseWriter, r *http.Request) {
+		dynamicService.Update(w, r)
 	})).Methods("OPTIONS", "POST")
-	router.HandleFunc("/generic-svc/objects/delete", appl(func(w http.ResponseWriter, r *http.Request) {
-		genericService.Delete(w, r)
+	router.HandleFunc("/dynamic-svc/objects/delete", appl(func(w http.ResponseWriter, r *http.Request) {
+		dynamicService.Delete(w, r)
 	})).Methods("OPTIONS", "POST")
-	router.HandleFunc("/generic-svc/objects", appl(func(w http.ResponseWriter, r *http.Request) {
-		genericService.Query(w, r)
+	router.HandleFunc("/dynamic-svc/objects", appl(func(w http.ResponseWriter, r *http.Request) {
+		dynamicService.Query(w, r)
 	})).Methods("OPTIONS", "POST")
-	router.HandleFunc("/generic-svc/object/{objectId}", appl(func(w http.ResponseWriter, r *http.Request) {
-		genericService.Upsert(w, r)
+	router.HandleFunc("/dynamic-svc/object/{objectId}", appl(func(w http.ResponseWriter, r *http.Request) {
+		dynamicService.Upsert(w, r)
 	})).Methods("OPTIONS", "PUT")
 
 	router.HandleFunc("/node-svc/nodes", appl(func(w http.ResponseWriter, r *http.Request) {
@@ -443,7 +443,7 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 		if err != nil {
 			return err
 		}
-		err = genericService.Start()
+		err = dynamicService.Start()
 		if err != nil {
 			return err
 		}

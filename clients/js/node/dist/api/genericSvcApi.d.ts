@@ -10,14 +10,14 @@
  * Do not edit the class manually.
  */
 import http from 'http';
-import { GenericSvcCreateObjectRequest } from '../model/genericSvcCreateObjectRequest';
-import { GenericSvcCreateObjectResponse } from '../model/genericSvcCreateObjectResponse';
-import { GenericSvcDeleteObjectRequest } from '../model/genericSvcDeleteObjectRequest';
-import { GenericSvcQueryRequest } from '../model/genericSvcQueryRequest';
-import { GenericSvcQueryResponse } from '../model/genericSvcQueryResponse';
-import { GenericSvcUpdateObjectRequest } from '../model/genericSvcUpdateObjectRequest';
-import { GenericSvcUpsertObjectRequest } from '../model/genericSvcUpsertObjectRequest';
-import { GenericSvcUpsertObjectResponse } from '../model/genericSvcUpsertObjectResponse';
+import { DynamicSvcCreateObjectRequest } from '../model/dynamicSvcCreateObjectRequest';
+import { DynamicSvcCreateObjectResponse } from '../model/dynamicSvcCreateObjectResponse';
+import { DynamicSvcDeleteObjectRequest } from '../model/dynamicSvcDeleteObjectRequest';
+import { DynamicSvcQueryRequest } from '../model/dynamicSvcQueryRequest';
+import { DynamicSvcQueryResponse } from '../model/dynamicSvcQueryResponse';
+import { DynamicSvcUpdateObjectRequest } from '../model/dynamicSvcUpdateObjectRequest';
+import { DynamicSvcUpsertObjectRequest } from '../model/dynamicSvcUpsertObjectRequest';
+import { DynamicSvcUpsertObjectResponse } from '../model/dynamicSvcUpsertObjectResponse';
 import { Authentication, Interceptor } from '../model/models';
 import { ApiKeyAuth } from '../model/models';
 export declare enum GenericSvcApiApiKeys {
@@ -46,13 +46,13 @@ export declare class GenericSvcApi {
      * @summary Create a Generic Object
      * @param body Create request payload
      */
-    createObject(body: GenericSvcCreateObjectRequest, options?: {
+    createObject(body: DynamicSvcCreateObjectRequest, options?: {
         headers: {
             [name: string]: string;
         };
     }): Promise<{
         response: http.IncomingMessage;
-        body: GenericSvcCreateObjectResponse;
+        body: DynamicSvcCreateObjectResponse;
     }>;
     /**
      * Removes a generic object from the system based on the provided conditions. Requires authorization and user authentication.
@@ -60,7 +60,7 @@ export declare class GenericSvcApi {
      * @param objectId Object ID
      * @param body Delete request payload
      */
-    deleteObjects(objectId: string, body: GenericSvcDeleteObjectRequest, options?: {
+    deleteObjects(objectId: string, body: DynamicSvcDeleteObjectRequest, options?: {
         headers: {
             [name: string]: string;
         };
@@ -73,20 +73,20 @@ export declare class GenericSvcApi {
      * @summary Query Generic Objects
      * @param body Query Request
      */
-    query(body?: GenericSvcQueryRequest, options?: {
+    query(body?: DynamicSvcQueryRequest, options?: {
         headers: {
             [name: string]: string;
         };
     }): Promise<{
         response: http.IncomingMessage;
-        body: GenericSvcQueryResponse;
+        body: DynamicSvcQueryResponse;
     }>;
     /**
      * Updates objects in a specified table based on provided conditions. Requires authorization and user authentication.
      * @summary Update Generic Objects
      * @param body Update request payload
      */
-    updateObjects(body: GenericSvcUpdateObjectRequest, options?: {
+    updateObjects(body: DynamicSvcUpdateObjectRequest, options?: {
         headers: {
             [name: string]: string;
         };
@@ -100,12 +100,12 @@ export declare class GenericSvcApi {
      * @param objectId Object ID
      * @param body Upsert request payload
      */
-    upsertObject(objectId: string, body: GenericSvcUpsertObjectRequest, options?: {
+    upsertObject(objectId: string, body: DynamicSvcUpsertObjectRequest, options?: {
         headers: {
             [name: string]: string;
         };
     }): Promise<{
         response: http.IncomingMessage;
-        body: GenericSvcUpsertObjectResponse;
+        body: DynamicSvcUpsertObjectResponse;
     }>;
 }

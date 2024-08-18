@@ -58,29 +58,29 @@ See [this page](https://superplatform.ai/docs/category/running) to help you get 
 
 https://superplatform.ai/docs/category/singulatron-api
 
-### Prompt svc
+### Prompt Svc
 
 Sync or async, streamed or request/response prompting. Dump tens of thousands of prompts into the system and let the prompt queue process it.
 
-### Download svc
+### Download Svc
 
 Start, pause, restart large file downloads to enable you to manage your AI models.
 
-### Chat svc
+### Chat Svc
 
 Manage threads, messages, assets (generated images etc.).
 
-### User svc
+### User Svc
 
 Role-based access control, JWT, fine tuned permissions and a unique ownership model that lets you build microservices based AI apps.
 
-### Node svc
+### Node Svc
 
 Get information about your nodes and GPUs like temperature, VRAM usage etc.
 
-### Generic svc
+### Dynamic svc
 
-A generic datastore service that lets you piggyback on Singulatron's database. Lets you build backendless applications on top of Singulatorn. Think Firebase but for AI.
+A dynamically typed (schema-free) datastore service that lets you piggyback on Singulatron's database. Lets you build backendless applications on top of Singulatorn. Think Firebase but for AI.
 
 ## Run On Your Laptop/PC
 

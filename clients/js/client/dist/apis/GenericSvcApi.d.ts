@@ -10,23 +10,23 @@
  * Do not edit the class manually.
  */
 import * as runtime from '../runtime';
-import type { GenericSvcCreateObjectRequest, GenericSvcCreateObjectResponse, GenericSvcDeleteObjectRequest, GenericSvcQueryRequest, GenericSvcQueryResponse, GenericSvcUpdateObjectRequest, GenericSvcUpsertObjectRequest, GenericSvcUpsertObjectResponse } from '../models/index';
+import type { DynamicSvcCreateObjectRequest, DynamicSvcCreateObjectResponse, DynamicSvcDeleteObjectRequest, DynamicSvcQueryRequest, DynamicSvcQueryResponse, DynamicSvcUpdateObjectRequest, DynamicSvcUpsertObjectRequest, DynamicSvcUpsertObjectResponse } from '../models/index';
 export interface CreateObjectRequest {
-    body: GenericSvcCreateObjectRequest;
+    body: DynamicSvcCreateObjectRequest;
 }
 export interface DeleteObjectsRequest {
     objectId: string;
-    body: GenericSvcDeleteObjectRequest;
+    body: DynamicSvcDeleteObjectRequest;
 }
 export interface QueryRequest {
-    body?: GenericSvcQueryRequest;
+    body?: DynamicSvcQueryRequest;
 }
 export interface UpdateObjectsRequest {
-    body: GenericSvcUpdateObjectRequest;
+    body: DynamicSvcUpdateObjectRequest;
 }
 export interface UpsertObjectRequest {
     objectId: string;
-    body: GenericSvcUpsertObjectRequest;
+    body: DynamicSvcUpsertObjectRequest;
 }
 /**
  *
@@ -36,12 +36,12 @@ export declare class GenericSvcApi extends runtime.BaseAPI {
      * Creates a new object with the provided details. Requires authorization and user authentication.
      * Create a Generic Object
      */
-    createObjectRaw(requestParameters: CreateObjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GenericSvcCreateObjectResponse>>;
+    createObjectRaw(requestParameters: CreateObjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DynamicSvcCreateObjectResponse>>;
     /**
      * Creates a new object with the provided details. Requires authorization and user authentication.
      * Create a Generic Object
      */
-    createObject(requestParameters: CreateObjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GenericSvcCreateObjectResponse>;
+    createObject(requestParameters: CreateObjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DynamicSvcCreateObjectResponse>;
     /**
      * Removes a generic object from the system based on the provided conditions. Requires authorization and user authentication.
      * Delete a Generic Object
@@ -56,12 +56,12 @@ export declare class GenericSvcApi extends runtime.BaseAPI {
      * Retrieves objects from a specified table based on search criteria. Requires authorization and user authentication.   Use helper functions in your respective client library such as condition constructors (`equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
      * Query Generic Objects
      */
-    queryRaw(requestParameters: QueryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GenericSvcQueryResponse>>;
+    queryRaw(requestParameters: QueryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DynamicSvcQueryResponse>>;
     /**
      * Retrieves objects from a specified table based on search criteria. Requires authorization and user authentication.   Use helper functions in your respective client library such as condition constructors (`equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
      * Query Generic Objects
      */
-    query(requestParameters?: QueryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GenericSvcQueryResponse>;
+    query(requestParameters?: QueryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DynamicSvcQueryResponse>;
     /**
      * Updates objects in a specified table based on provided conditions. Requires authorization and user authentication.
      * Update Generic Objects
@@ -76,10 +76,10 @@ export declare class GenericSvcApi extends runtime.BaseAPI {
      * Creates a new generic object or updates an existing one based on the provided data. Requires authorization and user authentication.
      * Upsert a Generic Object
      */
-    upsertObjectRaw(requestParameters: UpsertObjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GenericSvcUpsertObjectResponse>>;
+    upsertObjectRaw(requestParameters: UpsertObjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DynamicSvcUpsertObjectResponse>>;
     /**
      * Creates a new generic object or updates an existing one based on the provided data. Requires authorization and user authentication.
      * Upsert a Generic Object
      */
-    upsertObject(requestParameters: UpsertObjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GenericSvcUpsertObjectResponse>;
+    upsertObject(requestParameters: UpsertObjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DynamicSvcUpsertObjectResponse>;
 }
