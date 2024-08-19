@@ -4,7 +4,6 @@ export async function dynamicTest(apiKey: string) {
   const dynamicService: DynamicSvcApi = new DynamicSvcApi(
     new Configuration({
       apiKey: apiKey,
-      // basePath: "https://demo-api.singulatron.com",
     })
   );
 

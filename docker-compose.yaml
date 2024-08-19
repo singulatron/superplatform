@@ -10,7 +10,7 @@ volumes:
 
 services:
   singulatron-frontend:
-    image: crufter/singulatron-frontend:latest
+    build: ./frontend/docker
     ports:
       - "3901:80"
     environment:
@@ -19,7 +19,7 @@ services:
       - BACKEND_ADDRESS=http://127.0.0.1:58231
 
   singulatron-backend:
-    image: crufter/singulatron-backend:latest
+    build: ./localtron/docker/Dockerfile
     ports:
       - "58231:58231"
     volumes:
