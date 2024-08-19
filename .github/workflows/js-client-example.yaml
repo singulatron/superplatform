@@ -1,4 +1,4 @@
-name: Run client-example
+name: Run JS/TS client-example
 
 on:
   push:
@@ -23,11 +23,12 @@ jobs:
           bash link_local.sh
         working-directory: ./clients/js
 
-      - name: Run
+      - name: Start docker containers
         run: |
-          cp ../../../docker-compose.yaml .
           docker compose up singulatron-backend -d
 
+      - name: Run
+        run: |
           HOST="127.0.0.1"
           PORT=58231
 
@@ -44,7 +45,7 @@ jobs:
           ) || (
             echo "Node.js script failed, running docker commands for diagnostics..."
             docker ps
-            docker logs singulatron-backend
+            docker logs client-example-singulatron-backend-1
             exit 1
           )
         working-directory: ./clients/js/client-example

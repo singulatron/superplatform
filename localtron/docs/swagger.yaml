@@ -396,33 +396,17 @@ definitions:
       exists:
         type: boolean
     type: object
-  firehose_svc.ErrorResponse:
-    properties:
-      error:
-        type: string
-    type: object
-  firehose_svc.Event:
-    properties:
-      data: {}
-      name:
-        type: string
-    type: object
-  firehose_svc.PublishRequest:
-    properties:
-      event:
-        $ref: '#/definitions/firehose_svc.Event'
-    type: object
-  generic_svc.CreateObjectRequest:
+  dynamic_svc.CreateObjectRequest:
     properties:
       object:
-        $ref: '#/definitions/generic_svc.GenericObjectCreateFields'
+        $ref: '#/definitions/dynamic_svc.GenericObjectCreateFields'
     type: object
-  generic_svc.CreateObjectResponse:
+  dynamic_svc.CreateObjectResponse:
     properties:
       object:
-        $ref: '#/definitions/generic_svc.GenericObject'
+        $ref: '#/definitions/dynamic_svc.GenericObject'
     type: object
-  generic_svc.DeleteObjectRequest:
+  dynamic_svc.DeleteObjectRequest:
     properties:
       conditions:
         items:
@@ -431,14 +415,14 @@ definitions:
       table:
         type: string
     type: object
-  generic_svc.DeleteObjectResponse:
+  dynamic_svc.DeleteObjectResponse:
     type: object
-  generic_svc.ErrorResponse:
+  dynamic_svc.ErrorResponse:
     properties:
       error:
         type: string
     type: object
-  generic_svc.GenericObject:
+  dynamic_svc.GenericObject:
     properties:
       createdAt:
         type: string
@@ -463,7 +447,7 @@ definitions:
     - data
     - table
     type: object
-  generic_svc.GenericObjectCreateFields:
+  dynamic_svc.GenericObjectCreateFields:
     properties:
       data:
         additionalProperties: true
@@ -484,7 +468,7 @@ definitions:
     - data
     - table
     type: object
-  generic_svc.QueryRequest:
+  dynamic_svc.QueryRequest:
     properties:
       public:
         type: boolean
@@ -493,35 +477,51 @@ definitions:
       table:
         type: string
     type: object
-  generic_svc.QueryResponse:
+  dynamic_svc.QueryResponse:
     properties:
       objects:
         items:
-          $ref: '#/definitions/generic_svc.GenericObject'
+          $ref: '#/definitions/dynamic_svc.GenericObject'
         type: array
     type: object
-  generic_svc.UpdateObjectRequest:
+  dynamic_svc.UpdateObjectRequest:
     properties:
       conditions:
         items:
           $ref: '#/definitions/datastore.Condition'
         type: array
       object:
-        $ref: '#/definitions/generic_svc.GenericObject'
+        $ref: '#/definitions/dynamic_svc.GenericObject'
       table:
         type: string
     type: object
-  generic_svc.UpdateObjectResponse:
+  dynamic_svc.UpdateObjectResponse:
     type: object
-  generic_svc.UpsertObjectRequest:
+  dynamic_svc.UpsertObjectRequest:
     properties:
       object:
-        $ref: '#/definitions/generic_svc.GenericObjectCreateFields'
+        $ref: '#/definitions/dynamic_svc.GenericObjectCreateFields'
     type: object
-  generic_svc.UpsertObjectResponse:
+  dynamic_svc.UpsertObjectResponse:
     properties:
       object:
-        $ref: '#/definitions/generic_svc.GenericObject'
+        $ref: '#/definitions/dynamic_svc.GenericObject'
+    type: object
+  firehose_svc.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  firehose_svc.Event:
+    properties:
+      data: {}
+      name:
+        type: string
+    type: object
+  firehose_svc.PublishRequest:
+    properties:
+      event:
+        $ref: '#/definitions/firehose_svc.Event'
     type: object
   model_svc.Architectures:
     properties:
@@ -1965,6 +1965,209 @@ paths:
       summary: List Downloads
       tags:
       - Download Svc
+  /dynamic-svc/object:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new object with the provided details. Requires authorization
+        and user authentication.
+      operationId: createObject
+      parameters:
+      - description: Create request payload
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dynamic_svc.CreateObjectRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/dynamic_svc.CreateObjectResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/dynamic_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dynamic_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dynamic_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create a Generic Object
+      tags:
+      - Dynamic Svc
+  /dynamic-svc/object/{objectId}:
+    put:
+      consumes:
+      - application/json
+      description: Creates a new dynamic object or updates an existing one based on
+        the provided data. Requires authorization and user authentication.
+      operationId: upsertObject
+      parameters:
+      - description: Object ID
+        in: path
+        name: objectId
+        required: true
+        type: string
+      - description: Upsert request payload
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dynamic_svc.UpsertObjectRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful creation or update of object
+          schema:
+            $ref: '#/definitions/dynamic_svc.UpsertObjectResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/dynamic_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dynamic_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dynamic_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Upsert a Generic Object
+      tags:
+      - Dynamic Svc
+  /dynamic-svc/objects:
+    post:
+      consumes:
+      - application/json
+      description: |-
+        Retrieves objects from a specified table based on search criteria.
+        Requires authorization and user authentication.
+
+
+        Use helper functions in your respective client library such as condition constructors (`equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
+      operationId: query
+      parameters:
+      - description: Query Request
+        in: body
+        name: body
+        schema:
+          $ref: '#/definitions/dynamic_svc.QueryRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful retrieval of objects
+          schema:
+            $ref: '#/definitions/dynamic_svc.QueryResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/dynamic_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dynamic_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dynamic_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Query Dynamic Objects
+      tags:
+      - Dynamic Svc
+  /dynamic-svc/objects/delete:
+    post:
+      consumes:
+      - application/json
+      description: Removes a dynamic object from the system based on the provided
+        conditions. Requires authorization and user authentication.
+      operationId: deleteObjects
+      parameters:
+      - description: Object ID
+        in: path
+        name: objectId
+        required: true
+        type: string
+      - description: Delete request payload
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dynamic_svc.DeleteObjectRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful deletion of object
+          schema:
+            $ref: '#/definitions/dynamic_svc.DeleteObjectResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/dynamic_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dynamic_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dynamic_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete a Generic Object
+      tags:
+      - Dynamic Svc
+  /dynamic-svc/objects/update:
+    post:
+      consumes:
+      - application/json
+      description: Updates objects in a specified table based on provided conditions.
+        Requires authorization and user authentication.
+      operationId: updateObjects
+      parameters:
+      - description: Update request payload
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dynamic_svc.UpdateObjectRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful update of objects
+          schema:
+            $ref: '#/definitions/dynamic_svc.UpdateObjectResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/dynamic_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dynamic_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dynamic_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update Dynamic Objects
+      tags:
+      - Dynamic Svc
   /firehose-svc/publish:
     post:
       consumes:
@@ -2022,209 +2225,6 @@ paths:
       summary: Subscribe to the Event Stream
       tags:
       - Firehose Svc
-  /generic-svc/object:
-    post:
-      consumes:
-      - application/json
-      description: Creates a new object with the provided details. Requires authorization
-        and user authentication.
-      operationId: createObject
-      parameters:
-      - description: Create request payload
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/generic_svc.CreateObjectRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Success
-          schema:
-            $ref: '#/definitions/generic_svc.CreateObjectResponse'
-        "400":
-          description: Invalid JSON
-          schema:
-            $ref: '#/definitions/generic_svc.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/generic_svc.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/generic_svc.ErrorResponse'
-      security:
-      - BearerAuth: []
-      summary: Create a Generic Object
-      tags:
-      - Generic Svc
-  /generic-svc/object/{objectId}:
-    put:
-      consumes:
-      - application/json
-      description: Creates a new generic object or updates an existing one based on
-        the provided data. Requires authorization and user authentication.
-      operationId: upsertObject
-      parameters:
-      - description: Object ID
-        in: path
-        name: objectId
-        required: true
-        type: string
-      - description: Upsert request payload
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/generic_svc.UpsertObjectRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Successful creation or update of object
-          schema:
-            $ref: '#/definitions/generic_svc.UpsertObjectResponse'
-        "400":
-          description: Invalid JSON
-          schema:
-            $ref: '#/definitions/generic_svc.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/generic_svc.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/generic_svc.ErrorResponse'
-      security:
-      - BearerAuth: []
-      summary: Upsert a Generic Object
-      tags:
-      - Generic Svc
-  /generic-svc/objects:
-    post:
-      consumes:
-      - application/json
-      description: |-
-        Retrieves objects from a specified table based on search criteria.
-        Requires authorization and user authentication.
-
-
-        Use helper functions in your respective client library such as condition constructors (`equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
-      operationId: query
-      parameters:
-      - description: Query Request
-        in: body
-        name: body
-        schema:
-          $ref: '#/definitions/generic_svc.QueryRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Successful retrieval of objects
-          schema:
-            $ref: '#/definitions/generic_svc.QueryResponse'
-        "400":
-          description: Invalid JSON
-          schema:
-            $ref: '#/definitions/generic_svc.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/generic_svc.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/generic_svc.ErrorResponse'
-      security:
-      - BearerAuth: []
-      summary: Query Generic Objects
-      tags:
-      - Generic Svc
-  /generic-svc/objects/delete:
-    post:
-      consumes:
-      - application/json
-      description: Removes a generic object from the system based on the provided
-        conditions. Requires authorization and user authentication.
-      operationId: deleteObjects
-      parameters:
-      - description: Object ID
-        in: path
-        name: objectId
-        required: true
-        type: string
-      - description: Delete request payload
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/generic_svc.DeleteObjectRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Successful deletion of object
-          schema:
-            $ref: '#/definitions/generic_svc.DeleteObjectResponse'
-        "400":
-          description: Invalid JSON
-          schema:
-            $ref: '#/definitions/generic_svc.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/generic_svc.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/generic_svc.ErrorResponse'
-      security:
-      - BearerAuth: []
-      summary: Delete a Generic Object
-      tags:
-      - Generic Svc
-  /generic-svc/objects/update:
-    post:
-      consumes:
-      - application/json
-      description: Updates objects in a specified table based on provided conditions.
-        Requires authorization and user authentication.
-      operationId: updateObjects
-      parameters:
-      - description: Update request payload
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/generic_svc.UpdateObjectRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Successful update of objects
-          schema:
-            $ref: '#/definitions/generic_svc.UpdateObjectResponse'
-        "400":
-          description: Invalid JSON
-          schema:
-            $ref: '#/definitions/generic_svc.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/generic_svc.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/generic_svc.ErrorResponse'
-      security:
-      - BearerAuth: []
-      summary: Update Generic Objects
-      tags:
-      - Generic Svc
   /model-svc/default-model/start:
     put:
       consumes:

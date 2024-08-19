@@ -10,7 +10,9 @@ volumes:
 
 services:
   singulatron-frontend:
-    image: crufter/singulatron-frontend:latest
+    build:
+      context: ./desktop
+      dockerfile: ./docker/Dockerfile
     ports:
       - "3901:80"
     environment:
@@ -19,7 +21,9 @@ services:
       - BACKEND_ADDRESS=http://127.0.0.1:58231
 
   singulatron-backend:
-    image: crufter/singulatron-backend:latest
+    build:
+      context: .
+      dockerfile: ./localtron/docker/Dockerfile
     ports:
       - "58231:58231"
     volumes:
@@ -38,4 +42,3 @@ services:
       # Uncomment this envar for NVIDIA GPUs.
       #
       # - SINGULATRON_GPU_PLATFORM=cuda
-

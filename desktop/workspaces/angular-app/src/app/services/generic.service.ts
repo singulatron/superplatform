@@ -30,8 +30,8 @@ import {
 @Injectable({
 	providedIn: 'root',
 })
-export class GenericService {
-	genericService!: GenericSvcApi;
+export class DynamicService {
+	dynamicService!: GenericSvcApi;
 
 	constructor(
 		private localtron: LocaltronService,
@@ -40,7 +40,7 @@ export class GenericService {
 	) {
 		this.userService.user$.pipe(first()).subscribe(() => {
 			this.init();
-			this.genericService = new GenericSvcApi(
+			this.dynamicService = new GenericSvcApi(
 				new Configuration({
 					apiKey: this.localtron.token(),
 					basePath: this.localtron.addr(),
@@ -66,7 +66,7 @@ export class GenericService {
 			object: object,
 		};
 
-		return this.genericService.createObject({ body: request });
+		return this.dynamicService.createObject({ body: request });
 	}
 
 	async find(
@@ -80,7 +80,7 @@ export class GenericService {
 			},
 		};
 
-		return this.genericService.query({ body: request });
+		return this.dynamicService.query({ body: request });
 	}
 
 	async upsert(
@@ -92,7 +92,7 @@ export class GenericService {
 			object: object,
 		};
 
-		return this.genericService.upsertObject({
+		return this.dynamicService.upsertObject({
 			objectId: object.id!,
 			body: request,
 		});
@@ -109,7 +109,7 @@ export class GenericService {
 			object: object,
 		};
 
-		return this.genericService.updateObjects({
+		return this.dynamicService.updateObjects({
 			body: request,
 		});
 	}
@@ -121,7 +121,7 @@ export class GenericService {
 		// 	table: table,
 		// 	conditions: conditions,
 		// };
-		//eturn this.genericService.deleteObjects({
+		//eturn this.dynamicService.deleteObjects({
 		//	body: request,
 		//);
 	}

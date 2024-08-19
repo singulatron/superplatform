@@ -146,25 +146,7 @@ const sidebar: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "Firehose Svc",
-      items: [
-        {
-          type: "doc",
-          id: "singulatron/publish-an-event",
-          label: "Publish an Event",
-          className: "api-method post",
-        },
-        {
-          type: "doc",
-          id: "singulatron/subscribe-to-the-event-stream",
-          label: "Subscribe to the Event Stream",
-          className: "api-method get",
-        },
-      ],
-    },
-    {
-      type: "category",
-      label: "Generic Svc",
+      label: "Dynamic Svc",
       items: [
         {
           type: "doc",
@@ -181,7 +163,7 @@ const sidebar: SidebarsConfig = {
         {
           type: "doc",
           id: "singulatron/query",
-          label: "Query Generic Objects",
+          label: "Query Dynamic Objects",
           className: "api-method post",
         },
         {
@@ -193,8 +175,26 @@ const sidebar: SidebarsConfig = {
         {
           type: "doc",
           id: "singulatron/update-objects",
-          label: "Update Generic Objects",
+          label: "Update Dynamic Objects",
           className: "api-method post",
+        },
+      ],
+    },
+    {
+      type: "category",
+      label: "Firehose Svc",
+      items: [
+        {
+          type: "doc",
+          id: "singulatron/publish-an-event",
+          label: "Publish an Event",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "singulatron/subscribe-to-the-event-stream",
+          label: "Subscribe to the Event Stream",
+          className: "api-method get",
         },
       ],
     },

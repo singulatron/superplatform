@@ -7,7 +7,7 @@ volumes:
 
 services:
   singulatron-frontend:
-    build: ./frontend/docker
+    image: crufter/singulatron-frontend:latest
     ports:
       - "3901:80"
     environment:
@@ -16,7 +16,7 @@ services:
       - BACKEND_ADDRESS=http://127.0.0.1:58231
 
   singulatron-backend:
-    build: ./localtron/docker/Dockerfile
+    image: crufter/singulatron-backend:latest
     # use this if you have an nvidia card
     # build: ./localtron/docker/DockerfileNvidia
     ports:
