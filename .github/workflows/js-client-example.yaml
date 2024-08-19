@@ -23,11 +23,12 @@ jobs:
           bash link_local.sh
         working-directory: ./clients/js
 
-      - name: Run
+      - name: Start docker containers
         run: |
-          cp ../../../docker-compose.yaml .
           docker compose up singulatron-backend -d
 
+      - name: Run
+        run: |
           HOST="127.0.0.1"
           PORT=58231
 
