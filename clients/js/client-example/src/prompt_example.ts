@@ -68,7 +68,8 @@ export async function promptTest(apiKey: string) {
         prompt: "Is a cat an animal? Just answer with yes or no please.",
       },
     }),
-    timeout(15000),
+    // takes long mostly because the image has to be pulled
+    timeout(30000),
   ]);
 
   console.log(promptRsp);
