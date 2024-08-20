@@ -70,6 +70,8 @@ export interface PolicySvcInstance {
     templateId: PolicySvcTemplateId;
 }
 
+
+
 /**
  * Check if a given object implements the PolicySvcInstance interface.
  */

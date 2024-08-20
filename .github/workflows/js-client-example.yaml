@@ -7,8 +7,8 @@ on:
 
 jobs:
   build:
+    timeout-minutes: 3
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -16,7 +16,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
 
       - name: Link local packages
         run: |
@@ -44,8 +44,9 @@ jobs:
             node ./dist/index.js
           ) || (
             echo "Node.js script failed, running docker commands for diagnostics..."
-            docker ps
-            docker logs client-example-singulatron-backend-1
+            docker ps -a
+            docker logs llama-cpp
+            docker logs singulatron-singulatron-backend-1
             exit 1
           )
         working-directory: ./clients/js/client-example

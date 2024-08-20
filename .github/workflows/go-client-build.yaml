@@ -16,7 +16,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
 
       - name: Set up Go
         uses: actions/setup-go@v5
@@ -36,6 +36,7 @@ jobs:
           if [ -n "$(git status --porcelain)" ]; then
             echo "Uncommitted changes detected. Failing the build."
             git status
+            git diff
             exit 1
           else
             echo "No changes detected."

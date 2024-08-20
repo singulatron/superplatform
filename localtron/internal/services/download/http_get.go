@@ -62,7 +62,7 @@ func (ds *DownloadService) Get(
 
 	jsonData, _ := json.Marshal(download.GetDownloadResponse{
 		Exists:   exists,
-		Download: downloadToDownloadDetails(vars["downloadId"], dl),
+		Download: downloadToDownloadDetails(did, dl),
 	})
 	w.Write(jsonData)
 }

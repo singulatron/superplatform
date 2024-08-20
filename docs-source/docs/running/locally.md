@@ -3,25 +3,30 @@ sidebar_position: 1
 tags:
   - run
   - deploy
+  - local
 ---
 
 # Running Locally
 
+The easiest way to run Singulatron is to use [Docker Compose](https://docs.docker.com/compose/install/).
+
 ## Docker Compose
 
-The easiest way to run this is to clone the repo, step into the repo root and run:
+The easiest way to run this is to clone [the repo](https://github.com/singulatron/singulatron), step into the repo root and run:
 
 ```sh
+git clone git@github.com:singulatron/singulatron.git
+cd singulatron
 docker compose up
+# or use the -d flag to run it in the background
+# docker compose up -d
 ```
 
-or
+The `docker-compose-yaml` in the root folder is designed to build and run the current code. For a more production ready Docker Compose file see the [Docker Compose page](./docker-compose/).
 
-```sh
-docker compose up -d
-```
+### Once it's running
 
-to run in the background. The `docker-compose-yaml` in the root folder is designed to build and run the current code. For a more production ready Docker Compose file see the [Docker Compose page](./docker-compose/).
+After the containers successfully start, you can go to [http://127.0.0.1:3901](http://127.0.0.1:3901) and log in with the [Default Credentials](/docs/running/using#default-credentials).
 
 ## Natively (Go & Angular)
 
@@ -40,6 +45,10 @@ go run main.go
 cd desktop/workspaces/angular-app/;
 npm run start
 ```
+
+### Once it's running
+
+After the both the backend and frontend starts, you can go to [http://127.0.0.1:4200](http://127.0.0.1:4200) and log in with the [Default Credentials](/docs/running/using#default-credentials).
 
 ## Administration
 
