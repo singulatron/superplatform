@@ -39,10 +39,11 @@ export async function promptTest(apiKey: string) {
       downloadId: encodeURIComponent(tinyLamaAssetURL),
     });
 
+    console.log(dlResponse);
     const exists = dlResponse._exists;
 
     if (!exists) {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 2000));
     }
   }
 
@@ -59,5 +60,5 @@ export async function promptTest(apiKey: string) {
     },
   });
 
-  console.log(promptRsp)
+  console.log(promptRsp);
 }
