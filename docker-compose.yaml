@@ -16,8 +16,8 @@ services:
     ports:
       - "3901:80"
     environment:
-      # The `BACKEND_ADDRESS` must be accessible from the   browser.
-      # It is not an internal address, it's the address the   browser will make API requests to.
+      # The `BACKEND_ADDRESS` must be accessible from the browser.
+      # It is not an internal address, it's the address the browser will make API requests to.
       - BACKEND_ADDRESS=http://127.0.0.1:58231
 
   singulatron-backend:
@@ -27,15 +27,15 @@ services:
     ports:
       - "58231:58231"
     volumes:
-      # We mount the docker socket so the backend can start   containers
+      # We mount the docker socket so the backend can start containers
       - /var/run/docker.sock:/var/run/docker.sock
       # We mount a volume so data will be persisted
       - singulatron-data:/root/.singulatron
     environment:
       # This folder will be mounted by the LLM containers to  access the models
       - SINGULATRON_HOST_FOLDER=/var/lib/docker/volumes/singulatron-data/_data
-      # Address of the host so we can access the containers   running the LLMs from the backend container
-      # See "System Specific Settings" on this page for more  information.
+      # Address of the host so we can access the containers running the LLMs from the backend container
+      # See "System Specific Settings" on this page for more information.
       - SINGULATRON_LLM_HOST=172.17.0.1
       #
       # GPU Acceleration for NVIDIA GPUs
