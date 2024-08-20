@@ -45,6 +45,7 @@ jobs:
           ) || (
             echo "Node.js script failed, running docker commands for diagnostics..."
             docker ps -a
+            docker logs llama-cpp
             docker logs singulatron-singulatron-backend-1
             exit 1
           )
