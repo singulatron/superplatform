@@ -17,9 +17,9 @@ The easiest way to run this is to clone [the repo](https://github.com/singulatro
 ```sh
 git clone git@github.com:singulatron/singulatron.git
 cd singulatron
-docker compose up
+docker compose up --build
 # or use the -d flag to run it in the background
-# docker compose up -d
+# docker compose up --build -d
 ```
 
 The `docker-compose-yaml` in the root folder is designed to build and run the current code. For a more production ready Docker Compose file see the [Docker Compose page](./docker-compose/).
