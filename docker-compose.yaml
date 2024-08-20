@@ -32,8 +32,6 @@ services:
       # We mount a volume so data will be persisted
       - singulatron-data:/root/.singulatron
     environment:
-      # This folder will be mounted by the LLM containers to access the models
-      - SINGULATRON_HOST_FOLDER=singulatron-data
       # Address of the host so we can access the containers running the LLMs from the backend container
       # See "System Specific Settings" on this page for more information.
       - SINGULATRON_LLM_HOST=172.17.0.1
