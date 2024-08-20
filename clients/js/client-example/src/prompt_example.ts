@@ -68,7 +68,7 @@ export async function promptTest(apiKey: string) {
         prompt: "Is a cat an animal? Just answer with yes or no please.",
       },
     }),
-    timeout(10000),
+    timeout(15000),
   ]);
 
   console.log(promptRsp);

@@ -54,7 +54,7 @@ services:
 Put the above into a file called `docker-compose.yaml` in a folder on your computer and run it with the following command:
 
 ```sh
-docker compose up --build
+docker compose up
 ```
 
 ## Once it's running
