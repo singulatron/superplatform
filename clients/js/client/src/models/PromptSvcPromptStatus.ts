@@ -31,7 +31,7 @@ export type PromptSvcPromptStatus = typeof PromptSvcPromptStatus[keyof typeof Pr
 export function instanceOfPromptSvcPromptStatus(value: any): boolean {
     for (const key in PromptSvcPromptStatus) {
         if (Object.prototype.hasOwnProperty.call(PromptSvcPromptStatus, key)) {
-            if ((PromptSvcPromptStatus as Record<string, PromptSvcPromptStatus>)[key] === value) {
+            if (PromptSvcPromptStatus[key as keyof typeof PromptSvcPromptStatus] === value) {
                 return true;
             }
         }

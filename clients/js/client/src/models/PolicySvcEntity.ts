@@ -27,7 +27,7 @@ export type PolicySvcEntity = typeof PolicySvcEntity[keyof typeof PolicySvcEntit
 export function instanceOfPolicySvcEntity(value: any): boolean {
     for (const key in PolicySvcEntity) {
         if (Object.prototype.hasOwnProperty.call(PolicySvcEntity, key)) {
-            if ((PolicySvcEntity as Record<string, PolicySvcEntity>)[key] === value) {
+            if (PolicySvcEntity[key as keyof typeof PolicySvcEntity] === value) {
                 return true;
             }
         }

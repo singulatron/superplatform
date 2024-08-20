@@ -27,7 +27,7 @@ export type PolicySvcTemplateId = typeof PolicySvcTemplateId[keyof typeof Policy
 export function instanceOfPolicySvcTemplateId(value: any): boolean {
     for (const key in PolicySvcTemplateId) {
         if (Object.prototype.hasOwnProperty.call(PolicySvcTemplateId, key)) {
-            if ((PolicySvcTemplateId as Record<string, PolicySvcTemplateId>)[key] === value) {
+            if (PolicySvcTemplateId[key as keyof typeof PolicySvcTemplateId] === value) {
                 return true;
             }
         }
