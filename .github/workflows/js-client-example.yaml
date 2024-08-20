@@ -47,6 +47,8 @@ jobs:
             docker ps -a
             docker logs llama-cpp
             docker logs singulatron-singulatron-backend-1
+            ls -alh /var/lib/docker/volumes/singulatron-data/_data
+            ls -alh /var/lib/docker/volumes/singulatron-data/_data/downloads
             exit 1
           )
         working-directory: ./clients/js/client-example
