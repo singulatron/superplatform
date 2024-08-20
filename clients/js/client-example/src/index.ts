@@ -1,5 +1,6 @@
 import { UserSvcApi } from "@singulatron/client";
 import { dynamicTest } from "./dynamic_example.js";
+import { promptTest } from "./prompt_example.js";
 
 async function start() {
   let userService = new UserSvcApi();
@@ -24,6 +25,7 @@ async function start() {
   }
 
   dynamicTest(token!);
+  promptTest(token!);
 }
 
 start();

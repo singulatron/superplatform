@@ -1046,4 +1046,26 @@ var Models = []*Model{
 		Name:           "Stable Diffusion",
 		PromptTemplate: "{prompt}",
 	},
+	{
+		Id: "huggingface/TheBloke/tinyllama-1.1b-chat-v1.0.Q4_K_S.gguf",
+		Assets: map[string]string{
+			"MODEL": "https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF/resolve/main/tinyllama-1.1b-chat-v1.0.Q4_K_S.gguf?download=true",
+		},
+		PlatformId:   PlatformLlamaCpp.Id,
+		Name:         "TinyLlama",
+		Parameters:   "1.1",
+		Flavour:      "Chat",
+		Version:      "1.0",
+		Quality:      "Q3_K_S",
+		Extension:    "GGUF",
+		FullName:     "TinyLlama 1.1B-Chat v1.0",
+		Size:         0.5,
+		MaxRam:       3.00,
+		QuantComment: "very small, high quality loss",
+		PromptTemplate: `<|system|>
+{system_message}</s>
+<|user|>
+{prompt}</s>
+<|assistant|>`,
+	},
 }
