@@ -50,6 +50,12 @@ export class UserService {
 		private cookieService: CookieService,
 		private router: Router
 	) {
+		this.userService = new UserSvcApi(
+			new Configuration({
+				basePath: this.localtron.addr(),
+				apiKey: this.localtron.token(),
+			})
+		);
 		this.init();
 	}
 
@@ -76,12 +82,6 @@ export class UserService {
 		}
 
 		try {
-			this.userService = new UserSvcApi(
-				new Configuration({
-					basePath: this.localtron.addr(),
-					apiKey: this.localtron.token(),
-				})
-			);
 			const rsp = await this.readUserByToken(this.token);
 			this.userSubject.next(rsp.user!);
 		} catch (error) {
