@@ -94,7 +94,7 @@ export class AddUserComponent implements OnInit {
 			return;
 		}
 
-		const user: User = { slug, name, roleIds: roles };
+		const user: User = { slug, name };
 
 		try {
 			await this.userService.createUser(user, password, roles);

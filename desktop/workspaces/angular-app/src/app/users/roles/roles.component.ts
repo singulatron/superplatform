@@ -61,11 +61,12 @@ export class RolesComponent {
 		this.selectedRolePermissions.clear();
 		const rsp = await this.userService.getPermissions(role.id!);
 		this.permissions = rsp.permissions!;
-		if (role.permissionIds) {
-			for (const id of role.permissionIds) {
-				this.selectedRolePermissions.add(id);
-			}
-		}
+		// @todo fix this
+		// if (role.permissionIds) {
+		// 	for (const id of role.permissionIds) {
+		// 		this.selectedRolePermissions.add(id);
+		// 	}
+		// }
 		this.cd.markForCheck();
 	}
 
