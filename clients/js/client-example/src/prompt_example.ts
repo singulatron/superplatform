@@ -42,9 +42,7 @@ export async function promptTest(apiKey: string) {
     console.log(dlResponse);
     const exists = dlResponse._exists;
 
-    const listRsp = await downloadSvc.listDownloads();
-
-    if (!exists) {
+    if (!exists || dlResponse.download?.status !== "completed") {
       await new Promise((resolve) => setTimeout(resolve, 2000));
     } else {
       break;
@@ -61,7 +59,7 @@ export async function promptTest(apiKey: string) {
 
   await modelSvc.startDefaultModel();
 
-  console.log("Prompting")
+  console.log("Prompting");
 
   const promptRsp = await promptSvc.addPrompt({
     request: {
