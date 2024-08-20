@@ -61,12 +61,20 @@ export async function promptTest(apiKey: string) {
 
   console.log("Prompting");
 
-  const promptRsp = await promptSvc.addPrompt({
-    request: {
-      sync: true,
-      prompt: "Is a cat an animal? Just answer with yes or no please.",
-    },
-  });
+  const promptRsp = await Promise.race([
+    promptSvc.addPrompt({
+      request: {
+        sync: true,
+        prompt: "Is a cat an animal? Just answer with yes or no please.",
+      },
+    }),
+    timeout(10000),
+  ]);
 
   console.log(promptRsp);
 }
+
+const timeout = (ms: number) =>
+  new Promise((_, reject) =>
+    setTimeout(() => reject(new Error("Request timed out")), ms)
+  );
