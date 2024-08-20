@@ -36,22 +36,32 @@ export async function promptTest(apiKey: string) {
   let exists = false;
   while (!exists) {
     const dlResponse = await downloadSvc.getDownload({
-      downloadId: encodeURIComponent(tinyLamaAssetURL),
+      downloadId: tinyLamaAssetURL,
     });
 
     console.log(dlResponse);
     const exists = dlResponse._exists;
 
+    const listRsp = await downloadSvc.listDownloads();
+
     if (!exists) {
       await new Promise((resolve) => setTimeout(resolve, 2000));
+    } else {
+      break;
     }
   }
+
+  console.log(`Making model with ID ${tinyLamaModelId} default`);
 
   await modelSvc.makeDefault({
     modelId: tinyLamaModelId,
   });
 
+  console.log("Starting the default model");
+
   await modelSvc.startDefaultModel();
+
+  console.log("Prompting")
 
   const promptRsp = await promptSvc.addPrompt({
     request: {

@@ -84,7 +84,7 @@ export class DownloadService {
 
 	async downloadPause(url: string) {
 		this.downloadService.pause({
-			downloadId: encodeURIComponent(url),
+			downloadId: url,
 		});
 	}
 

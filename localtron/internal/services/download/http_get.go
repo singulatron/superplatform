@@ -13,6 +13,7 @@ import (
 	"net/http"
 	"net/url"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/gorilla/mux"
 	download "github.com/singulatron/singulatron/localtron/internal/services/download/types"
 	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
@@ -58,11 +59,12 @@ func (ds *DownloadService) Get(
 		return
 	}
 
+	spew.Dump("download id, before", vars["downloadId"], did)
 	dl, exists := ds.getDownload(did)
 
 	jsonData, _ := json.Marshal(download.GetDownloadResponse{
 		Exists:   exists,
-		Download: downloadToDownloadDetails(vars["downloadId"], dl),
+		Download: downloadToDownloadDetails(did, dl),
 	})
 	w.Write(jsonData)
 }
