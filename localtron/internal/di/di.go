@@ -65,8 +65,6 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 	singulatronFolder := path.Join(homeDir, singulatronFolder)
 	if os.Getenv("SINGULATRON_CONFIG_PATH") != "" {
 		singulatronFolder = os.Getenv("SINGULATRON_CONFIG_PATH")
-	} else if os.Getenv("SINGULATRON_HOST_FOLDER") != "" {
-		singulatronFolder = os.Getenv("SINGULATRON_HOST_FOLDER")
 	}
 
 	configService.ConfigDirectory = singulatronFolder
