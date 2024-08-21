@@ -47,6 +47,7 @@ jobs:
             docker ps -a
             docker logs llama-cpp || true
             docker logs singulatron-singulatron-backend-1
+            ifconfig
             exit 1
           )
         working-directory: ./clients/js/client-example
