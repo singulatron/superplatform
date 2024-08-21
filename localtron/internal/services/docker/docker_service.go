@@ -10,6 +10,7 @@ package dockerservice
 import (
 	"fmt"
 	"net"
+	"strings"
 	"sync"
 
 	"github.com/docker/docker/client"
@@ -83,31 +84,54 @@ func (ds *DockerService) getDockerPort() int {
 	return ds.dockerPort
 }
 
+type InterfaceInfo struct {
+	Name        string
+	IPAddresses []string
+}
+
 func getDockerBridgeIP() (string, error) {
+	var availableInterfaces []InterfaceInfo
+
 	interfaces, err := net.Interfaces()
 	if err != nil {
 		return "", fmt.Errorf("failed to get network interfaces: %w", err)
 	}
 
 	for _, iface := range interfaces {
-		if iface.Name == "docker0" {
-			addrs, err := iface.Addrs()
+		var ips []string
+		addrs, err := iface.Addrs()
+		if err != nil {
+			return "", fmt.Errorf("failed to get addresses for interface %s: %w", iface.Name, err)
+		}
+
+		for _, addr := range addrs {
+			ip, _, err := net.ParseCIDR(addr.String())
 			if err != nil {
-				return "", fmt.Errorf("failed to get addresses for interface %s: %w", iface.Name, err)
+				continue
 			}
+			ips = append(ips, ip.String())
+		}
 
-			for _, addr := range addrs {
-				ip, _, err := net.ParseCIDR(addr.String())
-				if err != nil {
-					continue
-				}
+		availableInterfaces = append(availableInterfaces, InterfaceInfo{
+			Name:        iface.Name,
+			IPAddresses: ips,
+		})
 
-				if ip.To4() != nil {
-					return ip.String(), nil
+		if iface.Name == "docker0" && len(ips) > 0 {
+			for _, ip := range ips {
+				if net.ParseIP(ip).To4() != nil {
+					return ip, nil
 				}
 			}
 		}
 	}
 
-	return "", fmt.Errorf("docker bridge interface not found")
+	var builder strings.Builder
+	builder.WriteString("docker bridge interface not found. Available network interfaces:\n")
+
+	for _, iface := range availableInterfaces {
+		builder.WriteString(fmt.Sprintf("Interface: %s, IP Addresses: %v\n", iface.Name, iface.IPAddresses))
+	}
+
+	return "", fmt.Errorf(builder.String())
 }
