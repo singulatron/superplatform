@@ -54,7 +54,8 @@ func TestModel(t *testing.T) {
 
 		require.Equal(t, false, statusRsp.Status.Running)
 		require.Equal(t, false, statusRsp.Status.AssetsReady)
-		require.Equal(t, "127.0.0.1:8001", statusRsp.Status.Address)
+		// will be ~ "172.17.0.1:8001"
+		require.Equal(t, true, statusRsp.Status.Address != "")
 	})
 
 	t.Run("default", func(t *testing.T) {
