@@ -62,10 +62,14 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 		os.Exit(1)
 	}
 
-	configService.ConfigDirectory = path.Join(homeDir, singulatronFolder)
+	singulatronFolder := path.Join(homeDir, singulatronFolder)
 	if os.Getenv("SINGULATRON_CONFIG_PATH") != "" {
-		configService.ConfigDirectory = os.Getenv("SINGULATRON_CONFIG_PATH")
+		singulatronFolder = os.Getenv("SINGULATRON_CONFIG_PATH")
+	} else if os.Getenv("SINGULATRON_HOST_FOLDER") != "" {
+		singulatronFolder = os.Getenv("SINGULATRON_HOST_FOLDER")
 	}
+
+	configService.ConfigDirectory = singulatronFolder
 
 	if options.DatastoreFactory == nil {
 		localStorePath := path.Join(configService.GetConfigDirectory(), "data")
@@ -115,7 +119,6 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 		os.Exit(1)
 	}
 
-	singulatronFolder := path.Join(homeDir, singulatronFolder)
 	err = os.MkdirAll(singulatronFolder, 0755)
 	if err != nil {
 		logger.Error("Config folder creation failed", slog.String("error", err.Error()))

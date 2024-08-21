@@ -53,7 +53,6 @@ func (p *PromptService) processPrompts() {
 
 		err := p.processNextPrompt()
 		if err != nil {
-			panic(err)
 			logger.Error("Error processing prompt",
 				slog.String("error", err.Error()),
 			)
@@ -115,7 +114,6 @@ func (p *PromptService) processNextPrompt() error {
 }
 
 func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err error) {
-
 	updateCurr := func() {
 		logger.Info("Prompt finished",
 			slog.String("promptId", currentPrompt.Id),
@@ -149,24 +147,15 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 			currentPrompt.Error = fmt.Sprintf("%v", r)
 			currentPrompt.Status = prompttypes.PromptStatusErrored
 			updateCurr()
-			panic(r)
-		}
-
-		if err != nil {
+		} else if err != nil {
 			currentPrompt.Error = err.Error()
 			currentPrompt.Status = prompttypes.PromptStatusErrored
+			updateCurr()
 		} else {
 			currentPrompt.Status = prompttypes.PromptStatusCompleted
+			updateCurr()
 		}
 
-		updateCurr()
-	}()
-
-	logger.Info("Picking up prompt from queue",
-		slog.String("promptId", currentPrompt.Id),
-	)
-
-	defer func() {
 		ev := prompttypes.EventPromptProcessingFinished{
 			PromptId: currentPrompt.Id,
 			Error:    errToString(err),
@@ -181,6 +170,10 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 			logger.Error("Failed to publish: %v", err)
 		}
 	}()
+
+	logger.Info("Picking up prompt from queue",
+		slog.String("promptId", currentPrompt.Id),
+	)
 
 	currentPrompt.LastRun = time.Now()
 	currentPrompt.Error = ""
@@ -272,7 +265,6 @@ func (p *PromptService) processPlatform(address string, modelId string, fullProm
 	getModelRsp := modeltypes.GetModelResponse{}
 	err := p.router.Get(context.Background(), "model-svc", fmt.Sprintf("/model/%v", url.PathEscape(modelId)), nil, &getModelRsp)
 	if err != nil {
-		panic(err)
 		return err
 	}
 

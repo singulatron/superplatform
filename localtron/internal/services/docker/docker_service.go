@@ -8,8 +8,11 @@
 package dockerservice
 
 import (
+	"context"
+	"fmt"
 	"sync"
 
+	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/client"
 	sdk "github.com/singulatron/singulatron/sdk/go"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
@@ -66,13 +69,43 @@ func (ds *DockerService) Start() error {
 	return ds.registerPermissions()
 }
 
-func (ds *DockerService) getDockerHost() string {
+func (ds *DockerService) getDockerHost() (string, error) {
+	// Docker host should only exist for cases like WSL when the
+	// Docker host address is not localhost.
+	// Here instead of trying to return localhost we will try to find the docker bridge
+	// ip so containers can address each other.
 	if ds.dockerHost == "" {
-		return "127.0.0.1"
+		return ds.getDockerBridgeIP()
 	}
-	return ds.dockerHost
+	return ds.dockerHost, nil
 }
 
 func (ds *DockerService) getDockerPort() int {
 	return ds.dockerPort
+}
+
+type InterfaceInfo struct {
+	Name        string
+	IPAddresses []string
+}
+
+func (d *DockerService) getDockerBridgeIP() (string, error) {
+	ctx := context.Background()
+
+	networks, err := d.client.NetworkList(ctx, types.NetworkListOptions{})
+	if err != nil {
+		return "", fmt.Errorf("failed to list Docker networks: %w", err)
+	}
+
+	for _, network := range networks {
+		if network.Name == "bridge" {
+			for _, config := range network.IPAM.Config {
+				if config.Gateway != "" {
+					return config.Gateway, nil
+				}
+			}
+		}
+	}
+
+	return "", fmt.Errorf("Docker bridge network not found")
 }

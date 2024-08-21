@@ -28,12 +28,12 @@ Host
 
 To be able persist data, a host folder must be mounted by all containers.
 
-In our example (`SINGULATRON_HOST_FOLDER=/var/lib/docker/volumes/singulatron-data/_data`) we basically pass down the full path of the `singulatron-data` volume we created in the docker compose file to the containers created by Singulatron.
+In our example (`SINGULATRON_HOST_FOLDER=singulatron-data`) we basically pass down the full path of the `singulatron-data` volume we created in the docker compose file to the containers created by Singulatron.
 
 So cycle goes like this:
 
-- Singulatron container writes to `/root/.singulatron`, which is mounted on host at `/var/lib/docker/volumes/singulatron-data/_data`
-- Assets (which are basically downloaded files) will be passed to containers created by Singulatron by mounting files in `/var/lib/docker/volumes/singulatron-data/_data`.
+- Singulatron container writes to `/root/.singulatron`, which is mounted to the volume `singulatron-data`
+- Assets (which are basically downloaded files) will be passed to containers created by Singulatron by mounting files in `singulatron-data`.
 
 ## `SINGULATRON_LLM_HOST`
 
