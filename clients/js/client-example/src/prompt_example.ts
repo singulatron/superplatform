@@ -69,7 +69,7 @@ export async function promptTest(apiKey: string) {
       },
     }),
     // takes long mostly because the image has to be pulled
-    timeout(30000),
+    timeout(45000),
   ]);
 
   console.log(promptRsp);
