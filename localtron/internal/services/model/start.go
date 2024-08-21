@@ -129,44 +129,22 @@ func (ms *ModelService) start(modelId string) error {
 		}
 		getConfigResponse = &rsp
 	}
-	configFolderPath := getConfigResponse.Config.Directory
-
-	// The SINGULATRON_HOST_FOLDER is a path on the host which is mounted
-	// by Singulatron to download models etc.
-	// (To persist the ~/.singulatron of the container basically).
-	// We then basically pass this folder down to
-	// containers launched by Singulatron.
-	//
-	// This way the intra-container path
-	// 		/root/.singulatron/downloads/somemodel
-	// Becomes
-	// 		/host/path/downloads/somemodel
-	singulatronHostFolder := os.Getenv("SINGULATRON_HOST_FOLDER")
 
 	for envName, assetPath := range env {
-		if singulatronHostFolder != "" {
-			// assetPath is an intra-container path, returned by the DownloadService
-			// eg. /root/.singulatron/downloads/somemodel
-			// configFolderPath is /root/.singulatron
-			// after replace: /host/path/download/somemodel
-			assetPath = strings.Replace(assetPath, configFolderPath, singulatronHostFolder, 1)
-		}
-
 		fileName := path.Base(assetPath)
-		// eg. MODEL=/assets/mistral-7b-instruct-v0.2.Q2_K.gguf
-		launchOptions.Envs = append(launchOptions.Envs, fmt.Sprintf("%v=/assets/%v", envName, fileName))
-
-		// eg. /path/on/host/fileName:/assets/fileName
-		launchOptions.HostBinds = append(launchOptions.HostBinds, fmt.Sprintf("%v:/assets/%v", assetPath, fileName))
+		// eg. MODEL=/root/.singulatron/downloads/mistral-7b-instruct-v0.2.Q2_K.gguf
+		launchOptions.Envs = append(launchOptions.Envs, fmt.Sprintf("%v=/root/.singulatron/downloads/%v", envName, fileName))
 	}
 
+	singulatronVolumeName := os.Getenv("SINGULATRON_VOLUME_NAME")
+	launchOptions.HostBinds = append(launchOptions.HostBinds, fmt.Sprintf("%v:/root/.singulatron", singulatronVolumeName))
+
+	// Persistent paths are paths in the container we want to persist.
+	// eg. /root/.cache/huggingface/diffusers
+	// Then here we mount singulatron-data:/root/.cache/huggingface/diffusers
 	for _, persistentPath := range persistentPaths {
-		fold := singulatronHostFolder
-		if fold == "" {
-			fold = configFolderPath
-		}
 		launchOptions.HostBinds = append(launchOptions.HostBinds,
-			fmt.Sprintf("%v:%v", fold, path.Dir(persistentPath)),
+			fmt.Sprintf("%v:%v", singulatronVolumeName, path.Dir(persistentPath)),
 		)
 	}
 
