@@ -8,11 +8,11 @@
 package dockerservice
 
 import (
+	"context"
 	"fmt"
-	"net"
-	"strings"
 	"sync"
 
+	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/client"
 	sdk "github.com/singulatron/singulatron/sdk/go"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
@@ -75,7 +75,7 @@ func (ds *DockerService) getDockerHost() (string, error) {
 	// Here instead of trying to return localhost we will try to find the docker bridge
 	// ip so containers can address each other.
 	if ds.dockerHost == "" {
-		return getDockerBridgeIP()
+		return ds.getDockerBridgeIP()
 	}
 	return ds.dockerHost, nil
 }
@@ -89,49 +89,23 @@ type InterfaceInfo struct {
 	IPAddresses []string
 }
 
-func getDockerBridgeIP() (string, error) {
-	var availableInterfaces []InterfaceInfo
+func (d *DockerService) getDockerBridgeIP() (string, error) {
+	ctx := context.Background()
 
-	interfaces, err := net.Interfaces()
+	networks, err := d.client.NetworkList(ctx, types.NetworkListOptions{})
 	if err != nil {
-		return "", fmt.Errorf("failed to get network interfaces: %w", err)
+		return "", fmt.Errorf("failed to list Docker networks: %w", err)
 	}
 
-	for _, iface := range interfaces {
-		var ips []string
-		addrs, err := iface.Addrs()
-		if err != nil {
-			return "", fmt.Errorf("failed to get addresses for interface %s: %w", iface.Name, err)
-		}
-
-		for _, addr := range addrs {
-			ip, _, err := net.ParseCIDR(addr.String())
-			if err != nil {
-				continue
-			}
-			ips = append(ips, ip.String())
-		}
-
-		availableInterfaces = append(availableInterfaces, InterfaceInfo{
-			Name:        iface.Name,
-			IPAddresses: ips,
-		})
-
-		if iface.Name == "docker0" && len(ips) > 0 {
-			for _, ip := range ips {
-				if net.ParseIP(ip).To4() != nil {
-					return ip, nil
+	for _, network := range networks {
+		if network.Name == "bridge" {
+			for _, config := range network.IPAM.Config {
+				if config.Gateway != "" {
+					return config.Gateway, nil
 				}
 			}
 		}
 	}
 
-	var builder strings.Builder
-	builder.WriteString("docker bridge interface not found. Available network interfaces:\n")
-
-	for _, iface := range availableInterfaces {
-		builder.WriteString(fmt.Sprintf("Interface: %s, IP Addresses: %v\n", iface.Name, iface.IPAddresses))
-	}
-
-	return "", fmt.Errorf(builder.String())
+	return "", fmt.Errorf("Docker bridge network not found")
 }
