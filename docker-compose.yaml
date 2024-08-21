@@ -32,6 +32,7 @@ services:
       # We mount a volume so data will be persisted
       - singulatron-data:/root/.singulatron
     environment:
+      - SINGULATRON_VOLUME_NAME=singulatron-data
       # Address of the host so we can access the containers running the LLMs from the backend container
       # See "System Specific Settings" on this page for more information.
       - SINGULATRON_LLM_HOST=172.17.0.1
