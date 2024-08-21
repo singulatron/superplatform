@@ -8,6 +8,8 @@
 package dockerservice
 
 import (
+	"fmt"
+	"net"
 	"sync"
 
 	"github.com/docker/docker/client"
@@ -66,13 +68,46 @@ func (ds *DockerService) Start() error {
 	return ds.registerPermissions()
 }
 
-func (ds *DockerService) getDockerHost() string {
+func (ds *DockerService) getDockerHost() (string, error) {
+	// Docker host should only exist for cases like WSL when the
+	// Docker host address is not localhost.
+	// Here instead of trying to return localhost we will try to find the docker bridge
+	// ip so containers can address each other.
 	if ds.dockerHost == "" {
-		return "127.0.0.1"
+		return getDockerBridgeIP()
 	}
-	return ds.dockerHost
+	return ds.dockerHost, nil
 }
 
 func (ds *DockerService) getDockerPort() int {
 	return ds.dockerPort
+}
+
+func getDockerBridgeIP() (string, error) {
+	interfaces, err := net.Interfaces()
+	if err != nil {
+		return "", fmt.Errorf("failed to get network interfaces: %w", err)
+	}
+
+	for _, iface := range interfaces {
+		if iface.Name == "docker0" {
+			addrs, err := iface.Addrs()
+			if err != nil {
+				return "", fmt.Errorf("failed to get addresses for interface %s: %w", iface.Name, err)
+			}
+
+			for _, addr := range addrs {
+				ip, _, err := net.ParseCIDR(addr.String())
+				if err != nil {
+					continue
+				}
+
+				if ip.To4() != nil {
+					return ip.String(), nil
+				}
+			}
+		}
+	}
+
+	return "", fmt.Errorf("docker bridge interface not found")
 }

@@ -42,7 +42,12 @@ func (dm *DockerService) Host(
 		return
 	}
 
-	host := dm.getDockerHost()
+	host, err := dm.getDockerHost()
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+		return
+	}
 
 	jsonData, _ := json.Marshal(docker.GetDockerHostResponse{
 		Host: host,

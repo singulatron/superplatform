@@ -24,7 +24,6 @@ import (
 )
 
 func (ms *ModelService) status(modelId string) (*modeltypes.ModelStatus, error) {
-	// hostReq := dockertypes.GetDockerHostRequest{}
 	hostRsp := dockertypes.GetDockerHostResponse{}
 	err := ms.router.Get(context.Background(), "docker-svc", "/host", nil, &hostRsp)
 	if err != nil {
