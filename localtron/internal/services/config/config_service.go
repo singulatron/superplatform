@@ -123,5 +123,9 @@ func (cs *ConfigService) loadConfig() error {
 		cs.config.Model.CurrentModelId = DefaultModelId
 	}
 
+	if cs.config.Directory == "" {
+		cs.config.Directory = cs.ConfigDirectory
+	}
+
 	return nil
 }

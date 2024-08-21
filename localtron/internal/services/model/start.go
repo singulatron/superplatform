@@ -130,6 +130,8 @@ func (ms *ModelService) start(modelId string) error {
 		getConfigResponse = &rsp
 	}
 
+	configFolderPath := getConfigResponse.Config.Directory
+
 	for envName, assetPath := range env {
 		fileName := path.Base(assetPath)
 		// eg. MODEL=/root/.singulatron/downloads/mistral-7b-instruct-v0.2.Q2_K.gguf
@@ -137,6 +139,12 @@ func (ms *ModelService) start(modelId string) error {
 	}
 
 	singulatronVolumeName := os.Getenv("SINGULATRON_VOLUME_NAME")
+	if singulatronVolumeName == "" {
+		if configFolderPath == "" {
+			return errors.New("config folder not found")
+		}
+		singulatronVolumeName = configFolderPath
+	}
 	launchOptions.HostBinds = append(launchOptions.HostBinds, fmt.Sprintf("%v:/root/.singulatron", singulatronVolumeName))
 
 	// Persistent paths are paths in the container we want to persist.

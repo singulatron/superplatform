@@ -15,7 +15,7 @@ Supported platforms:
 
 Do not set this if your card doesn't support the given architecture or things will break.
 
-## `SINGULATRON_HOST_FOLDER`
+## `SINGULATRON_VOLUME_NAME`
 
 This envar is needed when Singulatron runs as a container next to containers it starts:
 
@@ -26,9 +26,9 @@ Host
  |-> Container Launched By Singulatron
 ```
 
-To be able persist data, a host folder must be mounted by all containers.
+For the containers like `llama-cpp` to be able to read the models downloaded by Singulatron we they must both mount the same docker volume.
 
-In our example (`SINGULATRON_HOST_FOLDER=singulatron-data`) we basically pass down the full path of the `singulatron-data` volume we created in the docker compose file to the containers created by Singulatron.
+An example of this can be seen in the root `docker-compose.yaml` file: `SINGULATRON_VOLUME_NAME=singulatron-data`.
 
 So cycle goes like this:
 
@@ -36,6 +36,8 @@ So cycle goes like this:
 - Assets (which are basically downloaded files) will be passed to containers created by Singulatron by mounting files in `singulatron-data`.
 
 ## `SINGULATRON_LLM_HOST`
+
+**This flag is usually not needed as Singulatron gets the IP of the Docker bridge.**
 
 When Singulatron is running in a container, it needs to know how to address its siblings (other containers it started):
 

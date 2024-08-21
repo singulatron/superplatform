@@ -11,6 +11,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 
 	"github.com/gorilla/mux"
 	model "github.com/singulatron/singulatron/localtron/internal/services/model/types"
@@ -66,7 +67,14 @@ func (ms *ModelService) StartSpecific(
 	}
 	defer r.Body.Close()
 
-	err = ms.start(v["modelId"])
+	modelId, err := url.PathUnescape(v["modelId"])
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(err.Error()))
+		return
+	}
+
+	err = ms.start(modelId)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(err.Error()))

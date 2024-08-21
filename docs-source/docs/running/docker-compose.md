@@ -39,11 +39,8 @@ services:
       # We mount a volume so data will be persisted
       - singulatron-data:/root/.singulatron
     environment:
-      # This folder will be mounted by the LLM containers to  access the models
-      - SINGULATRON_HOST_FOLDER=/var/lib/docker/volumes/  singulatron-data/_data
-      # Address of the host so we can access the containers   running the LLMs from the backend container
-      # See "System Specific Settings" on this page for more  information.
-      - SINGULATRON_LLM_HOST=172.17.0.1
+      # This volume will be mounted by the LLM containers to access the models downloaded by Singulatron.
+      - SINGULATRON_VOLUME_NAME=singulatron-data
       #
       # GPU Acceleration for NVIDIA GPUs
       # Uncomment this envar for NVIDIA GPUs.
