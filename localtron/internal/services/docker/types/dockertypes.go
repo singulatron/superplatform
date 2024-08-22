@@ -33,24 +33,46 @@ type DockerInfo struct {
 }
 
 type LaunchContainerOptions struct {
-	Name            string            `json:"name,omitempty"`
-	Hash            string            `json:"hash,omitempty"`
-	Envs            []string          `json:"envs,omitempty"`
-	Labels          map[string]string `json:"labels,omitempty"`
-	PersistentPaths []string          `json:"persistentPaths,omitempty"`
-	GPUEnabled      bool              `json:"gpuEnabled,omitempty"`
-	// Asset is a map of envar name to file URL.
-	// eg. {"MODEL": "https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q2_K.gguf"}
-	// This file will be downloaded with the Download Svc and the local file will be mounted in the container
-	// and the envar `MODEL=/local/path/to/file` will be available in the container launched by the Docker Svc.
+	// Name is the name of the container
+	Name string `json:"name,omitempty"`
+
+	// Hash is a unique identifier for the container
+	Hash string `json:"hash,omitempty"`
+
+	// Envs are environment variables to set in the container
+	// example: ["VAR1=value1", "VAR2=value2"]
+	Envs []string `json:"envs,omitempty"`
+
+	// Labels are metadata labels associated with the container
+	Labels map[string]string `json:"labels,omitempty"`
+
+	// PersistentPaths are paths that should be persisted across container restarts
+	PersistentPaths []string `json:"persistentPaths,omitempty"`
+
+	// GPUEnabled specifies if GPU support is enabled
+	GPUEnabled bool `json:"gpuEnabled,omitempty"`
+
+	// Assets maps environment variable names to file URLs.
+	// Example: {"MODEL": "https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q2_K.gguf"}
+	// These files are downloaded by the Download Svc and mounted in the container.
+	// The environment variable `MODEL` will point to the local file path in the container.
 	Assets map[string]string `json:"assets,omitempty"`
 }
 
 type LaunchContainerRequest struct {
-	Image    string                  `json:"image"`
-	Port     int                     `json:"port"`
-	HostPort int                     `json:"hostPort"`
-	Options  *LaunchContainerOptions `json:"options"`
+	// Image is the Docker image to use for the container
+	Image string `json:"image" example:"nginx:latest"`
+
+	// Port is the port number that the container will expose
+	// example: 8080
+	Port int `json:"port" example:"8080"`
+
+	// HostPort is the port on the host machine that will be mapped to the container's port
+	// example: 8081
+	HostPort int `json:"hostPort" example:"8081"`
+
+	// Options provides additional options for launching the container
+	Options *LaunchContainerOptions `json:"options"`
 }
 
 type LaunchContainerResponse struct {

@@ -378,7 +378,7 @@ export class DockerSvcApi {
     }
     /**
      * Launches a Docker container with the specified parameters.  Requires the `docker-svc:docker:create` permission.
-     * @summary Launch a Docker Container
+     * @summary Launch a Container
      * @param request Launch Container Request
      */
     public async launchContainer (request: DockerSvcLaunchContainerRequest, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: DockerSvcLaunchContainerResponse;  }> {

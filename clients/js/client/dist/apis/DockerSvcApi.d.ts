@@ -67,12 +67,12 @@ export declare class DockerSvcApi extends runtime.BaseAPI {
     isRunning(requestParameters: IsRunningRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DockerSvcContainerIsRunningResponse>;
     /**
      * Launches a Docker container with the specified parameters.  Requires the `docker-svc:docker:create` permission.
-     * Launch a Docker Container
+     * Launch a Container
      */
     launchContainerRaw(requestParameters: LaunchContainerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DockerSvcLaunchContainerResponse>>;
     /**
      * Launches a Docker container with the specified parameters.  Requires the `docker-svc:docker:create` permission.
-     * Launch a Docker Container
+     * Launch a Container
      */
     launchContainer(requestParameters: LaunchContainerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DockerSvcLaunchContainerResponse>;
 }

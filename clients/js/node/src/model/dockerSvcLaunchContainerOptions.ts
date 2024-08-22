@@ -14,14 +14,32 @@ import { RequestFile } from './models';
 
 export class DockerSvcLaunchContainerOptions {
     /**
-    * Asset is a map of envar name to file URL. eg. {\"MODEL\": \"https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q2_K.gguf\"} This file will be downloaded with the Download Svc and the local file will be mounted in the container and the envar `MODEL=/local/path/to/file` will be available in the container launched by the Docker Svc.
+    * Assets maps environment variable names to file URLs. Example: {\"MODEL\": \"https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q2_K.gguf\"} These files are downloaded by the Download Svc and mounted in the container. The environment variable `MODEL` will point to the local file path in the container.
     */
     'assets'?: { [key: string]: string; };
+    /**
+    * Envs are environment variables to set in the container example: [\"VAR1=value1\", \"VAR2=value2\"]
+    */
     'envs'?: Array<string>;
+    /**
+    * GPUEnabled specifies if GPU support is enabled
+    */
     'gpuEnabled'?: boolean;
+    /**
+    * Hash is a unique identifier for the container
+    */
     'hash'?: string;
+    /**
+    * Labels are metadata labels associated with the container
+    */
     'labels'?: { [key: string]: string; };
+    /**
+    * Name is the name of the container
+    */
     'name'?: string;
+    /**
+    * PersistentPaths are paths that should be persisted across container restarts
+    */
     'persistentPaths'?: Array<string>;
 
     static discriminator: string | undefined = undefined;

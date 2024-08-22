@@ -611,7 +611,7 @@ func (r ApiLaunchContainerRequest) Execute() (*DockerSvcLaunchContainerResponse,
 }
 
 /*
-LaunchContainer Launch a Docker Container
+LaunchContainer Launch a Container
 
 Launches a Docker container with the specified parameters.
 

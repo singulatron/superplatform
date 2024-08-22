@@ -17,25 +17,27 @@ import type { DockerSvcLaunchContainerOptions } from './DockerSvcLaunchContainer
  */
 export interface DockerSvcLaunchContainerRequest {
     /**
-     *
+     * HostPort is the port on the host machine that will be mapped to the container's port
+     * example: 8081
      * @type {number}
      * @memberof DockerSvcLaunchContainerRequest
      */
     hostPort?: number;
     /**
-     *
+     * Image is the Docker image to use for the container
      * @type {string}
      * @memberof DockerSvcLaunchContainerRequest
      */
     image?: string;
     /**
-     *
+     * Options provides additional options for launching the container
      * @type {DockerSvcLaunchContainerOptions}
      * @memberof DockerSvcLaunchContainerRequest
      */
     options?: DockerSvcLaunchContainerOptions;
     /**
-     *
+     * Port is the port number that the container will expose
+     * example: 8080
      * @type {number}
      * @memberof DockerSvcLaunchContainerRequest
      */

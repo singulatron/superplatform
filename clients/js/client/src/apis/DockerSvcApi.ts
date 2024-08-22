@@ -209,7 +209,7 @@ export class DockerSvcApi extends runtime.BaseAPI {
 
     /**
      * Launches a Docker container with the specified parameters.  Requires the `docker-svc:docker:create` permission.
-     * Launch a Docker Container
+     * Launch a Container
      */
     async launchContainerRaw(requestParameters: LaunchContainerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DockerSvcLaunchContainerResponse>> {
         if (requestParameters['request'] == null) {
@@ -242,7 +242,7 @@ export class DockerSvcApi extends runtime.BaseAPI {
 
     /**
      * Launches a Docker container with the specified parameters.  Requires the `docker-svc:docker:create` permission.
-     * Launch a Docker Container
+     * Launch a Container
      */
     async launchContainer(requestParameters: LaunchContainerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DockerSvcLaunchContainerResponse> {
         const response = await this.launchContainerRaw(requestParameters, initOverrides);

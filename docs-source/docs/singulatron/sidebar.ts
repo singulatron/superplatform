@@ -85,7 +85,7 @@ const sidebar: SidebarsConfig = {
         {
           type: "doc",
           id: "singulatron/launch-container",
-          label: "Launch a Docker Container",
+          label: "Launch a Container",
           className: "api-method put",
         },
         {
