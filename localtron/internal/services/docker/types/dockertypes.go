@@ -40,7 +40,6 @@ type LaunchContainerOptions struct {
 	Hash string `json:"hash,omitempty"`
 
 	// Envs are environment variables to set in the container
-	// example: ["VAR1=value1", "VAR2=value2"]
 	Envs []string `json:"envs,omitempty"`
 
 	// Labels are metadata labels associated with the container
@@ -61,14 +60,12 @@ type LaunchContainerOptions struct {
 
 type LaunchContainerRequest struct {
 	// Image is the Docker image to use for the container
-	Image string `json:"image" example:"nginx:latest"`
+	Image string `json:"image" example:"nginx:latest" binding:"required"`
 
 	// Port is the port number that the container will expose
-	// example: 8080
-	Port int `json:"port" example:"8080"`
+	Port int `json:"port" example:"8080" binding:"required"`
 
 	// HostPort is the port on the host machine that will be mapped to the container's port
-	// example: 8081
 	HostPort int `json:"hostPort" example:"8081"`
 
 	// Options provides additional options for launching the container
