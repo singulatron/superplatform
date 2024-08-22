@@ -11,6 +11,7 @@ import (
 	"bufio"
 	"context"
 	"fmt"
+	"io/ioutil"
 	"log/slog"
 	"net/url"
 	"os"
@@ -183,7 +184,6 @@ func (d *DockerService) additionalEnvsAndHostBinds(assets map[string]string, per
 	singulatronVolumeName := os.Getenv("SINGULATRON_VOLUME_NAME")
 	if singulatronVolumeName == "" {
 		if isRunningInDocker() {
-			// Try to find the volume name
 			currentContainerId, err := getContainerID()
 			if err != nil {
 				return nil, nil, err
@@ -245,7 +245,71 @@ func (d *DockerService) getMountedVolume(containerID, mountPoint string) (string
 }
 
 func isRunningInDocker() bool {
-	file, err := os.Open("/proc/1/cgroup")
+	if checkDockerSocket() {
+		return true
+	}
+
+	if checkDockerenvFile() {
+		return true
+	}
+
+	if checkContainerenvFile() {
+		return true
+	}
+
+	if checkContainerEnvVars() {
+		return true
+	}
+
+	if checkMountInfoForDockerOrKubernetes() {
+		return true
+	}
+
+	if checkCgroupForDockerOrKubernetes() {
+		return true
+	}
+
+	if checkPidNamespace() {
+		return true
+	}
+
+	if checkHostname() {
+		return true
+	}
+
+	return false
+}
+
+func checkDockerSocket() bool {
+	if _, err := os.Stat("/var/run/docker.sock"); err == nil {
+		return true
+	}
+	return false
+}
+
+func checkDockerenvFile() bool {
+	if _, err := os.Stat("/.dockerenv"); err == nil {
+		return true
+	}
+	return false
+}
+
+func checkContainerenvFile() bool {
+	if _, err := os.Stat("/.containerenv"); err == nil {
+		return true
+	}
+	return false
+}
+
+func checkContainerEnvVars() bool {
+	if os.Getenv("DOCKER_CONTAINER") != "" || os.Getenv("KUBERNETES_SERVICE_HOST") != "" {
+		return true
+	}
+	return false
+}
+
+func checkMountInfoForDockerOrKubernetes() bool {
+	file, err := os.Open("/proc/self/mountinfo")
 	if err != nil {
 		return false
 	}
@@ -254,15 +318,72 @@ func isRunningInDocker() bool {
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		line := scanner.Text()
-		if strings.Contains(line, "docker") {
+		if strings.Contains(line, "/docker/") || strings.Contains(line, "/kubepods/") {
 			return true
 		}
 	}
-
 	return false
 }
 
+func checkCgroupForDockerOrKubernetes() bool {
+	file, err := os.Open("/proc/1/cgroup")
+	if err != nil {
+		return false
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		if strings.Contains(scanner.Text(), "docker") || strings.Contains(scanner.Text(), "kubepods") {
+			return true
+		}
+	}
+	return false
+}
+
+func checkPidNamespace() bool {
+	pid1, err := os.Readlink("/proc/1/ns/pid")
+	if err != nil {
+		return false
+	}
+
+	self, err := os.Readlink("/proc/self/ns/pid")
+	if err != nil {
+		return false
+	}
+
+	return pid1 != self
+}
+
+func checkHostname() bool {
+	hostname, err := os.Hostname()
+	if err != nil {
+		return false
+	}
+
+	return strings.HasPrefix(hostname, "docker-") || strings.HasPrefix(hostname, "container-")
+}
+
 func getContainerID() (string, error) {
+	id, err := getContainerIDFromCgroup()
+	if err == nil {
+		return id, nil
+	}
+
+	id, err = getContainerIDFromHostname()
+	if err == nil {
+		return id, nil
+	}
+
+	id, err = getContainerIDFromEnv()
+	if err == nil {
+		return id, nil
+	}
+
+	return "", fmt.Errorf("could not find container ID")
+}
+
+func getContainerIDFromCgroup() (string, error) {
 	file, err := os.Open("/proc/self/cgroup")
 	if err != nil {
 		return "", err
@@ -275,17 +396,44 @@ func getContainerID() (string, error) {
 		parts := strings.Split(line, "/")
 		if len(parts) > 1 {
 			containerID := parts[len(parts)-1]
-			if len(containerID) == 64 {
+			if len(containerID) == 64 && isHex(containerID) {
 				return containerID, nil
 			}
 		}
 	}
 
-	if err := scanner.Err(); err != nil {
+	return "", fmt.Errorf("could not find container ID in /proc/self/cgroup")
+}
+
+func getContainerIDFromHostname() (string, error) {
+	hostname, err := ioutil.ReadFile("/etc/hostname")
+	if err != nil {
 		return "", err
 	}
 
-	return "", fmt.Errorf("could not find container ID")
+	id := strings.TrimSpace(string(hostname))
+	if len(id) >= 12 && len(id) <= 64 && isHex(id) {
+		return id, nil
+	}
+
+	return "", fmt.Errorf("hostname does not contain a valid container ID")
+}
+
+func getContainerIDFromEnv() (string, error) {
+	id := os.Getenv("HOSTNAME")
+	if len(id) >= 12 && len(id) <= 64 && isHex(id) {
+		return id, nil
+	}
+	return "", fmt.Errorf("environment variable HOSTNAME does not contain a valid container ID")
+}
+
+func isHex(s string) bool {
+	for _, c := range s {
+		if !strings.Contains("0123456789abcdef", strings.ToLower(string(c))) {
+			return false
+		}
+	}
+	return true
 }
 
 // transformWinPaths maps win paths to unix paths so WSL can understand it
