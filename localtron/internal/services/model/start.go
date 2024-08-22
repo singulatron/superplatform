@@ -84,6 +84,7 @@ func (ms *ModelService) startWithDocker(model *modeltypes.Model, platform *model
 	port := platform.Architectures.Default.Port
 	launchOptions.Envs = platform.Architectures.Default.Envars
 	launchOptions.PersistentPaths = platform.Architectures.Default.PersistentPaths
+	launchOptions.Assets = model.Assets
 
 	switch os.Getenv("SINGULATRON_GPU_PLATFORM") {
 	case "cuda":

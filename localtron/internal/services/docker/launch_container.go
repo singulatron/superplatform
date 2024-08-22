@@ -169,12 +169,6 @@ func (d *DockerService) additionalEnvsAndHostBinds(assets map[string]string, per
 
 	envs := []string{}
 
-	var getConfigResponse *configtypes.GetConfigResponse
-	err := d.router.Get(context.Background(), "config-svc", "/config", nil, &getConfigResponse)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	for envName, assetPath := range envarNameToFilePath {
 		fileName := path.Base(assetPath)
 		// eg. MODEL=/root/.singulatron/downloads/mistral-7b-instruct-v0.2.Q2_K.gguf
@@ -186,13 +180,37 @@ func (d *DockerService) additionalEnvsAndHostBinds(assets map[string]string, per
 	// If the Singulatron daemon is running directly on the host, we will just mount the ~/.singulatron folder in
 	// the containers the Singulatron daemon starts.
 
-	configFolderPath := getConfigResponse.Config.Directory
 	singulatronVolumeName := os.Getenv("SINGULATRON_VOLUME_NAME")
 	if singulatronVolumeName == "" {
-		if configFolderPath == "" {
-			return nil, nil, errors.New("config folder not found")
+		if isRunningInDocker() {
+			// Try to find the volume name
+			currentContainerId, err := getContainerID()
+			if err != nil {
+				return nil, nil, err
+			}
+
+			mountedVolume, err := d.getMountedVolume(currentContainerId, "/root/.singulatron")
+			if err != nil {
+				return nil, nil, err
+			}
+
+			singulatronVolumeName = mountedVolume
+		} else {
+			// If we are not running in Docker, we will ask the Config Svc about the config directory and we mount that.
+			var getConfigResponse *configtypes.GetConfigResponse
+			err := d.router.Get(context.Background(), "config-svc", "/config", nil, &getConfigResponse)
+			if err != nil {
+				return nil, nil, err
+			}
+
+			configFolderPath := getConfigResponse.Config.Directory
+			if configFolderPath == "" {
+				return nil, nil, errors.New("config folder not found")
+			}
+
+			singulatronVolumeName = configFolderPath
 		}
-		singulatronVolumeName = configFolderPath
+
 	}
 
 	hostBinds := []string{}
