@@ -34,7 +34,7 @@ require('./DockerSvcGetDockerHostResponse.js');
 require('./DockerSvcGetInfoResponse.js');
 require('./DockerSvcDockerInfo.js');
 require('./DockerSvcLaunchContainerRequest.js');
-require('./DockerSvcLaunchOptions.js');
+require('./DockerSvcLaunchContainerOptions.js');
 require('./DockerSvcLaunchContainerResponse.js');
 require('./DockerSvcLaunchInfo.js');
 require('./DownloadSvcDownloadRequest.js');

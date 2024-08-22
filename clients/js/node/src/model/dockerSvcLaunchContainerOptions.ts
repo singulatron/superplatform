@@ -12,17 +12,26 @@
 
 import { RequestFile } from './models';
 
-export class DockerSvcLaunchOptions {
+export class DockerSvcLaunchContainerOptions {
+    /**
+    * Asset is a map of envar name to file URL. eg. {\"MODEL\": \"https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q2_K.gguf\"} This file will be downloaded with the Download Svc and the local file will be mounted in the container and the envar `MODEL=/local/path/to/file` will be available in the container launched by the Docker Svc.
+    */
+    'assets'?: { [key: string]: string; };
     'envs'?: Array<string>;
     'gpuEnabled'?: boolean;
     'hash'?: string;
-    'hostBinds'?: Array<string>;
     'labels'?: { [key: string]: string; };
     'name'?: string;
+    'persistentPaths'?: Array<string>;
 
     static discriminator: string | undefined = undefined;
 
     static attributeTypeMap: Array<{name: string, baseName: string, type: string}> = [
+        {
+            "name": "assets",
+            "baseName": "assets",
+            "type": "{ [key: string]: string; }"
+        },
         {
             "name": "envs",
             "baseName": "envs",
@@ -39,11 +48,6 @@ export class DockerSvcLaunchOptions {
             "type": "string"
         },
         {
-            "name": "hostBinds",
-            "baseName": "hostBinds",
-            "type": "Array<string>"
-        },
-        {
             "name": "labels",
             "baseName": "labels",
             "type": "{ [key: string]: string; }"
@@ -52,10 +56,15 @@ export class DockerSvcLaunchOptions {
             "name": "name",
             "baseName": "name",
             "type": "string"
+        },
+        {
+            "name": "persistentPaths",
+            "baseName": "persistentPaths",
+            "type": "Array<string>"
         }    ];
 
     static getAttributeTypeMap() {
-        return DockerSvcLaunchOptions.attributeTypeMap;
+        return DockerSvcLaunchContainerOptions.attributeTypeMap;
     }
 }
 

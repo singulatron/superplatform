@@ -13,12 +13,12 @@
  */
 
 import { mapValues } from '../runtime';
-import type { DockerSvcLaunchOptions } from './DockerSvcLaunchOptions';
+import type { DockerSvcLaunchContainerOptions } from './DockerSvcLaunchContainerOptions';
 import {
-    DockerSvcLaunchOptionsFromJSON,
-    DockerSvcLaunchOptionsFromJSONTyped,
-    DockerSvcLaunchOptionsToJSON,
-} from './DockerSvcLaunchOptions';
+    DockerSvcLaunchContainerOptionsFromJSON,
+    DockerSvcLaunchContainerOptionsFromJSONTyped,
+    DockerSvcLaunchContainerOptionsToJSON,
+} from './DockerSvcLaunchContainerOptions';
 
 /**
  * 
@@ -40,10 +40,10 @@ export interface DockerSvcLaunchContainerRequest {
     image?: string;
     /**
      * 
-     * @type {DockerSvcLaunchOptions}
+     * @type {DockerSvcLaunchContainerOptions}
      * @memberof DockerSvcLaunchContainerRequest
      */
-    options?: DockerSvcLaunchOptions;
+    options?: DockerSvcLaunchContainerOptions;
     /**
      * 
      * @type {number}
@@ -71,7 +71,7 @@ export function DockerSvcLaunchContainerRequestFromJSONTyped(json: any, ignoreDi
         
         'hostPort': json['hostPort'] == null ? undefined : json['hostPort'],
         'image': json['image'] == null ? undefined : json['image'],
-        'options': json['options'] == null ? undefined : DockerSvcLaunchOptionsFromJSON(json['options']),
+        'options': json['options'] == null ? undefined : DockerSvcLaunchContainerOptionsFromJSON(json['options']),
         'port': json['port'] == null ? undefined : json['port'],
     };
 }
@@ -84,7 +84,7 @@ export function DockerSvcLaunchContainerRequestToJSON(value?: DockerSvcLaunchCon
         
         'hostPort': value['hostPort'],
         'image': value['image'],
-        'options': DockerSvcLaunchOptionsToJSON(value['options']),
+        'options': DockerSvcLaunchContainerOptionsToJSON(value['options']),
         'port': value['port'],
     };
 }

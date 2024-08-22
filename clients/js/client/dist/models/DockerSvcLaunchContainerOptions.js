@@ -12,37 +12,39 @@
  * Do not edit the class manually.
  */
 /**
- * Check if a given object implements the DockerSvcLaunchOptions interface.
+ * Check if a given object implements the DockerSvcLaunchContainerOptions interface.
  */
-export function instanceOfDockerSvcLaunchOptions(value) {
+export function instanceOfDockerSvcLaunchContainerOptions(value) {
     return true;
 }
-export function DockerSvcLaunchOptionsFromJSON(json) {
-    return DockerSvcLaunchOptionsFromJSONTyped(json, false);
+export function DockerSvcLaunchContainerOptionsFromJSON(json) {
+    return DockerSvcLaunchContainerOptionsFromJSONTyped(json, false);
 }
-export function DockerSvcLaunchOptionsFromJSONTyped(json, ignoreDiscriminator) {
+export function DockerSvcLaunchContainerOptionsFromJSONTyped(json, ignoreDiscriminator) {
     if (json == null) {
         return json;
     }
     return {
+        'assets': json['assets'] == null ? undefined : json['assets'],
         'envs': json['envs'] == null ? undefined : json['envs'],
         'gpuEnabled': json['gpuEnabled'] == null ? undefined : json['gpuEnabled'],
         'hash': json['hash'] == null ? undefined : json['hash'],
-        'hostBinds': json['hostBinds'] == null ? undefined : json['hostBinds'],
         'labels': json['labels'] == null ? undefined : json['labels'],
         'name': json['name'] == null ? undefined : json['name'],
+        'persistentPaths': json['persistentPaths'] == null ? undefined : json['persistentPaths'],
     };
 }
-export function DockerSvcLaunchOptionsToJSON(value) {
+export function DockerSvcLaunchContainerOptionsToJSON(value) {
     if (value == null) {
         return value;
     }
     return {
+        'assets': value['assets'],
         'envs': value['envs'],
         'gpuEnabled': value['gpuEnabled'],
         'hash': value['hash'],
-        'hostBinds': value['hostBinds'],
         'labels': value['labels'],
         'name': value['name'],
+        'persistentPaths': value['persistentPaths'],
     };
 }

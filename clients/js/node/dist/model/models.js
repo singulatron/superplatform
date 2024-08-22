@@ -27,10 +27,10 @@ export * from './dockerSvcErrorResponse';
 export * from './dockerSvcGetContainerSummaryResponse';
 export * from './dockerSvcGetDockerHostResponse';
 export * from './dockerSvcGetInfoResponse';
+export * from './dockerSvcLaunchContainerOptions';
 export * from './dockerSvcLaunchContainerRequest';
 export * from './dockerSvcLaunchContainerResponse';
 export * from './dockerSvcLaunchInfo';
-export * from './dockerSvcLaunchOptions';
 export * from './downloadSvcDownloadDetails';
 export * from './downloadSvcDownloadRequest';
 export * from './downloadSvcDownloadsResponse';
@@ -139,10 +139,10 @@ import { DockerSvcErrorResponse } from './dockerSvcErrorResponse';
 import { DockerSvcGetContainerSummaryResponse } from './dockerSvcGetContainerSummaryResponse';
 import { DockerSvcGetDockerHostResponse } from './dockerSvcGetDockerHostResponse';
 import { DockerSvcGetInfoResponse } from './dockerSvcGetInfoResponse';
+import { DockerSvcLaunchContainerOptions } from './dockerSvcLaunchContainerOptions';
 import { DockerSvcLaunchContainerRequest } from './dockerSvcLaunchContainerRequest';
 import { DockerSvcLaunchContainerResponse } from './dockerSvcLaunchContainerResponse';
 import { DockerSvcLaunchInfo } from './dockerSvcLaunchInfo';
-import { DockerSvcLaunchOptions } from './dockerSvcLaunchOptions';
 import { DownloadSvcDownloadDetails } from './downloadSvcDownloadDetails';
 import { DownloadSvcDownloadRequest } from './downloadSvcDownloadRequest';
 import { DownloadSvcDownloadsResponse } from './downloadSvcDownloadsResponse';
@@ -269,10 +269,10 @@ let typeMap = {
     "DockerSvcGetContainerSummaryResponse": DockerSvcGetContainerSummaryResponse,
     "DockerSvcGetDockerHostResponse": DockerSvcGetDockerHostResponse,
     "DockerSvcGetInfoResponse": DockerSvcGetInfoResponse,
+    "DockerSvcLaunchContainerOptions": DockerSvcLaunchContainerOptions,
     "DockerSvcLaunchContainerRequest": DockerSvcLaunchContainerRequest,
     "DockerSvcLaunchContainerResponse": DockerSvcLaunchContainerResponse,
     "DockerSvcLaunchInfo": DockerSvcLaunchInfo,
-    "DockerSvcLaunchOptions": DockerSvcLaunchOptions,
     "DownloadSvcDownloadDetails": DownloadSvcDownloadDetails,
     "DownloadSvcDownloadRequest": DownloadSvcDownloadRequest,
     "DownloadSvcDownloadsResponse": DownloadSvcDownloadsResponse,

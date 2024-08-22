@@ -6,7 +6,7 @@ import { DockerSvcGetInfoResponseFromJSON } from './DockerSvcGetInfoResponse.mjs
 import { DockerSvcLaunchContainerRequestToJSON } from './DockerSvcLaunchContainerRequest.mjs';
 import { DockerSvcLaunchContainerResponseFromJSON } from './DockerSvcLaunchContainerResponse.mjs';
 import './DockerSvcDockerInfo.mjs';
-import './DockerSvcLaunchOptions.mjs';
+import './DockerSvcLaunchContainerOptions.mjs';
 import './DockerSvcLaunchInfo.mjs';
 
 /* tslint:disable */

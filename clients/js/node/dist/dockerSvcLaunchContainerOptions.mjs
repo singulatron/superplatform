@@ -9,13 +9,18 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-export class DockerSvcLaunchOptions {
+class DockerSvcLaunchContainerOptions {
     static getAttributeTypeMap() {
-        return DockerSvcLaunchOptions.attributeTypeMap;
+        return DockerSvcLaunchContainerOptions.attributeTypeMap;
     }
 }
-DockerSvcLaunchOptions.discriminator = undefined;
-DockerSvcLaunchOptions.attributeTypeMap = [
+DockerSvcLaunchContainerOptions.discriminator = undefined;
+DockerSvcLaunchContainerOptions.attributeTypeMap = [
+    {
+        "name": "assets",
+        "baseName": "assets",
+        "type": "{ [key: string]: string; }"
+    },
     {
         "name": "envs",
         "baseName": "envs",
@@ -32,11 +37,6 @@ DockerSvcLaunchOptions.attributeTypeMap = [
         "type": "string"
     },
     {
-        "name": "hostBinds",
-        "baseName": "hostBinds",
-        "type": "Array<string>"
-    },
-    {
         "name": "labels",
         "baseName": "labels",
         "type": "{ [key: string]: string; }"
@@ -45,5 +45,12 @@ DockerSvcLaunchOptions.attributeTypeMap = [
         "name": "name",
         "baseName": "name",
         "type": "string"
+    },
+    {
+        "name": "persistentPaths",
+        "baseName": "persistentPaths",
+        "type": "Array<string>"
     }
 ];
+
+export { DockerSvcLaunchContainerOptions };

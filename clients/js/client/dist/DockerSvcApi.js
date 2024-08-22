@@ -8,7 +8,7 @@ var DockerSvcGetInfoResponse = require('./DockerSvcGetInfoResponse.js');
 var DockerSvcLaunchContainerRequest = require('./DockerSvcLaunchContainerRequest.js');
 var DockerSvcLaunchContainerResponse = require('./DockerSvcLaunchContainerResponse.js');
 require('./DockerSvcDockerInfo.js');
-require('./DockerSvcLaunchOptions.js');
+require('./DockerSvcLaunchContainerOptions.js');
 require('./DockerSvcLaunchInfo.js');
 
 /* tslint:disable */

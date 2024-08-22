@@ -9,7 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import type { DockerSvcLaunchOptions } from './DockerSvcLaunchOptions';
+import type { DockerSvcLaunchContainerOptions } from './DockerSvcLaunchContainerOptions';
 /**
  *
  * @export
@@ -30,10 +30,10 @@ export interface DockerSvcLaunchContainerRequest {
     image?: string;
     /**
      *
-     * @type {DockerSvcLaunchOptions}
+     * @type {DockerSvcLaunchContainerOptions}
      * @memberof DockerSvcLaunchContainerRequest
      */
-    options?: DockerSvcLaunchOptions;
+    options?: DockerSvcLaunchContainerOptions;
     /**
      *
      * @type {number}

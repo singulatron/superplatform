@@ -17,6 +17,8 @@ Do not set this if your card doesn't support the given architecture or things wi
 
 ## `SINGULATRON_VOLUME_NAME`
 
+**This flag is typically unnecessary since Singulatron automatically detects the volume that is bound to `/root/.singulatron`. Use it only as a corrective action.**
+
 This envar is needed when Singulatron runs as a container next to containers it starts:
 
 ```sh
@@ -37,7 +39,7 @@ So cycle goes like this:
 
 ## `SINGULATRON_LLM_HOST`
 
-**This flag is usually not needed as Singulatron gets the IP of the Docker bridge.**
+**This flag is typically unnecessary since Singulatron retrieves the IP of the Docker bridge. Use it only as a corrective action.**
 
 When Singulatron is running in a container, it needs to know how to address its siblings (other containers it started):
 

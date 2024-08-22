@@ -3815,6 +3815,45 @@ const docTemplate = `{
                 }
             }
         },
+        "docker_svc.LaunchContainerOptions": {
+            "type": "object",
+            "properties": {
+                "assets": {
+                    "description": "Asset is a map of envar name to file URL.\neg. {\"MODEL\": \"https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q2_K.gguf\"}\nThis file will be downloaded with the Download Svc and the local file will be mounted in the container\nand the envar ` + "`" + `MODEL=/local/path/to/file` + "`" + ` will be available in the container launched by the Docker Svc.",
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "envs": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "gpuEnabled": {
+                    "type": "boolean"
+                },
+                "hash": {
+                    "type": "string"
+                },
+                "labels": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                },
+                "persistentPaths": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
         "docker_svc.LaunchContainerRequest": {
             "type": "object",
             "properties": {
@@ -3825,7 +3864,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "options": {
-                    "$ref": "#/definitions/docker_svc.LaunchOptions"
+                    "$ref": "#/definitions/docker_svc.LaunchContainerOptions"
                 },
                 "port": {
                     "type": "integer"
@@ -3848,38 +3887,6 @@ const docTemplate = `{
                 },
                 "portNumber": {
                     "type": "integer"
-                }
-            }
-        },
-        "docker_svc.LaunchOptions": {
-            "type": "object",
-            "properties": {
-                "envs": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "gpuEnabled": {
-                    "type": "boolean"
-                },
-                "hash": {
-                    "type": "string"
-                },
-                "hostBinds": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "labels": {
-                    "type": "object",
-                    "additionalProperties": {
-                        "type": "string"
-                    }
-                },
-                "name": {
-                    "type": "string"
                 }
             }
         },

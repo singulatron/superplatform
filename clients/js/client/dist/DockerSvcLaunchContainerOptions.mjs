@@ -1,5 +1,3 @@
-'use strict';
-
 /* tslint:disable */
 /* eslint-disable */
 /**
@@ -14,42 +12,41 @@
  * Do not edit the class manually.
  */
 /**
- * Check if a given object implements the DockerSvcLaunchOptions interface.
+ * Check if a given object implements the DockerSvcLaunchContainerOptions interface.
  */
-function instanceOfDockerSvcLaunchOptions(value) {
+function instanceOfDockerSvcLaunchContainerOptions(value) {
     return true;
 }
-function DockerSvcLaunchOptionsFromJSON(json) {
-    return DockerSvcLaunchOptionsFromJSONTyped(json);
+function DockerSvcLaunchContainerOptionsFromJSON(json) {
+    return DockerSvcLaunchContainerOptionsFromJSONTyped(json);
 }
-function DockerSvcLaunchOptionsFromJSONTyped(json, ignoreDiscriminator) {
+function DockerSvcLaunchContainerOptionsFromJSONTyped(json, ignoreDiscriminator) {
     if (json == null) {
         return json;
     }
     return {
+        'assets': json['assets'] == null ? undefined : json['assets'],
         'envs': json['envs'] == null ? undefined : json['envs'],
         'gpuEnabled': json['gpuEnabled'] == null ? undefined : json['gpuEnabled'],
         'hash': json['hash'] == null ? undefined : json['hash'],
-        'hostBinds': json['hostBinds'] == null ? undefined : json['hostBinds'],
         'labels': json['labels'] == null ? undefined : json['labels'],
         'name': json['name'] == null ? undefined : json['name'],
+        'persistentPaths': json['persistentPaths'] == null ? undefined : json['persistentPaths'],
     };
 }
-function DockerSvcLaunchOptionsToJSON(value) {
+function DockerSvcLaunchContainerOptionsToJSON(value) {
     if (value == null) {
         return value;
     }
     return {
+        'assets': value['assets'],
         'envs': value['envs'],
         'gpuEnabled': value['gpuEnabled'],
         'hash': value['hash'],
-        'hostBinds': value['hostBinds'],
         'labels': value['labels'],
         'name': value['name'],
+        'persistentPaths': value['persistentPaths'],
     };
 }
 
-exports.DockerSvcLaunchOptionsFromJSON = DockerSvcLaunchOptionsFromJSON;
-exports.DockerSvcLaunchOptionsFromJSONTyped = DockerSvcLaunchOptionsFromJSONTyped;
-exports.DockerSvcLaunchOptionsToJSON = DockerSvcLaunchOptionsToJSON;
-exports.instanceOfDockerSvcLaunchOptions = instanceOfDockerSvcLaunchOptions;
+export { DockerSvcLaunchContainerOptionsFromJSON, DockerSvcLaunchContainerOptionsFromJSONTyped, DockerSvcLaunchContainerOptionsToJSON, instanceOfDockerSvcLaunchContainerOptions };

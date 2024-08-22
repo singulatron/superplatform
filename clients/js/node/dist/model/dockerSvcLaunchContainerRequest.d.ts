@@ -9,11 +9,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { DockerSvcLaunchOptions } from './dockerSvcLaunchOptions';
+import { DockerSvcLaunchContainerOptions } from './dockerSvcLaunchContainerOptions';
 export declare class DockerSvcLaunchContainerRequest {
     'hostPort'?: number;
     'image'?: string;
-    'options'?: DockerSvcLaunchOptions;
+    'options'?: DockerSvcLaunchContainerOptions;
     'port'?: number;
     static discriminator: string | undefined;
     static attributeTypeMap: Array<{

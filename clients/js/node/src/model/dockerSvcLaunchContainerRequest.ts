@@ -11,12 +11,12 @@
  */
 
 import { RequestFile } from './models';
-import { DockerSvcLaunchOptions } from './dockerSvcLaunchOptions';
+import { DockerSvcLaunchContainerOptions } from './dockerSvcLaunchContainerOptions';
 
 export class DockerSvcLaunchContainerRequest {
     'hostPort'?: number;
     'image'?: string;
-    'options'?: DockerSvcLaunchOptions;
+    'options'?: DockerSvcLaunchContainerOptions;
     'port'?: number;
 
     static discriminator: string | undefined = undefined;
@@ -35,7 +35,7 @@ export class DockerSvcLaunchContainerRequest {
         {
             "name": "options",
             "baseName": "options",
-            "type": "DockerSvcLaunchOptions"
+            "type": "DockerSvcLaunchContainerOptions"
         },
         {
             "name": "port",

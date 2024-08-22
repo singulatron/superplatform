@@ -22,7 +22,7 @@ var _ MappedNullable = &DockerSvcLaunchContainerRequest{}
 type DockerSvcLaunchContainerRequest struct {
 	HostPort *int32 `json:"hostPort,omitempty"`
 	Image *string `json:"image,omitempty"`
-	Options *DockerSvcLaunchOptions `json:"options,omitempty"`
+	Options *DockerSvcLaunchContainerOptions `json:"options,omitempty"`
 	Port *int32 `json:"port,omitempty"`
 }
 
@@ -108,9 +108,9 @@ func (o *DockerSvcLaunchContainerRequest) SetImage(v string) {
 }
 
 // GetOptions returns the Options field value if set, zero value otherwise.
-func (o *DockerSvcLaunchContainerRequest) GetOptions() DockerSvcLaunchOptions {
+func (o *DockerSvcLaunchContainerRequest) GetOptions() DockerSvcLaunchContainerOptions {
 	if o == nil || IsNil(o.Options) {
-		var ret DockerSvcLaunchOptions
+		var ret DockerSvcLaunchContainerOptions
 		return ret
 	}
 	return *o.Options
@@ -118,7 +118,7 @@ func (o *DockerSvcLaunchContainerRequest) GetOptions() DockerSvcLaunchOptions {
 
 // GetOptionsOk returns a tuple with the Options field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *DockerSvcLaunchContainerRequest) GetOptionsOk() (*DockerSvcLaunchOptions, bool) {
+func (o *DockerSvcLaunchContainerRequest) GetOptionsOk() (*DockerSvcLaunchContainerOptions, bool) {
 	if o == nil || IsNil(o.Options) {
 		return nil, false
 	}
@@ -134,8 +134,8 @@ func (o *DockerSvcLaunchContainerRequest) HasOptions() bool {
 	return false
 }
 
-// SetOptions gets a reference to the given DockerSvcLaunchOptions and assigns it to the Options field.
-func (o *DockerSvcLaunchContainerRequest) SetOptions(v DockerSvcLaunchOptions) {
+// SetOptions gets a reference to the given DockerSvcLaunchContainerOptions and assigns it to the Options field.
+func (o *DockerSvcLaunchContainerRequest) SetOptions(v DockerSvcLaunchContainerOptions) {
 	o.Options = &v
 }
 
