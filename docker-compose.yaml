@@ -31,7 +31,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       # We mount a volume so data will be persisted
       - singulatron-data:/root/.singulatron
-    environment:
+    # environment:
       # GPU Acceleration for NVIDIA GPUs
       # Uncomment this envar for NVIDIA GPUs.
       #

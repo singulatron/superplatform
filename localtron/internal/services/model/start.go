@@ -72,10 +72,10 @@ func (ms *ModelService) start(modelId string) error {
 	}
 	platform := platformI.(*modeltypes.Platform)
 
-	return ms.startWithDocker(getConfigResponse, model, platform)
+	return ms.startWithDocker(model, platform)
 }
 
-func (ms *ModelService) startWithDocker(getConfigResponse *configtypes.GetConfigResponse, model *modeltypes.Model, platform *modeltypes.Platform) error {
+func (ms *ModelService) startWithDocker(model *modeltypes.Model, platform *modeltypes.Platform) error {
 	launchOptions := &dockertypes.LaunchContainerOptions{
 		Name: platform.Id,
 	}
