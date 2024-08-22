@@ -15,10 +15,7 @@ import (
 	"fmt"
 	"log/slog"
 	"net"
-	"net/url"
 	"os"
-	"path"
-	"regexp"
 	"strings"
 	"time"
 
@@ -29,7 +26,6 @@ import (
 
 	configtypes "github.com/singulatron/singulatron/localtron/internal/services/config/types"
 	dockertypes "github.com/singulatron/singulatron/localtron/internal/services/docker/types"
-	downloadtypes "github.com/singulatron/singulatron/localtron/internal/services/download/types"
 	modeltypes "github.com/singulatron/singulatron/localtron/internal/services/model/types"
 )
 
@@ -41,15 +37,13 @@ the modelId is empty.
 */
 func (ms *ModelService) start(modelId string) error {
 	var getConfigResponse *configtypes.GetConfigResponse
+	err := ms.router.Get(context.Background(), "config-svc", "/config", nil, &getConfigResponse)
+	if err != nil {
+		return err
+	}
 
 	if modelId == "" {
-		rsp := configtypes.GetConfigResponse{}
-		err := ms.router.Get(context.Background(), "config-svc", "/config", nil, &rsp)
-		if err != nil {
-			return err
-		}
-		getConfigResponse = &rsp
-		conf := rsp.Config
+		conf := getConfigResponse.Config
 		if conf.Model.CurrentModelId == "" {
 			return errors.New("no model id specified and no default model")
 		}
@@ -67,23 +61,6 @@ func (ms *ModelService) start(modelId string) error {
 	}
 	model := modelI.(*modeltypes.Model)
 
-	env := map[string]string{}
-	for envarName, assetURL := range model.Assets {
-		rsp := downloadtypes.GetDownloadResponse{}
-		err := ms.router.Get(context.Background(), "download-svc", fmt.Sprintf("/download/%v", url.PathEscape(assetURL)), nil, &rsp)
-		if err != nil {
-			return err
-		}
-		if !rsp.Exists {
-			return fmt.Errorf("asset with URL '%v' cannot be found locally", assetURL)
-		}
-
-		assetPath := *rsp.Download.FilePath
-		assetPath = transformWinPaths(assetPath)
-
-		env[envarName] = assetPath
-	}
-
 	platformI, found, err := ms.platformsStore.Query(
 		datastore.Id(model.PlatformId),
 	).FindOne()
@@ -95,14 +72,18 @@ func (ms *ModelService) start(modelId string) error {
 	}
 	platform := platformI.(*modeltypes.Platform)
 
-	launchOptions := &dockertypes.LaunchOptions{
+	return ms.startWithDocker(getConfigResponse, model, platform)
+}
+
+func (ms *ModelService) startWithDocker(getConfigResponse *configtypes.GetConfigResponse, model *modeltypes.Model, platform *modeltypes.Platform) error {
+	launchOptions := &dockertypes.LaunchContainerOptions{
 		Name: platform.Id,
 	}
 
 	image := platform.Architectures.Default.Image
 	port := platform.Architectures.Default.Port
 	launchOptions.Envs = platform.Architectures.Default.Envars
-	persistentPaths := platform.Architectures.Default.PersistentPaths
+	launchOptions.PersistentPaths = platform.Architectures.Default.PersistentPaths
 
 	switch os.Getenv("SINGULATRON_GPU_PLATFORM") {
 	case "cuda":
@@ -117,43 +98,8 @@ func (ms *ModelService) start(modelId string) error {
 			launchOptions.Envs = platform.Architectures.Cuda.Envars
 		}
 		if len(platform.Architectures.Cuda.PersistentPaths) > 0 {
-			persistentPaths = platform.Architectures.Cuda.PersistentPaths
+			launchOptions.PersistentPaths = platform.Architectures.Cuda.PersistentPaths
 		}
-	}
-
-	if getConfigResponse != nil {
-		rsp := configtypes.GetConfigResponse{}
-		err := ms.router.Get(context.Background(), "config-svc", "/config", nil, &rsp)
-		if err != nil {
-			return err
-		}
-		getConfigResponse = &rsp
-	}
-
-	configFolderPath := getConfigResponse.Config.Directory
-
-	for envName, assetPath := range env {
-		fileName := path.Base(assetPath)
-		// eg. MODEL=/root/.singulatron/downloads/mistral-7b-instruct-v0.2.Q2_K.gguf
-		launchOptions.Envs = append(launchOptions.Envs, fmt.Sprintf("%v=/root/.singulatron/downloads/%v", envName, fileName))
-	}
-
-	singulatronVolumeName := os.Getenv("SINGULATRON_VOLUME_NAME")
-	if singulatronVolumeName == "" {
-		if configFolderPath == "" {
-			return errors.New("config folder not found")
-		}
-		singulatronVolumeName = configFolderPath
-	}
-	launchOptions.HostBinds = append(launchOptions.HostBinds, fmt.Sprintf("%v:/root/.singulatron", singulatronVolumeName))
-
-	// Persistent paths are paths in the container we want to persist.
-	// eg. /root/.cache/huggingface/diffusers
-	// Then here we mount singulatron-data:/root/.cache/huggingface/diffusers
-	for _, persistentPath := range persistentPaths {
-		launchOptions.HostBinds = append(launchOptions.HostBinds,
-			fmt.Sprintf("%v:%v", singulatronVolumeName, path.Dir(persistentPath)),
-		)
 	}
 
 	hash, err := modelToHash(model, platform)
@@ -182,28 +128,6 @@ func (ms *ModelService) start(modelId string) error {
 	}
 
 	return nil
-}
-
-// transformWinPaths maps win paths to unix paths so WSL can understand it
-// eg. C:\users -> /mnt/c/users
-func transformWinPaths(modelDir string) string {
-	parts := strings.SplitN(modelDir, "\\", 2)
-	if len(parts) == 1 {
-		return modelDir
-	}
-
-	driveRegex := regexp.MustCompile(`^([A-Z]):`)
-	newFirstPart := driveRegex.ReplaceAllStringFunc(parts[0], func(match string) string {
-		driveLetter := strings.ToLower(match[:1])
-		return "/mnt/" + driveLetter
-	})
-
-	newModelDir := newFirstPart
-	if len(parts) > 1 {
-		newModelDir += "/" + strings.ReplaceAll(parts[1], "\\", "/")
-	}
-
-	return newModelDir
 }
 
 func (ms *ModelService) get(port int) *modeltypes.ModelState {

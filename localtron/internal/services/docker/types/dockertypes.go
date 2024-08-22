@@ -11,15 +11,6 @@ type ErrorResponse struct {
 	Error string `json:"error"`
 }
 
-type LaunchOptions struct {
-	Name       string            `json:"name,omitempty"`
-	Envs       []string          `json:"envs,omitempty"`
-	Labels     map[string]string `json:"labels,omitempty"`
-	HostBinds  []string          `json:"hostBinds,omitempty"`
-	GPUEnabled bool              `json:"gpuEnabled,omitempty"`
-	Hash       string            `json:"hash,omitempty"`
-}
-
 type LaunchInfo struct {
 	NewContainerStarted bool
 	PortNumber          int
@@ -41,26 +32,25 @@ type DockerInfo struct {
 	Error               *string `json:"error,omitempty"`
 }
 
-//
-// Events
-//
-
-// @todo nothing to trigger this yet
-const EventDockerInfoUpdatedName = "dockerInfoUpdated"
-
-type EventDockerInfoUpdated struct {
-	ThreadId string `json:"threadId"`
-}
-
-func (e EventDockerInfoUpdated) Name() string {
-	return EventDockerInfoUpdatedName
+type LaunchContainerOptions struct {
+	Name            string            `json:"name,omitempty"`
+	Hash            string            `json:"hash,omitempty"`
+	Envs            []string          `json:"envs,omitempty"`
+	Labels          map[string]string `json:"labels,omitempty"`
+	PersistentPaths []string          `json:"persistentPaths,omitempty"`
+	GPUEnabled      bool              `json:"gpuEnabled,omitempty"`
+	// Asset is a map of envar name to file URL.
+	// eg. {"MODEL": "https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q2_K.gguf"}
+	// This file will be downloaded with the Download Svc and the local file will be mounted in the container
+	// and the envar `MODEL=/local/path/to/file` will be available in the container launched by the Docker Svc.
+	Assets map[string]string `json:"assets,omitempty"`
 }
 
 type LaunchContainerRequest struct {
-	Image    string         `json:"image"`
-	Port     int            `json:"port"`
-	HostPort int            `json:"hostPort"`
-	Options  *LaunchOptions `json:"options"`
+	Image    string                  `json:"image"`
+	Port     int                     `json:"port"`
+	HostPort int                     `json:"hostPort"`
+	Options  *LaunchContainerOptions `json:"options"`
 }
 
 type LaunchContainerResponse struct {
@@ -88,4 +78,19 @@ type GetDockerHostRequest struct{}
 
 type GetDockerHostResponse struct {
 	Host string `json:"host"`
+}
+
+//
+// Events
+//
+
+// @todo nothing to trigger this yet
+const EventDockerInfoUpdatedName = "dockerInfoUpdated"
+
+type EventDockerInfoUpdated struct {
+	ThreadId string `json:"threadId"`
+}
+
+func (e EventDockerInfoUpdated) Name() string {
+	return EventDockerInfoUpdatedName
 }

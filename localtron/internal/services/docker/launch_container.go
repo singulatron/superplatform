@@ -8,9 +8,14 @@
 package dockerservice
 
 import (
+	"bufio"
 	"context"
 	"fmt"
 	"log/slog"
+	"net/url"
+	"os"
+	"path"
+	"regexp"
 	"strings"
 
 	"github.com/docker/docker/api/types"
@@ -20,14 +25,16 @@ import (
 
 	"github.com/singulatron/singulatron/sdk/go/logger"
 
+	configtypes "github.com/singulatron/singulatron/localtron/internal/services/config/types"
 	dockertypes "github.com/singulatron/singulatron/localtron/internal/services/docker/types"
+	downloadtypes "github.com/singulatron/singulatron/localtron/internal/services/download/types"
 )
 
 /*
 A low level method for launching containers running models.
 For a higher level one use `ModelService.Start“.
 */
-func (d *DockerService) launchContainer(image string, internalPort, hostPort int, options *dockertypes.LaunchOptions) (*dockertypes.LaunchInfo, error) {
+func (d *DockerService) launchContainer(image string, internalPort, hostPort int, options *dockertypes.LaunchContainerOptions) (*dockertypes.LaunchInfo, error) {
 	err := d.pullImage(image)
 	if err != nil {
 		return nil, errors.Wrap(err, "image pull failure")
@@ -37,22 +44,27 @@ func (d *DockerService) launchContainer(image string, internalPort, hostPort int
 	defer d.launchModelMutex.Unlock()
 
 	if options == nil {
-		options = &dockertypes.LaunchOptions{}
+		options = &dockertypes.LaunchContainerOptions{}
 	}
 	if options.Name == "" {
 		options.Name = "the-singulatron"
 	}
 
+	envs, hostBinds, err := d.additionalEnvsAndHostBinds(options.Assets, options.PersistentPaths)
+	if err != nil {
+		return nil, err
+	}
+
 	containerConfig := &container.Config{
 		Image: image,
-		Env:   options.Envs,
+		Env:   append(options.Envs, envs...),
 		ExposedPorts: nat.PortSet{
 			nat.Port(fmt.Sprintf("%v/tcp", internalPort)): {},
 		},
 		Labels: map[string]string{},
 	}
 	hostConfig := &container.HostConfig{
-		Binds: options.HostBinds,
+		Binds: hostBinds,
 		PortBindings: map[nat.Port][]nat.PortBinding{
 			nat.Port(fmt.Sprintf("%v/tcp", internalPort)): {
 				{
@@ -127,4 +139,155 @@ func (d *DockerService) launchContainer(image string, internalPort, hostPort int
 		NewContainerStarted: true,
 		PortNumber:          hostPort,
 	}, nil
+}
+
+func (d *DockerService) additionalEnvsAndHostBinds(assets map[string]string, persistentPaths []string) ([]string, []string, error) {
+	// We turn the asset map (which is an envar name to file URL map)
+	// eg. {"MODEL": "https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q2_K.gguf"}
+	// to an envarNameToFilePath
+	// eg. {"MODEL": "/var/lib/some/local/path.gguf"}
+	envarNameToFilePath := map[string]string{}
+
+	// We translate URLs in the assets map into local file paths
+	// by asking the Download Svc where did it download the file(s).
+
+	for envarName, assetURL := range assets {
+		rsp := downloadtypes.GetDownloadResponse{}
+		err := d.router.Get(context.Background(), "download-svc", fmt.Sprintf("/download/%v", url.PathEscape(assetURL)), nil, &rsp)
+		if err != nil {
+			return nil, nil, err
+		}
+		if !rsp.Exists {
+			return nil, nil, fmt.Errorf("asset with URL '%v' cannot be found locally", assetURL)
+		}
+
+		assetPath := *rsp.Download.FilePath
+		assetPath = transformWinPaths(assetPath)
+
+		envarNameToFilePath[envarName] = assetPath
+	}
+
+	envs := []string{}
+
+	var getConfigResponse *configtypes.GetConfigResponse
+	err := d.router.Get(context.Background(), "config-svc", "/config", nil, &getConfigResponse)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	for envName, assetPath := range envarNameToFilePath {
+		fileName := path.Base(assetPath)
+		// eg. MODEL=/root/.singulatron/downloads/mistral-7b-instruct-v0.2.Q2_K.gguf
+		envs = append(envs, fmt.Sprintf("%v=/root/.singulatron/downloads/%v", envName, fileName))
+	}
+
+	// If the Singulatron daemon is running in Docker, we need to find the volume it mounted so we can share
+	// the downloaded files with containers the Singulatron daemon starts.
+	// If the Singulatron daemon is running directly on the host, we will just mount the ~/.singulatron folder in
+	// the containers the Singulatron daemon starts.
+
+	configFolderPath := getConfigResponse.Config.Directory
+	singulatronVolumeName := os.Getenv("SINGULATRON_VOLUME_NAME")
+	if singulatronVolumeName == "" {
+		if configFolderPath == "" {
+			return nil, nil, errors.New("config folder not found")
+		}
+		singulatronVolumeName = configFolderPath
+	}
+
+	hostBinds := []string{}
+
+	hostBinds = append(hostBinds, fmt.Sprintf("%v:/root/.singulatron", singulatronVolumeName))
+
+	// Persistent paths are paths in the container we want to persist.
+	// eg. /root/.cache/huggingface/diffusers
+	// Then here we mount singulatron-data:/root/.cache/huggingface/diffusers
+	for _, persistentPath := range persistentPaths {
+		hostBinds = append(hostBinds,
+			fmt.Sprintf("%v:%v", singulatronVolumeName, path.Dir(persistentPath)),
+		)
+	}
+
+	return envs, hostBinds, nil
+}
+
+func (d *DockerService) getMountedVolume(containerID, mountPoint string) (string, error) {
+	container, err := d.client.ContainerInspect(context.Background(), containerID)
+	if err != nil {
+		return "", err
+	}
+
+	for _, mount := range container.Mounts {
+		if mount.Destination == mountPoint {
+			return mount.Name, nil
+		}
+	}
+
+	return "", fmt.Errorf("no volume mounted at %s", mountPoint)
+}
+
+func isRunningInDocker() bool {
+	file, err := os.Open("/proc/1/cgroup")
+	if err != nil {
+		return false
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line := scanner.Text()
+		if strings.Contains(line, "docker") {
+			return true
+		}
+	}
+
+	return false
+}
+
+func getContainerID() (string, error) {
+	file, err := os.Open("/proc/self/cgroup")
+	if err != nil {
+		return "", err
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line := scanner.Text()
+		parts := strings.Split(line, "/")
+		if len(parts) > 1 {
+			containerID := parts[len(parts)-1]
+			if len(containerID) == 64 {
+				return containerID, nil
+			}
+		}
+	}
+
+	if err := scanner.Err(); err != nil {
+		return "", err
+	}
+
+	return "", fmt.Errorf("could not find container ID")
+}
+
+// transformWinPaths maps win paths to unix paths so WSL can understand it
+// eg. C:\users -> /mnt/c/users
+func transformWinPaths(modelDir string) string {
+	parts := strings.SplitN(modelDir, "\\", 2)
+	if len(parts) == 1 {
+		return modelDir
+	}
+
+	driveRegex := regexp.MustCompile(`^([A-Z]):`)
+	newFirstPart := driveRegex.ReplaceAllStringFunc(parts[0], func(match string) string {
+		driveLetter := strings.ToLower(match[:1])
+		return "/mnt/" + driveLetter
+	})
+
+	newModelDir := newFirstPart
+	if len(parts) > 1 {
+		newModelDir += "/" + strings.ReplaceAll(parts[1], "\\", "/")
+	}
+
+	return newModelDir
 }
