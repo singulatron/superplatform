@@ -11,7 +11,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { DockerSvcLaunchOptionsFromJSON, DockerSvcLaunchOptionsToJSON, } from './DockerSvcLaunchOptions';
+import { DockerSvcLaunchContainerOptionsFromJSON, DockerSvcLaunchContainerOptionsToJSON, } from './DockerSvcLaunchContainerOptions';
 /**
  * Check if a given object implements the DockerSvcLaunchContainerRequest interface.
  */
@@ -28,7 +28,7 @@ export function DockerSvcLaunchContainerRequestFromJSONTyped(json, ignoreDiscrim
     return {
         'hostPort': json['hostPort'] == null ? undefined : json['hostPort'],
         'image': json['image'] == null ? undefined : json['image'],
-        'options': json['options'] == null ? undefined : DockerSvcLaunchOptionsFromJSON(json['options']),
+        'options': json['options'] == null ? undefined : DockerSvcLaunchContainerOptionsFromJSON(json['options']),
         'port': json['port'] == null ? undefined : json['port'],
     };
 }
@@ -39,7 +39,7 @@ export function DockerSvcLaunchContainerRequestToJSON(value) {
     return {
         'hostPort': value['hostPort'],
         'image': value['image'],
-        'options': DockerSvcLaunchOptionsToJSON(value['options']),
+        'options': DockerSvcLaunchContainerOptionsToJSON(value['options']),
         'port': value['port'],
     };
 }

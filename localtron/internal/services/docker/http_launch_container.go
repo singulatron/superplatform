@@ -17,7 +17,7 @@ import (
 )
 
 // @ID launchContainer
-// @Summary Launch a Docker Container
+// @Summary Launch a Container
 // @Description Launches a Docker container with the specified parameters.
 // @Description
 // @Description Requires the `docker-svc:docker:create` permission.

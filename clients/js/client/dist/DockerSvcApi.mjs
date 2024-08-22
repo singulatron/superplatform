@@ -6,7 +6,7 @@ import { DockerSvcGetInfoResponseFromJSON } from './DockerSvcGetInfoResponse.mjs
 import { DockerSvcLaunchContainerRequestToJSON } from './DockerSvcLaunchContainerRequest.mjs';
 import { DockerSvcLaunchContainerResponseFromJSON } from './DockerSvcLaunchContainerResponse.mjs';
 import './DockerSvcDockerInfo.mjs';
-import './DockerSvcLaunchOptions.mjs';
+import './DockerSvcLaunchContainerOptions.mjs';
 import './DockerSvcLaunchInfo.mjs';
 
 /* tslint:disable */
@@ -157,7 +157,7 @@ class DockerSvcApi extends BaseAPI {
     }
     /**
      * Launches a Docker container with the specified parameters.  Requires the `docker-svc:docker:create` permission.
-     * Launch a Docker Container
+     * Launch a Container
      */
     launchContainerRaw(requestParameters, initOverrides) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -182,7 +182,7 @@ class DockerSvcApi extends BaseAPI {
     }
     /**
      * Launches a Docker container with the specified parameters.  Requires the `docker-svc:docker:create` permission.
-     * Launch a Docker Container
+     * Launch a Container
      */
     launchContainer(requestParameters, initOverrides) {
         return __awaiter(this, void 0, void 0, function* () {

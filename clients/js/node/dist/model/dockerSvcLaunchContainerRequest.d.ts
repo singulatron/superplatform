@@ -9,11 +9,23 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { DockerSvcLaunchOptions } from './dockerSvcLaunchOptions';
+import { DockerSvcLaunchContainerOptions } from './dockerSvcLaunchContainerOptions';
 export declare class DockerSvcLaunchContainerRequest {
+    /**
+    * HostPort is the port on the host machine that will be mapped to the container\'s port example: 8081
+    */
     'hostPort'?: number;
+    /**
+    * Image is the Docker image to use for the container
+    */
     'image'?: string;
-    'options'?: DockerSvcLaunchOptions;
+    /**
+    * Options provides additional options for launching the container
+    */
+    'options'?: DockerSvcLaunchContainerOptions;
+    /**
+    * Port is the port number that the container will expose example: 8080
+    */
     'port'?: number;
     static discriminator: string | undefined;
     static attributeTypeMap: Array<{

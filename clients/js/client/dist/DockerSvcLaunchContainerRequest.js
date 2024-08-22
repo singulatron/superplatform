@@ -1,6 +1,6 @@
 'use strict';
 
-var DockerSvcLaunchOptions = require('./DockerSvcLaunchOptions.js');
+var DockerSvcLaunchContainerOptions = require('./DockerSvcLaunchContainerOptions.js');
 
 /* tslint:disable */
 /* eslint-disable */
@@ -31,7 +31,7 @@ function DockerSvcLaunchContainerRequestFromJSONTyped(json, ignoreDiscriminator)
     return {
         'hostPort': json['hostPort'] == null ? undefined : json['hostPort'],
         'image': json['image'] == null ? undefined : json['image'],
-        'options': json['options'] == null ? undefined : DockerSvcLaunchOptions.DockerSvcLaunchOptionsFromJSON(json['options']),
+        'options': json['options'] == null ? undefined : DockerSvcLaunchContainerOptions.DockerSvcLaunchContainerOptionsFromJSON(json['options']),
         'port': json['port'] == null ? undefined : json['port'],
     };
 }
@@ -42,7 +42,7 @@ function DockerSvcLaunchContainerRequestToJSON(value) {
     return {
         'hostPort': value['hostPort'],
         'image': value['image'],
-        'options': DockerSvcLaunchOptions.DockerSvcLaunchOptionsToJSON(value['options']),
+        'options': DockerSvcLaunchContainerOptions.DockerSvcLaunchContainerOptionsToJSON(value['options']),
         'port': value['port'],
     };
 }

@@ -93,7 +93,7 @@ Class | Method | HTTP request | Description
 *DockerSvcAPI* | [**GetHost**](docs/DockerSvcAPI.md#gethost) | **Get** /docker-svc/host | Get Docker Host
 *DockerSvcAPI* | [**GetInfo**](docs/DockerSvcAPI.md#getinfo) | **Get** /docker-svc/info | Get Docker Service Information
 *DockerSvcAPI* | [**IsRunning**](docs/DockerSvcAPI.md#isrunning) | **Get** /docker-svc/container/{hash}/is-running | Check If a Container Is Running
-*DockerSvcAPI* | [**LaunchContainer**](docs/DockerSvcAPI.md#launchcontainer) | **Put** /docker-svc/container | Launch a Docker Container
+*DockerSvcAPI* | [**LaunchContainer**](docs/DockerSvcAPI.md#launchcontainer) | **Put** /docker-svc/container | Launch a Container
 *DownloadSvcAPI* | [**Download**](docs/DownloadSvcAPI.md#download) | **Put** /download-svc/download | Download a File
 *DownloadSvcAPI* | [**GetDownload**](docs/DownloadSvcAPI.md#getdownload) | **Get** /download-svc/download/{downloadId} | Get a Download
 *DownloadSvcAPI* | [**ListDownloads**](docs/DownloadSvcAPI.md#listdownloads) | **Post** /download-svc/downloads | List Downloads
@@ -173,10 +173,10 @@ Class | Method | HTTP request | Description
  - [DockerSvcGetContainerSummaryResponse](docs/DockerSvcGetContainerSummaryResponse.md)
  - [DockerSvcGetDockerHostResponse](docs/DockerSvcGetDockerHostResponse.md)
  - [DockerSvcGetInfoResponse](docs/DockerSvcGetInfoResponse.md)
+ - [DockerSvcLaunchContainerOptions](docs/DockerSvcLaunchContainerOptions.md)
  - [DockerSvcLaunchContainerRequest](docs/DockerSvcLaunchContainerRequest.md)
  - [DockerSvcLaunchContainerResponse](docs/DockerSvcLaunchContainerResponse.md)
  - [DockerSvcLaunchInfo](docs/DockerSvcLaunchInfo.md)
- - [DockerSvcLaunchOptions](docs/DockerSvcLaunchOptions.md)
  - [DownloadSvcDownloadDetails](docs/DownloadSvcDownloadDetails.md)
  - [DownloadSvcDownloadRequest](docs/DownloadSvcDownloadRequest.md)
  - [DownloadSvcDownloadsResponse](docs/DownloadSvcDownloadsResponse.md)

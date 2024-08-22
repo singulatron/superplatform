@@ -31,7 +31,7 @@ DockerSvcLaunchContainerRequest.attributeTypeMap = [
     {
         "name": "options",
         "baseName": "options",
-        "type": "DockerSvcLaunchOptions"
+        "type": "DockerSvcLaunchContainerOptions"
     },
     {
         "name": "port",

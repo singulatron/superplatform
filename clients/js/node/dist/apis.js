@@ -46,10 +46,10 @@ require('./dockerSvcErrorResponse.js');
 require('./dockerSvcGetContainerSummaryResponse.js');
 require('./dockerSvcGetDockerHostResponse.js');
 require('./dockerSvcGetInfoResponse.js');
+require('./dockerSvcLaunchContainerOptions.js');
 require('./dockerSvcLaunchContainerRequest.js');
 require('./dockerSvcLaunchContainerResponse.js');
 require('./dockerSvcLaunchInfo.js');
-require('./dockerSvcLaunchOptions.js');
 require('./downloadSvcDownloadDetails.js');
 require('./downloadSvcDownloadRequest.js');
 require('./downloadSvcDownloadsResponse.js');
@@ -55191,7 +55191,7 @@ class DockerSvcApi {
     }
     /**
      * Launches a Docker container with the specified parameters.  Requires the `docker-svc:docker:create` permission.
-     * @summary Launch a Docker Container
+     * @summary Launch a Container
      * @param request Launch Container Request
      */
     launchContainer(request_1) {

@@ -20,9 +20,13 @@ var _ MappedNullable = &DockerSvcLaunchContainerRequest{}
 
 // DockerSvcLaunchContainerRequest struct for DockerSvcLaunchContainerRequest
 type DockerSvcLaunchContainerRequest struct {
+	// HostPort is the port on the host machine that will be mapped to the container's port example: 8081
 	HostPort *int32 `json:"hostPort,omitempty"`
+	// Image is the Docker image to use for the container
 	Image *string `json:"image,omitempty"`
-	Options *DockerSvcLaunchOptions `json:"options,omitempty"`
+	// Options provides additional options for launching the container
+	Options *DockerSvcLaunchContainerOptions `json:"options,omitempty"`
+	// Port is the port number that the container will expose example: 8080
 	Port *int32 `json:"port,omitempty"`
 }
 
@@ -108,9 +112,9 @@ func (o *DockerSvcLaunchContainerRequest) SetImage(v string) {
 }
 
 // GetOptions returns the Options field value if set, zero value otherwise.
-func (o *DockerSvcLaunchContainerRequest) GetOptions() DockerSvcLaunchOptions {
+func (o *DockerSvcLaunchContainerRequest) GetOptions() DockerSvcLaunchContainerOptions {
 	if o == nil || IsNil(o.Options) {
-		var ret DockerSvcLaunchOptions
+		var ret DockerSvcLaunchContainerOptions
 		return ret
 	}
 	return *o.Options
@@ -118,7 +122,7 @@ func (o *DockerSvcLaunchContainerRequest) GetOptions() DockerSvcLaunchOptions {
 
 // GetOptionsOk returns a tuple with the Options field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *DockerSvcLaunchContainerRequest) GetOptionsOk() (*DockerSvcLaunchOptions, bool) {
+func (o *DockerSvcLaunchContainerRequest) GetOptionsOk() (*DockerSvcLaunchContainerOptions, bool) {
 	if o == nil || IsNil(o.Options) {
 		return nil, false
 	}
@@ -134,8 +138,8 @@ func (o *DockerSvcLaunchContainerRequest) HasOptions() bool {
 	return false
 }
 
-// SetOptions gets a reference to the given DockerSvcLaunchOptions and assigns it to the Options field.
-func (o *DockerSvcLaunchContainerRequest) SetOptions(v DockerSvcLaunchOptions) {
+// SetOptions gets a reference to the given DockerSvcLaunchContainerOptions and assigns it to the Options field.
+func (o *DockerSvcLaunchContainerRequest) SetOptions(v DockerSvcLaunchContainerOptions) {
 	o.Options = &v
 }
 

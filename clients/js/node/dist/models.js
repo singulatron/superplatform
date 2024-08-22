@@ -29,10 +29,10 @@ var dockerSvcErrorResponse = require('./dockerSvcErrorResponse.js');
 var dockerSvcGetContainerSummaryResponse = require('./dockerSvcGetContainerSummaryResponse.js');
 var dockerSvcGetDockerHostResponse = require('./dockerSvcGetDockerHostResponse.js');
 var dockerSvcGetInfoResponse = require('./dockerSvcGetInfoResponse.js');
+var dockerSvcLaunchContainerOptions = require('./dockerSvcLaunchContainerOptions.js');
 var dockerSvcLaunchContainerRequest = require('./dockerSvcLaunchContainerRequest.js');
 var dockerSvcLaunchContainerResponse = require('./dockerSvcLaunchContainerResponse.js');
 var dockerSvcLaunchInfo = require('./dockerSvcLaunchInfo.js');
-var dockerSvcLaunchOptions = require('./dockerSvcLaunchOptions.js');
 var downloadSvcDownloadDetails = require('./downloadSvcDownloadDetails.js');
 var downloadSvcDownloadRequest = require('./downloadSvcDownloadRequest.js');
 var downloadSvcDownloadsResponse = require('./downloadSvcDownloadsResponse.js');
@@ -160,10 +160,10 @@ let typeMap = {
     "DockerSvcGetContainerSummaryResponse": dockerSvcGetContainerSummaryResponse.DockerSvcGetContainerSummaryResponse,
     "DockerSvcGetDockerHostResponse": dockerSvcGetDockerHostResponse.DockerSvcGetDockerHostResponse,
     "DockerSvcGetInfoResponse": dockerSvcGetInfoResponse.DockerSvcGetInfoResponse,
+    "DockerSvcLaunchContainerOptions": dockerSvcLaunchContainerOptions.DockerSvcLaunchContainerOptions,
     "DockerSvcLaunchContainerRequest": dockerSvcLaunchContainerRequest.DockerSvcLaunchContainerRequest,
     "DockerSvcLaunchContainerResponse": dockerSvcLaunchContainerResponse.DockerSvcLaunchContainerResponse,
     "DockerSvcLaunchInfo": dockerSvcLaunchInfo.DockerSvcLaunchInfo,
-    "DockerSvcLaunchOptions": dockerSvcLaunchOptions.DockerSvcLaunchOptions,
     "DownloadSvcDownloadDetails": downloadSvcDownloadDetails.DownloadSvcDownloadDetails,
     "DownloadSvcDownloadRequest": downloadSvcDownloadRequest.DownloadSvcDownloadRequest,
     "DownloadSvcDownloadsResponse": downloadSvcDownloadsResponse.DownloadSvcDownloadsResponse,
@@ -453,10 +453,10 @@ exports.DockerSvcErrorResponse = dockerSvcErrorResponse.DockerSvcErrorResponse;
 exports.DockerSvcGetContainerSummaryResponse = dockerSvcGetContainerSummaryResponse.DockerSvcGetContainerSummaryResponse;
 exports.DockerSvcGetDockerHostResponse = dockerSvcGetDockerHostResponse.DockerSvcGetDockerHostResponse;
 exports.DockerSvcGetInfoResponse = dockerSvcGetInfoResponse.DockerSvcGetInfoResponse;
+exports.DockerSvcLaunchContainerOptions = dockerSvcLaunchContainerOptions.DockerSvcLaunchContainerOptions;
 exports.DockerSvcLaunchContainerRequest = dockerSvcLaunchContainerRequest.DockerSvcLaunchContainerRequest;
 exports.DockerSvcLaunchContainerResponse = dockerSvcLaunchContainerResponse.DockerSvcLaunchContainerResponse;
 exports.DockerSvcLaunchInfo = dockerSvcLaunchInfo.DockerSvcLaunchInfo;
-exports.DockerSvcLaunchOptions = dockerSvcLaunchOptions.DockerSvcLaunchOptions;
 exports.DownloadSvcDownloadDetails = downloadSvcDownloadDetails.DownloadSvcDownloadDetails;
 exports.DownloadSvcDownloadRequest = downloadSvcDownloadRequest.DownloadSvcDownloadRequest;
 exports.DownloadSvcDownloadsResponse = downloadSvcDownloadsResponse.DownloadSvcDownloadsResponse;

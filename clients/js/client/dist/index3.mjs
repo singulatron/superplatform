@@ -32,7 +32,7 @@ import './DockerSvcGetDockerHostResponse.mjs';
 import './DockerSvcGetInfoResponse.mjs';
 import './DockerSvcDockerInfo.mjs';
 import './DockerSvcLaunchContainerRequest.mjs';
-import './DockerSvcLaunchOptions.mjs';
+import './DockerSvcLaunchContainerOptions.mjs';
 import './DockerSvcLaunchContainerResponse.mjs';
 import './DockerSvcLaunchInfo.mjs';
 import './DownloadSvcDownloadRequest.mjs';

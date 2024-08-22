@@ -8,7 +8,7 @@ var DockerSvcGetInfoResponse = require('./DockerSvcGetInfoResponse.js');
 var DockerSvcLaunchContainerRequest = require('./DockerSvcLaunchContainerRequest.js');
 var DockerSvcLaunchContainerResponse = require('./DockerSvcLaunchContainerResponse.js');
 require('./DockerSvcDockerInfo.js');
-require('./DockerSvcLaunchOptions.js');
+require('./DockerSvcLaunchContainerOptions.js');
 require('./DockerSvcLaunchInfo.js');
 
 /* tslint:disable */
@@ -159,7 +159,7 @@ class DockerSvcApi extends runtime.BaseAPI {
     }
     /**
      * Launches a Docker container with the specified parameters.  Requires the `docker-svc:docker:create` permission.
-     * Launch a Docker Container
+     * Launch a Container
      */
     launchContainerRaw(requestParameters, initOverrides) {
         return runtime.__awaiter(this, void 0, void 0, function* () {
@@ -184,7 +184,7 @@ class DockerSvcApi extends runtime.BaseAPI {
     }
     /**
      * Launches a Docker container with the specified parameters.  Requires the `docker-svc:docker:create` permission.
-     * Launch a Docker Container
+     * Launch a Container
      */
     launchContainer(requestParameters, initOverrides) {
         return runtime.__awaiter(this, void 0, void 0, function* () {

@@ -11,15 +11,6 @@ type ErrorResponse struct {
 	Error string `json:"error"`
 }
 
-type LaunchOptions struct {
-	Name       string            `json:"name,omitempty"`
-	Envs       []string          `json:"envs,omitempty"`
-	Labels     map[string]string `json:"labels,omitempty"`
-	HostBinds  []string          `json:"hostBinds,omitempty"`
-	GPUEnabled bool              `json:"gpuEnabled,omitempty"`
-	Hash       string            `json:"hash,omitempty"`
-}
-
 type LaunchInfo struct {
 	NewContainerStarted bool
 	PortNumber          int
@@ -41,26 +32,47 @@ type DockerInfo struct {
 	Error               *string `json:"error,omitempty"`
 }
 
-//
-// Events
-//
+type LaunchContainerOptions struct {
+	// Name is the name of the container
+	Name string `json:"name,omitempty"`
 
-// @todo nothing to trigger this yet
-const EventDockerInfoUpdatedName = "dockerInfoUpdated"
+	// Hash is a unique identifier for the container
+	Hash string `json:"hash,omitempty"`
 
-type EventDockerInfoUpdated struct {
-	ThreadId string `json:"threadId"`
-}
+	// Envs are environment variables to set in the container
+	// example: ["VAR1=value1", "VAR2=value2"]
+	Envs []string `json:"envs,omitempty"`
 
-func (e EventDockerInfoUpdated) Name() string {
-	return EventDockerInfoUpdatedName
+	// Labels are metadata labels associated with the container
+	Labels map[string]string `json:"labels,omitempty"`
+
+	// PersistentPaths are paths that should be persisted across container restarts
+	PersistentPaths []string `json:"persistentPaths,omitempty"`
+
+	// GPUEnabled specifies if GPU support is enabled
+	GPUEnabled bool `json:"gpuEnabled,omitempty"`
+
+	// Assets maps environment variable names to file URLs.
+	// Example: {"MODEL": "https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q2_K.gguf"}
+	// These files are downloaded by the Download Svc and mounted in the container.
+	// The environment variable `MODEL` will point to the local file path in the container.
+	Assets map[string]string `json:"assets,omitempty"`
 }
 
 type LaunchContainerRequest struct {
-	Image    string         `json:"image"`
-	Port     int            `json:"port"`
-	HostPort int            `json:"hostPort"`
-	Options  *LaunchOptions `json:"options"`
+	// Image is the Docker image to use for the container
+	Image string `json:"image" example:"nginx:latest"`
+
+	// Port is the port number that the container will expose
+	// example: 8080
+	Port int `json:"port" example:"8080"`
+
+	// HostPort is the port on the host machine that will be mapped to the container's port
+	// example: 8081
+	HostPort int `json:"hostPort" example:"8081"`
+
+	// Options provides additional options for launching the container
+	Options *LaunchContainerOptions `json:"options"`
 }
 
 type LaunchContainerResponse struct {
@@ -88,4 +100,19 @@ type GetDockerHostRequest struct{}
 
 type GetDockerHostResponse struct {
 	Host string `json:"host"`
+}
+
+//
+// Events
+//
+
+// @todo nothing to trigger this yet
+const EventDockerInfoUpdatedName = "dockerInfoUpdated"
+
+type EventDockerInfoUpdated struct {
+	ThreadId string `json:"threadId"`
+}
+
+func (e EventDockerInfoUpdated) Name() string {
+	return EventDockerInfoUpdatedName
 }

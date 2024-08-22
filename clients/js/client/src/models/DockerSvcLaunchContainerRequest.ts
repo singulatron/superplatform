@@ -13,12 +13,12 @@
  */
 
 import { mapValues } from '../runtime';
-import type { DockerSvcLaunchOptions } from './DockerSvcLaunchOptions';
+import type { DockerSvcLaunchContainerOptions } from './DockerSvcLaunchContainerOptions';
 import {
-    DockerSvcLaunchOptionsFromJSON,
-    DockerSvcLaunchOptionsFromJSONTyped,
-    DockerSvcLaunchOptionsToJSON,
-} from './DockerSvcLaunchOptions';
+    DockerSvcLaunchContainerOptionsFromJSON,
+    DockerSvcLaunchContainerOptionsFromJSONTyped,
+    DockerSvcLaunchContainerOptionsToJSON,
+} from './DockerSvcLaunchContainerOptions';
 
 /**
  * 
@@ -27,25 +27,27 @@ import {
  */
 export interface DockerSvcLaunchContainerRequest {
     /**
-     * 
+     * HostPort is the port on the host machine that will be mapped to the container's port
+     * example: 8081
      * @type {number}
      * @memberof DockerSvcLaunchContainerRequest
      */
     hostPort?: number;
     /**
-     * 
+     * Image is the Docker image to use for the container
      * @type {string}
      * @memberof DockerSvcLaunchContainerRequest
      */
     image?: string;
     /**
-     * 
-     * @type {DockerSvcLaunchOptions}
+     * Options provides additional options for launching the container
+     * @type {DockerSvcLaunchContainerOptions}
      * @memberof DockerSvcLaunchContainerRequest
      */
-    options?: DockerSvcLaunchOptions;
+    options?: DockerSvcLaunchContainerOptions;
     /**
-     * 
+     * Port is the port number that the container will expose
+     * example: 8080
      * @type {number}
      * @memberof DockerSvcLaunchContainerRequest
      */
@@ -71,7 +73,7 @@ export function DockerSvcLaunchContainerRequestFromJSONTyped(json: any, ignoreDi
         
         'hostPort': json['hostPort'] == null ? undefined : json['hostPort'],
         'image': json['image'] == null ? undefined : json['image'],
-        'options': json['options'] == null ? undefined : DockerSvcLaunchOptionsFromJSON(json['options']),
+        'options': json['options'] == null ? undefined : DockerSvcLaunchContainerOptionsFromJSON(json['options']),
         'port': json['port'] == null ? undefined : json['port'],
     };
 }
@@ -84,7 +86,7 @@ export function DockerSvcLaunchContainerRequestToJSON(value?: DockerSvcLaunchCon
         
         'hostPort': value['hostPort'],
         'image': value['image'],
-        'options': DockerSvcLaunchOptionsToJSON(value['options']),
+        'options': DockerSvcLaunchContainerOptionsToJSON(value['options']),
         'port': value['port'],
     };
 }

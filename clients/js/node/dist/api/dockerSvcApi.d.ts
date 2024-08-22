@@ -92,7 +92,7 @@ export declare class DockerSvcApi {
     }>;
     /**
      * Launches a Docker container with the specified parameters.  Requires the `docker-svc:docker:create` permission.
-     * @summary Launch a Docker Container
+     * @summary Launch a Container
      * @param request Launch Container Request
      */
     launchContainer(request: DockerSvcLaunchContainerRequest, options?: {

@@ -1,4 +1,4 @@
-import { DockerSvcLaunchOptionsFromJSON, DockerSvcLaunchOptionsToJSON } from './DockerSvcLaunchOptions.mjs';
+import { DockerSvcLaunchContainerOptionsFromJSON, DockerSvcLaunchContainerOptionsToJSON } from './DockerSvcLaunchContainerOptions.mjs';
 
 /* tslint:disable */
 /* eslint-disable */
@@ -29,7 +29,7 @@ function DockerSvcLaunchContainerRequestFromJSONTyped(json, ignoreDiscriminator)
     return {
         'hostPort': json['hostPort'] == null ? undefined : json['hostPort'],
         'image': json['image'] == null ? undefined : json['image'],
-        'options': json['options'] == null ? undefined : DockerSvcLaunchOptionsFromJSON(json['options']),
+        'options': json['options'] == null ? undefined : DockerSvcLaunchContainerOptionsFromJSON(json['options']),
         'port': json['port'] == null ? undefined : json['port'],
     };
 }
@@ -40,7 +40,7 @@ function DockerSvcLaunchContainerRequestToJSON(value) {
     return {
         'hostPort': value['hostPort'],
         'image': value['image'],
-        'options': DockerSvcLaunchOptionsToJSON(value['options']),
+        'options': DockerSvcLaunchContainerOptionsToJSON(value['options']),
         'port': value['port'],
     };
 }

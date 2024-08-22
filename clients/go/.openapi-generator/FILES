@@ -47,10 +47,10 @@ docs/DockerSvcErrorResponse.md
 docs/DockerSvcGetContainerSummaryResponse.md
 docs/DockerSvcGetDockerHostResponse.md
 docs/DockerSvcGetInfoResponse.md
+docs/DockerSvcLaunchContainerOptions.md
 docs/DockerSvcLaunchContainerRequest.md
 docs/DockerSvcLaunchContainerResponse.md
 docs/DockerSvcLaunchInfo.md
-docs/DockerSvcLaunchOptions.md
 docs/DownloadSvcAPI.md
 docs/DownloadSvcDownloadDetails.md
 docs/DownloadSvcDownloadRequest.md
@@ -170,10 +170,10 @@ model_docker_svc_error_response.go
 model_docker_svc_get_container_summary_response.go
 model_docker_svc_get_docker_host_response.go
 model_docker_svc_get_info_response.go
+model_docker_svc_launch_container_options.go
 model_docker_svc_launch_container_request.go
 model_docker_svc_launch_container_response.go
 model_docker_svc_launch_info.go
-model_docker_svc_launch_options.go
 model_download_svc_download_details.go
 model_download_svc_download_request.go
 model_download_svc_downloads_response.go

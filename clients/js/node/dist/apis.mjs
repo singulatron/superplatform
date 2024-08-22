@@ -44,10 +44,10 @@ import './dockerSvcErrorResponse.mjs';
 import './dockerSvcGetContainerSummaryResponse.mjs';
 import './dockerSvcGetDockerHostResponse.mjs';
 import './dockerSvcGetInfoResponse.mjs';
+import './dockerSvcLaunchContainerOptions.mjs';
 import './dockerSvcLaunchContainerRequest.mjs';
 import './dockerSvcLaunchContainerResponse.mjs';
 import './dockerSvcLaunchInfo.mjs';
-import './dockerSvcLaunchOptions.mjs';
 import './downloadSvcDownloadDetails.mjs';
 import './downloadSvcDownloadRequest.mjs';
 import './downloadSvcDownloadsResponse.mjs';
@@ -55189,7 +55189,7 @@ class DockerSvcApi {
     }
     /**
      * Launches a Docker container with the specified parameters.  Requires the `docker-svc:docker:create` permission.
-     * @summary Launch a Docker Container
+     * @summary Launch a Container
      * @param request Launch Container Request
      */
     launchContainer(request_1) {
