@@ -57,7 +57,7 @@ func (g *DynamicService) Create(
 		return
 	}
 	defer r.Body.Close()
-	req.Object.UserId = rsp.User.Id
+	//req.Object.UserId = rsp.User.Id
 
 	err = g.create(req)
 	if err != nil {

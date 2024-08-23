@@ -8,25 +8,27 @@ type ErrorResponse struct {
 	Error string `json:"error"`
 }
 
-type GenericObjectCreateFields struct {
+type ObjectCreateFields struct {
 	Id    string `json:"id"`
 	Table string `json:"table" binding:"required"`
 
-	// Public determines if the object is visible to all users.
-	// When it's false the entry is only visible to the user who created it.
-	// When it's true the entry is visible to everyone.
-	Public bool `json:"public,omitempty"`
+	// Readers is a list of user IDs, organization IDs or role IDs that can read the object.
+	Readers []string `json:"readers"`
+
+	// Writers is a list of user IDs, organization IDs or role IDs that can write the object.
+	Writers []string `json:"writers"`
+
+	// Deleters is a list of user IDs, organization IDs or role IDs that can delete the object.
+	Deleters []string `json:"deleters"`
 
 	Data map[string]interface{} `json:"data,omitempty" binding:"required"`
-
-	UserId string `json:"userId,omitempty"`
 }
 
-func (g GenericObjectCreateFields) GetId() string {
+func (g ObjectCreateFields) GetId() string {
 	return g.Id
 }
 
-// GenericObject holds any kind of data, so
+// Object holds any kind of data, so
 // we don't have to implement simple CRUD for
 // any new simple entity.
 //
@@ -42,8 +44,8 @@ func (g GenericObjectCreateFields) GetId() string {
 //			"anyfield2": 42
 //		}
 //	}
-type GenericObject struct {
-	GenericObjectCreateFields
+type Object struct {
+	ObjectCreateFields
 
 	CreatedAt string `json:"createdAt,omitempty"`
 	UpdatedAt string `json:"updatedAt,omitempty"`
@@ -63,35 +65,35 @@ type QueryOptions struct {
 }
 
 type QueryResponse struct {
-	Objects []*GenericObject `json:"objects,omitempty"`
+	Objects []*Object `json:"objects,omitempty"`
 }
 
 type CreateObjectRequest struct {
-	Object *GenericObjectCreateFields `json:"object,omitempty"`
+	Object *ObjectCreateFields `json:"object,omitempty"`
 }
 
 type CreateObjectResponse struct {
-	Object *GenericObject `json:"object,omitempty"`
+	Object *Object `json:"object,omitempty"`
 }
 
 type CreateManyRequest struct {
-	Objects []*GenericObjectCreateFields `json:"objects,omitempty"`
+	Objects []*ObjectCreateFields `json:"objects,omitempty"`
 }
 
 type UpsertObjectRequest struct {
-	Object *GenericObjectCreateFields `json:"object,omitempty"`
+	Object *ObjectCreateFields `json:"object,omitempty"`
 }
 
 type UpsertObjectResponse struct {
-	Object *GenericObject `json:"object,omitempty"`
+	Object *Object `json:"object,omitempty"`
 }
 
 type UpsertManyRequest struct {
-	Objects []*GenericObjectCreateFields `json:"objects,omitempty"`
+	Objects []*ObjectCreateFields `json:"objects,omitempty"`
 }
 
 type UpsertManyResponse struct {
-	Objects []*GenericObject `json:"objects,omitempty"`
+	Objects []*Object `json:"objects,omitempty"`
 }
 
 type DeleteObjectRequest struct {
@@ -105,7 +107,7 @@ type DeleteObjectResponse struct {
 type UpdateObjectRequest struct {
 	Table      string                `json:"table,omitempty"`
 	Conditions []datastore.Condition `json:"conditions,omitempty"`
-	Object     *GenericObject        `json:"object,omitempty"`
+	Object     *Object               `json:"object,omitempty"`
 }
 
 type UpdateObjectResponse struct {

@@ -70,8 +70,8 @@ func (o *ModelSvcModelStatus) HasAddress() bool {
 	return false
 }
 
-// SetAddress gets a reference to the given string and assigns it to the Address field.
-func (o *ModelSvcModelStatus) SetAddress(v string) {
+// SetDefaultAddress gets a reference to the given string and assigns it to the Address field.
+func (o *ModelSvcModelStatus) SetDefaultAddress(v string) {
 	o.Address = &v
 }
 

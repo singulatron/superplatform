@@ -38,9 +38,6 @@ func (g *DynamicService) CreateMany(
 		return
 	}
 	defer r.Body.Close()
-	for i := range req.Objects {
-		req.Objects[i].UserId = rsp.User.Id
-	}
 
 	err = g.createMany(req)
 	if err != nil {

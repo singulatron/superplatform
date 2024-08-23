@@ -5,6 +5,8 @@ import (
 	"crypto/x509"
 	"encoding/pem"
 	"fmt"
+	"net/http"
+	"strings"
 
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/pkg/errors"
@@ -50,6 +52,50 @@ func DecodeJWT(tokenString string, publicKeyString string) (*Claims, error) {
 	}
 
 	return nil, fmt.Errorf("invalid JWT token")
+}
+
+func TokenFromRequest(r *http.Request) (string, bool) {
+	authHeader := r.Header.Get("Authorization")
+	authHeader = strings.Replace(authHeader, "Bearer ", "", 1)
+
+	if authHeader == "" || authHeader == "Bearer" {
+		return "", false
+	}
+
+	return authHeader, true
+}
+
+// OrganizationIDsFromRoleIDs extracts organization slugs from role IDs in the format "user-svc:org:{org-slug}:role"
+func OrganizationSlugsFromRoleIDs(roleIDs []string) []string {
+	ret := []string{}
+	for _, roleID := range roleIDs {
+		// Check if the roleID starts with the expected prefix
+		if strings.HasPrefix(roleID, "user-svc:org:") {
+			// Remove the prefix "user-svc:org:"
+			trimmedRole := strings.TrimPrefix(roleID, "user-svc:org:")
+			// Split the remaining string by ':'
+			parts := strings.Split(trimmedRole, ":")
+			// Ensure there are at least two parts: the org-slug and a role
+			if len(parts) >= 2 {
+				orgSlug := parts[0]
+				// Strip the curly braces if they are part of the orgSlug
+				orgSlug = strings.Trim(orgSlug, "{}")
+				ret = append(ret, orgSlug)
+			}
+		}
+	}
+	return ret
+}
+
+func StaticRoles(roleIDs []string) []string {
+	ret := []string{}
+	for _, roleID := range roleIDs {
+		if !strings.Contains(roleID, "{") && !strings.Contains(roleID, "}") {
+			ret = append(ret, roleID)
+		}
+	}
+
+	return ret
 }
 
 func PublicKeyFromString(publicKeyPem string) (*rsa.PublicKey, error) {

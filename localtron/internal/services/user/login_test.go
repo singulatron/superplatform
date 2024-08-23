@@ -217,7 +217,7 @@ func TestOrganization(t *testing.T) {
 		require.NoError(t, err)
 		require.NotNil(t, claim)
 		require.Equal(t, 2, len(claim.RoleIds), claim.RoleIds)
-		require.Contains(t, claim.RoleIds, "user-svc:org:test-org:admin", claim.RoleIds)
+		require.Contains(t, claim.RoleIds, "user-svc:org:{test-org}:admin", claim.RoleIds)
 	})
 
 	t.Run("assign org to user", func(t *testing.T) {

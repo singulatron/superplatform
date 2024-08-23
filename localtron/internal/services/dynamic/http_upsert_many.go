@@ -20,7 +20,6 @@ func (g *DynamicService) UpsertMany(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-
 	rsp := &usertypes.IsAuthorizedResponse{}
 	err := g.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", dynamictypes.PermissionGenericCreate.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
@@ -39,9 +38,6 @@ func (g *DynamicService) UpsertMany(
 		return
 	}
 	defer r.Body.Close()
-	for i := range req.Objects {
-		req.Objects[i].UserId = rsp.User.Id
-	}
 
 	err = g.upsertMany(req)
 	if err != nil {

@@ -51,8 +51,8 @@ func TestCreate(t *testing.T) {
 	uuid1 := uuid.New().String()
 	uuid2 := uuid.New().String()
 
-	obj := &dynamictypes.GenericObject{
-		GenericObjectCreateFields: dynamictypes.GenericObjectCreateFields{
+	obj := &dynamictypes.Object{
+		ObjectCreateFields: dynamictypes.ObjectCreateFields{
 			Id:    uuid1,
 			Table: table1,
 			Data:  map[string]interface{}{"key": "value"},
@@ -61,7 +61,7 @@ func TestCreate(t *testing.T) {
 	}
 
 	err = user1Router.Post(context.Background(), "dynamic-svc", "/object", &dynamictypes.CreateObjectRequest{
-		Object: &obj.GenericObjectCreateFields,
+		Object: &obj.ObjectCreateFields,
 	}, nil)
 	require.NoError(t, err)
 
@@ -82,8 +82,8 @@ func TestCreate(t *testing.T) {
 		require.Contains(t, rsp.Objects[0].Id, uuid1)
 	})
 
-	obj2 := &dynamictypes.GenericObject{
-		GenericObjectCreateFields: dynamictypes.GenericObjectCreateFields{
+	obj2 := &dynamictypes.Object{
+		ObjectCreateFields: dynamictypes.ObjectCreateFields{
 			Id:    uuid2,
 			Table: table2,
 			Data:  map[string]interface{}{"key": "value"},
@@ -92,7 +92,7 @@ func TestCreate(t *testing.T) {
 	}
 
 	err = user2Router.Post(context.Background(), "dynamic-svc", "/object", &dynamictypes.CreateObjectRequest{
-		Object: &obj2.GenericObjectCreateFields,
+		Object: &obj2.ObjectCreateFields,
 	}, nil)
 	require.NoError(t, err)
 
@@ -144,7 +144,7 @@ func TestCreate(t *testing.T) {
 	t.Run("already exists", func(t *testing.T) {
 		err = user1Router.Post(context.Background(), "dynamic-svc", "/create",
 			&dynamictypes.CreateObjectRequest{
-				Object: &obj.GenericObjectCreateFields,
+				Object: &obj.ObjectCreateFields,
 			},
 			nil)
 		require.Error(t, err)
@@ -166,7 +166,7 @@ func TestCreate(t *testing.T) {
 
 	t.Run("user 2 cannot update record of user 1", func(t *testing.T) {
 		req := &dynamictypes.UpsertObjectRequest{
-			Object: &obj.GenericObjectCreateFields,
+			Object: &obj.ObjectCreateFields,
 		}
 		err = user2Router.Put(context.Background(), "dynamic-svc", fmt.Sprintf("/object/%v", req.Object.Id), req, nil)
 		// unauthorized
@@ -175,7 +175,7 @@ func TestCreate(t *testing.T) {
 
 	t.Run("user 1 can upsert its own reord", func(t *testing.T) {
 		req := &dynamictypes.UpsertObjectRequest{
-			Object: &obj.GenericObjectCreateFields,
+			Object: &obj.ObjectCreateFields,
 		}
 		err = user1Router.Put(context.Background(), "dynamic-svc", fmt.Sprintf("/object/%v", req.Object.Id), req, nil)
 		require.NoError(t, err)

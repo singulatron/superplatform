@@ -40,7 +40,7 @@ func (s *UserService) createOrganization(userId, orgId, name, slug string) error
 		return err
 	}
 
-	return s.addDynamicRoleToUser(userId, fmt.Sprintf("user-svc:org:%v:admin", slug))
+	return s.addDynamicRoleToUser(userId, fmt.Sprintf("user-svc:org:{%v}:admin", slug))
 }
 
 func (s *UserService) addStaticRoleToUser(userId, roleId string) error {

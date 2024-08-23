@@ -21,7 +21,7 @@ var _ MappedNullable = &DynamicSvcUpdateObjectRequest{}
 // DynamicSvcUpdateObjectRequest struct for DynamicSvcUpdateObjectRequest
 type DynamicSvcUpdateObjectRequest struct {
 	Conditions []DatastoreCondition `json:"conditions,omitempty"`
-	Object *DynamicSvcGenericObject `json:"object,omitempty"`
+	Object *DynamicSvcObject `json:"object,omitempty"`
 	Table *string `json:"table,omitempty"`
 }
 
@@ -75,9 +75,9 @@ func (o *DynamicSvcUpdateObjectRequest) SetConditions(v []DatastoreCondition) {
 }
 
 // GetObject returns the Object field value if set, zero value otherwise.
-func (o *DynamicSvcUpdateObjectRequest) GetObject() DynamicSvcGenericObject {
+func (o *DynamicSvcUpdateObjectRequest) GetObject() DynamicSvcObject {
 	if o == nil || IsNil(o.Object) {
-		var ret DynamicSvcGenericObject
+		var ret DynamicSvcObject
 		return ret
 	}
 	return *o.Object
@@ -85,7 +85,7 @@ func (o *DynamicSvcUpdateObjectRequest) GetObject() DynamicSvcGenericObject {
 
 // GetObjectOk returns a tuple with the Object field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *DynamicSvcUpdateObjectRequest) GetObjectOk() (*DynamicSvcGenericObject, bool) {
+func (o *DynamicSvcUpdateObjectRequest) GetObjectOk() (*DynamicSvcObject, bool) {
 	if o == nil || IsNil(o.Object) {
 		return nil, false
 	}
@@ -101,8 +101,8 @@ func (o *DynamicSvcUpdateObjectRequest) HasObject() bool {
 	return false
 }
 
-// SetObject gets a reference to the given DynamicSvcGenericObject and assigns it to the Object field.
-func (o *DynamicSvcUpdateObjectRequest) SetObject(v DynamicSvcGenericObject) {
+// SetObject gets a reference to the given DynamicSvcObject and assigns it to the Object field.
+func (o *DynamicSvcUpdateObjectRequest) SetObject(v DynamicSvcObject) {
 	o.Object = &v
 }
 

@@ -62,8 +62,8 @@ docs/DynamicSvcCreateObjectRequest.md
 docs/DynamicSvcCreateObjectResponse.md
 docs/DynamicSvcDeleteObjectRequest.md
 docs/DynamicSvcErrorResponse.md
-docs/DynamicSvcGenericObject.md
-docs/DynamicSvcGenericObjectCreateFields.md
+docs/DynamicSvcObject.md
+docs/DynamicSvcObjectCreateFields.md
 docs/DynamicSvcQueryRequest.md
 docs/DynamicSvcQueryResponse.md
 docs/DynamicSvcUpdateObjectRequest.md
@@ -183,8 +183,8 @@ model_dynamic_svc_create_object_request.go
 model_dynamic_svc_create_object_response.go
 model_dynamic_svc_delete_object_request.go
 model_dynamic_svc_error_response.go
-model_dynamic_svc_generic_object.go
-model_dynamic_svc_generic_object_create_fields.go
+model_dynamic_svc_object.go
+model_dynamic_svc_object_create_fields.go
 model_dynamic_svc_query_request.go
 model_dynamic_svc_query_response.go
 model_dynamic_svc_update_object_request.go

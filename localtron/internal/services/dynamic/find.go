@@ -15,7 +15,7 @@ import (
 	dynamictypes "github.com/singulatron/singulatron/localtron/internal/services/dynamic/types"
 )
 
-func (g *DynamicService) find(options dynamictypes.QueryOptions) ([]*dynamictypes.GenericObject, error) {
+func (g *DynamicService) find(options dynamictypes.QueryOptions) ([]*dynamictypes.Object, error) {
 	if options.Table == "" {
 		return nil, errors.New("no table name")
 	}
@@ -67,9 +67,9 @@ func (g *DynamicService) find(options dynamictypes.QueryOptions) ([]*dynamictype
 		return nil, err
 	}
 
-	objects := []*dynamictypes.GenericObject{}
+	objects := []*dynamictypes.Object{}
 	for _, objectI := range objectIs {
-		objects = append(objects, objectI.(*dynamictypes.GenericObject))
+		objects = append(objects, objectI.(*dynamictypes.Object))
 	}
 
 	return objects, nil

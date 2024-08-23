@@ -2348,7 +2348,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Allows a logged-in user to create a new organization. The user initiating the request will be assigned the role of admin for that organization.\nThe initiating user will receive a dynamic role in the format ` + "`" + `user-svc:org:$organization-slug:admin` + "`" + `, where ` + "`" + `$organization-slug` + "`" + ` is a unique identifier for the created organization.\nDynamic roles are generated based on specific user-resource associations, offering more flexible permission management compared to static roles.",
+                "description": "Allows a logged-in user to create a new organization. The user initiating the request will be assigned the role of admin for that organization.\nThe initiating user will receive a dynamic role in the format ` + "`" + `user-svc:org:{organization-slug}:admin` + "`" + `, where ` + "`" + `$organization-slug` + "`" + ` is a unique identifier for the created organization.\nDynamic roles are generated based on specific user-resource associations, offering more flexible permission management compared to static roles.",
                 "consumes": [
                     "application/json"
                 ],
@@ -3997,7 +3997,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "object": {
-                    "$ref": "#/definitions/dynamic_svc.GenericObjectCreateFields"
+                    "$ref": "#/definitions/dynamic_svc.ObjectCreateFields"
                 }
             }
         },
@@ -4005,7 +4005,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "object": {
-                    "$ref": "#/definitions/dynamic_svc.GenericObject"
+                    "$ref": "#/definitions/dynamic_svc.Object"
                 }
             }
         },
@@ -4034,7 +4034,7 @@ const docTemplate = `{
                 }
             }
         },
-        "dynamic_svc.GenericObject": {
+        "dynamic_svc.Object": {
             "type": "object",
             "required": [
                 "data",
@@ -4048,12 +4048,22 @@ const docTemplate = `{
                     "type": "object",
                     "additionalProperties": true
                 },
+                "deleters": {
+                    "description": "Deleters is a list of user IDs, organization IDs or role IDs that can delete the object.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
                 "id": {
                     "type": "string"
                 },
-                "public": {
-                    "description": "Public determines if the object is visible to all users.\nWhen it's false the entry is only visible to the user who created it.\nWhen it's true the entry is visible to everyone.",
-                    "type": "boolean"
+                "readers": {
+                    "description": "Readers is a list of user IDs, organization IDs or role IDs that can read the object.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "table": {
                     "type": "string"
@@ -4061,12 +4071,16 @@ const docTemplate = `{
                 "updatedAt": {
                     "type": "string"
                 },
-                "userId": {
-                    "type": "string"
+                "writers": {
+                    "description": "Writers is a list of user IDs, organization IDs or role IDs that can write the object.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             }
         },
-        "dynamic_svc.GenericObjectCreateFields": {
+        "dynamic_svc.ObjectCreateFields": {
             "type": "object",
             "required": [
                 "data",
@@ -4077,18 +4091,32 @@ const docTemplate = `{
                     "type": "object",
                     "additionalProperties": true
                 },
+                "deleters": {
+                    "description": "Deleters is a list of user IDs, organization IDs or role IDs that can delete the object.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
                 "id": {
                     "type": "string"
                 },
-                "public": {
-                    "description": "Public determines if the object is visible to all users.\nWhen it's false the entry is only visible to the user who created it.\nWhen it's true the entry is visible to everyone.",
-                    "type": "boolean"
+                "readers": {
+                    "description": "Readers is a list of user IDs, organization IDs or role IDs that can read the object.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "table": {
                     "type": "string"
                 },
-                "userId": {
-                    "type": "string"
+                "writers": {
+                    "description": "Writers is a list of user IDs, organization IDs or role IDs that can write the object.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             }
         },
@@ -4112,7 +4140,7 @@ const docTemplate = `{
                 "objects": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/dynamic_svc.GenericObject"
+                        "$ref": "#/definitions/dynamic_svc.Object"
                     }
                 }
             }
@@ -4127,7 +4155,7 @@ const docTemplate = `{
                     }
                 },
                 "object": {
-                    "$ref": "#/definitions/dynamic_svc.GenericObject"
+                    "$ref": "#/definitions/dynamic_svc.Object"
                 },
                 "table": {
                     "type": "string"
@@ -4141,7 +4169,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "object": {
-                    "$ref": "#/definitions/dynamic_svc.GenericObjectCreateFields"
+                    "$ref": "#/definitions/dynamic_svc.ObjectCreateFields"
                 }
             }
         },
@@ -4149,7 +4177,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "object": {
-                    "$ref": "#/definitions/dynamic_svc.GenericObject"
+                    "$ref": "#/definitions/dynamic_svc.Object"
                 }
             }
         },
