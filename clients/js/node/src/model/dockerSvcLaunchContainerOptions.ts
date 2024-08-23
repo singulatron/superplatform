@@ -18,7 +18,7 @@ export class DockerSvcLaunchContainerOptions {
     */
     'assets'?: { [key: string]: string; };
     /**
-    * Envs are environment variables to set in the container example: [\"VAR1=value1\", \"VAR2=value2\"]
+    * Envs are environment variables to set in the container
     */
     'envs'?: Array<string>;
     /**

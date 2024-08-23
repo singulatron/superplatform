@@ -13,6 +13,8 @@ package openapi
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the DockerSvcLaunchContainerRequest type satisfies the MappedNullable interface at compile time
@@ -20,22 +22,26 @@ var _ MappedNullable = &DockerSvcLaunchContainerRequest{}
 
 // DockerSvcLaunchContainerRequest struct for DockerSvcLaunchContainerRequest
 type DockerSvcLaunchContainerRequest struct {
-	// HostPort is the port on the host machine that will be mapped to the container's port example: 8081
+	// HostPort is the port on the host machine that will be mapped to the container's port
 	HostPort *int32 `json:"hostPort,omitempty"`
 	// Image is the Docker image to use for the container
-	Image *string `json:"image,omitempty"`
+	Image string `json:"image"`
 	// Options provides additional options for launching the container
 	Options *DockerSvcLaunchContainerOptions `json:"options,omitempty"`
-	// Port is the port number that the container will expose example: 8080
-	Port *int32 `json:"port,omitempty"`
+	// Port is the port number that the container will expose
+	Port int32 `json:"port"`
 }
+
+type _DockerSvcLaunchContainerRequest DockerSvcLaunchContainerRequest
 
 // NewDockerSvcLaunchContainerRequest instantiates a new DockerSvcLaunchContainerRequest object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewDockerSvcLaunchContainerRequest() *DockerSvcLaunchContainerRequest {
+func NewDockerSvcLaunchContainerRequest(image string, port int32) *DockerSvcLaunchContainerRequest {
 	this := DockerSvcLaunchContainerRequest{}
+	this.Image = image
+	this.Port = port
 	return &this
 }
 
@@ -79,36 +85,28 @@ func (o *DockerSvcLaunchContainerRequest) SetHostPort(v int32) {
 	o.HostPort = &v
 }
 
-// GetImage returns the Image field value if set, zero value otherwise.
+// GetImage returns the Image field value
 func (o *DockerSvcLaunchContainerRequest) GetImage() string {
-	if o == nil || IsNil(o.Image) {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.Image
+
+	return o.Image
 }
 
-// GetImageOk returns a tuple with the Image field value if set, nil otherwise
+// GetImageOk returns a tuple with the Image field value
 // and a boolean to check if the value has been set.
 func (o *DockerSvcLaunchContainerRequest) GetImageOk() (*string, bool) {
-	if o == nil || IsNil(o.Image) {
+	if o == nil {
 		return nil, false
 	}
-	return o.Image, true
+	return &o.Image, true
 }
 
-// HasImage returns a boolean if a field has been set.
-func (o *DockerSvcLaunchContainerRequest) HasImage() bool {
-	if o != nil && !IsNil(o.Image) {
-		return true
-	}
-
-	return false
-}
-
-// SetImage gets a reference to the given string and assigns it to the Image field.
+// SetImage sets field value
 func (o *DockerSvcLaunchContainerRequest) SetImage(v string) {
-	o.Image = &v
+	o.Image = v
 }
 
 // GetOptions returns the Options field value if set, zero value otherwise.
@@ -143,36 +141,28 @@ func (o *DockerSvcLaunchContainerRequest) SetOptions(v DockerSvcLaunchContainerO
 	o.Options = &v
 }
 
-// GetPort returns the Port field value if set, zero value otherwise.
+// GetPort returns the Port field value
 func (o *DockerSvcLaunchContainerRequest) GetPort() int32 {
-	if o == nil || IsNil(o.Port) {
+	if o == nil {
 		var ret int32
 		return ret
 	}
-	return *o.Port
+
+	return o.Port
 }
 
-// GetPortOk returns a tuple with the Port field value if set, nil otherwise
+// GetPortOk returns a tuple with the Port field value
 // and a boolean to check if the value has been set.
 func (o *DockerSvcLaunchContainerRequest) GetPortOk() (*int32, bool) {
-	if o == nil || IsNil(o.Port) {
+	if o == nil {
 		return nil, false
 	}
-	return o.Port, true
+	return &o.Port, true
 }
 
-// HasPort returns a boolean if a field has been set.
-func (o *DockerSvcLaunchContainerRequest) HasPort() bool {
-	if o != nil && !IsNil(o.Port) {
-		return true
-	}
-
-	return false
-}
-
-// SetPort gets a reference to the given int32 and assigns it to the Port field.
+// SetPort sets field value
 func (o *DockerSvcLaunchContainerRequest) SetPort(v int32) {
-	o.Port = &v
+	o.Port = v
 }
 
 func (o DockerSvcLaunchContainerRequest) MarshalJSON() ([]byte, error) {
@@ -188,16 +178,50 @@ func (o DockerSvcLaunchContainerRequest) ToMap() (map[string]interface{}, error)
 	if !IsNil(o.HostPort) {
 		toSerialize["hostPort"] = o.HostPort
 	}
-	if !IsNil(o.Image) {
-		toSerialize["image"] = o.Image
-	}
+	toSerialize["image"] = o.Image
 	if !IsNil(o.Options) {
 		toSerialize["options"] = o.Options
 	}
-	if !IsNil(o.Port) {
-		toSerialize["port"] = o.Port
-	}
+	toSerialize["port"] = o.Port
 	return toSerialize, nil
+}
+
+func (o *DockerSvcLaunchContainerRequest) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"image",
+		"port",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varDockerSvcLaunchContainerRequest := _DockerSvcLaunchContainerRequest{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varDockerSvcLaunchContainerRequest)
+
+	if err != nil {
+		return err
+	}
+
+	*o = DockerSvcLaunchContainerRequest(varDockerSvcLaunchContainerRequest)
+
+	return err
 }
 
 type NullableDockerSvcLaunchContainerRequest struct {

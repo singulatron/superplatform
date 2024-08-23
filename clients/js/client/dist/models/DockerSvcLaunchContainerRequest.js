@@ -16,6 +16,10 @@ import { DockerSvcLaunchContainerOptionsFromJSON, DockerSvcLaunchContainerOption
  * Check if a given object implements the DockerSvcLaunchContainerRequest interface.
  */
 export function instanceOfDockerSvcLaunchContainerRequest(value) {
+    if (!('image' in value) || value['image'] === undefined)
+        return false;
+    if (!('port' in value) || value['port'] === undefined)
+        return false;
     return true;
 }
 export function DockerSvcLaunchContainerRequestFromJSON(json) {
@@ -27,9 +31,9 @@ export function DockerSvcLaunchContainerRequestFromJSONTyped(json, ignoreDiscrim
     }
     return {
         'hostPort': json['hostPort'] == null ? undefined : json['hostPort'],
-        'image': json['image'] == null ? undefined : json['image'],
+        'image': json['image'],
         'options': json['options'] == null ? undefined : DockerSvcLaunchContainerOptionsFromJSON(json['options']),
-        'port': json['port'] == null ? undefined : json['port'],
+        'port': json['port'],
     };
 }
 export function DockerSvcLaunchContainerRequestToJSON(value) {

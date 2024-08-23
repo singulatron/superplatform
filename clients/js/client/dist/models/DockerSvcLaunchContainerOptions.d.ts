@@ -28,7 +28,6 @@ export interface DockerSvcLaunchContainerOptions {
     };
     /**
      * Envs are environment variables to set in the container
-     * example: ["VAR1=value1", "VAR2=value2"]
      * @type {Array<string>}
      * @memberof DockerSvcLaunchContainerOptions
      */
