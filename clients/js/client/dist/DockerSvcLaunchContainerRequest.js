@@ -19,6 +19,10 @@ var DockerSvcLaunchContainerOptions = require('./DockerSvcLaunchContainerOptions
  * Check if a given object implements the DockerSvcLaunchContainerRequest interface.
  */
 function instanceOfDockerSvcLaunchContainerRequest(value) {
+    if (!('image' in value) || value['image'] === undefined)
+        return false;
+    if (!('port' in value) || value['port'] === undefined)
+        return false;
     return true;
 }
 function DockerSvcLaunchContainerRequestFromJSON(json) {
@@ -30,9 +34,9 @@ function DockerSvcLaunchContainerRequestFromJSONTyped(json, ignoreDiscriminator)
     }
     return {
         'hostPort': json['hostPort'] == null ? undefined : json['hostPort'],
-        'image': json['image'] == null ? undefined : json['image'],
+        'image': json['image'],
         'options': json['options'] == null ? undefined : DockerSvcLaunchContainerOptions.DockerSvcLaunchContainerOptionsFromJSON(json['options']),
-        'port': json['port'] == null ? undefined : json['port'],
+        'port': json['port'],
     };
 }
 function DockerSvcLaunchContainerRequestToJSON(value) {

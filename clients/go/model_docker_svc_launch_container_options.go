@@ -22,7 +22,7 @@ var _ MappedNullable = &DockerSvcLaunchContainerOptions{}
 type DockerSvcLaunchContainerOptions struct {
 	// Assets maps environment variable names to file URLs. Example: {\"MODEL\": \"https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q2_K.gguf\"} These files are downloaded by the Download Svc and mounted in the container. The environment variable `MODEL` will point to the local file path in the container.
 	Assets *map[string]string `json:"assets,omitempty"`
-	// Envs are environment variables to set in the container example: [\"VAR1=value1\", \"VAR2=value2\"]
+	// Envs are environment variables to set in the container
 	Envs []string `json:"envs,omitempty"`
 	// GPUEnabled specifies if GPU support is enabled
 	GpuEnabled *bool `json:"gpuEnabled,omitempty"`

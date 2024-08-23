@@ -12,21 +12,21 @@
 import { DockerSvcLaunchContainerOptions } from './dockerSvcLaunchContainerOptions';
 export declare class DockerSvcLaunchContainerRequest {
     /**
-    * HostPort is the port on the host machine that will be mapped to the container\'s port example: 8081
+    * HostPort is the port on the host machine that will be mapped to the container\'s port
     */
     'hostPort'?: number;
     /**
     * Image is the Docker image to use for the container
     */
-    'image'?: string;
+    'image': string;
     /**
     * Options provides additional options for launching the container
     */
     'options'?: DockerSvcLaunchContainerOptions;
     /**
-    * Port is the port number that the container will expose example: 8080
+    * Port is the port number that the container will expose
     */
-    'port'?: number;
+    'port': number;
     static discriminator: string | undefined;
     static attributeTypeMap: Array<{
         name: string;

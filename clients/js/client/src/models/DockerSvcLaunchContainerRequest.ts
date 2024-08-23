@@ -28,7 +28,6 @@ import {
 export interface DockerSvcLaunchContainerRequest {
     /**
      * HostPort is the port on the host machine that will be mapped to the container's port
-     * example: 8081
      * @type {number}
      * @memberof DockerSvcLaunchContainerRequest
      */
@@ -38,7 +37,7 @@ export interface DockerSvcLaunchContainerRequest {
      * @type {string}
      * @memberof DockerSvcLaunchContainerRequest
      */
-    image?: string;
+    image: string;
     /**
      * Options provides additional options for launching the container
      * @type {DockerSvcLaunchContainerOptions}
@@ -47,17 +46,18 @@ export interface DockerSvcLaunchContainerRequest {
     options?: DockerSvcLaunchContainerOptions;
     /**
      * Port is the port number that the container will expose
-     * example: 8080
      * @type {number}
      * @memberof DockerSvcLaunchContainerRequest
      */
-    port?: number;
+    port: number;
 }
 
 /**
  * Check if a given object implements the DockerSvcLaunchContainerRequest interface.
  */
 export function instanceOfDockerSvcLaunchContainerRequest(value: object): value is DockerSvcLaunchContainerRequest {
+    if (!('image' in value) || value['image'] === undefined) return false;
+    if (!('port' in value) || value['port'] === undefined) return false;
     return true;
 }
 
@@ -72,9 +72,9 @@ export function DockerSvcLaunchContainerRequestFromJSONTyped(json: any, ignoreDi
     return {
         
         'hostPort': json['hostPort'] == null ? undefined : json['hostPort'],
-        'image': json['image'] == null ? undefined : json['image'],
+        'image': json['image'],
         'options': json['options'] == null ? undefined : DockerSvcLaunchContainerOptionsFromJSON(json['options']),
-        'port': json['port'] == null ? undefined : json['port'],
+        'port': json['port'],
     };
 }
 

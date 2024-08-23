@@ -3826,7 +3826,7 @@ const docTemplate = `{
                     }
                 },
                 "envs": {
-                    "description": "Envs are environment variables to set in the container\nexample: [\"VAR1=value1\", \"VAR2=value2\"]",
+                    "description": "Envs are environment variables to set in the container",
                     "type": "array",
                     "items": {
                         "type": "string"
@@ -3862,9 +3862,13 @@ const docTemplate = `{
         },
         "docker_svc.LaunchContainerRequest": {
             "type": "object",
+            "required": [
+                "image",
+                "port"
+            ],
             "properties": {
                 "hostPort": {
-                    "description": "HostPort is the port on the host machine that will be mapped to the container's port\nexample: 8081",
+                    "description": "HostPort is the port on the host machine that will be mapped to the container's port",
                     "type": "integer",
                     "example": 8081
                 },
@@ -3882,7 +3886,7 @@ const docTemplate = `{
                     ]
                 },
                 "port": {
-                    "description": "Port is the port number that the container will expose\nexample: 8080",
+                    "description": "Port is the port number that the container will expose",
                     "type": "integer",
                     "example": 8080
                 }
