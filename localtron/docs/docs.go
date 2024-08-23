@@ -1189,7 +1189,7 @@ const docTemplate = `{
                 "tags": [
                     "Dynamic Svc"
                 ],
-                "summary": "Query Dynamic Objects",
+                "summary": "Query Objects",
                 "operationId": "query",
                 "parameters": [
                     {
@@ -1311,7 +1311,7 @@ const docTemplate = `{
                 "tags": [
                     "Dynamic Svc"
                 ],
-                "summary": "Update Dynamic Objects",
+                "summary": "Update Objects",
                 "operationId": "updateObjects",
                 "parameters": [
                     {
@@ -4049,7 +4049,7 @@ const docTemplate = `{
                     "additionalProperties": true
                 },
                 "deleters": {
-                    "description": "Deleters is a list of user IDs, organization IDs or role IDs that can delete the object.",
+                    "description": "Deleters is a list of user IDs and role IDs that can delete the object.",
                     "type": "array",
                     "items": {
                         "type": "string"
@@ -4059,7 +4059,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "readers": {
-                    "description": "Readers is a list of user IDs, organization IDs or role IDs that can read the object.",
+                    "description": "Readers is a list of user IDs and role IDs that can read the object.",
                     "type": "array",
                     "items": {
                         "type": "string"
@@ -4072,7 +4072,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "writers": {
-                    "description": "Writers is a list of user IDs, organization IDs or role IDs that can write the object.",
+                    "description": "Writers is a list of user IDs and role IDs that can write the object.",
                     "type": "array",
                     "items": {
                         "type": "string"
@@ -4092,7 +4092,7 @@ const docTemplate = `{
                     "additionalProperties": true
                 },
                 "deleters": {
-                    "description": "Deleters is a list of user IDs, organization IDs or role IDs that can delete the object.",
+                    "description": "Deleters is a list of user IDs and role IDs that can delete the object.",
                     "type": "array",
                     "items": {
                         "type": "string"
@@ -4102,7 +4102,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "readers": {
-                    "description": "Readers is a list of user IDs, organization IDs or role IDs that can read the object.",
+                    "description": "Readers is a list of user IDs and role IDs that can read the object.",
                     "type": "array",
                     "items": {
                         "type": "string"
@@ -4112,7 +4112,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "writers": {
-                    "description": "Writers is a list of user IDs, organization IDs or role IDs that can write the object.",
+                    "description": "Writers is a list of user IDs and role IDs that can write the object.",
                     "type": "array",
                     "items": {
                         "type": "string"
@@ -4123,9 +4123,6 @@ const docTemplate = `{
         "dynamic_svc.QueryRequest": {
             "type": "object",
             "properties": {
-                "public": {
-                    "type": "boolean"
-                },
                 "query": {
                     "$ref": "#/definitions/datastore.Query"
                 },

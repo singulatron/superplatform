@@ -20,7 +20,6 @@ var _ MappedNullable = &DynamicSvcQueryRequest{}
 
 // DynamicSvcQueryRequest struct for DynamicSvcQueryRequest
 type DynamicSvcQueryRequest struct {
-	Public *bool `json:"public,omitempty"`
 	Query *DatastoreQuery `json:"query,omitempty"`
 	Table *string `json:"table,omitempty"`
 }
@@ -40,38 +39,6 @@ func NewDynamicSvcQueryRequest() *DynamicSvcQueryRequest {
 func NewDynamicSvcQueryRequestWithDefaults() *DynamicSvcQueryRequest {
 	this := DynamicSvcQueryRequest{}
 	return &this
-}
-
-// GetPublic returns the Public field value if set, zero value otherwise.
-func (o *DynamicSvcQueryRequest) GetPublic() bool {
-	if o == nil || IsNil(o.Public) {
-		var ret bool
-		return ret
-	}
-	return *o.Public
-}
-
-// GetPublicOk returns a tuple with the Public field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *DynamicSvcQueryRequest) GetPublicOk() (*bool, bool) {
-	if o == nil || IsNil(o.Public) {
-		return nil, false
-	}
-	return o.Public, true
-}
-
-// HasPublic returns a boolean if a field has been set.
-func (o *DynamicSvcQueryRequest) HasPublic() bool {
-	if o != nil && !IsNil(o.Public) {
-		return true
-	}
-
-	return false
-}
-
-// SetPublic gets a reference to the given bool and assigns it to the Public field.
-func (o *DynamicSvcQueryRequest) SetPublic(v bool) {
-	o.Public = &v
 }
 
 // GetQuery returns the Query field value if set, zero value otherwise.
@@ -148,9 +115,6 @@ func (o DynamicSvcQueryRequest) MarshalJSON() ([]byte, error) {
 
 func (o DynamicSvcQueryRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if !IsNil(o.Public) {
-		toSerialize["public"] = o.Public
-	}
 	if !IsNil(o.Query) {
 		toSerialize["query"] = o.Query
 	}

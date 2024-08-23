@@ -458,16 +458,16 @@ definitions:
         additionalProperties: true
         type: object
       deleters:
-        description: Deleters is a list of user IDs, organization IDs or role IDs
-          that can delete the object.
+        description: Deleters is a list of user IDs and role IDs that can delete the
+          object.
         items:
           type: string
         type: array
       id:
         type: string
       readers:
-        description: Readers is a list of user IDs, organization IDs or role IDs that
-          can read the object.
+        description: Readers is a list of user IDs and role IDs that can read the
+          object.
         items:
           type: string
         type: array
@@ -476,8 +476,8 @@ definitions:
       updatedAt:
         type: string
       writers:
-        description: Writers is a list of user IDs, organization IDs or role IDs that
-          can write the object.
+        description: Writers is a list of user IDs and role IDs that can write the
+          object.
         items:
           type: string
         type: array
@@ -491,24 +491,24 @@ definitions:
         additionalProperties: true
         type: object
       deleters:
-        description: Deleters is a list of user IDs, organization IDs or role IDs
-          that can delete the object.
+        description: Deleters is a list of user IDs and role IDs that can delete the
+          object.
         items:
           type: string
         type: array
       id:
         type: string
       readers:
-        description: Readers is a list of user IDs, organization IDs or role IDs that
-          can read the object.
+        description: Readers is a list of user IDs and role IDs that can read the
+          object.
         items:
           type: string
         type: array
       table:
         type: string
       writers:
-        description: Writers is a list of user IDs, organization IDs or role IDs that
-          can write the object.
+        description: Writers is a list of user IDs and role IDs that can write the
+          object.
         items:
           type: string
         type: array
@@ -518,8 +518,6 @@ definitions:
     type: object
   dynamic_svc.QueryRequest:
     properties:
-      public:
-        type: boolean
       query:
         $ref: '#/definitions/datastore.Query'
       table:
@@ -2132,7 +2130,7 @@ paths:
             $ref: '#/definitions/dynamic_svc.ErrorResponse'
       security:
       - BearerAuth: []
-      summary: Query Dynamic Objects
+      summary: Query Objects
       tags:
       - Dynamic Svc
   /dynamic-svc/objects/delete:
@@ -2213,7 +2211,7 @@ paths:
             $ref: '#/definitions/dynamic_svc.ErrorResponse'
       security:
       - BearerAuth: []
-      summary: Update Dynamic Objects
+      summary: Update Objects
       tags:
       - Dynamic Svc
   /firehose-svc/publish:

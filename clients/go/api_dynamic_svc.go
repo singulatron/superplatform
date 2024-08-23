@@ -359,7 +359,7 @@ func (r ApiQueryRequest) Execute() (*DynamicSvcQueryResponse, *http.Response, er
 }
 
 /*
-Query Query Dynamic Objects
+Query Query Objects
 
 Retrieves objects from a specified table based on search criteria.
 Requires authorization and user authentication.
@@ -517,7 +517,7 @@ func (r ApiUpdateObjectsRequest) Execute() (map[string]interface{}, *http.Respon
 }
 
 /*
-UpdateObjects Update Dynamic Objects
+UpdateObjects Update Objects
 
 Updates objects in a specified table based on provided conditions. Requires authorization and user authentication.
 

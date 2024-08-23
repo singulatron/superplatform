@@ -23,13 +23,13 @@ var _ MappedNullable = &DynamicSvcObjectCreateFields{}
 // DynamicSvcObjectCreateFields struct for DynamicSvcObjectCreateFields
 type DynamicSvcObjectCreateFields struct {
 	Data map[string]interface{} `json:"data"`
-	// Deleters is a list of user IDs, organization IDs or role IDs that can delete the object.
+	// Deleters is a list of user IDs and role IDs that can delete the object.
 	Deleters []string `json:"deleters,omitempty"`
 	Id *string `json:"id,omitempty"`
-	// Readers is a list of user IDs, organization IDs or role IDs that can read the object.
+	// Readers is a list of user IDs and role IDs that can read the object.
 	Readers []string `json:"readers,omitempty"`
 	Table string `json:"table"`
-	// Writers is a list of user IDs, organization IDs or role IDs that can write the object.
+	// Writers is a list of user IDs and role IDs that can write the object.
 	Writers []string `json:"writers,omitempty"`
 }
 

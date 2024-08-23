@@ -100,8 +100,8 @@ Class | Method | HTTP request | Description
 *DownloadSvcAPI* | [**Pause**](docs/DownloadSvcAPI.md#pause) | **Put** /download-svc/download/{downloadId}/pause | Pause a Download
 *DynamicSvcAPI* | [**CreateObject**](docs/DynamicSvcAPI.md#createobject) | **Post** /dynamic-svc/object | Create a Generic Object
 *DynamicSvcAPI* | [**DeleteObjects**](docs/DynamicSvcAPI.md#deleteobjects) | **Post** /dynamic-svc/objects/delete | Delete a Generic Object
-*DynamicSvcAPI* | [**Query**](docs/DynamicSvcAPI.md#query) | **Post** /dynamic-svc/objects | Query Dynamic Objects
-*DynamicSvcAPI* | [**UpdateObjects**](docs/DynamicSvcAPI.md#updateobjects) | **Post** /dynamic-svc/objects/update | Update Dynamic Objects
+*DynamicSvcAPI* | [**Query**](docs/DynamicSvcAPI.md#query) | **Post** /dynamic-svc/objects | Query Objects
+*DynamicSvcAPI* | [**UpdateObjects**](docs/DynamicSvcAPI.md#updateobjects) | **Post** /dynamic-svc/objects/update | Update Objects
 *DynamicSvcAPI* | [**UpsertObject**](docs/DynamicSvcAPI.md#upsertobject) | **Put** /dynamic-svc/object/{objectId} | Upsert a Generic Object
 *FirehoseSvcAPI* | [**FirehoseSvcPublishPost**](docs/FirehoseSvcAPI.md#firehosesvcpublishpost) | **Post** /firehose-svc/publish | Publish an Event
 *FirehoseSvcAPI* | [**FirehoseSvcSubscribeGet**](docs/FirehoseSvcAPI.md#firehosesvcsubscribeget) | **Get** /firehose-svc/subscribe | Subscribe to the Event Stream
