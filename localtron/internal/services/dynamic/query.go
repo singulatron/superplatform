@@ -15,7 +15,7 @@ import (
 	dynamictypes "github.com/singulatron/singulatron/localtron/internal/services/dynamic/types"
 )
 
-func (g *DynamicService) find(options dynamictypes.QueryOptions) ([]*dynamictypes.Object, error) {
+func (g *DynamicService) query(readers []string, options dynamictypes.QueryOptions) ([]*dynamictypes.Object, error) {
 	if options.Table == "" {
 		return nil, errors.New("no table name")
 	}
@@ -29,18 +29,9 @@ func (g *DynamicService) find(options dynamictypes.QueryOptions) ([]*dynamictype
 		datastore.Equal(datastore.Field("table"), options.Table),
 	)
 
-	if options.Public {
-		conditions = append(conditions,
-			datastore.Equal(datastore.Field("public"), true),
-		)
-	} else {
-		if options.UserId == "" {
-			return nil, errors.New("no user id when querying non public records")
-		}
-		conditions = append(conditions,
-			datastore.Equal(datastore.Field("userId"), options.UserId),
-		)
-	}
+	conditions = append(conditions,
+		datastore.Equal(datastore.Field("readers"), readers),
+	)
 
 	q := g.store.Query(
 		conditions[0], conditions[1:]...,

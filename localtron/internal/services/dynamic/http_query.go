@@ -14,11 +14,12 @@ import (
 
 	generic "github.com/singulatron/singulatron/localtron/internal/services/dynamic/types"
 	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	sdk "github.com/singulatron/singulatron/sdk/go"
 )
 
 // Query retrieves objects based on provided criteria
 // @ID query
-// @Summary Query Dynamic Objects
+// @Summary Query Objects
 // @Description Retrieves objects from a specified table based on search criteria.
 // @Description Requires authorization and user authentication.
 // @Description
@@ -41,13 +42,14 @@ func (g *DynamicService) Query(
 	w.Header().Set("Content-Type", "application/json")
 
 	rsp := &usertypes.IsAuthorizedResponse{}
+	token, hasToken := sdk.TokenFromRequest(r)
 	err := g.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", generic.PermissionGenericView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(err.Error()))
 		return
 	}
-	if !rsp.Authorized {
+	if !rsp.Authorized || !hasToken {
 		w.WriteHeader(http.StatusUnauthorized)
 		w.Write([]byte(`Unauthorized`))
 		return
@@ -62,11 +64,17 @@ func (g *DynamicService) Query(
 	}
 	defer r.Body.Close()
 
-	objects, err := g.find(generic.QueryOptions{
-		Table:  req.Table,
-		UserId: rsp.User.Id,
-		Public: req.Public,
-		Query:  req.Query,
+	claims, err := sdk.DecodeJWT(token, g.publicKey)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+		return
+	}
+	identifiers := append(claims.RoleIds, rsp.User.Id)
+
+	objects, err := g.query(identifiers, generic.QueryOptions{
+		Table: req.Table,
+		Query: req.Query,
 	})
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)

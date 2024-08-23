@@ -62,21 +62,18 @@ func (g *DynamicService) Upsert(
 	}
 	defer r.Body.Close()
 
-	writers := []string{rsp.User.Id}
 	claims, err := sdk.DecodeJWT(token, g.publicKey)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(err.Error()))
 		return
 	}
-	orgs := sdk.OrganizationSlugsFromRoleIDs(claims.RoleIds)
-	roles := sdk.StaticRoles(claims.RoleIds)
-	writers = append(append(writers, orgs...), roles...)
+	identifiers := append(claims.RoleIds, rsp.User.Id)
 
 	objectId := mux.Vars(r)
 	req.Object.Id = objectId["objectId"]
 
-	err = g.upsert(writers, req)
+	err = g.upsert(identifiers, req)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(err.Error()))

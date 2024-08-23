@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	clients "github.com/singulatron/singulatron/clients/go"
 	"github.com/singulatron/singulatron/localtron/internal/di"
 	dynamictypes "github.com/singulatron/singulatron/localtron/internal/services/dynamic/types"
 	sdk "github.com/singulatron/singulatron/sdk/go"
@@ -40,22 +41,57 @@ func TestCreate(t *testing.T) {
 	err = starterFunc()
 	require.NoError(t, err)
 
-	token, err := sdk.RegisterUser(router, "someuser", "pw123", "Some name")
+	token1, err := sdk.RegisterUser(router, "someuser", "pw123", "Some name")
 	require.NoError(t, err)
-	user1Router := router.SetBearerToken(token)
+	user1Router := router.SetBearerToken(token1)
 
-	token, err = sdk.RegisterUser(router, "someuser2", "pw123", "Some name 2")
+	token2, err := sdk.RegisterUser(router, "someuser2", "pw123", "Some name 2")
 	require.NoError(t, err)
-	user2Router := router.SetBearerToken(token)
+	user2Router := router.SetBearerToken(token2)
+
+	client1 := clients.NewAPIClient(&clients.Configuration{
+		Servers: clients.ServerConfigurations{
+			{
+				URL:         server.URL,
+				Description: "Default server",
+			},
+		},
+		DefaultHeader: map[string]string{
+			"Authorization": "Bearer " + token1,
+		},
+	})
+
+	client2 := clients.NewAPIClient(&clients.Configuration{
+		Servers: clients.ServerConfigurations{
+			{
+				URL:         server.URL,
+				Description: "Default server",
+			},
+		},
+		DefaultHeader: map[string]string{
+			"Authorization": "Bearer " + token2,
+		},
+	})
+
+	tokenReadRsp1, _, err := client1.UserSvcAPI.ReadUserByToken(context.Background()).Body(clients.UserSvcReadUserByTokenRequest{
+		Token: clients.PtrString(token1),
+	}).Execute()
+	require.NoError(t, err)
+
+	tokenReadRsp2, _, err := client2.UserSvcAPI.ReadUserByToken(context.Background()).Body(clients.UserSvcReadUserByTokenRequest{
+		Token: clients.PtrString(token1),
+	}).Execute()
+	require.NoError(t, err)
 
 	uuid1 := uuid.New().String()
 	uuid2 := uuid.New().String()
 
 	obj := &dynamictypes.Object{
 		ObjectCreateFields: dynamictypes.ObjectCreateFields{
-			Id:    uuid1,
-			Table: table1,
-			Data:  map[string]interface{}{"key": "value"},
+			Id:      uuid1,
+			Table:   table1,
+			Readers: []string{*tokenReadRsp1.User.Id},
+			Data:    map[string]interface{}{"key": "value"},
 		},
 		CreatedAt: time.Now().String(),
 	}
@@ -67,8 +103,7 @@ func TestCreate(t *testing.T) {
 
 	t.Run("user 1 can find its own private record", func(t *testing.T) {
 		req := dynamictypes.QueryRequest{
-			Table:  table1,
-			Public: false,
+			Table: table1,
 			Query: &datastore.Query{
 				Conditions: []datastore.Condition{
 					datastore.All(),
@@ -84,9 +119,10 @@ func TestCreate(t *testing.T) {
 
 	obj2 := &dynamictypes.Object{
 		ObjectCreateFields: dynamictypes.ObjectCreateFields{
-			Id:    uuid2,
-			Table: table2,
-			Data:  map[string]interface{}{"key": "value"},
+			Id:      uuid2,
+			Table:   table2,
+			Readers: []string{*tokenReadRsp2.User.Id},
+			Data:    map[string]interface{}{"key": "value"},
 		},
 		CreatedAt: time.Now().String(),
 	}
@@ -96,10 +132,9 @@ func TestCreate(t *testing.T) {
 	}, nil)
 	require.NoError(t, err)
 
-	t.Run("user 2 can find its own private record", func(t *testing.T) {
+	t.Run("query user2 records", func(t *testing.T) {
 		req := dynamictypes.QueryRequest{
-			Table:  table2,
-			Public: false,
+			Table: table2,
 			Query: &datastore.Query{
 				Conditions: []datastore.Condition{
 					datastore.All(),
@@ -112,10 +147,9 @@ func TestCreate(t *testing.T) {
 		require.Contains(t, rsp.Objects[0].Id, uuid2)
 	})
 
-	t.Run("find private for user 1", func(t *testing.T) {
+	t.Run("query user1 records", func(t *testing.T) {
 		req := dynamictypes.QueryRequest{
-			Table:  table1,
-			Public: false,
+			Table: table1,
 			Query: &datastore.Query{Conditions: []datastore.Condition{
 				datastore.Id(uuid1),
 			}},
@@ -125,20 +159,6 @@ func TestCreate(t *testing.T) {
 		require.NoError(t, err)
 		require.Equal(t, 1, len(rsp.Objects))
 		require.Equal(t, rsp.Objects[0].Id, uuid1)
-	})
-
-	t.Run("find public for user 1", func(t *testing.T) {
-		req := dynamictypes.QueryRequest{
-			Table:  table1,
-			Public: true,
-			Query: &datastore.Query{Conditions: []datastore.Condition{
-				datastore.Id(uuid1),
-			}},
-		}
-		rsp := dynamictypes.QueryResponse{}
-		err = user1Router.Post(context.Background(), "dynamic-svc", "/objects", req, &rsp)
-		require.NoError(t, err)
-		require.Equal(t, 0, len(rsp.Objects))
 	})
 
 	t.Run("already exists", func(t *testing.T) {
@@ -152,8 +172,7 @@ func TestCreate(t *testing.T) {
 
 	t.Run("user 1 cannot see record of user 2", func(t *testing.T) {
 		req := dynamictypes.QueryRequest{
-			Table:  table1,
-			Public: false,
+			Table: table1,
 			Query: &datastore.Query{Conditions: []datastore.Condition{
 				datastore.Id(uuid2),
 			}},
@@ -183,8 +202,7 @@ func TestCreate(t *testing.T) {
 
 	t.Run("user 1 can find its own reord", func(t *testing.T) {
 		req := dynamictypes.QueryRequest{
-			Table:  table1,
-			Public: false,
+			Table: table1,
 			Query: &datastore.Query{Conditions: []datastore.Condition{
 				datastore.All(),
 			}},
@@ -212,8 +230,7 @@ func TestCreate(t *testing.T) {
 	// ...item wont be deleted
 	t.Run("user 2 will no see other tables", func(t *testing.T) {
 		req := dynamictypes.QueryRequest{
-			Table:  table1,
-			Public: false,
+			Table: table1,
 			Query: &datastore.Query{Conditions: []datastore.Condition{
 				datastore.All(),
 			}},

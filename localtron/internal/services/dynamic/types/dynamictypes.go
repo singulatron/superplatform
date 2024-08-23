@@ -12,13 +12,13 @@ type ObjectCreateFields struct {
 	Id    string `json:"id"`
 	Table string `json:"table" binding:"required"`
 
-	// Readers is a list of user IDs, organization IDs or role IDs that can read the object.
+	// Readers is a list of user IDs and role IDs that can read the object.
 	Readers []string `json:"readers"`
 
-	// Writers is a list of user IDs, organization IDs or role IDs that can write the object.
+	// Writers is a list of user IDs and role IDs that can write the object.
 	Writers []string `json:"writers"`
 
-	// Deleters is a list of user IDs, organization IDs or role IDs that can delete the object.
+	// Deleters is a list of user IDs and role IDs that can delete the object.
 	Deleters []string `json:"deleters"`
 
 	Data map[string]interface{} `json:"data,omitempty" binding:"required"`
@@ -52,16 +52,13 @@ type Object struct {
 }
 
 type QueryRequest struct {
-	Table  string           `json:"table"`
-	Query  *datastore.Query `json:"query"`
-	Public bool             `json:"public"`
+	Table string           `json:"table"`
+	Query *datastore.Query `json:"query"`
 }
 
 type QueryOptions struct {
-	Table  string
-	Query  *datastore.Query
-	UserId string
-	Public bool
+	Table string
+	Query *datastore.Query
 }
 
 type QueryResponse struct {

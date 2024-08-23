@@ -18,7 +18,7 @@ import (
 
 // Update modifies existing dynamic objects based on given conditions
 // @ID updateObjects
-// @Summary Update Dynamic Objects
+// @Summary Update Objects
 // @Description Updates objects in a specified table based on provided conditions. Requires authorization and user authentication.
 // @Tags Dynamic Svc
 // @Accept json
