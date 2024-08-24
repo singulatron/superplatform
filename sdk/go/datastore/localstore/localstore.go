@@ -17,6 +17,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/flusflas/dipper"
 	"github.com/google/uuid"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
@@ -461,13 +462,13 @@ func (q *QueryBuilder) Delete() error {
 
 func (q *QueryBuilder) match(obj any) bool {
 	for _, cond := range q.conditions {
-		if cond.Equal != nil || cond.Contains != nil || cond.StartsWith != nil {
+		if cond.Equals != nil || cond.Contains != nil || cond.StartsWith != nil {
 			var matchFunc func(subject, test any) bool
 			var selector *datastore.FieldSelector
 			var value any
 
 			switch {
-			case cond.Equal != nil:
+			case cond.Equals != nil:
 				matchFunc = func(subject, test any) bool {
 					subject = toBaseType(subject)
 					test = toBaseType(test)
@@ -477,8 +478,8 @@ func (q *QueryBuilder) match(obj any) bool {
 
 					return reflect.DeepEqual(test, subject)
 				}
-				selector = cond.Equal.Selector
-				value = cond.Equal.Value
+				selector = cond.Equals.Selector
+				value = cond.Equals.Value
 			case cond.Contains != nil:
 				matchFunc = func(subject, test any) bool {
 					testStr, testOk := test.(string)
@@ -519,8 +520,11 @@ func (q *QueryBuilder) match(obj any) bool {
 				if fmt.Sprintf("%v", fieldValue) == "dipper: field not found" {
 					continue
 				}
+
 				condValue := reflect.ValueOf(value)
-				if fieldV := reflect.ValueOf(fieldValue); fieldV.Kind() == reflect.Slice {
+				fieldV := reflect.ValueOf(fieldValue)
+
+				if fieldV.Kind() == reflect.Slice {
 					for i := 0; i < fieldV.Len(); i++ {
 						if matchFunc(fieldV.Index(i).Interface(), condValue.Interface()) {
 							matched = true
@@ -546,7 +550,10 @@ func (q *QueryBuilder) match(obj any) bool {
 			}
 		} else if cond.All != nil {
 			continue
+		} else if cond.Intersects != nil {
+
 		} else {
+			spew.Dump(cond)
 			panic(fmt.Sprintf("unkown condition %v", cond))
 		}
 	}

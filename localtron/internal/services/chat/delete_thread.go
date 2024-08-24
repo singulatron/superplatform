@@ -11,6 +11,6 @@ import "github.com/singulatron/singulatron/sdk/go/datastore"
 
 func (a *ChatService) deleteThread(id string) error {
 	return a.threadsStore.Query(
-		datastore.Equal(datastore.Field("id"), id),
+		datastore.Equals(datastore.Field("id"), id),
 	).Delete()
 }

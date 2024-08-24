@@ -233,14 +233,14 @@ func TestCreatedAt(t *testing.T, store DataStore) {
 
 	res, err := store.Query(
 		All(),
-		Equal(Field("Value"), 101),
+		Equals(Field("Value"), 101),
 	).OrderBy(OrderByField("CreatedAt", false)).Find()
 	require.NoError(t, err)
 	require.Equal(t, 0, len(res))
 
 	res, err = store.Query(
 		All(),
-		Equal(Field("Value"), 10),
+		Equals(Field("Value"), 10),
 	).OrderBy(OrderByField("CreatedAt", false)).Find()
 	require.NoError(t, err)
 	require.Equal(t, 2, len(res))
@@ -248,7 +248,7 @@ func TestCreatedAt(t *testing.T, store DataStore) {
 
 	res, err = store.Query(
 		All(),
-		Equal(Field("Value"), 10),
+		Equals(Field("Value"), 10),
 	).OrderBy(OrderByField("CreatedAt", true)).Find()
 
 	require.NoError(t, err)
@@ -270,14 +270,14 @@ func TestPointerCreatedAt(t *testing.T, store DataStore) {
 
 	res, err := store.Query(
 		All(),
-		Equal(Field("Value"), 101),
+		Equals(Field("Value"), 101),
 	).OrderBy(OrderByField("CreatedAt", false)).Find()
 	require.NoError(t, err)
 	require.Equal(t, 0, len(res))
 
 	res, err = store.Query(
 		All(),
-		Equal(Field("Value"), 10),
+		Equals(Field("Value"), 10),
 	).OrderBy(OrderByField("CreatedAt", false)).Find()
 	require.NoError(t, err)
 	require.Equal(t, 2, len(res))
@@ -285,7 +285,7 @@ func TestPointerCreatedAt(t *testing.T, store DataStore) {
 
 	res, err = store.Query(
 		All(),
-		Equal(Field("Value"), 10),
+		Equals(Field("Value"), 10),
 	).OrderBy(OrderByField("CreatedAt", true)).Find()
 
 	require.NoError(t, err)
@@ -307,7 +307,7 @@ func TestFindOne(t *testing.T, store DataStore) {
 
 	res, found, err := store.Query(
 		All(),
-		Equal(Field("Value"), 20),
+		Equals(Field("Value"), 20),
 	).FindOne()
 	require.Equal(t, true, found)
 	require.NoError(t, err)
@@ -328,7 +328,7 @@ func TestPointerFindOne(t *testing.T, store DataStore) {
 
 	res, found, err := store.Query(
 		All(),
-		Equal(Field("Value"), 20),
+		Equals(Field("Value"), 20),
 	).FindOne()
 	require.Equal(t, true, found)
 	require.NoError(t, err)
@@ -391,11 +391,11 @@ func TestUpdate(t *testing.T, store DataStore) {
 	require.NoError(t, err)
 
 	obj1.Value = 50
-	err = store.Query(Equal(Field("Name"), "AliceCreate")).Update(obj1)
+	err = store.Query(Equals(Field("Name"), "AliceCreate")).Update(obj1)
 	require.NoError(t, err)
 
 	res, err := store.Query(
-		Equal(Field("Value"), 50),
+		Equals(Field("Value"), 50),
 	).Find()
 	require.NoError(t, err)
 	require.Equal(t, 1, len(res))
@@ -410,11 +410,11 @@ func TestPointerUpdate(t *testing.T, store DataStore) {
 
 	obj1.Value = 50
 
-	err = store.Query(Equal(Field("Name"), "AliceCreate")).Update(obj1)
+	err = store.Query(Equals(Field("Name"), "AliceCreate")).Update(obj1)
 	require.NoError(t, err)
 
 	res, err := store.Query(
-		Equal(Field("Value"), 50),
+		Equals(Field("Value"), 50),
 	).Find()
 	require.NoError(t, err)
 	require.Equal(t, 1, len(res))
@@ -422,9 +422,9 @@ func TestPointerUpdate(t *testing.T, store DataStore) {
 }
 
 func TestInClause(t *testing.T, store DataStore) {
-	obj1 := TestObject{Name: "Alice", Value: 10, Age: 25, NamedType: NamedStringOne}
-	obj2 := TestObject{Name: "Bob", Value: 20, Age: 30, NamedType: NamedStringTwo}
-	obj3 := TestObject{Name: "Charlie", Value: 30, Age: 35, NamedType: NamedStringThree}
+	obj1 := TestObject{Name: "Alice", Value: 10, Age: 25, NickNames: []string{"A1", "A2"}, NamedType: NamedStringOne}
+	obj2 := TestObject{Name: "Bob", Value: 20, Age: 30, NickNames: []string{"B1", "B2"}, NamedType: NamedStringTwo}
+	obj3 := TestObject{Name: "Charlie", Value: 30, Age: 35, NickNames: []string{"B1", "B2"}, NamedType: NamedStringThree}
 
 	err := store.Create(obj1)
 	require.NoError(t, err)
@@ -434,48 +434,55 @@ func TestInClause(t *testing.T, store DataStore) {
 	require.NoError(t, err)
 
 	// Test IN clause with string slice
-	results, err := store.Query(Equal(Field("Name"), []string{"Alice", "Bob"})).Find()
+	results, err := store.Query(Equals(Field("Name"), []string{"Alice", "Bob"})).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 2)
 	require.Contains(t, results, obj1)
 	require.Contains(t, results, obj2)
 
 	// Test IN clause with int slice
-	results, err = store.Query(Equal(Field("Value"), []int{10, 30})).Find()
+	results, err = store.Query(Equals(Field("Value"), []int{10, 30})).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 2)
 	require.Contains(t, results, obj1)
 	require.Contains(t, results, obj3)
 
 	// Test IN clause with empty slice (should return no results)
-	results, err = store.Query(Equal(Field("Age"), []int{})).Find()
+	results, err = store.Query(Equals(Field("Age"), []int{})).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 0)
 
 	// Test IN clause with one element slice
-	results, err = store.Query(Equal(Field("Age"), []int{30})).Find()
+	results, err = store.Query(Equals(Field("Age"), []int{30})).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Contains(t, results, obj2)
 
-	results, err = store.Query(Equal(Field("NamedType"), []NamedString{NamedStringTwo})).Find()
+	results, err = store.Query(Equals(Field("NamedType"), []NamedString{NamedStringTwo})).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
+	require.Contains(t, results, obj2)
+
+	// Test IN clause array intersection
+	results, err = store.Query(Intersects(Field("NickNames"), []any{"A1", "B2"})).Find()
+	require.NoError(t, err)
+	require.Len(t, results, 2)
+	require.Contains(t, results, obj1)
 	require.Contains(t, results, obj2)
 
 	// Clean up
-	err = store.Query(Equal(Field("Name"), "Alice")).Delete()
+	err = store.Query(Equals(Field("Name"), "Alice")).Delete()
 	require.NoError(t, err)
-	err = store.Query(Equal(Field("Name"), "Bob")).Delete()
+	err = store.Query(Equals(Field("Name"), "Bob")).Delete()
 	require.NoError(t, err)
-	err = store.Query(Equal(Field("Name"), "Charlie")).Delete()
+	err = store.Query(Equals(Field("Name"), "Charlie")).Delete()
 	require.NoError(t, err)
 }
 
 func TestPointerInClause(t *testing.T, store DataStore) {
-	obj1 := &TestObject{Name: "Alice", Value: 10, Age: 25, NamedType: NamedStringOne}
-	obj2 := &TestObject{Name: "Bob", Value: 20, Age: 30, NamedType: NamedStringTwo}
-	obj3 := &TestObject{Name: "Charlie", Value: 30, Age: 35, NamedType: NamedStringThree}
+	obj1 := &TestObject{Name: "Alice", Value: 10, Age: 25, NickNames: []string{"A1", "A2"}, NamedType: NamedStringOne}
+	obj2 := &TestObject{Name: "Bob", Value: 20, Age: 30, NickNames: []string{"B1", "B2"}, NamedType: NamedStringTwo}
+	obj3 := &TestObject{Name: "Charlie", Value: 30, Age: 35, NickNames: []string{"C1", "C2"}, NamedType: NamedStringThree}
 
 	err := store.Create(obj1)
 	require.NoError(t, err)
@@ -485,41 +492,48 @@ func TestPointerInClause(t *testing.T, store DataStore) {
 	require.NoError(t, err)
 
 	// Test IN clause with string slice
-	results, err := store.Query(Equal(Field("Name"), []string{"Alice", "Bob"})).Find()
+	results, err := store.Query(Equals(Field("Name"), []string{"Alice", "Bob"})).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 2)
 	require.Contains(t, results, obj1)
 	require.Contains(t, results, obj2)
 
 	// Test IN clause with int slice
-	results, err = store.Query(Equal(Field("Value"), []int{10, 30})).Find()
+	results, err = store.Query(Equals(Field("Value"), []int{10, 30})).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 2)
 	require.Contains(t, results, obj1)
 	require.Contains(t, results, obj3)
 
 	// Test IN clause with empty slice (should return no results)
-	results, err = store.Query(Equal(Field("Age"), []int{})).Find()
+	results, err = store.Query(Equals(Field("Age"), []int{})).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 0)
 
 	// Test IN clause with one element slice
-	results, err = store.Query(Equal(Field("Age"), []int{30})).Find()
+	results, err = store.Query(Equals(Field("Age"), []int{30})).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Contains(t, results, obj2)
 
-	results, err = store.Query(Equal(Field("NamedType"), []NamedString{NamedStringTwo})).Find()
+	results, err = store.Query(Equals(Field("NamedType"), []NamedString{NamedStringTwo})).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
+	require.Contains(t, results, obj2)
+
+	// Test IN clause array intersection
+	results, err = store.Query(Equals(Field("NickNames"), []NamedString{"A1", "B2"})).Find()
+	require.NoError(t, err)
+	require.Len(t, results, 2)
+	require.Contains(t, results, obj1)
 	require.Contains(t, results, obj2)
 
 	// Clean up
-	err = store.Query(Equal(Field("Name"), "Alice")).Delete()
+	err = store.Query(Equals(Field("Name"), "Alice")).Delete()
 	require.NoError(t, err)
-	err = store.Query(Equal(Field("Name"), "Bob")).Delete()
+	err = store.Query(Equals(Field("Name"), "Bob")).Delete()
 	require.NoError(t, err)
-	err = store.Query(Equal(Field("Name"), "Charlie")).Delete()
+	err = store.Query(Equals(Field("Name"), "Charlie")).Delete()
 	require.NoError(t, err)
 }
 
@@ -545,27 +559,27 @@ func TestDotNotation(t *testing.T, store DataStore) {
 	require.NoError(t, err)
 
 	// Test IN clause with string slice
-	results, err := store.Query(Equal(Field("Friend.Name"), []string{"AliceFriend", "BobFriend"})).Find()
+	results, err := store.Query(Equals(Field("Friend.Name"), []string{"AliceFriend", "BobFriend"})).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 2)
 	require.Contains(t, results, obj1)
 	require.Contains(t, results, obj2)
 
-	results, err = store.Query(Equal(Field("friendPointer.name"), []string{"AliceFriendP", "BobFriendP"})).Find()
+	results, err = store.Query(Equals(Field("friendPointer.name"), []string{"AliceFriendP", "BobFriendP"})).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 2)
 	require.Contains(t, results, obj1)
 	require.Contains(t, results, obj2)
 
 	// Test IN clause with int slice
-	results, err = store.Query(Equal(Field("Friend.Age"), []int{26, 36})).Find()
+	results, err = store.Query(Equals(Field("Friend.Age"), []int{26, 36})).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 2)
 	require.Contains(t, results, obj1)
 	require.Contains(t, results, obj3)
 
 	// Test IN clause with empty slice (should return no results)
-	results, err = store.Query(Equal(Field("Friend.Age"), []int{})).Find()
+	results, err = store.Query(Equals(Field("Friend.Age"), []int{})).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 0)
 
@@ -585,17 +599,17 @@ func TestDotNotation(t *testing.T, store DataStore) {
 	require.Equal(t, "Alice", results[2].(TestObject).Name)
 
 	// Test IN clause with one element slice
-	results, err = store.Query(Equal(Field("FriendPointer.Age"), []int{32})).Find()
+	results, err = store.Query(Equals(Field("FriendPointer.Age"), []int{32})).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Contains(t, results, obj2)
 
 	// Clean up
-	err = store.Query(Equal(Field("Friend.Name"), "AliceFriend")).Delete()
+	err = store.Query(Equals(Field("Friend.Name"), "AliceFriend")).Delete()
 	require.NoError(t, err)
-	err = store.Query(Equal(Field("Friend.Name"), "BobFriendP")).Delete()
+	err = store.Query(Equals(Field("Friend.Name"), "BobFriendP")).Delete()
 	require.NoError(t, err)
-	err = store.Query(Equal(Field("Friend.Name"), "CharlieFriend")).Delete()
+	err = store.Query(Equals(Field("Friend.Name"), "CharlieFriend")).Delete()
 	require.NoError(t, err)
 }
 
@@ -621,27 +635,27 @@ func TestPointerDotNotation(t *testing.T, store DataStore) {
 	require.NoError(t, err)
 
 	// Test IN clause with string slice
-	results, err := store.Query(Equal(Field("Friend.Name"), []string{"AliceFriend", "BobFriend"})).Find()
+	results, err := store.Query(Equals(Field("Friend.Name"), []string{"AliceFriend", "BobFriend"})).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 2)
 	require.Contains(t, results, obj1)
 	require.Contains(t, results, obj2)
 
-	results, err = store.Query(Equal(Field("friendPointer.name"), []string{"AliceFriendP", "BobFriendP"})).Find()
+	results, err = store.Query(Equals(Field("friendPointer.name"), []string{"AliceFriendP", "BobFriendP"})).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 2)
 	require.Contains(t, results, obj1)
 	require.Contains(t, results, obj2)
 
 	// Test IN clause with int slice
-	results, err = store.Query(Equal(Field("Friend.Age"), []int{26, 36})).Find()
+	results, err = store.Query(Equals(Field("Friend.Age"), []int{26, 36})).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 2)
 	require.Contains(t, results, obj1)
 	require.Contains(t, results, obj3)
 
 	// Test IN clause with empty slice (should return no results)
-	results, err = store.Query(Equal(Field("Friend.Age"), []int{})).Find()
+	results, err = store.Query(Equals(Field("Friend.Age"), []int{})).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 0)
 
@@ -661,17 +675,17 @@ func TestPointerDotNotation(t *testing.T, store DataStore) {
 	require.Equal(t, "Alice", results[2].(*TestObject).Name)
 
 	// Test IN clause with one element slice
-	results, err = store.Query(Equal(Field("FriendPointer.Age"), []int{32})).Find()
+	results, err = store.Query(Equals(Field("FriendPointer.Age"), []int{32})).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Contains(t, results, obj2)
 
 	// Clean up
-	err = store.Query(Equal(Field("Friend.Name"), "AliceFriend")).Delete()
+	err = store.Query(Equals(Field("Friend.Name"), "AliceFriend")).Delete()
 	require.NoError(t, err)
-	err = store.Query(Equal(Field("Friend.Name"), "BobFriendP")).Delete()
+	err = store.Query(Equals(Field("Friend.Name"), "BobFriendP")).Delete()
 	require.NoError(t, err)
-	err = store.Query(Equal(Field("Friend.Name"), "CharlieFriend")).Delete()
+	err = store.Query(Equals(Field("Friend.Name"), "CharlieFriend")).Delete()
 	require.NoError(t, err)
 }
 
@@ -688,21 +702,21 @@ func TestReverseInClause(t *testing.T, store DataStore) {
 	require.NoError(t, err)
 
 	results, err := store.Query(
-		Equal(Field("NickNames"), "A1"),
+		Equals(Field("NickNames"), "A1"),
 	).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Contains(t, results, obj1)
 
 	results, err = store.Query(
-		Equal(Field("NickNames"), "A2"),
+		Equals(Field("NickNames"), "A2"),
 	).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Contains(t, results, obj1)
 
 	results, err = store.Query(
-		Equal(Field("NickNames"), "B1"),
+		Equals(Field("NickNames"), "B1"),
 	).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
@@ -722,21 +736,21 @@ func TestPointerReverseInClause(t *testing.T, store DataStore) {
 	require.NoError(t, err)
 
 	results, err := store.Query(
-		Equal(Field("NickNames"), "A1"),
+		Equals(Field("NickNames"), "A1"),
 	).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Contains(t, results, obj1)
 
 	results, err = store.Query(
-		Equal(Field("NickNames"), "A2"),
+		Equals(Field("NickNames"), "A2"),
 	).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Contains(t, results, obj1)
 
 	results, err = store.Query(
-		Equal(Field("NickNames"), "B1"),
+		Equals(Field("NickNames"), "B1"),
 	).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
@@ -748,7 +762,7 @@ func TestCreateReadUpdateDelete(t *testing.T, store DataStore) {
 	err := store.Create(obj)
 	require.NoError(t, err)
 
-	results, err := store.Query(Equal(Field("Name"), "test")).Find()
+	results, err := store.Query(Equals(Field("Name"), "test")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	readObj := results[0]
@@ -756,22 +770,22 @@ func TestCreateReadUpdateDelete(t *testing.T, store DataStore) {
 	require.Equal(t, obj, readObj)
 
 	obj.Value = 20
-	err = store.Query(Equal(Field("Name"), "test")).UpdateFields(map[string]interface{}{
+	err = store.Query(Equals(Field("Name"), "test")).UpdateFields(map[string]interface{}{
 		"Value": obj.Value,
 	})
 	require.NoError(t, err)
 
-	results, err = store.Query(Equal(Field("Name"), "test")).Find()
+	results, err = store.Query(Equals(Field("Name"), "test")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	readObj = results[0]
 
 	require.Equal(t, obj, readObj)
 
-	err = store.Query(Equal(Field("Name"), "test")).Delete()
+	err = store.Query(Equals(Field("Name"), "test")).Delete()
 	require.NoError(t, err)
 
-	results, err = store.Query(Equal(Field("Name"), "test")).Find()
+	results, err = store.Query(Equals(Field("Name"), "test")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 0)
 }
@@ -781,7 +795,7 @@ func TestPointerCreateReadUpdateDelete(t *testing.T, store DataStore) {
 	err := store.Create(obj)
 	require.NoError(t, err)
 
-	results, err := store.Query(Equal(Field("Name"), "test")).Find()
+	results, err := store.Query(Equals(Field("Name"), "test")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	readObj := results[0]
@@ -789,22 +803,22 @@ func TestPointerCreateReadUpdateDelete(t *testing.T, store DataStore) {
 	require.Equal(t, obj, readObj)
 
 	obj.Value = 20
-	err = store.Query(Equal(Field("Name"), "test")).UpdateFields(map[string]interface{}{
+	err = store.Query(Equals(Field("Name"), "test")).UpdateFields(map[string]interface{}{
 		"Value": obj.Value,
 	})
 	require.NoError(t, err)
 
-	results, err = store.Query(Equal(Field("Name"), "test")).Find()
+	results, err = store.Query(Equals(Field("Name"), "test")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	readObj = results[0]
 
 	require.Equal(t, obj, readObj)
 
-	err = store.Query(Equal(Field("Name"), "test")).Delete()
+	err = store.Query(Equals(Field("Name"), "test")).Delete()
 	require.NoError(t, err)
 
-	results, err = store.Query(Equal(Field("Name"), "test")).Find()
+	results, err = store.Query(Equals(Field("Name"), "test")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 0)
 }
@@ -818,47 +832,47 @@ func TestCreateManyUpdateDelete(t *testing.T, store DataStore) {
 	err := store.CreateMany(objs)
 	require.NoError(t, err)
 
-	results, err := store.Query(Equal(Field("Name"), "test1")).Find()
+	results, err := store.Query(Equals(Field("Name"), "test1")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Equal(t, objs[0], results[0])
 
-	results, err = store.Query(Equal(Field("Name"), "test2")).Find()
+	results, err = store.Query(Equals(Field("Name"), "test2")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Equal(t, objs[1], results[0])
 
-	err = store.Query(Equal(Field("Name"), "test1")).UpdateFields(map[string]interface{}{
+	err = store.Query(Equals(Field("Name"), "test1")).UpdateFields(map[string]interface{}{
 		"Value": 30,
 	})
 	require.NoError(t, err)
 
-	err = store.Query(Equal(Field("Name"), "test2")).UpdateFields(map[string]interface{}{
+	err = store.Query(Equals(Field("Name"), "test2")).UpdateFields(map[string]interface{}{
 		"Value": 40,
 	})
 	require.NoError(t, err)
 
-	results, err = store.Query(Equal(Field("Name"), "test1")).Find()
+	results, err = store.Query(Equals(Field("Name"), "test1")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Equal(t, 30, results[0].(TestObject).Value)
 
-	results, err = store.Query(Equal(Field("Name"), "test2")).Find()
+	results, err = store.Query(Equals(Field("Name"), "test2")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Equal(t, 40, results[0].(TestObject).Value)
 
-	err = store.Query(Equal(Field("Name"), "test1")).Delete()
+	err = store.Query(Equals(Field("Name"), "test1")).Delete()
 	require.NoError(t, err)
 
-	err = store.Query(Equal(Field("Name"), "test2")).Delete()
+	err = store.Query(Equals(Field("Name"), "test2")).Delete()
 	require.NoError(t, err)
 
-	results, err = store.Query(Equal(Field("Name"), "test1")).Find()
+	results, err = store.Query(Equals(Field("Name"), "test1")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 0)
 
-	results, err = store.Query(Equal(Field("Name"), "test2")).Find()
+	results, err = store.Query(Equals(Field("Name"), "test2")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 0)
 }
@@ -872,47 +886,47 @@ func TestPointerCreateManyUpdateDelete(t *testing.T, store DataStore) {
 	err := store.CreateMany(objs)
 	require.NoError(t, err)
 
-	results, err := store.Query(Equal(Field("Name"), "test1")).Find()
+	results, err := store.Query(Equals(Field("Name"), "test1")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Equal(t, objs[0], results[0])
 
-	results, err = store.Query(Equal(Field("Name"), "test2")).Find()
+	results, err = store.Query(Equals(Field("Name"), "test2")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Equal(t, objs[1], results[0])
 
-	err = store.Query(Equal(Field("Name"), "test1")).UpdateFields(map[string]interface{}{
+	err = store.Query(Equals(Field("Name"), "test1")).UpdateFields(map[string]interface{}{
 		"Value": 30,
 	})
 	require.NoError(t, err)
 
-	err = store.Query(Equal(Field("Name"), "test2")).UpdateFields(map[string]interface{}{
+	err = store.Query(Equals(Field("Name"), "test2")).UpdateFields(map[string]interface{}{
 		"Value": 40,
 	})
 	require.NoError(t, err)
 
-	results, err = store.Query(Equal(Field("Name"), "test1")).Find()
+	results, err = store.Query(Equals(Field("Name"), "test1")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Equal(t, 30, results[0].(*TestObject).Value)
 
-	results, err = store.Query(Equal(Field("Name"), "test2")).Find()
+	results, err = store.Query(Equals(Field("Name"), "test2")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Equal(t, 40, results[0].(*TestObject).Value)
 
-	err = store.Query(Equal(Field("Name"), "test1")).Delete()
+	err = store.Query(Equals(Field("Name"), "test1")).Delete()
 	require.NoError(t, err)
 
-	err = store.Query(Equal(Field("Name"), "test2")).Delete()
+	err = store.Query(Equals(Field("Name"), "test2")).Delete()
 	require.NoError(t, err)
 
-	results, err = store.Query(Equal(Field("Name"), "test1")).Find()
+	results, err = store.Query(Equals(Field("Name"), "test1")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 0)
 
-	results, err = store.Query(Equal(Field("Name"), "test2")).Find()
+	results, err = store.Query(Equals(Field("Name"), "test2")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 0)
 }
@@ -927,7 +941,7 @@ func TestQuery(t *testing.T, store DataStore) {
 	err := store.CreateMany(objs)
 	require.NoError(t, err)
 
-	results, err := store.Query(Equal(Field("Value"), 20)).Find()
+	results, err := store.Query(Equals(Field("Value"), 20)).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Equal(t, objs[1], results[0])
@@ -953,24 +967,24 @@ func TestQuery(t *testing.T, store DataStore) {
 	// require.Equal(t, objs[1], results[0])
 	// require.Equal(t, objs[2], results[1])
 
-	count, err := store.Query(Equal(Field("Value"), 10)).Count()
+	count, err := store.Query(Equals(Field("Value"), 10)).Count()
 	require.NoError(t, err)
 	require.Equal(t, int64(1), count)
 
-	err = store.Query(Equal(Field("Value"), 10)).UpdateFields(map[string]interface{}{
+	err = store.Query(Equals(Field("Value"), 10)).UpdateFields(map[string]interface{}{
 		"Value": 100,
 	})
 	require.NoError(t, err)
 
-	results, err = store.Query(Equal(Field("Value"), 100)).Find()
+	results, err = store.Query(Equals(Field("Value"), 100)).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Equal(t, 100, results[0].(TestObject).Value)
 
-	err = store.Query(Equal(Field("Value"), 100)).Delete()
+	err = store.Query(Equals(Field("Value"), 100)).Delete()
 	require.NoError(t, err)
 
-	results, err = store.Query(Equal(Field("Value"), 100)).Find()
+	results, err = store.Query(Equals(Field("Value"), 100)).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 0)
 }
@@ -985,7 +999,7 @@ func TestPointerQuery(t *testing.T, store DataStore) {
 	err := store.CreateMany(objs)
 	require.NoError(t, err)
 
-	results, err := store.Query(Equal(Field("Value"), 20)).Find()
+	results, err := store.Query(Equals(Field("Value"), 20)).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Equal(t, objs[1], results[0])
@@ -1011,24 +1025,24 @@ func TestPointerQuery(t *testing.T, store DataStore) {
 	// require.Equal(t, objs[1], results[0])
 	// require.Equal(t, objs[2], results[1])
 
-	count, err := store.Query(Equal(Field("Value"), 10)).Count()
+	count, err := store.Query(Equals(Field("Value"), 10)).Count()
 	require.NoError(t, err)
 	require.Equal(t, int64(1), count)
 
-	err = store.Query(Equal(Field("Value"), 10)).UpdateFields(map[string]interface{}{
+	err = store.Query(Equals(Field("Value"), 10)).UpdateFields(map[string]interface{}{
 		"Value": 100,
 	})
 	require.NoError(t, err)
 
-	results, err = store.Query(Equal(Field("Value"), 100)).Find()
+	results, err = store.Query(Equals(Field("Value"), 100)).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Equal(t, 100, results[0].(*TestObject).Value)
 
-	err = store.Query(Equal(Field("Value"), 100)).Delete()
+	err = store.Query(Equals(Field("Value"), 100)).Delete()
 	require.NoError(t, err)
 
-	results, err = store.Query(Equal(Field("Value"), 100)).Find()
+	results, err = store.Query(Equals(Field("Value"), 100)).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 0)
 }
@@ -1041,14 +1055,14 @@ func TestTransactions(t *testing.T, store DataStore) {
 	err = tx.Create(obj)
 	require.NoError(t, err)
 
-	results, err := store.Query(Equal(Field("Name"), "test")).Find()
+	results, err := store.Query(Equals(Field("Name"), "test")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 0)
 
 	err = tx.Commit()
 	require.NoError(t, err)
 
-	results, err = store.Query(Equal(Field("Name"), "test")).Find()
+	results, err = store.Query(Equals(Field("Name"), "test")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	readObj := results[0]
@@ -1063,14 +1077,14 @@ func TestPointerTransactions(t *testing.T, store DataStore) {
 	err = tx.Create(obj)
 	require.NoError(t, err)
 
-	results, err := store.Query(Equal(Field("Name"), "test")).Find()
+	results, err := store.Query(Equals(Field("Name"), "test")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 0)
 
 	err = tx.Commit()
 	require.NoError(t, err)
 
-	results, err = store.Query(Equal(Field("Name"), "test")).Find()
+	results, err = store.Query(Equals(Field("Name"), "test")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	readObj := results[0]

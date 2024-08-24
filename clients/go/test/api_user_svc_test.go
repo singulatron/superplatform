@@ -11,10 +11,11 @@ package openapi
 
 import (
 	"context"
+	"testing"
+
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"testing"
-	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func Test_openapi_UserSvcAPIService(t *testing.T) {
@@ -24,7 +25,7 @@ func Test_openapi_UserSvcAPIService(t *testing.T) {
 
 	t.Run("Test UserSvcAPIService AddPermissionToRole", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var roleId string
 		var permissionId string
@@ -33,13 +34,13 @@ func Test_openapi_UserSvcAPIService(t *testing.T) {
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
+		assert.Equals(t, 200, httpRes.StatusCode)
 
 	})
 
 	t.Run("Test UserSvcAPIService AddUserToOrganization", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var organizationId string
 
@@ -47,73 +48,73 @@ func Test_openapi_UserSvcAPIService(t *testing.T) {
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
+		assert.Equals(t, 200, httpRes.StatusCode)
 
 	})
 
 	t.Run("Test UserSvcAPIService ChangePassword", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.UserSvcAPI.ChangePassword(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
+		assert.Equals(t, 200, httpRes.StatusCode)
 
 	})
 
 	t.Run("Test UserSvcAPIService ChangePasswordAdmin", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.UserSvcAPI.ChangePasswordAdmin(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
+		assert.Equals(t, 200, httpRes.StatusCode)
 
 	})
 
 	t.Run("Test UserSvcAPIService CreateOrganization", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.UserSvcAPI.CreateOrganization(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
+		assert.Equals(t, 200, httpRes.StatusCode)
 
 	})
 
 	t.Run("Test UserSvcAPIService CreateRole", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.UserSvcAPI.CreateRole(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
+		assert.Equals(t, 200, httpRes.StatusCode)
 
 	})
 
 	t.Run("Test UserSvcAPIService CreateUser", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.UserSvcAPI.CreateUser(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
+		assert.Equals(t, 200, httpRes.StatusCode)
 
 	})
 
 	t.Run("Test UserSvcAPIService DeleteRole", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var roleId string
 
@@ -121,13 +122,13 @@ func Test_openapi_UserSvcAPIService(t *testing.T) {
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
+		assert.Equals(t, 200, httpRes.StatusCode)
 
 	})
 
 	t.Run("Test UserSvcAPIService DeleteUser", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var userId string
 
@@ -135,13 +136,13 @@ func Test_openapi_UserSvcAPIService(t *testing.T) {
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
+		assert.Equals(t, 200, httpRes.StatusCode)
 
 	})
 
 	t.Run("Test UserSvcAPIService GetPermissionsByRole", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var roleId string
 
@@ -149,49 +150,49 @@ func Test_openapi_UserSvcAPIService(t *testing.T) {
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
+		assert.Equals(t, 200, httpRes.StatusCode)
 
 	})
 
 	t.Run("Test UserSvcAPIService GetPublicKey", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.UserSvcAPI.GetPublicKey(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
+		assert.Equals(t, 200, httpRes.StatusCode)
 
 	})
 
 	t.Run("Test UserSvcAPIService GetRoles", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.UserSvcAPI.GetRoles(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
+		assert.Equals(t, 200, httpRes.StatusCode)
 
 	})
 
 	t.Run("Test UserSvcAPIService GetUsers", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.UserSvcAPI.GetUsers(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
+		assert.Equals(t, 200, httpRes.StatusCode)
 
 	})
 
 	t.Run("Test UserSvcAPIService IsAuthorized", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var permissionId string
 
@@ -199,49 +200,49 @@ func Test_openapi_UserSvcAPIService(t *testing.T) {
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
+		assert.Equals(t, 200, httpRes.StatusCode)
 
 	})
 
 	t.Run("Test UserSvcAPIService Login", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.UserSvcAPI.Login(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
+		assert.Equals(t, 200, httpRes.StatusCode)
 
 	})
 
 	t.Run("Test UserSvcAPIService ReadUserByToken", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.UserSvcAPI.ReadUserByToken(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
+		assert.Equals(t, 200, httpRes.StatusCode)
 
 	})
 
 	t.Run("Test UserSvcAPIService Register", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.UserSvcAPI.Register(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
+		assert.Equals(t, 200, httpRes.StatusCode)
 
 	})
 
 	t.Run("Test UserSvcAPIService RemoveUserFromOrganization", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var organizationId string
 		var userId string
@@ -250,13 +251,13 @@ func Test_openapi_UserSvcAPIService(t *testing.T) {
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
+		assert.Equals(t, 200, httpRes.StatusCode)
 
 	})
 
 	t.Run("Test UserSvcAPIService SaveUserProfile", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var userId string
 
@@ -264,13 +265,13 @@ func Test_openapi_UserSvcAPIService(t *testing.T) {
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
+		assert.Equals(t, 200, httpRes.StatusCode)
 
 	})
 
 	t.Run("Test UserSvcAPIService SetRolePermission", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var roleId string
 
@@ -278,13 +279,13 @@ func Test_openapi_UserSvcAPIService(t *testing.T) {
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
+		assert.Equals(t, 200, httpRes.StatusCode)
 
 	})
 
 	t.Run("Test UserSvcAPIService UpsertPermission", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var permissionId string
 
@@ -292,7 +293,7 @@ func Test_openapi_UserSvcAPIService(t *testing.T) {
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
+		assert.Equals(t, 200, httpRes.StatusCode)
 
 	})
 

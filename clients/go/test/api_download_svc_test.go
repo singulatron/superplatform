@@ -11,10 +11,11 @@ package openapi
 
 import (
 	"context"
+	"testing"
+
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"testing"
-	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func Test_openapi_DownloadSvcAPIService(t *testing.T) {
@@ -24,19 +25,19 @@ func Test_openapi_DownloadSvcAPIService(t *testing.T) {
 
 	t.Run("Test DownloadSvcAPIService Download", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.DownloadSvcAPI.Download(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
+		assert.Equals(t, 200, httpRes.StatusCode)
 
 	})
 
 	t.Run("Test DownloadSvcAPIService GetDownload", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var downloadId string
 
@@ -44,25 +45,25 @@ func Test_openapi_DownloadSvcAPIService(t *testing.T) {
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
+		assert.Equals(t, 200, httpRes.StatusCode)
 
 	})
 
 	t.Run("Test DownloadSvcAPIService ListDownloads", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.DownloadSvcAPI.ListDownloads(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
+		assert.Equals(t, 200, httpRes.StatusCode)
 
 	})
 
 	t.Run("Test DownloadSvcAPIService Pause", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var downloadId string
 
@@ -70,7 +71,7 @@ func Test_openapi_DownloadSvcAPIService(t *testing.T) {
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
+		assert.Equals(t, 200, httpRes.StatusCode)
 
 	})
 

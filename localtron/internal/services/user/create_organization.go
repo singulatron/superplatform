@@ -19,7 +19,7 @@ import (
 
 func (s *UserService) createOrganization(userId, orgId, name, slug string) error {
 	_, exists, err := s.contactsStore.Query(
-		datastore.Equal(datastore.Field("slug"), slug),
+		datastore.Equals(datastore.Field("slug"), slug),
 	).FindOne()
 	if err != nil {
 		return err

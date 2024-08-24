@@ -11,10 +11,11 @@ package openapi
 
 import (
 	"context"
+	"testing"
+
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"testing"
-	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func Test_openapi_ChatSvcAPIService(t *testing.T) {
@@ -24,7 +25,7 @@ func Test_openapi_ChatSvcAPIService(t *testing.T) {
 
 	t.Run("Test ChatSvcAPIService AddMessage", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var threadId string
 
@@ -32,25 +33,25 @@ func Test_openapi_ChatSvcAPIService(t *testing.T) {
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
+		assert.Equals(t, 200, httpRes.StatusCode)
 
 	})
 
 	t.Run("Test ChatSvcAPIService AddThread", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.ChatSvcAPI.AddThread(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
+		assert.Equals(t, 200, httpRes.StatusCode)
 
 	})
 
 	t.Run("Test ChatSvcAPIService DeleteMessage", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var messageId string
 
@@ -58,13 +59,13 @@ func Test_openapi_ChatSvcAPIService(t *testing.T) {
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
+		assert.Equals(t, 200, httpRes.StatusCode)
 
 	})
 
 	t.Run("Test ChatSvcAPIService DeleteThread", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var threadId string
 
@@ -72,13 +73,13 @@ func Test_openapi_ChatSvcAPIService(t *testing.T) {
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
+		assert.Equals(t, 200, httpRes.StatusCode)
 
 	})
 
 	t.Run("Test ChatSvcAPIService GetMessages", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var threadId string
 
@@ -86,13 +87,13 @@ func Test_openapi_ChatSvcAPIService(t *testing.T) {
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
+		assert.Equals(t, 200, httpRes.StatusCode)
 
 	})
 
 	t.Run("Test ChatSvcAPIService GetThread", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var threadId string
 
@@ -100,25 +101,25 @@ func Test_openapi_ChatSvcAPIService(t *testing.T) {
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
+		assert.Equals(t, 200, httpRes.StatusCode)
 
 	})
 
 	t.Run("Test ChatSvcAPIService GetThreads", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.ChatSvcAPI.GetThreads(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
+		assert.Equals(t, 200, httpRes.StatusCode)
 
 	})
 
 	t.Run("Test ChatSvcAPIService UpdateThread", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var threadId string
 
@@ -126,7 +127,7 @@ func Test_openapi_ChatSvcAPIService(t *testing.T) {
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
+		assert.Equals(t, 200, httpRes.StatusCode)
 
 	})
 

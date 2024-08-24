@@ -67,7 +67,7 @@ func (p *PromptService) GetPrompts(
 	}
 
 	if !options.Query.HasFieldCondition("status") {
-		options.Query.Conditions = append(options.Query.Conditions, datastore.Equal(datastore.Field("status"), []prompt.PromptStatus{
+		options.Query.Conditions = append(options.Query.Conditions, datastore.Equals(datastore.Field("status"), []prompt.PromptStatus{
 			prompt.PromptStatusRunning,
 			prompt.PromptStatusScheduled,
 		}))

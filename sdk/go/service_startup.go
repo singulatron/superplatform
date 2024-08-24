@@ -5,10 +5,11 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
-	client "github.com/singulatron/singulatron/clients/go"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
 	"github.com/singulatron/singulatron/sdk/go/logger"
 	"github.com/singulatron/singulatron/sdk/go/router"
+
+	client "github.com/singulatron/singulatron/clients/go"
 )
 
 // RegisterService registers a service or logs in with credentials loaded
@@ -90,4 +91,23 @@ func RegisterUser(router *router.Router, slug, password, username string) (strin
 	}
 
 	return *loginRsp.Token.Token, nil
+}
+
+func RegisteredUserClient(router *router.Router, slug, password, username string) (*client.APIClient, error) {
+	token, err := RegisterUser(router, slug, password, username)
+	if err != nil {
+		return nil, err
+	}
+
+	return client.NewAPIClient(&client.Configuration{
+		Servers: client.ServerConfigurations{
+			{
+				URL:         router.Address(),
+				Description: "Default server",
+			},
+		},
+		DefaultHeader: map[string]string{
+			"Authorization": "Bearer " + token,
+		},
+	}), nil
 }

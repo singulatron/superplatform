@@ -24,8 +24,8 @@ type DatastoreCondition struct {
 	All map[string]interface{} `json:"all,omitempty"`
 	// Contains condition returns all objects where the field(s) values contain a particular string.
 	Contains *DatastoreContainsCondition `json:"contains,omitempty"`
-	// Equal condition returns objects where value of a field equals (=) to the specified value in the query.
-	Equal *DatastoreEqualCondition `json:"equal,omitempty"`
+	// Equals condition returns objects where value of a field equals (=) to the specified value in the query.
+	Equals *DatastoreEqualsCondition `json:"equal,omitempty"`
 	// StartsWith condition returns all objects where the field(s) values start with a particular string.
 	StartsWith *DatastoreStartsWithCondition `json:"startsWith,omitempty"`
 }
@@ -112,7 +112,7 @@ func (o *DatastoreCondition) SetContains(v DatastoreContainsCondition) {
 }
 
 // GetEqual returns the Equal field value if set, zero value otherwise.
-func (o *DatastoreCondition) GetEqual() DatastoreEqualCondition {
+func (o *DatastoreCondition) GetEquals() DatastoreEqualCondition {
 	if o == nil || IsNil(o.Equal) {
 		var ret DatastoreEqualCondition
 		return ret
@@ -130,7 +130,7 @@ func (o *DatastoreCondition) GetEqualOk() (*DatastoreEqualCondition, bool) {
 }
 
 // HasEqual returns a boolean if a field has been set.
-func (o *DatastoreCondition) HasEqual() bool {
+func (o *DatastoreCondition) HasEquals() bool {
 	if o != nil && !IsNil(o.Equal) {
 		return true
 	}
@@ -139,7 +139,7 @@ func (o *DatastoreCondition) HasEqual() bool {
 }
 
 // SetEqual gets a reference to the given DatastoreEqualCondition and assigns it to the Equal field.
-func (o *DatastoreCondition) SetEqual(v DatastoreEqualCondition) {
+func (o *DatastoreCondition) SetEquals(v DatastoreEqualCondition) {
 	o.Equal = &v
 }
 

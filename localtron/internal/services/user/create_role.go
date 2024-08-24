@@ -17,7 +17,7 @@ import (
 
 func (s *UserService) createRole(ownerId, name, description string, permissionIds []string) (*usertypes.Role, error) {
 	permissions, err := s.permissionsStore.Query(
-		datastore.Equal(datastore.Field("id"), permissionIds),
+		datastore.Equals(datastore.Field("id"), permissionIds),
 	).Find()
 	if err != nil {
 		return nil, err

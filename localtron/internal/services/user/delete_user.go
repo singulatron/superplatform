@@ -37,7 +37,7 @@ func (s *UserService) deleteUser(userId string) error {
 
 	if isAdminUser {
 		adminUsers, err := s.userRoleLinksStore.Query(
-			datastore.Equal(datastore.Field("roleId"), usertypes.RoleAdmin.Id),
+			datastore.Equals(datastore.Field("roleId"), usertypes.RoleAdmin.Id),
 		).Find()
 		if err != nil {
 			return err

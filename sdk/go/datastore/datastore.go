@@ -77,21 +77,24 @@ type FieldSelector struct {
 }
 
 type Condition struct {
-	// Equal condition returns objects where value of a field equals (=) to the specified value in the query.
-	Equal *EqualCondition `json:"equal,omitempty"`
+	// Equals condition returns objects where value of a field equals (=) to the specified value in the query.
+	Equals *EqualsCondition `json:"equal,omitempty"`
+
+	// Contains condition returns all objects where the field(s) values contain a particular string or slice element.
+	Contains *ContainsCondition `json:"contains,omitempty"`
+
+	// Intersects condition returns objects where the slice value of a field intersects with the slice value in the query.
+	Intersects *IntersectsCondition `json:"intersects,omitempty"`
 
 	// All condition returns all objects.
 	All *AllCondition `json:"all,omitempty"`
 
 	// StartsWith condition returns all objects where the field(s) values start with a particular string.
 	StartsWith *StartsWithCondition `json:"startsWith,omitempty"`
-
-	// Contains condition returns all objects where the field(s) values contain a particular string.
-	Contains *ContainsCondition `json:"contains,omitempty"`
 }
 
 func (c Condition) FieldIs(fieldName string) bool {
-	if c.Equal != nil && c.Equal.Selector != nil && c.Equal.Selector.Field == fieldName {
+	if c.Equals != nil && c.Equals.Selector != nil && c.Equals.Selector.Field == fieldName {
 		return true
 	}
 	if c.StartsWith != nil && c.StartsWith.Selector != nil && c.StartsWith.Selector.Field == fieldName {
@@ -104,7 +107,7 @@ func (c Condition) FieldIs(fieldName string) bool {
 	return false
 }
 
-type EqualCondition struct {
+type EqualsCondition struct {
 	// Selector selects one, more or all fields
 	Selector *FieldSelector `json:"selector,omitempty"`
 	Value    any            `json:"value,omitempty"`
@@ -120,6 +123,11 @@ type ContainsCondition struct {
 	// Selector selects one, more or all fields
 	Selector *FieldSelector `json:"selector,omitempty"`
 	Value    any            `json:"value,omitempty"`
+}
+
+type IntersectsCondition struct {
+	Selector *FieldSelector `json:"selector,omitempty"`
+	Values   []any          `json:"values,omitempty"`
 }
 
 // Query as a type is not used in the DataStore interface but mostly to accept
@@ -184,11 +192,20 @@ func OrderByField(field string, desc bool) OrderBy {
 type AllCondition struct {
 }
 
-func Equal(selector *FieldSelector, value any) Condition {
+func Equals(selector *FieldSelector, value any) Condition {
 	return Condition{
-		Equal: &EqualCondition{
+		Equals: &EqualsCondition{
 			Selector: selector,
 			Value:    value,
+		},
+	}
+}
+
+func Intersects(selector *FieldSelector, values []any) Condition {
+	return Condition{
+		Intersects: &IntersectsCondition{
+			Selector: selector,
+			Values:   values,
 		},
 	}
 }
@@ -219,7 +236,7 @@ func All() Condition {
 
 func Id(id any) Condition {
 	return Condition{
-		Equal: &EqualCondition{
+		Equals: &EqualsCondition{
 			Selector: Field("id"),
 			Value:    id,
 		},

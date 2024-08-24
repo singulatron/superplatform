@@ -11,10 +11,11 @@ package openapi
 
 import (
 	"context"
+	"testing"
+
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"testing"
-	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func Test_openapi_DockerSvcAPIService(t *testing.T) {
@@ -24,7 +25,7 @@ func Test_openapi_DockerSvcAPIService(t *testing.T) {
 
 	t.Run("Test DockerSvcAPIService GetContainerSummary", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var hash string
 		var numberOfLines int32
@@ -33,37 +34,37 @@ func Test_openapi_DockerSvcAPIService(t *testing.T) {
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
+		assert.Equals(t, 200, httpRes.StatusCode)
 
 	})
 
 	t.Run("Test DockerSvcAPIService GetHost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.DockerSvcAPI.GetHost(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
+		assert.Equals(t, 200, httpRes.StatusCode)
 
 	})
 
 	t.Run("Test DockerSvcAPIService GetInfo", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.DockerSvcAPI.GetInfo(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
+		assert.Equals(t, 200, httpRes.StatusCode)
 
 	})
 
 	t.Run("Test DockerSvcAPIService IsRunning", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var hash string
 
@@ -71,19 +72,19 @@ func Test_openapi_DockerSvcAPIService(t *testing.T) {
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
+		assert.Equals(t, 200, httpRes.StatusCode)
 
 	})
 
 	t.Run("Test DockerSvcAPIService LaunchContainer", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.DockerSvcAPI.LaunchContainer(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
+		assert.Equals(t, 200, httpRes.StatusCode)
 
 	})
 

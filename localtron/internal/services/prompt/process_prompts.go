@@ -65,7 +65,7 @@ func (p *PromptService) processNextPrompt() error {
 	defer p.runMutex.Unlock()
 
 	runningPrompts, err := p.promptsStore.Query(
-		datastore.Equal(datastore.Field("status"), prompttypes.PromptStatusRunning),
+		datastore.Equals(datastore.Field("status"), prompttypes.PromptStatusRunning),
 	).Find()
 	if err != nil {
 		return err

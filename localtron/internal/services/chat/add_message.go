@@ -33,7 +33,7 @@ func (a *ChatService) addMessage(chatMessage *chattypes.Message) error {
 	}
 
 	threads, err := a.threadsStore.Query(
-		datastore.Equal(datastore.Field("id"), chatMessage.ThreadId),
+		datastore.Equals(datastore.Field("id"), chatMessage.ThreadId),
 	).Find()
 	if err != nil {
 		return err
@@ -61,6 +61,6 @@ func (a *ChatService) addMessage(chatMessage *chattypes.Message) error {
 	}
 
 	return a.messagesStore.Query(
-		datastore.Equal(datastore.Field("id"), chatMessage.Id),
+		datastore.Equals(datastore.Field("id"), chatMessage.Id),
 	).Upsert(chatMessage)
 }

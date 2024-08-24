@@ -109,6 +109,7 @@ func TestCreate(t *testing.T) {
 					datastore.All(),
 				},
 			},
+			Readers: []string{*tokenReadRsp1.User.Id},
 		}
 		rsp := dynamictypes.QueryResponse{}
 		err = user1Router.Post(context.Background(), "dynamic-svc", "/objects", req, &rsp)

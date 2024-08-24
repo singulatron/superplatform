@@ -4,6 +4,8 @@ import (
 	"github.com/singulatron/singulatron/sdk/go/datastore"
 )
 
+const AnyIdentifier string = "any"
+
 type ErrorResponse struct {
 	Error string `json:"error"`
 }
@@ -52,8 +54,9 @@ type Object struct {
 }
 
 type QueryRequest struct {
-	Table string           `json:"table"`
-	Query *datastore.Query `json:"query"`
+	Table   string           `json:"table"`
+	Query   *datastore.Query `json:"query"`
+	Readers []string         `json:"readers,omitempty"`
 }
 
 type QueryOptions struct {

@@ -29,7 +29,7 @@ func (s *UserService) addRoleToUser(userId string, roleId string) error {
 	user := userI.(*usertypes.User)
 
 	roleLinks, err := s.userRoleLinksStore.Query(
-		datastore.Equal(datastore.Field("userId"), userId),
+		datastore.Equals(datastore.Field("userId"), userId),
 	).Find()
 	if err != nil {
 		return err
@@ -66,7 +66,7 @@ func (s *UserService) removeRoleFromUser(userId string, roleId string) error {
 	user := userI.(*usertypes.User)
 
 	roleLinks, err := s.userRoleLinksStore.Query(
-		datastore.Equal(datastore.Field("userId"), userId),
+		datastore.Equals(datastore.Field("userId"), userId),
 	).Find()
 	if err != nil {
 		return err

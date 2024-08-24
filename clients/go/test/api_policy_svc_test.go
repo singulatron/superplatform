@@ -11,10 +11,11 @@ package openapi
 
 import (
 	"context"
+	"testing"
+
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"testing"
-	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func Test_openapi_PolicySvcAPIService(t *testing.T) {
@@ -24,19 +25,19 @@ func Test_openapi_PolicySvcAPIService(t *testing.T) {
 
 	t.Run("Test PolicySvcAPIService Check", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.PolicySvcAPI.Check(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
+		assert.Equals(t, 200, httpRes.StatusCode)
 
 	})
 
 	t.Run("Test PolicySvcAPIService UpsertInstance", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var instanceId string
 
@@ -44,7 +45,7 @@ func Test_openapi_PolicySvcAPIService(t *testing.T) {
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
+		assert.Equals(t, 200, httpRes.StatusCode)
 
 	})
 

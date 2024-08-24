@@ -31,7 +31,7 @@ func (s *UserService) createUser(user *usertypes.User, password string, roleIds 
 	}
 
 	_, contactExists, err := s.contactsStore.Query(
-		datastore.Equal(datastore.Field("id"), user.Contacts[0]),
+		datastore.Equals(datastore.Field("id"), user.Contacts[0]),
 	).FindOne()
 	if err != nil {
 		return err
@@ -47,7 +47,7 @@ func (s *UserService) createUser(user *usertypes.User, password string, roleIds 
 	}
 
 	roles, err := s.rolesStore.Query(
-		datastore.Equal(datastore.Field("id"), roleIds),
+		datastore.Equals(datastore.Field("id"), roleIds),
 	).Find()
 	if err != nil {
 		return err

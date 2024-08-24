@@ -17,7 +17,7 @@ import (
 
 func (s *UserService) RemoveRole(userId string, roleId string) error {
 	query := s.usersStore.Query(
-		datastore.Equal(datastore.Field("id"), userId),
+		datastore.Equals(datastore.Field("id"), userId),
 	)
 	userI, found, err := query.FindOne()
 	if err != nil {

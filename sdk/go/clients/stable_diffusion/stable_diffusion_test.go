@@ -47,6 +47,6 @@ func TestResponseUnmarshal(t *testing.T) {
 	err = json.Unmarshal([]byte(exampleResponse), &rsp)
 	assert.NoError(t, err)
 
-	assert.Equal(t, 2, len(rsp.Data), rsp.Data)
-	assert.Equal(t, "/tmp/tmpj74v2rly/tmpr1li4qkz.png", rsp.Data[0].FileData[0].Name)
+	assert.Equals(t, 2, len(rsp.Data), rsp.Data)
+	assert.Equals(t, "/tmp/tmpj74v2rly/tmpr1li4qkz.png", rsp.Data[0].FileData[0].Name)
 }

@@ -12,7 +12,9 @@ import (
 	"fmt"
 	"net/http"
 
-	generic "github.com/singulatron/singulatron/localtron/internal/services/dynamic/types"
+	"github.com/samber/lo"
+
+	dynamic "github.com/singulatron/singulatron/localtron/internal/services/dynamic/types"
 	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
 	sdk "github.com/singulatron/singulatron/sdk/go"
 )
@@ -28,11 +30,11 @@ import (
 // @Tags Dynamic Svc
 // @Accept json
 // @Produce json
-// @Param body body generic.QueryRequest false "Query Request"
-// @Success 200 {object} generic.QueryResponse "Successful retrieval of objects"
-// @Failure 400 {object} generic.ErrorResponse "Invalid JSON"
-// @Failure 401 {object} generic.ErrorResponse "Unauthorized"
-// @Failure 500 {object} generic.ErrorResponse "Internal Server Error"
+// @Param body body dynamic.QueryRequest false "Query Request"
+// @Success 200 {object} dynamic.QueryResponse "Successful retrieval of objects"
+// @Failure 400 {object} dynamic.ErrorResponse "Invalid JSON"
+// @Failure 401 {object} dynamic.ErrorResponse "Unauthorized"
+// @Failure 500 {object} dynamic.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
 // @Router /dynamic-svc/objects [post]
 func (g *DynamicService) Query(
@@ -43,7 +45,7 @@ func (g *DynamicService) Query(
 
 	rsp := &usertypes.IsAuthorizedResponse{}
 	token, hasToken := sdk.TokenFromRequest(r)
-	err := g.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", generic.PermissionGenericView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	err := g.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", dynamic.PermissionGenericView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(err.Error()))
@@ -55,7 +57,7 @@ func (g *DynamicService) Query(
 		return
 	}
 
-	req := &generic.QueryRequest{}
+	req := &dynamic.QueryRequest{}
 	err = json.NewDecoder(r.Body).Decode(req)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -70,9 +72,10 @@ func (g *DynamicService) Query(
 		w.Write([]byte(err.Error()))
 		return
 	}
-	identifiers := append(claims.RoleIds, rsp.User.Id)
+	identifiers := append(claims.RoleIds, []string{rsp.User.Id, dynamic.AnyIdentifier}...)
+	allowedReaders := lo.Intersect(identifiers, req.Readers)
 
-	objects, err := g.query(identifiers, generic.QueryOptions{
+	objects, err := g.query(allowedReaders, dynamic.QueryOptions{
 		Table: req.Table,
 		Query: req.Query,
 	})
@@ -82,7 +85,7 @@ func (g *DynamicService) Query(
 		return
 	}
 
-	bs, _ := json.Marshal(generic.QueryResponse{
+	bs, _ := json.Marshal(dynamic.QueryResponse{
 		Objects: objects,
 	})
 	w.Write(bs)

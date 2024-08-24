@@ -92,7 +92,7 @@ func (s *UserService) isAuthorized(r *http.Request, permissionId string,
 		return usr, nil
 	}
 	roleLinks, err := s.userRoleLinksStore.Query(
-		datastore.Equal(datastore.Field("userId"), usr.Id),
+		datastore.Equals(datastore.Field("userId"), usr.Id),
 	).Find()
 	if err != nil {
 		return nil, err
@@ -103,7 +103,7 @@ func (s *UserService) isAuthorized(r *http.Request, permissionId string,
 	}
 
 	permissionLinks, err := s.permissionRoleLinksStore.Query(
-		datastore.Equal(datastore.Field("roleId"), roleIds),
+		datastore.Equals(datastore.Field("roleId"), roleIds),
 	).Find()
 	if err != nil {
 		return nil, err
@@ -121,7 +121,7 @@ func (s *UserService) isAuthorized(r *http.Request, permissionId string,
 
 func (s *UserService) getRoleIdsByUserId(userId string) ([]string, error) {
 	roleLinks, err := s.userRoleLinksStore.Query(
-		datastore.Equal(datastore.Field("userId"), userId),
+		datastore.Equals(datastore.Field("userId"), userId),
 	).Find()
 	if err != nil {
 		return nil, err
@@ -143,7 +143,7 @@ func (s *UserService) getUserFromRequest(r *http.Request) (*user.User, error) {
 	}
 
 	tokenI, found, err := s.authTokensStore.Query(
-		datastore.Equal(datastore.Field("token"), authHeader),
+		datastore.Equals(datastore.Field("token"), authHeader),
 	).FindOne()
 	if err != nil {
 		return nil, err
@@ -179,7 +179,7 @@ func (s *UserService) GetUserFromRequest(request *http.Request) (*user.User, boo
 	authHeader = strings.Replace(authHeader, "Bearer ", "", 1)
 
 	tokenI, found, err := s.authTokensStore.Query(
-		datastore.Equal(datastore.Field("token"), authHeader),
+		datastore.Equals(datastore.Field("token"), authHeader),
 	).FindOne()
 	if err != nil {
 		return nil, false, err

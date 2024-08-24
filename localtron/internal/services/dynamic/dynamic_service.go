@@ -139,8 +139,8 @@ func (g *DynamicService) update(tableName string, userId string, conditions []da
 		return errors.New("no conditions")
 	}
 
-	conditions = append(conditions, datastore.Equal(datastore.Field("table"), tableName))
-	conditions = append(conditions, datastore.Equal(
+	conditions = append(conditions, datastore.Equals(datastore.Field("table"), tableName))
+	conditions = append(conditions, datastore.Equals(
 		datastore.Field("userId"),
 		userId,
 	))
@@ -155,8 +155,8 @@ func (g *DynamicService) delete(tableName string, userId string, conditions []da
 		return errors.New("no conditions")
 	}
 
-	conditions = append(conditions, datastore.Equal(datastore.Field("table"), tableName))
-	conditions = append(conditions, datastore.Equal(
+	conditions = append(conditions, datastore.Equals(datastore.Field("table"), tableName))
+	conditions = append(conditions, datastore.Equals(
 		datastore.Field("userId"),
 		userId,
 	))

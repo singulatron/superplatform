@@ -26,11 +26,11 @@ func (g *DynamicService) query(readers []string, options dynamictypes.QueryOptio
 	}
 
 	conditions = append(conditions,
-		datastore.Equal(datastore.Field("table"), options.Table),
+		datastore.Equals(datastore.Field("table"), options.Table),
 	)
 
 	conditions = append(conditions,
-		datastore.Equal(datastore.Field("readers"), readers),
+		datastore.Equals(datastore.Field("readers"), readers),
 	)
 
 	q := g.store.Query(

@@ -31,7 +31,7 @@ func (s *UserService) overwriteRolePermissions(userId, roleId string, permission
 	}
 
 	perms, err := s.permissionsStore.Query(
-		datastore.Equal(datastore.Field("id"), permissionIds),
+		datastore.Equals(datastore.Field("id"), permissionIds),
 	).Find()
 	if err != nil {
 		return err
@@ -41,7 +41,7 @@ func (s *UserService) overwriteRolePermissions(userId, roleId string, permission
 	}
 
 	err = s.userRoleLinksStore.Query(
-		datastore.Equal(datastore.Field("roleId"), roleId),
+		datastore.Equals(datastore.Field("roleId"), roleId),
 	).Delete()
 	if err != nil {
 		return err
