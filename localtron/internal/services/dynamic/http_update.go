@@ -58,7 +58,7 @@ func (g *DynamicService) Update(
 	}
 	defer r.Body.Close()
 
-	err = g.update(req.Table, rsp.User.Id, req.Conditions, req.Object)
+	err = g.update(req.Table, rsp.User.Id, req.Filters, req.Object)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(err.Error()))

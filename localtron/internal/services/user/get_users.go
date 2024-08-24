@@ -13,16 +13,16 @@ import (
 )
 
 func (s *UserService) getUsers(options *usertypes.GetUsersOptions) ([]*usertypes.User, int64, error) {
-	if len(options.Query.Conditions) == 0 {
-		options.Query.Conditions = append(options.Query.Conditions, datastore.All())
+	if len(options.Query.Filters) == 0 {
+		options.Query.Filters = append(options.Query.Filters, datastore.All())
 	}
 
-	additional := []datastore.Condition{}
-	if len(options.Query.Conditions) > 1 {
-		additional = options.Query.Conditions[1:]
+	additional := []datastore.Filter{}
+	if len(options.Query.Filters) > 1 {
+		additional = options.Query.Filters[1:]
 	}
 	q := s.usersStore.Query(
-		options.Query.Conditions[0], additional...,
+		options.Query.Filters[0], additional...,
 	).Limit(options.Query.Limit)
 
 	if len(options.Query.OrderBys) > 1 {

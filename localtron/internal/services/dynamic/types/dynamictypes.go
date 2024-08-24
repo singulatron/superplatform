@@ -97,17 +97,17 @@ type UpsertManyResponse struct {
 }
 
 type DeleteObjectRequest struct {
-	Table      string                `json:"table"`
-	Conditions []datastore.Condition `json:"conditions"`
+	Table   string             `json:"table"`
+	Filters []datastore.Filter `json:"conditions"`
 }
 
 type DeleteObjectResponse struct {
 }
 
 type UpdateObjectRequest struct {
-	Table      string                `json:"table,omitempty"`
-	Conditions []datastore.Condition `json:"conditions,omitempty"`
-	Object     *Object               `json:"object,omitempty"`
+	Table   string             `json:"table,omitempty"`
+	Filters []datastore.Filter `json:"conditions,omitempty"`
+	Object  *Object            `json:"object,omitempty"`
 }
 
 type UpdateObjectResponse struct {

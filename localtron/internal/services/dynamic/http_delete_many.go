@@ -55,7 +55,7 @@ func (g *DynamicService) Delete(
 	}
 	defer r.Body.Close()
 
-	err = g.delete(req.Table, rsp.User.Id, req.Conditions)
+	err = g.delete(req.Table, rsp.User.Id, req.Filters)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

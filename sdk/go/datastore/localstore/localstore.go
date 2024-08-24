@@ -551,7 +551,62 @@ func (q *QueryBuilder) match(obj any) bool {
 		} else if cond.All != nil {
 			continue
 		} else if cond.Intersects != nil {
+			var matchFunc func(subject, test any) bool
+			var selector *datastore.FieldSelector
+			var value any
 
+			selector = cond.Intersects.Selector
+			value = cond.Intersects.Values
+
+			fieldNames := []string{}
+			if selector.Field != "" {
+				fieldNames = append(fieldNames, selector.Field)
+			} else if selector.OneOf != nil {
+				fieldNames = selector.OneOf
+			}
+
+			matched := false
+			for _, fieldName := range fieldNames {
+				fieldValue := getField(obj, fieldName)
+
+				if fmt.Sprintf("%v", fieldValue) == "dipper: field not found" {
+					continue
+				}
+
+				condValue := reflect.ValueOf(value)
+				fieldV := reflect.ValueOf(fieldValue)
+
+				if condValue.Kind() != reflect.Slice {
+					panic("intersects condition is not a slice")
+				}
+				if fieldV.Kind() != reflect.Slice {
+					panic("intersects field value is not a slice")
+				}
+
+				if fieldV.Kind() == reflect.Slice {
+					for i := 0; i < fieldV.Len(); i++ {
+						if matchFunc(fieldV.Index(i).Interface(), condValue.Interface()) {
+							matched = true
+							continue
+						}
+					}
+
+				} else if condValue.Kind() == reflect.Slice {
+					for i := 0; i < condValue.Len(); i++ {
+						if matchFunc(fieldValue, condValue.Index(i).Interface()) {
+							matched = true
+							continue
+						}
+					}
+				} else {
+					if matchFunc(fieldValue, value) {
+						matched = true
+					}
+				}
+			}
+			if !matched {
+				return false
+			}
 		} else {
 			spew.Dump(cond)
 			panic(fmt.Sprintf("unkown condition %v", cond))

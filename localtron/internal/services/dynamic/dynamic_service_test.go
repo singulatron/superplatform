@@ -105,7 +105,7 @@ func TestCreate(t *testing.T) {
 		req := dynamictypes.QueryRequest{
 			Table: table1,
 			Query: &datastore.Query{
-				Conditions: []datastore.Condition{
+				Filters: []datastore.Filter{
 					datastore.All(),
 				},
 			},
@@ -137,7 +137,7 @@ func TestCreate(t *testing.T) {
 		req := dynamictypes.QueryRequest{
 			Table: table2,
 			Query: &datastore.Query{
-				Conditions: []datastore.Condition{
+				Filters: []datastore.Filter{
 					datastore.All(),
 				}},
 		}
@@ -151,7 +151,7 @@ func TestCreate(t *testing.T) {
 	t.Run("query user1 records", func(t *testing.T) {
 		req := dynamictypes.QueryRequest{
 			Table: table1,
-			Query: &datastore.Query{Conditions: []datastore.Condition{
+			Query: &datastore.Query{Filters: []datastore.Filter{
 				datastore.Id(uuid1),
 			}},
 		}
@@ -174,7 +174,7 @@ func TestCreate(t *testing.T) {
 	t.Run("user 1 cannot see record of user 2", func(t *testing.T) {
 		req := dynamictypes.QueryRequest{
 			Table: table1,
-			Query: &datastore.Query{Conditions: []datastore.Condition{
+			Query: &datastore.Query{Filters: []datastore.Filter{
 				datastore.Id(uuid2),
 			}},
 		}
@@ -204,7 +204,7 @@ func TestCreate(t *testing.T) {
 	t.Run("user 1 can find its own reord", func(t *testing.T) {
 		req := dynamictypes.QueryRequest{
 			Table: table1,
-			Query: &datastore.Query{Conditions: []datastore.Condition{
+			Query: &datastore.Query{Filters: []datastore.Filter{
 				datastore.All(),
 			}},
 		}
@@ -218,7 +218,7 @@ func TestCreate(t *testing.T) {
 	t.Run("user 2 cannot delete user 1's record", func(t *testing.T) {
 		req := dynamictypes.DeleteObjectRequest{
 			Table: table1,
-			Conditions: []datastore.Condition{
+			Filters: []datastore.Filter{
 				datastore.Id(obj.Id),
 			},
 		}
@@ -232,7 +232,7 @@ func TestCreate(t *testing.T) {
 	t.Run("user 2 will no see other tables", func(t *testing.T) {
 		req := dynamictypes.QueryRequest{
 			Table: table1,
-			Query: &datastore.Query{Conditions: []datastore.Condition{
+			Query: &datastore.Query{Filters: []datastore.Filter{
 				datastore.All(),
 			}},
 		}

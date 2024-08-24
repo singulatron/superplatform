@@ -20,9 +20,9 @@ func (g *DynamicService) query(readers []string, options dynamictypes.QueryOptio
 		return nil, errors.New("no table name")
 	}
 
-	conditions := []datastore.Condition{}
+	conditions := []datastore.Filter{}
 	if options.Query != nil {
-		conditions = append(conditions, options.Query.Conditions...)
+		conditions = append(conditions, options.Query.Filters...)
 	}
 
 	conditions = append(conditions,

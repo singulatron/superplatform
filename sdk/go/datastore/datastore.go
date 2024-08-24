@@ -37,7 +37,7 @@ type DataStore interface {
 	/* Create or Update many objects */
 	UpsertMany(objs []Row) error
 
-	Query(condition Condition, conditions ...Condition) QueryBuilder
+	Query(condition Filter, conditions ...Filter) QueryBuilder
 
 	BeginTransaction() (DataStore, error)
 	Commit() error
@@ -76,24 +76,24 @@ type FieldSelector struct {
 	Any bool `json:"any,omitempty"`
 }
 
-type Condition struct {
+type Filter struct {
 	// Equals condition returns objects where value of a field equals (=) to the specified value in the query.
-	Equals *EqualsCondition `json:"equal,omitempty"`
+	Equals *EqualsFilter `json:"equal,omitempty"`
 
 	// Contains condition returns all objects where the field(s) values contain a particular string or slice element.
-	Contains *ContainsCondition `json:"contains,omitempty"`
+	Contains *ContainsFilter `json:"contains,omitempty"`
 
 	// Intersects condition returns objects where the slice value of a field intersects with the slice value in the query.
-	Intersects *IntersectsCondition `json:"intersects,omitempty"`
+	Intersects *IntersectsFilter `json:"intersects,omitempty"`
 
 	// All condition returns all objects.
-	All *AllCondition `json:"all,omitempty"`
+	All *AllFilter `json:"all,omitempty"`
 
 	// StartsWith condition returns all objects where the field(s) values start with a particular string.
-	StartsWith *StartsWithCondition `json:"startsWith,omitempty"`
+	StartsWith *StartsWithFilter `json:"startsWith,omitempty"`
 }
 
-func (c Condition) FieldIs(fieldName string) bool {
+func (c Filter) FieldIs(fieldName string) bool {
 	if c.Equals != nil && c.Equals.Selector != nil && c.Equals.Selector.Field == fieldName {
 		return true
 	}
@@ -103,29 +103,32 @@ func (c Condition) FieldIs(fieldName string) bool {
 	if c.Contains != nil && c.Contains.Selector != nil && c.Contains.Selector.Field == fieldName {
 		return true
 	}
+	if c.Intersects != nil && c.Intersects.Selector != nil && c.Intersects.Selector.Field == fieldName {
+		return true
+	}
 
 	return false
 }
 
-type EqualsCondition struct {
+type EqualsFilter struct {
 	// Selector selects one, more or all fields
 	Selector *FieldSelector `json:"selector,omitempty"`
 	Value    any            `json:"value,omitempty"`
 }
 
-type StartsWithCondition struct {
+type StartsWithFilter struct {
 	// Selector selects one, more or all fields
 	Selector *FieldSelector `json:"selector,omitempty"`
 	Value    any            `json:"value,omitempty"`
 }
 
-type ContainsCondition struct {
+type ContainsFilter struct {
 	// Selector selects one, more or all fields
 	Selector *FieldSelector `json:"selector,omitempty"`
 	Value    any            `json:"value,omitempty"`
 }
 
-type IntersectsCondition struct {
+type IntersectsFilter struct {
 	Selector *FieldSelector `json:"selector,omitempty"`
 	Values   []any          `json:"values,omitempty"`
 }
@@ -133,9 +136,9 @@ type IntersectsCondition struct {
 // Query as a type is not used in the DataStore interface but mostly to accept
 // a DataStore query through a HTTP API
 type Query struct {
-	// Conditions are filtering options of a query. It is advised to use
+	// Filters are filtering options of a query. It is advised to use
 	// It's advised to use helper functions in your respective client library such as condition constructors (`all`, `equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
-	Conditions []Condition `json:"conditions,omitempty"`
+	Filters []Filter `json:"conditions,omitempty"`
 
 	// After is used for paginations. Instead of offset-based pagination,
 	// we support cursor-based pagination because it works better in a scalable,
@@ -148,13 +151,13 @@ type Query struct {
 	// OrderBys order the result set.
 	OrderBys []OrderBy `json:"orderBys,omitempty"`
 
-	// Count true means return the count of the dataset filtered by Conditions
+	// Count true means return the count of the dataset filtered by Filters
 	// without after or limit.
 	Count bool `json:"count,omitempty"`
 }
 
-func (q *Query) HasFieldCondition(fieldName string) bool {
-	for _, v := range q.Conditions {
+func (q *Query) HasFieldFilter(fieldName string) bool {
+	for _, v := range q.Filters {
 		if v.FieldIs(fieldName) {
 			return true
 		}
@@ -189,54 +192,54 @@ func OrderByField(field string, desc bool) OrderBy {
 	}
 }
 
-type AllCondition struct {
+type AllFilter struct {
 }
 
-func Equals(selector *FieldSelector, value any) Condition {
-	return Condition{
-		Equals: &EqualsCondition{
+func Equals(selector *FieldSelector, value any) Filter {
+	return Filter{
+		Equals: &EqualsFilter{
 			Selector: selector,
 			Value:    value,
 		},
 	}
 }
 
-func Intersects(selector *FieldSelector, values []any) Condition {
-	return Condition{
-		Intersects: &IntersectsCondition{
+func Intersects(selector *FieldSelector, values []any) Filter {
+	return Filter{
+		Intersects: &IntersectsFilter{
 			Selector: selector,
 			Values:   values,
 		},
 	}
 }
 
-func StartsWith(selector *FieldSelector, value any) Condition {
-	return Condition{
-		StartsWith: &StartsWithCondition{
+func StartsWith(selector *FieldSelector, value any) Filter {
+	return Filter{
+		StartsWith: &StartsWithFilter{
 			Selector: selector,
 			Value:    value,
 		},
 	}
 }
 
-func Contains(selector *FieldSelector, value any) Condition {
-	return Condition{
-		Contains: &ContainsCondition{
+func Contains(selector *FieldSelector, value any) Filter {
+	return Filter{
+		Contains: &ContainsFilter{
 			Selector: selector,
 			Value:    value,
 		},
 	}
 }
 
-func All() Condition {
-	return Condition{
-		All: &AllCondition{},
+func All() Filter {
+	return Filter{
+		All: &AllFilter{},
 	}
 }
 
-func Id(id any) Condition {
-	return Condition{
-		Equals: &EqualsCondition{
+func Id(id any) Filter {
+	return Filter{
+		Equals: &EqualsFilter{
 			Selector: Field("id"),
 			Value:    id,
 		},

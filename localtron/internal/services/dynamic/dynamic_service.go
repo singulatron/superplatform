@@ -134,7 +134,7 @@ func (g *DynamicService) upsertMany(request *dynamictypes.UpsertManyRequest) err
 	return g.store.UpsertMany(objectIs)
 }
 
-func (g *DynamicService) update(tableName string, userId string, conditions []datastore.Condition, object *dynamictypes.Object) error {
+func (g *DynamicService) update(tableName string, userId string, conditions []datastore.Filter, object *dynamictypes.Object) error {
 	if len(conditions) == 0 {
 		return errors.New("no conditions")
 	}
@@ -150,7 +150,7 @@ func (g *DynamicService) update(tableName string, userId string, conditions []da
 	).Update(object)
 }
 
-func (g *DynamicService) delete(tableName string, userId string, conditions []datastore.Condition) error {
+func (g *DynamicService) delete(tableName string, userId string, conditions []datastore.Filter) error {
 	if len(conditions) == 0 {
 		return errors.New("no conditions")
 	}

@@ -14,7 +14,7 @@ import (
 
 func (p *PromptService) listPrompts(options *prompttypes.ListPromptOptions) ([]*prompttypes.Prompt, int64, error) {
 	q := p.promptsStore.Query(
-		options.Query.Conditions[0], options.Query.Conditions[1:]...,
+		options.Query.Filters[0], options.Query.Filters[1:]...,
 	).Limit(options.Query.Limit)
 
 	if len(options.Query.OrderBys) > 1 {
