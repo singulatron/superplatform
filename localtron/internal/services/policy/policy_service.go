@@ -54,7 +54,7 @@ func NewPolicyService(
 }
 
 func (cs *PolicyService) Start() error {
-	instances, err := cs.instancesStore.Query(datastore.All()).Find()
+	instances, err := cs.instancesStore.Query().Find()
 	if err != nil {
 		return err
 	}

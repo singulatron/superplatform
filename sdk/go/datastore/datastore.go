@@ -37,7 +37,7 @@ type DataStore interface {
 	/* Create or Update many objects */
 	UpsertMany(objs []Row) error
 
-	Query(condition Filter, conditions ...Filter) QueryBuilder
+	Query(filters ...Filter) QueryBuilder
 
 	BeginTransaction() (DataStore, error)
 	Commit() error
@@ -48,7 +48,7 @@ type DataStore interface {
 }
 
 type QueryBuilder interface {
-	OrderBy(option OrderBy, options ...OrderBy) QueryBuilder
+	OrderBy(options ...OrderBy) QueryBuilder
 	Limit(limit int64) QueryBuilder
 	After(value ...any) QueryBuilder
 
@@ -65,67 +65,45 @@ type QueryBuilder interface {
 	Delete() error
 }
 
-type FieldSelector struct {
-	// Field matchies a single field
-	Field string `json:"field,omitempty"`
+type Op string
 
-	// OneOf matches a number of fields
-	OneOf []string `json:"oneOf,omitempty"`
+const (
+	// OpEquals selects objects where value of a field equals (=) to the specified value in the query.
+	OpEquals Op = "equals"
 
-	// Any matches any fields in the object
-	Any bool `json:"any,omitempty"`
-}
+	// OpContains selects all objects where the field(s) values contain a particular string or slice element.
+	OpContains Op = "contains"
+
+	// OpStartsWith selects all objects where the field(s) values start with a particular string.
+	OpStartsWith Op = "startsWith"
+
+	// OpIntersects selects objects where the slice value of a field intersects with the slice value in the query.
+	OpIntersects Op = "intersects"
+)
 
 type Filter struct {
-	// Selector selects one, more or all fields
-	Selector *FieldSelector `json:"selector,omitempty"`
+	Fields []string `json:"fields,omitempty"`
 
-	// Equals condition returns objects where value of a field equals (=) to the specified value in the query.
-	Equals *EqualsMatch `json:"equal,omitempty"`
+	Values []any `json:"values,omitempty"`
 
-	// Contains condition returns all objects where the field(s) values contain a particular string or slice element.
-	Contains *ContainsMatch `json:"contains,omitempty"`
-
-	// Intersects condition returns objects where the slice value of a field intersects with the slice value in the query.
-	Intersects *IntersectsMatch `json:"intersects,omitempty"`
-
-	// All condition returns all objects.
-	All *AllMatch `json:"all,omitempty"`
-
-	// StartsWith condition returns all objects where the field(s) values start with a particular string.
-	StartsWith *StartsWithMatch `json:"startsWith,omitempty"`
+	Op Op `json:"op"`
 }
 
 func (c Filter) FieldIs(fieldName string) bool {
-	if c.Equals != nil && c.Selector != nil && c.Selector.Field == fieldName {
-		return true
+	for _, field := range c.Fields {
+		if fieldName == field {
+			return true
+		}
 	}
-
 	return false
-}
-
-type EqualsMatch struct {
-	Value any `json:"value,omitempty"`
-}
-
-type StartsWithMatch struct {
-	Value any `json:"value,omitempty"`
-}
-
-type ContainsMatch struct {
-	Value any `json:"value,omitempty"`
-}
-
-type IntersectsMatch struct {
-	Values []any `json:"values,omitempty"`
 }
 
 // Query as a type is not used in the DataStore interface but mostly to accept
 // a DataStore query through a HTTP API
 type Query struct {
 	// Filters are filtering options of a query. It is advised to use
-	// It's advised to use helper functions in your respective client library such as condition constructors (`all`, `equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
-	Filters []Filter `json:"conditions,omitempty"`
+	// It's advised to use helper functions in your respective client library such as filter constructors (`all`, `equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
+	Filters []Filter `json:"filters,omitempty"`
 
 	// After is used for paginations. Instead of offset-based pagination,
 	// we support cursor-based pagination because it works better in a scalable,
@@ -182,73 +160,56 @@ func OrderByField(field string, desc bool) OrderBy {
 type AllMatch struct {
 }
 
-func Equals(selector *FieldSelector, value any) Filter {
+func Equals(fields []string, value any) Filter {
 	return Filter{
-		Selector: selector,
-		Equals: &EqualsMatch{
-			Value: value,
-		},
+		Fields: fields,
+		Values: []any{value},
+		Op:     OpEquals,
 	}
 }
 
-func Intersects(selector *FieldSelector, values []any) Filter {
+func Intersects(fields []string, values []any) Filter {
 	return Filter{
-		Selector: selector,
-		Intersects: &IntersectsMatch{
-			Values: values,
-		},
+		Fields: fields,
+		Values: values,
+		Op:     OpIntersects,
 	}
 }
 
-func StartsWith(selector *FieldSelector, value any) Filter {
+func StartsWith(fields []string, value any) Filter {
 	return Filter{
-		Selector: selector,
-		StartsWith: &StartsWithMatch{
-			Value: value,
-		},
+		Fields: fields,
+		Values: []any{value},
+		Op:     OpContains,
 	}
 }
 
-func Contains(selector *FieldSelector, value any) Filter {
+func Contains(fields []string, value any) Filter {
 	return Filter{
-		Selector: selector,
-		Contains: &ContainsMatch{
-			Value: value,
-		},
-	}
-}
-
-func All() Filter {
-	return Filter{
-		All: &AllMatch{},
+		Fields: fields,
+		Values: []any{value},
+		Op:     OpContains,
 	}
 }
 
 func Id(id any) Filter {
 	return Filter{
-		Equals: &EqualsMatch{
-			Selector: Field("id"),
-			Value:    id,
-		},
+		Fields: []string{"id"},
+		Values: []any{id},
+		Op:     OpEquals,
 	}
 }
 
-func Field(fieldName string) *FieldSelector {
-	return &FieldSelector{
-		Field: fieldName,
-	}
+func Field(fieldName string) []string {
+	return []string{fieldName}
 }
 
-func Fields(fieldNames []string) *FieldSelector {
-	return &FieldSelector{
-		OneOf: fieldNames,
-	}
+func Fields(fieldNames ...string) []string {
+	return fieldNames
 }
 
-func AnyField() *FieldSelector {
-	return &FieldSelector{
-		Any: true,
-	}
+func AnyField() []string {
+	return nil
 }
 
 var dateFormats = []string{

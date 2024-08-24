@@ -103,12 +103,8 @@ func TestCreate(t *testing.T) {
 
 	t.Run("user 1 can find its own private record", func(t *testing.T) {
 		req := dynamictypes.QueryRequest{
-			Table: table1,
-			Query: &datastore.Query{
-				Filters: []datastore.Filter{
-					datastore.All(),
-				},
-			},
+			Table:   table1,
+			Query:   &datastore.Query{},
 			Readers: []string{*tokenReadRsp1.User.Id},
 		}
 		rsp := dynamictypes.QueryResponse{}
@@ -136,10 +132,7 @@ func TestCreate(t *testing.T) {
 	t.Run("query user2 records", func(t *testing.T) {
 		req := dynamictypes.QueryRequest{
 			Table: table2,
-			Query: &datastore.Query{
-				Filters: []datastore.Filter{
-					datastore.All(),
-				}},
+			Query: &datastore.Query{},
 		}
 		rsp := dynamictypes.QueryResponse{}
 		err = user2Router.Post(context.Background(), "dynamic-svc", "/objects", req, &rsp)
@@ -204,9 +197,7 @@ func TestCreate(t *testing.T) {
 	t.Run("user 1 can find its own reord", func(t *testing.T) {
 		req := dynamictypes.QueryRequest{
 			Table: table1,
-			Query: &datastore.Query{Filters: []datastore.Filter{
-				datastore.All(),
-			}},
+			Query: &datastore.Query{},
 		}
 		rsp := dynamictypes.QueryResponse{}
 		err = user1Router.Post(context.Background(), "dynamic-svc", "/objects", req, &rsp)
@@ -232,9 +223,7 @@ func TestCreate(t *testing.T) {
 	t.Run("user 2 will no see other tables", func(t *testing.T) {
 		req := dynamictypes.QueryRequest{
 			Table: table1,
-			Query: &datastore.Query{Filters: []datastore.Filter{
-				datastore.All(),
-			}},
+			Query: &datastore.Query{},
 		}
 		rsp := dynamictypes.QueryResponse{}
 		err = user2Router.Post(context.Background(), "dynamic-svc", "/objects", req, &rsp)

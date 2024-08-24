@@ -13,9 +13,7 @@ import (
 )
 
 func (s *UserService) getRoles() ([]*usertypes.Role, error) {
-	rolesI, err := s.rolesStore.Query(
-		datastore.All(),
-	).OrderBy(datastore.OrderByField("name", false)).Find()
+	rolesI, err := s.rolesStore.Query().OrderBy(datastore.OrderByField("name", false)).Find()
 
 	if err != nil {
 		return nil, err

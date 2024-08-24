@@ -17,7 +17,7 @@ import (
 // Every service should have a user account in the user service and this method creates
 // that user account.
 func RegisterService(serviceSlug, serviceName string, router *router.Router, store datastore.DataStore) (string, error) {
-	res, err := store.Query(datastore.All()).Find()
+	res, err := store.Query().Find()
 	if err != nil {
 		return "", err
 	}

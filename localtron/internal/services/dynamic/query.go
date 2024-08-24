@@ -34,15 +34,11 @@ func (g *DynamicService) query(readers []string, options dynamictypes.QueryOptio
 	)
 
 	q := g.store.Query(
-		conditions[0], conditions[1:]...,
+		conditions...,
 	)
 
 	if options.Query != nil {
-		if len(options.Query.OrderBys) > 1 {
-			q.OrderBy(options.Query.OrderBys[0], options.Query.OrderBys...)
-		} else if len(options.Query.OrderBys) > 0 {
-			q.OrderBy(options.Query.OrderBys[0])
-		}
+		q.OrderBy(options.Query.OrderBys...)
 
 		if options.Query.Limit != 0 {
 			q.Limit(options.Query.Limit)

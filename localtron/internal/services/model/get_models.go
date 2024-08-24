@@ -13,9 +13,7 @@ import (
 )
 
 func (ms *ModelService) getModels() ([]*modeltypes.Model, error) {
-	modelIs, err := ms.modelsStore.Query(
-		datastore.All(),
-	).Find()
+	modelIs, err := ms.modelsStore.Query().Find()
 	if err != nil {
 		return nil, err
 	}

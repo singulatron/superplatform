@@ -50,7 +50,7 @@ func NewLocalStore(instance any, filePath string) (*LocalStore, error) {
 	}
 
 	sm := statemanager.New(instance, func() []any {
-		vals, _ := ls.Query(datastore.All()).Find()
+		vals, _ := ls.Query().Find()
 		is := []any{}
 		for _, v := range vals {
 			is = append(is, v)
@@ -172,10 +172,9 @@ func (s *LocalStore) UpsertMany(objs []datastore.Row) error {
 	return nil
 }
 
-func (s *LocalStore) Query(condition datastore.Condition, conditions ...datastore.Condition) datastore.QueryBuilder {
+func (s *LocalStore) Query(filters ...datastore.Filter) datastore.QueryBuilder {
 	q := &QueryBuilder{store: s}
-	q.conditions = append(q.conditions, condition)
-	q.conditions = append(q.conditions, conditions...)
+	q.filters = append(q.filters, filters...)
 	return q
 }
 
@@ -243,7 +242,7 @@ func (s *LocalStore) IsInTransaction() bool {
 
 type QueryBuilder struct {
 	store        *LocalStore
-	conditions   []datastore.Condition
+	filters      []datastore.Filter
 	orderField   string
 	orderDesc    bool
 	orderByRand  bool
@@ -461,14 +460,12 @@ func (q *QueryBuilder) Delete() error {
 }
 
 func (q *QueryBuilder) match(obj any) bool {
-	for _, cond := range q.conditions {
-		if cond.Equals != nil || cond.Contains != nil || cond.StartsWith != nil {
+	for _, cond := range q.filters {
+		if cond.Op == datastore.OpEquals || cond.Op == datastore.OpContains || cond.Op == datastore.OpContains {
 			var matchFunc func(subject, test any) bool
-			var selector *datastore.FieldSelector
-			var value any
 
-			switch {
-			case cond.Equals != nil:
+			switch cond.Op {
+			case datastore.OpEquals:
 				matchFunc = func(subject, test any) bool {
 					subject = toBaseType(subject)
 					test = toBaseType(test)
@@ -478,9 +475,7 @@ func (q *QueryBuilder) match(obj any) bool {
 
 					return reflect.DeepEqual(test, subject)
 				}
-				selector = cond.Equals.Selector
-				value = cond.Equals.Value
-			case cond.Contains != nil:
+			case datastore.OpContains:
 				matchFunc = func(subject, test any) bool {
 					testStr, testOk := test.(string)
 					subjectStr, subjectOk := subject.(string)
@@ -490,10 +485,7 @@ func (q *QueryBuilder) match(obj any) bool {
 
 					return strings.Contains(subjectStr, testStr)
 				}
-
-				selector = cond.Contains.Selector
-				value = cond.Contains.Value
-			case cond.StartsWith != nil:
+			case datastore.OpStartsWith:
 				matchFunc = func(subject, test any) bool {
 					testStr, testOk := test.(string)
 					subjectStr, subjectOk := subject.(string)
@@ -502,16 +494,9 @@ func (q *QueryBuilder) match(obj any) bool {
 					}
 					return strings.HasPrefix(subjectStr, testStr)
 				}
-				selector = cond.StartsWith.Selector
-				value = cond.StartsWith.Value
 			}
 
-			fieldNames := []string{}
-			if selector.Field != "" {
-				fieldNames = append(fieldNames, selector.Field)
-			} else if selector.OneOf != nil {
-				fieldNames = selector.OneOf
-			}
+			fieldNames := cond.Fields
 
 			matched := false
 			for _, fieldName := range fieldNames {
@@ -548,68 +533,11 @@ func (q *QueryBuilder) match(obj any) bool {
 			if !matched {
 				return false
 			}
-		} else if cond.All != nil {
-			continue
-		} else if cond.Intersects != nil {
-			var matchFunc func(subject, test any) bool
-			var selector *datastore.FieldSelector
-			var value any
+		} else if cond.Op == datastore.OpIntersects {
 
-			selector = cond.Intersects.Selector
-			value = cond.Intersects.Values
-
-			fieldNames := []string{}
-			if selector.Field != "" {
-				fieldNames = append(fieldNames, selector.Field)
-			} else if selector.OneOf != nil {
-				fieldNames = selector.OneOf
-			}
-
-			matched := false
-			for _, fieldName := range fieldNames {
-				fieldValue := getField(obj, fieldName)
-
-				if fmt.Sprintf("%v", fieldValue) == "dipper: field not found" {
-					continue
-				}
-
-				condValue := reflect.ValueOf(value)
-				fieldV := reflect.ValueOf(fieldValue)
-
-				if condValue.Kind() != reflect.Slice {
-					panic("intersects condition is not a slice")
-				}
-				if fieldV.Kind() != reflect.Slice {
-					panic("intersects field value is not a slice")
-				}
-
-				if fieldV.Kind() == reflect.Slice {
-					for i := 0; i < fieldV.Len(); i++ {
-						if matchFunc(fieldV.Index(i).Interface(), condValue.Interface()) {
-							matched = true
-							continue
-						}
-					}
-
-				} else if condValue.Kind() == reflect.Slice {
-					for i := 0; i < condValue.Len(); i++ {
-						if matchFunc(fieldValue, condValue.Index(i).Interface()) {
-							matched = true
-							continue
-						}
-					}
-				} else {
-					if matchFunc(fieldValue, value) {
-						matched = true
-					}
-				}
-			}
-			if !matched {
-				return false
-			}
 		} else {
 			spew.Dump(cond)
-			panic(fmt.Sprintf("unkown condition %v", cond))
+			panic(fmt.Sprintf("unkown filter %v", cond))
 		}
 	}
 	return true

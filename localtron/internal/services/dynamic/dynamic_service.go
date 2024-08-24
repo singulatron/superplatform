@@ -146,7 +146,7 @@ func (g *DynamicService) update(tableName string, userId string, conditions []da
 	))
 
 	return g.store.Query(
-		conditions[0], conditions[1:]...,
+		conditions...,
 	).Update(object)
 }
 
@@ -162,6 +162,6 @@ func (g *DynamicService) delete(tableName string, userId string, conditions []da
 	))
 
 	return g.store.Query(
-		conditions[0], conditions[1:]...,
+		conditions...,
 	).Delete()
 }

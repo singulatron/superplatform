@@ -14,13 +14,11 @@ import (
 
 func (p *PromptService) listPrompts(options *prompttypes.ListPromptOptions) ([]*prompttypes.Prompt, int64, error) {
 	q := p.promptsStore.Query(
-		options.Query.Filters[0], options.Query.Filters[1:]...,
+		options.Query.Filters...,
 	).Limit(options.Query.Limit)
 
-	if len(options.Query.OrderBys) > 1 {
-		q = q.OrderBy(options.Query.OrderBys[0], options.Query.OrderBys[1:]...)
-	} else if len(options.Query.OrderBys) > 0 {
-		q = q.OrderBy(options.Query.OrderBys[0])
+	if len(options.Query.OrderBys) > 0 {
+		q = q.OrderBy(options.Query.OrderBys...)
 	} else {
 		q = q.OrderBy(datastore.OrderByField("createdAt", false))
 	}

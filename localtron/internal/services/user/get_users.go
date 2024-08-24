@@ -13,22 +13,12 @@ import (
 )
 
 func (s *UserService) getUsers(options *usertypes.GetUsersOptions) ([]*usertypes.User, int64, error) {
-	if len(options.Query.Filters) == 0 {
-		options.Query.Filters = append(options.Query.Filters, datastore.All())
-	}
-
-	additional := []datastore.Filter{}
-	if len(options.Query.Filters) > 1 {
-		additional = options.Query.Filters[1:]
-	}
 	q := s.usersStore.Query(
-		options.Query.Filters[0], additional...,
+		options.Query.Filters...,
 	).Limit(options.Query.Limit)
 
-	if len(options.Query.OrderBys) > 1 {
-		q = q.OrderBy(options.Query.OrderBys[0], options.Query.OrderBys[1:]...)
-	} else if len(options.Query.OrderBys) > 0 {
-		q = q.OrderBy(options.Query.OrderBys[0])
+	if len(options.Query.OrderBys) > 0 {
+		q = q.OrderBy(options.Query.OrderBys...)
 	} else {
 		q = q.OrderBy(datastore.OrderByField("createdAt", true))
 	}

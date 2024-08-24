@@ -126,9 +126,7 @@ func NewUserService(
 func (s *UserService) bootstrap() error {
 	// bootstrapping keys
 
-	keyPairs, err := s.keyPairsStore.Query(
-		datastore.All(),
-	).Find()
+	keyPairs, err := s.keyPairsStore.Query().Find()
 	if err != nil {
 		return err
 	}
@@ -170,9 +168,7 @@ func (s *UserService) bootstrap() error {
 
 	// bootstrap admin user
 
-	count, err := s.usersStore.Query(
-		datastore.All(),
-	).Count()
+	count, err := s.usersStore.Query().Count()
 
 	if err != nil {
 		return err
@@ -191,7 +187,7 @@ func (s *UserService) bootstrap() error {
 
 	// bootstrapping service user
 
-	credentials, err := s.credentialsStore.Query(datastore.All()).Find()
+	credentials, err := s.credentialsStore.Query().Find()
 	if err != nil {
 		return err
 	}
