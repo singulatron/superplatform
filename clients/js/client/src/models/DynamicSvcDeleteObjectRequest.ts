@@ -13,12 +13,12 @@
  */
 
 import { mapValues } from '../runtime';
-import type { DatastoreCondition } from './DatastoreCondition';
+import type { DatastoreFilter } from './DatastoreFilter';
 import {
-    DatastoreConditionFromJSON,
-    DatastoreConditionFromJSONTyped,
-    DatastoreConditionToJSON,
-} from './DatastoreCondition';
+    DatastoreFilterFromJSON,
+    DatastoreFilterFromJSONTyped,
+    DatastoreFilterToJSON,
+} from './DatastoreFilter';
 
 /**
  * 
@@ -28,10 +28,10 @@ import {
 export interface DynamicSvcDeleteObjectRequest {
     /**
      * 
-     * @type {Array<DatastoreCondition>}
+     * @type {Array<DatastoreFilter>}
      * @memberof DynamicSvcDeleteObjectRequest
      */
-    conditions?: Array<DatastoreCondition>;
+    conditions?: Array<DatastoreFilter>;
     /**
      * 
      * @type {string}
@@ -57,7 +57,7 @@ export function DynamicSvcDeleteObjectRequestFromJSONTyped(json: any, ignoreDisc
     }
     return {
         
-        'conditions': json['conditions'] == null ? undefined : ((json['conditions'] as Array<any>).map(DatastoreConditionFromJSON)),
+        'conditions': json['conditions'] == null ? undefined : ((json['conditions'] as Array<any>).map(DatastoreFilterFromJSON)),
         'table': json['table'] == null ? undefined : json['table'],
     };
 }
@@ -68,7 +68,7 @@ export function DynamicSvcDeleteObjectRequestToJSON(value?: DynamicSvcDeleteObje
     }
     return {
         
-        'conditions': value['conditions'] == null ? undefined : ((value['conditions'] as Array<any>).map(DatastoreConditionToJSON)),
+        'conditions': value['conditions'] == null ? undefined : ((value['conditions'] as Array<any>).map(DatastoreFilterToJSON)),
         'table': value['table'],
     };
 }

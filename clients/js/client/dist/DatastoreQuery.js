@@ -1,11 +1,12 @@
 'use strict';
 
-var DatastoreCondition = require('./DatastoreCondition.js');
+var DatastoreFilter = require('./DatastoreFilter.js');
 var DatastoreOrderBy = require('./DatastoreOrderBy.js');
-require('./DatastoreEqualCondition.js');
 require('./DatastoreFieldSelector.js');
-require('./DatastoreContainsCondition.js');
-require('./DatastoreStartsWithCondition.js');
+require('./DatastoreStartsWithMatch.js');
+require('./DatastoreContainsMatch.js');
+require('./DatastoreEqualsMatch.js');
+require('./DatastoreIntersectsMatch.js');
 
 /* tslint:disable */
 /* eslint-disable */
@@ -35,7 +36,7 @@ function DatastoreQueryFromJSONTyped(json, ignoreDiscriminator) {
     }
     return {
         'after': json['after'] == null ? undefined : json['after'],
-        'conditions': json['conditions'] == null ? undefined : (json['conditions'].map(DatastoreCondition.DatastoreConditionFromJSON)),
+        'conditions': json['conditions'] == null ? undefined : (json['conditions'].map(DatastoreFilter.DatastoreFilterFromJSON)),
         'count': json['count'] == null ? undefined : json['count'],
         'limit': json['limit'] == null ? undefined : json['limit'],
         'orderBys': json['orderBys'] == null ? undefined : (json['orderBys'].map(DatastoreOrderBy.DatastoreOrderByFromJSON)),
@@ -47,7 +48,7 @@ function DatastoreQueryToJSON(value) {
     }
     return {
         'after': value['after'],
-        'conditions': value['conditions'] == null ? undefined : (value['conditions'].map(DatastoreCondition.DatastoreConditionToJSON)),
+        'conditions': value['conditions'] == null ? undefined : (value['conditions'].map(DatastoreFilter.DatastoreFilterToJSON)),
         'count': value['count'],
         'limit': value['limit'],
         'orderBys': value['orderBys'] == null ? undefined : (value['orderBys'].map(DatastoreOrderBy.DatastoreOrderByToJSON)),

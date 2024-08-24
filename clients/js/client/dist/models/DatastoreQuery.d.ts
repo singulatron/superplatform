@@ -9,7 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import type { DatastoreCondition } from './DatastoreCondition';
+import type { DatastoreFilter } from './DatastoreFilter';
 import type { DatastoreOrderBy } from './DatastoreOrderBy';
 /**
  *
@@ -26,14 +26,14 @@ export interface DatastoreQuery {
      */
     after?: Array<object>;
     /**
-     * Conditions are filtering options of a query. It is advised to use
+     * Filters are filtering options of a query. It is advised to use
      * It's advised to use helper functions in your respective client library such as condition constructors (`all`, `equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
-     * @type {Array<DatastoreCondition>}
+     * @type {Array<DatastoreFilter>}
      * @memberof DatastoreQuery
      */
-    conditions?: Array<DatastoreCondition>;
+    conditions?: Array<DatastoreFilter>;
     /**
-     * Count true means return the count of the dataset filtered by Conditions
+     * Count true means return the count of the dataset filtered by Filters
      * without after or limit.
      * @type {boolean}
      * @memberof DatastoreQuery

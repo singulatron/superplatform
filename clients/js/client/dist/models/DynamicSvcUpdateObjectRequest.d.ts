@@ -9,8 +9,8 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import type { DynamicSvcGenericObject } from './DynamicSvcGenericObject';
-import type { DatastoreCondition } from './DatastoreCondition';
+import type { DynamicSvcObject } from './DynamicSvcObject';
+import type { DatastoreFilter } from './DatastoreFilter';
 /**
  *
  * @export
@@ -19,16 +19,16 @@ import type { DatastoreCondition } from './DatastoreCondition';
 export interface DynamicSvcUpdateObjectRequest {
     /**
      *
-     * @type {Array<DatastoreCondition>}
+     * @type {Array<DatastoreFilter>}
      * @memberof DynamicSvcUpdateObjectRequest
      */
-    conditions?: Array<DatastoreCondition>;
+    conditions?: Array<DatastoreFilter>;
     /**
      *
-     * @type {DynamicSvcGenericObject}
+     * @type {DynamicSvcObject}
      * @memberof DynamicSvcUpdateObjectRequest
      */
-    object?: DynamicSvcGenericObject;
+    object?: DynamicSvcObject;
     /**
      *
      * @type {string}

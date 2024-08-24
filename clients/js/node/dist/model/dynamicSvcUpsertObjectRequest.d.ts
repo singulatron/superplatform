@@ -9,9 +9,9 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { DynamicSvcGenericObjectCreateFields } from './dynamicSvcGenericObjectCreateFields';
+import { DynamicSvcObjectCreateFields } from './dynamicSvcObjectCreateFields';
 export declare class DynamicSvcUpsertObjectRequest {
-    'object'?: DynamicSvcGenericObjectCreateFields;
+    'object'?: DynamicSvcObjectCreateFields;
     static discriminator: string | undefined;
     static attributeTypeMap: Array<{
         name: string;

@@ -1,9 +1,10 @@
-import { DatastoreConditionFromJSON, DatastoreConditionToJSON } from './DatastoreCondition.mjs';
+import { DatastoreFilterFromJSON, DatastoreFilterToJSON } from './DatastoreFilter.mjs';
 import { DatastoreOrderByFromJSON, DatastoreOrderByToJSON } from './DatastoreOrderBy.mjs';
-import './DatastoreEqualCondition.mjs';
 import './DatastoreFieldSelector.mjs';
-import './DatastoreContainsCondition.mjs';
-import './DatastoreStartsWithCondition.mjs';
+import './DatastoreStartsWithMatch.mjs';
+import './DatastoreContainsMatch.mjs';
+import './DatastoreEqualsMatch.mjs';
+import './DatastoreIntersectsMatch.mjs';
 
 /* tslint:disable */
 /* eslint-disable */
@@ -33,7 +34,7 @@ function DatastoreQueryFromJSONTyped(json, ignoreDiscriminator) {
     }
     return {
         'after': json['after'] == null ? undefined : json['after'],
-        'conditions': json['conditions'] == null ? undefined : (json['conditions'].map(DatastoreConditionFromJSON)),
+        'conditions': json['conditions'] == null ? undefined : (json['conditions'].map(DatastoreFilterFromJSON)),
         'count': json['count'] == null ? undefined : json['count'],
         'limit': json['limit'] == null ? undefined : json['limit'],
         'orderBys': json['orderBys'] == null ? undefined : (json['orderBys'].map(DatastoreOrderByFromJSON)),
@@ -45,7 +46,7 @@ function DatastoreQueryToJSON(value) {
     }
     return {
         'after': value['after'],
-        'conditions': value['conditions'] == null ? undefined : (value['conditions'].map(DatastoreConditionToJSON)),
+        'conditions': value['conditions'] == null ? undefined : (value['conditions'].map(DatastoreFilterToJSON)),
         'count': value['count'],
         'limit': value['limit'],
         'orderBys': value['orderBys'] == null ? undefined : (value['orderBys'].map(DatastoreOrderByToJSON)),

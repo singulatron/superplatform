@@ -26,11 +26,12 @@ import './UserSvcUser.mjs';
 import './UserSvcContact.mjs';
 import './UserSvcPermission.mjs';
 import './DatastoreQuery.mjs';
-import './DatastoreCondition.mjs';
-import './DatastoreEqualCondition.mjs';
+import './DatastoreFilter.mjs';
 import './DatastoreFieldSelector.mjs';
-import './DatastoreContainsCondition.mjs';
-import './DatastoreStartsWithCondition.mjs';
+import './DatastoreStartsWithMatch.mjs';
+import './DatastoreContainsMatch.mjs';
+import './DatastoreEqualsMatch.mjs';
+import './DatastoreIntersectsMatch.mjs';
 import './DatastoreOrderBy.mjs';
 import './UserSvcAuthToken.mjs';
 
@@ -196,7 +197,7 @@ class UserSvcApi extends BaseAPI {
         });
     }
     /**
-     * Allows a logged-in user to create a new organization. The user initiating the request will be assigned the role of admin for that organization. The initiating user will receive a dynamic role in the format `user-svc:org:$organization-slug:admin`, where `$organization-slug` is a unique identifier for the created organization. Dynamic roles are generated based on specific user-resource associations, offering more flexible permission management compared to static roles.
+     * Allows a logged-in user to create a new organization. The user initiating the request will be assigned the role of admin for that organization. The initiating user will receive a dynamic role in the format `user-svc:org:{organizationId}:admin`, where `$organization-slug` is a unique identifier for the created organization. Dynamic roles are generated based on specific user-resource associations, offering more flexible permission management compared to static roles.
      * Create an Organization
      */
     createOrganizationRaw(requestParameters, initOverrides) {
@@ -221,7 +222,7 @@ class UserSvcApi extends BaseAPI {
         });
     }
     /**
-     * Allows a logged-in user to create a new organization. The user initiating the request will be assigned the role of admin for that organization. The initiating user will receive a dynamic role in the format `user-svc:org:$organization-slug:admin`, where `$organization-slug` is a unique identifier for the created organization. Dynamic roles are generated based on specific user-resource associations, offering more flexible permission management compared to static roles.
+     * Allows a logged-in user to create a new organization. The user initiating the request will be assigned the role of admin for that organization. The initiating user will receive a dynamic role in the format `user-svc:org:{organizationId}:admin`, where `$organization-slug` is a unique identifier for the created organization. Dynamic roles are generated based on specific user-resource associations, offering more flexible permission management compared to static roles.
      * Create an Organization
      */
     createOrganization(requestParameters, initOverrides) {

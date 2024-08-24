@@ -11,7 +11,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { DatastoreConditionFromJSON, DatastoreConditionToJSON, } from './DatastoreCondition';
+import { DatastoreFilterFromJSON, DatastoreFilterToJSON, } from './DatastoreFilter';
 /**
  * Check if a given object implements the DynamicSvcDeleteObjectRequest interface.
  */
@@ -26,7 +26,7 @@ export function DynamicSvcDeleteObjectRequestFromJSONTyped(json, ignoreDiscrimin
         return json;
     }
     return {
-        'conditions': json['conditions'] == null ? undefined : (json['conditions'].map(DatastoreConditionFromJSON)),
+        'conditions': json['conditions'] == null ? undefined : (json['conditions'].map(DatastoreFilterFromJSON)),
         'table': json['table'] == null ? undefined : json['table'],
     };
 }
@@ -35,7 +35,7 @@ export function DynamicSvcDeleteObjectRequestToJSON(value) {
         return value;
     }
     return {
-        'conditions': value['conditions'] == null ? undefined : (value['conditions'].map(DatastoreConditionToJSON)),
+        'conditions': value['conditions'] == null ? undefined : (value['conditions'].map(DatastoreFilterToJSON)),
         'table': value['table'],
     };
 }

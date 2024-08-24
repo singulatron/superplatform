@@ -3610,72 +3610,29 @@ const docTemplate = `{
         "config_svc.SaveConfigResponse": {
             "type": "object"
         },
-        "datastore.AllCondition": {
+        "datastore.AllMatch": {
             "type": "object"
         },
-        "datastore.Condition": {
+        "datastore.ContainsMatch": {
             "type": "object",
             "properties": {
-                "all": {
-                    "description": "All condition returns all objects.",
+                "selector": {
+                    "description": "Selector selects one, more or all fields",
                     "allOf": [
                         {
-                            "$ref": "#/definitions/datastore.AllCondition"
+                            "$ref": "#/definitions/datastore.FieldSelector"
                         }
                     ]
                 },
-                "contains": {
-                    "description": "Contains condition returns all objects where the field(s) values contain a particular string.",
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/datastore.ContainsCondition"
-                        }
-                    ]
-                },
-                "equal": {
-                    "description": "Equal condition returns objects where value of a field equals (=) to the specified value in the query.",
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/datastore.EqualCondition"
-                        }
-                    ]
-                },
-                "startsWith": {
-                    "description": "StartsWith condition returns all objects where the field(s) values start with a particular string.",
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/datastore.StartsWithCondition"
-                        }
-                    ]
+                "value": {}
+            }
+        },
+        "datastore.EqualsMatch": {
+            "type": "object",
+            "properties": {
+                "value": {
+                    "description": "Selector selects one, more or all fields"
                 }
-            }
-        },
-        "datastore.ContainsCondition": {
-            "type": "object",
-            "properties": {
-                "selector": {
-                    "description": "Selector selects one, more or all fields",
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/datastore.FieldSelector"
-                        }
-                    ]
-                },
-                "value": {}
-            }
-        },
-        "datastore.EqualCondition": {
-            "type": "object",
-            "properties": {
-                "selector": {
-                    "description": "Selector selects one, more or all fields",
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/datastore.FieldSelector"
-                        }
-                    ]
-                },
-                "value": {}
             }
         },
         "datastore.FieldSelector": {
@@ -3695,6 +3652,66 @@ const docTemplate = `{
                     "items": {
                         "type": "string"
                     }
+                }
+            }
+        },
+        "datastore.Filter": {
+            "type": "object",
+            "properties": {
+                "all": {
+                    "description": "All condition returns all objects.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/datastore.AllMatch"
+                        }
+                    ]
+                },
+                "contains": {
+                    "description": "Contains condition returns all objects where the field(s) values contain a particular string or slice element.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/datastore.ContainsMatch"
+                        }
+                    ]
+                },
+                "equal": {
+                    "description": "Equals condition returns objects where value of a field equals (=) to the specified value in the query.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/datastore.EqualsMatch"
+                        }
+                    ]
+                },
+                "intersects": {
+                    "description": "Intersects condition returns objects where the slice value of a field intersects with the slice value in the query.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/datastore.IntersectsMatch"
+                        }
+                    ]
+                },
+                "selector": {
+                    "$ref": "#/definitions/datastore.FieldSelector"
+                },
+                "startsWith": {
+                    "description": "StartsWith condition returns all objects where the field(s) values start with a particular string.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/datastore.StartsWithMatch"
+                        }
+                    ]
+                }
+            }
+        },
+        "datastore.IntersectsMatch": {
+            "type": "object",
+            "properties": {
+                "selector": {
+                    "$ref": "#/definitions/datastore.FieldSelector"
+                },
+                "values": {
+                    "type": "array",
+                    "items": {}
                 }
             }
         },
@@ -3724,14 +3741,14 @@ const docTemplate = `{
                     "items": {}
                 },
                 "conditions": {
-                    "description": "Conditions are filtering options of a query. It is advised to use\nIt's advised to use helper functions in your respective client library such as condition constructors (` + "`" + `all` + "`" + `, ` + "`" + `equal` + "`" + `, ` + "`" + `contains` + "`" + `, ` + "`" + `startsWith` + "`" + `) and field selectors (` + "`" + `field` + "`" + `, ` + "`" + `fields` + "`" + `, ` + "`" + `id` + "`" + `) for easier access.",
+                    "description": "Filters are filtering options of a query. It is advised to use\nIt's advised to use helper functions in your respective client library such as condition constructors (` + "`" + `all` + "`" + `, ` + "`" + `equal` + "`" + `, ` + "`" + `contains` + "`" + `, ` + "`" + `startsWith` + "`" + `) and field selectors (` + "`" + `field` + "`" + `, ` + "`" + `fields` + "`" + `, ` + "`" + `id` + "`" + `) for easier access.",
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/datastore.Condition"
+                        "$ref": "#/definitions/datastore.Filter"
                     }
                 },
                 "count": {
-                    "description": "Count true means return the count of the dataset filtered by Conditions\nwithout after or limit.",
+                    "description": "Count true means return the count of the dataset filtered by Filters\nwithout after or limit.",
                     "type": "boolean"
                 },
                 "limit": {
@@ -3747,7 +3764,7 @@ const docTemplate = `{
                 }
             }
         },
-        "datastore.StartsWithCondition": {
+        "datastore.StartsWithMatch": {
             "type": "object",
             "properties": {
                 "selector": {
@@ -4015,7 +4032,7 @@ const docTemplate = `{
                 "conditions": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/datastore.Condition"
+                        "$ref": "#/definitions/datastore.Filter"
                     }
                 },
                 "table": {
@@ -4126,6 +4143,12 @@ const docTemplate = `{
                 "query": {
                     "$ref": "#/definitions/datastore.Query"
                 },
+                "readers": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
                 "table": {
                     "type": "string"
                 }
@@ -4148,7 +4171,7 @@ const docTemplate = `{
                 "conditions": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/datastore.Condition"
+                        "$ref": "#/definitions/datastore.Filter"
                     }
                 },
                 "object": {

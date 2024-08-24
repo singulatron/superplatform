@@ -11,12 +11,12 @@
  */
 
 import { RequestFile } from './models';
-import { DatastoreCondition } from './datastoreCondition';
-import { DynamicSvcGenericObject } from './dynamicSvcGenericObject';
+import { DatastoreFilter } from './datastoreFilter';
+import { DynamicSvcObject } from './dynamicSvcObject';
 
 export class DynamicSvcUpdateObjectRequest {
-    'conditions'?: Array<DatastoreCondition>;
-    'object'?: DynamicSvcGenericObject;
+    'conditions'?: Array<DatastoreFilter>;
+    'object'?: DynamicSvcObject;
     'table'?: string;
 
     static discriminator: string | undefined = undefined;
@@ -25,12 +25,12 @@ export class DynamicSvcUpdateObjectRequest {
         {
             "name": "conditions",
             "baseName": "conditions",
-            "type": "Array<DatastoreCondition>"
+            "type": "Array<DatastoreFilter>"
         },
         {
             "name": "object",
             "baseName": "object",
-            "type": "DynamicSvcGenericObject"
+            "type": "DynamicSvcObject"
         },
         {
             "name": "table",

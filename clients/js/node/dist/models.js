@@ -16,13 +16,14 @@ var configSvcDownloadServiceConfig = require('./configSvcDownloadServiceConfig.j
 var configSvcGetConfigResponse = require('./configSvcGetConfigResponse.js');
 var configSvcModelServiceConfig = require('./configSvcModelServiceConfig.js');
 var configSvcSaveConfigRequest = require('./configSvcSaveConfigRequest.js');
-var datastoreCondition = require('./datastoreCondition.js');
-var datastoreContainsCondition = require('./datastoreContainsCondition.js');
-var datastoreEqualCondition = require('./datastoreEqualCondition.js');
+var datastoreContainsMatch = require('./datastoreContainsMatch.js');
+var datastoreEqualsMatch = require('./datastoreEqualsMatch.js');
 var datastoreFieldSelector = require('./datastoreFieldSelector.js');
+var datastoreFilter = require('./datastoreFilter.js');
+var datastoreIntersectsMatch = require('./datastoreIntersectsMatch.js');
 var datastoreOrderBy = require('./datastoreOrderBy.js');
 var datastoreQuery = require('./datastoreQuery.js');
-var datastoreStartsWithCondition = require('./datastoreStartsWithCondition.js');
+var datastoreStartsWithMatch = require('./datastoreStartsWithMatch.js');
 var dockerSvcContainerIsRunningResponse = require('./dockerSvcContainerIsRunningResponse.js');
 var dockerSvcDockerInfo = require('./dockerSvcDockerInfo.js');
 var dockerSvcErrorResponse = require('./dockerSvcErrorResponse.js');
@@ -42,8 +43,8 @@ var dynamicSvcCreateObjectRequest = require('./dynamicSvcCreateObjectRequest.js'
 var dynamicSvcCreateObjectResponse = require('./dynamicSvcCreateObjectResponse.js');
 var dynamicSvcDeleteObjectRequest = require('./dynamicSvcDeleteObjectRequest.js');
 var dynamicSvcErrorResponse = require('./dynamicSvcErrorResponse.js');
-var dynamicSvcGenericObject = require('./dynamicSvcGenericObject.js');
-var dynamicSvcGenericObjectCreateFields = require('./dynamicSvcGenericObjectCreateFields.js');
+var dynamicSvcObject = require('./dynamicSvcObject.js');
+var dynamicSvcObjectCreateFields = require('./dynamicSvcObjectCreateFields.js');
 var dynamicSvcQueryRequest = require('./dynamicSvcQueryRequest.js');
 var dynamicSvcQueryResponse = require('./dynamicSvcQueryResponse.js');
 var dynamicSvcUpdateObjectRequest = require('./dynamicSvcUpdateObjectRequest.js');
@@ -147,13 +148,14 @@ let typeMap = {
     "ConfigSvcGetConfigResponse": configSvcGetConfigResponse.ConfigSvcGetConfigResponse,
     "ConfigSvcModelServiceConfig": configSvcModelServiceConfig.ConfigSvcModelServiceConfig,
     "ConfigSvcSaveConfigRequest": configSvcSaveConfigRequest.ConfigSvcSaveConfigRequest,
-    "DatastoreCondition": datastoreCondition.DatastoreCondition,
-    "DatastoreContainsCondition": datastoreContainsCondition.DatastoreContainsCondition,
-    "DatastoreEqualCondition": datastoreEqualCondition.DatastoreEqualCondition,
+    "DatastoreContainsMatch": datastoreContainsMatch.DatastoreContainsMatch,
+    "DatastoreEqualsMatch": datastoreEqualsMatch.DatastoreEqualsMatch,
     "DatastoreFieldSelector": datastoreFieldSelector.DatastoreFieldSelector,
+    "DatastoreFilter": datastoreFilter.DatastoreFilter,
+    "DatastoreIntersectsMatch": datastoreIntersectsMatch.DatastoreIntersectsMatch,
     "DatastoreOrderBy": datastoreOrderBy.DatastoreOrderBy,
     "DatastoreQuery": datastoreQuery.DatastoreQuery,
-    "DatastoreStartsWithCondition": datastoreStartsWithCondition.DatastoreStartsWithCondition,
+    "DatastoreStartsWithMatch": datastoreStartsWithMatch.DatastoreStartsWithMatch,
     "DockerSvcContainerIsRunningResponse": dockerSvcContainerIsRunningResponse.DockerSvcContainerIsRunningResponse,
     "DockerSvcDockerInfo": dockerSvcDockerInfo.DockerSvcDockerInfo,
     "DockerSvcErrorResponse": dockerSvcErrorResponse.DockerSvcErrorResponse,
@@ -173,8 +175,8 @@ let typeMap = {
     "DynamicSvcCreateObjectResponse": dynamicSvcCreateObjectResponse.DynamicSvcCreateObjectResponse,
     "DynamicSvcDeleteObjectRequest": dynamicSvcDeleteObjectRequest.DynamicSvcDeleteObjectRequest,
     "DynamicSvcErrorResponse": dynamicSvcErrorResponse.DynamicSvcErrorResponse,
-    "DynamicSvcGenericObject": dynamicSvcGenericObject.DynamicSvcGenericObject,
-    "DynamicSvcGenericObjectCreateFields": dynamicSvcGenericObjectCreateFields.DynamicSvcGenericObjectCreateFields,
+    "DynamicSvcObject": dynamicSvcObject.DynamicSvcObject,
+    "DynamicSvcObjectCreateFields": dynamicSvcObjectCreateFields.DynamicSvcObjectCreateFields,
     "DynamicSvcQueryRequest": dynamicSvcQueryRequest.DynamicSvcQueryRequest,
     "DynamicSvcQueryResponse": dynamicSvcQueryResponse.DynamicSvcQueryResponse,
     "DynamicSvcUpdateObjectRequest": dynamicSvcUpdateObjectRequest.DynamicSvcUpdateObjectRequest,
@@ -440,13 +442,14 @@ exports.ConfigSvcDownloadServiceConfig = configSvcDownloadServiceConfig.ConfigSv
 exports.ConfigSvcGetConfigResponse = configSvcGetConfigResponse.ConfigSvcGetConfigResponse;
 exports.ConfigSvcModelServiceConfig = configSvcModelServiceConfig.ConfigSvcModelServiceConfig;
 exports.ConfigSvcSaveConfigRequest = configSvcSaveConfigRequest.ConfigSvcSaveConfigRequest;
-exports.DatastoreCondition = datastoreCondition.DatastoreCondition;
-exports.DatastoreContainsCondition = datastoreContainsCondition.DatastoreContainsCondition;
-exports.DatastoreEqualCondition = datastoreEqualCondition.DatastoreEqualCondition;
+exports.DatastoreContainsMatch = datastoreContainsMatch.DatastoreContainsMatch;
+exports.DatastoreEqualsMatch = datastoreEqualsMatch.DatastoreEqualsMatch;
 exports.DatastoreFieldSelector = datastoreFieldSelector.DatastoreFieldSelector;
+exports.DatastoreFilter = datastoreFilter.DatastoreFilter;
+exports.DatastoreIntersectsMatch = datastoreIntersectsMatch.DatastoreIntersectsMatch;
 exports.DatastoreOrderBy = datastoreOrderBy.DatastoreOrderBy;
 exports.DatastoreQuery = datastoreQuery.DatastoreQuery;
-exports.DatastoreStartsWithCondition = datastoreStartsWithCondition.DatastoreStartsWithCondition;
+exports.DatastoreStartsWithMatch = datastoreStartsWithMatch.DatastoreStartsWithMatch;
 exports.DockerSvcContainerIsRunningResponse = dockerSvcContainerIsRunningResponse.DockerSvcContainerIsRunningResponse;
 exports.DockerSvcDockerInfo = dockerSvcDockerInfo.DockerSvcDockerInfo;
 exports.DockerSvcErrorResponse = dockerSvcErrorResponse.DockerSvcErrorResponse;
@@ -466,8 +469,8 @@ exports.DynamicSvcCreateObjectRequest = dynamicSvcCreateObjectRequest.DynamicSvc
 exports.DynamicSvcCreateObjectResponse = dynamicSvcCreateObjectResponse.DynamicSvcCreateObjectResponse;
 exports.DynamicSvcDeleteObjectRequest = dynamicSvcDeleteObjectRequest.DynamicSvcDeleteObjectRequest;
 exports.DynamicSvcErrorResponse = dynamicSvcErrorResponse.DynamicSvcErrorResponse;
-exports.DynamicSvcGenericObject = dynamicSvcGenericObject.DynamicSvcGenericObject;
-exports.DynamicSvcGenericObjectCreateFields = dynamicSvcGenericObjectCreateFields.DynamicSvcGenericObjectCreateFields;
+exports.DynamicSvcObject = dynamicSvcObject.DynamicSvcObject;
+exports.DynamicSvcObjectCreateFields = dynamicSvcObjectCreateFields.DynamicSvcObjectCreateFields;
 exports.DynamicSvcQueryRequest = dynamicSvcQueryRequest.DynamicSvcQueryRequest;
 exports.DynamicSvcQueryResponse = dynamicSvcQueryResponse.DynamicSvcQueryResponse;
 exports.DynamicSvcUpdateObjectRequest = dynamicSvcUpdateObjectRequest.DynamicSvcUpdateObjectRequest;

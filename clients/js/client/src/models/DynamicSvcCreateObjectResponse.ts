@@ -13,12 +13,12 @@
  */
 
 import { mapValues } from '../runtime';
-import type { DynamicSvcGenericObject } from './DynamicSvcGenericObject';
+import type { DynamicSvcObject } from './DynamicSvcObject';
 import {
-    DynamicSvcGenericObjectFromJSON,
-    DynamicSvcGenericObjectFromJSONTyped,
-    DynamicSvcGenericObjectToJSON,
-} from './DynamicSvcGenericObject';
+    DynamicSvcObjectFromJSON,
+    DynamicSvcObjectFromJSONTyped,
+    DynamicSvcObjectToJSON,
+} from './DynamicSvcObject';
 
 /**
  * 
@@ -28,10 +28,10 @@ import {
 export interface DynamicSvcCreateObjectResponse {
     /**
      * 
-     * @type {DynamicSvcGenericObject}
+     * @type {DynamicSvcObject}
      * @memberof DynamicSvcCreateObjectResponse
      */
-    object?: DynamicSvcGenericObject;
+    object?: DynamicSvcObject;
 }
 
 /**
@@ -51,7 +51,7 @@ export function DynamicSvcCreateObjectResponseFromJSONTyped(json: any, ignoreDis
     }
     return {
         
-        'object': json['object'] == null ? undefined : DynamicSvcGenericObjectFromJSON(json['object']),
+        'object': json['object'] == null ? undefined : DynamicSvcObjectFromJSON(json['object']),
     };
 }
 
@@ -61,7 +61,7 @@ export function DynamicSvcCreateObjectResponseToJSON(value?: DynamicSvcCreateObj
     }
     return {
         
-        'object': DynamicSvcGenericObjectToJSON(value['object']),
+        'object': DynamicSvcObjectToJSON(value['object']),
     };
 }
 

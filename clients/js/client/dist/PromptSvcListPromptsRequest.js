@@ -1,11 +1,12 @@
 'use strict';
 
 var DatastoreQuery = require('./DatastoreQuery.js');
-require('./DatastoreCondition.js');
-require('./DatastoreEqualCondition.js');
+require('./DatastoreFilter.js');
 require('./DatastoreFieldSelector.js');
-require('./DatastoreContainsCondition.js');
-require('./DatastoreStartsWithCondition.js');
+require('./DatastoreStartsWithMatch.js');
+require('./DatastoreContainsMatch.js');
+require('./DatastoreEqualsMatch.js');
+require('./DatastoreIntersectsMatch.js');
 require('./DatastoreOrderBy.js');
 
 /* tslint:disable */

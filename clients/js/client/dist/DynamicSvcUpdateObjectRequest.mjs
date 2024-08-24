@@ -1,9 +1,10 @@
-import { DynamicSvcGenericObjectFromJSON, DynamicSvcGenericObjectToJSON } from './DynamicSvcGenericObject.mjs';
-import { DatastoreConditionFromJSON, DatastoreConditionToJSON } from './DatastoreCondition.mjs';
-import './DatastoreEqualCondition.mjs';
+import { DynamicSvcObjectFromJSON, DynamicSvcObjectToJSON } from './DynamicSvcObject.mjs';
+import { DatastoreFilterFromJSON, DatastoreFilterToJSON } from './DatastoreFilter.mjs';
 import './DatastoreFieldSelector.mjs';
-import './DatastoreContainsCondition.mjs';
-import './DatastoreStartsWithCondition.mjs';
+import './DatastoreStartsWithMatch.mjs';
+import './DatastoreContainsMatch.mjs';
+import './DatastoreEqualsMatch.mjs';
+import './DatastoreIntersectsMatch.mjs';
 
 /* tslint:disable */
 /* eslint-disable */
@@ -32,8 +33,8 @@ function DynamicSvcUpdateObjectRequestFromJSONTyped(json, ignoreDiscriminator) {
         return json;
     }
     return {
-        'conditions': json['conditions'] == null ? undefined : (json['conditions'].map(DatastoreConditionFromJSON)),
-        'object': json['object'] == null ? undefined : DynamicSvcGenericObjectFromJSON(json['object']),
+        'conditions': json['conditions'] == null ? undefined : (json['conditions'].map(DatastoreFilterFromJSON)),
+        'object': json['object'] == null ? undefined : DynamicSvcObjectFromJSON(json['object']),
         'table': json['table'] == null ? undefined : json['table'],
     };
 }
@@ -42,8 +43,8 @@ function DynamicSvcUpdateObjectRequestToJSON(value) {
         return value;
     }
     return {
-        'conditions': value['conditions'] == null ? undefined : (value['conditions'].map(DatastoreConditionToJSON)),
-        'object': DynamicSvcGenericObjectToJSON(value['object']),
+        'conditions': value['conditions'] == null ? undefined : (value['conditions'].map(DatastoreFilterToJSON)),
+        'object': DynamicSvcObjectToJSON(value['object']),
         'table': value['table'],
     };
 }

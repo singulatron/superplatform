@@ -14,22 +14,22 @@ import { RequestFile } from './models';
 import { DatastoreQuery } from './datastoreQuery';
 
 export class DynamicSvcQueryRequest {
-    '_public'?: boolean;
     'query'?: DatastoreQuery;
+    'readers'?: Array<string>;
     'table'?: string;
 
     static discriminator: string | undefined = undefined;
 
     static attributeTypeMap: Array<{name: string, baseName: string, type: string}> = [
         {
-            "name": "_public",
-            "baseName": "public",
-            "type": "boolean"
-        },
-        {
             "name": "query",
             "baseName": "query",
             "type": "DatastoreQuery"
+        },
+        {
+            "name": "readers",
+            "baseName": "readers",
+            "type": "Array<string>"
         },
         {
             "name": "table",

@@ -1,4 +1,4 @@
-import { DynamicSvcGenericObjectFromJSON, DynamicSvcGenericObjectToJSON } from './DynamicSvcGenericObject.mjs';
+import { DynamicSvcObjectFromJSON, DynamicSvcObjectToJSON } from './DynamicSvcObject.mjs';
 
 /* tslint:disable */
 /* eslint-disable */
@@ -27,7 +27,7 @@ function DynamicSvcUpsertObjectResponseFromJSONTyped(json, ignoreDiscriminator) 
         return json;
     }
     return {
-        'object': json['object'] == null ? undefined : DynamicSvcGenericObjectFromJSON(json['object']),
+        'object': json['object'] == null ? undefined : DynamicSvcObjectFromJSON(json['object']),
     };
 }
 function DynamicSvcUpsertObjectResponseToJSON(value) {
@@ -35,7 +35,7 @@ function DynamicSvcUpsertObjectResponseToJSON(value) {
         return value;
     }
     return {
-        'object': DynamicSvcGenericObjectToJSON(value['object']),
+        'object': DynamicSvcObjectToJSON(value['object']),
     };
 }
 

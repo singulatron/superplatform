@@ -1,11 +1,12 @@
 'use strict';
 
 var DatastoreQuery = require('./DatastoreQuery.js');
-require('./DatastoreCondition.js');
-require('./DatastoreEqualCondition.js');
+require('./DatastoreFilter.js');
 require('./DatastoreFieldSelector.js');
-require('./DatastoreContainsCondition.js');
-require('./DatastoreStartsWithCondition.js');
+require('./DatastoreStartsWithMatch.js');
+require('./DatastoreContainsMatch.js');
+require('./DatastoreEqualsMatch.js');
+require('./DatastoreIntersectsMatch.js');
 require('./DatastoreOrderBy.js');
 
 /* tslint:disable */
@@ -35,8 +36,8 @@ function DynamicSvcQueryRequestFromJSONTyped(json, ignoreDiscriminator) {
         return json;
     }
     return {
-        '_public': json['public'] == null ? undefined : json['public'],
         'query': json['query'] == null ? undefined : DatastoreQuery.DatastoreQueryFromJSON(json['query']),
+        'readers': json['readers'] == null ? undefined : json['readers'],
         'table': json['table'] == null ? undefined : json['table'],
     };
 }
@@ -45,8 +46,8 @@ function DynamicSvcQueryRequestToJSON(value) {
         return value;
     }
     return {
-        'public': value['_public'],
         'query': DatastoreQuery.DatastoreQueryToJSON(value['query']),
+        'readers': value['readers'],
         'table': value['table'],
     };
 }

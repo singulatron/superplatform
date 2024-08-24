@@ -160,31 +160,9 @@ definitions:
     type: object
   config_svc.SaveConfigResponse:
     type: object
-  datastore.AllCondition:
+  datastore.AllMatch:
     type: object
-  datastore.Condition:
-    properties:
-      all:
-        allOf:
-        - $ref: '#/definitions/datastore.AllCondition'
-        description: All condition returns all objects.
-      contains:
-        allOf:
-        - $ref: '#/definitions/datastore.ContainsCondition'
-        description: Contains condition returns all objects where the field(s) values
-          contain a particular string.
-      equal:
-        allOf:
-        - $ref: '#/definitions/datastore.EqualCondition'
-        description: Equal condition returns objects where value of a field equals
-          (=) to the specified value in the query.
-      startsWith:
-        allOf:
-        - $ref: '#/definitions/datastore.StartsWithCondition'
-        description: StartsWith condition returns all objects where the field(s) values
-          start with a particular string.
-    type: object
-  datastore.ContainsCondition:
+  datastore.ContainsMatch:
     properties:
       selector:
         allOf:
@@ -192,13 +170,10 @@ definitions:
         description: Selector selects one, more or all fields
       value: {}
     type: object
-  datastore.EqualCondition:
+  datastore.EqualsMatch:
     properties:
-      selector:
-        allOf:
-        - $ref: '#/definitions/datastore.FieldSelector'
+      value:
         description: Selector selects one, more or all fields
-      value: {}
     type: object
   datastore.FieldSelector:
     properties:
@@ -212,6 +187,43 @@ definitions:
         description: OneOf matches a number of fields
         items:
           type: string
+        type: array
+    type: object
+  datastore.Filter:
+    properties:
+      all:
+        allOf:
+        - $ref: '#/definitions/datastore.AllMatch'
+        description: All condition returns all objects.
+      contains:
+        allOf:
+        - $ref: '#/definitions/datastore.ContainsMatch'
+        description: Contains condition returns all objects where the field(s) values
+          contain a particular string or slice element.
+      equal:
+        allOf:
+        - $ref: '#/definitions/datastore.EqualsMatch'
+        description: Equals condition returns objects where value of a field equals
+          (=) to the specified value in the query.
+      intersects:
+        allOf:
+        - $ref: '#/definitions/datastore.IntersectsMatch'
+        description: Intersects condition returns objects where the slice value of
+          a field intersects with the slice value in the query.
+      selector:
+        $ref: '#/definitions/datastore.FieldSelector'
+      startsWith:
+        allOf:
+        - $ref: '#/definitions/datastore.StartsWithMatch'
+        description: StartsWith condition returns all objects where the field(s) values
+          start with a particular string.
+    type: object
+  datastore.IntersectsMatch:
+    properties:
+      selector:
+        $ref: '#/definitions/datastore.FieldSelector'
+      values:
+        items: {}
         type: array
     type: object
   datastore.OrderBy:
@@ -238,14 +250,14 @@ definitions:
         type: array
       conditions:
         description: |-
-          Conditions are filtering options of a query. It is advised to use
+          Filters are filtering options of a query. It is advised to use
           It's advised to use helper functions in your respective client library such as condition constructors (`all`, `equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
         items:
-          $ref: '#/definitions/datastore.Condition'
+          $ref: '#/definitions/datastore.Filter'
         type: array
       count:
         description: |-
-          Count true means return the count of the dataset filtered by Conditions
+          Count true means return the count of the dataset filtered by Filters
           without after or limit.
         type: boolean
       limit:
@@ -257,7 +269,7 @@ definitions:
           $ref: '#/definitions/datastore.OrderBy'
         type: array
     type: object
-  datastore.StartsWithCondition:
+  datastore.StartsWithMatch:
     properties:
       selector:
         allOf:
@@ -438,7 +450,7 @@ definitions:
     properties:
       conditions:
         items:
-          $ref: '#/definitions/datastore.Condition'
+          $ref: '#/definitions/datastore.Filter'
         type: array
       table:
         type: string
@@ -520,6 +532,10 @@ definitions:
     properties:
       query:
         $ref: '#/definitions/datastore.Query'
+      readers:
+        items:
+          type: string
+        type: array
       table:
         type: string
     type: object
@@ -534,7 +550,7 @@ definitions:
     properties:
       conditions:
         items:
-          $ref: '#/definitions/datastore.Condition'
+          $ref: '#/definitions/datastore.Filter'
         type: array
       object:
         $ref: '#/definitions/dynamic_svc.Object'
@@ -2870,7 +2886,7 @@ paths:
       - application/json
       description: |-
         Allows a logged-in user to create a new organization. The user initiating the request will be assigned the role of admin for that organization.
-        The initiating user will receive a dynamic role in the format `user-svc:org:{organization-slug}:admin`, where `$organization-slug` is a unique identifier for the created organization.
+        The initiating user will receive a dynamic role in the format `user-svc:org:{organizationId}:admin`, where `$organization-slug` is a unique identifier for the created organization.
         Dynamic roles are generated based on specific user-resource associations, offering more flexible permission management compared to static roles.
       operationId: createOrganization
       parameters:

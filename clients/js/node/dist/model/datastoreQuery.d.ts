@@ -9,7 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { DatastoreCondition } from './datastoreCondition';
+import { DatastoreFilter } from './datastoreFilter';
 import { DatastoreOrderBy } from './datastoreOrderBy';
 export declare class DatastoreQuery {
     /**
@@ -17,11 +17,11 @@ export declare class DatastoreQuery {
     */
     'after'?: Array<object>;
     /**
-    * Conditions are filtering options of a query. It is advised to use It\'s advised to use helper functions in your respective client library such as condition constructors (`all`, `equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
+    * Filters are filtering options of a query. It is advised to use It\'s advised to use helper functions in your respective client library such as condition constructors (`all`, `equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
     */
-    'conditions'?: Array<DatastoreCondition>;
+    'conditions'?: Array<DatastoreFilter>;
     /**
-    * Count true means return the count of the dataset filtered by Conditions without after or limit.
+    * Count true means return the count of the dataset filtered by Filters without after or limit.
     */
     'count'?: boolean;
     /**

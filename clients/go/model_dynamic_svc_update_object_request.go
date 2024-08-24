@@ -20,7 +20,7 @@ var _ MappedNullable = &DynamicSvcUpdateObjectRequest{}
 
 // DynamicSvcUpdateObjectRequest struct for DynamicSvcUpdateObjectRequest
 type DynamicSvcUpdateObjectRequest struct {
-	Conditions []DatastoreCondition `json:"conditions,omitempty"`
+	Conditions []DatastoreFilter `json:"conditions,omitempty"`
 	Object *DynamicSvcObject `json:"object,omitempty"`
 	Table *string `json:"table,omitempty"`
 }
@@ -43,9 +43,9 @@ func NewDynamicSvcUpdateObjectRequestWithDefaults() *DynamicSvcUpdateObjectReque
 }
 
 // GetConditions returns the Conditions field value if set, zero value otherwise.
-func (o *DynamicSvcUpdateObjectRequest) GetConditions() []DatastoreCondition {
+func (o *DynamicSvcUpdateObjectRequest) GetConditions() []DatastoreFilter {
 	if o == nil || IsNil(o.Conditions) {
-		var ret []DatastoreCondition
+		var ret []DatastoreFilter
 		return ret
 	}
 	return o.Conditions
@@ -53,7 +53,7 @@ func (o *DynamicSvcUpdateObjectRequest) GetConditions() []DatastoreCondition {
 
 // GetConditionsOk returns a tuple with the Conditions field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *DynamicSvcUpdateObjectRequest) GetConditionsOk() ([]DatastoreCondition, bool) {
+func (o *DynamicSvcUpdateObjectRequest) GetConditionsOk() ([]DatastoreFilter, bool) {
 	if o == nil || IsNil(o.Conditions) {
 		return nil, false
 	}
@@ -69,8 +69,8 @@ func (o *DynamicSvcUpdateObjectRequest) HasConditions() bool {
 	return false
 }
 
-// SetConditions gets a reference to the given []DatastoreCondition and assigns it to the Conditions field.
-func (o *DynamicSvcUpdateObjectRequest) SetConditions(v []DatastoreCondition) {
+// SetConditions gets a reference to the given []DatastoreFilter and assigns it to the Conditions field.
+func (o *DynamicSvcUpdateObjectRequest) SetConditions(v []DatastoreFilter) {
 	o.Conditions = v
 }
 

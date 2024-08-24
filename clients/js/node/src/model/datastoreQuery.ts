@@ -11,7 +11,7 @@
  */
 
 import { RequestFile } from './models';
-import { DatastoreCondition } from './datastoreCondition';
+import { DatastoreFilter } from './datastoreFilter';
 import { DatastoreOrderBy } from './datastoreOrderBy';
 
 export class DatastoreQuery {
@@ -20,11 +20,11 @@ export class DatastoreQuery {
     */
     'after'?: Array<object>;
     /**
-    * Conditions are filtering options of a query. It is advised to use It\'s advised to use helper functions in your respective client library such as condition constructors (`all`, `equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
+    * Filters are filtering options of a query. It is advised to use It\'s advised to use helper functions in your respective client library such as condition constructors (`all`, `equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
     */
-    'conditions'?: Array<DatastoreCondition>;
+    'conditions'?: Array<DatastoreFilter>;
     /**
-    * Count true means return the count of the dataset filtered by Conditions without after or limit.
+    * Count true means return the count of the dataset filtered by Filters without after or limit.
     */
     'count'?: boolean;
     /**
@@ -47,7 +47,7 @@ export class DatastoreQuery {
         {
             "name": "conditions",
             "baseName": "conditions",
-            "type": "Array<DatastoreCondition>"
+            "type": "Array<DatastoreFilter>"
         },
         {
             "name": "count",

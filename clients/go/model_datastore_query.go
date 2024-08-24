@@ -22,9 +22,9 @@ var _ MappedNullable = &DatastoreQuery{}
 type DatastoreQuery struct {
 	// After is used for paginations. Instead of offset-based pagination, we support cursor-based pagination because it works better in a scalable, distributed environment.
 	After []map[string]interface{} `json:"after,omitempty"`
-	// Conditions are filtering options of a query. It is advised to use It's advised to use helper functions in your respective client library such as condition constructors (`all`, `equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
-	Conditions []DatastoreCondition `json:"conditions,omitempty"`
-	// Count true means return the count of the dataset filtered by Conditions without after or limit.
+	// Filters are filtering options of a query. It is advised to use It's advised to use helper functions in your respective client library such as condition constructors (`all`, `equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
+	Conditions []DatastoreFilter `json:"conditions,omitempty"`
+	// Count true means return the count of the dataset filtered by Filters without after or limit.
 	Count *bool `json:"count,omitempty"`
 	// Limit the number of records in the result set.
 	Limit *int32 `json:"limit,omitempty"`
@@ -82,9 +82,9 @@ func (o *DatastoreQuery) SetAfter(v []map[string]interface{}) {
 }
 
 // GetConditions returns the Conditions field value if set, zero value otherwise.
-func (o *DatastoreQuery) GetConditions() []DatastoreCondition {
+func (o *DatastoreQuery) GetConditions() []DatastoreFilter {
 	if o == nil || IsNil(o.Conditions) {
-		var ret []DatastoreCondition
+		var ret []DatastoreFilter
 		return ret
 	}
 	return o.Conditions
@@ -92,7 +92,7 @@ func (o *DatastoreQuery) GetConditions() []DatastoreCondition {
 
 // GetConditionsOk returns a tuple with the Conditions field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *DatastoreQuery) GetConditionsOk() ([]DatastoreCondition, bool) {
+func (o *DatastoreQuery) GetConditionsOk() ([]DatastoreFilter, bool) {
 	if o == nil || IsNil(o.Conditions) {
 		return nil, false
 	}
@@ -108,8 +108,8 @@ func (o *DatastoreQuery) HasConditions() bool {
 	return false
 }
 
-// SetConditions gets a reference to the given []DatastoreCondition and assigns it to the Conditions field.
-func (o *DatastoreQuery) SetConditions(v []DatastoreCondition) {
+// SetConditions gets a reference to the given []DatastoreFilter and assigns it to the Conditions field.
+func (o *DatastoreQuery) SetConditions(v []DatastoreFilter) {
 	o.Conditions = v
 }
 

@@ -11,8 +11,8 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { DynamicSvcGenericObjectFromJSON, DynamicSvcGenericObjectToJSON, } from './DynamicSvcGenericObject';
-import { DatastoreConditionFromJSON, DatastoreConditionToJSON, } from './DatastoreCondition';
+import { DynamicSvcObjectFromJSON, DynamicSvcObjectToJSON, } from './DynamicSvcObject';
+import { DatastoreFilterFromJSON, DatastoreFilterToJSON, } from './DatastoreFilter';
 /**
  * Check if a given object implements the DynamicSvcUpdateObjectRequest interface.
  */
@@ -27,8 +27,8 @@ export function DynamicSvcUpdateObjectRequestFromJSONTyped(json, ignoreDiscrimin
         return json;
     }
     return {
-        'conditions': json['conditions'] == null ? undefined : (json['conditions'].map(DatastoreConditionFromJSON)),
-        'object': json['object'] == null ? undefined : DynamicSvcGenericObjectFromJSON(json['object']),
+        'conditions': json['conditions'] == null ? undefined : (json['conditions'].map(DatastoreFilterFromJSON)),
+        'object': json['object'] == null ? undefined : DynamicSvcObjectFromJSON(json['object']),
         'table': json['table'] == null ? undefined : json['table'],
     };
 }
@@ -37,8 +37,8 @@ export function DynamicSvcUpdateObjectRequestToJSON(value) {
         return value;
     }
     return {
-        'conditions': value['conditions'] == null ? undefined : (value['conditions'].map(DatastoreConditionToJSON)),
-        'object': DynamicSvcGenericObjectToJSON(value['object']),
+        'conditions': value['conditions'] == null ? undefined : (value['conditions'].map(DatastoreFilterToJSON)),
+        'object': DynamicSvcObjectToJSON(value['object']),
         'table': value['table'],
     };
 }

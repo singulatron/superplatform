@@ -7,11 +7,12 @@ import { PromptSvcRemovePromptRequestToJSON } from './PromptSvcRemovePromptReque
 import './PromptSvcPrompt.mjs';
 import './PromptSvcPromptStatus.mjs';
 import './DatastoreQuery.mjs';
-import './DatastoreCondition.mjs';
-import './DatastoreEqualCondition.mjs';
+import './DatastoreFilter.mjs';
 import './DatastoreFieldSelector.mjs';
-import './DatastoreContainsCondition.mjs';
-import './DatastoreStartsWithCondition.mjs';
+import './DatastoreStartsWithMatch.mjs';
+import './DatastoreContainsMatch.mjs';
+import './DatastoreEqualsMatch.mjs';
+import './DatastoreIntersectsMatch.mjs';
 import './DatastoreOrderBy.mjs';
 
 /* tslint:disable */

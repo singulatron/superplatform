@@ -1,11 +1,12 @@
 'use strict';
 
-var DynamicSvcGenericObject = require('./DynamicSvcGenericObject.js');
-var DatastoreCondition = require('./DatastoreCondition.js');
-require('./DatastoreEqualCondition.js');
+var DynamicSvcObject = require('./DynamicSvcObject.js');
+var DatastoreFilter = require('./DatastoreFilter.js');
 require('./DatastoreFieldSelector.js');
-require('./DatastoreContainsCondition.js');
-require('./DatastoreStartsWithCondition.js');
+require('./DatastoreStartsWithMatch.js');
+require('./DatastoreContainsMatch.js');
+require('./DatastoreEqualsMatch.js');
+require('./DatastoreIntersectsMatch.js');
 
 /* tslint:disable */
 /* eslint-disable */
@@ -34,8 +35,8 @@ function DynamicSvcUpdateObjectRequestFromJSONTyped(json, ignoreDiscriminator) {
         return json;
     }
     return {
-        'conditions': json['conditions'] == null ? undefined : (json['conditions'].map(DatastoreCondition.DatastoreConditionFromJSON)),
-        'object': json['object'] == null ? undefined : DynamicSvcGenericObject.DynamicSvcGenericObjectFromJSON(json['object']),
+        'conditions': json['conditions'] == null ? undefined : (json['conditions'].map(DatastoreFilter.DatastoreFilterFromJSON)),
+        'object': json['object'] == null ? undefined : DynamicSvcObject.DynamicSvcObjectFromJSON(json['object']),
         'table': json['table'] == null ? undefined : json['table'],
     };
 }
@@ -44,8 +45,8 @@ function DynamicSvcUpdateObjectRequestToJSON(value) {
         return value;
     }
     return {
-        'conditions': value['conditions'] == null ? undefined : (value['conditions'].map(DatastoreCondition.DatastoreConditionToJSON)),
-        'object': DynamicSvcGenericObject.DynamicSvcGenericObjectToJSON(value['object']),
+        'conditions': value['conditions'] == null ? undefined : (value['conditions'].map(DatastoreFilter.DatastoreFilterToJSON)),
+        'object': DynamicSvcObject.DynamicSvcObjectToJSON(value['object']),
         'table': value['table'],
     };
 }

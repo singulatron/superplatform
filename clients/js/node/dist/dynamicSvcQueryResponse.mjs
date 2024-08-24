@@ -19,7 +19,7 @@ DynamicSvcQueryResponse.attributeTypeMap = [
     {
         "name": "objects",
         "baseName": "objects",
-        "type": "Array<DynamicSvcGenericObject>"
+        "type": "Array<DynamicSvcObject>"
     }
 ];
 

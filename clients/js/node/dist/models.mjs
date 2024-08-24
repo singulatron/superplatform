@@ -14,13 +14,14 @@ import { ConfigSvcDownloadServiceConfig } from './configSvcDownloadServiceConfig
 import { ConfigSvcGetConfigResponse } from './configSvcGetConfigResponse.mjs';
 import { ConfigSvcModelServiceConfig } from './configSvcModelServiceConfig.mjs';
 import { ConfigSvcSaveConfigRequest } from './configSvcSaveConfigRequest.mjs';
-import { DatastoreCondition } from './datastoreCondition.mjs';
-import { DatastoreContainsCondition } from './datastoreContainsCondition.mjs';
-import { DatastoreEqualCondition } from './datastoreEqualCondition.mjs';
+import { DatastoreContainsMatch } from './datastoreContainsMatch.mjs';
+import { DatastoreEqualsMatch } from './datastoreEqualsMatch.mjs';
 import { DatastoreFieldSelector } from './datastoreFieldSelector.mjs';
+import { DatastoreFilter } from './datastoreFilter.mjs';
+import { DatastoreIntersectsMatch } from './datastoreIntersectsMatch.mjs';
 import { DatastoreOrderBy } from './datastoreOrderBy.mjs';
 import { DatastoreQuery } from './datastoreQuery.mjs';
-import { DatastoreStartsWithCondition } from './datastoreStartsWithCondition.mjs';
+import { DatastoreStartsWithMatch } from './datastoreStartsWithMatch.mjs';
 import { DockerSvcContainerIsRunningResponse } from './dockerSvcContainerIsRunningResponse.mjs';
 import { DockerSvcDockerInfo } from './dockerSvcDockerInfo.mjs';
 import { DockerSvcErrorResponse } from './dockerSvcErrorResponse.mjs';
@@ -40,8 +41,8 @@ import { DynamicSvcCreateObjectRequest } from './dynamicSvcCreateObjectRequest.m
 import { DynamicSvcCreateObjectResponse } from './dynamicSvcCreateObjectResponse.mjs';
 import { DynamicSvcDeleteObjectRequest } from './dynamicSvcDeleteObjectRequest.mjs';
 import { DynamicSvcErrorResponse } from './dynamicSvcErrorResponse.mjs';
-import { DynamicSvcGenericObject } from './dynamicSvcGenericObject.mjs';
-import { DynamicSvcGenericObjectCreateFields } from './dynamicSvcGenericObjectCreateFields.mjs';
+import { DynamicSvcObject } from './dynamicSvcObject.mjs';
+import { DynamicSvcObjectCreateFields } from './dynamicSvcObjectCreateFields.mjs';
 import { DynamicSvcQueryRequest } from './dynamicSvcQueryRequest.mjs';
 import { DynamicSvcQueryResponse } from './dynamicSvcQueryResponse.mjs';
 import { DynamicSvcUpdateObjectRequest } from './dynamicSvcUpdateObjectRequest.mjs';
@@ -145,13 +146,14 @@ let typeMap = {
     "ConfigSvcGetConfigResponse": ConfigSvcGetConfigResponse,
     "ConfigSvcModelServiceConfig": ConfigSvcModelServiceConfig,
     "ConfigSvcSaveConfigRequest": ConfigSvcSaveConfigRequest,
-    "DatastoreCondition": DatastoreCondition,
-    "DatastoreContainsCondition": DatastoreContainsCondition,
-    "DatastoreEqualCondition": DatastoreEqualCondition,
+    "DatastoreContainsMatch": DatastoreContainsMatch,
+    "DatastoreEqualsMatch": DatastoreEqualsMatch,
     "DatastoreFieldSelector": DatastoreFieldSelector,
+    "DatastoreFilter": DatastoreFilter,
+    "DatastoreIntersectsMatch": DatastoreIntersectsMatch,
     "DatastoreOrderBy": DatastoreOrderBy,
     "DatastoreQuery": DatastoreQuery,
-    "DatastoreStartsWithCondition": DatastoreStartsWithCondition,
+    "DatastoreStartsWithMatch": DatastoreStartsWithMatch,
     "DockerSvcContainerIsRunningResponse": DockerSvcContainerIsRunningResponse,
     "DockerSvcDockerInfo": DockerSvcDockerInfo,
     "DockerSvcErrorResponse": DockerSvcErrorResponse,
@@ -171,8 +173,8 @@ let typeMap = {
     "DynamicSvcCreateObjectResponse": DynamicSvcCreateObjectResponse,
     "DynamicSvcDeleteObjectRequest": DynamicSvcDeleteObjectRequest,
     "DynamicSvcErrorResponse": DynamicSvcErrorResponse,
-    "DynamicSvcGenericObject": DynamicSvcGenericObject,
-    "DynamicSvcGenericObjectCreateFields": DynamicSvcGenericObjectCreateFields,
+    "DynamicSvcObject": DynamicSvcObject,
+    "DynamicSvcObjectCreateFields": DynamicSvcObjectCreateFields,
     "DynamicSvcQueryRequest": DynamicSvcQueryRequest,
     "DynamicSvcQueryResponse": DynamicSvcQueryResponse,
     "DynamicSvcUpdateObjectRequest": DynamicSvcUpdateObjectRequest,
@@ -422,4 +424,4 @@ class VoidAuth {
     }
 }
 
-export { ApiKeyAuth, ChatSvcAddMessageRequest, ChatSvcAddThreadRequest, ChatSvcAddThreadResponse, ChatSvcAsset, ChatSvcGetMessagesResponse, ChatSvcGetThreadResponse, ChatSvcGetThreadsResponse, ChatSvcMessage, ChatSvcThread, ChatSvcUpdateThreadRequest, ConfigSvcAppServiceConfig, ConfigSvcConfig, ConfigSvcDownloadServiceConfig, ConfigSvcGetConfigResponse, ConfigSvcModelServiceConfig, ConfigSvcSaveConfigRequest, DatastoreCondition, DatastoreContainsCondition, DatastoreEqualCondition, DatastoreFieldSelector, DatastoreOrderBy, DatastoreQuery, DatastoreStartsWithCondition, DockerSvcContainerIsRunningResponse, DockerSvcDockerInfo, DockerSvcErrorResponse, DockerSvcGetContainerSummaryResponse, DockerSvcGetDockerHostResponse, DockerSvcGetInfoResponse, DockerSvcLaunchContainerOptions, DockerSvcLaunchContainerRequest, DockerSvcLaunchContainerResponse, DockerSvcLaunchInfo, DownloadSvcDownloadDetails, DownloadSvcDownloadRequest, DownloadSvcDownloadsResponse, DownloadSvcErrorResponse, DownloadSvcGetDownloadResponse, DynamicSvcCreateObjectRequest, DynamicSvcCreateObjectResponse, DynamicSvcDeleteObjectRequest, DynamicSvcErrorResponse, DynamicSvcGenericObject, DynamicSvcGenericObjectCreateFields, DynamicSvcQueryRequest, DynamicSvcQueryResponse, DynamicSvcUpdateObjectRequest, DynamicSvcUpsertObjectRequest, DynamicSvcUpsertObjectResponse, FirehoseSvcErrorResponse, FirehoseSvcEvent, FirehoseSvcPublishRequest, HttpBasicAuth, HttpBearerAuth, ModelSvcArchitectures, ModelSvcContainer, ModelSvcErrorResponse, ModelSvcGetModelResponse, ModelSvcListResponse, ModelSvcModel, ModelSvcModelStatus, ModelSvcPlatform, ModelSvcStatusResponse, NodeSvcErrorResponse, NodeSvcGPU, NodeSvcListNodesResponse, NodeSvcNode, NodeSvcProcess, OAuth, ObjectSerializer, PolicySvcBlocklistParameters, PolicySvcCheckRequest, PolicySvcCheckResponse, PolicySvcEntity, PolicySvcErrorResponse, PolicySvcInstance, PolicySvcRateLimitParameters, PolicySvcScope, PolicySvcTemplateId, PolicySvcUpsertInstanceRequest, PromptSvcAddPromptRequest, PromptSvcAddPromptResponse, PromptSvcErrorResponse, PromptSvcListPromptsRequest, PromptSvcListPromptsResponse, PromptSvcPrompt, PromptSvcPromptStatus, PromptSvcRemovePromptRequest, UserSvcAddUserToOrganizationRequest, UserSvcAuthToken, UserSvcChangePasswordAdminRequest, UserSvcChangePasswordRequest, UserSvcContact, UserSvcCreateOrganizationRequest, UserSvcCreateRoleRequest, UserSvcCreateRoleResponse, UserSvcCreateUserRequest, UserSvcErrorResponse, UserSvcGetPermissionsResponse, UserSvcGetPublicKeyResponse, UserSvcGetRolesResponse, UserSvcGetUsersRequest, UserSvcGetUsersResponse, UserSvcIsAuthorizedRequest, UserSvcIsAuthorizedResponse, UserSvcLoginRequest, UserSvcLoginResponse, UserSvcPermission, UserSvcReadUserByTokenRequest, UserSvcReadUserByTokenResponse, UserSvcRegisterRequest, UserSvcRole, UserSvcSaveProfileRequest, UserSvcSetRolePermissionsRequest, UserSvcUpserPermissionRequest, UserSvcUser, VoidAuth };
+export { ApiKeyAuth, ChatSvcAddMessageRequest, ChatSvcAddThreadRequest, ChatSvcAddThreadResponse, ChatSvcAsset, ChatSvcGetMessagesResponse, ChatSvcGetThreadResponse, ChatSvcGetThreadsResponse, ChatSvcMessage, ChatSvcThread, ChatSvcUpdateThreadRequest, ConfigSvcAppServiceConfig, ConfigSvcConfig, ConfigSvcDownloadServiceConfig, ConfigSvcGetConfigResponse, ConfigSvcModelServiceConfig, ConfigSvcSaveConfigRequest, DatastoreContainsMatch, DatastoreEqualsMatch, DatastoreFieldSelector, DatastoreFilter, DatastoreIntersectsMatch, DatastoreOrderBy, DatastoreQuery, DatastoreStartsWithMatch, DockerSvcContainerIsRunningResponse, DockerSvcDockerInfo, DockerSvcErrorResponse, DockerSvcGetContainerSummaryResponse, DockerSvcGetDockerHostResponse, DockerSvcGetInfoResponse, DockerSvcLaunchContainerOptions, DockerSvcLaunchContainerRequest, DockerSvcLaunchContainerResponse, DockerSvcLaunchInfo, DownloadSvcDownloadDetails, DownloadSvcDownloadRequest, DownloadSvcDownloadsResponse, DownloadSvcErrorResponse, DownloadSvcGetDownloadResponse, DynamicSvcCreateObjectRequest, DynamicSvcCreateObjectResponse, DynamicSvcDeleteObjectRequest, DynamicSvcErrorResponse, DynamicSvcObject, DynamicSvcObjectCreateFields, DynamicSvcQueryRequest, DynamicSvcQueryResponse, DynamicSvcUpdateObjectRequest, DynamicSvcUpsertObjectRequest, DynamicSvcUpsertObjectResponse, FirehoseSvcErrorResponse, FirehoseSvcEvent, FirehoseSvcPublishRequest, HttpBasicAuth, HttpBearerAuth, ModelSvcArchitectures, ModelSvcContainer, ModelSvcErrorResponse, ModelSvcGetModelResponse, ModelSvcListResponse, ModelSvcModel, ModelSvcModelStatus, ModelSvcPlatform, ModelSvcStatusResponse, NodeSvcErrorResponse, NodeSvcGPU, NodeSvcListNodesResponse, NodeSvcNode, NodeSvcProcess, OAuth, ObjectSerializer, PolicySvcBlocklistParameters, PolicySvcCheckRequest, PolicySvcCheckResponse, PolicySvcEntity, PolicySvcErrorResponse, PolicySvcInstance, PolicySvcRateLimitParameters, PolicySvcScope, PolicySvcTemplateId, PolicySvcUpsertInstanceRequest, PromptSvcAddPromptRequest, PromptSvcAddPromptResponse, PromptSvcErrorResponse, PromptSvcListPromptsRequest, PromptSvcListPromptsResponse, PromptSvcPrompt, PromptSvcPromptStatus, PromptSvcRemovePromptRequest, UserSvcAddUserToOrganizationRequest, UserSvcAuthToken, UserSvcChangePasswordAdminRequest, UserSvcChangePasswordRequest, UserSvcContact, UserSvcCreateOrganizationRequest, UserSvcCreateRoleRequest, UserSvcCreateRoleResponse, UserSvcCreateUserRequest, UserSvcErrorResponse, UserSvcGetPermissionsResponse, UserSvcGetPublicKeyResponse, UserSvcGetRolesResponse, UserSvcGetUsersRequest, UserSvcGetUsersResponse, UserSvcIsAuthorizedRequest, UserSvcIsAuthorizedResponse, UserSvcLoginRequest, UserSvcLoginResponse, UserSvcPermission, UserSvcReadUserByTokenRequest, UserSvcReadUserByTokenResponse, UserSvcRegisterRequest, UserSvcRole, UserSvcSaveProfileRequest, UserSvcSetRolePermissionsRequest, UserSvcUpserPermissionRequest, UserSvcUser, VoidAuth };

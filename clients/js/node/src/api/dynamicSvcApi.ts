@@ -250,7 +250,7 @@ export class DynamicSvcApi {
     }
     /**
      * Retrieves objects from a specified table based on search criteria. Requires authorization and user authentication.   Use helper functions in your respective client library such as condition constructors (`equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
-     * @summary Query Dynamic Objects
+     * @summary Query Objects
      * @param body Query Request
      */
     public async query (body?: DynamicSvcQueryRequest, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: DynamicSvcQueryResponse;  }> {
@@ -317,7 +317,7 @@ export class DynamicSvcApi {
     }
     /**
      * Updates objects in a specified table based on provided conditions. Requires authorization and user authentication.
-     * @summary Update Dynamic Objects
+     * @summary Update Objects
      * @param body Update request payload
      */
     public async updateObjects (body: DynamicSvcUpdateObjectRequest, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: object;  }> {

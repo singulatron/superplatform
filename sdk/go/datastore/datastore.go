@@ -77,60 +77,47 @@ type FieldSelector struct {
 }
 
 type Filter struct {
+	// Selector selects one, more or all fields
+	Selector *FieldSelector `json:"selector,omitempty"`
+
 	// Equals condition returns objects where value of a field equals (=) to the specified value in the query.
-	Equals *EqualsFilter `json:"equal,omitempty"`
+	Equals *EqualsMatch `json:"equal,omitempty"`
 
 	// Contains condition returns all objects where the field(s) values contain a particular string or slice element.
-	Contains *ContainsFilter `json:"contains,omitempty"`
+	Contains *ContainsMatch `json:"contains,omitempty"`
 
 	// Intersects condition returns objects where the slice value of a field intersects with the slice value in the query.
-	Intersects *IntersectsFilter `json:"intersects,omitempty"`
+	Intersects *IntersectsMatch `json:"intersects,omitempty"`
 
 	// All condition returns all objects.
-	All *AllFilter `json:"all,omitempty"`
+	All *AllMatch `json:"all,omitempty"`
 
 	// StartsWith condition returns all objects where the field(s) values start with a particular string.
-	StartsWith *StartsWithFilter `json:"startsWith,omitempty"`
+	StartsWith *StartsWithMatch `json:"startsWith,omitempty"`
 }
 
 func (c Filter) FieldIs(fieldName string) bool {
-	if c.Equals != nil && c.Equals.Selector != nil && c.Equals.Selector.Field == fieldName {
-		return true
-	}
-	if c.StartsWith != nil && c.StartsWith.Selector != nil && c.StartsWith.Selector.Field == fieldName {
-		return true
-	}
-	if c.Contains != nil && c.Contains.Selector != nil && c.Contains.Selector.Field == fieldName {
-		return true
-	}
-	if c.Intersects != nil && c.Intersects.Selector != nil && c.Intersects.Selector.Field == fieldName {
+	if c.Equals != nil && c.Selector != nil && c.Selector.Field == fieldName {
 		return true
 	}
 
 	return false
 }
 
-type EqualsFilter struct {
-	// Selector selects one, more or all fields
-	Selector *FieldSelector `json:"selector,omitempty"`
-	Value    any            `json:"value,omitempty"`
+type EqualsMatch struct {
+	Value any `json:"value,omitempty"`
 }
 
-type StartsWithFilter struct {
-	// Selector selects one, more or all fields
-	Selector *FieldSelector `json:"selector,omitempty"`
-	Value    any            `json:"value,omitempty"`
+type StartsWithMatch struct {
+	Value any `json:"value,omitempty"`
 }
 
-type ContainsFilter struct {
-	// Selector selects one, more or all fields
-	Selector *FieldSelector `json:"selector,omitempty"`
-	Value    any            `json:"value,omitempty"`
+type ContainsMatch struct {
+	Value any `json:"value,omitempty"`
 }
 
-type IntersectsFilter struct {
-	Selector *FieldSelector `json:"selector,omitempty"`
-	Values   []any          `json:"values,omitempty"`
+type IntersectsMatch struct {
+	Values []any `json:"values,omitempty"`
 }
 
 // Query as a type is not used in the DataStore interface but mostly to accept
@@ -192,54 +179,54 @@ func OrderByField(field string, desc bool) OrderBy {
 	}
 }
 
-type AllFilter struct {
+type AllMatch struct {
 }
 
 func Equals(selector *FieldSelector, value any) Filter {
 	return Filter{
-		Equals: &EqualsFilter{
-			Selector: selector,
-			Value:    value,
+		Selector: selector,
+		Equals: &EqualsMatch{
+			Value: value,
 		},
 	}
 }
 
 func Intersects(selector *FieldSelector, values []any) Filter {
 	return Filter{
-		Intersects: &IntersectsFilter{
-			Selector: selector,
-			Values:   values,
+		Selector: selector,
+		Intersects: &IntersectsMatch{
+			Values: values,
 		},
 	}
 }
 
 func StartsWith(selector *FieldSelector, value any) Filter {
 	return Filter{
-		StartsWith: &StartsWithFilter{
-			Selector: selector,
-			Value:    value,
+		Selector: selector,
+		StartsWith: &StartsWithMatch{
+			Value: value,
 		},
 	}
 }
 
 func Contains(selector *FieldSelector, value any) Filter {
 	return Filter{
-		Contains: &ContainsFilter{
-			Selector: selector,
-			Value:    value,
+		Selector: selector,
+		Contains: &ContainsMatch{
+			Value: value,
 		},
 	}
 }
 
 func All() Filter {
 	return Filter{
-		All: &AllFilter{},
+		All: &AllMatch{},
 	}
 }
 
 func Id(id any) Filter {
 	return Filter{
-		Equals: &EqualsFilter{
+		Equals: &EqualsMatch{
 			Selector: Field("id"),
 			Value:    id,
 		},

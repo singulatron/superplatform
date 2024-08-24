@@ -9,13 +9,14 @@ var DynamicSvcQueryResponse = require('./DynamicSvcQueryResponse.js');
 var DynamicSvcUpdateObjectRequest = require('./DynamicSvcUpdateObjectRequest.js');
 var DynamicSvcUpsertObjectRequest = require('./DynamicSvcUpsertObjectRequest.js');
 var DynamicSvcUpsertObjectResponse = require('./DynamicSvcUpsertObjectResponse.js');
-require('./DynamicSvcGenericObjectCreateFields.js');
-require('./DynamicSvcGenericObject.js');
-require('./DatastoreCondition.js');
-require('./DatastoreEqualCondition.js');
+require('./DynamicSvcObjectCreateFields.js');
+require('./DynamicSvcObject.js');
+require('./DatastoreFilter.js');
 require('./DatastoreFieldSelector.js');
-require('./DatastoreContainsCondition.js');
-require('./DatastoreStartsWithCondition.js');
+require('./DatastoreStartsWithMatch.js');
+require('./DatastoreContainsMatch.js');
+require('./DatastoreEqualsMatch.js');
+require('./DatastoreIntersectsMatch.js');
 require('./DatastoreQuery.js');
 require('./DatastoreOrderBy.js');
 
@@ -111,7 +112,7 @@ class DynamicSvcApi extends runtime.BaseAPI {
     }
     /**
      * Retrieves objects from a specified table based on search criteria. Requires authorization and user authentication.   Use helper functions in your respective client library such as condition constructors (`equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
-     * Query Dynamic Objects
+     * Query Objects
      */
     queryRaw(requestParameters, initOverrides) {
         return runtime.__awaiter(this, void 0, void 0, function* () {
@@ -133,7 +134,7 @@ class DynamicSvcApi extends runtime.BaseAPI {
     }
     /**
      * Retrieves objects from a specified table based on search criteria. Requires authorization and user authentication.   Use helper functions in your respective client library such as condition constructors (`equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
-     * Query Dynamic Objects
+     * Query Objects
      */
     query() {
         return runtime.__awaiter(this, arguments, void 0, function* (requestParameters = {}, initOverrides) {
@@ -143,7 +144,7 @@ class DynamicSvcApi extends runtime.BaseAPI {
     }
     /**
      * Updates objects in a specified table based on provided conditions. Requires authorization and user authentication.
-     * Update Dynamic Objects
+     * Update Objects
      */
     updateObjectsRaw(requestParameters, initOverrides) {
         return runtime.__awaiter(this, void 0, void 0, function* () {
@@ -168,7 +169,7 @@ class DynamicSvcApi extends runtime.BaseAPI {
     }
     /**
      * Updates objects in a specified table based on provided conditions. Requires authorization and user authentication.
-     * Update Dynamic Objects
+     * Update Objects
      */
     updateObjects(requestParameters, initOverrides) {
         return runtime.__awaiter(this, void 0, void 0, function* () {

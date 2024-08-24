@@ -1,6 +1,6 @@
 'use strict';
 
-var DynamicSvcGenericObjectCreateFields = require('./DynamicSvcGenericObjectCreateFields.js');
+var DynamicSvcObjectCreateFields = require('./DynamicSvcObjectCreateFields.js');
 
 /* tslint:disable */
 /* eslint-disable */
@@ -29,7 +29,7 @@ function DynamicSvcUpsertObjectRequestFromJSONTyped(json, ignoreDiscriminator) {
         return json;
     }
     return {
-        'object': json['object'] == null ? undefined : DynamicSvcGenericObjectCreateFields.DynamicSvcGenericObjectCreateFieldsFromJSON(json['object']),
+        'object': json['object'] == null ? undefined : DynamicSvcObjectCreateFields.DynamicSvcObjectCreateFieldsFromJSON(json['object']),
     };
 }
 function DynamicSvcUpsertObjectRequestToJSON(value) {
@@ -37,7 +37,7 @@ function DynamicSvcUpsertObjectRequestToJSON(value) {
         return value;
     }
     return {
-        'object': DynamicSvcGenericObjectCreateFields.DynamicSvcGenericObjectCreateFieldsToJSON(value['object']),
+        'object': DynamicSvcObjectCreateFields.DynamicSvcObjectCreateFieldsToJSON(value['object']),
     };
 }
 

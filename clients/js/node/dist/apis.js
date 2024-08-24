@@ -33,13 +33,14 @@ require('./configSvcDownloadServiceConfig.js');
 require('./configSvcGetConfigResponse.js');
 require('./configSvcModelServiceConfig.js');
 require('./configSvcSaveConfigRequest.js');
-require('./datastoreCondition.js');
-require('./datastoreContainsCondition.js');
-require('./datastoreEqualCondition.js');
+require('./datastoreContainsMatch.js');
+require('./datastoreEqualsMatch.js');
 require('./datastoreFieldSelector.js');
+require('./datastoreFilter.js');
+require('./datastoreIntersectsMatch.js');
 require('./datastoreOrderBy.js');
 require('./datastoreQuery.js');
-require('./datastoreStartsWithCondition.js');
+require('./datastoreStartsWithMatch.js');
 require('./dockerSvcContainerIsRunningResponse.js');
 require('./dockerSvcDockerInfo.js');
 require('./dockerSvcErrorResponse.js');
@@ -59,8 +60,8 @@ require('./dynamicSvcCreateObjectRequest.js');
 require('./dynamicSvcCreateObjectResponse.js');
 require('./dynamicSvcDeleteObjectRequest.js');
 require('./dynamicSvcErrorResponse.js');
-require('./dynamicSvcGenericObject.js');
-require('./dynamicSvcGenericObjectCreateFields.js');
+require('./dynamicSvcObject.js');
+require('./dynamicSvcObjectCreateFields.js');
 require('./dynamicSvcQueryRequest.js');
 require('./dynamicSvcQueryResponse.js');
 require('./dynamicSvcUpdateObjectRequest.js');
@@ -55792,7 +55793,7 @@ class DynamicSvcApi {
     }
     /**
      * Retrieves objects from a specified table based on search criteria. Requires authorization and user authentication.   Use helper functions in your respective client library such as condition constructors (`equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
-     * @summary Query Dynamic Objects
+     * @summary Query Objects
      * @param body Query Request
      */
     query(body_1) {
@@ -55855,7 +55856,7 @@ class DynamicSvcApi {
     }
     /**
      * Updates objects in a specified table based on provided conditions. Requires authorization and user authentication.
-     * @summary Update Dynamic Objects
+     * @summary Update Objects
      * @param body Update request payload
      */
     updateObjects(body_1) {
@@ -57715,7 +57716,7 @@ class UserSvcApi {
         });
     }
     /**
-     * Allows a logged-in user to create a new organization. The user initiating the request will be assigned the role of admin for that organization. The initiating user will receive a dynamic role in the format `user-svc:org:$organization-slug:admin`, where `$organization-slug` is a unique identifier for the created organization. Dynamic roles are generated based on specific user-resource associations, offering more flexible permission management compared to static roles.
+     * Allows a logged-in user to create a new organization. The user initiating the request will be assigned the role of admin for that organization. The initiating user will receive a dynamic role in the format `user-svc:org:{organizationId}:admin`, where `$organization-slug` is a unique identifier for the created organization. Dynamic roles are generated based on specific user-resource associations, offering more flexible permission management compared to static roles.
      * @summary Create an Organization
      * @param request Create User Request
      */

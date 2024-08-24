@@ -11,10 +11,10 @@
  */
 
 import { RequestFile } from './models';
-import { DynamicSvcGenericObject } from './dynamicSvcGenericObject';
+import { DynamicSvcObject } from './dynamicSvcObject';
 
 export class DynamicSvcUpsertObjectResponse {
-    'object'?: DynamicSvcGenericObject;
+    'object'?: DynamicSvcObject;
 
     static discriminator: string | undefined = undefined;
 
@@ -22,7 +22,7 @@ export class DynamicSvcUpsertObjectResponse {
         {
             "name": "object",
             "baseName": "object",
-            "type": "DynamicSvcGenericObject"
+            "type": "DynamicSvcObject"
         }    ];
 
     static getAttributeTypeMap() {

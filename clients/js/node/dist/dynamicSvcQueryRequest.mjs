@@ -17,14 +17,14 @@ class DynamicSvcQueryRequest {
 DynamicSvcQueryRequest.discriminator = undefined;
 DynamicSvcQueryRequest.attributeTypeMap = [
     {
-        "name": "_public",
-        "baseName": "public",
-        "type": "boolean"
-    },
-    {
         "name": "query",
         "baseName": "query",
         "type": "DatastoreQuery"
+    },
+    {
+        "name": "readers",
+        "baseName": "readers",
+        "type": "Array<string>"
     },
     {
         "name": "table",

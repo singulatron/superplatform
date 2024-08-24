@@ -21,7 +21,7 @@ DynamicSvcDeleteObjectRequest.attributeTypeMap = [
     {
         "name": "conditions",
         "baseName": "conditions",
-        "type": "Array<DatastoreCondition>"
+        "type": "Array<DatastoreFilter>"
     },
     {
         "name": "table",

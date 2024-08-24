@@ -9,7 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import type { DatastoreCondition } from './DatastoreCondition';
+import type { DatastoreFilter } from './DatastoreFilter';
 /**
  *
  * @export
@@ -18,10 +18,10 @@ import type { DatastoreCondition } from './DatastoreCondition';
 export interface DynamicSvcDeleteObjectRequest {
     /**
      *
-     * @type {Array<DatastoreCondition>}
+     * @type {Array<DatastoreFilter>}
      * @memberof DynamicSvcDeleteObjectRequest
      */
-    conditions?: Array<DatastoreCondition>;
+    conditions?: Array<DatastoreFilter>;
     /**
      *
      * @type {string}

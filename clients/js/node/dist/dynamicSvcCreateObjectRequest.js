@@ -21,7 +21,7 @@ DynamicSvcCreateObjectRequest.attributeTypeMap = [
     {
         "name": "object",
         "baseName": "object",
-        "type": "DynamicSvcGenericObjectCreateFields"
+        "type": "DynamicSvcObjectCreateFields"
     }
 ];
 

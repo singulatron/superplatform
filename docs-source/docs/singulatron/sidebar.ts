@@ -163,7 +163,7 @@ const sidebar: SidebarsConfig = {
         {
           type: "doc",
           id: "singulatron/query",
-          label: "Query Dynamic Objects",
+          label: "Query Objects",
           className: "api-method post",
         },
         {
@@ -175,7 +175,7 @@ const sidebar: SidebarsConfig = {
         {
           type: "doc",
           id: "singulatron/update-objects",
-          label: "Update Dynamic Objects",
+          label: "Update Objects",
           className: "api-method post",
         },
       ],

@@ -20,7 +20,7 @@ var _ MappedNullable = &DynamicSvcDeleteObjectRequest{}
 
 // DynamicSvcDeleteObjectRequest struct for DynamicSvcDeleteObjectRequest
 type DynamicSvcDeleteObjectRequest struct {
-	Conditions []DatastoreCondition `json:"conditions,omitempty"`
+	Conditions []DatastoreFilter `json:"conditions,omitempty"`
 	Table *string `json:"table,omitempty"`
 }
 
@@ -42,9 +42,9 @@ func NewDynamicSvcDeleteObjectRequestWithDefaults() *DynamicSvcDeleteObjectReque
 }
 
 // GetConditions returns the Conditions field value if set, zero value otherwise.
-func (o *DynamicSvcDeleteObjectRequest) GetConditions() []DatastoreCondition {
+func (o *DynamicSvcDeleteObjectRequest) GetConditions() []DatastoreFilter {
 	if o == nil || IsNil(o.Conditions) {
-		var ret []DatastoreCondition
+		var ret []DatastoreFilter
 		return ret
 	}
 	return o.Conditions
@@ -52,7 +52,7 @@ func (o *DynamicSvcDeleteObjectRequest) GetConditions() []DatastoreCondition {
 
 // GetConditionsOk returns a tuple with the Conditions field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *DynamicSvcDeleteObjectRequest) GetConditionsOk() ([]DatastoreCondition, bool) {
+func (o *DynamicSvcDeleteObjectRequest) GetConditionsOk() ([]DatastoreFilter, bool) {
 	if o == nil || IsNil(o.Conditions) {
 		return nil, false
 	}
@@ -68,8 +68,8 @@ func (o *DynamicSvcDeleteObjectRequest) HasConditions() bool {
 	return false
 }
 
-// SetConditions gets a reference to the given []DatastoreCondition and assigns it to the Conditions field.
-func (o *DynamicSvcDeleteObjectRequest) SetConditions(v []DatastoreCondition) {
+// SetConditions gets a reference to the given []DatastoreFilter and assigns it to the Conditions field.
+func (o *DynamicSvcDeleteObjectRequest) SetConditions(v []DatastoreFilter) {
 	o.Conditions = v
 }
 

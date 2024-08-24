@@ -14,13 +14,14 @@ export * from './configSvcDownloadServiceConfig';
 export * from './configSvcGetConfigResponse';
 export * from './configSvcModelServiceConfig';
 export * from './configSvcSaveConfigRequest';
-export * from './datastoreCondition';
-export * from './datastoreContainsCondition';
-export * from './datastoreEqualCondition';
+export * from './datastoreContainsMatch';
+export * from './datastoreEqualsMatch';
 export * from './datastoreFieldSelector';
+export * from './datastoreFilter';
+export * from './datastoreIntersectsMatch';
 export * from './datastoreOrderBy';
 export * from './datastoreQuery';
-export * from './datastoreStartsWithCondition';
+export * from './datastoreStartsWithMatch';
 export * from './dockerSvcContainerIsRunningResponse';
 export * from './dockerSvcDockerInfo';
 export * from './dockerSvcErrorResponse';
@@ -40,8 +41,8 @@ export * from './dynamicSvcCreateObjectRequest';
 export * from './dynamicSvcCreateObjectResponse';
 export * from './dynamicSvcDeleteObjectRequest';
 export * from './dynamicSvcErrorResponse';
-export * from './dynamicSvcGenericObject';
-export * from './dynamicSvcGenericObjectCreateFields';
+export * from './dynamicSvcObject';
+export * from './dynamicSvcObjectCreateFields';
 export * from './dynamicSvcQueryRequest';
 export * from './dynamicSvcQueryResponse';
 export * from './dynamicSvcUpdateObjectRequest';
@@ -126,13 +127,14 @@ import { ConfigSvcDownloadServiceConfig } from './configSvcDownloadServiceConfig
 import { ConfigSvcGetConfigResponse } from './configSvcGetConfigResponse';
 import { ConfigSvcModelServiceConfig } from './configSvcModelServiceConfig';
 import { ConfigSvcSaveConfigRequest } from './configSvcSaveConfigRequest';
-import { DatastoreCondition } from './datastoreCondition';
-import { DatastoreContainsCondition } from './datastoreContainsCondition';
-import { DatastoreEqualCondition } from './datastoreEqualCondition';
+import { DatastoreContainsMatch } from './datastoreContainsMatch';
+import { DatastoreEqualsMatch } from './datastoreEqualsMatch';
 import { DatastoreFieldSelector } from './datastoreFieldSelector';
+import { DatastoreFilter } from './datastoreFilter';
+import { DatastoreIntersectsMatch } from './datastoreIntersectsMatch';
 import { DatastoreOrderBy } from './datastoreOrderBy';
 import { DatastoreQuery } from './datastoreQuery';
-import { DatastoreStartsWithCondition } from './datastoreStartsWithCondition';
+import { DatastoreStartsWithMatch } from './datastoreStartsWithMatch';
 import { DockerSvcContainerIsRunningResponse } from './dockerSvcContainerIsRunningResponse';
 import { DockerSvcDockerInfo } from './dockerSvcDockerInfo';
 import { DockerSvcErrorResponse } from './dockerSvcErrorResponse';
@@ -152,8 +154,8 @@ import { DynamicSvcCreateObjectRequest } from './dynamicSvcCreateObjectRequest';
 import { DynamicSvcCreateObjectResponse } from './dynamicSvcCreateObjectResponse';
 import { DynamicSvcDeleteObjectRequest } from './dynamicSvcDeleteObjectRequest';
 import { DynamicSvcErrorResponse } from './dynamicSvcErrorResponse';
-import { DynamicSvcGenericObject } from './dynamicSvcGenericObject';
-import { DynamicSvcGenericObjectCreateFields } from './dynamicSvcGenericObjectCreateFields';
+import { DynamicSvcObject } from './dynamicSvcObject';
+import { DynamicSvcObjectCreateFields } from './dynamicSvcObjectCreateFields';
 import { DynamicSvcQueryRequest } from './dynamicSvcQueryRequest';
 import { DynamicSvcQueryResponse } from './dynamicSvcQueryResponse';
 import { DynamicSvcUpdateObjectRequest } from './dynamicSvcUpdateObjectRequest';
@@ -256,13 +258,14 @@ let typeMap = {
     "ConfigSvcGetConfigResponse": ConfigSvcGetConfigResponse,
     "ConfigSvcModelServiceConfig": ConfigSvcModelServiceConfig,
     "ConfigSvcSaveConfigRequest": ConfigSvcSaveConfigRequest,
-    "DatastoreCondition": DatastoreCondition,
-    "DatastoreContainsCondition": DatastoreContainsCondition,
-    "DatastoreEqualCondition": DatastoreEqualCondition,
+    "DatastoreContainsMatch": DatastoreContainsMatch,
+    "DatastoreEqualsMatch": DatastoreEqualsMatch,
     "DatastoreFieldSelector": DatastoreFieldSelector,
+    "DatastoreFilter": DatastoreFilter,
+    "DatastoreIntersectsMatch": DatastoreIntersectsMatch,
     "DatastoreOrderBy": DatastoreOrderBy,
     "DatastoreQuery": DatastoreQuery,
-    "DatastoreStartsWithCondition": DatastoreStartsWithCondition,
+    "DatastoreStartsWithMatch": DatastoreStartsWithMatch,
     "DockerSvcContainerIsRunningResponse": DockerSvcContainerIsRunningResponse,
     "DockerSvcDockerInfo": DockerSvcDockerInfo,
     "DockerSvcErrorResponse": DockerSvcErrorResponse,
@@ -282,8 +285,8 @@ let typeMap = {
     "DynamicSvcCreateObjectResponse": DynamicSvcCreateObjectResponse,
     "DynamicSvcDeleteObjectRequest": DynamicSvcDeleteObjectRequest,
     "DynamicSvcErrorResponse": DynamicSvcErrorResponse,
-    "DynamicSvcGenericObject": DynamicSvcGenericObject,
-    "DynamicSvcGenericObjectCreateFields": DynamicSvcGenericObjectCreateFields,
+    "DynamicSvcObject": DynamicSvcObject,
+    "DynamicSvcObjectCreateFields": DynamicSvcObjectCreateFields,
     "DynamicSvcQueryRequest": DynamicSvcQueryRequest,
     "DynamicSvcQueryResponse": DynamicSvcQueryResponse,
     "DynamicSvcUpdateObjectRequest": DynamicSvcUpdateObjectRequest,

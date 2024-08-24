@@ -24,7 +24,7 @@ DatastoreQuery.attributeTypeMap = [
     {
         "name": "conditions",
         "baseName": "conditions",
-        "type": "Array<DatastoreCondition>"
+        "type": "Array<DatastoreFilter>"
     },
     {
         "name": "count",

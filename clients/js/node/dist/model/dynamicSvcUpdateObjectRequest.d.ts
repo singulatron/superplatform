@@ -9,11 +9,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { DatastoreCondition } from './datastoreCondition';
-import { DynamicSvcGenericObject } from './dynamicSvcGenericObject';
+import { DatastoreFilter } from './datastoreFilter';
+import { DynamicSvcObject } from './dynamicSvcObject';
 export declare class DynamicSvcUpdateObjectRequest {
-    'conditions'?: Array<DatastoreCondition>;
-    'object'?: DynamicSvcGenericObject;
+    'conditions'?: Array<DatastoreFilter>;
+    'object'?: DynamicSvcObject;
     'table'?: string;
     static discriminator: string | undefined;
     static attributeTypeMap: Array<{

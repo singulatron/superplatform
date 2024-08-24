@@ -13,12 +13,12 @@
  */
 
 import { mapValues } from '../runtime';
-import type { DatastoreCondition } from './DatastoreCondition';
+import type { DatastoreFilter } from './DatastoreFilter';
 import {
-    DatastoreConditionFromJSON,
-    DatastoreConditionFromJSONTyped,
-    DatastoreConditionToJSON,
-} from './DatastoreCondition';
+    DatastoreFilterFromJSON,
+    DatastoreFilterFromJSONTyped,
+    DatastoreFilterToJSON,
+} from './DatastoreFilter';
 import type { DatastoreOrderBy } from './DatastoreOrderBy';
 import {
     DatastoreOrderByFromJSON,
@@ -41,14 +41,14 @@ export interface DatastoreQuery {
      */
     after?: Array<object>;
     /**
-     * Conditions are filtering options of a query. It is advised to use
+     * Filters are filtering options of a query. It is advised to use
      * It's advised to use helper functions in your respective client library such as condition constructors (`all`, `equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
-     * @type {Array<DatastoreCondition>}
+     * @type {Array<DatastoreFilter>}
      * @memberof DatastoreQuery
      */
-    conditions?: Array<DatastoreCondition>;
+    conditions?: Array<DatastoreFilter>;
     /**
-     * Count true means return the count of the dataset filtered by Conditions
+     * Count true means return the count of the dataset filtered by Filters
      * without after or limit.
      * @type {boolean}
      * @memberof DatastoreQuery
@@ -86,7 +86,7 @@ export function DatastoreQueryFromJSONTyped(json: any, ignoreDiscriminator: bool
     return {
         
         'after': json['after'] == null ? undefined : json['after'],
-        'conditions': json['conditions'] == null ? undefined : ((json['conditions'] as Array<any>).map(DatastoreConditionFromJSON)),
+        'conditions': json['conditions'] == null ? undefined : ((json['conditions'] as Array<any>).map(DatastoreFilterFromJSON)),
         'count': json['count'] == null ? undefined : json['count'],
         'limit': json['limit'] == null ? undefined : json['limit'],
         'orderBys': json['orderBys'] == null ? undefined : ((json['orderBys'] as Array<any>).map(DatastoreOrderByFromJSON)),
@@ -100,7 +100,7 @@ export function DatastoreQueryToJSON(value?: DatastoreQuery | null): any {
     return {
         
         'after': value['after'],
-        'conditions': value['conditions'] == null ? undefined : ((value['conditions'] as Array<any>).map(DatastoreConditionToJSON)),
+        'conditions': value['conditions'] == null ? undefined : ((value['conditions'] as Array<any>).map(DatastoreFilterToJSON)),
         'count': value['count'],
         'limit': value['limit'],
         'orderBys': value['orderBys'] == null ? undefined : ((value['orderBys'] as Array<any>).map(DatastoreOrderByToJSON)),

@@ -11,10 +11,10 @@
  */
 
 import { RequestFile } from './models';
-import { DatastoreCondition } from './datastoreCondition';
+import { DatastoreFilter } from './datastoreFilter';
 
 export class DynamicSvcDeleteObjectRequest {
-    'conditions'?: Array<DatastoreCondition>;
+    'conditions'?: Array<DatastoreFilter>;
     'table'?: string;
 
     static discriminator: string | undefined = undefined;
@@ -23,7 +23,7 @@ export class DynamicSvcDeleteObjectRequest {
         {
             "name": "conditions",
             "baseName": "conditions",
-            "type": "Array<DatastoreCondition>"
+            "type": "Array<DatastoreFilter>"
         },
         {
             "name": "table",

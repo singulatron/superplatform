@@ -21,12 +21,12 @@ DynamicSvcUpdateObjectRequest.attributeTypeMap = [
     {
         "name": "conditions",
         "baseName": "conditions",
-        "type": "Array<DatastoreCondition>"
+        "type": "Array<DatastoreFilter>"
     },
     {
         "name": "object",
         "baseName": "object",
-        "type": "DynamicSvcGenericObject"
+        "type": "DynamicSvcObject"
     },
     {
         "name": "table",
