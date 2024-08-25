@@ -16,14 +16,10 @@ var configSvcDownloadServiceConfig = require('./configSvcDownloadServiceConfig.j
 var configSvcGetConfigResponse = require('./configSvcGetConfigResponse.js');
 var configSvcModelServiceConfig = require('./configSvcModelServiceConfig.js');
 var configSvcSaveConfigRequest = require('./configSvcSaveConfigRequest.js');
-var datastoreContainsMatch = require('./datastoreContainsMatch.js');
-var datastoreEqualsMatch = require('./datastoreEqualsMatch.js');
-var datastoreFieldSelector = require('./datastoreFieldSelector.js');
 var datastoreFilter = require('./datastoreFilter.js');
-var datastoreIntersectsMatch = require('./datastoreIntersectsMatch.js');
+var datastoreOp = require('./datastoreOp.js');
 var datastoreOrderBy = require('./datastoreOrderBy.js');
 var datastoreQuery = require('./datastoreQuery.js');
-var datastoreStartsWithMatch = require('./datastoreStartsWithMatch.js');
 var dockerSvcContainerIsRunningResponse = require('./dockerSvcContainerIsRunningResponse.js');
 var dockerSvcDockerInfo = require('./dockerSvcDockerInfo.js');
 var dockerSvcErrorResponse = require('./dockerSvcErrorResponse.js');
@@ -126,6 +122,7 @@ let primitives = [
     "any"
 ];
 let enumsMap = {
+    "DatastoreOp": datastoreOp.DatastoreOp,
     "PolicySvcEntity": policySvcEntity.PolicySvcEntity,
     "PolicySvcScope": policySvcScope.PolicySvcScope,
     "PolicySvcTemplateId": policySvcTemplateId.PolicySvcTemplateId,
@@ -148,14 +145,9 @@ let typeMap = {
     "ConfigSvcGetConfigResponse": configSvcGetConfigResponse.ConfigSvcGetConfigResponse,
     "ConfigSvcModelServiceConfig": configSvcModelServiceConfig.ConfigSvcModelServiceConfig,
     "ConfigSvcSaveConfigRequest": configSvcSaveConfigRequest.ConfigSvcSaveConfigRequest,
-    "DatastoreContainsMatch": datastoreContainsMatch.DatastoreContainsMatch,
-    "DatastoreEqualsMatch": datastoreEqualsMatch.DatastoreEqualsMatch,
-    "DatastoreFieldSelector": datastoreFieldSelector.DatastoreFieldSelector,
     "DatastoreFilter": datastoreFilter.DatastoreFilter,
-    "DatastoreIntersectsMatch": datastoreIntersectsMatch.DatastoreIntersectsMatch,
     "DatastoreOrderBy": datastoreOrderBy.DatastoreOrderBy,
     "DatastoreQuery": datastoreQuery.DatastoreQuery,
-    "DatastoreStartsWithMatch": datastoreStartsWithMatch.DatastoreStartsWithMatch,
     "DockerSvcContainerIsRunningResponse": dockerSvcContainerIsRunningResponse.DockerSvcContainerIsRunningResponse,
     "DockerSvcDockerInfo": dockerSvcDockerInfo.DockerSvcDockerInfo,
     "DockerSvcErrorResponse": dockerSvcErrorResponse.DockerSvcErrorResponse,
@@ -442,14 +434,13 @@ exports.ConfigSvcDownloadServiceConfig = configSvcDownloadServiceConfig.ConfigSv
 exports.ConfigSvcGetConfigResponse = configSvcGetConfigResponse.ConfigSvcGetConfigResponse;
 exports.ConfigSvcModelServiceConfig = configSvcModelServiceConfig.ConfigSvcModelServiceConfig;
 exports.ConfigSvcSaveConfigRequest = configSvcSaveConfigRequest.ConfigSvcSaveConfigRequest;
-exports.DatastoreContainsMatch = datastoreContainsMatch.DatastoreContainsMatch;
-exports.DatastoreEqualsMatch = datastoreEqualsMatch.DatastoreEqualsMatch;
-exports.DatastoreFieldSelector = datastoreFieldSelector.DatastoreFieldSelector;
 exports.DatastoreFilter = datastoreFilter.DatastoreFilter;
-exports.DatastoreIntersectsMatch = datastoreIntersectsMatch.DatastoreIntersectsMatch;
+Object.defineProperty(exports, 'DatastoreOp', {
+    enumerable: true,
+    get: function () { return datastoreOp.DatastoreOp; }
+});
 exports.DatastoreOrderBy = datastoreOrderBy.DatastoreOrderBy;
 exports.DatastoreQuery = datastoreQuery.DatastoreQuery;
-exports.DatastoreStartsWithMatch = datastoreStartsWithMatch.DatastoreStartsWithMatch;
 exports.DockerSvcContainerIsRunningResponse = dockerSvcContainerIsRunningResponse.DockerSvcContainerIsRunningResponse;
 exports.DockerSvcDockerInfo = dockerSvcDockerInfo.DockerSvcDockerInfo;
 exports.DockerSvcErrorResponse = dockerSvcErrorResponse.DockerSvcErrorResponse;

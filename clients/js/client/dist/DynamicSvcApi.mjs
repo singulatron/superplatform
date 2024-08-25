@@ -10,11 +10,7 @@ import { DynamicSvcUpsertObjectResponseFromJSON } from './DynamicSvcUpsertObject
 import './DynamicSvcObjectCreateFields.mjs';
 import './DynamicSvcObject.mjs';
 import './DatastoreFilter.mjs';
-import './DatastoreFieldSelector.mjs';
-import './DatastoreStartsWithMatch.mjs';
-import './DatastoreContainsMatch.mjs';
-import './DatastoreEqualsMatch.mjs';
-import './DatastoreIntersectsMatch.mjs';
+import './DatastoreOp.mjs';
 import './DatastoreQuery.mjs';
 import './DatastoreOrderBy.mjs';
 

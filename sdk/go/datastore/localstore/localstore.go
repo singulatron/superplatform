@@ -251,6 +251,10 @@ type QueryBuilder struct {
 }
 
 func (q *QueryBuilder) OrderBy(options ...datastore.OrderBy) datastore.QueryBuilder {
+	if len(options) == 0 {
+		return q
+	}
+
 	option := options[0]
 
 	if option.Field != "" {

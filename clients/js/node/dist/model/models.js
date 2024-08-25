@@ -14,14 +14,10 @@ export * from './configSvcDownloadServiceConfig';
 export * from './configSvcGetConfigResponse';
 export * from './configSvcModelServiceConfig';
 export * from './configSvcSaveConfigRequest';
-export * from './datastoreContainsMatch';
-export * from './datastoreEqualsMatch';
-export * from './datastoreFieldSelector';
 export * from './datastoreFilter';
-export * from './datastoreIntersectsMatch';
+export * from './datastoreOp';
 export * from './datastoreOrderBy';
 export * from './datastoreQuery';
-export * from './datastoreStartsWithMatch';
 export * from './dockerSvcContainerIsRunningResponse';
 export * from './dockerSvcDockerInfo';
 export * from './dockerSvcErrorResponse';
@@ -127,14 +123,10 @@ import { ConfigSvcDownloadServiceConfig } from './configSvcDownloadServiceConfig
 import { ConfigSvcGetConfigResponse } from './configSvcGetConfigResponse';
 import { ConfigSvcModelServiceConfig } from './configSvcModelServiceConfig';
 import { ConfigSvcSaveConfigRequest } from './configSvcSaveConfigRequest';
-import { DatastoreContainsMatch } from './datastoreContainsMatch';
-import { DatastoreEqualsMatch } from './datastoreEqualsMatch';
-import { DatastoreFieldSelector } from './datastoreFieldSelector';
 import { DatastoreFilter } from './datastoreFilter';
-import { DatastoreIntersectsMatch } from './datastoreIntersectsMatch';
+import { DatastoreOp } from './datastoreOp';
 import { DatastoreOrderBy } from './datastoreOrderBy';
 import { DatastoreQuery } from './datastoreQuery';
-import { DatastoreStartsWithMatch } from './datastoreStartsWithMatch';
 import { DockerSvcContainerIsRunningResponse } from './dockerSvcContainerIsRunningResponse';
 import { DockerSvcDockerInfo } from './dockerSvcDockerInfo';
 import { DockerSvcErrorResponse } from './dockerSvcErrorResponse';
@@ -236,6 +228,7 @@ let primitives = [
     "any"
 ];
 let enumsMap = {
+    "DatastoreOp": DatastoreOp,
     "PolicySvcEntity": PolicySvcEntity,
     "PolicySvcScope": PolicySvcScope,
     "PolicySvcTemplateId": PolicySvcTemplateId,
@@ -258,14 +251,9 @@ let typeMap = {
     "ConfigSvcGetConfigResponse": ConfigSvcGetConfigResponse,
     "ConfigSvcModelServiceConfig": ConfigSvcModelServiceConfig,
     "ConfigSvcSaveConfigRequest": ConfigSvcSaveConfigRequest,
-    "DatastoreContainsMatch": DatastoreContainsMatch,
-    "DatastoreEqualsMatch": DatastoreEqualsMatch,
-    "DatastoreFieldSelector": DatastoreFieldSelector,
     "DatastoreFilter": DatastoreFilter,
-    "DatastoreIntersectsMatch": DatastoreIntersectsMatch,
     "DatastoreOrderBy": DatastoreOrderBy,
     "DatastoreQuery": DatastoreQuery,
-    "DatastoreStartsWithMatch": DatastoreStartsWithMatch,
     "DockerSvcContainerIsRunningResponse": DockerSvcContainerIsRunningResponse,
     "DockerSvcDockerInfo": DockerSvcDockerInfo,
     "DockerSvcErrorResponse": DockerSvcErrorResponse,

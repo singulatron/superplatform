@@ -22,10 +22,10 @@ var _ MappedNullable = &DatastoreQuery{}
 type DatastoreQuery struct {
 	// After is used for paginations. Instead of offset-based pagination, we support cursor-based pagination because it works better in a scalable, distributed environment.
 	After []map[string]interface{} `json:"after,omitempty"`
-	// Filters are filtering options of a query. It is advised to use It's advised to use helper functions in your respective client library such as condition constructors (`all`, `equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
-	Conditions []DatastoreFilter `json:"conditions,omitempty"`
 	// Count true means return the count of the dataset filtered by Filters without after or limit.
 	Count *bool `json:"count,omitempty"`
+	// Filters are filtering options of a query. It is advised to use It's advised to use helper functions in your respective client library such as filter constructors (`all`, `equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
+	Filters []DatastoreFilter `json:"filters,omitempty"`
 	// Limit the number of records in the result set.
 	Limit *int32 `json:"limit,omitempty"`
 	// OrderBys order the result set.
@@ -81,38 +81,6 @@ func (o *DatastoreQuery) SetAfter(v []map[string]interface{}) {
 	o.After = v
 }
 
-// GetConditions returns the Conditions field value if set, zero value otherwise.
-func (o *DatastoreQuery) GetConditions() []DatastoreFilter {
-	if o == nil || IsNil(o.Conditions) {
-		var ret []DatastoreFilter
-		return ret
-	}
-	return o.Conditions
-}
-
-// GetConditionsOk returns a tuple with the Conditions field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *DatastoreQuery) GetConditionsOk() ([]DatastoreFilter, bool) {
-	if o == nil || IsNil(o.Conditions) {
-		return nil, false
-	}
-	return o.Conditions, true
-}
-
-// HasConditions returns a boolean if a field has been set.
-func (o *DatastoreQuery) HasConditions() bool {
-	if o != nil && !IsNil(o.Conditions) {
-		return true
-	}
-
-	return false
-}
-
-// SetConditions gets a reference to the given []DatastoreFilter and assigns it to the Conditions field.
-func (o *DatastoreQuery) SetConditions(v []DatastoreFilter) {
-	o.Conditions = v
-}
-
 // GetCount returns the Count field value if set, zero value otherwise.
 func (o *DatastoreQuery) GetCount() bool {
 	if o == nil || IsNil(o.Count) {
@@ -143,6 +111,38 @@ func (o *DatastoreQuery) HasCount() bool {
 // SetCount gets a reference to the given bool and assigns it to the Count field.
 func (o *DatastoreQuery) SetCount(v bool) {
 	o.Count = &v
+}
+
+// GetFilters returns the Filters field value if set, zero value otherwise.
+func (o *DatastoreQuery) GetFilters() []DatastoreFilter {
+	if o == nil || IsNil(o.Filters) {
+		var ret []DatastoreFilter
+		return ret
+	}
+	return o.Filters
+}
+
+// GetFiltersOk returns a tuple with the Filters field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *DatastoreQuery) GetFiltersOk() ([]DatastoreFilter, bool) {
+	if o == nil || IsNil(o.Filters) {
+		return nil, false
+	}
+	return o.Filters, true
+}
+
+// HasFilters returns a boolean if a field has been set.
+func (o *DatastoreQuery) HasFilters() bool {
+	if o != nil && !IsNil(o.Filters) {
+		return true
+	}
+
+	return false
+}
+
+// SetFilters gets a reference to the given []DatastoreFilter and assigns it to the Filters field.
+func (o *DatastoreQuery) SetFilters(v []DatastoreFilter) {
+	o.Filters = v
 }
 
 // GetLimit returns the Limit field value if set, zero value otherwise.
@@ -222,11 +222,11 @@ func (o DatastoreQuery) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.After) {
 		toSerialize["after"] = o.After
 	}
-	if !IsNil(o.Conditions) {
-		toSerialize["conditions"] = o.Conditions
-	}
 	if !IsNil(o.Count) {
 		toSerialize["count"] = o.Count
+	}
+	if !IsNil(o.Filters) {
+		toSerialize["filters"] = o.Filters
 	}
 	if !IsNil(o.Limit) {
 		toSerialize["limit"] = o.Limit

@@ -10,11 +10,7 @@ require('./PromptSvcPrompt.js');
 require('./PromptSvcPromptStatus.js');
 require('./DatastoreQuery.js');
 require('./DatastoreFilter.js');
-require('./DatastoreFieldSelector.js');
-require('./DatastoreStartsWithMatch.js');
-require('./DatastoreContainsMatch.js');
-require('./DatastoreEqualsMatch.js');
-require('./DatastoreIntersectsMatch.js');
+require('./DatastoreOp.js');
 require('./DatastoreOrderBy.js');
 
 /* tslint:disable */

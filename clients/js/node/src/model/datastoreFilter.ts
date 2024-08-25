@@ -11,67 +11,30 @@
  */
 
 import { RequestFile } from './models';
-import { DatastoreContainsMatch } from './datastoreContainsMatch';
-import { DatastoreEqualsMatch } from './datastoreEqualsMatch';
-import { DatastoreFieldSelector } from './datastoreFieldSelector';
-import { DatastoreIntersectsMatch } from './datastoreIntersectsMatch';
-import { DatastoreStartsWithMatch } from './datastoreStartsWithMatch';
+import { DatastoreOp } from './datastoreOp';
 
 export class DatastoreFilter {
-    /**
-    * All condition returns all objects.
-    */
-    'all'?: object;
-    /**
-    * Contains condition returns all objects where the field(s) values contain a particular string or slice element.
-    */
-    'contains'?: DatastoreContainsMatch;
-    /**
-    * Equals condition returns objects where value of a field equals (=) to the specified value in the query.
-    */
-    'equal'?: DatastoreEqualsMatch;
-    /**
-    * Intersects condition returns objects where the slice value of a field intersects with the slice value in the query.
-    */
-    'intersects'?: DatastoreIntersectsMatch;
-    'selector'?: DatastoreFieldSelector;
-    /**
-    * StartsWith condition returns all objects where the field(s) values start with a particular string.
-    */
-    'startsWith'?: DatastoreStartsWithMatch;
+    'fields'?: Array<string>;
+    'op'?: DatastoreOp;
+    'values'?: Array<object>;
 
     static discriminator: string | undefined = undefined;
 
     static attributeTypeMap: Array<{name: string, baseName: string, type: string}> = [
         {
-            "name": "all",
-            "baseName": "all",
-            "type": "object"
+            "name": "fields",
+            "baseName": "fields",
+            "type": "Array<string>"
         },
         {
-            "name": "contains",
-            "baseName": "contains",
-            "type": "DatastoreContainsMatch"
+            "name": "op",
+            "baseName": "op",
+            "type": "DatastoreOp"
         },
         {
-            "name": "equal",
-            "baseName": "equal",
-            "type": "DatastoreEqualsMatch"
-        },
-        {
-            "name": "intersects",
-            "baseName": "intersects",
-            "type": "DatastoreIntersectsMatch"
-        },
-        {
-            "name": "selector",
-            "baseName": "selector",
-            "type": "DatastoreFieldSelector"
-        },
-        {
-            "name": "startsWith",
-            "baseName": "startsWith",
-            "type": "DatastoreStartsWithMatch"
+            "name": "values",
+            "baseName": "values",
+            "type": "Array<object>"
         }    ];
 
     static getAttributeTypeMap() {
@@ -79,3 +42,5 @@ export class DatastoreFilter {
     }
 }
 
+export namespace DatastoreFilter {
+}

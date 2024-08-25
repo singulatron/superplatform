@@ -1,10 +1,6 @@
 'use strict';
 
-var DatastoreFieldSelector = require('./DatastoreFieldSelector.js');
-var DatastoreStartsWithMatch = require('./DatastoreStartsWithMatch.js');
-var DatastoreContainsMatch = require('./DatastoreContainsMatch.js');
-var DatastoreEqualsMatch = require('./DatastoreEqualsMatch.js');
-var DatastoreIntersectsMatch = require('./DatastoreIntersectsMatch.js');
+var DatastoreOp = require('./DatastoreOp.js');
 
 /* tslint:disable */
 /* eslint-disable */
@@ -33,12 +29,9 @@ function DatastoreFilterFromJSONTyped(json, ignoreDiscriminator) {
         return json;
     }
     return {
-        'all': json['all'] == null ? undefined : json['all'],
-        'contains': json['contains'] == null ? undefined : DatastoreContainsMatch.DatastoreContainsMatchFromJSON(json['contains']),
-        'equal': json['equal'] == null ? undefined : DatastoreEqualsMatch.DatastoreEqualsMatchFromJSON(json['equal']),
-        'intersects': json['intersects'] == null ? undefined : DatastoreIntersectsMatch.DatastoreIntersectsMatchFromJSON(json['intersects']),
-        'selector': json['selector'] == null ? undefined : DatastoreFieldSelector.DatastoreFieldSelectorFromJSON(json['selector']),
-        'startsWith': json['startsWith'] == null ? undefined : DatastoreStartsWithMatch.DatastoreStartsWithMatchFromJSON(json['startsWith']),
+        'fields': json['fields'] == null ? undefined : json['fields'],
+        'op': json['op'] == null ? undefined : DatastoreOp.DatastoreOpFromJSON(json['op']),
+        'values': json['values'] == null ? undefined : json['values'],
     };
 }
 function DatastoreFilterToJSON(value) {
@@ -46,12 +39,9 @@ function DatastoreFilterToJSON(value) {
         return value;
     }
     return {
-        'all': value['all'],
-        'contains': DatastoreContainsMatch.DatastoreContainsMatchToJSON(value['contains']),
-        'equal': DatastoreEqualsMatch.DatastoreEqualsMatchToJSON(value['equal']),
-        'intersects': DatastoreIntersectsMatch.DatastoreIntersectsMatchToJSON(value['intersects']),
-        'selector': DatastoreFieldSelector.DatastoreFieldSelectorToJSON(value['selector']),
-        'startsWith': DatastoreStartsWithMatch.DatastoreStartsWithMatchToJSON(value['startsWith']),
+        'fields': value['fields'],
+        'op': DatastoreOp.DatastoreOpToJSON(value['op']),
+        'values': value['values'],
     };
 }
 

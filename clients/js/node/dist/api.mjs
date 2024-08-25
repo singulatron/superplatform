@@ -16,14 +16,10 @@ export { ConfigSvcDownloadServiceConfig } from './configSvcDownloadServiceConfig
 export { ConfigSvcGetConfigResponse } from './configSvcGetConfigResponse.mjs';
 export { ConfigSvcModelServiceConfig } from './configSvcModelServiceConfig.mjs';
 export { ConfigSvcSaveConfigRequest } from './configSvcSaveConfigRequest.mjs';
-export { DatastoreContainsMatch } from './datastoreContainsMatch.mjs';
-export { DatastoreEqualsMatch } from './datastoreEqualsMatch.mjs';
-export { DatastoreFieldSelector } from './datastoreFieldSelector.mjs';
 export { DatastoreFilter } from './datastoreFilter.mjs';
-export { DatastoreIntersectsMatch } from './datastoreIntersectsMatch.mjs';
+export { DatastoreOp } from './datastoreOp.mjs';
 export { DatastoreOrderBy } from './datastoreOrderBy.mjs';
 export { DatastoreQuery } from './datastoreQuery.mjs';
-export { DatastoreStartsWithMatch } from './datastoreStartsWithMatch.mjs';
 export { DockerSvcContainerIsRunningResponse } from './dockerSvcContainerIsRunningResponse.mjs';
 export { DockerSvcDockerInfo } from './dockerSvcDockerInfo.mjs';
 export { DockerSvcErrorResponse } from './dockerSvcErrorResponse.mjs';

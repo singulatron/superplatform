@@ -8,11 +8,7 @@ import './PromptSvcPrompt.mjs';
 import './PromptSvcPromptStatus.mjs';
 import './DatastoreQuery.mjs';
 import './DatastoreFilter.mjs';
-import './DatastoreFieldSelector.mjs';
-import './DatastoreStartsWithMatch.mjs';
-import './DatastoreContainsMatch.mjs';
-import './DatastoreEqualsMatch.mjs';
-import './DatastoreIntersectsMatch.mjs';
+import './DatastoreOp.mjs';
 import './DatastoreOrderBy.mjs';
 
 /* tslint:disable */

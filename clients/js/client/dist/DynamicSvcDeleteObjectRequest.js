@@ -1,11 +1,7 @@
 'use strict';
 
 var DatastoreFilter = require('./DatastoreFilter.js');
-require('./DatastoreFieldSelector.js');
-require('./DatastoreStartsWithMatch.js');
-require('./DatastoreContainsMatch.js');
-require('./DatastoreEqualsMatch.js');
-require('./DatastoreIntersectsMatch.js');
+require('./DatastoreOp.js');
 
 /* tslint:disable */
 /* eslint-disable */

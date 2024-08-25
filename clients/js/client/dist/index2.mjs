@@ -14,14 +14,10 @@ export { ConfigSvcDownloadServiceConfigFromJSON, ConfigSvcDownloadServiceConfigF
 export { ConfigSvcGetConfigResponseFromJSON, ConfigSvcGetConfigResponseFromJSONTyped, ConfigSvcGetConfigResponseToJSON, instanceOfConfigSvcGetConfigResponse } from './ConfigSvcGetConfigResponse.mjs';
 export { ConfigSvcModelServiceConfigFromJSON, ConfigSvcModelServiceConfigFromJSONTyped, ConfigSvcModelServiceConfigToJSON, instanceOfConfigSvcModelServiceConfig } from './ConfigSvcModelServiceConfig.mjs';
 export { ConfigSvcSaveConfigRequestFromJSON, ConfigSvcSaveConfigRequestFromJSONTyped, ConfigSvcSaveConfigRequestToJSON, instanceOfConfigSvcSaveConfigRequest } from './ConfigSvcSaveConfigRequest.mjs';
-export { DatastoreContainsMatchFromJSON, DatastoreContainsMatchFromJSONTyped, DatastoreContainsMatchToJSON, instanceOfDatastoreContainsMatch } from './DatastoreContainsMatch.mjs';
-export { DatastoreEqualsMatchFromJSON, DatastoreEqualsMatchFromJSONTyped, DatastoreEqualsMatchToJSON, instanceOfDatastoreEqualsMatch } from './DatastoreEqualsMatch.mjs';
-export { DatastoreFieldSelectorFromJSON, DatastoreFieldSelectorFromJSONTyped, DatastoreFieldSelectorToJSON, instanceOfDatastoreFieldSelector } from './DatastoreFieldSelector.mjs';
 export { DatastoreFilterFromJSON, DatastoreFilterFromJSONTyped, DatastoreFilterToJSON, instanceOfDatastoreFilter } from './DatastoreFilter.mjs';
-export { DatastoreIntersectsMatchFromJSON, DatastoreIntersectsMatchFromJSONTyped, DatastoreIntersectsMatchToJSON, instanceOfDatastoreIntersectsMatch } from './DatastoreIntersectsMatch.mjs';
+export { DatastoreOp, DatastoreOpFromJSON, DatastoreOpFromJSONTyped, DatastoreOpToJSON, instanceOfDatastoreOp } from './DatastoreOp.mjs';
 export { DatastoreOrderByFromJSON, DatastoreOrderByFromJSONTyped, DatastoreOrderByToJSON, instanceOfDatastoreOrderBy } from './DatastoreOrderBy.mjs';
 export { DatastoreQueryFromJSON, DatastoreQueryFromJSONTyped, DatastoreQueryToJSON, instanceOfDatastoreQuery } from './DatastoreQuery.mjs';
-export { DatastoreStartsWithMatchFromJSON, DatastoreStartsWithMatchFromJSONTyped, DatastoreStartsWithMatchToJSON, instanceOfDatastoreStartsWithMatch } from './DatastoreStartsWithMatch.mjs';
 export { DockerSvcContainerIsRunningResponseFromJSON, DockerSvcContainerIsRunningResponseFromJSONTyped, DockerSvcContainerIsRunningResponseToJSON, instanceOfDockerSvcContainerIsRunningResponse } from './DockerSvcContainerIsRunningResponse.mjs';
 export { DockerSvcDockerInfoFromJSON, DockerSvcDockerInfoFromJSONTyped, DockerSvcDockerInfoToJSON, instanceOfDockerSvcDockerInfo } from './DockerSvcDockerInfo.mjs';
 export { DockerSvcErrorResponseFromJSON, DockerSvcErrorResponseFromJSONTyped, DockerSvcErrorResponseToJSON, instanceOfDockerSvcErrorResponse } from './DockerSvcErrorResponse.mjs';

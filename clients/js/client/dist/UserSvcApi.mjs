@@ -27,11 +27,7 @@ import './UserSvcContact.mjs';
 import './UserSvcPermission.mjs';
 import './DatastoreQuery.mjs';
 import './DatastoreFilter.mjs';
-import './DatastoreFieldSelector.mjs';
-import './DatastoreStartsWithMatch.mjs';
-import './DatastoreContainsMatch.mjs';
-import './DatastoreEqualsMatch.mjs';
-import './DatastoreIntersectsMatch.mjs';
+import './DatastoreOp.mjs';
 import './DatastoreOrderBy.mjs';
 import './UserSvcAuthToken.mjs';
 

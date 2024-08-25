@@ -1,9 +1,5 @@
 import { DatastoreFilterFromJSON, DatastoreFilterToJSON } from './DatastoreFilter.mjs';
-import './DatastoreFieldSelector.mjs';
-import './DatastoreStartsWithMatch.mjs';
-import './DatastoreContainsMatch.mjs';
-import './DatastoreEqualsMatch.mjs';
-import './DatastoreIntersectsMatch.mjs';
+import './DatastoreOp.mjs';
 
 /* tslint:disable */
 /* eslint-disable */

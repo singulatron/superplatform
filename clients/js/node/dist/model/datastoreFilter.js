@@ -17,33 +17,18 @@ export class DatastoreFilter {
 DatastoreFilter.discriminator = undefined;
 DatastoreFilter.attributeTypeMap = [
     {
-        "name": "all",
-        "baseName": "all",
-        "type": "object"
+        "name": "fields",
+        "baseName": "fields",
+        "type": "Array<string>"
     },
     {
-        "name": "contains",
-        "baseName": "contains",
-        "type": "DatastoreContainsMatch"
+        "name": "op",
+        "baseName": "op",
+        "type": "DatastoreOp"
     },
     {
-        "name": "equal",
-        "baseName": "equal",
-        "type": "DatastoreEqualsMatch"
-    },
-    {
-        "name": "intersects",
-        "baseName": "intersects",
-        "type": "DatastoreIntersectsMatch"
-    },
-    {
-        "name": "selector",
-        "baseName": "selector",
-        "type": "DatastoreFieldSelector"
-    },
-    {
-        "name": "startsWith",
-        "baseName": "startsWith",
-        "type": "DatastoreStartsWithMatch"
+        "name": "values",
+        "baseName": "values",
+        "type": "Array<object>"
     }
 ];

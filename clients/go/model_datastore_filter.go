@@ -20,17 +20,9 @@ var _ MappedNullable = &DatastoreFilter{}
 
 // DatastoreFilter struct for DatastoreFilter
 type DatastoreFilter struct {
-	// All condition returns all objects.
-	All map[string]interface{} `json:"all,omitempty"`
-	// Contains condition returns all objects where the field(s) values contain a particular string or slice element.
-	Contains *DatastoreContainsMatch `json:"contains,omitempty"`
-	// Equals condition returns objects where value of a field equals (=) to the specified value in the query.
-	Equal *DatastoreEqualsMatch `json:"equal,omitempty"`
-	// Intersects condition returns objects where the slice value of a field intersects with the slice value in the query.
-	Intersects *DatastoreIntersectsMatch `json:"intersects,omitempty"`
-	Selector *DatastoreFieldSelector `json:"selector,omitempty"`
-	// StartsWith condition returns all objects where the field(s) values start with a particular string.
-	StartsWith *DatastoreStartsWithMatch `json:"startsWith,omitempty"`
+	Fields []string `json:"fields,omitempty"`
+	Op *DatastoreOp `json:"op,omitempty"`
+	Values []map[string]interface{} `json:"values,omitempty"`
 }
 
 // NewDatastoreFilter instantiates a new DatastoreFilter object
@@ -50,196 +42,100 @@ func NewDatastoreFilterWithDefaults() *DatastoreFilter {
 	return &this
 }
 
-// GetAll returns the All field value if set, zero value otherwise.
-func (o *DatastoreFilter) GetAll() map[string]interface{} {
-	if o == nil || IsNil(o.All) {
-		var ret map[string]interface{}
+// GetFields returns the Fields field value if set, zero value otherwise.
+func (o *DatastoreFilter) GetFields() []string {
+	if o == nil || IsNil(o.Fields) {
+		var ret []string
 		return ret
 	}
-	return o.All
+	return o.Fields
 }
 
-// GetAllOk returns a tuple with the All field value if set, nil otherwise
+// GetFieldsOk returns a tuple with the Fields field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *DatastoreFilter) GetAllOk() (map[string]interface{}, bool) {
-	if o == nil || IsNil(o.All) {
-		return map[string]interface{}{}, false
-	}
-	return o.All, true
-}
-
-// HasAll returns a boolean if a field has been set.
-func (o *DatastoreFilter) HasAll() bool {
-	if o != nil && !IsNil(o.All) {
-		return true
-	}
-
-	return false
-}
-
-// SetAll gets a reference to the given map[string]interface{} and assigns it to the All field.
-func (o *DatastoreFilter) SetAll(v map[string]interface{}) {
-	o.All = v
-}
-
-// GetContains returns the Contains field value if set, zero value otherwise.
-func (o *DatastoreFilter) GetContains() DatastoreContainsMatch {
-	if o == nil || IsNil(o.Contains) {
-		var ret DatastoreContainsMatch
-		return ret
-	}
-	return *o.Contains
-}
-
-// GetContainsOk returns a tuple with the Contains field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *DatastoreFilter) GetContainsOk() (*DatastoreContainsMatch, bool) {
-	if o == nil || IsNil(o.Contains) {
+func (o *DatastoreFilter) GetFieldsOk() ([]string, bool) {
+	if o == nil || IsNil(o.Fields) {
 		return nil, false
 	}
-	return o.Contains, true
+	return o.Fields, true
 }
 
-// HasContains returns a boolean if a field has been set.
-func (o *DatastoreFilter) HasContains() bool {
-	if o != nil && !IsNil(o.Contains) {
+// HasFields returns a boolean if a field has been set.
+func (o *DatastoreFilter) HasFields() bool {
+	if o != nil && !IsNil(o.Fields) {
 		return true
 	}
 
 	return false
 }
 
-// SetContains gets a reference to the given DatastoreContainsMatch and assigns it to the Contains field.
-func (o *DatastoreFilter) SetContains(v DatastoreContainsMatch) {
-	o.Contains = &v
+// SetFields gets a reference to the given []string and assigns it to the Fields field.
+func (o *DatastoreFilter) SetFields(v []string) {
+	o.Fields = v
 }
 
-// GetEqual returns the Equal field value if set, zero value otherwise.
-func (o *DatastoreFilter) GetEqual() DatastoreEqualsMatch {
-	if o == nil || IsNil(o.Equal) {
-		var ret DatastoreEqualsMatch
+// GetOp returns the Op field value if set, zero value otherwise.
+func (o *DatastoreFilter) GetOp() DatastoreOp {
+	if o == nil || IsNil(o.Op) {
+		var ret DatastoreOp
 		return ret
 	}
-	return *o.Equal
+	return *o.Op
 }
 
-// GetEqualOk returns a tuple with the Equal field value if set, nil otherwise
+// GetOpOk returns a tuple with the Op field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *DatastoreFilter) GetEqualOk() (*DatastoreEqualsMatch, bool) {
-	if o == nil || IsNil(o.Equal) {
+func (o *DatastoreFilter) GetOpOk() (*DatastoreOp, bool) {
+	if o == nil || IsNil(o.Op) {
 		return nil, false
 	}
-	return o.Equal, true
+	return o.Op, true
 }
 
-// HasEqual returns a boolean if a field has been set.
-func (o *DatastoreFilter) HasEqual() bool {
-	if o != nil && !IsNil(o.Equal) {
+// HasOp returns a boolean if a field has been set.
+func (o *DatastoreFilter) HasOp() bool {
+	if o != nil && !IsNil(o.Op) {
 		return true
 	}
 
 	return false
 }
 
-// SetEqual gets a reference to the given DatastoreEqualsMatch and assigns it to the Equal field.
-func (o *DatastoreFilter) SetEqual(v DatastoreEqualsMatch) {
-	o.Equal = &v
+// SetOp gets a reference to the given DatastoreOp and assigns it to the Op field.
+func (o *DatastoreFilter) SetOp(v DatastoreOp) {
+	o.Op = &v
 }
 
-// GetIntersects returns the Intersects field value if set, zero value otherwise.
-func (o *DatastoreFilter) GetIntersects() DatastoreIntersectsMatch {
-	if o == nil || IsNil(o.Intersects) {
-		var ret DatastoreIntersectsMatch
+// GetValues returns the Values field value if set, zero value otherwise.
+func (o *DatastoreFilter) GetValues() []map[string]interface{} {
+	if o == nil || IsNil(o.Values) {
+		var ret []map[string]interface{}
 		return ret
 	}
-	return *o.Intersects
+	return o.Values
 }
 
-// GetIntersectsOk returns a tuple with the Intersects field value if set, nil otherwise
+// GetValuesOk returns a tuple with the Values field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *DatastoreFilter) GetIntersectsOk() (*DatastoreIntersectsMatch, bool) {
-	if o == nil || IsNil(o.Intersects) {
+func (o *DatastoreFilter) GetValuesOk() ([]map[string]interface{}, bool) {
+	if o == nil || IsNil(o.Values) {
 		return nil, false
 	}
-	return o.Intersects, true
+	return o.Values, true
 }
 
-// HasIntersects returns a boolean if a field has been set.
-func (o *DatastoreFilter) HasIntersects() bool {
-	if o != nil && !IsNil(o.Intersects) {
+// HasValues returns a boolean if a field has been set.
+func (o *DatastoreFilter) HasValues() bool {
+	if o != nil && !IsNil(o.Values) {
 		return true
 	}
 
 	return false
 }
 
-// SetIntersects gets a reference to the given DatastoreIntersectsMatch and assigns it to the Intersects field.
-func (o *DatastoreFilter) SetIntersects(v DatastoreIntersectsMatch) {
-	o.Intersects = &v
-}
-
-// GetSelector returns the Selector field value if set, zero value otherwise.
-func (o *DatastoreFilter) GetSelector() DatastoreFieldSelector {
-	if o == nil || IsNil(o.Selector) {
-		var ret DatastoreFieldSelector
-		return ret
-	}
-	return *o.Selector
-}
-
-// GetSelectorOk returns a tuple with the Selector field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *DatastoreFilter) GetSelectorOk() (*DatastoreFieldSelector, bool) {
-	if o == nil || IsNil(o.Selector) {
-		return nil, false
-	}
-	return o.Selector, true
-}
-
-// HasSelector returns a boolean if a field has been set.
-func (o *DatastoreFilter) HasSelector() bool {
-	if o != nil && !IsNil(o.Selector) {
-		return true
-	}
-
-	return false
-}
-
-// SetSelector gets a reference to the given DatastoreFieldSelector and assigns it to the Selector field.
-func (o *DatastoreFilter) SetSelector(v DatastoreFieldSelector) {
-	o.Selector = &v
-}
-
-// GetStartsWith returns the StartsWith field value if set, zero value otherwise.
-func (o *DatastoreFilter) GetStartsWith() DatastoreStartsWithMatch {
-	if o == nil || IsNil(o.StartsWith) {
-		var ret DatastoreStartsWithMatch
-		return ret
-	}
-	return *o.StartsWith
-}
-
-// GetStartsWithOk returns a tuple with the StartsWith field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *DatastoreFilter) GetStartsWithOk() (*DatastoreStartsWithMatch, bool) {
-	if o == nil || IsNil(o.StartsWith) {
-		return nil, false
-	}
-	return o.StartsWith, true
-}
-
-// HasStartsWith returns a boolean if a field has been set.
-func (o *DatastoreFilter) HasStartsWith() bool {
-	if o != nil && !IsNil(o.StartsWith) {
-		return true
-	}
-
-	return false
-}
-
-// SetStartsWith gets a reference to the given DatastoreStartsWithMatch and assigns it to the StartsWith field.
-func (o *DatastoreFilter) SetStartsWith(v DatastoreStartsWithMatch) {
-	o.StartsWith = &v
+// SetValues gets a reference to the given []map[string]interface{} and assigns it to the Values field.
+func (o *DatastoreFilter) SetValues(v []map[string]interface{}) {
+	o.Values = v
 }
 
 func (o DatastoreFilter) MarshalJSON() ([]byte, error) {
@@ -252,23 +148,14 @@ func (o DatastoreFilter) MarshalJSON() ([]byte, error) {
 
 func (o DatastoreFilter) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if !IsNil(o.All) {
-		toSerialize["all"] = o.All
+	if !IsNil(o.Fields) {
+		toSerialize["fields"] = o.Fields
 	}
-	if !IsNil(o.Contains) {
-		toSerialize["contains"] = o.Contains
+	if !IsNil(o.Op) {
+		toSerialize["op"] = o.Op
 	}
-	if !IsNil(o.Equal) {
-		toSerialize["equal"] = o.Equal
-	}
-	if !IsNil(o.Intersects) {
-		toSerialize["intersects"] = o.Intersects
-	}
-	if !IsNil(o.Selector) {
-		toSerialize["selector"] = o.Selector
-	}
-	if !IsNil(o.StartsWith) {
-		toSerialize["startsWith"] = o.StartsWith
+	if !IsNil(o.Values) {
+		toSerialize["values"] = o.Values
 	}
 	return toSerialize, nil
 }

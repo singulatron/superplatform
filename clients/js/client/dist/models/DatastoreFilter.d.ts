@@ -9,11 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import type { DatastoreFieldSelector } from './DatastoreFieldSelector';
-import type { DatastoreStartsWithMatch } from './DatastoreStartsWithMatch';
-import type { DatastoreContainsMatch } from './DatastoreContainsMatch';
-import type { DatastoreEqualsMatch } from './DatastoreEqualsMatch';
-import type { DatastoreIntersectsMatch } from './DatastoreIntersectsMatch';
+import type { DatastoreOp } from './DatastoreOp';
 /**
  *
  * @export
@@ -21,41 +17,23 @@ import type { DatastoreIntersectsMatch } from './DatastoreIntersectsMatch';
  */
 export interface DatastoreFilter {
     /**
-     * All condition returns all objects.
-     * @type {object}
+     *
+     * @type {Array<string>}
      * @memberof DatastoreFilter
      */
-    all?: object;
-    /**
-     * Contains condition returns all objects where the field(s) values contain a particular string or slice element.
-     * @type {DatastoreContainsMatch}
-     * @memberof DatastoreFilter
-     */
-    contains?: DatastoreContainsMatch;
-    /**
-     * Equals condition returns objects where value of a field equals (=) to the specified value in the query.
-     * @type {DatastoreEqualsMatch}
-     * @memberof DatastoreFilter
-     */
-    equal?: DatastoreEqualsMatch;
-    /**
-     * Intersects condition returns objects where the slice value of a field intersects with the slice value in the query.
-     * @type {DatastoreIntersectsMatch}
-     * @memberof DatastoreFilter
-     */
-    intersects?: DatastoreIntersectsMatch;
+    fields?: Array<string>;
     /**
      *
-     * @type {DatastoreFieldSelector}
+     * @type {DatastoreOp}
      * @memberof DatastoreFilter
      */
-    selector?: DatastoreFieldSelector;
+    op?: DatastoreOp;
     /**
-     * StartsWith condition returns all objects where the field(s) values start with a particular string.
-     * @type {DatastoreStartsWithMatch}
+     *
+     * @type {Array<object>}
      * @memberof DatastoreFilter
      */
-    startsWith?: DatastoreStartsWithMatch;
+    values?: Array<object>;
 }
 /**
  * Check if a given object implements the DatastoreFilter interface.

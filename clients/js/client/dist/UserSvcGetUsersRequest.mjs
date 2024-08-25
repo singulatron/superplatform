@@ -1,10 +1,6 @@
 import { DatastoreQueryFromJSON, DatastoreQueryToJSON } from './DatastoreQuery.mjs';
 import './DatastoreFilter.mjs';
-import './DatastoreFieldSelector.mjs';
-import './DatastoreStartsWithMatch.mjs';
-import './DatastoreContainsMatch.mjs';
-import './DatastoreEqualsMatch.mjs';
-import './DatastoreIntersectsMatch.mjs';
+import './DatastoreOp.mjs';
 import './DatastoreOrderBy.mjs';
 
 /* tslint:disable */

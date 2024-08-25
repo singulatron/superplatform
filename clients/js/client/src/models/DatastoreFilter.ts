@@ -13,36 +13,12 @@
  */
 
 import { mapValues } from '../runtime';
-import type { DatastoreFieldSelector } from './DatastoreFieldSelector';
+import type { DatastoreOp } from './DatastoreOp';
 import {
-    DatastoreFieldSelectorFromJSON,
-    DatastoreFieldSelectorFromJSONTyped,
-    DatastoreFieldSelectorToJSON,
-} from './DatastoreFieldSelector';
-import type { DatastoreStartsWithMatch } from './DatastoreStartsWithMatch';
-import {
-    DatastoreStartsWithMatchFromJSON,
-    DatastoreStartsWithMatchFromJSONTyped,
-    DatastoreStartsWithMatchToJSON,
-} from './DatastoreStartsWithMatch';
-import type { DatastoreContainsMatch } from './DatastoreContainsMatch';
-import {
-    DatastoreContainsMatchFromJSON,
-    DatastoreContainsMatchFromJSONTyped,
-    DatastoreContainsMatchToJSON,
-} from './DatastoreContainsMatch';
-import type { DatastoreEqualsMatch } from './DatastoreEqualsMatch';
-import {
-    DatastoreEqualsMatchFromJSON,
-    DatastoreEqualsMatchFromJSONTyped,
-    DatastoreEqualsMatchToJSON,
-} from './DatastoreEqualsMatch';
-import type { DatastoreIntersectsMatch } from './DatastoreIntersectsMatch';
-import {
-    DatastoreIntersectsMatchFromJSON,
-    DatastoreIntersectsMatchFromJSONTyped,
-    DatastoreIntersectsMatchToJSON,
-} from './DatastoreIntersectsMatch';
+    DatastoreOpFromJSON,
+    DatastoreOpFromJSONTyped,
+    DatastoreOpToJSON,
+} from './DatastoreOp';
 
 /**
  * 
@@ -51,42 +27,26 @@ import {
  */
 export interface DatastoreFilter {
     /**
-     * All condition returns all objects.
-     * @type {object}
+     * 
+     * @type {Array<string>}
      * @memberof DatastoreFilter
      */
-    all?: object;
-    /**
-     * Contains condition returns all objects where the field(s) values contain a particular string or slice element.
-     * @type {DatastoreContainsMatch}
-     * @memberof DatastoreFilter
-     */
-    contains?: DatastoreContainsMatch;
-    /**
-     * Equals condition returns objects where value of a field equals (=) to the specified value in the query.
-     * @type {DatastoreEqualsMatch}
-     * @memberof DatastoreFilter
-     */
-    equal?: DatastoreEqualsMatch;
-    /**
-     * Intersects condition returns objects where the slice value of a field intersects with the slice value in the query.
-     * @type {DatastoreIntersectsMatch}
-     * @memberof DatastoreFilter
-     */
-    intersects?: DatastoreIntersectsMatch;
+    fields?: Array<string>;
     /**
      * 
-     * @type {DatastoreFieldSelector}
+     * @type {DatastoreOp}
      * @memberof DatastoreFilter
      */
-    selector?: DatastoreFieldSelector;
+    op?: DatastoreOp;
     /**
-     * StartsWith condition returns all objects where the field(s) values start with a particular string.
-     * @type {DatastoreStartsWithMatch}
+     * 
+     * @type {Array<object>}
      * @memberof DatastoreFilter
      */
-    startsWith?: DatastoreStartsWithMatch;
+    values?: Array<object>;
 }
+
+
 
 /**
  * Check if a given object implements the DatastoreFilter interface.
@@ -105,12 +65,9 @@ export function DatastoreFilterFromJSONTyped(json: any, ignoreDiscriminator: boo
     }
     return {
         
-        'all': json['all'] == null ? undefined : json['all'],
-        'contains': json['contains'] == null ? undefined : DatastoreContainsMatchFromJSON(json['contains']),
-        'equal': json['equal'] == null ? undefined : DatastoreEqualsMatchFromJSON(json['equal']),
-        'intersects': json['intersects'] == null ? undefined : DatastoreIntersectsMatchFromJSON(json['intersects']),
-        'selector': json['selector'] == null ? undefined : DatastoreFieldSelectorFromJSON(json['selector']),
-        'startsWith': json['startsWith'] == null ? undefined : DatastoreStartsWithMatchFromJSON(json['startsWith']),
+        'fields': json['fields'] == null ? undefined : json['fields'],
+        'op': json['op'] == null ? undefined : DatastoreOpFromJSON(json['op']),
+        'values': json['values'] == null ? undefined : json['values'],
     };
 }
 
@@ -120,12 +77,9 @@ export function DatastoreFilterToJSON(value?: DatastoreFilter | null): any {
     }
     return {
         
-        'all': value['all'],
-        'contains': DatastoreContainsMatchToJSON(value['contains']),
-        'equal': DatastoreEqualsMatchToJSON(value['equal']),
-        'intersects': DatastoreIntersectsMatchToJSON(value['intersects']),
-        'selector': DatastoreFieldSelectorToJSON(value['selector']),
-        'startsWith': DatastoreStartsWithMatchToJSON(value['startsWith']),
+        'fields': value['fields'],
+        'op': DatastoreOpToJSON(value['op']),
+        'values': value['values'],
     };
 }
 

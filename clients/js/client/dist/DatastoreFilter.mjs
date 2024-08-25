@@ -1,8 +1,4 @@
-import { DatastoreFieldSelectorFromJSON, DatastoreFieldSelectorToJSON } from './DatastoreFieldSelector.mjs';
-import { DatastoreStartsWithMatchFromJSON, DatastoreStartsWithMatchToJSON } from './DatastoreStartsWithMatch.mjs';
-import { DatastoreContainsMatchFromJSON, DatastoreContainsMatchToJSON } from './DatastoreContainsMatch.mjs';
-import { DatastoreEqualsMatchFromJSON, DatastoreEqualsMatchToJSON } from './DatastoreEqualsMatch.mjs';
-import { DatastoreIntersectsMatchFromJSON, DatastoreIntersectsMatchToJSON } from './DatastoreIntersectsMatch.mjs';
+import { DatastoreOpFromJSON, DatastoreOpToJSON } from './DatastoreOp.mjs';
 
 /* tslint:disable */
 /* eslint-disable */
@@ -31,12 +27,9 @@ function DatastoreFilterFromJSONTyped(json, ignoreDiscriminator) {
         return json;
     }
     return {
-        'all': json['all'] == null ? undefined : json['all'],
-        'contains': json['contains'] == null ? undefined : DatastoreContainsMatchFromJSON(json['contains']),
-        'equal': json['equal'] == null ? undefined : DatastoreEqualsMatchFromJSON(json['equal']),
-        'intersects': json['intersects'] == null ? undefined : DatastoreIntersectsMatchFromJSON(json['intersects']),
-        'selector': json['selector'] == null ? undefined : DatastoreFieldSelectorFromJSON(json['selector']),
-        'startsWith': json['startsWith'] == null ? undefined : DatastoreStartsWithMatchFromJSON(json['startsWith']),
+        'fields': json['fields'] == null ? undefined : json['fields'],
+        'op': json['op'] == null ? undefined : DatastoreOpFromJSON(json['op']),
+        'values': json['values'] == null ? undefined : json['values'],
     };
 }
 function DatastoreFilterToJSON(value) {
@@ -44,12 +37,9 @@ function DatastoreFilterToJSON(value) {
         return value;
     }
     return {
-        'all': value['all'],
-        'contains': DatastoreContainsMatchToJSON(value['contains']),
-        'equal': DatastoreEqualsMatchToJSON(value['equal']),
-        'intersects': DatastoreIntersectsMatchToJSON(value['intersects']),
-        'selector': DatastoreFieldSelectorToJSON(value['selector']),
-        'startsWith': DatastoreStartsWithMatchToJSON(value['startsWith']),
+        'fields': value['fields'],
+        'op': DatastoreOpToJSON(value['op']),
+        'values': value['values'],
     };
 }
 

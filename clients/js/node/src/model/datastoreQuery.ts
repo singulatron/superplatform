@@ -20,13 +20,13 @@ export class DatastoreQuery {
     */
     'after'?: Array<object>;
     /**
-    * Filters are filtering options of a query. It is advised to use It\'s advised to use helper functions in your respective client library such as condition constructors (`all`, `equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
-    */
-    'conditions'?: Array<DatastoreFilter>;
-    /**
     * Count true means return the count of the dataset filtered by Filters without after or limit.
     */
     'count'?: boolean;
+    /**
+    * Filters are filtering options of a query. It is advised to use It\'s advised to use helper functions in your respective client library such as filter constructors (`all`, `equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
+    */
+    'filters'?: Array<DatastoreFilter>;
     /**
     * Limit the number of records in the result set.
     */
@@ -45,14 +45,14 @@ export class DatastoreQuery {
             "type": "Array<object>"
         },
         {
-            "name": "conditions",
-            "baseName": "conditions",
-            "type": "Array<DatastoreFilter>"
-        },
-        {
             "name": "count",
             "baseName": "count",
             "type": "boolean"
+        },
+        {
+            "name": "filters",
+            "baseName": "filters",
+            "type": "Array<DatastoreFilter>"
         },
         {
             "name": "limit",
