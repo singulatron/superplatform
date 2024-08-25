@@ -99,7 +99,7 @@ export class ChatComponent implements OnInit {
 		}
 		if (!this.activeThread) {
 			this.activeThread = {
-				id: this.localtron.uuid(),
+				id: this.localtron.id('thr'),
 			};
 		}
 
@@ -156,7 +156,7 @@ export class ChatComponent implements OnInit {
 
 	public async openNewThread() {
 		this.activeThread = {
-			id: this.localtron.uuid(),
+			id: this.localtron.id("thr"),
 		};
 		console.debug('Opened empty thread', {
 			threadId: this.activeThread.id,

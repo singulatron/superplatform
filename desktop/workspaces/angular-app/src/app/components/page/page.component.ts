@@ -75,7 +75,7 @@ export class PageComponent implements AfterContentInit {
 		private localtron: LocaltronService,
 		private router: Router
 	) {
-		this.id = this.localtron.uuid();
+		this.id = this.localtron.id("page");
 		this.cd.markForCheck();
 	}
 

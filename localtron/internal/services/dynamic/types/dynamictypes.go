@@ -14,14 +14,17 @@ type ObjectCreateFields struct {
 	Id    string `json:"id"`
 	Table string `json:"table" binding:"required"`
 
+	// Authors is a list of user ID and organization ID who created the object.
+	Authors []string `json:"authors" binding:"required" example:"[\"usr_12345\", \"org_67890\"]"`
+
 	// Readers is a list of user IDs and role IDs that can read the object.
-	Readers []string `json:"readers"`
+	Readers []string `json:"readers,omitempty"`
 
 	// Writers is a list of user IDs and role IDs that can write the object.
-	Writers []string `json:"writers"`
+	Writers []string `json:"writers,omitempty"`
 
 	// Deleters is a list of user IDs and role IDs that can delete the object.
-	Deleters []string `json:"deleters"`
+	Deleters []string `json:"deleters,omitempty"`
 
 	Data map[string]interface{} `json:"data,omitempty" binding:"required"`
 }

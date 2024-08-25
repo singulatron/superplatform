@@ -98,7 +98,7 @@ export class PromptService {
 
 	async promptAdd(prompt: Prompt): Promise<PromptSvcAddPromptResponse> {
 		if (!prompt.id) {
-			prompt.id = this.localtron.uuid();
+			prompt.id = this.localtron.id("prom");
 		}
 		const request: PromptSvcAddPromptRequest = prompt;
 

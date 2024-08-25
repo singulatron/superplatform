@@ -216,7 +216,7 @@ export class ChatBoxComponent implements OnChanges, AfterViewInit, OnDestroy {
 		}
 
 		await this.promptService.promptAdd({
-			id: this.localtron.uuid(),
+			id: this.localtron.id('prom'),
 			prompt: emitted.message,
 			// characterId: emitted.characterId,
 			template: this.promptTemplate,
@@ -260,7 +260,7 @@ export class ChatBoxComponent implements OnChanges, AfterViewInit, OnDestroy {
 				this.assets = rsp.assets!;
 			} else {
 				this.thread = {
-					id: this.localtron.uuid(),
+					id: this.localtron.id("thr"),
 				};
 				threadId = this.thread.id as string;
 			}

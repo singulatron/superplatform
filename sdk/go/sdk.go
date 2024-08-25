@@ -10,6 +10,7 @@ import (
 
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/pkg/errors"
+	"github.com/sony/sonyflake"
 )
 
 type Claims struct {
@@ -28,6 +29,37 @@ type Credential struct {
 
 func (c *Credential) GetId() string {
 	return c.Contact
+}
+
+var sonyFlake *sonyflake.Sonyflake
+
+func init() {
+	sonyFlake = sonyflake.NewSonyflake(sonyflake.Settings{})
+	if sonyFlake == nil {
+		panic("Sonyflake not created")
+	}
+}
+
+const base62 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+
+func Id(prefix string) string {
+	number, err := sonyFlake.NextID()
+	if err != nil {
+		panic(err)
+	}
+
+	if number == 0 {
+		return string(base62[0])
+	}
+
+	b := make([]byte, 0)
+	for number > 0 {
+		remainder := number % 62
+		number = number / 62
+		b = append([]byte{base62[remainder]}, b...)
+	}
+
+	return prefix + "_" + string(b)
 }
 
 func DecodeJWT(tokenString string, publicKeyString string) (*Claims, error) {

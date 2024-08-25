@@ -20,21 +20,25 @@ func (g *DynamicService) query(readers []string, options dynamictypes.QueryOptio
 		return nil, errors.New("no table name")
 	}
 
-	conditions := []datastore.Filter{}
+	filters := []datastore.Filter{}
 	if options.Query != nil {
-		conditions = append(conditions, options.Query.Filters...)
+		filters = append(filters, options.Query.Filters...)
 	}
 
-	conditions = append(conditions,
+	filters = append(filters,
 		datastore.Equals(datastore.Field("table"), options.Table),
 	)
 
-	conditions = append(conditions,
-		datastore.Equals(datastore.Field("readers"), readers),
+	readersAny := []any{}
+	for _, reader := range readers {
+		readersAny = append(readersAny, reader)
+	}
+	filters = append(filters,
+		datastore.Intersects(datastore.Field("readers"), readersAny),
 	)
 
 	q := g.store.Query(
-		conditions...,
+		filters...,
 	)
 
 	if options.Query != nil {

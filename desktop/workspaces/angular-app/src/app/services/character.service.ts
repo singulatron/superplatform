@@ -58,7 +58,7 @@ export class CharacterService {
 	}
 
 	async createNewCharacter(character: Character) {
-		const id = this.localtron.uuid();
+		const id = this.localtron.id('char');
 		const now = new Date().toISOString();
 		character.id = id;
 		await this.dynamicService.create(CHARACTERS_TABLE_NAME, {
@@ -126,7 +126,7 @@ export class CharacterService {
 		let characterSelection = await this.getCharacterSelection();
 		if (!characterSelection) {
 			characterSelection = initCharacterSelection();
-			characterSelection.id = this.localtron.uuid();
+			characterSelection.id = this.localtron.id('char');
 			characterSelection.createdAt = now;
 		}
 		characterSelection.updatedAt = now;
