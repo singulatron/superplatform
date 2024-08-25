@@ -68,17 +68,75 @@ type QueryBuilder interface {
 type Op string
 
 const (
-	// OpEquals selects objects where value of a field equals (=) to the specified value in the query.
+	// OpEquals selects objects where the value of a field equals (=) the specified value in the query.
+	// Example: `"fieldValue" = "value"`
+	// SQL Equivalent: `SELECT * FROM table WHERE field = 'value';`
+	// Elasticsearch Equivalent:
+	// {
+	//   "query": {
+	//     "term": {
+	//       "field": "value"
+	//     }
+	//   }
+	// }
 	OpEquals Op = "equals"
 
-	// OpContains selects all objects where the field(s) values contain a particular string or slice element.
-	OpContains Op = "contains"
+	// OpContainsSubstring selects all objects where the field's value contains a particular substring.
+	// Example: `"fieldValue" CONTAINS_SUBSTRING "subString"`
+	// SQL Equivalent: `SELECT * FROM table WHERE field LIKE '%subString%';`
+	// Elasticsearch Equivalent:
+	// {
+	//   "query": {
+	//     "wildcard": {
+	//       "field": "*subString*"
+	//     }
+	//   }
+	// }
+	OpContainsSubstring Op = "containsSubstring"
 
-	// OpStartsWith selects all objects where the field(s) values start with a particular string.
+	// OpStartsWith selects all objects where the field's value starts with a particular string.
+	// Example: `"fieldValue" STARTS WITH "prefix"`
+	// SQL Equivalent: `SELECT * FROM table WHERE field LIKE 'prefix%';`
+	// Elasticsearch Equivalent:
+	// {
+	//   "query": {
+	//     "prefix": {
+	//       "field": "prefix"
+	//     }
+	//   }
+	// }
 	OpStartsWith Op = "startsWith"
 
 	// OpIntersects selects objects where the slice value of a field intersects with the slice value in the query.
+	// Example: `["fieldValue2", "fieldValue3"] INTERSECTS ["value1", "value2"]`
+	// SQL Equivalent: `SELECT * FROM table WHERE field && ARRAY['value1', 'value2'];` (PostgreSQL syntax)
+	// Elasticsearch Equivalent:
+	// {
+	//   "query": {
+	//     "terms_set": {
+	//       "field": {
+	//         "terms": ["value1", "value2"],
+	//         "minimum_should_match_script": {
+	//           "source": "1"
+	//         }
+	//       }
+	//     }
+	//   }
+	// }
 	OpIntersects Op = "intersects"
+
+	// OpIsInList selects objects where the value of a field is one of the specified values in a list.
+	// Example: `"fieldValue" IS_IN_LIST ["value1", "value2", "value3"]`
+	// SQL Equivalent: `SELECT * FROM table WHERE field IN ('value1', 'value2', 'value3');`
+	// Elasticsearch Equivalent:
+	// {
+	//   "query": {
+	//     "terms": {
+	//       "field": ["value1", "value2", "value3"]
+	//     }
+	//   }
+	// }
+	OpIsInList Op = "isInList"
 )
 
 type Filter struct {
@@ -180,15 +238,23 @@ func StartsWith(fields []string, value any) Filter {
 	return Filter{
 		Fields: fields,
 		Values: []any{value},
-		Op:     OpContains,
+		Op:     OpStartsWith,
 	}
 }
 
-func Contains(fields []string, value any) Filter {
+func ContainsSubstring(fields []string, value any) Filter {
 	return Filter{
 		Fields: fields,
 		Values: []any{value},
-		Op:     OpContains,
+		Op:     OpContainsSubstring,
+	}
+}
+
+func IsInList(fields []string, value any) Filter {
+	return Filter{
+		Fields: fields,
+		Values: []any{value},
+		Op:     OpIsInList,
 	}
 }
 

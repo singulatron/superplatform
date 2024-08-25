@@ -17,7 +17,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/flusflas/dipper"
 	"github.com/google/uuid"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
@@ -251,7 +250,9 @@ type QueryBuilder struct {
 	selectFields []string
 }
 
-func (q *QueryBuilder) OrderBy(option datastore.OrderBy, options ...datastore.OrderBy) datastore.QueryBuilder {
+func (q *QueryBuilder) OrderBy(options ...datastore.OrderBy) datastore.QueryBuilder {
+	option := options[0]
+
 	if option.Field != "" {
 		q.orderField = option.Field
 		q.orderDesc = option.Desc
@@ -293,7 +294,12 @@ func (q *QueryBuilder) Find() ([]datastore.Row, error) {
 
 	var result []any
 	for _, obj := range q.store.data {
-		if q.match(obj) {
+		matched, err := q.match(obj)
+		if err != nil {
+			return nil,
+				err
+		}
+		if matched {
 			result = append(result, obj)
 		}
 	}
@@ -346,7 +352,11 @@ func (q *QueryBuilder) FindOne() (datastore.Row, bool, error) {
 	var empty datastore.Row
 
 	for _, obj := range q.store.data {
-		if q.match(obj) {
+		matched, err := q.match(obj)
+		if err != nil {
+			return nil, false, err
+		}
+		if matched {
 			cop, err := reflector.DeepCopyIntoType(obj, q.store.instance)
 			if err != nil {
 				return nil, false, err
@@ -365,7 +375,11 @@ func (q *QueryBuilder) Count() (int64, error) {
 
 	var count int64
 	for _, obj := range q.store.data {
-		if q.match(obj) {
+		matched, err := q.match(obj)
+		if err != nil {
+			return 0, err
+		}
+		if matched {
 			count++
 		}
 	}
@@ -378,7 +392,11 @@ func (q *QueryBuilder) Update(obj datastore.Row) error {
 
 	found := false
 	for id, existingObj := range q.store.data {
-		if q.match(existingObj) {
+		matched, err := q.match(existingObj)
+		if err != nil {
+			return err
+		}
+		if matched {
 			found = true
 
 			v, err := reflector.DeepCopyIntoMap(obj)
@@ -407,7 +425,11 @@ func (q *QueryBuilder) Upsert(obj datastore.Row) error {
 
 	found := false
 	for id, existingObj := range q.store.data {
-		if q.match(existingObj) {
+		matched, err := q.match(existingObj)
+		if err != nil {
+			return err
+		}
+		if matched {
 			found = true
 
 			v, err := reflector.DeepCopyIntoMap(obj)
@@ -431,7 +453,11 @@ func (q *QueryBuilder) UpdateFields(fields map[string]interface{}) error {
 	defer q.store.mu.Unlock()
 
 	for id, obj := range q.store.data {
-		if q.match(obj) {
+		matched, err := q.match(obj)
+		if err != nil {
+			return err
+		}
+		if matched {
 			for field, value := range fields {
 
 				err := setField(&obj, field, value)
@@ -451,7 +477,11 @@ func (q *QueryBuilder) Delete() error {
 	defer q.store.mu.Unlock()
 
 	for id, obj := range q.store.data {
-		if q.match(obj) {
+		matched, err := q.match(obj)
+		if err != nil {
+			return err
+		}
+		if matched {
 			delete(q.store.data, id)
 		}
 	}
@@ -459,41 +489,18 @@ func (q *QueryBuilder) Delete() error {
 	return nil
 }
 
-func (q *QueryBuilder) match(obj any) bool {
+func (q *QueryBuilder) match(obj any) (bool, error) {
 	for _, cond := range q.filters {
-		if cond.Op == datastore.OpEquals || cond.Op == datastore.OpContains || cond.Op == datastore.OpContains {
-			var matchFunc func(subject, test any) bool
-
-			switch cond.Op {
-			case datastore.OpEquals:
-				matchFunc = func(subject, test any) bool {
-					subject = toBaseType(subject)
-					test = toBaseType(test)
-					if subject == "dipper: field not found" {
-						panic("dipper")
-					}
-
-					return reflect.DeepEqual(test, subject)
+		switch cond.Op {
+		case datastore.OpEquals:
+			matchFunc := func(subject, test any) bool {
+				subject = toBaseType(subject)
+				test = toBaseType(test)
+				if subject == "dipper: field not found" {
+					panic("dipper")
 				}
-			case datastore.OpContains:
-				matchFunc = func(subject, test any) bool {
-					testStr, testOk := test.(string)
-					subjectStr, subjectOk := subject.(string)
-					if !testOk || !subjectOk {
-						return false
-					}
 
-					return strings.Contains(subjectStr, testStr)
-				}
-			case datastore.OpStartsWith:
-				matchFunc = func(subject, test any) bool {
-					testStr, testOk := test.(string)
-					subjectStr, subjectOk := subject.(string)
-					if !testOk || subjectOk {
-						return false
-					}
-					return strings.HasPrefix(subjectStr, testStr)
-				}
+				return reflect.DeepEqual(test, subject)
 			}
 
 			fieldNames := cond.Fields
@@ -506,20 +513,13 @@ func (q *QueryBuilder) match(obj any) bool {
 					continue
 				}
 
-				condValue := reflect.ValueOf(value)
+				value := cond.Values[0]
+				queryValue := reflect.ValueOf(value)
 				fieldV := reflect.ValueOf(fieldValue)
 
 				if fieldV.Kind() == reflect.Slice {
 					for i := 0; i < fieldV.Len(); i++ {
-						if matchFunc(fieldV.Index(i).Interface(), condValue.Interface()) {
-							matched = true
-							continue
-						}
-					}
-
-				} else if condValue.Kind() == reflect.Slice {
-					for i := 0; i < condValue.Len(); i++ {
-						if matchFunc(fieldValue, condValue.Index(i).Interface()) {
+						if matchFunc(fieldV.Index(i).Interface(), queryValue.Interface()) {
 							matched = true
 							continue
 						}
@@ -531,16 +531,183 @@ func (q *QueryBuilder) match(obj any) bool {
 				}
 			}
 			if !matched {
-				return false
+				return false, nil
 			}
-		} else if cond.Op == datastore.OpIntersects {
+		case datastore.OpIsInList:
+			matchFunc := func(subject, test any) bool {
+				subject = toBaseType(subject)
+				test = toBaseType(test)
+				if subject == "dipper: field not found" {
+					panic("dipper")
+				}
 
-		} else {
-			spew.Dump(cond)
-			panic(fmt.Sprintf("unkown filter %v", cond))
+				return reflect.DeepEqual(test, subject)
+			}
+
+			fieldNames := cond.Fields
+
+			matched := false
+			for _, fieldName := range fieldNames {
+				fieldValue := getField(obj, fieldName)
+
+				if fmt.Sprintf("%v", fieldValue) == "dipper: field not found" {
+					continue
+				}
+
+				value := cond.Values[0]
+				queryValue := reflect.ValueOf(value)
+				fieldV := reflect.ValueOf(fieldValue)
+
+				if fieldV.Kind() == reflect.Slice {
+					return false, nil
+				} else if queryValue.Kind() == reflect.Slice {
+					for i := 0; i < queryValue.Len(); i++ {
+						if matchFunc(fieldValue, queryValue.Index(i).Interface()) {
+							matched = true
+							continue
+						}
+					}
+				} else {
+					return false, nil
+				}
+			}
+			if !matched {
+				return false, nil
+			}
+
+		case datastore.OpStartsWith:
+			matchFunc := func(subject, test any) bool {
+				testStr, testOk := test.(string)
+				subjectStr, subjectOk := subject.(string)
+				if !testOk || !subjectOk {
+					return false
+				}
+				return strings.HasPrefix(subjectStr, testStr)
+			}
+			fieldNames := cond.Fields
+
+			matched := false
+			for _, fieldName := range fieldNames {
+				fieldValue := getField(obj, fieldName)
+
+				if fmt.Sprintf("%v", fieldValue) == "dipper: field not found" {
+					continue
+				}
+
+				value := cond.Values[0]
+				queryValue := reflect.ValueOf(value)
+				fieldV := reflect.ValueOf(fieldValue)
+
+				if fieldV.Kind() == reflect.Slice {
+					for i := 0; i < fieldV.Len(); i++ {
+						if matchFunc(fieldV.Index(i).Interface(), queryValue.Interface()) {
+							matched = true
+							continue
+						}
+					}
+				} else {
+					if matchFunc(fieldValue, value) {
+						matched = true
+					}
+				}
+			}
+			if !matched {
+				return false, nil
+			}
+
+		case datastore.OpContainsSubstring:
+			matchFunc := func(subject, test any) bool {
+				testStr, testOk := test.(string)
+				subjectStr, subjectOk := subject.(string)
+
+				if !testOk || !subjectOk {
+					return false
+				}
+
+				return strings.Contains(subjectStr, testStr)
+			}
+			fieldNames := cond.Fields
+
+			matched := false
+			for _, fieldName := range fieldNames {
+				fieldValue := getField(obj, fieldName)
+
+				if fmt.Sprintf("%v", fieldValue) == "dipper: field not found" {
+					continue
+				}
+
+				value := cond.Values[0]
+				queryValue := reflect.ValueOf(value)
+				fieldV := reflect.ValueOf(fieldValue)
+
+				if fieldV.Kind() == reflect.Slice {
+					for i := 0; i < fieldV.Len(); i++ {
+						if matchFunc(fieldV.Index(i).Interface(), queryValue.Interface()) {
+							matched = true
+							continue
+						}
+					}
+				} else {
+					if matchFunc(fieldValue, value) {
+						matched = true
+					}
+				}
+			}
+			if !matched {
+				return false, nil
+			}
+
+		case datastore.OpIntersects:
+			matchFunc := func(subject, test any) bool {
+				subject = toBaseType(subject)
+				test = toBaseType(test)
+				if subject == "dipper: field not found" {
+					panic("dipper")
+				}
+
+				return reflect.DeepEqual(test, subject)
+			}
+
+			fieldNames := cond.Fields
+
+			matched := false
+			for _, fieldName := range fieldNames {
+				fieldValue := getField(obj, fieldName)
+
+				if fmt.Sprintf("%v", fieldValue) == "dipper: field not found" {
+					continue
+				}
+
+				value := cond.Values
+				queryValue := reflect.ValueOf(value)
+				fieldV := reflect.ValueOf(fieldValue)
+
+				if fieldV.Kind() != reflect.Slice {
+					continue
+				}
+				if queryValue.Kind() != reflect.Slice {
+					continue
+				}
+
+				for i := 0; i < fieldV.Len(); i++ {
+					for j := 0; j < queryValue.Len(); j++ {
+						if matchFunc(fieldV.Index(i).Interface(), queryValue.Index(j).Interface()) {
+							matched = true
+							continue
+						}
+					}
+				}
+
+			}
+			if !matched {
+				return false, nil
+			}
+
+		default:
+			return false, fmt.Errorf("unkown filter %v", cond)
 		}
 	}
-	return true
+	return true, nil
 }
 
 func fixFieldName(s string) string {
