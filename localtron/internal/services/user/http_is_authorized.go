@@ -102,8 +102,12 @@ func (s *UserService) isAuthorized(r *http.Request, permissionId string,
 		roleIds = append(roleIds, role.(*user.UserRoleLink).RoleId)
 	}
 
+	roleIdAnys := []any{}
+	for _, roleId := range roleIds {
+		roleIdAnys = append(roleIdAnys, roleId)
+	}
 	permissionLinks, err := s.permissionRoleLinksStore.Query(
-		datastore.Equals(datastore.Field("roleId"), roleIds),
+		datastore.IsInList(datastore.Field("roleId"), roleIdAnys...),
 	).Find()
 	if err != nil {
 		return nil, err

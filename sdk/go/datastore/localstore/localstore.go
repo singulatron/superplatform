@@ -554,7 +554,7 @@ func (q *QueryBuilder) match(obj any) (bool, error) {
 					continue
 				}
 
-				value := cond.Values[0]
+				value := cond.Values
 				queryValue := reflect.ValueOf(value)
 				fieldV := reflect.ValueOf(fieldValue)
 

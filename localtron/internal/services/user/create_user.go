@@ -46,11 +46,19 @@ func (s *UserService) createUser(user *usertypes.User, password string, roleIds 
 		return err
 	}
 
+	roleIdAnys := []any{}
+	for _, roleId := range roleIds {
+		roleIdAnys = append(roleIdAnys, roleId)
+	}
+
 	roles, err := s.rolesStore.Query(
-		datastore.Equals(datastore.Field("id"), roleIds),
+		datastore.IsInList(datastore.Field("id"), roleIdAnys...),
 	).Find()
 	if err != nil {
 		return err
+	}
+	if len(roles) == 0 {
+		return errors.New("no roles found")
 	}
 	if len(roles) < len(roleIds) {
 		return errors.New("some roles are not found")
