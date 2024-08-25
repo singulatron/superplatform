@@ -67,12 +67,4 @@ export class LocaltronService {
 
 		return `${prefix}_${result}`;
 	}
-
-	
-}
-
-function generateSegment(length: number) {
-	return Array.from({ length: length }, () =>
-		Math.floor(Math.random() * 16).toString(16)
-	).join('');
 }
