@@ -156,7 +156,7 @@ export class ChatComponent implements OnInit {
 
 	public async openNewThread() {
 		this.activeThread = {
-			id: this.localtron.id("thr"),
+			id: this.localtron.id('thr'),
 		};
 		console.debug('Opened empty thread', {
 			threadId: this.activeThread.id,

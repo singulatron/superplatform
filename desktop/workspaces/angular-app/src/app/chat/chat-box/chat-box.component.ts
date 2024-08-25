@@ -260,7 +260,7 @@ export class ChatBoxComponent implements OnChanges, AfterViewInit, OnDestroy {
 				this.assets = rsp.assets!;
 			} else {
 				this.thread = {
-					id: this.localtron.id("thr"),
+					id: this.localtron.id('thr'),
 				};
 				threadId = this.thread.id as string;
 			}

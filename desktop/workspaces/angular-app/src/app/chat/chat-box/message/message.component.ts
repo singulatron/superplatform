@@ -62,7 +62,7 @@ export class MessageComponent {
 		}
 
 		await this.promptService.promptAdd({
-			id: this.localtron.id("msg"),
+			id: this.localtron.id('msg'),
 			prompt: message.content!,
 			threadId: message.threadId as string,
 			modelId: this.modelId as string,
