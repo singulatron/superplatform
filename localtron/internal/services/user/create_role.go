@@ -10,8 +10,8 @@ package userservice
 import (
 	"errors"
 
-	"github.com/google/uuid"
 	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	sdk "github.com/singulatron/singulatron/sdk/go"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
 )
 
@@ -27,7 +27,7 @@ func (s *UserService) createRole(ownerId, name, description string, permissionId
 	}
 
 	role := &usertypes.Role{
-		Id:          uuid.New().String(),
+		Id:          sdk.Id("rol"),
 		Name:        name,
 		Description: description,
 		OwnerId:     ownerId,

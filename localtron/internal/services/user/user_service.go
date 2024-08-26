@@ -12,7 +12,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/google/uuid"
 	sdk "github.com/singulatron/singulatron/sdk/go"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
 	"github.com/singulatron/singulatron/sdk/go/logger"
@@ -146,7 +145,7 @@ func (s *UserService) bootstrap() error {
 		}
 		now := time.Now()
 		kp := &usertypes.KeyPair{
-			Id:         uuid.New().String(),
+			Id:         sdk.Id("keyp"),
 			CreatedAt:  now,
 			UpdatedAt:  now,
 			PublicKey:  pubKey,
@@ -200,7 +199,7 @@ func (s *UserService) bootstrap() error {
 		slug = cred.Slug
 		pw = cred.Password
 	} else {
-		pw = uuid.New().String()
+		pw = sdk.Id("cred")
 		err = s.credentialsStore.Upsert(&sdk.Credential{
 			Slug:     slug,
 			Password: pw,

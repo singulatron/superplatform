@@ -10,8 +10,8 @@ package userservice
 import (
 	"time"
 
-	"github.com/google/uuid"
 	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	sdk "github.com/singulatron/singulatron/sdk/go"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
 	"golang.org/x/crypto/bcrypt"
 
@@ -70,7 +70,7 @@ func (s *UserService) generateAuthToken(user *usertypes.User) (*usertypes.AuthTo
 	}
 
 	return &usertypes.AuthToken{
-		Id:        uuid.New().String(),
+		Id:        sdk.Id("tok"),
 		UserId:    user.Id,
 		Token:     token,
 		CreatedAt: time.Now(),

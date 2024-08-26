@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/google/uuid"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
 	"github.com/singulatron/singulatron/sdk/go/logger"
 	"github.com/singulatron/singulatron/sdk/go/router"
@@ -30,7 +29,7 @@ func RegisterService(serviceSlug, serviceName string, router *router.Router, sto
 		slug = cred.Slug
 		pw = cred.Password
 	} else {
-		pw = uuid.New().String()
+		pw = Id("cred")
 		err = store.Upsert(&Credential{
 			Slug:     slug,
 			Password: pw,

@@ -12,8 +12,8 @@ import (
 	"log/slog"
 	"time"
 
-	"github.com/google/uuid"
 	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	sdk "github.com/singulatron/singulatron/sdk/go"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
 	"github.com/singulatron/singulatron/sdk/go/logger"
 	"golang.org/x/crypto/bcrypt"
@@ -38,7 +38,7 @@ func (s *UserService) register(slug, password, name string, roleIds []string) (*
 	}
 
 	user := &usertypes.User{
-		Id:           uuid.New().String(),
+		Id:           sdk.Id("usr"),
 		CreatedAt:    time.Now(),
 		UpdatedAt:    time.Now(),
 		Name:         name,

@@ -79,19 +79,21 @@ func TestCreate(t *testing.T) {
 	require.NoError(t, err)
 
 	tokenReadRsp2, _, err := client2.UserSvcAPI.ReadUserByToken(context.Background()).Body(clients.UserSvcReadUserByTokenRequest{
-		Token: clients.PtrString(token1),
+		Token: clients.PtrString(token2),
 	}).Execute()
 	require.NoError(t, err)
 
-	uuid1 := uuid.New().String()
-	uuid2 := uuid.New().String()
+	uuid1 := sdk.Id("ob")
+	uuid2 := sdk.Id("ob")
 
 	obj := &dynamictypes.Object{
 		ObjectCreateFields: dynamictypes.ObjectCreateFields{
-			Id:      uuid1,
-			Table:   table1,
-			Readers: []string{*tokenReadRsp1.User.Id},
-			Data:    map[string]interface{}{"key": "value"},
+			Id:       uuid1,
+			Table:    table1,
+			Readers:  []string{*tokenReadRsp1.User.Id},
+			Writers:  []string{*tokenReadRsp1.User.Id},
+			Deleters: []string{*tokenReadRsp1.User.Id},
+			Data:     map[string]interface{}{"key": "value"},
 		},
 		CreatedAt: time.Now().String(),
 	}
@@ -131,9 +133,11 @@ func TestCreate(t *testing.T) {
 
 	t.Run("query user2 records", func(t *testing.T) {
 		req := dynamictypes.QueryRequest{
-			Table: table2,
-			Query: &datastore.Query{},
+			Table:   table2,
+			Query:   &datastore.Query{},
+			Readers: []string{*tokenReadRsp2.User.Id},
 		}
+
 		rsp := dynamictypes.QueryResponse{}
 		err = user2Router.Post(context.Background(), "dynamic-svc", "/objects", req, &rsp)
 		require.NoError(t, err)
@@ -147,6 +151,7 @@ func TestCreate(t *testing.T) {
 			Query: &datastore.Query{Filters: []datastore.Filter{
 				datastore.Id(uuid1),
 			}},
+			Readers: []string{*tokenReadRsp1.User.Id},
 		}
 		rsp := dynamictypes.QueryResponse{}
 		err = user1Router.Post(context.Background(), "dynamic-svc", "/objects", req, &rsp)
@@ -170,6 +175,7 @@ func TestCreate(t *testing.T) {
 			Query: &datastore.Query{Filters: []datastore.Filter{
 				datastore.Id(uuid2),
 			}},
+			Readers: []string{*tokenReadRsp2.User.Id},
 		}
 		rsp := dynamictypes.QueryResponse{}
 		err = user1Router.Post(context.Background(), "dynamic-svc", "/objects", req, &rsp)
@@ -186,7 +192,7 @@ func TestCreate(t *testing.T) {
 		require.Error(t, err)
 	})
 
-	t.Run("user 1 can upsert its own reord", func(t *testing.T) {
+	t.Run("user 1 can upsert its own record", func(t *testing.T) {
 		req := &dynamictypes.UpsertObjectRequest{
 			Object: &obj.ObjectCreateFields,
 		}
@@ -196,8 +202,9 @@ func TestCreate(t *testing.T) {
 
 	t.Run("user 1 can find its own reord", func(t *testing.T) {
 		req := dynamictypes.QueryRequest{
-			Table: table1,
-			Query: &datastore.Query{},
+			Table:   table1,
+			Query:   &datastore.Query{},
+			Readers: []string{*tokenReadRsp1.User.Id},
 		}
 		rsp := dynamictypes.QueryResponse{}
 		err = user1Router.Post(context.Background(), "dynamic-svc", "/objects", req, &rsp)

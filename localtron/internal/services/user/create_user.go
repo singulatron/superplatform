@@ -11,8 +11,8 @@ import (
 	"errors"
 	"time"
 
-	"github.com/google/uuid"
 	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	sdk "github.com/singulatron/singulatron/sdk/go"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
 )
 
@@ -66,7 +66,7 @@ func (s *UserService) createUser(user *usertypes.User, password string, roleIds 
 
 	user.PasswordHash = passwordHash
 	if user.Id == "" {
-		user.Id = uuid.NewString()
+		user.Id = sdk.Id("usr")
 	}
 
 	now := time.Now()

@@ -72,6 +72,7 @@ func (g *DynamicService) Query(
 		w.Write([]byte(err.Error()))
 		return
 	}
+
 	identifiers := append(claims.RoleIds, []string{rsp.User.Id, dynamic.AnyIdentifier}...)
 	allowedReaders := lo.Intersect(identifiers, req.Readers)
 

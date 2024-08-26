@@ -13,7 +13,7 @@ import (
 	"log/slog"
 	"time"
 
-	"github.com/google/uuid"
+	sdk "github.com/singulatron/singulatron/sdk/go"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
 	"github.com/singulatron/singulatron/sdk/go/logger"
 
@@ -26,7 +26,7 @@ func (a *ChatService) addMessage(chatMessage *chattypes.Message) error {
 		return errors.New("empty chat message thread id")
 	}
 	if chatMessage.Id == "" {
-		chatMessage.Id = uuid.New().String()
+		chatMessage.Id = sdk.Id("msg")
 	}
 	if chatMessage.CreatedAt.IsZero() {
 		chatMessage.CreatedAt = time.Now()
