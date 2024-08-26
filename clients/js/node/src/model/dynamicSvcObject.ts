@@ -13,6 +13,10 @@
 import { RequestFile } from './models';
 
 export class DynamicSvcObject {
+    /**
+    * Authors is a list of user ID and organization ID who created the object.
+    */
+    'authors': Array<string>;
     'createdAt'?: string;
     'data': { [key: string]: any; };
     /**
@@ -34,6 +38,11 @@ export class DynamicSvcObject {
     static discriminator: string | undefined = undefined;
 
     static attributeTypeMap: Array<{name: string, baseName: string, type: string}> = [
+        {
+            "name": "authors",
+            "baseName": "authors",
+            "type": "Array<string>"
+        },
         {
             "name": "createdAt",
             "baseName": "createdAt",

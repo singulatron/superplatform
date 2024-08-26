@@ -10,6 +10,10 @@
  * Do not edit the class manually.
  */
 export declare class DynamicSvcObjectCreateFields {
+    /**
+    * Authors is a list of user ID and organization ID who created the object.
+    */
+    'authors': Array<string>;
     'data': {
         [key: string]: any;
     };

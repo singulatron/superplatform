@@ -17,6 +17,8 @@
  * Check if a given object implements the DynamicSvcObject interface.
  */
 function instanceOfDynamicSvcObject(value) {
+    if (!('authors' in value) || value['authors'] === undefined)
+        return false;
     if (!('data' in value) || value['data'] === undefined)
         return false;
     if (!('table' in value) || value['table'] === undefined)
@@ -31,6 +33,7 @@ function DynamicSvcObjectFromJSONTyped(json, ignoreDiscriminator) {
         return json;
     }
     return {
+        'authors': json['authors'],
         'createdAt': json['createdAt'] == null ? undefined : json['createdAt'],
         'data': json['data'],
         'deleters': json['deleters'] == null ? undefined : json['deleters'],
@@ -46,6 +49,7 @@ function DynamicSvcObjectToJSON(value) {
         return value;
     }
     return {
+        'authors': value['authors'],
         'createdAt': value['createdAt'],
         'data': value['data'],
         'deleters': value['deleters'],

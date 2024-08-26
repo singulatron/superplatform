@@ -16,6 +16,12 @@
  */
 export interface DynamicSvcObject {
     /**
+     * Authors is a list of user ID and organization ID who created the object.
+     * @type {Array<string>}
+     * @memberof DynamicSvcObject
+     */
+    authors: Array<string>;
+    /**
      *
      * @type {string}
      * @memberof DynamicSvcObject

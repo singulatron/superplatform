@@ -17,6 +17,11 @@ class DynamicSvcObjectCreateFields {
 DynamicSvcObjectCreateFields.discriminator = undefined;
 DynamicSvcObjectCreateFields.attributeTypeMap = [
     {
+        "name": "authors",
+        "baseName": "authors",
+        "type": "Array<string>"
+    },
+    {
         "name": "data",
         "baseName": "data",
         "type": "{ [key: string]: any; }"

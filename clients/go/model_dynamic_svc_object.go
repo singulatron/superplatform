@@ -22,6 +22,8 @@ var _ MappedNullable = &DynamicSvcObject{}
 
 // DynamicSvcObject struct for DynamicSvcObject
 type DynamicSvcObject struct {
+	// Authors is a list of user ID and organization ID who created the object.
+	Authors []string `json:"authors"`
 	CreatedAt *string `json:"createdAt,omitempty"`
 	Data map[string]interface{} `json:"data"`
 	// Deleters is a list of user IDs and role IDs that can delete the object.
@@ -41,8 +43,9 @@ type _DynamicSvcObject DynamicSvcObject
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewDynamicSvcObject(data map[string]interface{}, table string) *DynamicSvcObject {
+func NewDynamicSvcObject(authors []string, data map[string]interface{}, table string) *DynamicSvcObject {
 	this := DynamicSvcObject{}
+	this.Authors = authors
 	this.Data = data
 	this.Table = table
 	return &this
@@ -54,6 +57,30 @@ func NewDynamicSvcObject(data map[string]interface{}, table string) *DynamicSvcO
 func NewDynamicSvcObjectWithDefaults() *DynamicSvcObject {
 	this := DynamicSvcObject{}
 	return &this
+}
+
+// GetAuthors returns the Authors field value
+func (o *DynamicSvcObject) GetAuthors() []string {
+	if o == nil {
+		var ret []string
+		return ret
+	}
+
+	return o.Authors
+}
+
+// GetAuthorsOk returns a tuple with the Authors field value
+// and a boolean to check if the value has been set.
+func (o *DynamicSvcObject) GetAuthorsOk() ([]string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.Authors, true
+}
+
+// SetAuthors sets field value
+func (o *DynamicSvcObject) SetAuthors(v []string) {
+	o.Authors = v
 }
 
 // GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
@@ -306,6 +333,7 @@ func (o DynamicSvcObject) MarshalJSON() ([]byte, error) {
 
 func (o DynamicSvcObject) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
+	toSerialize["authors"] = o.Authors
 	if !IsNil(o.CreatedAt) {
 		toSerialize["createdAt"] = o.CreatedAt
 	}
@@ -334,6 +362,7 @@ func (o *DynamicSvcObject) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
+		"authors",
 		"data",
 		"table",
 	}

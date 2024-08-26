@@ -13,6 +13,10 @@
 import { RequestFile } from './models';
 
 export class DynamicSvcObjectCreateFields {
+    /**
+    * Authors is a list of user ID and organization ID who created the object.
+    */
+    'authors': Array<string>;
     'data': { [key: string]: any; };
     /**
     * Deleters is a list of user IDs and role IDs that can delete the object.
@@ -32,6 +36,11 @@ export class DynamicSvcObjectCreateFields {
     static discriminator: string | undefined = undefined;
 
     static attributeTypeMap: Array<{name: string, baseName: string, type: string}> = [
+        {
+            "name": "authors",
+            "baseName": "authors",
+            "type": "Array<string>"
+        },
         {
             "name": "data",
             "baseName": "data",

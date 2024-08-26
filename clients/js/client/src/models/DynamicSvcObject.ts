@@ -20,6 +20,12 @@ import { mapValues } from '../runtime';
  */
 export interface DynamicSvcObject {
     /**
+     * Authors is a list of user ID and organization ID who created the object.
+     * @type {Array<string>}
+     * @memberof DynamicSvcObject
+     */
+    authors: Array<string>;
+    /**
      * 
      * @type {string}
      * @memberof DynamicSvcObject
@@ -73,6 +79,7 @@ export interface DynamicSvcObject {
  * Check if a given object implements the DynamicSvcObject interface.
  */
 export function instanceOfDynamicSvcObject(value: object): value is DynamicSvcObject {
+    if (!('authors' in value) || value['authors'] === undefined) return false;
     if (!('data' in value) || value['data'] === undefined) return false;
     if (!('table' in value) || value['table'] === undefined) return false;
     return true;
@@ -88,6 +95,7 @@ export function DynamicSvcObjectFromJSONTyped(json: any, ignoreDiscriminator: bo
     }
     return {
         
+        'authors': json['authors'],
         'createdAt': json['createdAt'] == null ? undefined : json['createdAt'],
         'data': json['data'],
         'deleters': json['deleters'] == null ? undefined : json['deleters'],
@@ -105,6 +113,7 @@ export function DynamicSvcObjectToJSON(value?: DynamicSvcObject | null): any {
     }
     return {
         
+        'authors': value['authors'],
         'createdAt': value['createdAt'],
         'data': value['data'],
         'deleters': value['deleters'],

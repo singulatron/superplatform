@@ -22,6 +22,8 @@ var _ MappedNullable = &DynamicSvcObjectCreateFields{}
 
 // DynamicSvcObjectCreateFields struct for DynamicSvcObjectCreateFields
 type DynamicSvcObjectCreateFields struct {
+	// Authors is a list of user ID and organization ID who created the object.
+	Authors []string `json:"authors"`
 	Data map[string]interface{} `json:"data"`
 	// Deleters is a list of user IDs and role IDs that can delete the object.
 	Deleters []string `json:"deleters,omitempty"`
@@ -39,8 +41,9 @@ type _DynamicSvcObjectCreateFields DynamicSvcObjectCreateFields
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewDynamicSvcObjectCreateFields(data map[string]interface{}, table string) *DynamicSvcObjectCreateFields {
+func NewDynamicSvcObjectCreateFields(authors []string, data map[string]interface{}, table string) *DynamicSvcObjectCreateFields {
 	this := DynamicSvcObjectCreateFields{}
+	this.Authors = authors
 	this.Data = data
 	this.Table = table
 	return &this
@@ -52,6 +55,30 @@ func NewDynamicSvcObjectCreateFields(data map[string]interface{}, table string) 
 func NewDynamicSvcObjectCreateFieldsWithDefaults() *DynamicSvcObjectCreateFields {
 	this := DynamicSvcObjectCreateFields{}
 	return &this
+}
+
+// GetAuthors returns the Authors field value
+func (o *DynamicSvcObjectCreateFields) GetAuthors() []string {
+	if o == nil {
+		var ret []string
+		return ret
+	}
+
+	return o.Authors
+}
+
+// GetAuthorsOk returns a tuple with the Authors field value
+// and a boolean to check if the value has been set.
+func (o *DynamicSvcObjectCreateFields) GetAuthorsOk() ([]string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.Authors, true
+}
+
+// SetAuthors sets field value
+func (o *DynamicSvcObjectCreateFields) SetAuthors(v []string) {
+	o.Authors = v
 }
 
 // GetData returns the Data field value
@@ -240,6 +267,7 @@ func (o DynamicSvcObjectCreateFields) MarshalJSON() ([]byte, error) {
 
 func (o DynamicSvcObjectCreateFields) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
+	toSerialize["authors"] = o.Authors
 	toSerialize["data"] = o.Data
 	if !IsNil(o.Deleters) {
 		toSerialize["deleters"] = o.Deleters
@@ -262,6 +290,7 @@ func (o *DynamicSvcObjectCreateFields) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
+		"authors",
 		"data",
 		"table",
 	}

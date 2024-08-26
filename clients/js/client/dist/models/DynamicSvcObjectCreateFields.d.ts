@@ -16,6 +16,12 @@
  */
 export interface DynamicSvcObjectCreateFields {
     /**
+     * Authors is a list of user ID and organization ID who created the object.
+     * @type {Array<string>}
+     * @memberof DynamicSvcObjectCreateFields
+     */
+    authors: Array<string>;
+    /**
      *
      * @type {{ [key: string]: any; }}
      * @memberof DynamicSvcObjectCreateFields

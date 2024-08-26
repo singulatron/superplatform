@@ -17,6 +17,11 @@ export class DynamicSvcObject {
 DynamicSvcObject.discriminator = undefined;
 DynamicSvcObject.attributeTypeMap = [
     {
+        "name": "authors",
+        "baseName": "authors",
+        "type": "Array<string>"
+    },
+    {
         "name": "createdAt",
         "baseName": "createdAt",
         "type": "string"
