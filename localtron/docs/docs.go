@@ -3993,7 +3993,7 @@ const docTemplate = `{
                     "additionalProperties": true
                 },
                 "deleters": {
-                    "description": "Deleters is a list of user IDs and role IDs that can delete the object.",
+                    "description": "Deleters is a list of user IDs and role IDs that can delete the object.\n` + "`" + `_self` + "`" + ` can be used to refer to the caller user's userId and\n` + "`" + `_org` + "`" + ` can be used to refer to the user's currently active organization (if exists).",
                     "type": "array",
                     "items": {
                         "type": "string"
@@ -4003,7 +4003,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "readers": {
-                    "description": "Readers is a list of user IDs and role IDs that can read the object.",
+                    "description": "Readers is a list of user IDs and role IDs that can read the object.\n` + "`" + `_self` + "`" + ` can be used to refer to the caller user's userId and\n` + "`" + `_org` + "`" + ` can be used to refer to the user's currently active organization (if exists).",
                     "type": "array",
                     "items": {
                         "type": "string"
@@ -4016,7 +4016,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "writers": {
-                    "description": "Writers is a list of user IDs and role IDs that can write the object.",
+                    "description": "Writers is a list of user IDs and role IDs that can write the object.\n` + "`" + `_self` + "`" + ` can be used to refer to the caller user's userId and\n` + "`" + `_org` + "`" + ` can be used to refer to the user's currently active organization (if exists).",
                     "type": "array",
                     "items": {
                         "type": "string"
@@ -4047,7 +4047,7 @@ const docTemplate = `{
                     "additionalProperties": true
                 },
                 "deleters": {
-                    "description": "Deleters is a list of user IDs and role IDs that can delete the object.",
+                    "description": "Deleters is a list of user IDs and role IDs that can delete the object.\n` + "`" + `_self` + "`" + ` can be used to refer to the caller user's userId and\n` + "`" + `_org` + "`" + ` can be used to refer to the user's currently active organization (if exists).",
                     "type": "array",
                     "items": {
                         "type": "string"
@@ -4057,7 +4057,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "readers": {
-                    "description": "Readers is a list of user IDs and role IDs that can read the object.",
+                    "description": "Readers is a list of user IDs and role IDs that can read the object.\n` + "`" + `_self` + "`" + ` can be used to refer to the caller user's userId and\n` + "`" + `_org` + "`" + ` can be used to refer to the user's currently active organization (if exists).",
                     "type": "array",
                     "items": {
                         "type": "string"
@@ -4067,7 +4067,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "writers": {
-                    "description": "Writers is a list of user IDs and role IDs that can write the object.",
+                    "description": "Writers is a list of user IDs and role IDs that can write the object.\n` + "`" + `_self` + "`" + ` can be used to refer to the caller user's userId and\n` + "`" + `_org` + "`" + ` can be used to refer to the user's currently active organization (if exists).",
                     "type": "array",
                     "items": {
                         "type": "string"
@@ -5073,6 +5073,33 @@ const docTemplate = `{
                 }
             }
         },
+        "user_svc.Organization": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "description": "Full name of the organization",
+                    "type": "string",
+                    "example": "Acme Corporation"
+                },
+                "slug": {
+                    "description": "URL-friendly unique (inside the Singularon platform) identifier for the ` + "`" + `organization` + "`" + `.",
+                    "type": "string",
+                    "example": "acme-corporation"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
         "user_svc.Permission": {
             "type": "object",
             "properties": {
@@ -5110,6 +5137,15 @@ const docTemplate = `{
         "user_svc.ReadUserByTokenResponse": {
             "type": "object",
             "properties": {
+                "activeOrganizationId": {
+                    "type": "string"
+                },
+                "organizations": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/user_svc.Organization"
+                    }
+                },
                 "user": {
                     "$ref": "#/definitions/user_svc.User"
                 }

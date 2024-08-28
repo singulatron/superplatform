@@ -433,16 +433,20 @@ definitions:
         additionalProperties: true
         type: object
       deleters:
-        description: Deleters is a list of user IDs and role IDs that can delete the
-          object.
+        description: |-
+          Deleters is a list of user IDs and role IDs that can delete the object.
+          `_self` can be used to refer to the caller user's userId and
+          `_org` can be used to refer to the user's currently active organization (if exists).
         items:
           type: string
         type: array
       id:
         type: string
       readers:
-        description: Readers is a list of user IDs and role IDs that can read the
-          object.
+        description: |-
+          Readers is a list of user IDs and role IDs that can read the object.
+          `_self` can be used to refer to the caller user's userId and
+          `_org` can be used to refer to the user's currently active organization (if exists).
         items:
           type: string
         type: array
@@ -451,8 +455,10 @@ definitions:
       updatedAt:
         type: string
       writers:
-        description: Writers is a list of user IDs and role IDs that can write the
-          object.
+        description: |-
+          Writers is a list of user IDs and role IDs that can write the object.
+          `_self` can be used to refer to the caller user's userId and
+          `_org` can be used to refer to the user's currently active organization (if exists).
         items:
           type: string
         type: array
@@ -477,24 +483,30 @@ definitions:
         additionalProperties: true
         type: object
       deleters:
-        description: Deleters is a list of user IDs and role IDs that can delete the
-          object.
+        description: |-
+          Deleters is a list of user IDs and role IDs that can delete the object.
+          `_self` can be used to refer to the caller user's userId and
+          `_org` can be used to refer to the user's currently active organization (if exists).
         items:
           type: string
         type: array
       id:
         type: string
       readers:
-        description: Readers is a list of user IDs and role IDs that can read the
-          object.
+        description: |-
+          Readers is a list of user IDs and role IDs that can read the object.
+          `_self` can be used to refer to the caller user's userId and
+          `_org` can be used to refer to the user's currently active organization (if exists).
         items:
           type: string
         type: array
       table:
         type: string
       writers:
-        description: Writers is a list of user IDs and role IDs that can write the
-          object.
+        description: |-
+          Writers is a list of user IDs and role IDs that can write the object.
+          `_self` can be used to refer to the caller user's userId and
+          `_org` can be used to refer to the user's currently active organization (if exists).
         items:
           type: string
         type: array
@@ -1197,6 +1209,26 @@ definitions:
       token:
         $ref: '#/definitions/user_svc.AuthToken'
     type: object
+  user_svc.Organization:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      id:
+        type: string
+      name:
+        description: Full name of the organization
+        example: Acme Corporation
+        type: string
+      slug:
+        description: URL-friendly unique (inside the Singularon platform) identifier
+          for the `organization`.
+        example: acme-corporation
+        type: string
+      updatedAt:
+        type: string
+    type: object
   user_svc.Permission:
     properties:
       createdAt:
@@ -1222,6 +1254,12 @@ definitions:
     type: object
   user_svc.ReadUserByTokenResponse:
     properties:
+      activeOrganizationId:
+        type: string
+      organizations:
+        items:
+          $ref: '#/definitions/user_svc.Organization'
+        type: array
       user:
         $ref: '#/definitions/user_svc.User'
     type: object

@@ -49,7 +49,7 @@ func (s *UserService) createOrganization(userId, orgId, name, slug string) error
 		Id:             fmt.Sprintf("%v:%v", org.Id, userId),
 		UserId:         userId,
 		OrganizationId: org.Id,
-		Active:         count > 0, // make the first org active
+		Active:         count == 0, // make the first org active
 	}
 
 	err = s.organizationUserLinksStore.Create(link)

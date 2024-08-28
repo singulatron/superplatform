@@ -218,6 +218,13 @@ func TestOrganization(t *testing.T) {
 		require.NotNil(t, claim)
 		require.Equal(t, 2, len(claim.RoleIds), claim.RoleIds)
 		require.Contains(t, claim.RoleIds, "user-svc:org:{test-org}:admin", claim.RoleIds)
+
+		tokenRsp, _, err := adminClient.UserSvcAPI.ReadUserByToken(context.Background()).Body(clients.UserSvcReadUserByTokenRequest{
+			Token: adminLoginRsp.Token.Token,
+		}).Execute()
+		require.NoError(t, err)
+		require.Equal(t, 1, len(tokenRsp.Organizations))
+		require.Equal(t, clients.PtrString("torgid1"), tokenRsp.ActiveOrganizationId)
 	})
 
 	t.Run("assign org to user", func(t *testing.T) {

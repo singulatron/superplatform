@@ -244,6 +244,7 @@ Class | Method | HTTP request | Description
  - [UserSvcIsAuthorizedResponse](docs/UserSvcIsAuthorizedResponse.md)
  - [UserSvcLoginRequest](docs/UserSvcLoginRequest.md)
  - [UserSvcLoginResponse](docs/UserSvcLoginResponse.md)
+ - [UserSvcOrganization](docs/UserSvcOrganization.md)
  - [UserSvcPermission](docs/UserSvcPermission.md)
  - [UserSvcReadUserByTokenRequest](docs/UserSvcReadUserByTokenRequest.md)
  - [UserSvcReadUserByTokenResponse](docs/UserSvcReadUserByTokenResponse.md)

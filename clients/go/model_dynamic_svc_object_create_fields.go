@@ -22,16 +22,16 @@ var _ MappedNullable = &DynamicSvcObjectCreateFields{}
 
 // DynamicSvcObjectCreateFields struct for DynamicSvcObjectCreateFields
 type DynamicSvcObjectCreateFields struct {
-	// Authors is a list of user ID and organization ID who created the object.
-	Authors []string `json:"authors"`
+	// Authors is a list of user ID and organization ID who created the object. If an organization ID is not provided, the currently active organization will be queried from the User Svc.
+	Authors []string `json:"authors,omitempty"`
 	Data map[string]interface{} `json:"data"`
-	// Deleters is a list of user IDs and role IDs that can delete the object.
+	// Deleters is a list of user IDs and role IDs that can delete the object. `_self` can be used to refer to the caller user's userId and `_org` can be used to refer to the user's currently active organization (if exists).
 	Deleters []string `json:"deleters,omitempty"`
 	Id *string `json:"id,omitempty"`
-	// Readers is a list of user IDs and role IDs that can read the object.
+	// Readers is a list of user IDs and role IDs that can read the object. `_self` can be used to refer to the caller user's userId and `_org` can be used to refer to the user's currently active organization (if exists).
 	Readers []string `json:"readers,omitempty"`
 	Table string `json:"table"`
-	// Writers is a list of user IDs and role IDs that can write the object.
+	// Writers is a list of user IDs and role IDs that can write the object. `_self` can be used to refer to the caller user's userId and `_org` can be used to refer to the user's currently active organization (if exists).
 	Writers []string `json:"writers,omitempty"`
 }
 
@@ -41,9 +41,8 @@ type _DynamicSvcObjectCreateFields DynamicSvcObjectCreateFields
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewDynamicSvcObjectCreateFields(authors []string, data map[string]interface{}, table string) *DynamicSvcObjectCreateFields {
+func NewDynamicSvcObjectCreateFields(data map[string]interface{}, table string) *DynamicSvcObjectCreateFields {
 	this := DynamicSvcObjectCreateFields{}
-	this.Authors = authors
 	this.Data = data
 	this.Table = table
 	return &this
@@ -57,26 +56,34 @@ func NewDynamicSvcObjectCreateFieldsWithDefaults() *DynamicSvcObjectCreateFields
 	return &this
 }
 
-// GetAuthors returns the Authors field value
+// GetAuthors returns the Authors field value if set, zero value otherwise.
 func (o *DynamicSvcObjectCreateFields) GetAuthors() []string {
-	if o == nil {
+	if o == nil || IsNil(o.Authors) {
 		var ret []string
 		return ret
 	}
-
 	return o.Authors
 }
 
-// GetAuthorsOk returns a tuple with the Authors field value
+// GetAuthorsOk returns a tuple with the Authors field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *DynamicSvcObjectCreateFields) GetAuthorsOk() ([]string, bool) {
-	if o == nil {
+	if o == nil || IsNil(o.Authors) {
 		return nil, false
 	}
 	return o.Authors, true
 }
 
-// SetAuthors sets field value
+// HasAuthors returns a boolean if a field has been set.
+func (o *DynamicSvcObjectCreateFields) HasAuthors() bool {
+	if o != nil && !IsNil(o.Authors) {
+		return true
+	}
+
+	return false
+}
+
+// SetAuthors gets a reference to the given []string and assigns it to the Authors field.
 func (o *DynamicSvcObjectCreateFields) SetAuthors(v []string) {
 	o.Authors = v
 }
@@ -267,7 +274,9 @@ func (o DynamicSvcObjectCreateFields) MarshalJSON() ([]byte, error) {
 
 func (o DynamicSvcObjectCreateFields) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["authors"] = o.Authors
+	if !IsNil(o.Authors) {
+		toSerialize["authors"] = o.Authors
+	}
 	toSerialize["data"] = o.Data
 	if !IsNil(o.Deleters) {
 		toSerialize["deleters"] = o.Deleters
@@ -290,7 +299,6 @@ func (o *DynamicSvcObjectCreateFields) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"authors",
 		"data",
 		"table",
 	}

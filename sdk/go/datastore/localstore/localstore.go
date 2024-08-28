@@ -566,6 +566,9 @@ func (q *QueryBuilder) match(obj any) (bool, error) {
 					return false, nil
 				} else if queryValue.Kind() == reflect.Slice {
 					for i := 0; i < queryValue.Len(); i++ {
+						if queryValue.Index(i).Kind() == reflect.Slice {
+							return false, errors.New("OpIsInList value should not be a slice")
+						}
 						if matchFunc(fieldValue, queryValue.Index(i).Interface()) {
 							matched = true
 							continue

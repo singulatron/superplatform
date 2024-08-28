@@ -60,22 +60,25 @@ func (s *UserService) getUserOrganizations(userId string) ([]*usertypes.Organiza
 		return nil, "", err
 	}
 
-	organizationIds := []string{}
+	organizationIds := []any{}
 	activeOrganizationId := ""
 	for _, linkI := range links {
 		link := linkI.(*usertypes.OrganizationUserLink)
 		if link.Active {
 			activeOrganizationId = link.OrganizationId
 		}
-		organizationIds = append(organizationIds)
+		organizationIds = append(organizationIds, link.OrganizationId)
 	}
 
 	orgIs, err := s.organizationsStore.Query(
 		datastore.IsInList(
 			datastore.Field("id"),
-			organizationIds,
+			organizationIds...,
 		),
 	).Find()
+	if err != nil {
+		return nil, "", err
+	}
 
 	orgs := []*usertypes.Organization{}
 	for _, orgI := range orgIs {
