@@ -3970,13 +3970,12 @@ const docTemplate = `{
         "dynamic_svc.Object": {
             "type": "object",
             "required": [
-                "authors",
                 "data",
                 "table"
             ],
             "properties": {
                 "authors": {
-                    "description": "Authors is a list of user ID and organization ID who created the object.",
+                    "description": "Authors is a list of user ID and organization ID who created the object.\nIf an organization ID is not provided, the currently active organization will\nbe queried from the User Svc.",
                     "type": "array",
                     "items": {
                         "type": "string"
@@ -4028,13 +4027,12 @@ const docTemplate = `{
         "dynamic_svc.ObjectCreateFields": {
             "type": "object",
             "required": [
-                "authors",
                 "data",
                 "table"
             ],
             "properties": {
                 "authors": {
-                    "description": "Authors is a list of user ID and organization ID who created the object.",
+                    "description": "Authors is a list of user ID and organization ID who created the object.\nIf an organization ID is not provided, the currently active organization will\nbe queried from the User Svc.",
                     "type": "array",
                     "items": {
                         "type": "string"

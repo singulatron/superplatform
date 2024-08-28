@@ -21,10 +21,12 @@ import { mapValues } from '../runtime';
 export interface DynamicSvcObjectCreateFields {
     /**
      * Authors is a list of user ID and organization ID who created the object.
+     * If an organization ID is not provided, the currently active organization will
+     * be queried from the User Svc.
      * @type {Array<string>}
      * @memberof DynamicSvcObjectCreateFields
      */
-    authors: Array<string>;
+    authors?: Array<string>;
     /**
      * 
      * @type {{ [key: string]: any; }}
@@ -67,7 +69,6 @@ export interface DynamicSvcObjectCreateFields {
  * Check if a given object implements the DynamicSvcObjectCreateFields interface.
  */
 export function instanceOfDynamicSvcObjectCreateFields(value: object): value is DynamicSvcObjectCreateFields {
-    if (!('authors' in value) || value['authors'] === undefined) return false;
     if (!('data' in value) || value['data'] === undefined) return false;
     if (!('table' in value) || value['table'] === undefined) return false;
     return true;
@@ -83,7 +84,7 @@ export function DynamicSvcObjectCreateFieldsFromJSONTyped(json: any, ignoreDiscr
     }
     return {
         
-        'authors': json['authors'],
+        'authors': json['authors'] == null ? undefined : json['authors'],
         'data': json['data'],
         'deleters': json['deleters'] == null ? undefined : json['deleters'],
         'id': json['id'] == null ? undefined : json['id'],

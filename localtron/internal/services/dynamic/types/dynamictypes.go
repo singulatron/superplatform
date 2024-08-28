@@ -15,15 +15,23 @@ type ObjectCreateFields struct {
 	Table string `json:"table" binding:"required"`
 
 	// Authors is a list of user ID and organization ID who created the object.
-	Authors []string `json:"authors" binding:"required" example:"[\"usr_12345\", \"org_67890\"]"`
+	// If an organization ID is not provided, the currently active organization will
+	// be queried from the User Svc.
+	Authors []string `json:"authors" example:"[\"usr_12345\", \"org_67890\"]"`
 
 	// Readers is a list of user IDs and role IDs that can read the object.
+	// `_self` can be used to refer to the caller user's userId and
+	// `_org` can be used to refer to the user's currently active organization (if exists).
 	Readers []string `json:"readers,omitempty"`
 
 	// Writers is a list of user IDs and role IDs that can write the object.
+	// `_self` can be used to refer to the caller user's userId and
+	// `_org` can be used to refer to the user's currently active organization (if exists).
 	Writers []string `json:"writers,omitempty"`
 
 	// Deleters is a list of user IDs and role IDs that can delete the object.
+	// `_self` can be used to refer to the caller user's userId and
+	// `_org` can be used to refer to the user's currently active organization (if exists).
 	Deleters []string `json:"deleters,omitempty"`
 
 	Data map[string]interface{} `json:"data,omitempty" binding:"required"`

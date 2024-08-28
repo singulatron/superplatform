@@ -14,6 +14,7 @@ export async function dynamicTest(apiKey: string) {
         data: {
           fieldA: "valueA",
         },
+        readers: ["_self"],
       },
     },
   });
@@ -25,6 +26,7 @@ export async function dynamicTest(apiKey: string) {
         data: {
           fieldA: "valueB",
         },
+        readers: ["_self"],
       },
     },
   });
@@ -32,6 +34,7 @@ export async function dynamicTest(apiKey: string) {
   let rsp = await dynamicService.query({
     body: {
       table: "uzerz",
+      readers: ["_self"],
     },
   });
 

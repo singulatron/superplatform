@@ -15,8 +15,6 @@
  * Check if a given object implements the DynamicSvcObjectCreateFields interface.
  */
 function instanceOfDynamicSvcObjectCreateFields(value) {
-    if (!('authors' in value) || value['authors'] === undefined)
-        return false;
     if (!('data' in value) || value['data'] === undefined)
         return false;
     if (!('table' in value) || value['table'] === undefined)
@@ -31,7 +29,7 @@ function DynamicSvcObjectCreateFieldsFromJSONTyped(json, ignoreDiscriminator) {
         return json;
     }
     return {
-        'authors': json['authors'],
+        'authors': json['authors'] == null ? undefined : json['authors'],
         'data': json['data'],
         'deleters': json['deleters'] == null ? undefined : json['deleters'],
         'id': json['id'] == null ? undefined : json['id'],

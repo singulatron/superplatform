@@ -11,9 +11,9 @@
  */
 export declare class DynamicSvcObjectCreateFields {
     /**
-    * Authors is a list of user ID and organization ID who created the object.
+    * Authors is a list of user ID and organization ID who created the object. If an organization ID is not provided, the currently active organization will be queried from the User Svc.
     */
-    'authors': Array<string>;
+    'authors'?: Array<string>;
     'data': {
         [key: string]: any;
     };

@@ -45,10 +45,14 @@ func (s *UserService) ReadUserByToken(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	orgs, activeOrgId, err := s.getUserOrganizations(usr.Id)
+
 	usr.PasswordHash = ""
 
 	bs, _ := json.Marshal(user.ReadUserByTokenResponse{
-		User: usr,
+		User:                 usr,
+		Organizations:        orgs,
+		ActiveOrganizationId: activeOrgId,
 	})
 	w.Write(bs)
 }

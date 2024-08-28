@@ -417,8 +417,10 @@ definitions:
   dynamic_svc.Object:
     properties:
       authors:
-        description: Authors is a list of user ID and organization ID who created
-          the object.
+        description: |-
+          Authors is a list of user ID and organization ID who created the object.
+          If an organization ID is not provided, the currently active organization will
+          be queried from the User Svc.
         example:
         - '["usr_12345"'
         - ' "org_67890"]'
@@ -455,15 +457,16 @@ definitions:
           type: string
         type: array
     required:
-    - authors
     - data
     - table
     type: object
   dynamic_svc.ObjectCreateFields:
     properties:
       authors:
-        description: Authors is a list of user ID and organization ID who created
-          the object.
+        description: |-
+          Authors is a list of user ID and organization ID who created the object.
+          If an organization ID is not provided, the currently active organization will
+          be queried from the User Svc.
         example:
         - '["usr_12345"'
         - ' "org_67890"]'
@@ -496,7 +499,6 @@ definitions:
           type: string
         type: array
     required:
-    - authors
     - data
     - table
     type: object

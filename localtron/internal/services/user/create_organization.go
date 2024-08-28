@@ -35,6 +35,28 @@ func (s *UserService) createOrganization(userId, orgId, name, slug string) error
 		Slug: slug,
 	}
 
+	count, err := s.organizationUserLinksStore.Query(
+		datastore.Equals(
+			datastore.Field("userId"),
+			userId,
+		),
+	).Count()
+	if err != nil {
+		return err
+	}
+
+	link := &usertypes.OrganizationUserLink{
+		Id:             fmt.Sprintf("%v:%v", org.Id, userId),
+		UserId:         userId,
+		OrganizationId: org.Id,
+		Active:         count > 0, // make the first org active
+	}
+
+	err = s.organizationUserLinksStore.Create(link)
+	if err != nil {
+		return err
+	}
+
 	err = s.organizationsStore.Create(org)
 	if err != nil {
 		return err

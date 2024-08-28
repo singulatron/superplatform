@@ -48,3 +48,40 @@ func (s *UserService) readUserByToken(token string) (*usertypes.User, error) {
 	}
 	return ret, nil
 }
+
+func (s *UserService) getUserOrganizations(userId string) ([]*usertypes.Organization, string, error) {
+	links, err := s.organizationUserLinksStore.Query(
+		datastore.Equals(
+			datastore.Field("userId"),
+			userId,
+		),
+	).Find()
+	if err != nil {
+		return nil, "", err
+	}
+
+	organizationIds := []string{}
+	activeOrganizationId := ""
+	for _, linkI := range links {
+		link := linkI.(*usertypes.OrganizationUserLink)
+		if link.Active {
+			activeOrganizationId = link.OrganizationId
+		}
+		organizationIds = append(organizationIds)
+	}
+
+	orgIs, err := s.organizationsStore.Query(
+		datastore.IsInList(
+			datastore.Field("id"),
+			organizationIds,
+		),
+	).Find()
+
+	orgs := []*usertypes.Organization{}
+	for _, orgI := range orgIs {
+		org := orgI.(*usertypes.Organization)
+		orgs = append(orgs, org)
+	}
+
+	return orgs, activeOrganizationId, nil
+}
