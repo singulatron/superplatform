@@ -117,6 +117,7 @@ require('./userSvcIsAuthorizedRequest.js');
 require('./userSvcIsAuthorizedResponse.js');
 require('./userSvcLoginRequest.js');
 require('./userSvcLoginResponse.js');
+require('./userSvcOrganization.js');
 require('./userSvcPermission.js');
 require('./userSvcReadUserByTokenRequest.js');
 require('./userSvcReadUserByTokenResponse.js');

@@ -100,6 +100,7 @@ export { UserSvcIsAuthorizedRequest } from './userSvcIsAuthorizedRequest.mjs';
 export { UserSvcIsAuthorizedResponse } from './userSvcIsAuthorizedResponse.mjs';
 export { UserSvcLoginRequest } from './userSvcLoginRequest.mjs';
 export { UserSvcLoginResponse } from './userSvcLoginResponse.mjs';
+export { UserSvcOrganization } from './userSvcOrganization.mjs';
 export { UserSvcPermission } from './userSvcPermission.mjs';
 export { UserSvcReadUserByTokenRequest } from './userSvcReadUserByTokenRequest.mjs';
 export { UserSvcReadUserByTokenResponse } from './userSvcReadUserByTokenResponse.mjs';

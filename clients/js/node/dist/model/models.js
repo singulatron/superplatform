@@ -98,6 +98,7 @@ export * from './userSvcIsAuthorizedRequest';
 export * from './userSvcIsAuthorizedResponse';
 export * from './userSvcLoginRequest';
 export * from './userSvcLoginResponse';
+export * from './userSvcOrganization';
 export * from './userSvcPermission';
 export * from './userSvcReadUserByTokenRequest';
 export * from './userSvcReadUserByTokenResponse';
@@ -207,6 +208,7 @@ import { UserSvcIsAuthorizedRequest } from './userSvcIsAuthorizedRequest';
 import { UserSvcIsAuthorizedResponse } from './userSvcIsAuthorizedResponse';
 import { UserSvcLoginRequest } from './userSvcLoginRequest';
 import { UserSvcLoginResponse } from './userSvcLoginResponse';
+import { UserSvcOrganization } from './userSvcOrganization';
 import { UserSvcPermission } from './userSvcPermission';
 import { UserSvcReadUserByTokenRequest } from './userSvcReadUserByTokenRequest';
 import { UserSvcReadUserByTokenResponse } from './userSvcReadUserByTokenResponse';
@@ -330,6 +332,7 @@ let typeMap = {
     "UserSvcIsAuthorizedResponse": UserSvcIsAuthorizedResponse,
     "UserSvcLoginRequest": UserSvcLoginRequest,
     "UserSvcLoginResponse": UserSvcLoginResponse,
+    "UserSvcOrganization": UserSvcOrganization,
     "UserSvcPermission": UserSvcPermission,
     "UserSvcReadUserByTokenRequest": UserSvcReadUserByTokenRequest,
     "UserSvcReadUserByTokenResponse": UserSvcReadUserByTokenResponse,

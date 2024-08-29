@@ -33,6 +33,8 @@ export interface DynamicSvcObjectCreateFields {
     };
     /**
      * Deleters is a list of user IDs and role IDs that can delete the object.
+     * `_self` can be used to refer to the caller user's userId and
+     * `_org` can be used to refer to the user's currently active organization (if exists).
      * @type {Array<string>}
      * @memberof DynamicSvcObjectCreateFields
      */
@@ -45,6 +47,8 @@ export interface DynamicSvcObjectCreateFields {
     id?: string;
     /**
      * Readers is a list of user IDs and role IDs that can read the object.
+     * `_self` can be used to refer to the caller user's userId and
+     * `_org` can be used to refer to the user's currently active organization (if exists).
      * @type {Array<string>}
      * @memberof DynamicSvcObjectCreateFields
      */
@@ -57,6 +61,8 @@ export interface DynamicSvcObjectCreateFields {
     table: string;
     /**
      * Writers is a list of user IDs and role IDs that can write the object.
+     * `_self` can be used to refer to the caller user's userId and
+     * `_org` can be used to refer to the user's currently active organization (if exists).
      * @type {Array<string>}
      * @memberof DynamicSvcObjectCreateFields
      */

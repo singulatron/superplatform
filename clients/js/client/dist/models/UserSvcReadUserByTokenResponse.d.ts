@@ -9,6 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import type { UserSvcOrganization } from './UserSvcOrganization';
 import type { UserSvcUser } from './UserSvcUser';
 /**
  *
@@ -16,6 +17,18 @@ import type { UserSvcUser } from './UserSvcUser';
  * @interface UserSvcReadUserByTokenResponse
  */
 export interface UserSvcReadUserByTokenResponse {
+    /**
+     *
+     * @type {string}
+     * @memberof UserSvcReadUserByTokenResponse
+     */
+    activeOrganizationId?: string;
+    /**
+     *
+     * @type {Array<UserSvcOrganization>}
+     * @memberof UserSvcReadUserByTokenResponse
+     */
+    organizations?: Array<UserSvcOrganization>;
     /**
      *
      * @type {UserSvcUser}

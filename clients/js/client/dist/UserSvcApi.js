@@ -32,6 +32,7 @@ require('./DatastoreFilter.js');
 require('./DatastoreOp.js');
 require('./DatastoreOrderBy.js');
 require('./UserSvcAuthToken.js');
+require('./UserSvcOrganization.js');
 
 /* tslint:disable */
 /* eslint-disable */

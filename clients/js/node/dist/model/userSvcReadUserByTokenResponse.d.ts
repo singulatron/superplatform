@@ -9,8 +9,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { UserSvcOrganization } from './userSvcOrganization';
 import { UserSvcUser } from './userSvcUser';
 export declare class UserSvcReadUserByTokenResponse {
+    'activeOrganizationId'?: string;
+    'organizations'?: Array<UserSvcOrganization>;
     'user'?: UserSvcUser;
     static discriminator: string | undefined;
     static attributeTypeMap: Array<{

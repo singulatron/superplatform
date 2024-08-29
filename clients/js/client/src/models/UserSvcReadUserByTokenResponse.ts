@@ -13,6 +13,12 @@
  */
 
 import { mapValues } from '../runtime';
+import type { UserSvcOrganization } from './UserSvcOrganization';
+import {
+    UserSvcOrganizationFromJSON,
+    UserSvcOrganizationFromJSONTyped,
+    UserSvcOrganizationToJSON,
+} from './UserSvcOrganization';
 import type { UserSvcUser } from './UserSvcUser';
 import {
     UserSvcUserFromJSON,
@@ -26,6 +32,18 @@ import {
  * @interface UserSvcReadUserByTokenResponse
  */
 export interface UserSvcReadUserByTokenResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof UserSvcReadUserByTokenResponse
+     */
+    activeOrganizationId?: string;
+    /**
+     * 
+     * @type {Array<UserSvcOrganization>}
+     * @memberof UserSvcReadUserByTokenResponse
+     */
+    organizations?: Array<UserSvcOrganization>;
     /**
      * 
      * @type {UserSvcUser}
@@ -51,6 +69,8 @@ export function UserSvcReadUserByTokenResponseFromJSONTyped(json: any, ignoreDis
     }
     return {
         
+        'activeOrganizationId': json['activeOrganizationId'] == null ? undefined : json['activeOrganizationId'],
+        'organizations': json['organizations'] == null ? undefined : ((json['organizations'] as Array<any>).map(UserSvcOrganizationFromJSON)),
         'user': json['user'] == null ? undefined : UserSvcUserFromJSON(json['user']),
     };
 }
@@ -61,6 +81,8 @@ export function UserSvcReadUserByTokenResponseToJSON(value?: UserSvcReadUserByTo
     }
     return {
         
+        'activeOrganizationId': value['activeOrganizationId'],
+        'organizations': value['organizations'] == null ? undefined : ((value['organizations'] as Array<any>).map(UserSvcOrganizationToJSON)),
         'user': UserSvcUserToJSON(value['user']),
     };
 }

@@ -1,5 +1,6 @@
 'use strict';
 
+var UserSvcOrganization = require('./UserSvcOrganization.js');
 var UserSvcUser = require('./UserSvcUser.js');
 require('./UserSvcContact.js');
 
@@ -30,6 +31,8 @@ function UserSvcReadUserByTokenResponseFromJSONTyped(json, ignoreDiscriminator) 
         return json;
     }
     return {
+        'activeOrganizationId': json['activeOrganizationId'] == null ? undefined : json['activeOrganizationId'],
+        'organizations': json['organizations'] == null ? undefined : (json['organizations'].map(UserSvcOrganization.UserSvcOrganizationFromJSON)),
         'user': json['user'] == null ? undefined : UserSvcUser.UserSvcUserFromJSON(json['user']),
     };
 }
@@ -38,6 +41,8 @@ function UserSvcReadUserByTokenResponseToJSON(value) {
         return value;
     }
     return {
+        'activeOrganizationId': value['activeOrganizationId'],
+        'organizations': value['organizations'] == null ? undefined : (value['organizations'].map(UserSvcOrganization.UserSvcOrganizationToJSON)),
         'user': UserSvcUser.UserSvcUserToJSON(value['user']),
     };
 }

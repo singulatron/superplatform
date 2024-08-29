@@ -99,6 +99,7 @@ export * from './userSvcIsAuthorizedRequest';
 export * from './userSvcIsAuthorizedResponse';
 export * from './userSvcLoginRequest';
 export * from './userSvcLoginResponse';
+export * from './userSvcOrganization';
 export * from './userSvcPermission';
 export * from './userSvcReadUserByTokenRequest';
 export * from './userSvcReadUserByTokenResponse';

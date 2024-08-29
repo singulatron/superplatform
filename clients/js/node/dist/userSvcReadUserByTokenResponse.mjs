@@ -17,6 +17,16 @@ class UserSvcReadUserByTokenResponse {
 UserSvcReadUserByTokenResponse.discriminator = undefined;
 UserSvcReadUserByTokenResponse.attributeTypeMap = [
     {
+        "name": "activeOrganizationId",
+        "baseName": "activeOrganizationId",
+        "type": "string"
+    },
+    {
+        "name": "organizations",
+        "baseName": "organizations",
+        "type": "Array<UserSvcOrganization>"
+    },
+    {
         "name": "user",
         "baseName": "user",
         "type": "UserSvcUser"

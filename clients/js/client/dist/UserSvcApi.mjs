@@ -30,6 +30,7 @@ import './DatastoreFilter.mjs';
 import './DatastoreOp.mjs';
 import './DatastoreOrderBy.mjs';
 import './UserSvcAuthToken.mjs';
+import './UserSvcOrganization.mjs';
 
 /* tslint:disable */
 /* eslint-disable */

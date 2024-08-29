@@ -116,6 +116,7 @@ import './userSvcIsAuthorizedRequest.mjs';
 import './userSvcIsAuthorizedResponse.mjs';
 import './userSvcLoginRequest.mjs';
 import './userSvcLoginResponse.mjs';
+import './userSvcOrganization.mjs';
 import './userSvcPermission.mjs';
 import './userSvcReadUserByTokenRequest.mjs';
 import './userSvcReadUserByTokenResponse.mjs';

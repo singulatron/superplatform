@@ -106,6 +106,7 @@ import './UserSvcLoginResponse.mjs';
 import './UserSvcAuthToken.mjs';
 import './UserSvcReadUserByTokenRequest.mjs';
 import './UserSvcReadUserByTokenResponse.mjs';
+import './UserSvcOrganization.mjs';
 import './UserSvcRegisterRequest.mjs';
 import './UserSvcSaveProfileRequest.mjs';
 import './UserSvcSetRolePermissionsRequest.mjs';

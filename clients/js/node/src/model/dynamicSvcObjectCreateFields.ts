@@ -19,17 +19,17 @@ export class DynamicSvcObjectCreateFields {
     'authors'?: Array<string>;
     'data': { [key: string]: any; };
     /**
-    * Deleters is a list of user IDs and role IDs that can delete the object.
+    * Deleters is a list of user IDs and role IDs that can delete the object. `_self` can be used to refer to the caller user\'s userId and `_org` can be used to refer to the user\'s currently active organization (if exists).
     */
     'deleters'?: Array<string>;
     'id'?: string;
     /**
-    * Readers is a list of user IDs and role IDs that can read the object.
+    * Readers is a list of user IDs and role IDs that can read the object. `_self` can be used to refer to the caller user\'s userId and `_org` can be used to refer to the user\'s currently active organization (if exists).
     */
     'readers'?: Array<string>;
     'table': string;
     /**
-    * Writers is a list of user IDs and role IDs that can write the object.
+    * Writers is a list of user IDs and role IDs that can write the object. `_self` can be used to refer to the caller user\'s userId and `_org` can be used to refer to the user\'s currently active organization (if exists).
     */
     'writers'?: Array<string>;
 

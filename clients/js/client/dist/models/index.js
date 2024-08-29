@@ -100,6 +100,7 @@ export * from './UserSvcIsAuthorizedRequest';
 export * from './UserSvcIsAuthorizedResponse';
 export * from './UserSvcLoginRequest';
 export * from './UserSvcLoginResponse';
+export * from './UserSvcOrganization';
 export * from './UserSvcPermission';
 export * from './UserSvcReadUserByTokenRequest';
 export * from './UserSvcReadUserByTokenResponse';

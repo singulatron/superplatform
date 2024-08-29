@@ -1,3 +1,4 @@
+import { UserSvcOrganizationFromJSON, UserSvcOrganizationToJSON } from './UserSvcOrganization.mjs';
 import { UserSvcUserFromJSON, UserSvcUserToJSON } from './UserSvcUser.mjs';
 import './UserSvcContact.mjs';
 
@@ -28,6 +29,8 @@ function UserSvcReadUserByTokenResponseFromJSONTyped(json, ignoreDiscriminator) 
         return json;
     }
     return {
+        'activeOrganizationId': json['activeOrganizationId'] == null ? undefined : json['activeOrganizationId'],
+        'organizations': json['organizations'] == null ? undefined : (json['organizations'].map(UserSvcOrganizationFromJSON)),
         'user': json['user'] == null ? undefined : UserSvcUserFromJSON(json['user']),
     };
 }
@@ -36,6 +39,8 @@ function UserSvcReadUserByTokenResponseToJSON(value) {
         return value;
     }
     return {
+        'activeOrganizationId': value['activeOrganizationId'],
+        'organizations': value['organizations'] == null ? undefined : (value['organizations'].map(UserSvcOrganizationToJSON)),
         'user': UserSvcUserToJSON(value['user']),
     };
 }

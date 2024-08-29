@@ -98,6 +98,7 @@ export { UserSvcIsAuthorizedRequestFromJSON, UserSvcIsAuthorizedRequestFromJSONT
 export { UserSvcIsAuthorizedResponseFromJSON, UserSvcIsAuthorizedResponseFromJSONTyped, UserSvcIsAuthorizedResponseToJSON, instanceOfUserSvcIsAuthorizedResponse } from './UserSvcIsAuthorizedResponse.mjs';
 export { UserSvcLoginRequestFromJSON, UserSvcLoginRequestFromJSONTyped, UserSvcLoginRequestToJSON, instanceOfUserSvcLoginRequest } from './UserSvcLoginRequest.mjs';
 export { UserSvcLoginResponseFromJSON, UserSvcLoginResponseFromJSONTyped, UserSvcLoginResponseToJSON, instanceOfUserSvcLoginResponse } from './UserSvcLoginResponse.mjs';
+export { UserSvcOrganizationFromJSON, UserSvcOrganizationFromJSONTyped, UserSvcOrganizationToJSON, instanceOfUserSvcOrganization } from './UserSvcOrganization.mjs';
 export { UserSvcPermissionFromJSON, UserSvcPermissionFromJSONTyped, UserSvcPermissionToJSON, instanceOfUserSvcPermission } from './UserSvcPermission.mjs';
 export { UserSvcReadUserByTokenRequestFromJSON, UserSvcReadUserByTokenRequestFromJSONTyped, UserSvcReadUserByTokenRequestToJSON, instanceOfUserSvcReadUserByTokenRequest } from './UserSvcReadUserByTokenRequest.mjs';
 export { UserSvcReadUserByTokenResponseFromJSON, UserSvcReadUserByTokenResponseFromJSONTyped, UserSvcReadUserByTokenResponseToJSON, instanceOfUserSvcReadUserByTokenResponse } from './UserSvcReadUserByTokenResponse.mjs';
