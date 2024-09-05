@@ -3193,7 +3193,7 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "Invalid JSON",
+                        "description": "Token Missing",
                         "schema": {
                             "$ref": "#/definitions/user_svc.ErrorResponse"
                         }
@@ -5127,12 +5127,7 @@ const docTemplate = `{
             }
         },
         "user_svc.ReadUserByTokenRequest": {
-            "type": "object",
-            "properties": {
-                "token": {
-                    "type": "string"
-                }
-            }
+            "type": "object"
         },
         "user_svc.ReadUserByTokenResponse": {
             "type": "object",

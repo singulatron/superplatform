@@ -102,7 +102,6 @@ export { UserSvcLoginRequest } from './userSvcLoginRequest.mjs';
 export { UserSvcLoginResponse } from './userSvcLoginResponse.mjs';
 export { UserSvcOrganization } from './userSvcOrganization.mjs';
 export { UserSvcPermission } from './userSvcPermission.mjs';
-export { UserSvcReadUserByTokenRequest } from './userSvcReadUserByTokenRequest.mjs';
 export { UserSvcReadUserByTokenResponse } from './userSvcReadUserByTokenResponse.mjs';
 export { UserSvcRegisterRequest } from './userSvcRegisterRequest.mjs';
 export { UserSvcRole } from './userSvcRole.mjs';

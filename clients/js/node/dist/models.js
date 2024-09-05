@@ -102,7 +102,6 @@ var userSvcLoginRequest = require('./userSvcLoginRequest.js');
 var userSvcLoginResponse = require('./userSvcLoginResponse.js');
 var userSvcOrganization = require('./userSvcOrganization.js');
 var userSvcPermission = require('./userSvcPermission.js');
-var userSvcReadUserByTokenRequest = require('./userSvcReadUserByTokenRequest.js');
 var userSvcReadUserByTokenResponse = require('./userSvcReadUserByTokenResponse.js');
 var userSvcRegisterRequest = require('./userSvcRegisterRequest.js');
 var userSvcRole = require('./userSvcRole.js');
@@ -227,7 +226,6 @@ let typeMap = {
     "UserSvcLoginResponse": userSvcLoginResponse.UserSvcLoginResponse,
     "UserSvcOrganization": userSvcOrganization.UserSvcOrganization,
     "UserSvcPermission": userSvcPermission.UserSvcPermission,
-    "UserSvcReadUserByTokenRequest": userSvcReadUserByTokenRequest.UserSvcReadUserByTokenRequest,
     "UserSvcReadUserByTokenResponse": userSvcReadUserByTokenResponse.UserSvcReadUserByTokenResponse,
     "UserSvcRegisterRequest": userSvcRegisterRequest.UserSvcRegisterRequest,
     "UserSvcRole": userSvcRole.UserSvcRole,
@@ -537,7 +535,6 @@ exports.UserSvcLoginRequest = userSvcLoginRequest.UserSvcLoginRequest;
 exports.UserSvcLoginResponse = userSvcLoginResponse.UserSvcLoginResponse;
 exports.UserSvcOrganization = userSvcOrganization.UserSvcOrganization;
 exports.UserSvcPermission = userSvcPermission.UserSvcPermission;
-exports.UserSvcReadUserByTokenRequest = userSvcReadUserByTokenRequest.UserSvcReadUserByTokenRequest;
 exports.UserSvcReadUserByTokenResponse = userSvcReadUserByTokenResponse.UserSvcReadUserByTokenResponse;
 exports.UserSvcRegisterRequest = userSvcRegisterRequest.UserSvcRegisterRequest;
 exports.UserSvcRole = userSvcRole.UserSvcRole;

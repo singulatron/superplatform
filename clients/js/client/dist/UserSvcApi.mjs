@@ -15,7 +15,6 @@ import { UserSvcIsAuthorizedRequestToJSON } from './UserSvcIsAuthorizedRequest.m
 import { UserSvcIsAuthorizedResponseFromJSON } from './UserSvcIsAuthorizedResponse.mjs';
 import { UserSvcLoginRequestToJSON } from './UserSvcLoginRequest.mjs';
 import { UserSvcLoginResponseFromJSON } from './UserSvcLoginResponse.mjs';
-import { UserSvcReadUserByTokenRequestToJSON } from './UserSvcReadUserByTokenRequest.mjs';
 import { UserSvcReadUserByTokenResponseFromJSON } from './UserSvcReadUserByTokenResponse.mjs';
 import { UserSvcRegisterRequestToJSON } from './UserSvcRegisterRequest.mjs';
 import { UserSvcSaveProfileRequestToJSON } from './UserSvcSaveProfileRequest.mjs';
@@ -576,7 +575,7 @@ class UserSvcApi extends BaseAPI {
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,
-                body: UserSvcReadUserByTokenRequestToJSON(requestParameters['body']),
+                body: requestParameters['body'],
             }, initOverrides);
             return new JSONApiResponse(response, (jsonValue) => UserSvcReadUserByTokenResponseFromJSON(jsonValue));
         });

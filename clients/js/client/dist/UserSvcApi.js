@@ -17,7 +17,6 @@ var UserSvcIsAuthorizedRequest = require('./UserSvcIsAuthorizedRequest.js');
 var UserSvcIsAuthorizedResponse = require('./UserSvcIsAuthorizedResponse.js');
 var UserSvcLoginRequest = require('./UserSvcLoginRequest.js');
 var UserSvcLoginResponse = require('./UserSvcLoginResponse.js');
-var UserSvcReadUserByTokenRequest = require('./UserSvcReadUserByTokenRequest.js');
 var UserSvcReadUserByTokenResponse = require('./UserSvcReadUserByTokenResponse.js');
 var UserSvcRegisterRequest = require('./UserSvcRegisterRequest.js');
 var UserSvcSaveProfileRequest = require('./UserSvcSaveProfileRequest.js');
@@ -578,7 +577,7 @@ class UserSvcApi extends runtime.BaseAPI {
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,
-                body: UserSvcReadUserByTokenRequest.UserSvcReadUserByTokenRequestToJSON(requestParameters['body']),
+                body: requestParameters['body'],
             }, initOverrides);
             return new runtime.JSONApiResponse(response, (jsonValue) => UserSvcReadUserByTokenResponse.UserSvcReadUserByTokenResponseFromJSON(jsonValue));
         });

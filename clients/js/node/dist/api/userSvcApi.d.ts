@@ -26,7 +26,6 @@ import { UserSvcIsAuthorizedRequest } from '../model/userSvcIsAuthorizedRequest'
 import { UserSvcIsAuthorizedResponse } from '../model/userSvcIsAuthorizedResponse';
 import { UserSvcLoginRequest } from '../model/userSvcLoginRequest';
 import { UserSvcLoginResponse } from '../model/userSvcLoginResponse';
-import { UserSvcReadUserByTokenRequest } from '../model/userSvcReadUserByTokenRequest';
 import { UserSvcReadUserByTokenResponse } from '../model/userSvcReadUserByTokenResponse';
 import { UserSvcRegisterRequest } from '../model/userSvcRegisterRequest';
 import { UserSvcSaveProfileRequest } from '../model/userSvcSaveProfileRequest';
@@ -256,7 +255,7 @@ export declare class UserSvcApi {
      * @summary Read User by Token
      * @param body Read User By Token Request
      */
-    readUserByToken(body: UserSvcReadUserByTokenRequest, options?: {
+    readUserByToken(body: object, options?: {
         headers: {
             [name: string]: string;
         };

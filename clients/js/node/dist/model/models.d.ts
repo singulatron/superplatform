@@ -101,7 +101,6 @@ export * from './userSvcLoginRequest';
 export * from './userSvcLoginResponse';
 export * from './userSvcOrganization';
 export * from './userSvcPermission';
-export * from './userSvcReadUserByTokenRequest';
 export * from './userSvcReadUserByTokenResponse';
 export * from './userSvcRegisterRequest';
 export * from './userSvcRole';

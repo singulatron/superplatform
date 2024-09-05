@@ -117,7 +117,6 @@ import './userSvcLoginRequest.mjs';
 import './userSvcLoginResponse.mjs';
 import './userSvcOrganization.mjs';
 import './userSvcPermission.mjs';
-import './userSvcReadUserByTokenRequest.mjs';
 import './userSvcReadUserByTokenResponse.mjs';
 import './userSvcRegisterRequest.mjs';
 import './userSvcRole.mjs';
@@ -58462,7 +58461,7 @@ class UserSvcApi {
                 uri: localVarPath,
                 useQuerystring: this._useQuerystring,
                 json: true,
-                body: ObjectSerializer.serialize(body, "UserSvcReadUserByTokenRequest")
+                body: ObjectSerializer.serialize(body, "object")
             };
             let authenticationPromise = Promise.resolve();
             if (this.authentications.BearerAuth.apiKey) {

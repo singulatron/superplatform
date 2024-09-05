@@ -32,7 +32,6 @@ import { UserSvcIsAuthorizedRequest } from '../model/userSvcIsAuthorizedRequest'
 import { UserSvcIsAuthorizedResponse } from '../model/userSvcIsAuthorizedResponse';
 import { UserSvcLoginRequest } from '../model/userSvcLoginRequest';
 import { UserSvcLoginResponse } from '../model/userSvcLoginResponse';
-import { UserSvcReadUserByTokenRequest } from '../model/userSvcReadUserByTokenRequest';
 import { UserSvcReadUserByTokenResponse } from '../model/userSvcReadUserByTokenResponse';
 import { UserSvcRegisterRequest } from '../model/userSvcRegisterRequest';
 import { UserSvcSaveProfileRequest } from '../model/userSvcSaveProfileRequest';
@@ -1192,7 +1191,7 @@ export class UserSvcApi {
      * @summary Read User by Token
      * @param body Read User By Token Request
      */
-    public async readUserByToken (body: UserSvcReadUserByTokenRequest, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: UserSvcReadUserByTokenResponse;  }> {
+    public async readUserByToken (body: object, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: UserSvcReadUserByTokenResponse;  }> {
         const localVarPath = this.basePath + '/user-svc/user/by-token';
         let localVarQueryParameters: any = {};
         let localVarHeaderParams: any = (<any>Object).assign({}, this._defaultHeaders);
@@ -1221,7 +1220,7 @@ export class UserSvcApi {
             uri: localVarPath,
             useQuerystring: this._useQuerystring,
             json: true,
-            body: ObjectSerializer.serialize(body, "UserSvcReadUserByTokenRequest")
+            body: ObjectSerializer.serialize(body, "object")
         };
 
         let authenticationPromise = Promise.resolve();

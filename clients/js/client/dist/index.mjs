@@ -112,7 +112,6 @@ export { UserSvcLoginRequestFromJSON, UserSvcLoginRequestFromJSONTyped, UserSvcL
 export { UserSvcLoginResponseFromJSON, UserSvcLoginResponseFromJSONTyped, UserSvcLoginResponseToJSON, instanceOfUserSvcLoginResponse } from './UserSvcLoginResponse.mjs';
 export { UserSvcOrganizationFromJSON, UserSvcOrganizationFromJSONTyped, UserSvcOrganizationToJSON, instanceOfUserSvcOrganization } from './UserSvcOrganization.mjs';
 export { UserSvcPermissionFromJSON, UserSvcPermissionFromJSONTyped, UserSvcPermissionToJSON, instanceOfUserSvcPermission } from './UserSvcPermission.mjs';
-export { UserSvcReadUserByTokenRequestFromJSON, UserSvcReadUserByTokenRequestFromJSONTyped, UserSvcReadUserByTokenRequestToJSON, instanceOfUserSvcReadUserByTokenRequest } from './UserSvcReadUserByTokenRequest.mjs';
 export { UserSvcReadUserByTokenResponseFromJSON, UserSvcReadUserByTokenResponseFromJSONTyped, UserSvcReadUserByTokenResponseToJSON, instanceOfUserSvcReadUserByTokenResponse } from './UserSvcReadUserByTokenResponse.mjs';
 export { UserSvcRegisterRequestFromJSON, UserSvcRegisterRequestFromJSONTyped, UserSvcRegisterRequestToJSON, instanceOfUserSvcRegisterRequest } from './UserSvcRegisterRequest.mjs';
 export { UserSvcRoleFromJSON, UserSvcRoleFromJSONTyped, UserSvcRoleToJSON, instanceOfUserSvcRole } from './UserSvcRole.mjs';

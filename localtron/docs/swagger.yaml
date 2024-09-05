@@ -1248,9 +1248,6 @@ definitions:
         type: string
     type: object
   user_svc.ReadUserByTokenRequest:
-    properties:
-      token:
-        type: string
     type: object
   user_svc.ReadUserByTokenResponse:
     properties:
@@ -3534,7 +3531,7 @@ paths:
           schema:
             $ref: '#/definitions/user_svc.ReadUserByTokenResponse'
         "400":
-          description: Invalid JSON
+          description: Token Missing
           schema:
             $ref: '#/definitions/user_svc.ErrorResponse'
         "500":

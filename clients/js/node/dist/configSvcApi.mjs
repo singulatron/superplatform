@@ -118,7 +118,6 @@ import './userSvcLoginRequest.mjs';
 import './userSvcLoginResponse.mjs';
 import './userSvcOrganization.mjs';
 import './userSvcPermission.mjs';
-import './userSvcReadUserByTokenRequest.mjs';
 import './userSvcReadUserByTokenResponse.mjs';
 import './userSvcRegisterRequest.mjs';
 import './userSvcRole.mjs';

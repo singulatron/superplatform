@@ -10,7 +10,7 @@
  * Do not edit the class manually.
  */
 import * as runtime from '../runtime';
-import type { UserSvcAddUserToOrganizationRequest, UserSvcChangePasswordAdminRequest, UserSvcChangePasswordRequest, UserSvcCreateOrganizationRequest, UserSvcCreateRoleRequest, UserSvcCreateRoleResponse, UserSvcCreateUserRequest, UserSvcGetPermissionsResponse, UserSvcGetPublicKeyResponse, UserSvcGetRolesResponse, UserSvcGetUsersRequest, UserSvcGetUsersResponse, UserSvcIsAuthorizedRequest, UserSvcIsAuthorizedResponse, UserSvcLoginRequest, UserSvcLoginResponse, UserSvcReadUserByTokenRequest, UserSvcReadUserByTokenResponse, UserSvcRegisterRequest, UserSvcSaveProfileRequest, UserSvcSetRolePermissionsRequest, UserSvcUpserPermissionRequest } from '../models/index';
+import type { UserSvcAddUserToOrganizationRequest, UserSvcChangePasswordAdminRequest, UserSvcChangePasswordRequest, UserSvcCreateOrganizationRequest, UserSvcCreateRoleRequest, UserSvcCreateRoleResponse, UserSvcCreateUserRequest, UserSvcGetPermissionsResponse, UserSvcGetPublicKeyResponse, UserSvcGetRolesResponse, UserSvcGetUsersRequest, UserSvcGetUsersResponse, UserSvcIsAuthorizedRequest, UserSvcIsAuthorizedResponse, UserSvcLoginRequest, UserSvcLoginResponse, UserSvcReadUserByTokenResponse, UserSvcRegisterRequest, UserSvcSaveProfileRequest, UserSvcSetRolePermissionsRequest, UserSvcUpserPermissionRequest } from '../models/index';
 export interface AddPermissionToRoleRequest {
     roleId: string;
     permissionId: string;
@@ -54,7 +54,7 @@ export interface LoginRequest {
     request: UserSvcLoginRequest;
 }
 export interface ReadUserByTokenRequest {
-    body: UserSvcReadUserByTokenRequest;
+    body: object;
 }
 export interface RegisterRequest {
     body: UserSvcRegisterRequest;

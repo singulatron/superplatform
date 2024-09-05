@@ -102,7 +102,6 @@ export * from './userSvcLoginRequest';
 export * from './userSvcLoginResponse';
 export * from './userSvcOrganization';
 export * from './userSvcPermission';
-export * from './userSvcReadUserByTokenRequest';
 export * from './userSvcReadUserByTokenResponse';
 export * from './userSvcRegisterRequest';
 export * from './userSvcRole';
@@ -226,7 +225,6 @@ import { UserSvcLoginRequest } from './userSvcLoginRequest';
 import { UserSvcLoginResponse } from './userSvcLoginResponse';
 import { UserSvcOrganization } from './userSvcOrganization';
 import { UserSvcPermission } from './userSvcPermission';
-import { UserSvcReadUserByTokenRequest } from './userSvcReadUserByTokenRequest';
 import { UserSvcReadUserByTokenResponse } from './userSvcReadUserByTokenResponse';
 import { UserSvcRegisterRequest } from './userSvcRegisterRequest';
 import { UserSvcRole } from './userSvcRole';
@@ -353,7 +351,6 @@ let typeMap: {[index: string]: any} = {
     "UserSvcLoginResponse": UserSvcLoginResponse,
     "UserSvcOrganization": UserSvcOrganization,
     "UserSvcPermission": UserSvcPermission,
-    "UserSvcReadUserByTokenRequest": UserSvcReadUserByTokenRequest,
     "UserSvcReadUserByTokenResponse": UserSvcReadUserByTokenResponse,
     "UserSvcRegisterRequest": UserSvcRegisterRequest,
     "UserSvcRole": UserSvcRole,

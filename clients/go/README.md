@@ -246,7 +246,6 @@ Class | Method | HTTP request | Description
  - [UserSvcLoginResponse](docs/UserSvcLoginResponse.md)
  - [UserSvcOrganization](docs/UserSvcOrganization.md)
  - [UserSvcPermission](docs/UserSvcPermission.md)
- - [UserSvcReadUserByTokenRequest](docs/UserSvcReadUserByTokenRequest.md)
  - [UserSvcReadUserByTokenResponse](docs/UserSvcReadUserByTokenResponse.md)
  - [UserSvcRegisterRequest](docs/UserSvcRegisterRequest.md)
  - [UserSvcRole](docs/UserSvcRole.md)

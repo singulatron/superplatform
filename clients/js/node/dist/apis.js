@@ -119,7 +119,6 @@ require('./userSvcLoginRequest.js');
 require('./userSvcLoginResponse.js');
 require('./userSvcOrganization.js');
 require('./userSvcPermission.js');
-require('./userSvcReadUserByTokenRequest.js');
 require('./userSvcReadUserByTokenResponse.js');
 require('./userSvcRegisterRequest.js');
 require('./userSvcRole.js');
@@ -58464,7 +58463,7 @@ class UserSvcApi {
                 uri: localVarPath,
                 useQuerystring: this._useQuerystring,
                 json: true,
-                body: models.ObjectSerializer.serialize(body, "UserSvcReadUserByTokenRequest")
+                body: models.ObjectSerializer.serialize(body, "object")
             };
             let authenticationPromise = Promise.resolve();
             if (this.authentications.BearerAuth.apiKey) {

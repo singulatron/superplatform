@@ -12,6 +12,7 @@ import (
 	"net/http"
 
 	user "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	sdk "github.com/singulatron/singulatron/sdk/go"
 )
 
 // @ID readUserByToken
@@ -22,23 +23,21 @@ import (
 // @Produce json
 // @Param body body user.ReadUserByTokenRequest true "Read User By Token Request"
 // @Success 200 {object} user.ReadUserByTokenResponse
-// @Failure 400 {object} user.ErrorResponse "Invalid JSON"
+// @Failure 400 {object} user.ErrorResponse "Token Missing"
 // @Failure 500 {object} user.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
 // @Router /user-svc/user/by-token [post]
 func (s *UserService) ReadUserByToken(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	req := user.ReadUserByTokenRequest{}
-	err := json.NewDecoder(r.Body).Decode(&req)
-	if err != nil {
+	token, exists := sdk.TokenFromRequest(r)
+	if !exists {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(`Invalid JSON`))
+		w.Write([]byte(`Token Missing`))
 		return
 	}
-	defer r.Body.Close()
 
-	usr, err := s.readUserByToken(req.Token)
+	usr, err := s.readUserByToken(token)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(err.Error()))

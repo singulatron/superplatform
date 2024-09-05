@@ -21,7 +21,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import * as runtime from '../runtime';
-import { UserSvcAddUserToOrganizationRequestToJSON, UserSvcChangePasswordAdminRequestToJSON, UserSvcChangePasswordRequestToJSON, UserSvcCreateOrganizationRequestToJSON, UserSvcCreateRoleRequestToJSON, UserSvcCreateRoleResponseFromJSON, UserSvcCreateUserRequestToJSON, UserSvcGetPermissionsResponseFromJSON, UserSvcGetPublicKeyResponseFromJSON, UserSvcGetRolesResponseFromJSON, UserSvcGetUsersRequestToJSON, UserSvcGetUsersResponseFromJSON, UserSvcIsAuthorizedRequestToJSON, UserSvcIsAuthorizedResponseFromJSON, UserSvcLoginRequestToJSON, UserSvcLoginResponseFromJSON, UserSvcReadUserByTokenRequestToJSON, UserSvcReadUserByTokenResponseFromJSON, UserSvcRegisterRequestToJSON, UserSvcSaveProfileRequestToJSON, UserSvcSetRolePermissionsRequestToJSON, UserSvcUpserPermissionRequestToJSON, } from '../models/index';
+import { UserSvcAddUserToOrganizationRequestToJSON, UserSvcChangePasswordAdminRequestToJSON, UserSvcChangePasswordRequestToJSON, UserSvcCreateOrganizationRequestToJSON, UserSvcCreateRoleRequestToJSON, UserSvcCreateRoleResponseFromJSON, UserSvcCreateUserRequestToJSON, UserSvcGetPermissionsResponseFromJSON, UserSvcGetPublicKeyResponseFromJSON, UserSvcGetRolesResponseFromJSON, UserSvcGetUsersRequestToJSON, UserSvcGetUsersResponseFromJSON, UserSvcIsAuthorizedRequestToJSON, UserSvcIsAuthorizedResponseFromJSON, UserSvcLoginRequestToJSON, UserSvcLoginResponseFromJSON, UserSvcReadUserByTokenResponseFromJSON, UserSvcRegisterRequestToJSON, UserSvcSaveProfileRequestToJSON, UserSvcSetRolePermissionsRequestToJSON, UserSvcUpserPermissionRequestToJSON, } from '../models/index';
 /**
  *
  */
@@ -553,7 +553,7 @@ export class UserSvcApi extends runtime.BaseAPI {
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,
-                body: UserSvcReadUserByTokenRequestToJSON(requestParameters['body']),
+                body: requestParameters['body'],
             }, initOverrides);
             return new runtime.JSONApiResponse(response, (jsonValue) => UserSvcReadUserByTokenResponseFromJSON(jsonValue));
         });

@@ -120,7 +120,6 @@ require('./userSvcLoginRequest.js');
 require('./userSvcLoginResponse.js');
 require('./userSvcOrganization.js');
 require('./userSvcPermission.js');
-require('./userSvcReadUserByTokenRequest.js');
 require('./userSvcReadUserByTokenResponse.js');
 require('./userSvcRegisterRequest.js');
 require('./userSvcRole.js');

@@ -104,7 +104,6 @@ import './UserSvcIsAuthorizedResponse.mjs';
 import './UserSvcLoginRequest.mjs';
 import './UserSvcLoginResponse.mjs';
 import './UserSvcAuthToken.mjs';
-import './UserSvcReadUserByTokenRequest.mjs';
 import './UserSvcReadUserByTokenResponse.mjs';
 import './UserSvcOrganization.mjs';
 import './UserSvcRegisterRequest.mjs';

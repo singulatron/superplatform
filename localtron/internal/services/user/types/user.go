@@ -153,9 +153,7 @@ func (c *User) GetUpdatedAt() string {
 	return c.Id
 }
 
-type ReadUserByTokenRequest struct {
-	Token string `json:"token,omitempty"`
-}
+type ReadUserByTokenRequest struct{}
 
 type ReadUserByTokenResponse struct {
 	User                 *User           `json:"user,omitempty"`

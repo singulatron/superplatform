@@ -91,22 +91,3 @@ func RegisterUser(router *router.Router, slug, password, username string) (strin
 
 	return *loginRsp.Token.Token, nil
 }
-
-func RegisteredUserClient(router *router.Router, slug, password, username string) (*client.APIClient, error) {
-	token, err := RegisterUser(router, slug, password, username)
-	if err != nil {
-		return nil, err
-	}
-
-	return client.NewAPIClient(&client.Configuration{
-		Servers: client.ServerConfigurations{
-			{
-				URL:         router.Address(),
-				Description: "Default server",
-			},
-		},
-		DefaultHeader: map[string]string{
-			"Authorization": "Bearer " + token,
-		},
-	}), nil
-}

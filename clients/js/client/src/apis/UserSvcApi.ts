@@ -32,7 +32,6 @@ import type {
   UserSvcIsAuthorizedResponse,
   UserSvcLoginRequest,
   UserSvcLoginResponse,
-  UserSvcReadUserByTokenRequest,
   UserSvcReadUserByTokenResponse,
   UserSvcRegisterRequest,
   UserSvcSaveProfileRequest,
@@ -74,8 +73,6 @@ import {
     UserSvcLoginRequestToJSON,
     UserSvcLoginResponseFromJSON,
     UserSvcLoginResponseToJSON,
-    UserSvcReadUserByTokenRequestFromJSON,
-    UserSvcReadUserByTokenRequestToJSON,
     UserSvcReadUserByTokenResponseFromJSON,
     UserSvcReadUserByTokenResponseToJSON,
     UserSvcRegisterRequestFromJSON,
@@ -144,7 +141,7 @@ export interface LoginRequest {
 }
 
 export interface ReadUserByTokenRequest {
-    body: UserSvcReadUserByTokenRequest;
+    body: object;
 }
 
 export interface RegisterRequest {
@@ -808,7 +805,7 @@ export class UserSvcApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: UserSvcReadUserByTokenRequestToJSON(requestParameters['body']),
+            body: requestParameters['body'] as any,
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => UserSvcReadUserByTokenResponseFromJSON(jsonValue));

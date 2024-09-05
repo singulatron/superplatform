@@ -2272,11 +2272,11 @@ func (a *UserSvcAPIService) LoginExecute(r ApiLoginRequest) (*UserSvcLoginRespon
 type ApiReadUserByTokenRequest struct {
 	ctx context.Context
 	ApiService *UserSvcAPIService
-	body *UserSvcReadUserByTokenRequest
+	body *map[string]interface{}
 }
 
 // Read User By Token Request
-func (r ApiReadUserByTokenRequest) Body(body UserSvcReadUserByTokenRequest) ApiReadUserByTokenRequest {
+func (r ApiReadUserByTokenRequest) Body(body map[string]interface{}) ApiReadUserByTokenRequest {
 	r.body = &body
 	return r
 }
