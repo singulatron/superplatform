@@ -9,7 +9,20 @@ import (
 	"github.com/singulatron/singulatron/sdk/go/router"
 )
 
-func AdminClient(url string, username, password string) (*client.APIClient, error) {
+func Client(url string) *client.APIClient {
+	cli := client.NewAPIClient(&client.Configuration{
+		Servers: client.ServerConfigurations{
+			{
+				URL:         url,
+				Description: "Default server",
+			},
+		},
+	})
+
+	return cli
+}
+
+func AdminClient(url string) (*client.APIClient, string, error) {
 	cli := client.NewAPIClient(&client.Configuration{
 		Servers: client.ServerConfigurations{
 			{
@@ -20,14 +33,27 @@ func AdminClient(url string, username, password string) (*client.APIClient, erro
 	})
 	userSvc := cli.UserSvcAPI
 
-	adminLoginRsp, _, err := userSvc.Login(context.Background()).Request(clients.UserSvcLoginRequest{
+	adminLoginRsp, _, err := userSvc.Login(context.Background()).Request(client.UserSvcLoginRequest{
 		Slug:     client.PtrString("singulatron"),
 		Password: client.PtrString("changeme"),
 	}).Execute()
 	if err != nil {
-		return nil, err
+		return nil, "", err
 	}
 
+	adminClient := client.NewAPIClient(&client.Configuration{
+		Servers: client.ServerConfigurations{
+			{
+				URL:         url,
+				Description: "Default server",
+			},
+		},
+		DefaultHeader: map[string]string{
+			"Authorization": "Bearer " + *adminLoginRsp.Token.Token,
+		},
+	})
+
+	return adminClient, *adminLoginRsp.Token.Token, nil
 }
 
 func MakeClients(router *router.Router, num int) ([]*client.APIClient, error) {

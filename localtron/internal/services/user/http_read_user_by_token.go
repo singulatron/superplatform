@@ -21,7 +21,6 @@ import (
 // @Tags User Svc
 // @Accept json
 // @Produce json
-// @Param body body user.ReadUserByTokenRequest true "Read User By Token Request"
 // @Success 200 {object} user.ReadUserByTokenResponse
 // @Failure 400 {object} user.ErrorResponse "Token Missing"
 // @Failure 500 {object} user.ErrorResponse "Internal Server Error"

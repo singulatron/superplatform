@@ -3174,17 +3174,6 @@ const docTemplate = `{
                 ],
                 "summary": "Read User by Token",
                 "operationId": "readUserByToken",
-                "parameters": [
-                    {
-                        "description": "Read User By Token Request",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/user_svc.ReadUserByTokenRequest"
-                        }
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -5125,9 +5114,6 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
-        },
-        "user_svc.ReadUserByTokenRequest": {
-            "type": "object"
         },
         "user_svc.ReadUserByTokenResponse": {
             "type": "object",

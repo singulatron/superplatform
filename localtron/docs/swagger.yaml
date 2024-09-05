@@ -1247,8 +1247,6 @@ definitions:
       updatedAt:
         type: string
     type: object
-  user_svc.ReadUserByTokenRequest:
-    type: object
   user_svc.ReadUserByTokenResponse:
     properties:
       activeOrganizationId:
@@ -3516,13 +3514,6 @@ paths:
       - application/json
       description: Retrieve user information based on an authentication token.
       operationId: readUserByToken
-      parameters:
-      - description: Read User By Token Request
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/user_svc.ReadUserByTokenRequest'
       produces:
       - application/json
       responses:
