@@ -426,31 +426,31 @@ func TestInClause(t *testing.T, store DataStore) {
 	require.NoError(t, err)
 
 	// Test IN clause with string slice
-	results, err := store.Query(IsInList(Field("Name"), []string{"Alice", "Bob"})).Find()
+	results, err := store.Query(IsInList(Field("Name"), "Alice", "Bob")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 2)
 	require.Contains(t, results, obj1)
 	require.Contains(t, results, obj2)
 
 	// Test IN clause with int slice
-	results, err = store.Query(IsInList(Field("Value"), []int{10, 30})).Find()
+	results, err = store.Query(IsInList(Field("Value"), 10, 30)).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 2)
 	require.Contains(t, results, obj1)
 	require.Contains(t, results, obj3)
 
 	// Test IN clause with empty slice (should return no results)
-	results, err = store.Query(IsInList(Field("Age"), []int{})).Find()
+	results, err = store.Query(IsInList(Field("Age"))).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 0)
 
 	// Test IN clause with one element slice
-	results, err = store.Query(IsInList(Field("Age"), []int{30})).Find()
+	results, err = store.Query(IsInList(Field("Age"), 30)).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Contains(t, results, obj2)
 
-	results, err = store.Query(IsInList(Field("NamedType"), []NamedString{NamedStringTwo})).Find()
+	results, err = store.Query(IsInList(Field("NamedType"), NamedStringTwo)).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Contains(t, results, obj2)
@@ -484,31 +484,31 @@ func TestPointerInClause(t *testing.T, store DataStore) {
 	require.NoError(t, err)
 
 	// Test IN clause with string slice
-	results, err := store.Query(IsInList(Field("Name"), []string{"Alice", "Bob"})).Find()
+	results, err := store.Query(IsInList(Field("Name"), "Alice", "Bob")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 2)
 	require.Contains(t, results, obj1)
 	require.Contains(t, results, obj2)
 
 	// Test IN clause with int slice
-	results, err = store.Query(IsInList(Field("Value"), []int{10, 30})).Find()
+	results, err = store.Query(IsInList(Field("Value"), 10, 30)).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 2)
 	require.Contains(t, results, obj1)
 	require.Contains(t, results, obj3)
 
 	// Test IN clause with empty slice (should return no results)
-	results, err = store.Query(IsInList(Field("Age"), []int{})).Find()
+	results, err = store.Query(IsInList(Field("Age"))).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 0)
 
 	// Test IN clause with one element slice
-	results, err = store.Query(IsInList(Field("Age"), []int{30})).Find()
+	results, err = store.Query(IsInList(Field("Age"), 30)).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Contains(t, results, obj2)
 
-	results, err = store.Query(IsInList(Field("NamedType"), []NamedString{NamedStringTwo})).Find()
+	results, err = store.Query(IsInList(Field("NamedType"), NamedStringTwo)).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Contains(t, results, obj2)
@@ -551,27 +551,27 @@ func TestDotNotation(t *testing.T, store DataStore) {
 	require.NoError(t, err)
 
 	// Test IN clause with string slice
-	results, err := store.Query(IsInList(Field("Friend.Name"), []string{"AliceFriend", "BobFriend"})).Find()
+	results, err := store.Query(IsInList(Field("Friend.Name"), "AliceFriend", "BobFriend")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 2)
 	require.Contains(t, results, obj1)
 	require.Contains(t, results, obj2)
 
-	results, err = store.Query(IsInList(Field("friendPointer.name"), []string{"AliceFriendP", "BobFriendP"})).Find()
+	results, err = store.Query(IsInList(Field("friendPointer.name"), "AliceFriendP", "BobFriendP")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 2)
 	require.Contains(t, results, obj1)
 	require.Contains(t, results, obj2)
 
 	// Test IN clause with int slice
-	results, err = store.Query(IsInList(Field("Friend.Age"), []int{26, 36})).Find()
+	results, err = store.Query(IsInList(Field("Friend.Age"), 26, 36)).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 2)
 	require.Contains(t, results, obj1)
 	require.Contains(t, results, obj3)
 
 	// Test IN clause with empty slice (should return no results)
-	results, err = store.Query(Equals(Field("Friend.Age"), []int{})).Find()
+	results, err = store.Query(Equals(Field("Friend.Age"), []any{})).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 0)
 
@@ -591,7 +591,7 @@ func TestDotNotation(t *testing.T, store DataStore) {
 	require.Equal(t, "Alice", results[2].(TestObject).Name)
 
 	// Test IN clause with one element slice
-	results, err = store.Query(IsInList(Field("FriendPointer.Age"), []int{32})).Find()
+	results, err = store.Query(IsInList(Field("FriendPointer.Age"), 32)).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Contains(t, results, obj2)
@@ -627,27 +627,27 @@ func TestPointerDotNotation(t *testing.T, store DataStore) {
 	require.NoError(t, err)
 
 	// Test IN clause with string slice
-	results, err := store.Query(IsInList(Field("Friend.Name"), []string{"AliceFriend", "BobFriend"})).Find()
+	results, err := store.Query(IsInList(Field("Friend.Name"), "AliceFriend", "BobFriend")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 2)
 	require.Contains(t, results, obj1)
 	require.Contains(t, results, obj2)
 
-	results, err = store.Query(IsInList(Field("friendPointer.name"), []string{"AliceFriendP", "BobFriendP"})).Find()
+	results, err = store.Query(IsInList(Field("friendPointer.name"), "AliceFriendP", "BobFriendP")).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 2)
 	require.Contains(t, results, obj1)
 	require.Contains(t, results, obj2)
 
 	// Test IN clause with int slice
-	results, err = store.Query(IsInList(Field("Friend.Age"), []int{26, 36})).Find()
+	results, err = store.Query(IsInList(Field("Friend.Age"), 26, 36)).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 2)
 	require.Contains(t, results, obj1)
 	require.Contains(t, results, obj3)
 
 	// Test IN clause with empty slice (should return no results)
-	results, err = store.Query(IsInList(Field("Friend.Age"), []int{})).Find()
+	results, err = store.Query(IsInList(Field("Friend.Age"))).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 0)
 
@@ -667,7 +667,7 @@ func TestPointerDotNotation(t *testing.T, store DataStore) {
 	require.Equal(t, "Alice", results[2].(*TestObject).Name)
 
 	// Test IN clause with one element slice
-	results, err = store.Query(IsInList(Field("FriendPointer.Age"), []int{32})).Find()
+	results, err = store.Query(IsInList(Field("FriendPointer.Age"), 32)).Find()
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	require.Contains(t, results, obj2)
