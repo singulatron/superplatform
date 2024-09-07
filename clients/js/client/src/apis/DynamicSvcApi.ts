@@ -51,7 +51,6 @@ export interface CreateObjectRequest {
 }
 
 export interface DeleteObjectsRequest {
-    objectId: string;
     body: DynamicSvcDeleteObjectRequest;
 }
 
@@ -120,13 +119,6 @@ export class DynamicSvcApi extends runtime.BaseAPI {
      * Delete a Generic Object
      */
     async deleteObjectsRaw(requestParameters: DeleteObjectsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
-        if (requestParameters['objectId'] == null) {
-            throw new runtime.RequiredError(
-                'objectId',
-                'Required parameter "objectId" was null or undefined when calling deleteObjects().'
-            );
-        }
-
         if (requestParameters['body'] == null) {
             throw new runtime.RequiredError(
                 'body',
@@ -145,7 +137,7 @@ export class DynamicSvcApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/dynamic-svc/objects/delete`.replace(`{${"objectId"}}`, encodeURIComponent(String(requestParameters['objectId']))),
+            path: `/dynamic-svc/objects/delete`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -166,7 +158,7 @@ export class DynamicSvcApi extends runtime.BaseAPI {
 
     /**
      * Retrieves objects from a specified table based on search criteria. Requires authorization and user authentication.   Use helper functions in your respective client library such as condition constructors (`equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
-     * Query Dynamic Objects
+     * Query Objects
      */
     async queryRaw(requestParameters: QueryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DynamicSvcQueryResponse>> {
         const queryParameters: any = {};
@@ -192,7 +184,7 @@ export class DynamicSvcApi extends runtime.BaseAPI {
 
     /**
      * Retrieves objects from a specified table based on search criteria. Requires authorization and user authentication.   Use helper functions in your respective client library such as condition constructors (`equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
-     * Query Dynamic Objects
+     * Query Objects
      */
     async query(requestParameters: QueryRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DynamicSvcQueryResponse> {
         const response = await this.queryRaw(requestParameters, initOverrides);
@@ -201,7 +193,7 @@ export class DynamicSvcApi extends runtime.BaseAPI {
 
     /**
      * Updates objects in a specified table based on provided conditions. Requires authorization and user authentication.
-     * Update Dynamic Objects
+     * Update Objects
      */
     async updateObjectsRaw(requestParameters: UpdateObjectsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
         if (requestParameters['body'] == null) {
@@ -234,7 +226,7 @@ export class DynamicSvcApi extends runtime.BaseAPI {
 
     /**
      * Updates objects in a specified table based on provided conditions. Requires authorization and user authentication.
-     * Update Dynamic Objects
+     * Update Objects
      */
     async updateObjects(requestParameters: UpdateObjectsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
         const response = await this.updateObjectsRaw(requestParameters, initOverrides);

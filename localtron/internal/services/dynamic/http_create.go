@@ -12,7 +12,7 @@ import (
 	"fmt"
 	"net/http"
 
-	generic "github.com/singulatron/singulatron/localtron/internal/services/dynamic/types"
+	dynamic "github.com/singulatron/singulatron/localtron/internal/services/dynamic/types"
 	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
 )
 
@@ -23,11 +23,11 @@ import (
 // @Tags Dynamic Svc
 // @Accept json
 // @Produce json
-// @Param body body generic.CreateObjectRequest true "Create request payload"
-// @Success 200 {object} generic.CreateObjectResponse "Success"
-// @Failure 400 {object} generic.ErrorResponse "Invalid JSON"
-// @Failure 401 {object} generic.ErrorResponse "Unauthorized"
-// @Failure 500 {object} generic.ErrorResponse "Internal Server Error"
+// @Param body body dynamic.CreateObjectRequest true "Create request payload"
+// @Success 200 {object} dynamic.CreateObjectResponse "Success"
+// @Failure 400 {object} dynamic.ErrorResponse "Invalid JSON"
+// @Failure 401 {object} dynamic.ErrorResponse "Unauthorized"
+// @Failure 500 {object} dynamic.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
 // @Router /dynamic-svc/object [post]
 func (g *DynamicService) Create(
@@ -37,7 +37,7 @@ func (g *DynamicService) Create(
 	w.Header().Set("Content-Type", "application/json")
 
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := g.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", generic.PermissionGenericCreate.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	err := g.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", dynamic.PermissionGenericCreate.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(err.Error()))
@@ -49,7 +49,7 @@ func (g *DynamicService) Create(
 		return
 	}
 
-	req := &generic.CreateObjectRequest{}
+	req := &dynamic.CreateObjectRequest{}
 	err = json.NewDecoder(r.Body).Decode(req)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -57,7 +57,22 @@ func (g *DynamicService) Create(
 		return
 	}
 	defer r.Body.Close()
-	req.Object.UserId = rsp.User.Id
+
+	for i, v := range req.Object.Readers {
+		if v == "_self" {
+			req.Object.Readers[i] = rsp.User.Id
+		}
+	}
+	for i, v := range req.Object.Writers {
+		if v == "_self" {
+			req.Object.Writers[i] = rsp.User.Id
+		}
+	}
+	for i, v := range req.Object.Deleters {
+		if v == "_self" {
+			req.Object.Deleters[i] = rsp.User.Id
+		}
+	}
 
 	err = g.create(req)
 	if err != nil {

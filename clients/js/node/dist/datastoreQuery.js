@@ -21,17 +21,17 @@ DatastoreQuery.attributeTypeMap = [
     {
         "name": "after",
         "baseName": "after",
-        "type": "Array<object>"
-    },
-    {
-        "name": "conditions",
-        "baseName": "conditions",
-        "type": "Array<DatastoreCondition>"
+        "type": "string"
     },
     {
         "name": "count",
         "baseName": "count",
         "type": "boolean"
+    },
+    {
+        "name": "filters",
+        "baseName": "filters",
+        "type": "Array<DatastoreFilter>"
     },
     {
         "name": "limit",

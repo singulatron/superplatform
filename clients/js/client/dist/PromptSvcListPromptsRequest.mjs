@@ -1,9 +1,6 @@
 import { DatastoreQueryFromJSON, DatastoreQueryToJSON } from './DatastoreQuery.mjs';
-import './DatastoreCondition.mjs';
-import './DatastoreEqualCondition.mjs';
-import './DatastoreFieldSelector.mjs';
-import './DatastoreContainsCondition.mjs';
-import './DatastoreStartsWithCondition.mjs';
+import './DatastoreFilter.mjs';
+import './DatastoreOp.mjs';
 import './DatastoreOrderBy.mjs';
 
 /* tslint:disable */

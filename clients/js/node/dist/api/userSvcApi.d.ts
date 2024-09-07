@@ -26,7 +26,6 @@ import { UserSvcIsAuthorizedRequest } from '../model/userSvcIsAuthorizedRequest'
 import { UserSvcIsAuthorizedResponse } from '../model/userSvcIsAuthorizedResponse';
 import { UserSvcLoginRequest } from '../model/userSvcLoginRequest';
 import { UserSvcLoginResponse } from '../model/userSvcLoginResponse';
-import { UserSvcReadUserByTokenRequest } from '../model/userSvcReadUserByTokenRequest';
 import { UserSvcReadUserByTokenResponse } from '../model/userSvcReadUserByTokenResponse';
 import { UserSvcRegisterRequest } from '../model/userSvcRegisterRequest';
 import { UserSvcSaveProfileRequest } from '../model/userSvcSaveProfileRequest';
@@ -110,7 +109,7 @@ export declare class UserSvcApi {
         body: object;
     }>;
     /**
-     * Allows a logged-in user to create a new organization. The user initiating the request will be assigned the role of admin for that organization. The initiating user will receive a dynamic role in the format `user-svc:org:$organization-slug:admin`, where `$organization-slug` is a unique identifier for the created organization. Dynamic roles are generated based on specific user-resource associations, offering more flexible permission management compared to static roles.
+     * Allows a logged-in user to create a new organization. The user initiating the request will be assigned the role of admin for that organization. The initiating user will receive a dynamic role in the format `user-svc:org:{organizationId}:admin`, where `$organization-slug` is a unique identifier for the created organization. Dynamic roles are generated based on specific user-resource associations, offering more flexible permission management compared to static roles.
      * @summary Create an Organization
      * @param request Create User Request
      */
@@ -254,9 +253,8 @@ export declare class UserSvcApi {
     /**
      * Retrieve user information based on an authentication token.
      * @summary Read User by Token
-     * @param body Read User By Token Request
      */
-    readUserByToken(body: UserSvcReadUserByTokenRequest, options?: {
+    readUserByToken(options?: {
         headers: {
             [name: string]: string;
         };

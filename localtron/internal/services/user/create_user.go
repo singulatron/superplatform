@@ -11,8 +11,8 @@ import (
 	"errors"
 	"time"
 
-	"github.com/google/uuid"
 	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	sdk "github.com/singulatron/singulatron/sdk/go"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
 )
 
@@ -31,7 +31,7 @@ func (s *UserService) createUser(user *usertypes.User, password string, roleIds 
 	}
 
 	_, contactExists, err := s.contactsStore.Query(
-		datastore.Equal(datastore.Field("id"), user.Contacts[0]),
+		datastore.Equals(datastore.Field("id"), user.Contacts[0]),
 	).FindOne()
 	if err != nil {
 		return err
@@ -46,11 +46,19 @@ func (s *UserService) createUser(user *usertypes.User, password string, roleIds 
 		return err
 	}
 
+	roleIdAnys := []any{}
+	for _, roleId := range roleIds {
+		roleIdAnys = append(roleIdAnys, roleId)
+	}
+
 	roles, err := s.rolesStore.Query(
-		datastore.Equal(datastore.Field("id"), roleIds),
+		datastore.IsInList(datastore.Field("id"), roleIdAnys...),
 	).Find()
 	if err != nil {
 		return err
+	}
+	if len(roles) == 0 {
+		return errors.New("no roles found")
 	}
 	if len(roles) < len(roleIds) {
 		return errors.New("some roles are not found")
@@ -58,7 +66,7 @@ func (s *UserService) createUser(user *usertypes.User, password string, roleIds 
 
 	user.PasswordHash = passwordHash
 	if user.Id == "" {
-		user.Id = uuid.NewString()
+		user.Id = sdk.Id("usr")
 	}
 
 	now := time.Now()

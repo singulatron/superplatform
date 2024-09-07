@@ -10,8 +10,8 @@ package userservice
 import (
 	"time"
 
-	"github.com/google/uuid"
 	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	sdk "github.com/singulatron/singulatron/sdk/go"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
 	"golang.org/x/crypto/bcrypt"
 
@@ -20,7 +20,7 @@ import (
 
 func (s *UserService) login(slug, password string) (*usertypes.AuthToken, error) {
 	userI, found, err := s.usersStore.Query(
-		datastore.Equal(datastore.Field("slug"), slug),
+		datastore.Equals(datastore.Field("slug"), slug),
 	).FindOne()
 	if err != nil {
 		return nil, err
@@ -54,7 +54,7 @@ func checkPasswordHash(password, hash string) bool {
 
 func (s *UserService) generateAuthToken(user *usertypes.User) (*usertypes.AuthToken, error) {
 	roleLinks, err := s.userRoleLinksStore.Query(
-		datastore.Equal(datastore.Field("userId"), user.Id),
+		datastore.Equals(datastore.Field("userId"), user.Id),
 	).Find()
 	if err != nil {
 		return nil, err
@@ -70,7 +70,7 @@ func (s *UserService) generateAuthToken(user *usertypes.User) (*usertypes.AuthTo
 	}
 
 	return &usertypes.AuthToken{
-		Id:        uuid.New().String(),
+		Id:        sdk.Id("tok"),
 		UserId:    user.Id,
 		Token:     token,
 		CreatedAt: time.Now(),

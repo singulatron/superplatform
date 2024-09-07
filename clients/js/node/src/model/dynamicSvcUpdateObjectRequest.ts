@@ -11,26 +11,26 @@
  */
 
 import { RequestFile } from './models';
-import { DatastoreCondition } from './datastoreCondition';
-import { DynamicSvcGenericObject } from './dynamicSvcGenericObject';
+import { DatastoreFilter } from './datastoreFilter';
+import { DynamicSvcObject } from './dynamicSvcObject';
 
 export class DynamicSvcUpdateObjectRequest {
-    'conditions'?: Array<DatastoreCondition>;
-    'object'?: DynamicSvcGenericObject;
+    'filters'?: Array<DatastoreFilter>;
+    'object'?: DynamicSvcObject;
     'table'?: string;
 
     static discriminator: string | undefined = undefined;
 
     static attributeTypeMap: Array<{name: string, baseName: string, type: string}> = [
         {
-            "name": "conditions",
-            "baseName": "conditions",
-            "type": "Array<DatastoreCondition>"
+            "name": "filters",
+            "baseName": "filters",
+            "type": "Array<DatastoreFilter>"
         },
         {
             "name": "object",
             "baseName": "object",
-            "type": "DynamicSvcGenericObject"
+            "type": "DynamicSvcObject"
         },
         {
             "name": "table",

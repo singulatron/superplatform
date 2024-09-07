@@ -16,7 +16,7 @@ import (
 
 func (s *UserService) readUserByToken(token string) (*usertypes.User, error) {
 	authTokenI, found, err := s.authTokensStore.Query(
-		datastore.Equal(datastore.Field("token"), token),
+		datastore.Equals(datastore.Field("token"), token),
 	).FindOne()
 	if err != nil {
 		return nil, err
@@ -28,7 +28,7 @@ func (s *UserService) readUserByToken(token string) (*usertypes.User, error) {
 	authToken := authTokenI.(*usertypes.AuthToken)
 
 	userI, found, err := s.usersStore.Query(
-		datastore.Equal(datastore.Field("id"), authToken.UserId),
+		datastore.Equals(datastore.Field("id"), authToken.UserId),
 	).FindOne()
 	if err != nil {
 		return nil, err
@@ -47,4 +47,44 @@ func (s *UserService) readUserByToken(token string) (*usertypes.User, error) {
 		UpdatedAt: user.UpdatedAt,
 	}
 	return ret, nil
+}
+
+func (s *UserService) getUserOrganizations(userId string) ([]*usertypes.Organization, string, error) {
+	links, err := s.organizationUserLinksStore.Query(
+		datastore.Equals(
+			datastore.Field("userId"),
+			userId,
+		),
+	).Find()
+	if err != nil {
+		return nil, "", err
+	}
+
+	organizationIds := []any{}
+	activeOrganizationId := ""
+	for _, linkI := range links {
+		link := linkI.(*usertypes.OrganizationUserLink)
+		if link.Active {
+			activeOrganizationId = link.OrganizationId
+		}
+		organizationIds = append(organizationIds, link.OrganizationId)
+	}
+
+	orgIs, err := s.organizationsStore.Query(
+		datastore.IsInList(
+			datastore.Field("id"),
+			organizationIds...,
+		),
+	).Find()
+	if err != nil {
+		return nil, "", err
+	}
+
+	orgs := []*usertypes.Organization{}
+	for _, orgI := range orgIs {
+		org := orgI.(*usertypes.Organization)
+		orgs = append(orgs, org)
+	}
+
+	return orgs, activeOrganizationId, nil
 }

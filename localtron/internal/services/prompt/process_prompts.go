@@ -16,9 +16,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/google/uuid"
 	"github.com/pkg/errors"
 
+	sdk "github.com/singulatron/singulatron/sdk/go"
 	"github.com/singulatron/singulatron/sdk/go/clients/llm"
 	"github.com/singulatron/singulatron/sdk/go/clients/stable_diffusion"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
@@ -65,7 +65,7 @@ func (p *PromptService) processNextPrompt() error {
 	defer p.runMutex.Unlock()
 
 	runningPrompts, err := p.promptsStore.Query(
-		datastore.Equal(datastore.Field("status"), prompttypes.PromptStatusRunning),
+		datastore.Equals(datastore.Field("status"), prompttypes.PromptStatusRunning),
 	).Find()
 	if err != nil {
 		return err
@@ -321,7 +321,7 @@ func (p *PromptService) processStableDiffusion(address string, fullPrompt string
 	}
 
 	asset := &apptypes.Asset{
-		Id:      uuid.New().String(),
+		Id:      sdk.Id("ast"),
 		Content: base64String,
 	}
 
@@ -338,7 +338,7 @@ func (p *PromptService) processStableDiffusion(address string, fullPrompt string
 
 	addMsgReq := chattypes.AddMessageRequest{
 		Message: &apptypes.Message{
-			Id:       uuid.New().String(),
+			Id:       sdk.Id("msg"),
 			ThreadId: currentPrompt.ThreadId,
 			Content:  "Sure, here is your image",
 			AssetIds: []string{asset.Id},
@@ -408,7 +408,7 @@ func (p *PromptService) processLlamaCpp(address string, fullPrompt string, curre
 
 			addMsgReq := chattypes.AddMessageRequest{
 				Message: &apptypes.Message{
-					Id:       uuid.New().String(),
+					Id:       sdk.Id("msg"),
 					ThreadId: currentPrompt.ThreadId,
 					Content:  llmResponseToText(p.StreamManager.History[currentPrompt.ThreadId]),
 				},

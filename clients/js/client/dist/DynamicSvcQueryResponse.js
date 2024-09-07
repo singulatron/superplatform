@@ -1,6 +1,6 @@
 'use strict';
 
-var DynamicSvcGenericObject = require('./DynamicSvcGenericObject.js');
+var DynamicSvcObject = require('./DynamicSvcObject.js');
 
 /* tslint:disable */
 /* eslint-disable */
@@ -29,7 +29,7 @@ function DynamicSvcQueryResponseFromJSONTyped(json, ignoreDiscriminator) {
         return json;
     }
     return {
-        'objects': json['objects'] == null ? undefined : (json['objects'].map(DynamicSvcGenericObject.DynamicSvcGenericObjectFromJSON)),
+        'objects': json['objects'] == null ? undefined : (json['objects'].map(DynamicSvcObject.DynamicSvcObjectFromJSON)),
     };
 }
 function DynamicSvcQueryResponseToJSON(value) {
@@ -37,7 +37,7 @@ function DynamicSvcQueryResponseToJSON(value) {
         return value;
     }
     return {
-        'objects': value['objects'] == null ? undefined : (value['objects'].map(DynamicSvcGenericObject.DynamicSvcGenericObjectToJSON)),
+        'objects': value['objects'] == null ? undefined : (value['objects'].map(DynamicSvcObject.DynamicSvcObjectToJSON)),
     };
 }
 

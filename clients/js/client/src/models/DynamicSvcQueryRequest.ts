@@ -28,16 +28,16 @@ import {
 export interface DynamicSvcQueryRequest {
     /**
      * 
-     * @type {boolean}
-     * @memberof DynamicSvcQueryRequest
-     */
-    _public?: boolean;
-    /**
-     * 
      * @type {DatastoreQuery}
      * @memberof DynamicSvcQueryRequest
      */
     query?: DatastoreQuery;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof DynamicSvcQueryRequest
+     */
+    readers?: Array<string>;
     /**
      * 
      * @type {string}
@@ -63,8 +63,8 @@ export function DynamicSvcQueryRequestFromJSONTyped(json: any, ignoreDiscriminat
     }
     return {
         
-        '_public': json['public'] == null ? undefined : json['public'],
         'query': json['query'] == null ? undefined : DatastoreQueryFromJSON(json['query']),
+        'readers': json['readers'] == null ? undefined : json['readers'],
         'table': json['table'] == null ? undefined : json['table'],
     };
 }
@@ -75,8 +75,8 @@ export function DynamicSvcQueryRequestToJSON(value?: DynamicSvcQueryRequest | nu
     }
     return {
         
-        'public': value['_public'],
         'query': DatastoreQueryToJSON(value['query']),
+        'readers': value['readers'],
         'table': value['table'],
     };
 }

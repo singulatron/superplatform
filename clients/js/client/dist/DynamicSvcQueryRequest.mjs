@@ -1,9 +1,6 @@
 import { DatastoreQueryFromJSON, DatastoreQueryToJSON } from './DatastoreQuery.mjs';
-import './DatastoreCondition.mjs';
-import './DatastoreEqualCondition.mjs';
-import './DatastoreFieldSelector.mjs';
-import './DatastoreContainsCondition.mjs';
-import './DatastoreStartsWithCondition.mjs';
+import './DatastoreFilter.mjs';
+import './DatastoreOp.mjs';
 import './DatastoreOrderBy.mjs';
 
 /* tslint:disable */
@@ -33,8 +30,8 @@ function DynamicSvcQueryRequestFromJSONTyped(json, ignoreDiscriminator) {
         return json;
     }
     return {
-        '_public': json['public'] == null ? undefined : json['public'],
         'query': json['query'] == null ? undefined : DatastoreQueryFromJSON(json['query']),
+        'readers': json['readers'] == null ? undefined : json['readers'],
         'table': json['table'] == null ? undefined : json['table'],
     };
 }
@@ -43,8 +40,8 @@ function DynamicSvcQueryRequestToJSON(value) {
         return value;
     }
     return {
-        'public': value['_public'],
         'query': DatastoreQueryToJSON(value['query']),
+        'readers': value['readers'],
         'table': value['table'],
     };
 }

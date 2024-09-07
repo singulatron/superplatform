@@ -172,12 +172,10 @@ export class DynamicSvcApi {
     /**
      * Removes a dynamic object from the system based on the provided conditions. Requires authorization and user authentication.
      * @summary Delete a Generic Object
-     * @param objectId Object ID
      * @param body Delete request payload
      */
-    public async deleteObjects (objectId: string, body: DynamicSvcDeleteObjectRequest, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: object;  }> {
-        const localVarPath = this.basePath + '/dynamic-svc/objects/delete'
-            .replace('{' + 'objectId' + '}', encodeURIComponent(String(objectId)));
+    public async deleteObjects (body: DynamicSvcDeleteObjectRequest, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: object;  }> {
+        const localVarPath = this.basePath + '/dynamic-svc/objects/delete';
         let localVarQueryParameters: any = {};
         let localVarHeaderParams: any = (<any>Object).assign({}, this._defaultHeaders);
         const produces = ['application/json'];
@@ -188,11 +186,6 @@ export class DynamicSvcApi {
             localVarHeaderParams.Accept = produces.join(',');
         }
         let localVarFormParams: any = {};
-
-        // verify required parameter 'objectId' is not null or undefined
-        if (objectId === null || objectId === undefined) {
-            throw new Error('Required parameter objectId was null or undefined when calling deleteObjects.');
-        }
 
         // verify required parameter 'body' is not null or undefined
         if (body === null || body === undefined) {
@@ -250,7 +243,7 @@ export class DynamicSvcApi {
     }
     /**
      * Retrieves objects from a specified table based on search criteria. Requires authorization and user authentication.   Use helper functions in your respective client library such as condition constructors (`equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
-     * @summary Query Dynamic Objects
+     * @summary Query Objects
      * @param body Query Request
      */
     public async query (body?: DynamicSvcQueryRequest, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: DynamicSvcQueryResponse;  }> {
@@ -317,7 +310,7 @@ export class DynamicSvcApi {
     }
     /**
      * Updates objects in a specified table based on provided conditions. Requires authorization and user authentication.
-     * @summary Update Dynamic Objects
+     * @summary Update Objects
      * @param body Update request payload
      */
     public async updateObjects (body: DynamicSvcUpdateObjectRequest, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: object;  }> {

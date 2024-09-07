@@ -32,7 +32,6 @@ import type {
   UserSvcIsAuthorizedResponse,
   UserSvcLoginRequest,
   UserSvcLoginResponse,
-  UserSvcReadUserByTokenRequest,
   UserSvcReadUserByTokenResponse,
   UserSvcRegisterRequest,
   UserSvcSaveProfileRequest,
@@ -74,8 +73,6 @@ import {
     UserSvcLoginRequestToJSON,
     UserSvcLoginResponseFromJSON,
     UserSvcLoginResponseToJSON,
-    UserSvcReadUserByTokenRequestFromJSON,
-    UserSvcReadUserByTokenRequestToJSON,
     UserSvcReadUserByTokenResponseFromJSON,
     UserSvcReadUserByTokenResponseToJSON,
     UserSvcRegisterRequestFromJSON,
@@ -141,10 +138,6 @@ export interface IsAuthorizedRequest {
 
 export interface LoginRequest {
     request: UserSvcLoginRequest;
-}
-
-export interface ReadUserByTokenRequest {
-    body: UserSvcReadUserByTokenRequest;
 }
 
 export interface RegisterRequest {
@@ -357,7 +350,7 @@ export class UserSvcApi extends runtime.BaseAPI {
     }
 
     /**
-     * Allows a logged-in user to create a new organization. The user initiating the request will be assigned the role of admin for that organization. The initiating user will receive a dynamic role in the format `user-svc:org:$organization-slug:admin`, where `$organization-slug` is a unique identifier for the created organization. Dynamic roles are generated based on specific user-resource associations, offering more flexible permission management compared to static roles.
+     * Allows a logged-in user to create a new organization. The user initiating the request will be assigned the role of admin for that organization. The initiating user will receive a dynamic role in the format `user-svc:org:{organizationId}:admin`, where `$organization-slug` is a unique identifier for the created organization. Dynamic roles are generated based on specific user-resource associations, offering more flexible permission management compared to static roles.
      * Create an Organization
      */
     async createOrganizationRaw(requestParameters: CreateOrganizationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
@@ -390,7 +383,7 @@ export class UserSvcApi extends runtime.BaseAPI {
     }
 
     /**
-     * Allows a logged-in user to create a new organization. The user initiating the request will be assigned the role of admin for that organization. The initiating user will receive a dynamic role in the format `user-svc:org:$organization-slug:admin`, where `$organization-slug` is a unique identifier for the created organization. Dynamic roles are generated based on specific user-resource associations, offering more flexible permission management compared to static roles.
+     * Allows a logged-in user to create a new organization. The user initiating the request will be assigned the role of admin for that organization. The initiating user will receive a dynamic role in the format `user-svc:org:{organizationId}:admin`, where `$organization-slug` is a unique identifier for the created organization. Dynamic roles are generated based on specific user-resource associations, offering more flexible permission management compared to static roles.
      * Create an Organization
      */
     async createOrganization(requestParameters: CreateOrganizationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
@@ -785,19 +778,10 @@ export class UserSvcApi extends runtime.BaseAPI {
      * Retrieve user information based on an authentication token.
      * Read User by Token
      */
-    async readUserByTokenRaw(requestParameters: ReadUserByTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserSvcReadUserByTokenResponse>> {
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling readUserByToken().'
-            );
-        }
-
+    async readUserByTokenRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserSvcReadUserByTokenResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.apiKey) {
             headerParameters["Authorization"] = await this.configuration.apiKey("Authorization"); // BearerAuth authentication
@@ -808,7 +792,6 @@ export class UserSvcApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: UserSvcReadUserByTokenRequestToJSON(requestParameters['body']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => UserSvcReadUserByTokenResponseFromJSON(jsonValue));
@@ -818,8 +801,8 @@ export class UserSvcApi extends runtime.BaseAPI {
      * Retrieve user information based on an authentication token.
      * Read User by Token
      */
-    async readUserByToken(requestParameters: ReadUserByTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserSvcReadUserByTokenResponse> {
-        const response = await this.readUserByTokenRaw(requestParameters, initOverrides);
+    async readUserByToken(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserSvcReadUserByTokenResponse> {
+        const response = await this.readUserByTokenRaw(initOverrides);
         return await response.value();
     }
 

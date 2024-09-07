@@ -11,7 +11,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 const exampleResponse = `
@@ -41,12 +41,12 @@ const exampleResponse = `
 func TestResponseUnmarshal(t *testing.T) {
 	x := map[string]any{}
 	err := json.Unmarshal([]byte(exampleResponse), &x)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	rsp := PredictResponse{}
 	err = json.Unmarshal([]byte(exampleResponse), &rsp)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
-	assert.Equal(t, 2, len(rsp.Data), rsp.Data)
-	assert.Equal(t, "/tmp/tmpj74v2rly/tmpr1li4qkz.png", rsp.Data[0].FileData[0].Name)
+	require.Equal(t, 2, len(rsp.Data), rsp.Data)
+	require.Equal(t, "/tmp/tmpj74v2rly/tmpr1li4qkz.png", rsp.Data[0].FileData[0].Name)
 }

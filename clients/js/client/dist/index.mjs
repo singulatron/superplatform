@@ -26,13 +26,10 @@ export { ConfigSvcDownloadServiceConfigFromJSON, ConfigSvcDownloadServiceConfigF
 export { ConfigSvcGetConfigResponseFromJSON, ConfigSvcGetConfigResponseFromJSONTyped, ConfigSvcGetConfigResponseToJSON, instanceOfConfigSvcGetConfigResponse } from './ConfigSvcGetConfigResponse.mjs';
 export { ConfigSvcModelServiceConfigFromJSON, ConfigSvcModelServiceConfigFromJSONTyped, ConfigSvcModelServiceConfigToJSON, instanceOfConfigSvcModelServiceConfig } from './ConfigSvcModelServiceConfig.mjs';
 export { ConfigSvcSaveConfigRequestFromJSON, ConfigSvcSaveConfigRequestFromJSONTyped, ConfigSvcSaveConfigRequestToJSON, instanceOfConfigSvcSaveConfigRequest } from './ConfigSvcSaveConfigRequest.mjs';
-export { DatastoreConditionFromJSON, DatastoreConditionFromJSONTyped, DatastoreConditionToJSON, instanceOfDatastoreCondition } from './DatastoreCondition.mjs';
-export { DatastoreContainsConditionFromJSON, DatastoreContainsConditionFromJSONTyped, DatastoreContainsConditionToJSON, instanceOfDatastoreContainsCondition } from './DatastoreContainsCondition.mjs';
-export { DatastoreEqualConditionFromJSON, DatastoreEqualConditionFromJSONTyped, DatastoreEqualConditionToJSON, instanceOfDatastoreEqualCondition } from './DatastoreEqualCondition.mjs';
-export { DatastoreFieldSelectorFromJSON, DatastoreFieldSelectorFromJSONTyped, DatastoreFieldSelectorToJSON, instanceOfDatastoreFieldSelector } from './DatastoreFieldSelector.mjs';
+export { DatastoreFilterFromJSON, DatastoreFilterFromJSONTyped, DatastoreFilterToJSON, instanceOfDatastoreFilter } from './DatastoreFilter.mjs';
+export { DatastoreOp, DatastoreOpFromJSON, DatastoreOpFromJSONTyped, DatastoreOpToJSON, instanceOfDatastoreOp } from './DatastoreOp.mjs';
 export { DatastoreOrderByFromJSON, DatastoreOrderByFromJSONTyped, DatastoreOrderByToJSON, instanceOfDatastoreOrderBy } from './DatastoreOrderBy.mjs';
 export { DatastoreQueryFromJSON, DatastoreQueryFromJSONTyped, DatastoreQueryToJSON, instanceOfDatastoreQuery } from './DatastoreQuery.mjs';
-export { DatastoreStartsWithConditionFromJSON, DatastoreStartsWithConditionFromJSONTyped, DatastoreStartsWithConditionToJSON, instanceOfDatastoreStartsWithCondition } from './DatastoreStartsWithCondition.mjs';
 export { DockerSvcContainerIsRunningResponseFromJSON, DockerSvcContainerIsRunningResponseFromJSONTyped, DockerSvcContainerIsRunningResponseToJSON, instanceOfDockerSvcContainerIsRunningResponse } from './DockerSvcContainerIsRunningResponse.mjs';
 export { DockerSvcDockerInfoFromJSON, DockerSvcDockerInfoFromJSONTyped, DockerSvcDockerInfoToJSON, instanceOfDockerSvcDockerInfo } from './DockerSvcDockerInfo.mjs';
 export { DockerSvcErrorResponseFromJSON, DockerSvcErrorResponseFromJSONTyped, DockerSvcErrorResponseToJSON, instanceOfDockerSvcErrorResponse } from './DockerSvcErrorResponse.mjs';
@@ -52,8 +49,8 @@ export { DynamicSvcCreateObjectRequestFromJSON, DynamicSvcCreateObjectRequestFro
 export { DynamicSvcCreateObjectResponseFromJSON, DynamicSvcCreateObjectResponseFromJSONTyped, DynamicSvcCreateObjectResponseToJSON, instanceOfDynamicSvcCreateObjectResponse } from './DynamicSvcCreateObjectResponse.mjs';
 export { DynamicSvcDeleteObjectRequestFromJSON, DynamicSvcDeleteObjectRequestFromJSONTyped, DynamicSvcDeleteObjectRequestToJSON, instanceOfDynamicSvcDeleteObjectRequest } from './DynamicSvcDeleteObjectRequest.mjs';
 export { DynamicSvcErrorResponseFromJSON, DynamicSvcErrorResponseFromJSONTyped, DynamicSvcErrorResponseToJSON, instanceOfDynamicSvcErrorResponse } from './DynamicSvcErrorResponse.mjs';
-export { DynamicSvcGenericObjectFromJSON, DynamicSvcGenericObjectFromJSONTyped, DynamicSvcGenericObjectToJSON, instanceOfDynamicSvcGenericObject } from './DynamicSvcGenericObject.mjs';
-export { DynamicSvcGenericObjectCreateFieldsFromJSON, DynamicSvcGenericObjectCreateFieldsFromJSONTyped, DynamicSvcGenericObjectCreateFieldsToJSON, instanceOfDynamicSvcGenericObjectCreateFields } from './DynamicSvcGenericObjectCreateFields.mjs';
+export { DynamicSvcObjectFromJSON, DynamicSvcObjectFromJSONTyped, DynamicSvcObjectToJSON, instanceOfDynamicSvcObject } from './DynamicSvcObject.mjs';
+export { DynamicSvcObjectCreateFieldsFromJSON, DynamicSvcObjectCreateFieldsFromJSONTyped, DynamicSvcObjectCreateFieldsToJSON, instanceOfDynamicSvcObjectCreateFields } from './DynamicSvcObjectCreateFields.mjs';
 export { DynamicSvcQueryRequestFromJSON, DynamicSvcQueryRequestFromJSONTyped, DynamicSvcQueryRequestToJSON, instanceOfDynamicSvcQueryRequest } from './DynamicSvcQueryRequest.mjs';
 export { DynamicSvcQueryResponseFromJSON, DynamicSvcQueryResponseFromJSONTyped, DynamicSvcQueryResponseToJSON, instanceOfDynamicSvcQueryResponse } from './DynamicSvcQueryResponse.mjs';
 export { DynamicSvcUpdateObjectRequestFromJSON, DynamicSvcUpdateObjectRequestFromJSONTyped, DynamicSvcUpdateObjectRequestToJSON, instanceOfDynamicSvcUpdateObjectRequest } from './DynamicSvcUpdateObjectRequest.mjs';
@@ -113,8 +110,8 @@ export { UserSvcIsAuthorizedRequestFromJSON, UserSvcIsAuthorizedRequestFromJSONT
 export { UserSvcIsAuthorizedResponseFromJSON, UserSvcIsAuthorizedResponseFromJSONTyped, UserSvcIsAuthorizedResponseToJSON, instanceOfUserSvcIsAuthorizedResponse } from './UserSvcIsAuthorizedResponse.mjs';
 export { UserSvcLoginRequestFromJSON, UserSvcLoginRequestFromJSONTyped, UserSvcLoginRequestToJSON, instanceOfUserSvcLoginRequest } from './UserSvcLoginRequest.mjs';
 export { UserSvcLoginResponseFromJSON, UserSvcLoginResponseFromJSONTyped, UserSvcLoginResponseToJSON, instanceOfUserSvcLoginResponse } from './UserSvcLoginResponse.mjs';
+export { UserSvcOrganizationFromJSON, UserSvcOrganizationFromJSONTyped, UserSvcOrganizationToJSON, instanceOfUserSvcOrganization } from './UserSvcOrganization.mjs';
 export { UserSvcPermissionFromJSON, UserSvcPermissionFromJSONTyped, UserSvcPermissionToJSON, instanceOfUserSvcPermission } from './UserSvcPermission.mjs';
-export { UserSvcReadUserByTokenRequestFromJSON, UserSvcReadUserByTokenRequestFromJSONTyped, UserSvcReadUserByTokenRequestToJSON, instanceOfUserSvcReadUserByTokenRequest } from './UserSvcReadUserByTokenRequest.mjs';
 export { UserSvcReadUserByTokenResponseFromJSON, UserSvcReadUserByTokenResponseFromJSONTyped, UserSvcReadUserByTokenResponseToJSON, instanceOfUserSvcReadUserByTokenResponse } from './UserSvcReadUserByTokenResponse.mjs';
 export { UserSvcRegisterRequestFromJSON, UserSvcRegisterRequestFromJSONTyped, UserSvcRegisterRequestToJSON, instanceOfUserSvcRegisterRequest } from './UserSvcRegisterRequest.mjs';
 export { UserSvcRoleFromJSON, UserSvcRoleFromJSONTyped, UserSvcRoleToJSON, instanceOfUserSvcRole } from './UserSvcRole.mjs';

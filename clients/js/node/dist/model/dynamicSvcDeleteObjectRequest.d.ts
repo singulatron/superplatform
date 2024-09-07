@@ -9,9 +9,9 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { DatastoreCondition } from './datastoreCondition';
+import { DatastoreFilter } from './datastoreFilter';
 export declare class DynamicSvcDeleteObjectRequest {
-    'conditions'?: Array<DatastoreCondition>;
+    'filters'?: Array<DatastoreFilter>;
     'table'?: string;
     static discriminator: string | undefined;
     static attributeTypeMap: Array<{

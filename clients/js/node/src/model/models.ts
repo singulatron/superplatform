@@ -16,13 +16,10 @@ export * from './configSvcDownloadServiceConfig';
 export * from './configSvcGetConfigResponse';
 export * from './configSvcModelServiceConfig';
 export * from './configSvcSaveConfigRequest';
-export * from './datastoreCondition';
-export * from './datastoreContainsCondition';
-export * from './datastoreEqualCondition';
-export * from './datastoreFieldSelector';
+export * from './datastoreFilter';
+export * from './datastoreOp';
 export * from './datastoreOrderBy';
 export * from './datastoreQuery';
-export * from './datastoreStartsWithCondition';
 export * from './dockerSvcContainerIsRunningResponse';
 export * from './dockerSvcDockerInfo';
 export * from './dockerSvcErrorResponse';
@@ -42,8 +39,8 @@ export * from './dynamicSvcCreateObjectRequest';
 export * from './dynamicSvcCreateObjectResponse';
 export * from './dynamicSvcDeleteObjectRequest';
 export * from './dynamicSvcErrorResponse';
-export * from './dynamicSvcGenericObject';
-export * from './dynamicSvcGenericObjectCreateFields';
+export * from './dynamicSvcObject';
+export * from './dynamicSvcObjectCreateFields';
 export * from './dynamicSvcQueryRequest';
 export * from './dynamicSvcQueryResponse';
 export * from './dynamicSvcUpdateObjectRequest';
@@ -103,8 +100,8 @@ export * from './userSvcIsAuthorizedRequest';
 export * from './userSvcIsAuthorizedResponse';
 export * from './userSvcLoginRequest';
 export * from './userSvcLoginResponse';
+export * from './userSvcOrganization';
 export * from './userSvcPermission';
-export * from './userSvcReadUserByTokenRequest';
 export * from './userSvcReadUserByTokenResponse';
 export * from './userSvcRegisterRequest';
 export * from './userSvcRole';
@@ -142,13 +139,10 @@ import { ConfigSvcDownloadServiceConfig } from './configSvcDownloadServiceConfig
 import { ConfigSvcGetConfigResponse } from './configSvcGetConfigResponse';
 import { ConfigSvcModelServiceConfig } from './configSvcModelServiceConfig';
 import { ConfigSvcSaveConfigRequest } from './configSvcSaveConfigRequest';
-import { DatastoreCondition } from './datastoreCondition';
-import { DatastoreContainsCondition } from './datastoreContainsCondition';
-import { DatastoreEqualCondition } from './datastoreEqualCondition';
-import { DatastoreFieldSelector } from './datastoreFieldSelector';
+import { DatastoreFilter } from './datastoreFilter';
+import { DatastoreOp } from './datastoreOp';
 import { DatastoreOrderBy } from './datastoreOrderBy';
 import { DatastoreQuery } from './datastoreQuery';
-import { DatastoreStartsWithCondition } from './datastoreStartsWithCondition';
 import { DockerSvcContainerIsRunningResponse } from './dockerSvcContainerIsRunningResponse';
 import { DockerSvcDockerInfo } from './dockerSvcDockerInfo';
 import { DockerSvcErrorResponse } from './dockerSvcErrorResponse';
@@ -168,8 +162,8 @@ import { DynamicSvcCreateObjectRequest } from './dynamicSvcCreateObjectRequest';
 import { DynamicSvcCreateObjectResponse } from './dynamicSvcCreateObjectResponse';
 import { DynamicSvcDeleteObjectRequest } from './dynamicSvcDeleteObjectRequest';
 import { DynamicSvcErrorResponse } from './dynamicSvcErrorResponse';
-import { DynamicSvcGenericObject } from './dynamicSvcGenericObject';
-import { DynamicSvcGenericObjectCreateFields } from './dynamicSvcGenericObjectCreateFields';
+import { DynamicSvcObject } from './dynamicSvcObject';
+import { DynamicSvcObjectCreateFields } from './dynamicSvcObjectCreateFields';
 import { DynamicSvcQueryRequest } from './dynamicSvcQueryRequest';
 import { DynamicSvcQueryResponse } from './dynamicSvcQueryResponse';
 import { DynamicSvcUpdateObjectRequest } from './dynamicSvcUpdateObjectRequest';
@@ -229,8 +223,8 @@ import { UserSvcIsAuthorizedRequest } from './userSvcIsAuthorizedRequest';
 import { UserSvcIsAuthorizedResponse } from './userSvcIsAuthorizedResponse';
 import { UserSvcLoginRequest } from './userSvcLoginRequest';
 import { UserSvcLoginResponse } from './userSvcLoginResponse';
+import { UserSvcOrganization } from './userSvcOrganization';
 import { UserSvcPermission } from './userSvcPermission';
-import { UserSvcReadUserByTokenRequest } from './userSvcReadUserByTokenRequest';
 import { UserSvcReadUserByTokenResponse } from './userSvcReadUserByTokenResponse';
 import { UserSvcRegisterRequest } from './userSvcRegisterRequest';
 import { UserSvcRole } from './userSvcRole';
@@ -252,6 +246,7 @@ let primitives = [
                  ];
 
 let enumsMap: {[index: string]: any} = {
+        "DatastoreOp": DatastoreOp,
         "PolicySvcEntity": PolicySvcEntity,
         "PolicySvcScope": PolicySvcScope,
         "PolicySvcTemplateId": PolicySvcTemplateId,
@@ -275,13 +270,9 @@ let typeMap: {[index: string]: any} = {
     "ConfigSvcGetConfigResponse": ConfigSvcGetConfigResponse,
     "ConfigSvcModelServiceConfig": ConfigSvcModelServiceConfig,
     "ConfigSvcSaveConfigRequest": ConfigSvcSaveConfigRequest,
-    "DatastoreCondition": DatastoreCondition,
-    "DatastoreContainsCondition": DatastoreContainsCondition,
-    "DatastoreEqualCondition": DatastoreEqualCondition,
-    "DatastoreFieldSelector": DatastoreFieldSelector,
+    "DatastoreFilter": DatastoreFilter,
     "DatastoreOrderBy": DatastoreOrderBy,
     "DatastoreQuery": DatastoreQuery,
-    "DatastoreStartsWithCondition": DatastoreStartsWithCondition,
     "DockerSvcContainerIsRunningResponse": DockerSvcContainerIsRunningResponse,
     "DockerSvcDockerInfo": DockerSvcDockerInfo,
     "DockerSvcErrorResponse": DockerSvcErrorResponse,
@@ -301,8 +292,8 @@ let typeMap: {[index: string]: any} = {
     "DynamicSvcCreateObjectResponse": DynamicSvcCreateObjectResponse,
     "DynamicSvcDeleteObjectRequest": DynamicSvcDeleteObjectRequest,
     "DynamicSvcErrorResponse": DynamicSvcErrorResponse,
-    "DynamicSvcGenericObject": DynamicSvcGenericObject,
-    "DynamicSvcGenericObjectCreateFields": DynamicSvcGenericObjectCreateFields,
+    "DynamicSvcObject": DynamicSvcObject,
+    "DynamicSvcObjectCreateFields": DynamicSvcObjectCreateFields,
     "DynamicSvcQueryRequest": DynamicSvcQueryRequest,
     "DynamicSvcQueryResponse": DynamicSvcQueryResponse,
     "DynamicSvcUpdateObjectRequest": DynamicSvcUpdateObjectRequest,
@@ -358,8 +349,8 @@ let typeMap: {[index: string]: any} = {
     "UserSvcIsAuthorizedResponse": UserSvcIsAuthorizedResponse,
     "UserSvcLoginRequest": UserSvcLoginRequest,
     "UserSvcLoginResponse": UserSvcLoginResponse,
+    "UserSvcOrganization": UserSvcOrganization,
     "UserSvcPermission": UserSvcPermission,
-    "UserSvcReadUserByTokenRequest": UserSvcReadUserByTokenRequest,
     "UserSvcReadUserByTokenResponse": UserSvcReadUserByTokenResponse,
     "UserSvcRegisterRequest": UserSvcRegisterRequest,
     "UserSvcRole": UserSvcRole,

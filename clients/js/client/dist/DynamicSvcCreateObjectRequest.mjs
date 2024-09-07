@@ -1,4 +1,4 @@
-import { DynamicSvcGenericObjectCreateFieldsFromJSON, DynamicSvcGenericObjectCreateFieldsToJSON } from './DynamicSvcGenericObjectCreateFields.mjs';
+import { DynamicSvcObjectCreateFieldsFromJSON, DynamicSvcObjectCreateFieldsToJSON } from './DynamicSvcObjectCreateFields.mjs';
 
 /* tslint:disable */
 /* eslint-disable */
@@ -27,7 +27,7 @@ function DynamicSvcCreateObjectRequestFromJSONTyped(json, ignoreDiscriminator) {
         return json;
     }
     return {
-        'object': json['object'] == null ? undefined : DynamicSvcGenericObjectCreateFieldsFromJSON(json['object']),
+        'object': json['object'] == null ? undefined : DynamicSvcObjectCreateFieldsFromJSON(json['object']),
     };
 }
 function DynamicSvcCreateObjectRequestToJSON(value) {
@@ -35,7 +35,7 @@ function DynamicSvcCreateObjectRequestToJSON(value) {
         return value;
     }
     return {
-        'object': DynamicSvcGenericObjectCreateFieldsToJSON(value['object']),
+        'object': DynamicSvcObjectCreateFieldsToJSON(value['object']),
     };
 }
 

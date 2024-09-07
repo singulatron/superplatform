@@ -8,6 +8,7 @@
 package datastore
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"time"
@@ -37,7 +38,7 @@ type DataStore interface {
 	/* Create or Update many objects */
 	UpsertMany(objs []Row) error
 
-	Query(condition Condition, conditions ...Condition) QueryBuilder
+	Query(filters ...Filter) QueryBuilder
 
 	BeginTransaction() (DataStore, error)
 	Commit() error
@@ -48,7 +49,7 @@ type DataStore interface {
 }
 
 type QueryBuilder interface {
-	OrderBy(option OrderBy, options ...OrderBy) QueryBuilder
+	OrderBy(options ...OrderBy) QueryBuilder
 	Limit(limit int64) QueryBuilder
 	After(value ...any) QueryBuilder
 
@@ -65,74 +66,113 @@ type QueryBuilder interface {
 	Delete() error
 }
 
-type FieldSelector struct {
-	// Field matchies a single field
-	Field string `json:"field,omitempty"`
+type Op string
 
-	// OneOf matches a number of fields
-	OneOf []string `json:"oneOf,omitempty"`
+const (
+	// OpEquals selects objects where the value of a field equals (=) the specified value in the query.
+	// Example: `"fieldValue" = "value"`
+	// SQL Equivalent: `SELECT * FROM table WHERE field = 'value';`
+	// Elasticsearch Equivalent:
+	// {
+	//   "query": {
+	//     "term": {
+	//       "field": "value"
+	//     }
+	//   }
+	// }
+	OpEquals Op = "equals"
 
-	// Any matches any fields in the object
-	Any bool `json:"any,omitempty"`
+	// OpContainsSubstring selects all objects where the field's value contains a particular substring.
+	// Example: `"fieldValue" CONTAINS_SUBSTRING "subString"`
+	// SQL Equivalent: `SELECT * FROM table WHERE field LIKE '%subString%';`
+	// Elasticsearch Equivalent:
+	// {
+	//   "query": {
+	//     "wildcard": {
+	//       "field": "*subString*"
+	//     }
+	//   }
+	// }
+	OpContainsSubstring Op = "containsSubstring"
+
+	// OpStartsWith selects all objects where the field's value starts with a particular string.
+	// Example: `"fieldValue" STARTS WITH "prefix"`
+	// SQL Equivalent: `SELECT * FROM table WHERE field LIKE 'prefix%';`
+	// Elasticsearch Equivalent:
+	// {
+	//   "query": {
+	//     "prefix": {
+	//       "field": "prefix"
+	//     }
+	//   }
+	// }
+	OpStartsWith Op = "startsWith"
+
+	// OpIntersects selects objects where the slice value of a field intersects with the slice value in the query.
+	// Example: `["fieldValue2", "fieldValue3"] INTERSECTS ["value1", "value2"]`
+	// SQL Equivalent: `SELECT * FROM table WHERE field && ARRAY['value1', 'value2'];` (PostgreSQL syntax)
+	// Elasticsearch Equivalent:
+	// {
+	//   "query": {
+	//     "terms_set": {
+	//       "field": {
+	//         "terms": ["value1", "value2"],
+	//         "minimum_should_match_script": {
+	//           "source": "1"
+	//         }
+	//       }
+	//     }
+	//   }
+	// }
+	OpIntersects Op = "intersects"
+
+	// OpIsInList selects objects where the value of a field is one of the specified values in a list.
+	// Example: `"fieldValue" IS_IN_LIST ["value1", "value2", "value3"]`
+	// SQL Equivalent: `SELECT * FROM table WHERE field IN ('value1', 'value2', 'value3');`
+	// Elasticsearch Equivalent:
+	// {
+	//   "query": {
+	//     "terms": {
+	//       "field": ["value1", "value2", "value3"]
+	//     }
+	//   }
+	// }
+	OpIsInList Op = "isInList"
+)
+
+type Filter struct {
+	Fields []string `json:"fields,omitempty"`
+
+	// JSONValues is a JSON marshalled array of values.
+	// It's JSON marhalled due to the limitations of the
+	// Swaggo -> OpenAPI 2.0 -> OpenAPI Go generator toolchain.
+	JSONValues string `json:"values,omitempty"`
+
+	Op Op `json:"op"`
 }
 
-type Condition struct {
-	// Equal condition returns objects where value of a field equals (=) to the specified value in the query.
-	Equal *EqualCondition `json:"equal,omitempty"`
-
-	// All condition returns all objects.
-	All *AllCondition `json:"all,omitempty"`
-
-	// StartsWith condition returns all objects where the field(s) values start with a particular string.
-	StartsWith *StartsWithCondition `json:"startsWith,omitempty"`
-
-	// Contains condition returns all objects where the field(s) values contain a particular string.
-	Contains *ContainsCondition `json:"contains,omitempty"`
-}
-
-func (c Condition) FieldIs(fieldName string) bool {
-	if c.Equal != nil && c.Equal.Selector != nil && c.Equal.Selector.Field == fieldName {
-		return true
+func (c Filter) FieldIs(fieldName string) bool {
+	for _, field := range c.Fields {
+		if fieldName == field {
+			return true
+		}
 	}
-	if c.StartsWith != nil && c.StartsWith.Selector != nil && c.StartsWith.Selector.Field == fieldName {
-		return true
-	}
-	if c.Contains != nil && c.Contains.Selector != nil && c.Contains.Selector.Field == fieldName {
-		return true
-	}
-
 	return false
-}
-
-type EqualCondition struct {
-	// Selector selects one, more or all fields
-	Selector *FieldSelector `json:"selector,omitempty"`
-	Value    any            `json:"value,omitempty"`
-}
-
-type StartsWithCondition struct {
-	// Selector selects one, more or all fields
-	Selector *FieldSelector `json:"selector,omitempty"`
-	Value    any            `json:"value,omitempty"`
-}
-
-type ContainsCondition struct {
-	// Selector selects one, more or all fields
-	Selector *FieldSelector `json:"selector,omitempty"`
-	Value    any            `json:"value,omitempty"`
 }
 
 // Query as a type is not used in the DataStore interface but mostly to accept
 // a DataStore query through a HTTP API
 type Query struct {
-	// Conditions are filtering options of a query. It is advised to use
-	// It's advised to use helper functions in your respective client library such as condition constructors (`all`, `equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
-	Conditions []Condition `json:"conditions,omitempty"`
+	// Filters are filtering options of a query. It is advised to use
+	// It's advised to use helper functions in your respective client library such as filter constructors (`all`, `equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
+	Filters []Filter `json:"filters,omitempty"`
 
-	// After is used for paginations. Instead of offset-based pagination,
-	// we support cursor-based pagination because it works better in a scalable,
-	// distributed environment.
-	After []any `json:"after,omitempty"`
+	// JSONAfter is used for cursor-based pagination, which is more
+	// effective in scalable and distributed environments compared
+	// to offset-based pagination.
+	//
+	// JSONAfter is a JSON encoded string due to limitations of Swaggo (ie. []interface{} generates []map[stirng]interface{}).
+	JSONAfter string `json:"after,omitempty"`
 
 	// Limit the number of records in the result set.
 	Limit int64 `json:"limit,omitempty"`
@@ -140,13 +180,13 @@ type Query struct {
 	// OrderBys order the result set.
 	OrderBys []OrderBy `json:"orderBys,omitempty"`
 
-	// Count true means return the count of the dataset filtered by Conditions
+	// Count true means return the count of the dataset filtered by Filters
 	// without after or limit.
 	Count bool `json:"count,omitempty"`
 }
 
-func (q *Query) HasFieldCondition(fieldName string) bool {
-	for _, v := range q.Conditions {
+func (q *Query) HasFieldFilter(fieldName string) bool {
+	for _, v := range q.Filters {
 		if v.FieldIs(fieldName) {
 			return true
 		}
@@ -181,67 +221,73 @@ func OrderByField(field string, desc bool) OrderBy {
 	}
 }
 
-type AllCondition struct {
+type AllMatch struct {
 }
 
-func Equal(selector *FieldSelector, value any) Condition {
-	return Condition{
-		Equal: &EqualCondition{
-			Selector: selector,
-			Value:    value,
-		},
+func marshal(value any) string {
+	jsonBytes, _ := json.Marshal(value)
+
+	return string(jsonBytes)
+}
+
+func Equals(fields []string, value any) Filter {
+	return Filter{
+		Fields:     fields,
+		JSONValues: marshal([]any{value}),
+		Op:         OpEquals,
 	}
 }
 
-func StartsWith(selector *FieldSelector, value any) Condition {
-	return Condition{
-		StartsWith: &StartsWithCondition{
-			Selector: selector,
-			Value:    value,
-		},
+func Intersects(fields []string, values []any) Filter {
+	return Filter{
+		Fields:     fields,
+		JSONValues: marshal(values),
+		Op:         OpIntersects,
 	}
 }
 
-func Contains(selector *FieldSelector, value any) Condition {
-	return Condition{
-		Contains: &ContainsCondition{
-			Selector: selector,
-			Value:    value,
-		},
+func StartsWith(fields []string, value any) Filter {
+	return Filter{
+		Fields:     fields,
+		JSONValues: marshal([]any{value}),
+		Op:         OpStartsWith,
 	}
 }
 
-func All() Condition {
-	return Condition{
-		All: &AllCondition{},
+func ContainsSubstring(fields []string, value any) Filter {
+	return Filter{
+		Fields:     fields,
+		JSONValues: marshal([]any{value}),
+		Op:         OpContainsSubstring,
 	}
 }
 
-func Id(id any) Condition {
-	return Condition{
-		Equal: &EqualCondition{
-			Selector: Field("id"),
-			Value:    id,
-		},
+func IsInList(fields []string, values ...any) Filter {
+	return Filter{
+		Fields:     fields,
+		JSONValues: marshal(values),
+		Op:         OpIsInList,
 	}
 }
 
-func Field(fieldName string) *FieldSelector {
-	return &FieldSelector{
-		Field: fieldName,
+func Id(id any) Filter {
+	return Filter{
+		Fields:     []string{"id"},
+		JSONValues: marshal([]any{id}),
+		Op:         OpEquals,
 	}
 }
 
-func Fields(fieldNames []string) *FieldSelector {
-	return &FieldSelector{
-		OneOf: fieldNames,
-	}
+func Field(fieldName string) []string {
+	return []string{fieldName}
 }
 
-func AnyField() *FieldSelector {
-	return &FieldSelector{
-		Any: true,
-	}
+func Fields(fieldNames ...string) []string {
+	return fieldNames
+}
+
+func AnyField() []string {
+	return nil
 }
 
 var dateFormats = []string{

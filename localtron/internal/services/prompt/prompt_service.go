@@ -60,7 +60,7 @@ func NewPromptService(
 	}
 
 	promptIs, err := service.promptsStore.Query(
-		datastore.Equal(datastore.Field("status"), prompttypes.PromptStatusRunning),
+		datastore.Equals(datastore.Field("status"), prompttypes.PromptStatusRunning),
 	).Find()
 	if err != nil {
 		return nil, err
@@ -71,7 +71,7 @@ func NewPromptService(
 	}
 
 	err = service.promptsStore.Query(
-		datastore.Equal(datastore.Field("id"), promptIds),
+		datastore.Equals(datastore.Field("id"), promptIds),
 	).UpdateFields(map[string]any{
 		"status": prompttypes.PromptStatusScheduled,
 	})

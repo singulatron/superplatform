@@ -15,7 +15,6 @@ import { UserSvcIsAuthorizedRequestToJSON } from './UserSvcIsAuthorizedRequest.m
 import { UserSvcIsAuthorizedResponseFromJSON } from './UserSvcIsAuthorizedResponse.mjs';
 import { UserSvcLoginRequestToJSON } from './UserSvcLoginRequest.mjs';
 import { UserSvcLoginResponseFromJSON } from './UserSvcLoginResponse.mjs';
-import { UserSvcReadUserByTokenRequestToJSON } from './UserSvcReadUserByTokenRequest.mjs';
 import { UserSvcReadUserByTokenResponseFromJSON } from './UserSvcReadUserByTokenResponse.mjs';
 import { UserSvcRegisterRequestToJSON } from './UserSvcRegisterRequest.mjs';
 import { UserSvcSaveProfileRequestToJSON } from './UserSvcSaveProfileRequest.mjs';
@@ -26,13 +25,11 @@ import './UserSvcUser.mjs';
 import './UserSvcContact.mjs';
 import './UserSvcPermission.mjs';
 import './DatastoreQuery.mjs';
-import './DatastoreCondition.mjs';
-import './DatastoreEqualCondition.mjs';
-import './DatastoreFieldSelector.mjs';
-import './DatastoreContainsCondition.mjs';
-import './DatastoreStartsWithCondition.mjs';
+import './DatastoreFilter.mjs';
+import './DatastoreOp.mjs';
 import './DatastoreOrderBy.mjs';
 import './UserSvcAuthToken.mjs';
+import './UserSvcOrganization.mjs';
 
 /* tslint:disable */
 /* eslint-disable */
@@ -196,7 +193,7 @@ class UserSvcApi extends BaseAPI {
         });
     }
     /**
-     * Allows a logged-in user to create a new organization. The user initiating the request will be assigned the role of admin for that organization. The initiating user will receive a dynamic role in the format `user-svc:org:$organization-slug:admin`, where `$organization-slug` is a unique identifier for the created organization. Dynamic roles are generated based on specific user-resource associations, offering more flexible permission management compared to static roles.
+     * Allows a logged-in user to create a new organization. The user initiating the request will be assigned the role of admin for that organization. The initiating user will receive a dynamic role in the format `user-svc:org:{organizationId}:admin`, where `$organization-slug` is a unique identifier for the created organization. Dynamic roles are generated based on specific user-resource associations, offering more flexible permission management compared to static roles.
      * Create an Organization
      */
     createOrganizationRaw(requestParameters, initOverrides) {
@@ -221,7 +218,7 @@ class UserSvcApi extends BaseAPI {
         });
     }
     /**
-     * Allows a logged-in user to create a new organization. The user initiating the request will be assigned the role of admin for that organization. The initiating user will receive a dynamic role in the format `user-svc:org:$organization-slug:admin`, where `$organization-slug` is a unique identifier for the created organization. Dynamic roles are generated based on specific user-resource associations, offering more flexible permission management compared to static roles.
+     * Allows a logged-in user to create a new organization. The user initiating the request will be assigned the role of admin for that organization. The initiating user will receive a dynamic role in the format `user-svc:org:{organizationId}:admin`, where `$organization-slug` is a unique identifier for the created organization. Dynamic roles are generated based on specific user-resource associations, offering more flexible permission management compared to static roles.
      * Create an Organization
      */
     createOrganization(requestParameters, initOverrides) {
@@ -562,14 +559,10 @@ class UserSvcApi extends BaseAPI {
      * Retrieve user information based on an authentication token.
      * Read User by Token
      */
-    readUserByTokenRaw(requestParameters, initOverrides) {
+    readUserByTokenRaw(initOverrides) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (requestParameters['body'] == null) {
-                throw new RequiredError('body', 'Required parameter "body" was null or undefined when calling readUserByToken().');
-            }
             const queryParameters = {};
             const headerParameters = {};
-            headerParameters['Content-Type'] = 'application/json';
             if (this.configuration && this.configuration.apiKey) {
                 headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
             }
@@ -578,7 +571,6 @@ class UserSvcApi extends BaseAPI {
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,
-                body: UserSvcReadUserByTokenRequestToJSON(requestParameters['body']),
             }, initOverrides);
             return new JSONApiResponse(response, (jsonValue) => UserSvcReadUserByTokenResponseFromJSON(jsonValue));
         });
@@ -587,9 +579,9 @@ class UserSvcApi extends BaseAPI {
      * Retrieve user information based on an authentication token.
      * Read User by Token
      */
-    readUserByToken(requestParameters, initOverrides) {
+    readUserByToken(initOverrides) {
         return __awaiter(this, void 0, void 0, function* () {
-            const response = yield this.readUserByTokenRaw(requestParameters, initOverrides);
+            const response = yield this.readUserByTokenRaw(initOverrides);
             return yield response.value();
         });
     }

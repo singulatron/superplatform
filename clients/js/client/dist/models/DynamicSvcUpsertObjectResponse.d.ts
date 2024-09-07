@@ -9,7 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import type { DynamicSvcGenericObject } from './DynamicSvcGenericObject';
+import type { DynamicSvcObject } from './DynamicSvcObject';
 /**
  *
  * @export
@@ -18,10 +18,10 @@ import type { DynamicSvcGenericObject } from './DynamicSvcGenericObject';
 export interface DynamicSvcUpsertObjectResponse {
     /**
      *
-     * @type {DynamicSvcGenericObject}
+     * @type {DynamicSvcObject}
      * @memberof DynamicSvcUpsertObjectResponse
      */
-    object?: DynamicSvcGenericObject;
+    object?: DynamicSvcObject;
 }
 /**
  * Check if a given object implements the DynamicSvcUpsertObjectResponse interface.

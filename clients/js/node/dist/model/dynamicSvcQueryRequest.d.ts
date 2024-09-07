@@ -11,8 +11,8 @@
  */
 import { DatastoreQuery } from './datastoreQuery';
 export declare class DynamicSvcQueryRequest {
-    '_public'?: boolean;
     'query'?: DatastoreQuery;
+    'readers'?: Array<string>;
     'table'?: string;
     static discriminator: string | undefined;
     static attributeTypeMap: Array<{

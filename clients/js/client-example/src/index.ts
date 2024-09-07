@@ -17,9 +17,7 @@ async function start() {
     apiKey: token,
   });
 
-  const readTokenResponse = await userService.readUserByToken({
-    body: { token: token! },
-  });
+  const readTokenResponse = await userService.readUserByToken();
   if (readTokenResponse.user?.slug !== "singulatron") {
     process.exit(1);
   }

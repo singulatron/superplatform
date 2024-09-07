@@ -13,7 +13,7 @@ import (
 	"log/slog"
 	"time"
 
-	"github.com/google/uuid"
+	sdk "github.com/singulatron/singulatron/sdk/go"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
 	"github.com/singulatron/singulatron/sdk/go/logger"
 
@@ -26,14 +26,14 @@ func (a *ChatService) addMessage(chatMessage *chattypes.Message) error {
 		return errors.New("empty chat message thread id")
 	}
 	if chatMessage.Id == "" {
-		chatMessage.Id = uuid.New().String()
+		chatMessage.Id = sdk.Id("msg")
 	}
 	if chatMessage.CreatedAt.IsZero() {
 		chatMessage.CreatedAt = time.Now()
 	}
 
 	threads, err := a.threadsStore.Query(
-		datastore.Equal(datastore.Field("id"), chatMessage.ThreadId),
+		datastore.Equals(datastore.Field("id"), chatMessage.ThreadId),
 	).Find()
 	if err != nil {
 		return err
@@ -61,6 +61,6 @@ func (a *ChatService) addMessage(chatMessage *chattypes.Message) error {
 	}
 
 	return a.messagesStore.Query(
-		datastore.Equal(datastore.Field("id"), chatMessage.Id),
+		datastore.Equals(datastore.Field("id"), chatMessage.Id),
 	).Upsert(chatMessage)
 }

@@ -6,7 +6,6 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
 
 	"github.com/singulatron/singulatron/localtron/internal/di"
@@ -39,7 +38,7 @@ func TestMessageCreatesThread(t *testing.T) {
 	t.Run("no thread id", func(t *testing.T) {
 		req := &chattypes.AddMessageRequest{
 			Message: &chattypes.Message{
-				Id:      uuid.New().String(),
+				Id:      sdk.Id("msg"),
 				Content: "hi there",
 			},
 		}
@@ -50,7 +49,7 @@ func TestMessageCreatesThread(t *testing.T) {
 	t.Run("thread does not exist", func(t *testing.T) {
 		req := &chattypes.AddMessageRequest{
 			Message: &chattypes.Message{
-				Id:       uuid.New().String(),
+				Id:       sdk.Id("msg"),
 				ThreadId: "1",
 				Content:  "hi there",
 			},
@@ -61,7 +60,7 @@ func TestMessageCreatesThread(t *testing.T) {
 	})
 
 	t.Run("no user id should not fail", func(t *testing.T) {
-		tid := uuid.New().String()
+		tid := sdk.Id("thr")
 		title := "Test Thread Title"
 
 		req := &chattypes.AddThreadRequest{
@@ -79,7 +78,7 @@ func TestMessageCreatesThread(t *testing.T) {
 	var threadId string
 
 	t.Run("create thread", func(t *testing.T) {
-		tid := uuid.New().String()
+		tid := sdk.Id("thr")
 		title := "Test Thread Title"
 
 		req := &chattypes.AddThreadRequest{
@@ -103,7 +102,7 @@ func TestMessageCreatesThread(t *testing.T) {
 	t.Run("no user id", func(t *testing.T) {
 		req := chattypes.AddMessageRequest{
 			Message: &chattypes.Message{
-				Id:       uuid.New().String(),
+				Id:       sdk.Id("msg"),
 				ThreadId: threadId,
 				Content:  "hi there",
 			}}

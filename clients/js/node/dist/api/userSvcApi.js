@@ -372,7 +372,7 @@ export class UserSvcApi {
         });
     }
     /**
-     * Allows a logged-in user to create a new organization. The user initiating the request will be assigned the role of admin for that organization. The initiating user will receive a dynamic role in the format `user-svc:org:$organization-slug:admin`, where `$organization-slug` is a unique identifier for the created organization. Dynamic roles are generated based on specific user-resource associations, offering more flexible permission management compared to static roles.
+     * Allows a logged-in user to create a new organization. The user initiating the request will be assigned the role of admin for that organization. The initiating user will receive a dynamic role in the format `user-svc:org:{organizationId}:admin`, where `$organization-slug` is a unique identifier for the created organization. Dynamic roles are generated based on specific user-resource associations, offering more flexible permission management compared to static roles.
      * @summary Create an Organization
      * @param request Create User Request
      */
@@ -1139,10 +1139,9 @@ export class UserSvcApi {
     /**
      * Retrieve user information based on an authentication token.
      * @summary Read User by Token
-     * @param body Read User By Token Request
      */
-    readUserByToken(body_1) {
-        return __awaiter(this, arguments, void 0, function* (body, options = { headers: {} }) {
+    readUserByToken() {
+        return __awaiter(this, arguments, void 0, function* (options = { headers: {} }) {
             const localVarPath = this.basePath + '/user-svc/user/by-token';
             let localVarQueryParameters = {};
             let localVarHeaderParams = Object.assign({}, this._defaultHeaders);
@@ -1155,10 +1154,6 @@ export class UserSvcApi {
                 localVarHeaderParams.Accept = produces.join(',');
             }
             let localVarFormParams = {};
-            // verify required parameter 'body' is not null or undefined
-            if (body === null || body === undefined) {
-                throw new Error('Required parameter body was null or undefined when calling readUserByToken.');
-            }
             Object.assign(localVarHeaderParams, options.headers);
             let localVarUseFormData = false;
             let localVarRequestOptions = {
@@ -1168,7 +1163,6 @@ export class UserSvcApi {
                 uri: localVarPath,
                 useQuerystring: this._useQuerystring,
                 json: true,
-                body: ObjectSerializer.serialize(body, "UserSvcReadUserByTokenRequest")
             };
             let authenticationPromise = Promise.resolve();
             if (this.authentications.BearerAuth.apiKey) {

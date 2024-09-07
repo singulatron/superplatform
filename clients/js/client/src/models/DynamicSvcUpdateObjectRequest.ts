@@ -13,18 +13,18 @@
  */
 
 import { mapValues } from '../runtime';
-import type { DynamicSvcGenericObject } from './DynamicSvcGenericObject';
+import type { DynamicSvcObject } from './DynamicSvcObject';
 import {
-    DynamicSvcGenericObjectFromJSON,
-    DynamicSvcGenericObjectFromJSONTyped,
-    DynamicSvcGenericObjectToJSON,
-} from './DynamicSvcGenericObject';
-import type { DatastoreCondition } from './DatastoreCondition';
+    DynamicSvcObjectFromJSON,
+    DynamicSvcObjectFromJSONTyped,
+    DynamicSvcObjectToJSON,
+} from './DynamicSvcObject';
+import type { DatastoreFilter } from './DatastoreFilter';
 import {
-    DatastoreConditionFromJSON,
-    DatastoreConditionFromJSONTyped,
-    DatastoreConditionToJSON,
-} from './DatastoreCondition';
+    DatastoreFilterFromJSON,
+    DatastoreFilterFromJSONTyped,
+    DatastoreFilterToJSON,
+} from './DatastoreFilter';
 
 /**
  * 
@@ -34,16 +34,16 @@ import {
 export interface DynamicSvcUpdateObjectRequest {
     /**
      * 
-     * @type {Array<DatastoreCondition>}
+     * @type {Array<DatastoreFilter>}
      * @memberof DynamicSvcUpdateObjectRequest
      */
-    conditions?: Array<DatastoreCondition>;
+    filters?: Array<DatastoreFilter>;
     /**
      * 
-     * @type {DynamicSvcGenericObject}
+     * @type {DynamicSvcObject}
      * @memberof DynamicSvcUpdateObjectRequest
      */
-    object?: DynamicSvcGenericObject;
+    object?: DynamicSvcObject;
     /**
      * 
      * @type {string}
@@ -69,8 +69,8 @@ export function DynamicSvcUpdateObjectRequestFromJSONTyped(json: any, ignoreDisc
     }
     return {
         
-        'conditions': json['conditions'] == null ? undefined : ((json['conditions'] as Array<any>).map(DatastoreConditionFromJSON)),
-        'object': json['object'] == null ? undefined : DynamicSvcGenericObjectFromJSON(json['object']),
+        'filters': json['filters'] == null ? undefined : ((json['filters'] as Array<any>).map(DatastoreFilterFromJSON)),
+        'object': json['object'] == null ? undefined : DynamicSvcObjectFromJSON(json['object']),
         'table': json['table'] == null ? undefined : json['table'],
     };
 }
@@ -81,8 +81,8 @@ export function DynamicSvcUpdateObjectRequestToJSON(value?: DynamicSvcUpdateObje
     }
     return {
         
-        'conditions': value['conditions'] == null ? undefined : ((value['conditions'] as Array<any>).map(DatastoreConditionToJSON)),
-        'object': DynamicSvcGenericObjectToJSON(value['object']),
+        'filters': value['filters'] == null ? undefined : ((value['filters'] as Array<any>).map(DatastoreFilterToJSON)),
+        'object': DynamicSvcObjectToJSON(value['object']),
         'table': value['table'],
     };
 }

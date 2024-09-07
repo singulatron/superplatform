@@ -14,7 +14,7 @@ import (
 
 func (a *ChatService) getAssets(assetIds []string) ([]*chattypes.Asset, error) {
 	assetIs, err := a.assetsStore.Query(
-		datastore.Equal(datastore.Field("id"), assetIds),
+		datastore.Equals(datastore.Field("id"), assetIds),
 	).Find()
 
 	if err != nil {

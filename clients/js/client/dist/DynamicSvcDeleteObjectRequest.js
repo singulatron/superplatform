@@ -1,10 +1,7 @@
 'use strict';
 
-var DatastoreCondition = require('./DatastoreCondition.js');
-require('./DatastoreEqualCondition.js');
-require('./DatastoreFieldSelector.js');
-require('./DatastoreContainsCondition.js');
-require('./DatastoreStartsWithCondition.js');
+var DatastoreFilter = require('./DatastoreFilter.js');
+require('./DatastoreOp.js');
 
 /* tslint:disable */
 /* eslint-disable */
@@ -33,7 +30,7 @@ function DynamicSvcDeleteObjectRequestFromJSONTyped(json, ignoreDiscriminator) {
         return json;
     }
     return {
-        'conditions': json['conditions'] == null ? undefined : (json['conditions'].map(DatastoreCondition.DatastoreConditionFromJSON)),
+        'filters': json['filters'] == null ? undefined : (json['filters'].map(DatastoreFilter.DatastoreFilterFromJSON)),
         'table': json['table'] == null ? undefined : json['table'],
     };
 }
@@ -42,7 +39,7 @@ function DynamicSvcDeleteObjectRequestToJSON(value) {
         return value;
     }
     return {
-        'conditions': value['conditions'] == null ? undefined : (value['conditions'].map(DatastoreCondition.DatastoreConditionToJSON)),
+        'filters': value['filters'] == null ? undefined : (value['filters'].map(DatastoreFilter.DatastoreFilterToJSON)),
         'table': value['table'],
     };
 }

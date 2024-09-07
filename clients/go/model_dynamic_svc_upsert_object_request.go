@@ -20,7 +20,7 @@ var _ MappedNullable = &DynamicSvcUpsertObjectRequest{}
 
 // DynamicSvcUpsertObjectRequest struct for DynamicSvcUpsertObjectRequest
 type DynamicSvcUpsertObjectRequest struct {
-	Object *DynamicSvcGenericObjectCreateFields `json:"object,omitempty"`
+	Object *DynamicSvcObjectCreateFields `json:"object,omitempty"`
 }
 
 // NewDynamicSvcUpsertObjectRequest instantiates a new DynamicSvcUpsertObjectRequest object
@@ -41,9 +41,9 @@ func NewDynamicSvcUpsertObjectRequestWithDefaults() *DynamicSvcUpsertObjectReque
 }
 
 // GetObject returns the Object field value if set, zero value otherwise.
-func (o *DynamicSvcUpsertObjectRequest) GetObject() DynamicSvcGenericObjectCreateFields {
+func (o *DynamicSvcUpsertObjectRequest) GetObject() DynamicSvcObjectCreateFields {
 	if o == nil || IsNil(o.Object) {
-		var ret DynamicSvcGenericObjectCreateFields
+		var ret DynamicSvcObjectCreateFields
 		return ret
 	}
 	return *o.Object
@@ -51,7 +51,7 @@ func (o *DynamicSvcUpsertObjectRequest) GetObject() DynamicSvcGenericObjectCreat
 
 // GetObjectOk returns a tuple with the Object field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *DynamicSvcUpsertObjectRequest) GetObjectOk() (*DynamicSvcGenericObjectCreateFields, bool) {
+func (o *DynamicSvcUpsertObjectRequest) GetObjectOk() (*DynamicSvcObjectCreateFields, bool) {
 	if o == nil || IsNil(o.Object) {
 		return nil, false
 	}
@@ -67,8 +67,8 @@ func (o *DynamicSvcUpsertObjectRequest) HasObject() bool {
 	return false
 }
 
-// SetObject gets a reference to the given DynamicSvcGenericObjectCreateFields and assigns it to the Object field.
-func (o *DynamicSvcUpsertObjectRequest) SetObject(v DynamicSvcGenericObjectCreateFields) {
+// SetObject gets a reference to the given DynamicSvcObjectCreateFields and assigns it to the Object field.
+func (o *DynamicSvcUpsertObjectRequest) SetObject(v DynamicSvcObjectCreateFields) {
 	o.Object = &v
 }
 

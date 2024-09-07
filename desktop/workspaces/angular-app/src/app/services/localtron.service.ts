@@ -7,6 +7,10 @@
  */
 import { Injectable, Inject, InjectionToken } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
+import Sonyflake from 'sonyflake';
+
+const base62 = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+const sonyflake = new Sonyflake();
 
 export interface Environment {
 	production: boolean;
@@ -44,23 +48,23 @@ export class LocaltronService {
 		return this.config.env.localtronAddress;
 	}
 
-	uuid() {
-		return (
-			generateSegment(8) +
-			'-' +
-			generateSegment(4) +
-			'-' +
-			generateSegment(4) +
-			'-' +
-			generateSegment(4) +
-			'-' +
-			generateSegment(12)
-		);
-	}
-}
+	id(prefix: string): string {
+		const numberStr = sonyflake.nextId();
+		const number = BigInt(numberStr);
 
-function generateSegment(length: number) {
-	return Array.from({ length: length }, () =>
-		Math.floor(Math.random() * 16).toString(16)
-	).join('');
+		if (number === BigInt(0)) {
+			return `${prefix}_0`;
+		}
+
+		let result = '';
+		let num = number;
+
+		while (num > 0) {
+			const remainder = Number(num % BigInt(62));
+			num = num / BigInt(62);
+			result = base62[remainder] + result;
+		}
+
+		return `${prefix}_${result}`;
+	}
 }

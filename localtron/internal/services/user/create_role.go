@@ -10,14 +10,14 @@ package userservice
 import (
 	"errors"
 
-	"github.com/google/uuid"
 	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	sdk "github.com/singulatron/singulatron/sdk/go"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
 )
 
 func (s *UserService) createRole(ownerId, name, description string, permissionIds []string) (*usertypes.Role, error) {
 	permissions, err := s.permissionsStore.Query(
-		datastore.Equal(datastore.Field("id"), permissionIds),
+		datastore.Equals(datastore.Field("id"), permissionIds),
 	).Find()
 	if err != nil {
 		return nil, err
@@ -27,7 +27,7 @@ func (s *UserService) createRole(ownerId, name, description string, permissionId
 	}
 
 	role := &usertypes.Role{
-		Id:          uuid.New().String(),
+		Id:          sdk.Id("rol"),
 		Name:        name,
 		Description: description,
 		OwnerId:     ownerId,

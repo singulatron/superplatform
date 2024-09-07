@@ -17,9 +17,7 @@ import (
 )
 
 func SelectPrompt(promptsMem datastore.DataStore) (*prompttypes.Prompt, error) {
-	promptIs, err := promptsMem.Query(
-		datastore.All(),
-	).OrderBy(datastore.OrderByField("createdAt", false)).Find()
+	promptIs, err := promptsMem.Query().OrderBy(datastore.OrderByField("createdAt", false)).Find()
 	if err != nil {
 		return nil, err
 	}

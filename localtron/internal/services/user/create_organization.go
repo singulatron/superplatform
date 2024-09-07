@@ -19,7 +19,7 @@ import (
 
 func (s *UserService) createOrganization(userId, orgId, name, slug string) error {
 	_, exists, err := s.contactsStore.Query(
-		datastore.Equal(datastore.Field("slug"), slug),
+		datastore.Equals(datastore.Field("slug"), slug),
 	).FindOne()
 	if err != nil {
 		return err
@@ -35,12 +35,34 @@ func (s *UserService) createOrganization(userId, orgId, name, slug string) error
 		Slug: slug,
 	}
 
+	count, err := s.organizationUserLinksStore.Query(
+		datastore.Equals(
+			datastore.Field("userId"),
+			userId,
+		),
+	).Count()
+	if err != nil {
+		return err
+	}
+
+	link := &usertypes.OrganizationUserLink{
+		Id:             fmt.Sprintf("%v:%v", org.Id, userId),
+		UserId:         userId,
+		OrganizationId: org.Id,
+		Active:         count == 0, // make the first org active
+	}
+
+	err = s.organizationUserLinksStore.Create(link)
+	if err != nil {
+		return err
+	}
+
 	err = s.organizationsStore.Create(org)
 	if err != nil {
 		return err
 	}
 
-	return s.addDynamicRoleToUser(userId, fmt.Sprintf("user-svc:org:%v:admin", slug))
+	return s.addDynamicRoleToUser(userId, fmt.Sprintf("user-svc:org:{%v}:admin", slug))
 }
 
 func (s *UserService) addStaticRoleToUser(userId, roleId string) error {

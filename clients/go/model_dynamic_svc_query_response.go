@@ -20,7 +20,7 @@ var _ MappedNullable = &DynamicSvcQueryResponse{}
 
 // DynamicSvcQueryResponse struct for DynamicSvcQueryResponse
 type DynamicSvcQueryResponse struct {
-	Objects []DynamicSvcGenericObject `json:"objects,omitempty"`
+	Objects []DynamicSvcObject `json:"objects,omitempty"`
 }
 
 // NewDynamicSvcQueryResponse instantiates a new DynamicSvcQueryResponse object
@@ -41,9 +41,9 @@ func NewDynamicSvcQueryResponseWithDefaults() *DynamicSvcQueryResponse {
 }
 
 // GetObjects returns the Objects field value if set, zero value otherwise.
-func (o *DynamicSvcQueryResponse) GetObjects() []DynamicSvcGenericObject {
+func (o *DynamicSvcQueryResponse) GetObjects() []DynamicSvcObject {
 	if o == nil || IsNil(o.Objects) {
-		var ret []DynamicSvcGenericObject
+		var ret []DynamicSvcObject
 		return ret
 	}
 	return o.Objects
@@ -51,7 +51,7 @@ func (o *DynamicSvcQueryResponse) GetObjects() []DynamicSvcGenericObject {
 
 // GetObjectsOk returns a tuple with the Objects field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *DynamicSvcQueryResponse) GetObjectsOk() ([]DynamicSvcGenericObject, bool) {
+func (o *DynamicSvcQueryResponse) GetObjectsOk() ([]DynamicSvcObject, bool) {
 	if o == nil || IsNil(o.Objects) {
 		return nil, false
 	}
@@ -67,8 +67,8 @@ func (o *DynamicSvcQueryResponse) HasObjects() bool {
 	return false
 }
 
-// SetObjects gets a reference to the given []DynamicSvcGenericObject and assigns it to the Objects field.
-func (o *DynamicSvcQueryResponse) SetObjects(v []DynamicSvcGenericObject) {
+// SetObjects gets a reference to the given []DynamicSvcObject and assigns it to the Objects field.
+func (o *DynamicSvcQueryResponse) SetObjects(v []DynamicSvcObject) {
 	o.Objects = v
 }
 

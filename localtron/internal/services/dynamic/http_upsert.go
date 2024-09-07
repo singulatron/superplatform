@@ -15,6 +15,7 @@ import (
 	"github.com/gorilla/mux"
 	dynamic "github.com/singulatron/singulatron/localtron/internal/services/dynamic/types"
 	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	sdk "github.com/singulatron/singulatron/sdk/go"
 )
 
 // Upsert creates or updates a dynamic object based on the provided data
@@ -39,13 +40,14 @@ func (g *DynamicService) Upsert(
 	w.Header().Set("Content-Type", "application/json")
 
 	rsp := &usertypes.IsAuthorizedResponse{}
+	token, hasToken := sdk.TokenFromRequest(r)
 	err := g.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", dynamic.PermissionGenericCreate.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(err.Error()))
 		return
 	}
-	if !rsp.Authorized {
+	if !rsp.Authorized || !hasToken {
 		w.WriteHeader(http.StatusUnauthorized)
 		w.Write([]byte(`Unauthorized`))
 		return
@@ -59,12 +61,35 @@ func (g *DynamicService) Upsert(
 		return
 	}
 	defer r.Body.Close()
-	req.Object.UserId = rsp.User.Id
+
+	for i, v := range req.Object.Readers {
+		if v == "_self" {
+			req.Object.Readers[i] = rsp.User.Id
+		}
+	}
+	for i, v := range req.Object.Writers {
+		if v == "_self" {
+			req.Object.Writers[i] = rsp.User.Id
+		}
+	}
+	for i, v := range req.Object.Deleters {
+		if v == "_self" {
+			req.Object.Deleters[i] = rsp.User.Id
+		}
+	}
+
+	claims, err := sdk.DecodeJWT(token, g.publicKey)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+		return
+	}
+	identifiers := append(claims.RoleIds, rsp.User.Id)
 
 	objectId := mux.Vars(r)
 	req.Object.Id = objectId["objectId"]
 
-	err = g.upsert(req)
+	err = g.upsert(identifiers, req)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(err.Error()))

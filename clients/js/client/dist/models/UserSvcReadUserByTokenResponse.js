@@ -11,6 +11,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { UserSvcOrganizationFromJSON, UserSvcOrganizationToJSON, } from './UserSvcOrganization';
 import { UserSvcUserFromJSON, UserSvcUserToJSON, } from './UserSvcUser';
 /**
  * Check if a given object implements the UserSvcReadUserByTokenResponse interface.
@@ -26,6 +27,8 @@ export function UserSvcReadUserByTokenResponseFromJSONTyped(json, ignoreDiscrimi
         return json;
     }
     return {
+        'activeOrganizationId': json['activeOrganizationId'] == null ? undefined : json['activeOrganizationId'],
+        'organizations': json['organizations'] == null ? undefined : (json['organizations'].map(UserSvcOrganizationFromJSON)),
         'user': json['user'] == null ? undefined : UserSvcUserFromJSON(json['user']),
     };
 }
@@ -34,6 +37,8 @@ export function UserSvcReadUserByTokenResponseToJSON(value) {
         return value;
     }
     return {
+        'activeOrganizationId': value['activeOrganizationId'],
+        'organizations': value['organizations'] == null ? undefined : (value['organizations'].map(UserSvcOrganizationToJSON)),
         'user': UserSvcUserToJSON(value['user']),
     };
 }

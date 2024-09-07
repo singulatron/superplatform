@@ -1,9 +1,6 @@
-import { DynamicSvcGenericObjectFromJSON, DynamicSvcGenericObjectToJSON } from './DynamicSvcGenericObject.mjs';
-import { DatastoreConditionFromJSON, DatastoreConditionToJSON } from './DatastoreCondition.mjs';
-import './DatastoreEqualCondition.mjs';
-import './DatastoreFieldSelector.mjs';
-import './DatastoreContainsCondition.mjs';
-import './DatastoreStartsWithCondition.mjs';
+import { DynamicSvcObjectFromJSON, DynamicSvcObjectToJSON } from './DynamicSvcObject.mjs';
+import { DatastoreFilterFromJSON, DatastoreFilterToJSON } from './DatastoreFilter.mjs';
+import './DatastoreOp.mjs';
 
 /* tslint:disable */
 /* eslint-disable */
@@ -32,8 +29,8 @@ function DynamicSvcUpdateObjectRequestFromJSONTyped(json, ignoreDiscriminator) {
         return json;
     }
     return {
-        'conditions': json['conditions'] == null ? undefined : (json['conditions'].map(DatastoreConditionFromJSON)),
-        'object': json['object'] == null ? undefined : DynamicSvcGenericObjectFromJSON(json['object']),
+        'filters': json['filters'] == null ? undefined : (json['filters'].map(DatastoreFilterFromJSON)),
+        'object': json['object'] == null ? undefined : DynamicSvcObjectFromJSON(json['object']),
         'table': json['table'] == null ? undefined : json['table'],
     };
 }
@@ -42,8 +39,8 @@ function DynamicSvcUpdateObjectRequestToJSON(value) {
         return value;
     }
     return {
-        'conditions': value['conditions'] == null ? undefined : (value['conditions'].map(DatastoreConditionToJSON)),
-        'object': DynamicSvcGenericObjectToJSON(value['object']),
+        'filters': value['filters'] == null ? undefined : (value['filters'].map(DatastoreFilterToJSON)),
+        'object': DynamicSvcObjectToJSON(value['object']),
         'table': value['table'],
     };
 }

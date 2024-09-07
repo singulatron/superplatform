@@ -11,10 +11,10 @@
  */
 
 import { RequestFile } from './models';
-import { DynamicSvcGenericObject } from './dynamicSvcGenericObject';
+import { DynamicSvcObject } from './dynamicSvcObject';
 
 export class DynamicSvcQueryResponse {
-    'objects'?: Array<DynamicSvcGenericObject>;
+    'objects'?: Array<DynamicSvcObject>;
 
     static discriminator: string | undefined = undefined;
 
@@ -22,7 +22,7 @@ export class DynamicSvcQueryResponse {
         {
             "name": "objects",
             "baseName": "objects",
-            "type": "Array<DynamicSvcGenericObject>"
+            "type": "Array<DynamicSvcObject>"
         }    ];
 
     static getAttributeTypeMap() {

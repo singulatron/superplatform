@@ -2,18 +2,17 @@ package dynamicservice_test
 
 import (
 	"context"
-	"fmt"
 	"net/http/httptest"
 	"strings"
 	"testing"
-	"time"
 
 	"github.com/google/uuid"
 	"github.com/singulatron/singulatron/localtron/internal/di"
-	dynamictypes "github.com/singulatron/singulatron/localtron/internal/services/dynamic/types"
 	sdk "github.com/singulatron/singulatron/sdk/go"
-	"github.com/singulatron/singulatron/sdk/go/datastore"
+	"github.com/singulatron/singulatron/sdk/go/test"
 	"github.com/stretchr/testify/require"
+
+	client "github.com/singulatron/singulatron/clients/go"
 )
 
 func TestCreate(t *testing.T) {
@@ -35,191 +34,195 @@ func TestCreate(t *testing.T) {
 	require.NoError(t, err)
 
 	hs.UpdateHandler(universe)
-	router := options.Router
 
 	err = starterFunc()
 	require.NoError(t, err)
 
-	token, err := sdk.RegisterUser(router, "someuser", "pw123", "Some name")
+	manyClients, err := test.MakeClients(options.Router, 2)
 	require.NoError(t, err)
-	user1Router := router.SetBearerToken(token)
+	client1 := manyClients[0]
+	client2 := manyClients[1]
 
-	token, err = sdk.RegisterUser(router, "someuser2", "pw123", "Some name 2")
+	tokenReadRsp1, _, err := client1.UserSvcAPI.ReadUserByToken(context.Background()).Execute()
 	require.NoError(t, err)
-	user2Router := router.SetBearerToken(token)
 
-	uuid1 := uuid.New().String()
-	uuid2 := uuid.New().String()
+	tokenReadRsp2, _, err := client2.UserSvcAPI.ReadUserByToken(context.Background()).Execute()
+	require.NoError(t, err)
 
-	obj := &dynamictypes.GenericObject{
-		GenericObjectCreateFields: dynamictypes.GenericObjectCreateFields{
-			Id:    uuid1,
-			Table: table1,
-			Data:  map[string]interface{}{"key": "value"},
-		},
-		CreatedAt: time.Now().String(),
+	uuid1 := sdk.Id("ob")
+	uuid2 := sdk.Id("ob")
+
+	obj := client.DynamicSvcObjectCreateFields{
+		Id:       &uuid1,
+		Table:    table1,
+		Readers:  []string{"_self"},
+		Writers:  []string{"_self"},
+		Deleters: []string{"_self"},
+		Data:     map[string]interface{}{"key": "value"},
 	}
 
-	err = user1Router.Post(context.Background(), "dynamic-svc", "/object", &dynamictypes.CreateObjectRequest{
-		Object: &obj.GenericObjectCreateFields,
-	}, nil)
+	_, _, err = client1.DynamicSvcAPI.CreateObject(context.Background()).Body(client.DynamicSvcCreateObjectRequest{
+		Object: &obj,
+	}).Execute()
 	require.NoError(t, err)
 
 	t.Run("user 1 can find its own private record", func(t *testing.T) {
-		req := dynamictypes.QueryRequest{
-			Table:  table1,
-			Public: false,
-			Query: &datastore.Query{
-				Conditions: []datastore.Condition{
-					datastore.All(),
-				},
-			},
+		req := client.DynamicSvcQueryRequest{
+			Table:   &table1,
+			Readers: []string{*tokenReadRsp1.User.Id},
 		}
-		rsp := dynamictypes.QueryResponse{}
-		err = user1Router.Post(context.Background(), "dynamic-svc", "/objects", req, &rsp)
+
+		rsp, _, err := client1.DynamicSvcAPI.Query(context.Background()).Body(req).Execute()
 		require.NoError(t, err)
 		require.Equal(t, 1, len(rsp.Objects))
-		require.Contains(t, rsp.Objects[0].Id, uuid1)
+		require.Equal(t, uuid1, *rsp.Objects[0].Id)
 	})
 
-	obj2 := &dynamictypes.GenericObject{
-		GenericObjectCreateFields: dynamictypes.GenericObjectCreateFields{
-			Id:    uuid2,
-			Table: table2,
-			Data:  map[string]interface{}{"key": "value"},
-		},
-		CreatedAt: time.Now().String(),
+	obj2 := client.DynamicSvcObjectCreateFields{
+		Id:      &uuid2,
+		Table:   table2,
+		Readers: []string{*tokenReadRsp2.User.Id},
+		Data:    map[string]interface{}{"key": "value"},
 	}
 
-	err = user2Router.Post(context.Background(), "dynamic-svc", "/object", &dynamictypes.CreateObjectRequest{
-		Object: &obj2.GenericObjectCreateFields,
-	}, nil)
+	_, _, err = client2.DynamicSvcAPI.CreateObject(context.Background()).Body(client.DynamicSvcCreateObjectRequest{
+		Object: &obj2,
+	}).Execute()
 	require.NoError(t, err)
 
-	t.Run("user 2 can find its own private record", func(t *testing.T) {
-		req := dynamictypes.QueryRequest{
-			Table:  table2,
-			Public: false,
-			Query: &datastore.Query{
-				Conditions: []datastore.Condition{
-					datastore.All(),
-				}},
+	t.Run("query user2 records", func(t *testing.T) {
+		req := client.DynamicSvcQueryRequest{
+			Table:   &table2,
+			Readers: []string{*tokenReadRsp2.User.Id},
 		}
-		rsp := dynamictypes.QueryResponse{}
-		err = user2Router.Post(context.Background(), "dynamic-svc", "/objects", req, &rsp)
+
+		rsp, _, err := client2.DynamicSvcAPI.Query(context.Background()).Body(req).Execute()
 		require.NoError(t, err)
 		require.Equal(t, 1, len(rsp.Objects))
-		require.Contains(t, rsp.Objects[0].Id, uuid2)
+		require.Equal(t, uuid2, *rsp.Objects[0].Id)
 	})
 
-	t.Run("find private for user 1", func(t *testing.T) {
-		req := dynamictypes.QueryRequest{
-			Table:  table1,
-			Public: false,
-			Query: &datastore.Query{Conditions: []datastore.Condition{
-				datastore.Id(uuid1),
+	t.Run("query user1 records", func(t *testing.T) {
+		req := client.DynamicSvcQueryRequest{
+			Table: &table1,
+			Query: &client.DatastoreQuery{Filters: []client.DatastoreFilter{
+				{
+					Fields: []string{"id"},
+					Op:     client.OpEquals.Ptr(),
+					Values: sdk.Marshal([]any{uuid1}),
+				},
 			}},
+
+			Readers: []string{*tokenReadRsp1.User.Id},
 		}
-		rsp := dynamictypes.QueryResponse{}
-		err = user1Router.Post(context.Background(), "dynamic-svc", "/objects", req, &rsp)
+
+		rsp, _, err := client1.DynamicSvcAPI.Query(context.Background()).Body(req).Execute()
+		require.NoError(t, err)
 		require.NoError(t, err)
 		require.Equal(t, 1, len(rsp.Objects))
-		require.Equal(t, rsp.Objects[0].Id, uuid1)
+		require.Equal(t, uuid1, *rsp.Objects[0].Id)
 	})
 
-	t.Run("find public for user 1", func(t *testing.T) {
-		req := dynamictypes.QueryRequest{
-			Table:  table1,
-			Public: true,
-			Query: &datastore.Query{Conditions: []datastore.Condition{
-				datastore.Id(uuid1),
+	t.Run("query user1 records with _self", func(t *testing.T) {
+		req := client.DynamicSvcQueryRequest{
+			Table: &table1,
+			Query: &client.DatastoreQuery{Filters: []client.DatastoreFilter{
+				{
+					Fields: []string{"id"},
+					Op:     client.OpEquals.Ptr(),
+					Values: sdk.Marshal([]any{uuid1}),
+				},
 			}},
+
+			Readers: []string{"_self"},
 		}
-		rsp := dynamictypes.QueryResponse{}
-		err = user1Router.Post(context.Background(), "dynamic-svc", "/objects", req, &rsp)
+
+		rsp, _, err := client1.DynamicSvcAPI.Query(context.Background()).Body(req).Execute()
 		require.NoError(t, err)
-		require.Equal(t, 0, len(rsp.Objects))
+		require.NoError(t, err)
+		require.Equal(t, 1, len(rsp.Objects))
+		require.Equal(t, uuid1, *rsp.Objects[0].Id)
 	})
 
 	t.Run("already exists", func(t *testing.T) {
-		err = user1Router.Post(context.Background(), "dynamic-svc", "/create",
-			&dynamictypes.CreateObjectRequest{
-				Object: &obj.GenericObjectCreateFields,
-			},
-			nil)
+		_, _, err = client1.DynamicSvcAPI.CreateObject(context.Background()).Body(client.DynamicSvcCreateObjectRequest{
+			Object: &obj,
+		}).Execute()
+
 		require.Error(t, err)
 	})
 
 	t.Run("user 1 cannot see record of user 2", func(t *testing.T) {
-		req := dynamictypes.QueryRequest{
-			Table:  table1,
-			Public: false,
-			Query: &datastore.Query{Conditions: []datastore.Condition{
-				datastore.Id(uuid2),
+		req := client.DynamicSvcQueryRequest{
+			Table: &table1,
+			Query: &client.DatastoreQuery{Filters: []client.DatastoreFilter{
+				{
+					Fields: []string{"id"},
+					Op:     client.OpEquals.Ptr(),
+					Values: sdk.Marshal([]any{uuid2}),
+				},
 			}},
+			Readers: []string{*tokenReadRsp2.User.Id},
 		}
-		rsp := dynamictypes.QueryResponse{}
-		err = user1Router.Post(context.Background(), "dynamic-svc", "/objects", req, &rsp)
+		rsp, _, err := client1.DynamicSvcAPI.Query(context.Background()).Body(req).Execute()
 		require.NoError(t, err)
 		require.Equal(t, 0, len(rsp.Objects))
 	})
 
 	t.Run("user 2 cannot update record of user 1", func(t *testing.T) {
-		req := &dynamictypes.UpsertObjectRequest{
-			Object: &obj.GenericObjectCreateFields,
+		req := &client.DynamicSvcUpsertObjectRequest{
+			Object: &obj,
 		}
-		err = user2Router.Put(context.Background(), "dynamic-svc", fmt.Sprintf("/object/%v", req.Object.Id), req, nil)
+		_, _, err = client2.DynamicSvcAPI.UpsertObject(context.Background(), *obj.Id).Body(*req).Execute()
+
 		// unauthorized
 		require.Error(t, err)
 	})
 
-	t.Run("user 1 can upsert its own reord", func(t *testing.T) {
-		req := &dynamictypes.UpsertObjectRequest{
-			Object: &obj.GenericObjectCreateFields,
+	t.Run("user 1 can upsert its own record", func(t *testing.T) {
+		req := &client.DynamicSvcUpsertObjectRequest{
+			Object: &obj,
 		}
-		err = user1Router.Put(context.Background(), "dynamic-svc", fmt.Sprintf("/object/%v", req.Object.Id), req, nil)
+		_, _, err = client1.DynamicSvcAPI.UpsertObject(context.Background(), *obj.Id).Body(*req).Execute()
+
 		require.NoError(t, err)
 	})
 
-	t.Run("user 1 can find its own reord", func(t *testing.T) {
-		req := dynamictypes.QueryRequest{
-			Table:  table1,
-			Public: false,
-			Query: &datastore.Query{Conditions: []datastore.Condition{
-				datastore.All(),
-			}},
+	t.Run("user 1 can find its own record", func(t *testing.T) {
+		req := &client.DynamicSvcQueryRequest{
+			Table:   client.PtrString(table1),
+			Readers: []string{*tokenReadRsp1.User.Id},
 		}
-		rsp := dynamictypes.QueryResponse{}
-		err = user1Router.Post(context.Background(), "dynamic-svc", "/objects", req, &rsp)
+		rsp, _, err := client1.DynamicSvcAPI.Query(context.Background()).Body(*req).Execute()
+
 		require.NoError(t, err)
 		require.Equal(t, 1, len(rsp.Objects))
-		require.Contains(t, rsp.Objects[0].Id, uuid1)
+		require.Equal(t, uuid1, *rsp.Objects[0].Id)
 	})
 
 	t.Run("user 2 cannot delete user 1's record", func(t *testing.T) {
-		req := dynamictypes.DeleteObjectRequest{
-			Table: table1,
-			Conditions: []datastore.Condition{
-				datastore.Id(obj.Id),
+		req := &client.DynamicSvcDeleteObjectRequest{
+			Table: client.PtrString(table1),
+			Filters: []client.DatastoreFilter{
+				{
+					Fields: []string{"id"},
+					Op:     client.OpEquals.Ptr(),
+					Values: sdk.Marshal([]any{obj.Id}),
+				},
 			},
 		}
 
-		err = user2Router.Post(context.Background(), "dynamic-svc", "/objects/delete", req, nil)
-		// no unauthorized but no error either...
-		require.NoError(t, err)
+		_, _, err = client2.DynamicSvcAPI.DeleteObjects(context.Background()).Body(*req).Execute()
+
+		require.Error(t, err)
 	})
 
 	// ...item wont be deleted
 	t.Run("user 2 will no see other tables", func(t *testing.T) {
-		req := dynamictypes.QueryRequest{
-			Table:  table1,
-			Public: false,
-			Query: &datastore.Query{Conditions: []datastore.Condition{
-				datastore.All(),
-			}},
+		req := &client.DynamicSvcQueryRequest{
+			Table: client.PtrString(table1),
 		}
-		rsp := dynamictypes.QueryResponse{}
-		err = user2Router.Post(context.Background(), "dynamic-svc", "/objects", req, &rsp)
+		rsp, _, err := client2.DynamicSvcAPI.Query(context.Background()).Body(*req).Execute()
 
 		require.NoError(t, err)
 		require.Equal(t, 0, len(rsp.Objects))

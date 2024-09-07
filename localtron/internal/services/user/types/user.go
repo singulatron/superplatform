@@ -96,6 +96,14 @@ type OrganizationUserLink struct {
 
 	OrganizationId string `json:"organizationId,omitempty"`
 	UserId         string `json:"userId,omitempty"`
+
+	// Active/default organization for a user.
+	// There can only be one per user.
+	Active bool `json:"active,omitempty"`
+}
+
+func (o *OrganizationUserLink) GetId() string {
+	return o.Id
 }
 
 type Organization struct {
@@ -145,12 +153,12 @@ func (c *User) GetUpdatedAt() string {
 	return c.Id
 }
 
-type ReadUserByTokenRequest struct {
-	Token string `json:"token,omitempty"`
-}
+type ReadUserByTokenRequest struct{}
 
 type ReadUserByTokenResponse struct {
-	User *User `json:"user,omitempty"`
+	User                 *User           `json:"user,omitempty"`
+	Organizations        []*Organization `json:"organizations,omitempty"`
+	ActiveOrganizationId string          `json:"activeOrganizationId,omitempty"`
 }
 
 type RegisterRequest struct {

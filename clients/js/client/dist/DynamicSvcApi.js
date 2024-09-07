@@ -9,13 +9,10 @@ var DynamicSvcQueryResponse = require('./DynamicSvcQueryResponse.js');
 var DynamicSvcUpdateObjectRequest = require('./DynamicSvcUpdateObjectRequest.js');
 var DynamicSvcUpsertObjectRequest = require('./DynamicSvcUpsertObjectRequest.js');
 var DynamicSvcUpsertObjectResponse = require('./DynamicSvcUpsertObjectResponse.js');
-require('./DynamicSvcGenericObjectCreateFields.js');
-require('./DynamicSvcGenericObject.js');
-require('./DatastoreCondition.js');
-require('./DatastoreEqualCondition.js');
-require('./DatastoreFieldSelector.js');
-require('./DatastoreContainsCondition.js');
-require('./DatastoreStartsWithCondition.js');
+require('./DynamicSvcObjectCreateFields.js');
+require('./DynamicSvcObject.js');
+require('./DatastoreFilter.js');
+require('./DatastoreOp.js');
 require('./DatastoreQuery.js');
 require('./DatastoreOrderBy.js');
 
@@ -77,9 +74,6 @@ class DynamicSvcApi extends runtime.BaseAPI {
      */
     deleteObjectsRaw(requestParameters, initOverrides) {
         return runtime.__awaiter(this, void 0, void 0, function* () {
-            if (requestParameters['objectId'] == null) {
-                throw new runtime.RequiredError('objectId', 'Required parameter "objectId" was null or undefined when calling deleteObjects().');
-            }
             if (requestParameters['body'] == null) {
                 throw new runtime.RequiredError('body', 'Required parameter "body" was null or undefined when calling deleteObjects().');
             }
@@ -90,7 +84,7 @@ class DynamicSvcApi extends runtime.BaseAPI {
                 headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
             }
             const response = yield this.request({
-                path: `/dynamic-svc/objects/delete`.replace(`{${"objectId"}}`, encodeURIComponent(String(requestParameters['objectId']))),
+                path: `/dynamic-svc/objects/delete`,
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,
@@ -111,7 +105,7 @@ class DynamicSvcApi extends runtime.BaseAPI {
     }
     /**
      * Retrieves objects from a specified table based on search criteria. Requires authorization and user authentication.   Use helper functions in your respective client library such as condition constructors (`equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
-     * Query Dynamic Objects
+     * Query Objects
      */
     queryRaw(requestParameters, initOverrides) {
         return runtime.__awaiter(this, void 0, void 0, function* () {
@@ -133,7 +127,7 @@ class DynamicSvcApi extends runtime.BaseAPI {
     }
     /**
      * Retrieves objects from a specified table based on search criteria. Requires authorization and user authentication.   Use helper functions in your respective client library such as condition constructors (`equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
-     * Query Dynamic Objects
+     * Query Objects
      */
     query() {
         return runtime.__awaiter(this, arguments, void 0, function* (requestParameters = {}, initOverrides) {
@@ -143,7 +137,7 @@ class DynamicSvcApi extends runtime.BaseAPI {
     }
     /**
      * Updates objects in a specified table based on provided conditions. Requires authorization and user authentication.
-     * Update Dynamic Objects
+     * Update Objects
      */
     updateObjectsRaw(requestParameters, initOverrides) {
         return runtime.__awaiter(this, void 0, void 0, function* () {
@@ -168,7 +162,7 @@ class DynamicSvcApi extends runtime.BaseAPI {
     }
     /**
      * Updates objects in a specified table based on provided conditions. Requires authorization and user authentication.
-     * Update Dynamic Objects
+     * Update Objects
      */
     updateObjects(requestParameters, initOverrides) {
         return runtime.__awaiter(this, void 0, void 0, function* () {

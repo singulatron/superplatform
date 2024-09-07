@@ -19,7 +19,7 @@ DynamicSvcUpsertObjectResponse.attributeTypeMap = [
     {
         "name": "object",
         "baseName": "object",
-        "type": "DynamicSvcGenericObject"
+        "type": "DynamicSvcObject"
     }
 ];
 

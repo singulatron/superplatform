@@ -14,7 +14,7 @@ import (
 
 func (a *ChatService) getThreads(userId string) ([]*chattypes.Thread, error) {
 	threadIs, err := a.threadsStore.Query(
-		datastore.Equal(datastore.Field("userIds"), userId),
+		datastore.Equals(datastore.Field("userIds"), userId),
 	).OrderBy(datastore.OrderByField("createdAt", true)).Find()
 	if err != nil {
 		return nil, err

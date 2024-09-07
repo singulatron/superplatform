@@ -19,14 +19,14 @@ class DynamicSvcUpdateObjectRequest {
 DynamicSvcUpdateObjectRequest.discriminator = undefined;
 DynamicSvcUpdateObjectRequest.attributeTypeMap = [
     {
-        "name": "conditions",
-        "baseName": "conditions",
-        "type": "Array<DatastoreCondition>"
+        "name": "filters",
+        "baseName": "filters",
+        "type": "Array<DatastoreFilter>"
     },
     {
         "name": "object",
         "baseName": "object",
-        "type": "DynamicSvcGenericObject"
+        "type": "DynamicSvcObject"
     },
     {
         "name": "table",

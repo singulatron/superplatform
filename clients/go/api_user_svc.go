@@ -685,7 +685,7 @@ func (r ApiCreateOrganizationRequest) Execute() (map[string]interface{}, *http.R
 CreateOrganization Create an Organization
 
 Allows a logged-in user to create a new organization. The user initiating the request will be assigned the role of admin for that organization.
-The initiating user will receive a dynamic role in the format `user-svc:org:$organization-slug:admin`, where `$organization-slug` is a unique identifier for the created organization.
+The initiating user will receive a dynamic role in the format `user-svc:org:{organizationId}:admin`, where `$organization-slug` is a unique identifier for the created organization.
 Dynamic roles are generated based on specific user-resource associations, offering more flexible permission management compared to static roles.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
@@ -2272,13 +2272,6 @@ func (a *UserSvcAPIService) LoginExecute(r ApiLoginRequest) (*UserSvcLoginRespon
 type ApiReadUserByTokenRequest struct {
 	ctx context.Context
 	ApiService *UserSvcAPIService
-	body *UserSvcReadUserByTokenRequest
-}
-
-// Read User By Token Request
-func (r ApiReadUserByTokenRequest) Body(body UserSvcReadUserByTokenRequest) ApiReadUserByTokenRequest {
-	r.body = &body
-	return r
 }
 
 func (r ApiReadUserByTokenRequest) Execute() (*UserSvcReadUserByTokenResponse, *http.Response, error) {
@@ -2320,12 +2313,9 @@ func (a *UserSvcAPIService) ReadUserByTokenExecute(r ApiReadUserByTokenRequest) 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.body == nil {
-		return localVarReturnValue, nil, reportError("body is required and must be specified")
-	}
 
 	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{"application/json"}
+	localVarHTTPContentTypes := []string{}
 
 	// set Content-Type header
 	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
@@ -2341,8 +2331,6 @@ func (a *UserSvcAPIService) ReadUserByTokenExecute(r ApiReadUserByTokenRequest) 
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	// body params
-	localVarPostBody = r.body
 	if r.ctx != nil {
 		// API Key Authentication
 		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {

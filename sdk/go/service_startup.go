@@ -4,11 +4,11 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/google/uuid"
-	client "github.com/singulatron/singulatron/clients/go"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
 	"github.com/singulatron/singulatron/sdk/go/logger"
 	"github.com/singulatron/singulatron/sdk/go/router"
+
+	client "github.com/singulatron/singulatron/clients/go"
 )
 
 // RegisterService registers a service or logs in with credentials loaded
@@ -16,7 +16,7 @@ import (
 // Every service should have a user account in the user service and this method creates
 // that user account.
 func RegisterService(serviceSlug, serviceName string, router *router.Router, store datastore.DataStore) (string, error) {
-	res, err := store.Query(datastore.All()).Find()
+	res, err := store.Query().Find()
 	if err != nil {
 		return "", err
 	}
@@ -29,7 +29,7 @@ func RegisterService(serviceSlug, serviceName string, router *router.Router, sto
 		slug = cred.Slug
 		pw = cred.Password
 	} else {
-		pw = uuid.New().String()
+		pw = Id("cred")
 		err = store.Upsert(&Credential{
 			Slug:     slug,
 			Password: pw,

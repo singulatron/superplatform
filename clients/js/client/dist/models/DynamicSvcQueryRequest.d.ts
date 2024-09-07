@@ -18,16 +18,16 @@ import type { DatastoreQuery } from './DatastoreQuery';
 export interface DynamicSvcQueryRequest {
     /**
      *
-     * @type {boolean}
-     * @memberof DynamicSvcQueryRequest
-     */
-    _public?: boolean;
-    /**
-     *
      * @type {DatastoreQuery}
      * @memberof DynamicSvcQueryRequest
      */
     query?: DatastoreQuery;
+    /**
+     *
+     * @type {Array<string>}
+     * @memberof DynamicSvcQueryRequest
+     */
+    readers?: Array<string>;
     /**
      *
      * @type {string}

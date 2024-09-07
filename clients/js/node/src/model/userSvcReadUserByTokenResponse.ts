@@ -11,14 +11,27 @@
  */
 
 import { RequestFile } from './models';
+import { UserSvcOrganization } from './userSvcOrganization';
 import { UserSvcUser } from './userSvcUser';
 
 export class UserSvcReadUserByTokenResponse {
+    'activeOrganizationId'?: string;
+    'organizations'?: Array<UserSvcOrganization>;
     'user'?: UserSvcUser;
 
     static discriminator: string | undefined = undefined;
 
     static attributeTypeMap: Array<{name: string, baseName: string, type: string}> = [
+        {
+            "name": "activeOrganizationId",
+            "baseName": "activeOrganizationId",
+            "type": "string"
+        },
+        {
+            "name": "organizations",
+            "baseName": "organizations",
+            "type": "Array<UserSvcOrganization>"
+        },
         {
             "name": "user",
             "baseName": "user",

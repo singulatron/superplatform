@@ -13,12 +13,12 @@
  */
 
 import { mapValues } from '../runtime';
-import type { DynamicSvcGenericObject } from './DynamicSvcGenericObject';
+import type { DynamicSvcObject } from './DynamicSvcObject';
 import {
-    DynamicSvcGenericObjectFromJSON,
-    DynamicSvcGenericObjectFromJSONTyped,
-    DynamicSvcGenericObjectToJSON,
-} from './DynamicSvcGenericObject';
+    DynamicSvcObjectFromJSON,
+    DynamicSvcObjectFromJSONTyped,
+    DynamicSvcObjectToJSON,
+} from './DynamicSvcObject';
 
 /**
  * 
@@ -28,10 +28,10 @@ import {
 export interface DynamicSvcQueryResponse {
     /**
      * 
-     * @type {Array<DynamicSvcGenericObject>}
+     * @type {Array<DynamicSvcObject>}
      * @memberof DynamicSvcQueryResponse
      */
-    objects?: Array<DynamicSvcGenericObject>;
+    objects?: Array<DynamicSvcObject>;
 }
 
 /**
@@ -51,7 +51,7 @@ export function DynamicSvcQueryResponseFromJSONTyped(json: any, ignoreDiscrimina
     }
     return {
         
-        'objects': json['objects'] == null ? undefined : ((json['objects'] as Array<any>).map(DynamicSvcGenericObjectFromJSON)),
+        'objects': json['objects'] == null ? undefined : ((json['objects'] as Array<any>).map(DynamicSvcObjectFromJSON)),
     };
 }
 
@@ -61,7 +61,7 @@ export function DynamicSvcQueryResponseToJSON(value?: DynamicSvcQueryResponse | 
     }
     return {
         
-        'objects': value['objects'] == null ? undefined : ((value['objects'] as Array<any>).map(DynamicSvcGenericObjectToJSON)),
+        'objects': value['objects'] == null ? undefined : ((value['objects'] as Array<any>).map(DynamicSvcObjectToJSON)),
     };
 }
 

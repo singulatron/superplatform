@@ -33,13 +33,10 @@ require('./configSvcDownloadServiceConfig.js');
 require('./configSvcGetConfigResponse.js');
 require('./configSvcModelServiceConfig.js');
 require('./configSvcSaveConfigRequest.js');
-require('./datastoreCondition.js');
-require('./datastoreContainsCondition.js');
-require('./datastoreEqualCondition.js');
-require('./datastoreFieldSelector.js');
+require('./datastoreFilter.js');
+require('./datastoreOp.js');
 require('./datastoreOrderBy.js');
 require('./datastoreQuery.js');
-require('./datastoreStartsWithCondition.js');
 require('./dockerSvcContainerIsRunningResponse.js');
 require('./dockerSvcDockerInfo.js');
 require('./dockerSvcErrorResponse.js');
@@ -59,8 +56,8 @@ require('./dynamicSvcCreateObjectRequest.js');
 require('./dynamicSvcCreateObjectResponse.js');
 require('./dynamicSvcDeleteObjectRequest.js');
 require('./dynamicSvcErrorResponse.js');
-require('./dynamicSvcGenericObject.js');
-require('./dynamicSvcGenericObjectCreateFields.js');
+require('./dynamicSvcObject.js');
+require('./dynamicSvcObjectCreateFields.js');
 require('./dynamicSvcQueryRequest.js');
 require('./dynamicSvcQueryResponse.js');
 require('./dynamicSvcUpdateObjectRequest.js');
@@ -120,8 +117,8 @@ require('./userSvcIsAuthorizedRequest.js');
 require('./userSvcIsAuthorizedResponse.js');
 require('./userSvcLoginRequest.js');
 require('./userSvcLoginResponse.js');
+require('./userSvcOrganization.js');
 require('./userSvcPermission.js');
-require('./userSvcReadUserByTokenRequest.js');
 require('./userSvcReadUserByTokenResponse.js');
 require('./userSvcRegisterRequest.js');
 require('./userSvcRole.js');
@@ -55720,13 +55717,11 @@ class DynamicSvcApi {
     /**
      * Removes a dynamic object from the system based on the provided conditions. Requires authorization and user authentication.
      * @summary Delete a Generic Object
-     * @param objectId Object ID
      * @param body Delete request payload
      */
-    deleteObjects(objectId_1, body_1) {
-        return __awaiter(this, arguments, void 0, function* (objectId, body, options = { headers: {} }) {
-            const localVarPath = this.basePath + '/dynamic-svc/objects/delete'
-                .replace('{' + 'objectId' + '}', encodeURIComponent(String(objectId)));
+    deleteObjects(body_1) {
+        return __awaiter(this, arguments, void 0, function* (body, options = { headers: {} }) {
+            const localVarPath = this.basePath + '/dynamic-svc/objects/delete';
             let localVarQueryParameters = {};
             let localVarHeaderParams = Object.assign({}, this._defaultHeaders);
             const produces = ['application/json'];
@@ -55738,10 +55733,6 @@ class DynamicSvcApi {
                 localVarHeaderParams.Accept = produces.join(',');
             }
             let localVarFormParams = {};
-            // verify required parameter 'objectId' is not null or undefined
-            if (objectId === null || objectId === undefined) {
-                throw new Error('Required parameter objectId was null or undefined when calling deleteObjects.');
-            }
             // verify required parameter 'body' is not null or undefined
             if (body === null || body === undefined) {
                 throw new Error('Required parameter body was null or undefined when calling deleteObjects.');
@@ -55792,7 +55783,7 @@ class DynamicSvcApi {
     }
     /**
      * Retrieves objects from a specified table based on search criteria. Requires authorization and user authentication.   Use helper functions in your respective client library such as condition constructors (`equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
-     * @summary Query Dynamic Objects
+     * @summary Query Objects
      * @param body Query Request
      */
     query(body_1) {
@@ -55855,7 +55846,7 @@ class DynamicSvcApi {
     }
     /**
      * Updates objects in a specified table based on provided conditions. Requires authorization and user authentication.
-     * @summary Update Dynamic Objects
+     * @summary Update Objects
      * @param body Update request payload
      */
     updateObjects(body_1) {
@@ -57715,7 +57706,7 @@ class UserSvcApi {
         });
     }
     /**
-     * Allows a logged-in user to create a new organization. The user initiating the request will be assigned the role of admin for that organization. The initiating user will receive a dynamic role in the format `user-svc:org:$organization-slug:admin`, where `$organization-slug` is a unique identifier for the created organization. Dynamic roles are generated based on specific user-resource associations, offering more flexible permission management compared to static roles.
+     * Allows a logged-in user to create a new organization. The user initiating the request will be assigned the role of admin for that organization. The initiating user will receive a dynamic role in the format `user-svc:org:{organizationId}:admin`, where `$organization-slug` is a unique identifier for the created organization. Dynamic roles are generated based on specific user-resource associations, offering more flexible permission management compared to static roles.
      * @summary Create an Organization
      * @param request Create User Request
      */
@@ -58438,10 +58429,9 @@ class UserSvcApi {
     /**
      * Retrieve user information based on an authentication token.
      * @summary Read User by Token
-     * @param body Read User By Token Request
      */
-    readUserByToken(body_1) {
-        return __awaiter(this, arguments, void 0, function* (body, options = { headers: {} }) {
+    readUserByToken() {
+        return __awaiter(this, arguments, void 0, function* (options = { headers: {} }) {
             const localVarPath = this.basePath + '/user-svc/user/by-token';
             let localVarQueryParameters = {};
             let localVarHeaderParams = Object.assign({}, this._defaultHeaders);
@@ -58454,10 +58444,6 @@ class UserSvcApi {
                 localVarHeaderParams.Accept = produces.join(',');
             }
             let localVarFormParams = {};
-            // verify required parameter 'body' is not null or undefined
-            if (body === null || body === undefined) {
-                throw new Error('Required parameter body was null or undefined when calling readUserByToken.');
-            }
             Object.assign(localVarHeaderParams, options.headers);
             let localVarRequestOptions = {
                 method: 'POST',
@@ -58466,7 +58452,6 @@ class UserSvcApi {
                 uri: localVarPath,
                 useQuerystring: this._useQuerystring,
                 json: true,
-                body: models.ObjectSerializer.serialize(body, "UserSvcReadUserByTokenRequest")
             };
             let authenticationPromise = Promise.resolve();
             if (this.authentications.BearerAuth.apiKey) {

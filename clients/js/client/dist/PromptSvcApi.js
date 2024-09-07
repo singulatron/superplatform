@@ -9,11 +9,8 @@ var PromptSvcRemovePromptRequest = require('./PromptSvcRemovePromptRequest.js');
 require('./PromptSvcPrompt.js');
 require('./PromptSvcPromptStatus.js');
 require('./DatastoreQuery.js');
-require('./DatastoreCondition.js');
-require('./DatastoreEqualCondition.js');
-require('./DatastoreFieldSelector.js');
-require('./DatastoreContainsCondition.js');
-require('./DatastoreStartsWithCondition.js');
+require('./DatastoreFilter.js');
+require('./DatastoreOp.js');
 require('./DatastoreOrderBy.js');
 
 /* tslint:disable */

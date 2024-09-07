@@ -9,21 +9,21 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { DatastoreCondition } from './datastoreCondition';
+import { DatastoreFilter } from './datastoreFilter';
 import { DatastoreOrderBy } from './datastoreOrderBy';
 export declare class DatastoreQuery {
     /**
-    * After is used for paginations. Instead of offset-based pagination, we support cursor-based pagination because it works better in a scalable, distributed environment.
+    * JSONAfter is used for cursor-based pagination, which is more effective in scalable and distributed environments compared to offset-based pagination.  JSONAfter is a JSON encoded string due to limitations of Swaggo (ie. []interface{} generates []map[stirng]interface{}).
     */
-    'after'?: Array<object>;
+    'after'?: string;
     /**
-    * Conditions are filtering options of a query. It is advised to use It\'s advised to use helper functions in your respective client library such as condition constructors (`all`, `equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
-    */
-    'conditions'?: Array<DatastoreCondition>;
-    /**
-    * Count true means return the count of the dataset filtered by Conditions without after or limit.
+    * Count true means return the count of the dataset filtered by Filters without after or limit.
     */
     'count'?: boolean;
+    /**
+    * Filters are filtering options of a query. It is advised to use It\'s advised to use helper functions in your respective client library such as filter constructors (`all`, `equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
+    */
+    'filters'?: Array<DatastoreFilter>;
     /**
     * Limit the number of records in the result set.
     */

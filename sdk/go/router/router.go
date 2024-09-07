@@ -35,6 +35,10 @@ func (r *Router) SetDefaultAddress(address string) {
 	r.defaultAddress = address
 }
 
+func (r *Router) Address() string {
+	return r.defaultAddress
+}
+
 func (r *Router) AddMock(serviceName, path string, rsp any) {
 	r.mockEndpoints[serviceName+path] = rsp
 }

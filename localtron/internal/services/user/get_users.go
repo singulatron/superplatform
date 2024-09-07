@@ -8,33 +8,30 @@
 package userservice
 
 import (
+	"encoding/json"
+
 	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
 )
 
 func (s *UserService) getUsers(options *usertypes.GetUsersOptions) ([]*usertypes.User, int64, error) {
-	if len(options.Query.Conditions) == 0 {
-		options.Query.Conditions = append(options.Query.Conditions, datastore.All())
-	}
-
-	additional := []datastore.Condition{}
-	if len(options.Query.Conditions) > 1 {
-		additional = options.Query.Conditions[1:]
-	}
 	q := s.usersStore.Query(
-		options.Query.Conditions[0], additional...,
+		options.Query.Filters...,
 	).Limit(options.Query.Limit)
 
-	if len(options.Query.OrderBys) > 1 {
-		q = q.OrderBy(options.Query.OrderBys[0], options.Query.OrderBys[1:]...)
-	} else if len(options.Query.OrderBys) > 0 {
-		q = q.OrderBy(options.Query.OrderBys[0])
+	if len(options.Query.OrderBys) > 0 {
+		q = q.OrderBy(options.Query.OrderBys...)
 	} else {
 		q = q.OrderBy(datastore.OrderByField("createdAt", true))
 	}
 
-	if options.Query.After != nil {
-		q = q.After(options.Query.After...)
+	if options.Query.JSONAfter != "" {
+		v := []any{}
+		err := json.Unmarshal([]byte(options.Query.JSONAfter), &v)
+		if err != nil {
+			return nil, 0, err
+		}
+		q = q.After(v...)
 	}
 
 	res, err := q.Find()

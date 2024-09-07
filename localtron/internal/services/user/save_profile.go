@@ -17,7 +17,7 @@ import (
 
 func (s *UserService) saveProfile(email, newName string) error {
 	query := s.usersStore.Query(
-		datastore.Equal(datastore.Field("email"), email),
+		datastore.Equals(datastore.Field("email"), email),
 	)
 
 	userI, found, err := query.FindOne()

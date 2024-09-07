@@ -8,6 +8,7 @@
 package dynamicservice
 
 import (
+	"context"
 	"errors"
 
 	"github.com/google/uuid"
@@ -16,19 +17,23 @@ import (
 	"github.com/singulatron/singulatron/sdk/go/router"
 
 	dynamictypes "github.com/singulatron/singulatron/localtron/internal/services/dynamic/types"
+
+	clients "github.com/singulatron/singulatron/clients/go"
 )
 
 type DynamicService struct {
 	router          *router.Router
 	store           datastore.DataStore
 	credentialStore datastore.DataStore
+	publicKey       string
+	client          *clients.APIClient
 }
 
 func NewDynamicService(
 	router *router.Router,
 	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error),
 ) (*DynamicService, error) {
-	store, err := datastoreFactory("genericSvcObjects", &dynamictypes.GenericObject{})
+	store, err := datastoreFactory("genericSvcObjects", &dynamictypes.Object{})
 	if err != nil {
 		return nil, err
 	}
@@ -47,6 +52,21 @@ func NewDynamicService(
 }
 
 func (g *DynamicService) Start() error {
+	g.client = clients.NewAPIClient(&clients.Configuration{
+		Servers: clients.ServerConfigurations{
+			{
+				URL:         g.router.Address(),
+				Description: "Default server",
+			},
+		},
+	})
+
+	pk, _, err := g.client.UserSvcAPI.GetPublicKey(context.Background()).Execute()
+	if err != nil {
+		return err
+	}
+	g.publicKey = *pk.PublicKey
+
 	token, err := sdk.RegisterService("dynamic-svc", "Dynamic Svc", g.router, g.credentialStore)
 	if err != nil {
 		return err
@@ -72,7 +92,7 @@ func (g *DynamicService) createMany(request *dynamictypes.CreateManyRequest) err
 	return g.store.CreateMany(objectIs)
 }
 
-func (g *DynamicService) upsert(request *dynamictypes.UpsertObjectRequest) error {
+func (g *DynamicService) upsert(writers []string, request *dynamictypes.UpsertObjectRequest) error {
 	vI, found, err := g.store.Query(
 		datastore.Id(request.Object.Id),
 	).FindOne()
@@ -81,13 +101,39 @@ func (g *DynamicService) upsert(request *dynamictypes.UpsertObjectRequest) error
 	}
 
 	if found {
-		v := vI.(*dynamictypes.GenericObject)
-		if v.UserId != request.Object.UserId {
+		v := vI.(*dynamictypes.Object)
+
+		if !intersects(writers, v.Writers) {
 			return errors.New("unauthorized")
+		}
+
+		if request.Object.Readers == nil {
+			request.Object.Readers = v.Readers
+		}
+		if request.Object.Writers == nil {
+			request.Object.Writers = v.Writers
+		}
+		if request.Object.Deleters == nil {
+			request.Object.Deleters = v.Deleters
 		}
 	}
 
 	return g.store.Upsert(request.Object)
+}
+
+func intersects(slice1, slice2 []string) bool {
+	elemMap := make(map[string]struct{})
+	for _, elem := range slice1 {
+		elemMap[elem] = struct{}{}
+	}
+
+	for _, elem := range slice2 {
+		if _, found := elemMap[elem]; found {
+			return true
+		}
+	}
+
+	return false
 }
 
 func (g *DynamicService) upsertMany(request *dynamictypes.UpsertManyRequest) error {
@@ -98,34 +144,34 @@ func (g *DynamicService) upsertMany(request *dynamictypes.UpsertManyRequest) err
 	return g.store.UpsertMany(objectIs)
 }
 
-func (g *DynamicService) update(tableName string, userId string, conditions []datastore.Condition, object *dynamictypes.GenericObject) error {
+func (g *DynamicService) update(tableName string, userId string, conditions []datastore.Filter, object *dynamictypes.Object) error {
 	if len(conditions) == 0 {
 		return errors.New("no conditions")
 	}
 
-	conditions = append(conditions, datastore.Equal(datastore.Field("table"), tableName))
-	conditions = append(conditions, datastore.Equal(
+	conditions = append(conditions, datastore.Equals(datastore.Field("table"), tableName))
+	conditions = append(conditions, datastore.Equals(
 		datastore.Field("userId"),
 		userId,
 	))
 
 	return g.store.Query(
-		conditions[0], conditions[1:]...,
+		conditions...,
 	).Update(object)
 }
 
-func (g *DynamicService) delete(tableName string, userId string, conditions []datastore.Condition) error {
+func (g *DynamicService) delete(tableName string, userId string, conditions []datastore.Filter) error {
 	if len(conditions) == 0 {
 		return errors.New("no conditions")
 	}
 
-	conditions = append(conditions, datastore.Equal(datastore.Field("table"), tableName))
-	conditions = append(conditions, datastore.Equal(
+	conditions = append(conditions, datastore.Equals(datastore.Field("table"), tableName))
+	conditions = append(conditions, datastore.Equals(
 		datastore.Field("userId"),
 		userId,
 	))
 
 	return g.store.Query(
-		conditions[0], conditions[1:]...,
+		conditions...,
 	).Delete()
 }

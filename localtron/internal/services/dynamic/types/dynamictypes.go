@@ -4,29 +4,44 @@ import (
 	"github.com/singulatron/singulatron/sdk/go/datastore"
 )
 
+const AnyIdentifier string = "any"
+
 type ErrorResponse struct {
 	Error string `json:"error"`
 }
 
-type GenericObjectCreateFields struct {
+type ObjectCreateFields struct {
 	Id    string `json:"id"`
 	Table string `json:"table" binding:"required"`
 
-	// Public determines if the object is visible to all users.
-	// When it's false the entry is only visible to the user who created it.
-	// When it's true the entry is visible to everyone.
-	Public bool `json:"public,omitempty"`
+	// Authors is a list of user ID and organization ID who created the object.
+	// If an organization ID is not provided, the currently active organization will
+	// be queried from the User Svc.
+	Authors []string `json:"authors" example:"[\"usr_12345\", \"org_67890\"]"`
+
+	// Readers is a list of user IDs and role IDs that can read the object.
+	// `_self` can be used to refer to the caller user's userId and
+	// `_org` can be used to refer to the user's currently active organization (if exists).
+	Readers []string `json:"readers,omitempty"`
+
+	// Writers is a list of user IDs and role IDs that can write the object.
+	// `_self` can be used to refer to the caller user's userId and
+	// `_org` can be used to refer to the user's currently active organization (if exists).
+	Writers []string `json:"writers,omitempty"`
+
+	// Deleters is a list of user IDs and role IDs that can delete the object.
+	// `_self` can be used to refer to the caller user's userId and
+	// `_org` can be used to refer to the user's currently active organization (if exists).
+	Deleters []string `json:"deleters,omitempty"`
 
 	Data map[string]interface{} `json:"data,omitempty" binding:"required"`
-
-	UserId string `json:"userId,omitempty"`
 }
 
-func (g GenericObjectCreateFields) GetId() string {
+func (g ObjectCreateFields) GetId() string {
 	return g.Id
 }
 
-// GenericObject holds any kind of data, so
+// Object holds any kind of data, so
 // we don't have to implement simple CRUD for
 // any new simple entity.
 //
@@ -42,70 +57,68 @@ func (g GenericObjectCreateFields) GetId() string {
 //			"anyfield2": 42
 //		}
 //	}
-type GenericObject struct {
-	GenericObjectCreateFields
+type Object struct {
+	ObjectCreateFields
 
 	CreatedAt string `json:"createdAt,omitempty"`
 	UpdatedAt string `json:"updatedAt,omitempty"`
 }
 
 type QueryRequest struct {
-	Table  string           `json:"table"`
-	Query  *datastore.Query `json:"query"`
-	Public bool             `json:"public"`
+	Table   string           `json:"table"`
+	Query   *datastore.Query `json:"query"`
+	Readers []string         `json:"readers,omitempty"`
 }
 
 type QueryOptions struct {
-	Table  string
-	Query  *datastore.Query
-	UserId string
-	Public bool
+	Table string
+	Query *datastore.Query
 }
 
 type QueryResponse struct {
-	Objects []*GenericObject `json:"objects,omitempty"`
+	Objects []*Object `json:"objects,omitempty"`
 }
 
 type CreateObjectRequest struct {
-	Object *GenericObjectCreateFields `json:"object,omitempty"`
+	Object *ObjectCreateFields `json:"object,omitempty"`
 }
 
 type CreateObjectResponse struct {
-	Object *GenericObject `json:"object,omitempty"`
+	Object *Object `json:"object,omitempty"`
 }
 
 type CreateManyRequest struct {
-	Objects []*GenericObjectCreateFields `json:"objects,omitempty"`
+	Objects []*ObjectCreateFields `json:"objects,omitempty"`
 }
 
 type UpsertObjectRequest struct {
-	Object *GenericObjectCreateFields `json:"object,omitempty"`
+	Object *ObjectCreateFields `json:"object,omitempty"`
 }
 
 type UpsertObjectResponse struct {
-	Object *GenericObject `json:"object,omitempty"`
+	Object *Object `json:"object,omitempty"`
 }
 
 type UpsertManyRequest struct {
-	Objects []*GenericObjectCreateFields `json:"objects,omitempty"`
+	Objects []*ObjectCreateFields `json:"objects,omitempty"`
 }
 
 type UpsertManyResponse struct {
-	Objects []*GenericObject `json:"objects,omitempty"`
+	Objects []*Object `json:"objects,omitempty"`
 }
 
 type DeleteObjectRequest struct {
-	Table      string                `json:"table"`
-	Conditions []datastore.Condition `json:"conditions"`
+	Table   string             `json:"table"`
+	Filters []datastore.Filter `json:"filters"`
 }
 
 type DeleteObjectResponse struct {
 }
 
 type UpdateObjectRequest struct {
-	Table      string                `json:"table,omitempty"`
-	Conditions []datastore.Condition `json:"conditions,omitempty"`
-	Object     *GenericObject        `json:"object,omitempty"`
+	Table   string             `json:"table,omitempty"`
+	Filters []datastore.Filter `json:"filters,omitempty"`
+	Object  *Object            `json:"object,omitempty"`
 }
 
 type UpdateObjectResponse struct {

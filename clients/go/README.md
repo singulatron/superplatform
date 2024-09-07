@@ -100,8 +100,8 @@ Class | Method | HTTP request | Description
 *DownloadSvcAPI* | [**Pause**](docs/DownloadSvcAPI.md#pause) | **Put** /download-svc/download/{downloadId}/pause | Pause a Download
 *DynamicSvcAPI* | [**CreateObject**](docs/DynamicSvcAPI.md#createobject) | **Post** /dynamic-svc/object | Create a Generic Object
 *DynamicSvcAPI* | [**DeleteObjects**](docs/DynamicSvcAPI.md#deleteobjects) | **Post** /dynamic-svc/objects/delete | Delete a Generic Object
-*DynamicSvcAPI* | [**Query**](docs/DynamicSvcAPI.md#query) | **Post** /dynamic-svc/objects | Query Dynamic Objects
-*DynamicSvcAPI* | [**UpdateObjects**](docs/DynamicSvcAPI.md#updateobjects) | **Post** /dynamic-svc/objects/update | Update Dynamic Objects
+*DynamicSvcAPI* | [**Query**](docs/DynamicSvcAPI.md#query) | **Post** /dynamic-svc/objects | Query Objects
+*DynamicSvcAPI* | [**UpdateObjects**](docs/DynamicSvcAPI.md#updateobjects) | **Post** /dynamic-svc/objects/update | Update Objects
 *DynamicSvcAPI* | [**UpsertObject**](docs/DynamicSvcAPI.md#upsertobject) | **Put** /dynamic-svc/object/{objectId} | Upsert a Generic Object
 *FirehoseSvcAPI* | [**FirehoseSvcPublishPost**](docs/FirehoseSvcAPI.md#firehosesvcpublishpost) | **Post** /firehose-svc/publish | Publish an Event
 *FirehoseSvcAPI* | [**FirehoseSvcSubscribeGet**](docs/FirehoseSvcAPI.md#firehosesvcsubscribeget) | **Get** /firehose-svc/subscribe | Subscribe to the Event Stream
@@ -160,13 +160,10 @@ Class | Method | HTTP request | Description
  - [ConfigSvcGetConfigResponse](docs/ConfigSvcGetConfigResponse.md)
  - [ConfigSvcModelServiceConfig](docs/ConfigSvcModelServiceConfig.md)
  - [ConfigSvcSaveConfigRequest](docs/ConfigSvcSaveConfigRequest.md)
- - [DatastoreCondition](docs/DatastoreCondition.md)
- - [DatastoreContainsCondition](docs/DatastoreContainsCondition.md)
- - [DatastoreEqualCondition](docs/DatastoreEqualCondition.md)
- - [DatastoreFieldSelector](docs/DatastoreFieldSelector.md)
+ - [DatastoreFilter](docs/DatastoreFilter.md)
+ - [DatastoreOp](docs/DatastoreOp.md)
  - [DatastoreOrderBy](docs/DatastoreOrderBy.md)
  - [DatastoreQuery](docs/DatastoreQuery.md)
- - [DatastoreStartsWithCondition](docs/DatastoreStartsWithCondition.md)
  - [DockerSvcContainerIsRunningResponse](docs/DockerSvcContainerIsRunningResponse.md)
  - [DockerSvcDockerInfo](docs/DockerSvcDockerInfo.md)
  - [DockerSvcErrorResponse](docs/DockerSvcErrorResponse.md)
@@ -186,8 +183,8 @@ Class | Method | HTTP request | Description
  - [DynamicSvcCreateObjectResponse](docs/DynamicSvcCreateObjectResponse.md)
  - [DynamicSvcDeleteObjectRequest](docs/DynamicSvcDeleteObjectRequest.md)
  - [DynamicSvcErrorResponse](docs/DynamicSvcErrorResponse.md)
- - [DynamicSvcGenericObject](docs/DynamicSvcGenericObject.md)
- - [DynamicSvcGenericObjectCreateFields](docs/DynamicSvcGenericObjectCreateFields.md)
+ - [DynamicSvcObject](docs/DynamicSvcObject.md)
+ - [DynamicSvcObjectCreateFields](docs/DynamicSvcObjectCreateFields.md)
  - [DynamicSvcQueryRequest](docs/DynamicSvcQueryRequest.md)
  - [DynamicSvcQueryResponse](docs/DynamicSvcQueryResponse.md)
  - [DynamicSvcUpdateObjectRequest](docs/DynamicSvcUpdateObjectRequest.md)
@@ -247,8 +244,8 @@ Class | Method | HTTP request | Description
  - [UserSvcIsAuthorizedResponse](docs/UserSvcIsAuthorizedResponse.md)
  - [UserSvcLoginRequest](docs/UserSvcLoginRequest.md)
  - [UserSvcLoginResponse](docs/UserSvcLoginResponse.md)
+ - [UserSvcOrganization](docs/UserSvcOrganization.md)
  - [UserSvcPermission](docs/UserSvcPermission.md)
- - [UserSvcReadUserByTokenRequest](docs/UserSvcReadUserByTokenRequest.md)
  - [UserSvcReadUserByTokenResponse](docs/UserSvcReadUserByTokenResponse.md)
  - [UserSvcRegisterRequest](docs/UserSvcRegisterRequest.md)
  - [UserSvcRole](docs/UserSvcRole.md)

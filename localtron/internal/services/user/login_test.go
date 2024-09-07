@@ -9,6 +9,7 @@ import (
 
 	"github.com/singulatron/singulatron/localtron/internal/di"
 	sdk "github.com/singulatron/singulatron/sdk/go"
+	"github.com/singulatron/singulatron/sdk/go/test"
 
 	clients "github.com/singulatron/singulatron/clients/go"
 )
@@ -30,44 +31,19 @@ func TestRegistration(t *testing.T) {
 	err = starterFunc()
 	require.NoError(t, err)
 
-	client := clients.NewAPIClient(&clients.Configuration{
-		Servers: clients.ServerConfigurations{
-			{
-				URL:         server.URL,
-				Description: "Default server",
-			},
-		},
-	})
-	userSvc := client.UserSvcAPI
+	userSvc := test.Client(server.URL).UserSvcAPI
 
-	adminLoginRsp, _, err := userSvc.Login(context.Background()).Request(clients.UserSvcLoginRequest{
-		Slug:     clients.PtrString("singulatron"),
-		Password: clients.PtrString("changeme"),
-	}).Execute()
+	adminClient, adminToken, err := test.AdminClient(server.URL)
 	require.NoError(t, err)
 
 	publicKeyRsp, _, err := userSvc.GetPublicKey(context.Background()).Execute()
 	require.NoError(t, err)
 
-	adminClient := clients.NewAPIClient(&clients.Configuration{
-		Servers: clients.ServerConfigurations{
-			{
-				URL:         server.URL,
-				Description: "Default server",
-			},
-		},
-		DefaultHeader: map[string]string{
-			"Authorization": "Bearer " + *adminLoginRsp.Token.Token,
-		},
-	})
-
 	t.Run("user password change", func(t *testing.T) {
-		claim, err := sdk.DecodeJWT(*adminLoginRsp.Token.Token, *publicKeyRsp.PublicKey)
+		claim, err := sdk.DecodeJWT(adminToken, *publicKeyRsp.PublicKey)
 		require.NoError(t, err)
 
-		byTokenRsp, _, err := userSvc.ReadUserByToken(context.Background()).Body(clients.UserSvcReadUserByTokenRequest{
-			Token: adminLoginRsp.Token.Token,
-		}).Execute()
+		byTokenRsp, _, err := adminClient.UserSvcAPI.ReadUserByToken(context.Background()).Execute()
 		require.NoError(t, err)
 
 		require.Equal(t, "singulatron", *byTokenRsp.User.Slug)
@@ -111,86 +87,16 @@ func TestOrganization(t *testing.T) {
 	err = starterFunc()
 	require.NoError(t, err)
 
-	client := clients.NewAPIClient(&clients.Configuration{
-		Servers: clients.ServerConfigurations{
-			{
-				URL:         server.URL,
-				Description: "Default server",
-			},
-		},
-	})
-	userSvc := client.UserSvcAPI
-
-	adminLoginRsp, _, err := userSvc.Login(context.Background()).Request(clients.UserSvcLoginRequest{
-		Slug:     clients.PtrString("singulatron"),
-		Password: clients.PtrString("changeme"),
-	}).Execute()
+	adminClient, adminToken, err := test.AdminClient(server.URL)
 	require.NoError(t, err)
 
-	publicKeyRsp, _, err := userSvc.GetPublicKey(context.Background()).Execute()
+	manyClients, err := test.MakeClients(options.Router, 2)
 	require.NoError(t, err)
+	otherClient := manyClients[0]
+	thirdClient := manyClients[1]
 
-	adminClient := clients.NewAPIClient(&clients.Configuration{
-		Servers: clients.ServerConfigurations{
-			{
-				URL:         server.URL,
-				Description: "Default server",
-			},
-		},
-		DefaultHeader: map[string]string{
-			"Authorization": "Bearer " + *adminLoginRsp.Token.Token,
-		},
-	})
-
-	// Register additional users
-	_, _, err = userSvc.Register(context.Background()).Body(clients.UserSvcRegisterRequest{
-		Name:     clients.PtrString("Some User"),
-		Slug:     clients.PtrString("someotheruser"),
-		Password: clients.PtrString("pw1233"),
-	}).Execute()
-
+	publicKeyRsp, _, err := test.Client(server.URL).UserSvcAPI.GetPublicKey(context.Background()).Execute()
 	require.NoError(t, err)
-	otherLoginRsp, _, err := userSvc.Login(context.Background()).Request(clients.UserSvcLoginRequest{
-		Slug:     clients.PtrString("someotheruser"),
-		Password: clients.PtrString("pw1233"),
-	}).Execute()
-	require.NoError(t, err)
-
-	otherClient := clients.NewAPIClient(&clients.Configuration{
-		Servers: clients.ServerConfigurations{
-			{
-				URL:         server.URL,
-				Description: "Default server",
-			},
-		},
-		DefaultHeader: map[string]string{
-			"Authorization": "Bearer " + *otherLoginRsp.Token.Token,
-		},
-	})
-
-	_, _, err = userSvc.Register(context.Background()).Body(clients.UserSvcRegisterRequest{
-		Name:     clients.PtrString("Some Other User"),
-		Slug:     clients.PtrString("someotherthirduser"),
-		Password: clients.PtrString("thirdpw1233"),
-	}).Execute()
-	require.NoError(t, err)
-	thirdLoginRsp, _, err := userSvc.Login(context.Background()).Request(clients.UserSvcLoginRequest{
-		Slug:     clients.PtrString("someotherthirduser"),
-		Password: clients.PtrString("thirdpw1233"),
-	}).Execute()
-	require.NoError(t, err)
-
-	thirdClient := clients.NewAPIClient(&clients.Configuration{
-		Servers: clients.ServerConfigurations{
-			{
-				URL:         server.URL,
-				Description: "Default server",
-			},
-		},
-		DefaultHeader: map[string]string{
-			"Authorization": "Bearer " + *thirdLoginRsp.Token.Token,
-		},
-	})
 
 	t.Run("claim contains new organization admin role after creating organization", func(t *testing.T) {
 		createOrgReq := clients.UserSvcCreateOrganizationRequest{
@@ -201,7 +107,7 @@ func TestOrganization(t *testing.T) {
 		_, _, err := adminClient.UserSvcAPI.CreateOrganization(context.Background()).Request(createOrgReq).Execute()
 		require.NoError(t, err)
 
-		claim, err := sdk.DecodeJWT(*adminLoginRsp.Token.Token, *publicKeyRsp.PublicKey)
+		claim, err := sdk.DecodeJWT(adminToken, *publicKeyRsp.PublicKey)
 		require.NoError(t, err)
 		require.NotNil(t, claim)
 		require.Equal(t, 1, len(claim.RoleIds), claim.RoleIds)
@@ -217,13 +123,16 @@ func TestOrganization(t *testing.T) {
 		require.NoError(t, err)
 		require.NotNil(t, claim)
 		require.Equal(t, 2, len(claim.RoleIds), claim.RoleIds)
-		require.Contains(t, claim.RoleIds, "user-svc:org:test-org:admin", claim.RoleIds)
+		require.Contains(t, claim.RoleIds, "user-svc:org:{test-org}:admin", claim.RoleIds)
+
+		tokenRsp, _, err := adminClient.UserSvcAPI.ReadUserByToken(context.Background()).Execute()
+		require.NoError(t, err)
+		require.Equal(t, 1, len(tokenRsp.Organizations))
+		require.Equal(t, clients.PtrString("torgid1"), tokenRsp.ActiveOrganizationId)
 	})
 
 	t.Run("assign org to user", func(t *testing.T) {
-		byTokenRsp, _, err := otherClient.UserSvcAPI.ReadUserByToken(context.Background()).Body(clients.UserSvcReadUserByTokenRequest{
-			Token: otherLoginRsp.Token.Token,
-		}).Execute()
+		byTokenRsp, _, err := otherClient.UserSvcAPI.ReadUserByToken(context.Background()).Execute()
 		require.NoError(t, err)
 
 		addUserReq := clients.UserSvcAddUserToOrganizationRequest{
@@ -233,8 +142,8 @@ func TestOrganization(t *testing.T) {
 		require.NoError(t, err)
 
 		loginReq := clients.UserSvcLoginRequest{
-			Slug:     clients.PtrString("someotheruser"),
-			Password: clients.PtrString("pw1233"),
+			Slug:     clients.PtrString("test-user-slug-0"),
+			Password: clients.PtrString("testUserPassword0"),
 		}
 		// log in again and see the claim
 		loginRsp, _, err := otherClient.UserSvcAPI.Login(context.Background()).Request(loginReq).Execute()

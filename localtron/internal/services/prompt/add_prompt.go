@@ -13,7 +13,7 @@ import (
 	"log/slog"
 	"time"
 
-	"github.com/google/uuid"
+	sdk "github.com/singulatron/singulatron/sdk/go"
 	"github.com/singulatron/singulatron/sdk/go/clients/llm"
 	"github.com/singulatron/singulatron/sdk/go/logger"
 
@@ -37,7 +37,7 @@ func (p *PromptService) addPrompt(ctx context.Context, promptReq *prompttypes.Ad
 	prompt.UserId = userId
 
 	if prompt.Id == "" {
-		prompt.Id = uuid.New().String()
+		prompt.Id = sdk.Id("prom")
 	}
 
 	if prompt.ThreadId == "" {

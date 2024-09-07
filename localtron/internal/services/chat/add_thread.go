@@ -12,15 +12,15 @@ import (
 	"errors"
 	"time"
 
-	"github.com/google/uuid"
 	chattypes "github.com/singulatron/singulatron/localtron/internal/services/chat/types"
 	firehosetypes "github.com/singulatron/singulatron/localtron/internal/services/firehose/types"
+	sdk "github.com/singulatron/singulatron/sdk/go"
 	"github.com/singulatron/singulatron/sdk/go/logger"
 )
 
 func (a *ChatService) addThread(chatThread *chattypes.Thread) (*chattypes.Thread, error) {
 	if chatThread.Id == "" {
-		chatThread.Id = uuid.New().String()
+		chatThread.Id = sdk.Id("thr")
 	}
 	if chatThread.Title == "" {
 		chatThread.Title = "New chat"

@@ -8,25 +8,30 @@
 package promptservice
 
 import (
+	"encoding/json"
+
 	prompttypes "github.com/singulatron/singulatron/localtron/internal/services/prompt/types"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
 )
 
 func (p *PromptService) listPrompts(options *prompttypes.ListPromptOptions) ([]*prompttypes.Prompt, int64, error) {
 	q := p.promptsStore.Query(
-		options.Query.Conditions[0], options.Query.Conditions[1:]...,
+		options.Query.Filters...,
 	).Limit(options.Query.Limit)
 
-	if len(options.Query.OrderBys) > 1 {
-		q = q.OrderBy(options.Query.OrderBys[0], options.Query.OrderBys[1:]...)
-	} else if len(options.Query.OrderBys) > 0 {
-		q = q.OrderBy(options.Query.OrderBys[0])
+	if len(options.Query.OrderBys) > 0 {
+		q = q.OrderBy(options.Query.OrderBys...)
 	} else {
 		q = q.OrderBy(datastore.OrderByField("createdAt", false))
 	}
 
-	if options.Query.After != nil {
-		q = q.After(options.Query.After...)
+	if options.Query.JSONAfter != "" {
+		v := []any{}
+		err := json.Unmarshal([]byte(options.Query.JSONAfter), &v)
+		if err != nil {
+			return nil, 0, err
+		}
+		q = q.After(v...)
 	}
 
 	resI, err := q.Find()
