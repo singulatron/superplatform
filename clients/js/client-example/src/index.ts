@@ -1,4 +1,4 @@
-import { UserSvcApi } from "@singulatron/client";
+import { Configuration, UserSvcApi } from "@singulatron/client";
 import { dynamicTest } from "./dynamic_example.js";
 import { promptTest } from "./prompt_example.js";
 
@@ -12,10 +12,12 @@ async function start() {
   });
 
   const token = loginResponse.token?.token;
-  userService = new UserSvcApi();
-  ({
-    apiKey: token,
-  });
+
+  userService = new UserSvcApi(
+    new Configuration({
+      apiKey: token!,
+    })
+  );
 
   const readTokenResponse = await userService.readUserByToken();
   if (readTokenResponse.user?.slug !== "singulatron") {
