@@ -106,6 +106,16 @@ func (g *DynamicService) upsert(writers []string, request *dynamictypes.UpsertOb
 		if !intersects(writers, v.Writers) {
 			return errors.New("unauthorized")
 		}
+
+		if request.Object.Readers == nil {
+			request.Object.Readers = v.Readers
+		}
+		if request.Object.Writers == nil {
+			request.Object.Writers = v.Writers
+		}
+		if request.Object.Deleters == nil {
+			request.Object.Deleters = v.Deleters
+		}
 	}
 
 	return g.store.Upsert(request.Object)

@@ -73,6 +73,12 @@ func (g *DynamicService) Query(
 		return
 	}
 
+	for i, v := range req.Readers {
+		if v == "_self" {
+			req.Readers[i] = rsp.User.Id
+		}
+	}
+
 	identifiers := append(claims.RoleIds, []string{rsp.User.Id, dynamic.AnyIdentifier}...)
 	allowedReaders := lo.Intersect(identifiers, req.Readers)
 

@@ -55,9 +55,9 @@ func TestCreate(t *testing.T) {
 	obj := client.DynamicSvcObjectCreateFields{
 		Id:       &uuid1,
 		Table:    table1,
-		Readers:  []string{*tokenReadRsp1.User.Id},
-		Writers:  []string{*tokenReadRsp1.User.Id},
-		Deleters: []string{*tokenReadRsp1.User.Id},
+		Readers:  []string{"_self"},
+		Writers:  []string{"_self"},
+		Deleters: []string{"_self"},
 		Data:     map[string]interface{}{"key": "value"},
 	}
 
@@ -123,6 +123,27 @@ func TestCreate(t *testing.T) {
 		require.Equal(t, uuid1, *rsp.Objects[0].Id)
 	})
 
+	t.Run("query user1 records with _self", func(t *testing.T) {
+		req := client.DynamicSvcQueryRequest{
+			Table: &table1,
+			Query: &client.DatastoreQuery{Filters: []client.DatastoreFilter{
+				{
+					Fields: []string{"id"},
+					Op:     client.OpEquals.Ptr(),
+					Values: sdk.Marshal([]any{uuid1}),
+				},
+			}},
+
+			Readers: []string{"_self"},
+		}
+
+		rsp, _, err := client1.DynamicSvcAPI.Query(context.Background()).Body(req).Execute()
+		require.NoError(t, err)
+		require.NoError(t, err)
+		require.Equal(t, 1, len(rsp.Objects))
+		require.Equal(t, uuid1, *rsp.Objects[0].Id)
+	})
+
 	t.Run("already exists", func(t *testing.T) {
 		_, _, err = client1.DynamicSvcAPI.CreateObject(context.Background()).Body(client.DynamicSvcCreateObjectRequest{
 			Object: &obj,
@@ -167,7 +188,7 @@ func TestCreate(t *testing.T) {
 		require.NoError(t, err)
 	})
 
-	t.Run("user 1 can find its own reord", func(t *testing.T) {
+	t.Run("user 1 can find its own record", func(t *testing.T) {
 		req := &client.DynamicSvcQueryRequest{
 			Table:   client.PtrString(table1),
 			Readers: []string{*tokenReadRsp1.User.Id},
@@ -176,7 +197,7 @@ func TestCreate(t *testing.T) {
 
 		require.NoError(t, err)
 		require.Equal(t, 1, len(rsp.Objects))
-		require.Contains(t, uuid1, *rsp.Objects[0].Id)
+		require.Equal(t, uuid1, *rsp.Objects[0].Id)
 	})
 
 	t.Run("user 2 cannot delete user 1's record", func(t *testing.T) {

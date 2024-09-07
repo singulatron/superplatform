@@ -57,7 +57,22 @@ func (g *DynamicService) Create(
 		return
 	}
 	defer r.Body.Close()
-	//req.Object.UserId = rsp.User.Id
+
+	for i, v := range req.Object.Readers {
+		if v == "_self" {
+			req.Object.Readers[i] = rsp.User.Id
+		}
+	}
+	for i, v := range req.Object.Writers {
+		if v == "_self" {
+			req.Object.Writers[i] = rsp.User.Id
+		}
+	}
+	for i, v := range req.Object.Deleters {
+		if v == "_self" {
+			req.Object.Deleters[i] = rsp.User.Id
+		}
+	}
 
 	err = g.create(req)
 	if err != nil {
