@@ -57,10 +57,9 @@ export declare class DynamicSvcApi {
     /**
      * Removes a dynamic object from the system based on the provided conditions. Requires authorization and user authentication.
      * @summary Delete a Generic Object
-     * @param objectId Object ID
      * @param body Delete request payload
      */
-    deleteObjects(objectId: string, body: DynamicSvcDeleteObjectRequest, options?: {
+    deleteObjects(body: DynamicSvcDeleteObjectRequest, options?: {
         headers: {
             [name: string]: string;
         };

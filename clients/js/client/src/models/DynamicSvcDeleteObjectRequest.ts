@@ -31,7 +31,7 @@ export interface DynamicSvcDeleteObjectRequest {
      * @type {Array<DatastoreFilter>}
      * @memberof DynamicSvcDeleteObjectRequest
      */
-    conditions?: Array<DatastoreFilter>;
+    filters?: Array<DatastoreFilter>;
     /**
      * 
      * @type {string}
@@ -57,7 +57,7 @@ export function DynamicSvcDeleteObjectRequestFromJSONTyped(json: any, ignoreDisc
     }
     return {
         
-        'conditions': json['conditions'] == null ? undefined : ((json['conditions'] as Array<any>).map(DatastoreFilterFromJSON)),
+        'filters': json['filters'] == null ? undefined : ((json['filters'] as Array<any>).map(DatastoreFilterFromJSON)),
         'table': json['table'] == null ? undefined : json['table'],
     };
 }
@@ -68,7 +68,7 @@ export function DynamicSvcDeleteObjectRequestToJSON(value?: DynamicSvcDeleteObje
     }
     return {
         
-        'conditions': value['conditions'] == null ? undefined : ((value['conditions'] as Array<any>).map(DatastoreFilterToJSON)),
+        'filters': value['filters'] == null ? undefined : ((value['filters'] as Array<any>).map(DatastoreFilterToJSON)),
         'table': value['table'],
     };
 }

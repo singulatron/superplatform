@@ -15,7 +15,7 @@ import { DatastoreFilter } from './datastoreFilter';
 import { DynamicSvcObject } from './dynamicSvcObject';
 
 export class DynamicSvcUpdateObjectRequest {
-    'conditions'?: Array<DatastoreFilter>;
+    'filters'?: Array<DatastoreFilter>;
     'object'?: DynamicSvcObject;
     'table'?: string;
 
@@ -23,8 +23,8 @@ export class DynamicSvcUpdateObjectRequest {
 
     static attributeTypeMap: Array<{name: string, baseName: string, type: string}> = [
         {
-            "name": "conditions",
-            "baseName": "conditions",
+            "name": "filters",
+            "baseName": "filters",
             "type": "Array<DatastoreFilter>"
         },
         {

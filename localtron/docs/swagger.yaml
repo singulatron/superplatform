@@ -169,8 +169,11 @@ definitions:
       op:
         $ref: '#/definitions/datastore.Op'
       values:
-        items: {}
-        type: array
+        description: |-
+          JSONValues is a JSON marshalled array of values.
+          It's JSON marhalled due to the limitations of the
+          Swaggo -> OpenAPI 2.0 -> OpenAPI Go generator toolchain.
+        type: string
     type: object
   datastore.Op:
     enum:
@@ -203,11 +206,12 @@ definitions:
     properties:
       after:
         description: |-
-          After is used for paginations. Instead of offset-based pagination,
-          we support cursor-based pagination because it works better in a scalable,
-          distributed environment.
-        items: {}
-        type: array
+          JSONAfter is used for cursor-based pagination, which is more
+          effective in scalable and distributed environments compared
+          to offset-based pagination.
+
+          JSONAfter is a JSON encoded string due to limitations of Swaggo (ie. []interface{} generates []map[stirng]interface{}).
+        type: string
       count:
         description: |-
           Count true means return the count of the dataset filtered by Filters
@@ -400,7 +404,7 @@ definitions:
     type: object
   dynamic_svc.DeleteObjectRequest:
     properties:
-      conditions:
+      filters:
         items:
           $ref: '#/definitions/datastore.Filter'
         type: array
@@ -534,7 +538,7 @@ definitions:
     type: object
   dynamic_svc.UpdateObjectRequest:
     properties:
-      conditions:
+      filters:
         items:
           $ref: '#/definitions/datastore.Filter'
         type: array
@@ -2164,11 +2168,6 @@ paths:
         conditions. Requires authorization and user authentication.
       operationId: deleteObjects
       parameters:
-      - description: Object ID
-        in: path
-        name: objectId
-        required: true
-        type: string
       - description: Delete request payload
         in: body
         name: body

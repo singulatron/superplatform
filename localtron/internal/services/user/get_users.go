@@ -8,6 +8,8 @@
 package userservice
 
 import (
+	"encoding/json"
+
 	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
 )
@@ -23,8 +25,13 @@ func (s *UserService) getUsers(options *usertypes.GetUsersOptions) ([]*usertypes
 		q = q.OrderBy(datastore.OrderByField("createdAt", true))
 	}
 
-	if options.Query.After != nil {
-		q = q.After(options.Query.After...)
+	if options.Query.JSONAfter != "" {
+		v := []any{}
+		err := json.Unmarshal([]byte(options.Query.JSONAfter), &v)
+		if err != nil {
+			return nil, 0, err
+		}
+		q = q.After(v...)
 	}
 
 	res, err := q.Find()

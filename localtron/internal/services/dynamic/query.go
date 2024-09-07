@@ -8,6 +8,7 @@
 package dynamicservice
 
 import (
+	"encoding/json"
 	"errors"
 
 	"github.com/singulatron/singulatron/sdk/go/datastore"
@@ -48,8 +49,13 @@ func (g *DynamicService) query(readers []string, options dynamictypes.QueryOptio
 			q.Limit(options.Query.Limit)
 		}
 
-		if options.Query.After != nil {
-			q.After(options.Query.After...)
+		if options.Query.JSONAfter != "" {
+			v := []any{}
+			err := json.Unmarshal([]byte(options.Query.JSONAfter), &v)
+			if err != nil {
+				return nil, err
+			}
+			q = q.After(v...)
 		}
 	}
 

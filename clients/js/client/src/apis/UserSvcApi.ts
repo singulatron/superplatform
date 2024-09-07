@@ -140,10 +140,6 @@ export interface LoginRequest {
     request: UserSvcLoginRequest;
 }
 
-export interface ReadUserByTokenRequest {
-    body: object;
-}
-
 export interface RegisterRequest {
     body: UserSvcRegisterRequest;
 }
@@ -782,19 +778,10 @@ export class UserSvcApi extends runtime.BaseAPI {
      * Retrieve user information based on an authentication token.
      * Read User by Token
      */
-    async readUserByTokenRaw(requestParameters: ReadUserByTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserSvcReadUserByTokenResponse>> {
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling readUserByToken().'
-            );
-        }
-
+    async readUserByTokenRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserSvcReadUserByTokenResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.apiKey) {
             headerParameters["Authorization"] = await this.configuration.apiKey("Authorization"); // BearerAuth authentication
@@ -805,7 +792,6 @@ export class UserSvcApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['body'] as any,
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => UserSvcReadUserByTokenResponseFromJSON(jsonValue));
@@ -815,8 +801,8 @@ export class UserSvcApi extends runtime.BaseAPI {
      * Retrieve user information based on an authentication token.
      * Read User by Token
      */
-    async readUserByToken(requestParameters: ReadUserByTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserSvcReadUserByTokenResponse> {
-        const response = await this.readUserByTokenRaw(requestParameters, initOverrides);
+    async readUserByToken(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserSvcReadUserByTokenResponse> {
+        const response = await this.readUserByTokenRaw(initOverrides);
         return await response.value();
     }
 

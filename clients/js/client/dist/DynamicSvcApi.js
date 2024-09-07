@@ -74,9 +74,6 @@ class DynamicSvcApi extends runtime.BaseAPI {
      */
     deleteObjectsRaw(requestParameters, initOverrides) {
         return runtime.__awaiter(this, void 0, void 0, function* () {
-            if (requestParameters['objectId'] == null) {
-                throw new runtime.RequiredError('objectId', 'Required parameter "objectId" was null or undefined when calling deleteObjects().');
-            }
             if (requestParameters['body'] == null) {
                 throw new runtime.RequiredError('body', 'Required parameter "body" was null or undefined when calling deleteObjects().');
             }
@@ -87,7 +84,7 @@ class DynamicSvcApi extends runtime.BaseAPI {
                 headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
             }
             const response = yield this.request({
-                path: `/dynamic-svc/objects/delete`.replace(`{${"objectId"}}`, encodeURIComponent(String(requestParameters['objectId']))),
+                path: `/dynamic-svc/objects/delete`,
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,

@@ -21,7 +21,7 @@ export interface DynamicSvcDeleteObjectRequest {
      * @type {Array<DatastoreFilter>}
      * @memberof DynamicSvcDeleteObjectRequest
      */
-    conditions?: Array<DatastoreFilter>;
+    filters?: Array<DatastoreFilter>;
     /**
      *
      * @type {string}

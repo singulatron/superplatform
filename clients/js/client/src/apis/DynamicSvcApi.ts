@@ -51,7 +51,6 @@ export interface CreateObjectRequest {
 }
 
 export interface DeleteObjectsRequest {
-    objectId: string;
     body: DynamicSvcDeleteObjectRequest;
 }
 
@@ -120,13 +119,6 @@ export class DynamicSvcApi extends runtime.BaseAPI {
      * Delete a Generic Object
      */
     async deleteObjectsRaw(requestParameters: DeleteObjectsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
-        if (requestParameters['objectId'] == null) {
-            throw new runtime.RequiredError(
-                'objectId',
-                'Required parameter "objectId" was null or undefined when calling deleteObjects().'
-            );
-        }
-
         if (requestParameters['body'] == null) {
             throw new runtime.RequiredError(
                 'body',
@@ -145,7 +137,7 @@ export class DynamicSvcApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/dynamic-svc/objects/delete`.replace(`{${"objectId"}}`, encodeURIComponent(String(requestParameters['objectId']))),
+            path: `/dynamic-svc/objects/delete`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,

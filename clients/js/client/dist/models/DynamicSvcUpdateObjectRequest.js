@@ -27,7 +27,7 @@ export function DynamicSvcUpdateObjectRequestFromJSONTyped(json, ignoreDiscrimin
         return json;
     }
     return {
-        'conditions': json['conditions'] == null ? undefined : (json['conditions'].map(DatastoreFilterFromJSON)),
+        'filters': json['filters'] == null ? undefined : (json['filters'].map(DatastoreFilterFromJSON)),
         'object': json['object'] == null ? undefined : DynamicSvcObjectFromJSON(json['object']),
         'table': json['table'] == null ? undefined : json['table'],
     };
@@ -37,7 +37,7 @@ export function DynamicSvcUpdateObjectRequestToJSON(value) {
         return value;
     }
     return {
-        'conditions': value['conditions'] == null ? undefined : (value['conditions'].map(DatastoreFilterToJSON)),
+        'filters': value['filters'] == null ? undefined : (value['filters'].map(DatastoreFilterToJSON)),
         'object': DynamicSvcObjectToJSON(value['object']),
         'table': value['table'],
     };

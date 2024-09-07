@@ -8,6 +8,7 @@
 package localstore
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -517,7 +518,13 @@ func (q *QueryBuilder) match(obj any) (bool, error) {
 					continue
 				}
 
-				value := cond.Values[0]
+				values := []any{}
+				err := json.Unmarshal([]byte(cond.JSONValues), &values)
+				if err != nil {
+					return false, err
+				}
+
+				value := values[0]
 				queryValue := reflect.ValueOf(value)
 				fieldV := reflect.ValueOf(fieldValue)
 
@@ -558,7 +565,12 @@ func (q *QueryBuilder) match(obj any) (bool, error) {
 					continue
 				}
 
-				value := cond.Values
+				value := []any{}
+				err := json.Unmarshal([]byte(cond.JSONValues), &value)
+				if err != nil {
+					return false, err
+				}
+
 				queryValue := reflect.ValueOf(value)
 				fieldV := reflect.ValueOf(fieldValue)
 
@@ -601,7 +613,12 @@ func (q *QueryBuilder) match(obj any) (bool, error) {
 					continue
 				}
 
-				value := cond.Values[0]
+				value := []any{}
+				err := json.Unmarshal([]byte(cond.JSONValues), &value)
+				if err != nil {
+					return false, err
+				}
+
 				queryValue := reflect.ValueOf(value)
 				fieldV := reflect.ValueOf(fieldValue)
 
@@ -643,7 +660,13 @@ func (q *QueryBuilder) match(obj any) (bool, error) {
 					continue
 				}
 
-				value := cond.Values[0]
+				values := []any{}
+				err := json.Unmarshal([]byte(cond.JSONValues), &values)
+				if err != nil {
+					return false, err
+				}
+				value := values[0]
+
 				queryValue := reflect.ValueOf(value)
 				fieldV := reflect.ValueOf(fieldValue)
 
@@ -685,7 +708,13 @@ func (q *QueryBuilder) match(obj any) (bool, error) {
 					continue
 				}
 
-				value := cond.Values
+				values := []any{}
+				err := json.Unmarshal([]byte(cond.JSONValues), &values)
+				if err != nil {
+					return false, err
+				}
+
+				value := values
 				queryValue := reflect.ValueOf(value)
 				fieldV := reflect.ValueOf(fieldValue)
 

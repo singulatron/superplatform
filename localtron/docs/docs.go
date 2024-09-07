@@ -1250,13 +1250,6 @@ const docTemplate = `{
                 "operationId": "deleteObjects",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "Object ID",
-                        "name": "objectId",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
                         "description": "Delete request payload",
                         "name": "body",
                         "in": "body",
@@ -3612,8 +3605,8 @@ const docTemplate = `{
                     "$ref": "#/definitions/datastore.Op"
                 },
                 "values": {
-                    "type": "array",
-                    "items": {}
+                    "description": "JSONValues is a JSON marshalled array of values.\nIt's JSON marhalled due to the limitations of the\nSwaggo -\u003e OpenAPI 2.0 -\u003e OpenAPI Go generator toolchain.",
+                    "type": "string"
                 }
             }
         },
@@ -3655,9 +3648,8 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "after": {
-                    "description": "After is used for paginations. Instead of offset-based pagination,\nwe support cursor-based pagination because it works better in a scalable,\ndistributed environment.",
-                    "type": "array",
-                    "items": {}
+                    "description": "JSONAfter is used for cursor-based pagination, which is more\neffective in scalable and distributed environments compared\nto offset-based pagination.\n\nJSONAfter is a JSON encoded string due to limitations of Swaggo (ie. []interface{} generates []map[stirng]interface{}).",
+                    "type": "string"
                 },
                 "count": {
                     "description": "Count true means return the count of the dataset filtered by Filters\nwithout after or limit.",
@@ -3934,7 +3926,7 @@ const docTemplate = `{
         "dynamic_svc.DeleteObjectRequest": {
             "type": "object",
             "properties": {
-                "conditions": {
+                "filters": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/datastore.Filter"
@@ -4095,7 +4087,7 @@ const docTemplate = `{
         "dynamic_svc.UpdateObjectRequest": {
             "type": "object",
             "properties": {
-                "conditions": {
+                "filters": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/datastore.Filter"

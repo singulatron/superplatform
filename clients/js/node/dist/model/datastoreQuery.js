@@ -19,7 +19,7 @@ DatastoreQuery.attributeTypeMap = [
     {
         "name": "after",
         "baseName": "after",
-        "type": "Array<object>"
+        "type": "string"
     },
     {
         "name": "count",

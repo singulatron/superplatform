@@ -12,7 +12,7 @@
 import { DatastoreFilter } from './datastoreFilter';
 import { DynamicSvcObject } from './dynamicSvcObject';
 export declare class DynamicSvcUpdateObjectRequest {
-    'conditions'?: Array<DatastoreFilter>;
+    'filters'?: Array<DatastoreFilter>;
     'object'?: DynamicSvcObject;
     'table'?: string;
     static discriminator: string | undefined;

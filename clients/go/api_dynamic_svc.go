@@ -184,7 +184,6 @@ func (a *DynamicSvcAPIService) CreateObjectExecute(r ApiCreateObjectRequest) (*D
 type ApiDeleteObjectsRequest struct {
 	ctx context.Context
 	ApiService *DynamicSvcAPIService
-	objectId string
 	body *DynamicSvcDeleteObjectRequest
 }
 
@@ -204,14 +203,12 @@ DeleteObjects Delete a Generic Object
 Removes a dynamic object from the system based on the provided conditions. Requires authorization and user authentication.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param objectId Object ID
  @return ApiDeleteObjectsRequest
 */
-func (a *DynamicSvcAPIService) DeleteObjects(ctx context.Context, objectId string) ApiDeleteObjectsRequest {
+func (a *DynamicSvcAPIService) DeleteObjects(ctx context.Context) ApiDeleteObjectsRequest {
 	return ApiDeleteObjectsRequest{
 		ApiService: a,
 		ctx: ctx,
-		objectId: objectId,
 	}
 }
 
@@ -231,7 +228,6 @@ func (a *DynamicSvcAPIService) DeleteObjectsExecute(r ApiDeleteObjectsRequest) (
 	}
 
 	localVarPath := localBasePath + "/dynamic-svc/objects/delete"
-	localVarPath = strings.Replace(localVarPath, "{"+"objectId"+"}", url.PathEscape(parameterValueToString(r.objectId, "objectId")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}

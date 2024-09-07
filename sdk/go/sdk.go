@@ -3,6 +3,7 @@ package sdk
 import (
 	"crypto/rsa"
 	"crypto/x509"
+	"encoding/json"
 	"encoding/pem"
 	"fmt"
 	"net/http"
@@ -114,4 +115,11 @@ func PublicKeyFromString(publicKeyPem string) (*rsa.PublicKey, error) {
 	}
 
 	return rsaPub, nil
+}
+
+func Marshal(value any) *string {
+	jsonBytes, _ := json.Marshal(value)
+
+	v := string(jsonBytes)
+	return &v
 }

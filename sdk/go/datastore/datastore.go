@@ -8,6 +8,7 @@
 package datastore
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"time"
@@ -142,7 +143,10 @@ const (
 type Filter struct {
 	Fields []string `json:"fields,omitempty"`
 
-	Values []any `json:"values,omitempty"`
+	// JSONValues is a JSON marshalled array of values.
+	// It's JSON marhalled due to the limitations of the
+	// Swaggo -> OpenAPI 2.0 -> OpenAPI Go generator toolchain.
+	JSONValues string `json:"values,omitempty"`
 
 	Op Op `json:"op"`
 }
@@ -163,10 +167,12 @@ type Query struct {
 	// It's advised to use helper functions in your respective client library such as filter constructors (`all`, `equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
 	Filters []Filter `json:"filters,omitempty"`
 
-	// After is used for paginations. Instead of offset-based pagination,
-	// we support cursor-based pagination because it works better in a scalable,
-	// distributed environment.
-	After []any `json:"after,omitempty"`
+	// JSONAfter is used for cursor-based pagination, which is more
+	// effective in scalable and distributed environments compared
+	// to offset-based pagination.
+	//
+	// JSONAfter is a JSON encoded string due to limitations of Swaggo (ie. []interface{} generates []map[stirng]interface{}).
+	JSONAfter string `json:"after,omitempty"`
 
 	// Limit the number of records in the result set.
 	Limit int64 `json:"limit,omitempty"`
@@ -218,51 +224,57 @@ func OrderByField(field string, desc bool) OrderBy {
 type AllMatch struct {
 }
 
+func marshal(value any) string {
+	jsonBytes, _ := json.Marshal(value)
+
+	return string(jsonBytes)
+}
+
 func Equals(fields []string, value any) Filter {
 	return Filter{
-		Fields: fields,
-		Values: []any{value},
-		Op:     OpEquals,
+		Fields:     fields,
+		JSONValues: marshal([]any{value}),
+		Op:         OpEquals,
 	}
 }
 
 func Intersects(fields []string, values []any) Filter {
 	return Filter{
-		Fields: fields,
-		Values: values,
-		Op:     OpIntersects,
+		Fields:     fields,
+		JSONValues: marshal(values),
+		Op:         OpIntersects,
 	}
 }
 
 func StartsWith(fields []string, value any) Filter {
 	return Filter{
-		Fields: fields,
-		Values: []any{value},
-		Op:     OpStartsWith,
+		Fields:     fields,
+		JSONValues: marshal([]any{value}),
+		Op:         OpStartsWith,
 	}
 }
 
 func ContainsSubstring(fields []string, value any) Filter {
 	return Filter{
-		Fields: fields,
-		Values: []any{value},
-		Op:     OpContainsSubstring,
+		Fields:     fields,
+		JSONValues: marshal([]any{value}),
+		Op:         OpContainsSubstring,
 	}
 }
 
 func IsInList(fields []string, values ...any) Filter {
 	return Filter{
-		Fields: fields,
-		Values: values,
-		Op:     OpIsInList,
+		Fields:     fields,
+		JSONValues: marshal(values),
+		Op:         OpIsInList,
 	}
 }
 
 func Id(id any) Filter {
 	return Filter{
-		Fields: []string{"id"},
-		Values: []any{id},
-		Op:     OpEquals,
+		Fields:     []string{"id"},
+		JSONValues: marshal([]any{id}),
+		Op:         OpEquals,
 	}
 }
 

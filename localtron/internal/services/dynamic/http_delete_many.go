@@ -23,7 +23,6 @@ import (
 // @Tags        Dynamic Svc
 // @Accept      json
 // @Produce     json
-// @Param       objectId  path     string  true  "Object ID"
 // @Param       body      body     dynamic.DeleteObjectRequest true "Delete request payload"
 // @Success     200       {object} dynamic.DeleteObjectResponse "Successful deletion of object"
 // @Failure     400       {object} dynamic.ErrorResponse "Invalid JSON"

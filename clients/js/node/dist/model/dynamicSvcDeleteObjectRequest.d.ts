@@ -11,7 +11,7 @@
  */
 import { DatastoreFilter } from './datastoreFilter';
 export declare class DynamicSvcDeleteObjectRequest {
-    'conditions'?: Array<DatastoreFilter>;
+    'filters'?: Array<DatastoreFilter>;
     'table'?: string;
     static discriminator: string | undefined;
     static attributeTypeMap: Array<{

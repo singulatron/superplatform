@@ -20,8 +20,8 @@ var _ MappedNullable = &DatastoreQuery{}
 
 // DatastoreQuery struct for DatastoreQuery
 type DatastoreQuery struct {
-	// After is used for paginations. Instead of offset-based pagination, we support cursor-based pagination because it works better in a scalable, distributed environment.
-	After []map[string]interface{} `json:"after,omitempty"`
+	// JSONAfter is used for cursor-based pagination, which is more effective in scalable and distributed environments compared to offset-based pagination.  JSONAfter is a JSON encoded string due to limitations of Swaggo (ie. []interface{} generates []map[stirng]interface{}).
+	After *string `json:"after,omitempty"`
 	// Count true means return the count of the dataset filtered by Filters without after or limit.
 	Count *bool `json:"count,omitempty"`
 	// Filters are filtering options of a query. It is advised to use It's advised to use helper functions in your respective client library such as filter constructors (`all`, `equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
@@ -50,17 +50,17 @@ func NewDatastoreQueryWithDefaults() *DatastoreQuery {
 }
 
 // GetAfter returns the After field value if set, zero value otherwise.
-func (o *DatastoreQuery) GetAfter() []map[string]interface{} {
+func (o *DatastoreQuery) GetAfter() string {
 	if o == nil || IsNil(o.After) {
-		var ret []map[string]interface{}
+		var ret string
 		return ret
 	}
-	return o.After
+	return *o.After
 }
 
 // GetAfterOk returns a tuple with the After field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *DatastoreQuery) GetAfterOk() ([]map[string]interface{}, bool) {
+func (o *DatastoreQuery) GetAfterOk() (*string, bool) {
 	if o == nil || IsNil(o.After) {
 		return nil, false
 	}
@@ -76,9 +76,9 @@ func (o *DatastoreQuery) HasAfter() bool {
 	return false
 }
 
-// SetAfter gets a reference to the given []map[string]interface{} and assigns it to the After field.
-func (o *DatastoreQuery) SetAfter(v []map[string]interface{}) {
-	o.After = v
+// SetAfter gets a reference to the given string and assigns it to the After field.
+func (o *DatastoreQuery) SetAfter(v string) {
+	o.After = &v
 }
 
 // GetCount returns the Count field value if set, zero value otherwise.

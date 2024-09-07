@@ -253,9 +253,8 @@ export declare class UserSvcApi {
     /**
      * Retrieve user information based on an authentication token.
      * @summary Read User by Token
-     * @param body Read User By Token Request
      */
-    readUserByToken(body: object, options?: {
+    readUserByToken(options?: {
         headers: {
             [name: string]: string;
         };

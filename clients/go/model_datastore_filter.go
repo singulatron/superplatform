@@ -22,7 +22,8 @@ var _ MappedNullable = &DatastoreFilter{}
 type DatastoreFilter struct {
 	Fields []string `json:"fields,omitempty"`
 	Op *DatastoreOp `json:"op,omitempty"`
-	Values []map[string]interface{} `json:"values,omitempty"`
+	// JSONValues is a JSON marshalled array of values. It's JSON marhalled due to the limitations of the Swaggo -> OpenAPI 2.0 -> OpenAPI Go generator toolchain.
+	Values *string `json:"values,omitempty"`
 }
 
 // NewDatastoreFilter instantiates a new DatastoreFilter object
@@ -107,17 +108,17 @@ func (o *DatastoreFilter) SetOp(v DatastoreOp) {
 }
 
 // GetValues returns the Values field value if set, zero value otherwise.
-func (o *DatastoreFilter) GetValues() []map[string]interface{} {
+func (o *DatastoreFilter) GetValues() string {
 	if o == nil || IsNil(o.Values) {
-		var ret []map[string]interface{}
+		var ret string
 		return ret
 	}
-	return o.Values
+	return *o.Values
 }
 
 // GetValuesOk returns a tuple with the Values field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *DatastoreFilter) GetValuesOk() ([]map[string]interface{}, bool) {
+func (o *DatastoreFilter) GetValuesOk() (*string, bool) {
 	if o == nil || IsNil(o.Values) {
 		return nil, false
 	}
@@ -133,9 +134,9 @@ func (o *DatastoreFilter) HasValues() bool {
 	return false
 }
 
-// SetValues gets a reference to the given []map[string]interface{} and assigns it to the Values field.
-func (o *DatastoreFilter) SetValues(v []map[string]interface{}) {
-	o.Values = v
+// SetValues gets a reference to the given string and assigns it to the Values field.
+func (o *DatastoreFilter) SetValues(v string) {
+	o.Values = &v
 }
 
 func (o DatastoreFilter) MarshalJSON() ([]byte, error) {

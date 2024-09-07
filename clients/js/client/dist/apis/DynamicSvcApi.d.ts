@@ -15,7 +15,6 @@ export interface CreateObjectRequest {
     body: DynamicSvcCreateObjectRequest;
 }
 export interface DeleteObjectsRequest {
-    objectId: string;
     body: DynamicSvcDeleteObjectRequest;
 }
 export interface QueryRequest {

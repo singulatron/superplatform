@@ -1189,9 +1189,8 @@ export class UserSvcApi {
     /**
      * Retrieve user information based on an authentication token.
      * @summary Read User by Token
-     * @param body Read User By Token Request
      */
-    public async readUserByToken (body: object, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: UserSvcReadUserByTokenResponse;  }> {
+    public async readUserByToken (options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: UserSvcReadUserByTokenResponse;  }> {
         const localVarPath = this.basePath + '/user-svc/user/by-token';
         let localVarQueryParameters: any = {};
         let localVarHeaderParams: any = (<any>Object).assign({}, this._defaultHeaders);
@@ -1204,11 +1203,6 @@ export class UserSvcApi {
         }
         let localVarFormParams: any = {};
 
-        // verify required parameter 'body' is not null or undefined
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling readUserByToken.');
-        }
-
         (<any>Object).assign(localVarHeaderParams, options.headers);
 
         let localVarUseFormData = false;
@@ -1220,7 +1214,6 @@ export class UserSvcApi {
             uri: localVarPath,
             useQuerystring: this._useQuerystring,
             json: true,
-            body: ObjectSerializer.serialize(body, "object")
         };
 
         let authenticationPromise = Promise.resolve();

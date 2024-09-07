@@ -31,7 +31,7 @@ DatastoreFilter.attributeTypeMap = [
     {
         "name": "values",
         "baseName": "values",
-        "type": "Array<object>"
+        "type": "string"
     }
 ];
 

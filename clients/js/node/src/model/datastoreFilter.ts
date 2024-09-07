@@ -16,7 +16,10 @@ import { DatastoreOp } from './datastoreOp';
 export class DatastoreFilter {
     'fields'?: Array<string>;
     'op'?: DatastoreOp;
-    'values'?: Array<object>;
+    /**
+    * JSONValues is a JSON marshalled array of values. It\'s JSON marhalled due to the limitations of the Swaggo -> OpenAPI 2.0 -> OpenAPI Go generator toolchain.
+    */
+    'values'?: string;
 
     static discriminator: string | undefined = undefined;
 
@@ -34,7 +37,7 @@ export class DatastoreFilter {
         {
             "name": "values",
             "baseName": "values",
-            "type": "Array<object>"
+            "type": "string"
         }    ];
 
     static getAttributeTypeMap() {

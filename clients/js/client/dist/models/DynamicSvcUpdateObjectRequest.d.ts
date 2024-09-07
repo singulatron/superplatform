@@ -22,7 +22,7 @@ export interface DynamicSvcUpdateObjectRequest {
      * @type {Array<DatastoreFilter>}
      * @memberof DynamicSvcUpdateObjectRequest
      */
-    conditions?: Array<DatastoreFilter>;
+    filters?: Array<DatastoreFilter>;
     /**
      *
      * @type {DynamicSvcObject}

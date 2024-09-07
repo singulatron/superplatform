@@ -55715,13 +55715,11 @@ class DynamicSvcApi {
     /**
      * Removes a dynamic object from the system based on the provided conditions. Requires authorization and user authentication.
      * @summary Delete a Generic Object
-     * @param objectId Object ID
      * @param body Delete request payload
      */
-    deleteObjects(objectId_1, body_1) {
-        return __awaiter(this, arguments, void 0, function* (objectId, body, options = { headers: {} }) {
-            const localVarPath = this.basePath + '/dynamic-svc/objects/delete'
-                .replace('{' + 'objectId' + '}', encodeURIComponent(String(objectId)));
+    deleteObjects(body_1) {
+        return __awaiter(this, arguments, void 0, function* (body, options = { headers: {} }) {
+            const localVarPath = this.basePath + '/dynamic-svc/objects/delete';
             let localVarQueryParameters = {};
             let localVarHeaderParams = Object.assign({}, this._defaultHeaders);
             const produces = ['application/json'];
@@ -55733,10 +55731,6 @@ class DynamicSvcApi {
                 localVarHeaderParams.Accept = produces.join(',');
             }
             let localVarFormParams = {};
-            // verify required parameter 'objectId' is not null or undefined
-            if (objectId === null || objectId === undefined) {
-                throw new Error('Required parameter objectId was null or undefined when calling deleteObjects.');
-            }
             // verify required parameter 'body' is not null or undefined
             if (body === null || body === undefined) {
                 throw new Error('Required parameter body was null or undefined when calling deleteObjects.');
@@ -58433,10 +58427,9 @@ class UserSvcApi {
     /**
      * Retrieve user information based on an authentication token.
      * @summary Read User by Token
-     * @param body Read User By Token Request
      */
-    readUserByToken(body_1) {
-        return __awaiter(this, arguments, void 0, function* (body, options = { headers: {} }) {
+    readUserByToken() {
+        return __awaiter(this, arguments, void 0, function* (options = { headers: {} }) {
             const localVarPath = this.basePath + '/user-svc/user/by-token';
             let localVarQueryParameters = {};
             let localVarHeaderParams = Object.assign({}, this._defaultHeaders);
@@ -58449,10 +58442,6 @@ class UserSvcApi {
                 localVarHeaderParams.Accept = produces.join(',');
             }
             let localVarFormParams = {};
-            // verify required parameter 'body' is not null or undefined
-            if (body === null || body === undefined) {
-                throw new Error('Required parameter body was null or undefined when calling readUserByToken.');
-            }
             Object.assign(localVarHeaderParams, options.headers);
             let localVarRequestOptions = {
                 method: 'POST',
@@ -58461,7 +58450,6 @@ class UserSvcApi {
                 uri: localVarPath,
                 useQuerystring: this._useQuerystring,
                 json: true,
-                body: ObjectSerializer.serialize(body, "object")
             };
             let authenticationPromise = Promise.resolve();
             if (this.authentications.BearerAuth.apiKey) {

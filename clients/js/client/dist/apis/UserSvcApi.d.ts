@@ -53,9 +53,6 @@ export interface IsAuthorizedRequest {
 export interface LoginRequest {
     request: UserSvcLoginRequest;
 }
-export interface ReadUserByTokenRequest {
-    body: object;
-}
 export interface RegisterRequest {
     body: UserSvcRegisterRequest;
 }
@@ -234,12 +231,12 @@ export declare class UserSvcApi extends runtime.BaseAPI {
      * Retrieve user information based on an authentication token.
      * Read User by Token
      */
-    readUserByTokenRaw(requestParameters: ReadUserByTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserSvcReadUserByTokenResponse>>;
+    readUserByTokenRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserSvcReadUserByTokenResponse>>;
     /**
      * Retrieve user information based on an authentication token.
      * Read User by Token
      */
-    readUserByToken(requestParameters: ReadUserByTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserSvcReadUserByTokenResponse>;
+    readUserByToken(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserSvcReadUserByTokenResponse>;
     /**
      * Register a new user with a name, email, and password.
      * Register

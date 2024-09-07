@@ -14,15 +14,15 @@ import { RequestFile } from './models';
 import { DatastoreFilter } from './datastoreFilter';
 
 export class DynamicSvcDeleteObjectRequest {
-    'conditions'?: Array<DatastoreFilter>;
+    'filters'?: Array<DatastoreFilter>;
     'table'?: string;
 
     static discriminator: string | undefined = undefined;
 
     static attributeTypeMap: Array<{name: string, baseName: string, type: string}> = [
         {
-            "name": "conditions",
-            "baseName": "conditions",
+            "name": "filters",
+            "baseName": "filters",
             "type": "Array<DatastoreFilter>"
         },
         {

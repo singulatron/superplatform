@@ -17,8 +17,8 @@ export class DynamicSvcDeleteObjectRequest {
 DynamicSvcDeleteObjectRequest.discriminator = undefined;
 DynamicSvcDeleteObjectRequest.attributeTypeMap = [
     {
-        "name": "conditions",
-        "baseName": "conditions",
+        "name": "filters",
+        "baseName": "filters",
         "type": "Array<DatastoreFilter>"
     },
     {

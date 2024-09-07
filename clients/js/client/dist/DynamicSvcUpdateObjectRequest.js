@@ -31,7 +31,7 @@ function DynamicSvcUpdateObjectRequestFromJSONTyped(json, ignoreDiscriminator) {
         return json;
     }
     return {
-        'conditions': json['conditions'] == null ? undefined : (json['conditions'].map(DatastoreFilter.DatastoreFilterFromJSON)),
+        'filters': json['filters'] == null ? undefined : (json['filters'].map(DatastoreFilter.DatastoreFilterFromJSON)),
         'object': json['object'] == null ? undefined : DynamicSvcObject.DynamicSvcObjectFromJSON(json['object']),
         'table': json['table'] == null ? undefined : json['table'],
     };
@@ -41,7 +41,7 @@ function DynamicSvcUpdateObjectRequestToJSON(value) {
         return value;
     }
     return {
-        'conditions': value['conditions'] == null ? undefined : (value['conditions'].map(DatastoreFilter.DatastoreFilterToJSON)),
+        'filters': value['filters'] == null ? undefined : (value['filters'].map(DatastoreFilter.DatastoreFilterToJSON)),
         'object': DynamicSvcObject.DynamicSvcObjectToJSON(value['object']),
         'table': value['table'],
     };

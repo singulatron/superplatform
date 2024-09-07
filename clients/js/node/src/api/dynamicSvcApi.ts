@@ -172,12 +172,10 @@ export class DynamicSvcApi {
     /**
      * Removes a dynamic object from the system based on the provided conditions. Requires authorization and user authentication.
      * @summary Delete a Generic Object
-     * @param objectId Object ID
      * @param body Delete request payload
      */
-    public async deleteObjects (objectId: string, body: DynamicSvcDeleteObjectRequest, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: object;  }> {
-        const localVarPath = this.basePath + '/dynamic-svc/objects/delete'
-            .replace('{' + 'objectId' + '}', encodeURIComponent(String(objectId)));
+    public async deleteObjects (body: DynamicSvcDeleteObjectRequest, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: object;  }> {
+        const localVarPath = this.basePath + '/dynamic-svc/objects/delete';
         let localVarQueryParameters: any = {};
         let localVarHeaderParams: any = (<any>Object).assign({}, this._defaultHeaders);
         const produces = ['application/json'];
@@ -188,11 +186,6 @@ export class DynamicSvcApi {
             localVarHeaderParams.Accept = produces.join(',');
         }
         let localVarFormParams: any = {};
-
-        // verify required parameter 'objectId' is not null or undefined
-        if (objectId === null || objectId === undefined) {
-            throw new Error('Required parameter objectId was null or undefined when calling deleteObjects.');
-        }
 
         // verify required parameter 'body' is not null or undefined
         if (body === null || body === undefined) {

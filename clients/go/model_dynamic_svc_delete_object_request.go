@@ -20,7 +20,7 @@ var _ MappedNullable = &DynamicSvcDeleteObjectRequest{}
 
 // DynamicSvcDeleteObjectRequest struct for DynamicSvcDeleteObjectRequest
 type DynamicSvcDeleteObjectRequest struct {
-	Conditions []DatastoreFilter `json:"conditions,omitempty"`
+	Filters []DatastoreFilter `json:"filters,omitempty"`
 	Table *string `json:"table,omitempty"`
 }
 
@@ -41,36 +41,36 @@ func NewDynamicSvcDeleteObjectRequestWithDefaults() *DynamicSvcDeleteObjectReque
 	return &this
 }
 
-// GetConditions returns the Conditions field value if set, zero value otherwise.
-func (o *DynamicSvcDeleteObjectRequest) GetConditions() []DatastoreFilter {
-	if o == nil || IsNil(o.Conditions) {
+// GetFilters returns the Filters field value if set, zero value otherwise.
+func (o *DynamicSvcDeleteObjectRequest) GetFilters() []DatastoreFilter {
+	if o == nil || IsNil(o.Filters) {
 		var ret []DatastoreFilter
 		return ret
 	}
-	return o.Conditions
+	return o.Filters
 }
 
-// GetConditionsOk returns a tuple with the Conditions field value if set, nil otherwise
+// GetFiltersOk returns a tuple with the Filters field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *DynamicSvcDeleteObjectRequest) GetConditionsOk() ([]DatastoreFilter, bool) {
-	if o == nil || IsNil(o.Conditions) {
+func (o *DynamicSvcDeleteObjectRequest) GetFiltersOk() ([]DatastoreFilter, bool) {
+	if o == nil || IsNil(o.Filters) {
 		return nil, false
 	}
-	return o.Conditions, true
+	return o.Filters, true
 }
 
-// HasConditions returns a boolean if a field has been set.
-func (o *DynamicSvcDeleteObjectRequest) HasConditions() bool {
-	if o != nil && !IsNil(o.Conditions) {
+// HasFilters returns a boolean if a field has been set.
+func (o *DynamicSvcDeleteObjectRequest) HasFilters() bool {
+	if o != nil && !IsNil(o.Filters) {
 		return true
 	}
 
 	return false
 }
 
-// SetConditions gets a reference to the given []DatastoreFilter and assigns it to the Conditions field.
-func (o *DynamicSvcDeleteObjectRequest) SetConditions(v []DatastoreFilter) {
-	o.Conditions = v
+// SetFilters gets a reference to the given []DatastoreFilter and assigns it to the Filters field.
+func (o *DynamicSvcDeleteObjectRequest) SetFilters(v []DatastoreFilter) {
+	o.Filters = v
 }
 
 // GetTable returns the Table field value if set, zero value otherwise.
@@ -115,8 +115,8 @@ func (o DynamicSvcDeleteObjectRequest) MarshalJSON() ([]byte, error) {
 
 func (o DynamicSvcDeleteObjectRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if !IsNil(o.Conditions) {
-		toSerialize["conditions"] = o.Conditions
+	if !IsNil(o.Filters) {
+		toSerialize["filters"] = o.Filters
 	}
 	if !IsNil(o.Table) {
 		toSerialize["table"] = o.Table

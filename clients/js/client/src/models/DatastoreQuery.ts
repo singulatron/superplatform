@@ -33,13 +33,15 @@ import {
  */
 export interface DatastoreQuery {
     /**
-     * After is used for paginations. Instead of offset-based pagination,
-     * we support cursor-based pagination because it works better in a scalable,
-     * distributed environment.
-     * @type {Array<object>}
+     * JSONAfter is used for cursor-based pagination, which is more
+     * effective in scalable and distributed environments compared
+     * to offset-based pagination.
+     * 
+     * JSONAfter is a JSON encoded string due to limitations of Swaggo (ie. []interface{} generates []map[stirng]interface{}).
+     * @type {string}
      * @memberof DatastoreQuery
      */
-    after?: Array<object>;
+    after?: string;
     /**
      * Count true means return the count of the dataset filtered by Filters
      * without after or limit.
