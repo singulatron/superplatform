@@ -12,8 +12,7 @@ async function start() {
   });
 
   const token = loginResponse.token?.token;
-  userService = new UserSvcApi();
-  ({
+  userService = new UserSvcApi({
     apiKey: token,
   });
 
