@@ -80,7 +80,7 @@ func (s *UserService) addUserToOrganization(callerId, userId, organizationId str
 		return fmt.Errorf("organization not found")
 	}
 
-	if !contains(roleIds, fmt.Sprintf("user-svc:org:{%v}:admin", org.(*user.Organization).Slug)) {
+	if !contains(roleIds, fmt.Sprintf("user-svc:org:{%v}:admin", org.(*user.Organization).Id)) {
 		return fmt.Errorf("not an admin of the organization")
 	}
 

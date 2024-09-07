@@ -82,7 +82,7 @@ func (s *UserService) removeUserFromOrganization(callerId, userId, organizationI
 		return fmt.Errorf("organization not found")
 	}
 
-	if !contains(roleIds, fmt.Sprintf("user-svc:org:{%v}:admin", org.(*user.Organization).Slug)) {
+	if !contains(roleIds, fmt.Sprintf("user-svc:org:{%v}:admin", org.(*user.Organization).Id)) {
 		return fmt.Errorf("unauthorized")
 	}
 

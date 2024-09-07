@@ -2,6 +2,7 @@ package userservice_test
 
 import (
 	"context"
+	"fmt"
 	"net/http/httptest"
 	"testing"
 
@@ -98,9 +99,11 @@ func TestOrganization(t *testing.T) {
 	publicKeyRsp, _, err := test.Client(server.URL).UserSvcAPI.GetPublicKey(context.Background()).Execute()
 	require.NoError(t, err)
 
+	orgId1 := sdk.Id("org")
+
 	t.Run("claim contains new organization admin role after creating organization", func(t *testing.T) {
 		createOrgReq := clients.UserSvcCreateOrganizationRequest{
-			Id:   clients.PtrString("torgid1"),
+			Id:   clients.PtrString(orgId1),
 			Slug: clients.PtrString("test-org"),
 			Name: clients.PtrString("Test Org"),
 		}
@@ -123,12 +126,12 @@ func TestOrganization(t *testing.T) {
 		require.NoError(t, err)
 		require.NotNil(t, claim)
 		require.Equal(t, 2, len(claim.RoleIds), claim.RoleIds)
-		require.Contains(t, claim.RoleIds, "user-svc:org:{test-org}:admin", claim.RoleIds)
+		require.Contains(t, claim.RoleIds, fmt.Sprintf("user-svc:org:{%v}:admin", orgId1), claim.RoleIds)
 
 		tokenRsp, _, err := adminClient.UserSvcAPI.ReadUserByToken(context.Background()).Execute()
 		require.NoError(t, err)
 		require.Equal(t, 1, len(tokenRsp.Organizations))
-		require.Equal(t, clients.PtrString("torgid1"), tokenRsp.ActiveOrganizationId)
+		require.Equal(t, clients.PtrString(orgId1), tokenRsp.ActiveOrganizationId)
 	})
 
 	t.Run("assign org to user", func(t *testing.T) {
@@ -138,7 +141,7 @@ func TestOrganization(t *testing.T) {
 		addUserReq := clients.UserSvcAddUserToOrganizationRequest{
 			UserId: byTokenRsp.User.Id,
 		}
-		_, _, err = adminClient.UserSvcAPI.AddUserToOrganization(context.Background(), "torgid1").Request(addUserReq).Execute()
+		_, _, err = adminClient.UserSvcAPI.AddUserToOrganization(context.Background(), orgId1).Request(addUserReq).Execute()
 		require.NoError(t, err)
 
 		loginReq := clients.UserSvcLoginRequest{
@@ -154,11 +157,11 @@ func TestOrganization(t *testing.T) {
 		require.NotNil(t, claim)
 		require.Equal(t, 2, len(claim.RoleIds), claim.RoleIds)
 
-		_, _, err = thirdClient.UserSvcAPI.RemoveUserFromOrganization(context.Background(), "torgid1", *byTokenRsp.User.Id).Execute()
+		_, _, err = thirdClient.UserSvcAPI.RemoveUserFromOrganization(context.Background(), orgId1, *byTokenRsp.User.Id).Execute()
 		// third user cannot remove the second from the org of the first
 		require.Error(t, err)
 
-		_, _, err = adminClient.UserSvcAPI.RemoveUserFromOrganization(context.Background(), "torgid1", *byTokenRsp.User.Id).Execute()
+		_, _, err = adminClient.UserSvcAPI.RemoveUserFromOrganization(context.Background(), orgId1, *byTokenRsp.User.Id).Execute()
 		require.NoError(t, err)
 	})
 }
