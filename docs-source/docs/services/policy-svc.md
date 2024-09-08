@@ -12,7 +12,7 @@ tags:
 
 The policy service provides features such as rate limiting of endpoint calls by user ip, user id, organization id and more.
 
-> This page is a high level overview of the `Policy Svc`. For API documentation, please see the [API documentation](/docs/singulatron/upsert-instance).
+> This page is a high level overview of the `Policy Svc`. For API documentation, please see the [Policy Svc API documentation](/docs/singulatron/upsert-instance).
 
 ## How It Works
 

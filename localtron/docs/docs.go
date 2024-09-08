@@ -3601,12 +3601,12 @@ const docTemplate = `{
                         "type": "string"
                     }
                 },
-                "op": {
-                    "$ref": "#/definitions/datastore.Op"
-                },
-                "values": {
+                "jsonValues": {
                     "description": "JSONValues is a JSON marshalled array of values.\nIt's JSON marhalled due to the limitations of the\nSwaggo -\u003e OpenAPI 2.0 -\u003e OpenAPI Go generator toolchain.",
                     "type": "string"
+                },
+                "op": {
+                    "$ref": "#/definitions/datastore.Op"
                 }
             }
         },

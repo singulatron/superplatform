@@ -146,7 +146,7 @@ type Filter struct {
 	// JSONValues is a JSON marshalled array of values.
 	// It's JSON marhalled due to the limitations of the
 	// Swaggo -> OpenAPI 2.0 -> OpenAPI Go generator toolchain.
-	JSONValues string `json:"values,omitempty"`
+	JSONValues string `json:"jsonValues,omitempty"`
 
 	Op Op `json:"op"`
 }

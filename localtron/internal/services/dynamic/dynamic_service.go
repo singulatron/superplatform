@@ -10,8 +10,8 @@ package dynamicservice
 import (
 	"context"
 	"errors"
+	"strings"
 
-	"github.com/google/uuid"
 	sdk "github.com/singulatron/singulatron/sdk/go"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
 	"github.com/singulatron/singulatron/sdk/go/router"
@@ -78,14 +78,24 @@ func (g *DynamicService) Start() error {
 
 func (g *DynamicService) create(request *dynamictypes.CreateObjectRequest) error {
 	if request.Object.Id == "" {
-		request.Object.Id = uuid.NewString()
+		request.Object.Id = sdk.Id(request.Object.Table)
 	}
+	if !strings.HasPrefix(request.Object.Id, request.Object.Table) {
+		return errors.New("wrong prefix")
+	}
+
 	return g.store.Create(request.Object)
 }
 
 func (g *DynamicService) createMany(request *dynamictypes.CreateManyRequest) error {
 	objectIs := []datastore.Row{}
 	for _, object := range request.Objects {
+		if object.Id == "" {
+			object.Id = sdk.Id(object.Table)
+		}
+		if !strings.HasPrefix(object.Id, object.Table) {
+			return errors.New("wrong prefix")
+		}
 		objectIs = append(objectIs, object)
 	}
 

@@ -21,9 +21,9 @@ var _ MappedNullable = &DatastoreFilter{}
 // DatastoreFilter struct for DatastoreFilter
 type DatastoreFilter struct {
 	Fields []string `json:"fields,omitempty"`
-	Op *DatastoreOp `json:"op,omitempty"`
 	// JSONValues is a JSON marshalled array of values. It's JSON marhalled due to the limitations of the Swaggo -> OpenAPI 2.0 -> OpenAPI Go generator toolchain.
-	Values *string `json:"values,omitempty"`
+	JsonValues *string `json:"jsonValues,omitempty"`
+	Op *DatastoreOp `json:"op,omitempty"`
 }
 
 // NewDatastoreFilter instantiates a new DatastoreFilter object
@@ -75,6 +75,38 @@ func (o *DatastoreFilter) SetFields(v []string) {
 	o.Fields = v
 }
 
+// GetJsonValues returns the JsonValues field value if set, zero value otherwise.
+func (o *DatastoreFilter) GetJsonValues() string {
+	if o == nil || IsNil(o.JsonValues) {
+		var ret string
+		return ret
+	}
+	return *o.JsonValues
+}
+
+// GetJsonValuesOk returns a tuple with the JsonValues field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *DatastoreFilter) GetJsonValuesOk() (*string, bool) {
+	if o == nil || IsNil(o.JsonValues) {
+		return nil, false
+	}
+	return o.JsonValues, true
+}
+
+// HasJsonValues returns a boolean if a field has been set.
+func (o *DatastoreFilter) HasJsonValues() bool {
+	if o != nil && !IsNil(o.JsonValues) {
+		return true
+	}
+
+	return false
+}
+
+// SetJsonValues gets a reference to the given string and assigns it to the JsonValues field.
+func (o *DatastoreFilter) SetJsonValues(v string) {
+	o.JsonValues = &v
+}
+
 // GetOp returns the Op field value if set, zero value otherwise.
 func (o *DatastoreFilter) GetOp() DatastoreOp {
 	if o == nil || IsNil(o.Op) {
@@ -107,38 +139,6 @@ func (o *DatastoreFilter) SetOp(v DatastoreOp) {
 	o.Op = &v
 }
 
-// GetValues returns the Values field value if set, zero value otherwise.
-func (o *DatastoreFilter) GetValues() string {
-	if o == nil || IsNil(o.Values) {
-		var ret string
-		return ret
-	}
-	return *o.Values
-}
-
-// GetValuesOk returns a tuple with the Values field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *DatastoreFilter) GetValuesOk() (*string, bool) {
-	if o == nil || IsNil(o.Values) {
-		return nil, false
-	}
-	return o.Values, true
-}
-
-// HasValues returns a boolean if a field has been set.
-func (o *DatastoreFilter) HasValues() bool {
-	if o != nil && !IsNil(o.Values) {
-		return true
-	}
-
-	return false
-}
-
-// SetValues gets a reference to the given string and assigns it to the Values field.
-func (o *DatastoreFilter) SetValues(v string) {
-	o.Values = &v
-}
-
 func (o DatastoreFilter) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -152,11 +152,11 @@ func (o DatastoreFilter) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Fields) {
 		toSerialize["fields"] = o.Fields
 	}
+	if !IsNil(o.JsonValues) {
+		toSerialize["jsonValues"] = o.JsonValues
+	}
 	if !IsNil(o.Op) {
 		toSerialize["op"] = o.Op
-	}
-	if !IsNil(o.Values) {
-		toSerialize["values"] = o.Values
 	}
 	return toSerialize, nil
 }
