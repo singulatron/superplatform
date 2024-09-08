@@ -84,7 +84,7 @@ func (s *UserService) addUserToOrganization(callerId, userId, organizationId str
 		return fmt.Errorf("not an admin of the organization")
 	}
 
-	return s.addRoleToUser(userId, "user-svc:org:{%v}:user")
+	return s.addRoleToUser(userId, fmt.Sprintf("user-svc:org:{%v}:user", org.(*user.Organization).Id))
 }
 
 func contains(ss []string, s string) bool {

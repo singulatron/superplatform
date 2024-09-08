@@ -153,9 +153,11 @@ func TestOrganization(t *testing.T) {
 		require.NoError(t, err)
 
 		claim, err := sdk.DecodeJWT(*loginRsp.Token.Token, *publicKeyRsp.PublicKey)
+
 		require.NoError(t, err)
 		require.NotNil(t, claim)
 		require.Equal(t, 2, len(claim.RoleIds), claim.RoleIds)
+		require.Contains(t, claim.RoleIds, fmt.Sprintf("user-svc:org:{%v}:user", orgId1))
 
 		_, _, err = thirdClient.UserSvcAPI.RemoveUserFromOrganization(context.Background(), orgId1, *byTokenRsp.User.Id).Execute()
 		// third user cannot remove the second from the org of the first

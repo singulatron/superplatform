@@ -14,7 +14,47 @@ The user service is at the heart of Singulatron, managing users, tokens, organiz
 
 > This page is a high level overview of the `User Svc`. For API documentation, please see the [API documentation](/docs/singulatron/login).
 
-### Managing Credentials
+## How It Works
+
+### The Token
+
+The User Svc produces a JWT ([JSON Web Token](https://en.wikipedia.org/wiki/JSON_Web_Token)) upon [/user-svc/login](/docs/singulatron/login) in the `token.token` field (see the response documentation).
+
+You can either use this token as a proper JWT - decode it and inspect the contents, or you can just use the token to read the user account that belongs to the token with the [/user-svc/user/by-token](/docs/singulatron/read-user-by-token) endpoint.
+
+### Decoding the Token
+
+The [`/user-svc/public-key`](/docs/singulatron/get-public-key) will return you the public key of the User Svc which then you can use that to decode the token.
+
+Use the JWT libraries that are available in your programming language to do that, or use the Singularon [SDK](https://github.com/singulatron/singulatron/tree/main/sdk) if your language is supported.
+
+### Token Structure
+
+The structure of the JWT is the following:
+
+```js
+{
+   "sui":"usr_dC4K75Cbp6",
+   "slu":"test-user-slug-0",
+   "sri":[
+      "user-svc:user",
+      "user-svc:org:{org_dC4K7NNDCG}:user"
+   ]
+}
+```
+
+The field names are kept short to save space, so perhaps the Go definition is also educational:
+
+```go
+type Claims struct {
+	UserId  string   `json:"sui"` // `sui`: singulatron user ids
+	Slug    string   `json:"slu"` // `slu`: singulatron slug
+	RoleIds []string `json:"sri"` // `sri`: singulatron role ids
+	jwt.RegisteredClaims
+}
+```
+
+## Managing Credentials
 
 The most important thing about the User Svc is that service (machine) and user (human) accounts look and function the same.
 
@@ -26,7 +66,7 @@ You can do this in a few ways:
 - Use a language specific [client](https://github.com/singulatron/singulatron/tree/main/clients) that was generated from the API
 - Use a language specific [SDK](https://github.com/singulatron/singulatron/tree/main/localtron/sdk)
 
-#### A Practical Example
+### A Practical Example
 
 A code snippet is worth a thousand words, even if it's in an unfamiliar language, so here is how the Prompt Svc boots up:
 
@@ -72,6 +112,6 @@ Each role created must by prefixed by the slug of the account that created it. S
 
 Each permission created must by prefixed by the slug of the account that created it. Said account becomes the owner of the permission and only that account can add the permission to a role.
 
-> Once you own a permission (by creating it, and it being prefixed by your account slug), you can add it to any role, not just roles owned by you.
+> Once you (your service) own a permission (by creating it, and it being prefixed by your account slug), you can add it to any role, not just roles owned by you.
 
 Example; let's say your service is `petstore-svc`. Singulatron prefers fine-grained access control, so you are free to define your own permissions, such as `petstore-svc:read` or `petstore-svc:pet:read`.
