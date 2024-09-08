@@ -1,0 +1,86 @@
+---
+sidebar_position: 5
+tags:
+  - policy-svc
+  - blocklist
+  - rate-limiting
+  - policy
+  - policies
+---
+
+# Policy Svc
+
+The policy service provides features such as rate limiting of endpoint calls by user ip, user id, organization id and more.
+
+> This page is a high level overview of the `Policy Svc`. For API documentation, please see the [API documentation](/docs/singulatron/upsert-instance).
+
+## How It Works
+
+The Policy Svc requires you to explicitly call the [/policy-svc/check](/docs/singulatron/check) endpoint in every service endpoint you are building. There is no magic or framework feature involved.
+
+## Usage
+
+The policy service has two endpoint:
+
+- You can create policy instances with [/policy-svc/upsert-instance](/docs/singulatron/upsert-instance) - use this to define rate limits, block IPs etc.
+- A [/policy-svc/check](/docs/singulatron/check) endpoint that you should call for every request in your endpoint you want to rate limit.
+
+While the documentation should be
+thorough, it might be not be the easiest to understand at first glance due to the presence of `*Parameters` fields which are specific to `Policy Templates`.
+
+## Terms
+
+### Policy Templates
+
+`Policy Templates` are hardcoded features of the `Policy Svc`:
+
+#### Rate Limit
+
+Rate Limit (templateId: `rate-limit`) provides rate limiting various entities and scopes, see the `rateLimitParameters` in the [api doc](/docs/singulatron/upsert-instance)).
+
+#### Blocklist
+
+Blocklist provides blocking of access by `ip` addresses, see the `blocklistParameters` in the [api doc](/docs/singulatron/upsert-instance)).
+
+### Policy Instance
+
+A policy instance is a specific application of a policy template to certain data like endpoints, user ids, ip addresses etc.
+
+## Examples
+
+### Rate Limit
+
+The following [`/policy-svc/upsert-instance`](/docs/singulatron/upsert-instance) payload rate limits calls to the `register` endpoint by caller IP: maximum 5 calls are permitted per IP per day:
+
+```js
+{
+  "instance": {
+    "endpoint": "/user-svc/register",
+    "id": "insta_dBZRCej3fo",
+    "rateLimitParameters": {
+      "entity": "ip",
+      "maxRequests": 5,
+      "scope": "endpoint",
+      "timeWindow": "1d"
+    },
+    "templateId": "rate-limit"
+  }
+}
+```
+
+### Block by IP
+
+The following [`/policy-svc/upsert-instance`](/docs/singulatron/upsert-instance) payload blocks access to the register endpoint by ip address.
+
+```js
+{
+  "instance": {
+    "endpoint": "/user-svc/register",
+    "id": "insta_dBZRCej3fo",
+    "blocklistParameters": {
+      "blockedIPs": ["8.8.8.8"]
+    },
+    "templateId": "rate-limit"
+  }
+}
+```

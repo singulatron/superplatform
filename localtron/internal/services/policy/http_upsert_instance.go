@@ -8,6 +8,7 @@ import (
 	"github.com/gorilla/mux"
 	policy "github.com/singulatron/singulatron/localtron/internal/services/policy/types"
 	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	sdk "github.com/singulatron/singulatron/sdk/go"
 )
 
 // UpsertInstance allows a user to upsert a new policy instance
@@ -66,6 +67,10 @@ func (s *PolicyService) UpsertInstance(
 }
 
 func (s *PolicyService) upsertInstance(instance *policy.Instance) error {
+	if instance.Id == "" {
+		instance.Id = sdk.Id("insta")
+	}
+
 	exists := false
 	for _, i := range s.instances {
 		if i.Id == instance.Id {
