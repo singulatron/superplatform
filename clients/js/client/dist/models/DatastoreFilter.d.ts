@@ -23,19 +23,19 @@ export interface DatastoreFilter {
      */
     fields?: Array<string>;
     /**
-     *
-     * @type {DatastoreOp}
-     * @memberof DatastoreFilter
-     */
-    op?: DatastoreOp;
-    /**
      * JSONValues is a JSON marshalled array of values.
      * It's JSON marhalled due to the limitations of the
      * Swaggo -> OpenAPI 2.0 -> OpenAPI Go generator toolchain.
      * @type {string}
      * @memberof DatastoreFilter
      */
-    values?: string;
+    jsonValues?: string;
+    /**
+     *
+     * @type {DatastoreOp}
+     * @memberof DatastoreFilter
+     */
+    op?: DatastoreOp;
 }
 /**
  * Check if a given object implements the DatastoreFilter interface.

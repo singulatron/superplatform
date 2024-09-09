@@ -11,15 +11,27 @@ tags:
 
 The prompt service provides an easy to use interface to prompt LLMs and use AI models. Aims to serve humans and machines alike with its resilient queue based architecture.
 
-> This page is a high level overview of the `Prompt Svc`. For API documentation, please see the [Prompt Svc API documentation](/docs/singulatron/upsert-instance).
+> This page is a high level overview of the `Prompt Svc`. For more details, please see the [Prompt Svc API documentation](/docs/singulatron/upsert-instance).
 
-## How It Works
+## Responsibilities
 
-The prompt service accepts prompts,maintains a list of prompts and processes them as soon as it's able to. It handles retries of prompts that errored with an exponential backoff.
+The prompt service:
 
-It's able to stream back LLM responses, or it can respond syncronously if that's what the caller wants, for details see the [`/prompt-svc/prompt`](/docs/singulatron/add-prompt).
+- Accepts prompts
+- Maintains a list of prompts
+- Processes prompts as soon as it's able to
+- Streams prompt answers
+- Handles retries of prompts that errored with an exponential backoff
 
-It talks to two services primarily:
+It's able to stream back LLM responses, or it can respond syncronously if that's what the caller wants, for details see the [Add Prompt (`/prompt-svc/prompt`) Endpoint](/docs/singulatron/add-prompt).
 
-- [Chat Svc] to save prompt responses to chat threads and messages.
-- [Model Svc] to get the address of the running AI models, see their status etc.
+## Dependencies
+
+- [Chat Svc](/docs/services/chat-svc) to save prompt responses to chat threads and messages
+- [Model Svc](/docs/services/model-svc) to get the address of the running AI models, see their status etc.
+
+## Current Limitations
+
+There are planned improvements for this service:
+
+- It should manage models: start needed ones and stop unneeded ones based on the volume of prompts in the backlog

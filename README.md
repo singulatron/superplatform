@@ -4,7 +4,7 @@
     <span>
       <h1>Singulatron</h1>
     </span>
-    <div>AI management and development platform. Self-host AI models and build apps with them.</div>
+    <div>AI management and development platform.</div>
     <div>
       <a href="https://superplatform.ai">superplatform.ai</a> 
     </div>

@@ -6,13 +6,18 @@ tags:
   - rate-limiting
   - policy
   - policies
+  - reliability
 ---
 
 # Policy Svc
 
 The policy service provides features such as rate limiting of endpoint calls by user ip, user id, organization id and more.
 
-> This page is a high level overview of the `Policy Svc`. For API documentation, please see the [Policy Svc API documentation](/docs/singulatron/upsert-instance).
+> This page is a high level overview of the `Policy Svc`. For more details, please see the [Policy Svc API documentation](/docs/singulatron/upsert-instance).
+
+## Responsibilities
+
+- Provide tools for service writers to prevent adversarial users from causing service degradation
 
 ## How It Works
 

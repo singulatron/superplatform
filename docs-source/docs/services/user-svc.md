@@ -13,7 +13,7 @@ tags:
 
 The user service is at the heart of Singulatron, managing users, tokens, organizations, permissions and more. Each service and human on the Singulatron network has an account in the `User Svc`.
 
-> This page is a high level overview of the `User Svc`. For API documentation, please see the [User Svc API documentation](/docs/singulatron/login).
+> This page is a high level overview of the `User Svc`. For more details, please see the [User Svc API documentation](/docs/singulatron/login).
 
 ## How It Works
 

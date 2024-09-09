@@ -13,7 +13,7 @@ tags:
 
 The dynamic service is designed to help build backendless applications: the goal is to be able to save and query data directly from the frontend. Similarly to Firebase.
 
-> This page is a high level overview of the `Dynamic Svc`. For API documentation, please see the [Dynamic Svc API documentation](/docs/singulatron/query).
+> This page is a high level overview of the `Dynamic Svc`. For more details, please see the [Dynamic Svc API documentation](/docs/singulatron/query).
 
 Aimed at prototyping or where building a service to store the data feels like an overkill. It doesn't aim to be a definitive and exclusively used datastore by any means.
 

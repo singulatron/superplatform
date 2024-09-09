@@ -24,14 +24,14 @@ DatastoreFilter.attributeTypeMap = [
         "type": "Array<string>"
     },
     {
+        "name": "jsonValues",
+        "baseName": "jsonValues",
+        "type": "string"
+    },
+    {
         "name": "op",
         "baseName": "op",
         "type": "DatastoreOp"
-    },
-    {
-        "name": "values",
-        "baseName": "values",
-        "type": "string"
     }
 ];
 
