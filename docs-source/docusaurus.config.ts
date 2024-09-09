@@ -109,6 +109,10 @@ const config: Config = {
               label: "superplatform.ai",
               href: "https://superplatform.ai",
             },
+            {
+              label: "singulatron.com",
+              href: "https://singulatron.com",
+            },
           ],
         },
         {
