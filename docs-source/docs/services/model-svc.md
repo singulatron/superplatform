@@ -16,7 +16,6 @@ The model service can start, stop AI models across multiple runtimes (eg. Docker
 ## Responsibilities
 
 - Start and stop models
--
 - Maintain a database of models and other related information such as the default model
 
 ## Dependencies

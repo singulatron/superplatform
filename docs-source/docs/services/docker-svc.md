@@ -24,4 +24,3 @@ The docker service maintains AI model containers on a node. It expects the docke
 ## Current Limitations
 
 - Service expects to run on the same node as the Download Svc. This is an issue in distributed setups.
--
