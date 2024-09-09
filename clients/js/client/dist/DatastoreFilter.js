@@ -30,8 +30,8 @@ function DatastoreFilterFromJSONTyped(json, ignoreDiscriminator) {
     }
     return {
         'fields': json['fields'] == null ? undefined : json['fields'],
+        'jsonValues': json['jsonValues'] == null ? undefined : json['jsonValues'],
         'op': json['op'] == null ? undefined : DatastoreOp.DatastoreOpFromJSON(json['op']),
-        'values': json['values'] == null ? undefined : json['values'],
     };
 }
 function DatastoreFilterToJSON(value) {
@@ -40,8 +40,8 @@ function DatastoreFilterToJSON(value) {
     }
     return {
         'fields': value['fields'],
+        'jsonValues': value['jsonValues'],
         'op': DatastoreOp.DatastoreOpToJSON(value['op']),
-        'values': value['values'],
     };
 }
 

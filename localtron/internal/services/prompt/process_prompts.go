@@ -229,7 +229,6 @@ func (p *PromptService) processPrompt(currentPrompt *prompttypes.Prompt) (err er
 	statusRsp := modeltypes.StatusResponse{}
 	err = p.router.Get(context.Background(), "model-svc", fmt.Sprintf("/model/%v/status", url.PathEscape(modelId)), nil, &statusRsp)
 	if err != nil {
-
 		return err
 	}
 

@@ -8,7 +8,8 @@ import type * as OpenApiPlugin from "docusaurus-plugin-openapi-docs";
 
 const config: Config = {
   title: "Singulatron",
-  tagline: "AI management and development platform",
+  tagline:
+    "AI management and development platform. Self-host AI models and build apps with them.",
   url: "https://superplatform.ai",
   baseUrl: "/",
   onBrokenLinks: "throw",

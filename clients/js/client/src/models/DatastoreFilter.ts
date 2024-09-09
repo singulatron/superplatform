@@ -33,19 +33,19 @@ export interface DatastoreFilter {
      */
     fields?: Array<string>;
     /**
-     * 
-     * @type {DatastoreOp}
-     * @memberof DatastoreFilter
-     */
-    op?: DatastoreOp;
-    /**
      * JSONValues is a JSON marshalled array of values.
      * It's JSON marhalled due to the limitations of the
      * Swaggo -> OpenAPI 2.0 -> OpenAPI Go generator toolchain.
      * @type {string}
      * @memberof DatastoreFilter
      */
-    values?: string;
+    jsonValues?: string;
+    /**
+     * 
+     * @type {DatastoreOp}
+     * @memberof DatastoreFilter
+     */
+    op?: DatastoreOp;
 }
 
 
@@ -68,8 +68,8 @@ export function DatastoreFilterFromJSONTyped(json: any, ignoreDiscriminator: boo
     return {
         
         'fields': json['fields'] == null ? undefined : json['fields'],
+        'jsonValues': json['jsonValues'] == null ? undefined : json['jsonValues'],
         'op': json['op'] == null ? undefined : DatastoreOpFromJSON(json['op']),
-        'values': json['values'] == null ? undefined : json['values'],
     };
 }
 
@@ -80,8 +80,8 @@ export function DatastoreFilterToJSON(value?: DatastoreFilter | null): any {
     return {
         
         'fields': value['fields'],
+        'jsonValues': value['jsonValues'],
         'op': DatastoreOpToJSON(value['op']),
-        'values': value['values'],
     };
 }
 

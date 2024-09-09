@@ -8,9 +8,7 @@ tags:
 
 ## What is it?
 
-Singulatron is a rapid prototyping environment for the AI age.
-
-It allows you to self-host and work with LLMs and other AI technologies, offering a comprehensive framework and ecosystem for rapidly building AI-driven applications.
+Singulatron enables you to self-host AI models, build apps that leverage those models in any language, and utilize a microservices-based communal backend designed to support a diverse range of projects.
 
 ## It lets you:
 
