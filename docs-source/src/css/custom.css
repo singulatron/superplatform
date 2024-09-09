@@ -6,7 +6,7 @@
 
 /* You can override the default Infima variables here. */
 :root {
-  --ifm-color-primary: #0ad3fd;
+  --ifm-color-primary: #00ccff;
   --ifm-color-primary-dark: #09bfdf;
   --ifm-color-primary-darker: #08b1ce;
   --ifm-color-primary-darkest: #0795ad;
@@ -18,8 +18,8 @@
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
-[data-theme='dark'] {
-  --ifm-color-primary: #0ad3fd;
+[data-theme="dark"] {
+  --ifm-color-primary: #00ccff;
   --ifm-color-primary-dark: #09bfdf;
   --ifm-color-primary-darker: #08b1ce;
   --ifm-color-primary-darkest: #0795ad;
@@ -30,12 +30,12 @@
 }
 
 /* Sidebar Method labels */
-.api-method>.menu__link {
+.api-method > .menu__link {
   align-items: center;
   justify-content: start;
 }
 
-.api-method>.menu__link::before {
+.api-method > .menu__link::before {
   width: 50px;
   height: 20px;
   font-size: 12px;
@@ -51,27 +51,27 @@
   color: white;
 }
 
-.get>.menu__link::before {
+.get > .menu__link::before {
   content: "get";
   background-color: var(--ifm-color-primary);
 }
 
-.put>.menu__link::before {
+.put > .menu__link::before {
   content: "put";
   background-color: var(--openapi-code-blue);
 }
 
-.post>.menu__link::before {
+.post > .menu__link::before {
   content: "post";
   background-color: var(--openapi-code-green);
 }
 
-.delete>.menu__link::before {
+.delete > .menu__link::before {
   content: "del";
   background-color: var(--openapi-code-red);
 }
 
-.patch>.menu__link::before {
+.patch > .menu__link::before {
   content: "patch";
   background-color: var(--openapi-code-orange);
 }
