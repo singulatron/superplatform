@@ -49,19 +49,19 @@ export class LocaltronService {
 	}
 
 	id(prefix: string): string {
-		const numberStr = sonyflake.nextId();
-		const number = BigInt(numberStr);
+		const numberString = sonyflake.nextId();
+		const number = BigInt(numberString);
 
 		if (number === BigInt(0)) {
 			return `${prefix}_0`;
 		}
 
 		let result = '';
-		let num = number;
+		let number_ = number;
 
-		while (num > 0) {
-			const remainder = Number(num % BigInt(62));
-			num = num / BigInt(62);
+		while (number_ > 0) {
+			const remainder = Number(number_ % BigInt(62));
+			number_ = number_ / BigInt(62);
 			result = base62[remainder] + result;
 		}
 
