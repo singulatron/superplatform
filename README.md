@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="150px" src="https://singulatron.com/assets/logo-lighter.svg" />
+  <img width="150px" src="https://singulatron.com/assets/logo-lighter.svg?v=1" />
   <div align="center">
     <span>
       <h1>Singulatron</h1>
