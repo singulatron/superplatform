@@ -73,7 +73,7 @@ const config: Config = {
       title: "Singulatron",
       logo: {
         alt: "Singulatron Logo",
-        src: "img/logo-lighter.svg",
+        src: "img/logo_circled_grey.svg",
       },
       items: [
         // {
