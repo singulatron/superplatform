@@ -29,9 +29,9 @@ function DatastoreQueryFromJSONTyped(json, ignoreDiscriminator) {
         return json;
     }
     return {
-        'after': json['after'] == null ? undefined : json['after'],
         'count': json['count'] == null ? undefined : json['count'],
         'filters': json['filters'] == null ? undefined : (json['filters'].map(DatastoreFilterFromJSON)),
+        'jsonAfter': json['jsonAfter'] == null ? undefined : json['jsonAfter'],
         'limit': json['limit'] == null ? undefined : json['limit'],
         'orderBys': json['orderBys'] == null ? undefined : (json['orderBys'].map(DatastoreOrderByFromJSON)),
     };
@@ -41,9 +41,9 @@ function DatastoreQueryToJSON(value) {
         return value;
     }
     return {
-        'after': value['after'],
         'count': value['count'],
         'filters': value['filters'] == null ? undefined : (value['filters'].map(DatastoreFilterToJSON)),
+        'jsonAfter': value['jsonAfter'],
         'limit': value['limit'],
         'orderBys': value['orderBys'] == null ? undefined : (value['orderBys'].map(DatastoreOrderByToJSON)),
     };

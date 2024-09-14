@@ -3647,10 +3647,6 @@ const docTemplate = `{
         "datastore.Query": {
             "type": "object",
             "properties": {
-                "after": {
-                    "description": "JSONAfter is used for cursor-based pagination, which is more\neffective in scalable and distributed environments compared\nto offset-based pagination.\n\nJSONAfter is a JSON encoded string due to limitations of Swaggo (ie. []interface{} generates []map[stirng]interface{}).",
-                    "type": "string"
-                },
                 "count": {
                     "description": "Count true means return the count of the dataset filtered by Filters\nwithout after or limit.",
                     "type": "boolean"
@@ -3661,6 +3657,10 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/datastore.Filter"
                     }
+                },
+                "jsonAfter": {
+                    "description": "JSONAfter is used for cursor-based pagination, which is more\neffective in scalable and distributed environments compared\nto offset-based pagination.\n\nJSONAfter is a JSON encoded string due to limitations of Swaggo (ie. []interface{} generates []map[stirng]interface{}).",
+                    "type": "string"
                 },
                 "limit": {
                     "description": "Limit the number of records in the result set.",

@@ -16,10 +16,6 @@ import { DatastoreOrderBy } from './datastoreOrderBy';
 
 export class DatastoreQuery {
     /**
-    * JSONAfter is used for cursor-based pagination, which is more effective in scalable and distributed environments compared to offset-based pagination.  JSONAfter is a JSON encoded string due to limitations of Swaggo (ie. []interface{} generates []map[stirng]interface{}).
-    */
-    'after'?: string;
-    /**
     * Count true means return the count of the dataset filtered by Filters without after or limit.
     */
     'count'?: boolean;
@@ -27,6 +23,10 @@ export class DatastoreQuery {
     * Filters are filtering options of a query. It is advised to use It\'s advised to use helper functions in your respective client library such as filter constructors (`all`, `equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
     */
     'filters'?: Array<DatastoreFilter>;
+    /**
+    * JSONAfter is used for cursor-based pagination, which is more effective in scalable and distributed environments compared to offset-based pagination.  JSONAfter is a JSON encoded string due to limitations of Swaggo (ie. []interface{} generates []map[stirng]interface{}).
+    */
+    'jsonAfter'?: string;
     /**
     * Limit the number of records in the result set.
     */
@@ -40,11 +40,6 @@ export class DatastoreQuery {
 
     static attributeTypeMap: Array<{name: string, baseName: string, type: string}> = [
         {
-            "name": "after",
-            "baseName": "after",
-            "type": "string"
-        },
-        {
             "name": "count",
             "baseName": "count",
             "type": "boolean"
@@ -53,6 +48,11 @@ export class DatastoreQuery {
             "name": "filters",
             "baseName": "filters",
             "type": "Array<DatastoreFilter>"
+        },
+        {
+            "name": "jsonAfter",
+            "baseName": "jsonAfter",
+            "type": "string"
         },
         {
             "name": "limit",

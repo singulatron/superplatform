@@ -6,12 +6,6 @@
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
 import { Injectable } from '@angular/core';
-import {
-	GenericObject,
-	all,
-	id as idCondition,
-	userId as userIdCondition,
-} from '@singulatron/types';
 import { DynamicService } from './generic.service';
 import { LocaltronService } from './localtron.service';
 import { UserService } from './user.service';

@@ -82,7 +82,7 @@ export class UserService {
 		}
 
 		try {
-			const rsp = await this.readUserByToken(this.token);
+			const rsp = await this.readUserByToken();
 			this.userSubject.next(rsp.user!);
 		} catch (error) {
 			console.error('Cannot read user even with a token', error);
@@ -130,12 +130,8 @@ export class UserService {
 		});
 	}
 
-	readUserByToken(token: string): Promise<UserSvcReadUserByTokenResponse> {
-		return this.userService.readUserByToken({
-			body: {
-				token: token,
-			},
-		});
+	readUserByToken(): Promise<UserSvcReadUserByTokenResponse> {
+		return this.userService.readUserByToken({});
 	}
 
 	getUsers(request: user.GetUsersRequest): Promise<UserSvcGetUsersResponse> {
