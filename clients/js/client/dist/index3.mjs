@@ -15,6 +15,7 @@ import './ChatSvcMessage.mjs';
 import './ChatSvcAddThreadRequest.mjs';
 import './ChatSvcThread.mjs';
 import './ChatSvcAddThreadResponse.mjs';
+import './ChatSvcEventThreadUpdate.mjs';
 import './ChatSvcGetMessagesResponse.mjs';
 import './ChatSvcAsset.mjs';
 import './ChatSvcGetThreadResponse.mjs';

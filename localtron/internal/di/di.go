@@ -307,6 +307,10 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 		chatService.UpdateThread(w, r)
 	})).Methods("OPTIONS", "PUT")
 
+	router.HandleFunc("/chat-svc/evens", appl(func(w http.ResponseWriter, r *http.Request) {
+		chatService.Events(w, r)
+	})).Methods("OPTIONS", "GET")
+
 	router.HandleFunc("/prompt-svc/prompt", appl(func(w http.ResponseWriter, r *http.Request) {
 		promptService.Add(w, r)
 	})).Methods("OPTIONS", "POST")

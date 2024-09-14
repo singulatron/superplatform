@@ -24,6 +24,30 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/chat-svc/events": {
+            "get": {
+                "description": "Events is a dummy endpoint to display documentation about the events that this service emits.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Chat Svc"
+                ],
+                "summary": "Events",
+                "operationId": "events",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/chat_svc.EventThreadUpdate"
+                        }
+                    }
+                }
+            }
+        },
         "/chat-svc/message/{messageId}": {
             "delete": {
                 "security": [
@@ -3409,6 +3433,30 @@ const docTemplate = `{
                 },
                 "url": {
                     "description": "Url of the asset where",
+                    "type": "string"
+                }
+            }
+        },
+        "chat_svc.EventMessageAdded": {
+            "type": "object",
+            "properties": {
+                "threadId": {
+                    "type": "string"
+                }
+            }
+        },
+        "chat_svc.EventThreadAdded": {
+            "type": "object",
+            "properties": {
+                "threadId": {
+                    "type": "string"
+                }
+            }
+        },
+        "chat_svc.EventThreadUpdate": {
+            "type": "object",
+            "properties": {
+                "threadId": {
                     "type": "string"
                 }
             }

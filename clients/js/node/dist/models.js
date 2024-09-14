@@ -4,6 +4,9 @@ var chatSvcAddMessageRequest = require('./chatSvcAddMessageRequest.js');
 var chatSvcAddThreadRequest = require('./chatSvcAddThreadRequest.js');
 var chatSvcAddThreadResponse = require('./chatSvcAddThreadResponse.js');
 var chatSvcAsset = require('./chatSvcAsset.js');
+var chatSvcEventMessageAdded = require('./chatSvcEventMessageAdded.js');
+var chatSvcEventThreadAdded = require('./chatSvcEventThreadAdded.js');
+var chatSvcEventThreadUpdate = require('./chatSvcEventThreadUpdate.js');
 var chatSvcGetMessagesResponse = require('./chatSvcGetMessagesResponse.js');
 var chatSvcGetThreadResponse = require('./chatSvcGetThreadResponse.js');
 var chatSvcGetThreadsResponse = require('./chatSvcGetThreadsResponse.js');
@@ -133,6 +136,9 @@ let typeMap = {
     "ChatSvcAddThreadRequest": chatSvcAddThreadRequest.ChatSvcAddThreadRequest,
     "ChatSvcAddThreadResponse": chatSvcAddThreadResponse.ChatSvcAddThreadResponse,
     "ChatSvcAsset": chatSvcAsset.ChatSvcAsset,
+    "ChatSvcEventMessageAdded": chatSvcEventMessageAdded.ChatSvcEventMessageAdded,
+    "ChatSvcEventThreadAdded": chatSvcEventThreadAdded.ChatSvcEventThreadAdded,
+    "ChatSvcEventThreadUpdate": chatSvcEventThreadUpdate.ChatSvcEventThreadUpdate,
     "ChatSvcGetMessagesResponse": chatSvcGetMessagesResponse.ChatSvcGetMessagesResponse,
     "ChatSvcGetThreadResponse": chatSvcGetThreadResponse.ChatSvcGetThreadResponse,
     "ChatSvcGetThreadsResponse": chatSvcGetThreadsResponse.ChatSvcGetThreadsResponse,
@@ -422,6 +428,9 @@ exports.ChatSvcAddMessageRequest = chatSvcAddMessageRequest.ChatSvcAddMessageReq
 exports.ChatSvcAddThreadRequest = chatSvcAddThreadRequest.ChatSvcAddThreadRequest;
 exports.ChatSvcAddThreadResponse = chatSvcAddThreadResponse.ChatSvcAddThreadResponse;
 exports.ChatSvcAsset = chatSvcAsset.ChatSvcAsset;
+exports.ChatSvcEventMessageAdded = chatSvcEventMessageAdded.ChatSvcEventMessageAdded;
+exports.ChatSvcEventThreadAdded = chatSvcEventThreadAdded.ChatSvcEventThreadAdded;
+exports.ChatSvcEventThreadUpdate = chatSvcEventThreadUpdate.ChatSvcEventThreadUpdate;
 exports.ChatSvcGetMessagesResponse = chatSvcGetMessagesResponse.ChatSvcGetMessagesResponse;
 exports.ChatSvcGetThreadResponse = chatSvcGetThreadResponse.ChatSvcGetThreadResponse;
 exports.ChatSvcGetThreadsResponse = chatSvcGetThreadsResponse.ChatSvcGetThreadsResponse;

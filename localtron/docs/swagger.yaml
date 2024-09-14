@@ -35,6 +35,21 @@ definitions:
         description: Url of the asset where
         type: string
     type: object
+  chat_svc.EventMessageAdded:
+    properties:
+      threadId:
+        type: string
+    type: object
+  chat_svc.EventThreadAdded:
+    properties:
+      threadId:
+        type: string
+    type: object
+  chat_svc.EventThreadUpdate:
+    properties:
+      threadId:
+        type: string
+    type: object
   chat_svc.GetMessagesResponse:
     properties:
       assets:
@@ -1361,6 +1376,23 @@ info:
   title: Singulatron
   version: "0.2"
 paths:
+  /chat-svc/events:
+    get:
+      consumes:
+      - application/json
+      description: Events is a dummy endpoint to display documentation about the events
+        that this service emits.
+      operationId: events
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/chat_svc.EventThreadUpdate'
+      summary: Events
+      tags:
+      - Chat Svc
   /chat-svc/message/{messageId}:
     delete:
       consumes:

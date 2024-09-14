@@ -10,6 +10,7 @@ import { DynamicService } from './generic.service';
 import { LocaltronService } from './localtron.service';
 import { UserService } from './user.service';
 import { first } from 'rxjs';
+import { DynamicSvcObject } from '@singulatron/client';
 
 const CHARACTERS_TABLE_NAME = 'characters';
 const SELECTED_CHARACTERS_TABLE_NAME = 'selected-characters';
@@ -39,7 +40,7 @@ export class CharacterService {
 
 	async loadCharacters(): Promise<Character[]> {
 		const response = await this.dynamicService.find(CHARACTERS_TABLE_NAME, [
-			all(),
+			// all(),
 		]);
 		return response?.objects as Character[];
 	}
@@ -69,7 +70,7 @@ export class CharacterService {
 			await this.deleteCharacterSelection(character.id!);
 		}
 		await this.dynamicService.delete(CHARACTERS_TABLE_NAME, [
-			idCondition(character.id!),
+			// idCondition(character.id!),
 		]);
 	}
 
@@ -78,7 +79,9 @@ export class CharacterService {
 		character.updatedAt = now;
 		this.dynamicService.update(
 			CHARACTERS_TABLE_NAME,
-			[idCondition(character.id!)],
+			[
+				//idCondition(character.id!)
+			],
 			{
 				...character,
 			}
@@ -86,9 +89,10 @@ export class CharacterService {
 	}
 
 	async getCharacter(characterId: string): Promise<Character | undefined> {
+		console.log(characterId);
 		try {
 			const response = await this.dynamicService.find(CHARACTERS_TABLE_NAME, [
-				idCondition(characterId),
+				// idCondition(characterId),
 			]);
 			return response?.objects?.[0] as any as Character;
 		} catch {
@@ -132,9 +136,12 @@ export class CharacterService {
 
 	async getCharacterSelection(): Promise<SelectedCharacter | null> {
 		const userId = await this.userService.getUserId();
+		console.log(userId);
 		const response = await this.dynamicService.find(
 			SELECTED_CHARACTERS_TABLE_NAME,
-			[userIdCondition(userId)]
+			[
+				// userIdCondition(userId)
+			]
 		);
 		return response?.objects?.[0] as SelectedCharacter;
 	}
@@ -143,13 +150,14 @@ export class CharacterService {
 	 * This will remove only the selection from SELECTED_CHARACTERS_TABLE_NAME
 	 */
 	async deleteCharacterSelection(characterId: string) {
+		console.log(characterId)
 		this.dynamicService.delete(SELECTED_CHARACTERS_TABLE_NAME, [
-			idCondition(characterId),
+			//idCondition(characterId),
 		]);
 	}
 }
 
-export interface Character extends GenericObject {
+export interface Character extends DynamicSvcObject {
 	data: {
 		name: string;
 		behaviour: string;
@@ -157,7 +165,7 @@ export interface Character extends GenericObject {
 	};
 }
 
-export interface SelectedCharacter extends GenericObject {
+export interface SelectedCharacter extends DynamicSvcObject {
 	data: {
 		selectedCharacterId: string;
 	};

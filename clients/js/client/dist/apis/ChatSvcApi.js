@@ -21,7 +21,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import * as runtime from '../runtime';
-import { ChatSvcAddMessageRequestToJSON, ChatSvcAddThreadRequestToJSON, ChatSvcAddThreadResponseFromJSON, ChatSvcGetMessagesResponseFromJSON, ChatSvcGetThreadResponseFromJSON, ChatSvcGetThreadsResponseFromJSON, ChatSvcUpdateThreadRequestToJSON, } from '../models/index';
+import { ChatSvcAddMessageRequestToJSON, ChatSvcAddThreadRequestToJSON, ChatSvcAddThreadResponseFromJSON, ChatSvcEventThreadUpdateFromJSON, ChatSvcGetMessagesResponseFromJSON, ChatSvcGetThreadResponseFromJSON, ChatSvcGetThreadsResponseFromJSON, ChatSvcUpdateThreadRequestToJSON, } from '../models/index';
 /**
  *
  */
@@ -162,6 +162,33 @@ export class ChatSvcApi extends runtime.BaseAPI {
     deleteThread(requestParameters, initOverrides) {
         return __awaiter(this, void 0, void 0, function* () {
             const response = yield this.deleteThreadRaw(requestParameters, initOverrides);
+            return yield response.value();
+        });
+    }
+    /**
+     * Events is a dummy endpoint to display documentation about the events that this service emits.
+     * Events
+     */
+    eventsRaw(initOverrides) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const queryParameters = {};
+            const headerParameters = {};
+            const response = yield this.request({
+                path: `/chat-svc/events`,
+                method: 'GET',
+                headers: headerParameters,
+                query: queryParameters,
+            }, initOverrides);
+            return new runtime.JSONApiResponse(response, (jsonValue) => ChatSvcEventThreadUpdateFromJSON(jsonValue));
+        });
+    }
+    /**
+     * Events is a dummy endpoint to display documentation about the events that this service emits.
+     * Events
+     */
+    events(initOverrides) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const response = yield this.eventsRaw(initOverrides);
             return yield response.value();
         });
     }

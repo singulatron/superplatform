@@ -20,6 +20,9 @@ docs/ChatSvcAddMessageRequest.md
 docs/ChatSvcAddThreadRequest.md
 docs/ChatSvcAddThreadResponse.md
 docs/ChatSvcAsset.md
+docs/ChatSvcEventMessageAdded.md
+docs/ChatSvcEventThreadAdded.md
+docs/ChatSvcEventThreadUpdate.md
 docs/ChatSvcGetMessagesResponse.md
 docs/ChatSvcGetThreadResponse.md
 docs/ChatSvcGetThreadsResponse.md
@@ -142,6 +145,9 @@ model_chat_svc_add_message_request.go
 model_chat_svc_add_thread_request.go
 model_chat_svc_add_thread_response.go
 model_chat_svc_asset.go
+model_chat_svc_event_message_added.go
+model_chat_svc_event_thread_added.go
+model_chat_svc_event_thread_update.go
 model_chat_svc_get_messages_response.go
 model_chat_svc_get_thread_response.go
 model_chat_svc_get_threads_response.go

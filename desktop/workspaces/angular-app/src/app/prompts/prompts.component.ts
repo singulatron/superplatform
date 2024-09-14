@@ -22,15 +22,7 @@ import { CenteredComponent } from '../components/centered/centered.component';
 import { PromptComponent } from './prompt/prompt.component';
 import { QueryParser } from '../services/query.service';
 import {
-	queryHasFieldCondition,
-	field,
-	equal,
-	conditionsToKeyValue,
-	contains,
-	Condition,
-	conditionFieldIs,
-} from '@singulatron/types';
-import {
+	DatastoreFilter,
 	PromptSvcPrompt as Prompt,
 	PromptSvcListPromptsRequest,
 } from '@singulatron/client';
@@ -81,8 +73,12 @@ export class PromptsComponent {
 		private router: Router
 	) {
 		this.queryParser = new QueryParser();
-		this.queryParser.defaultConditionFunc = (value: any): Condition => {
-			return contains(field('modelId'), value);
+		this.queryParser.defaultConditionFunc = (value: any): DatastoreFilter => {
+			return {
+				op: 'containsSubstring',
+				fields: ['modelId'],
+				jsonValues: JSON.stringify([value]),
+			};
 		};
 
 		this.userService.user$.pipe(first()).subscribe(() => {
@@ -102,10 +98,10 @@ export class PromptsComponent {
 
 	public redirect() {
 		const query = this.queryParser.parse(this.searchTerm);
-		const kv = conditionsToKeyValue(
-			query.conditions
-				? query.conditions.filter((v) => {
-						return !conditionFieldIs(v, 'modelId');
+		const kv = filtersToKeyValue(
+			query.filters
+				? query.filters.filter((v) => {
+						return v.fields?.includes('modelId');
 					})
 				: []
 		);
@@ -132,10 +128,14 @@ export class PromptsComponent {
 	public async fetchPrompts() {
 		const query = this.queryParser.parse(this.searchTerm);
 		query.count = true;
-		query.conditions = query.conditions || [];
+		query.filters = query.filters || [];
 
-		if (!queryHasFieldCondition(query, 'status')) {
-			query.conditions.push(equal(field('status'), this.request.statuses));
+		if (!query.filters.find((f) => f.fields?.includes('status'))) {
+			query.filters.push({
+				fields: ['status'],
+				jsonValues: JSON.stringify(this.request.statuses),
+				op: 'equals',
+			});
 		}
 		query.orderBys = [{ field: 'createdAt', desc: true }];
 
@@ -144,7 +144,7 @@ export class PromptsComponent {
 		};
 
 		if (this.after) {
-			request.query!.after = [this.after];
+			request.query!.jsonAfter = JSON.stringify([this.after]);
 		}
 
 		const response = await this.promptService.promptList(request);
@@ -177,4 +177,19 @@ export class PromptsComponent {
 		}
 		await this.fetchPrompts();
 	}
+}
+
+function filtersToKeyValue(filters: DatastoreFilter[]): {
+	[key: string]: any;
+} {
+	if (!filters) {
+		return {};
+	}
+	const object: { [key: string]: any } = {};
+
+	for (const filter of filters) {
+		object[filter.fields![0]] = JSON.parse(filter.jsonValues!)[0];
+	}
+
+	return object;
 }

@@ -2,6 +2,7 @@ import { a as BaseAPI, _ as __awaiter, b as RequiredError, J as JSONApiResponse 
 import { ChatSvcAddMessageRequestToJSON } from './ChatSvcAddMessageRequest.mjs';
 import { ChatSvcAddThreadRequestToJSON } from './ChatSvcAddThreadRequest.mjs';
 import { ChatSvcAddThreadResponseFromJSON } from './ChatSvcAddThreadResponse.mjs';
+import { ChatSvcEventThreadUpdateFromJSON } from './ChatSvcEventThreadUpdate.mjs';
 import { ChatSvcGetMessagesResponseFromJSON } from './ChatSvcGetMessagesResponse.mjs';
 import { ChatSvcGetThreadResponseFromJSON } from './ChatSvcGetThreadResponse.mjs';
 import { ChatSvcGetThreadsResponseFromJSON } from './ChatSvcGetThreadsResponse.mjs';
@@ -163,6 +164,33 @@ class ChatSvcApi extends BaseAPI {
     deleteThread(requestParameters, initOverrides) {
         return __awaiter(this, void 0, void 0, function* () {
             const response = yield this.deleteThreadRaw(requestParameters, initOverrides);
+            return yield response.value();
+        });
+    }
+    /**
+     * Events is a dummy endpoint to display documentation about the events that this service emits.
+     * Events
+     */
+    eventsRaw(initOverrides) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const queryParameters = {};
+            const headerParameters = {};
+            const response = yield this.request({
+                path: `/chat-svc/events`,
+                method: 'GET',
+                headers: headerParameters,
+                query: queryParameters,
+            }, initOverrides);
+            return new JSONApiResponse(response, (jsonValue) => ChatSvcEventThreadUpdateFromJSON(jsonValue));
+        });
+    }
+    /**
+     * Events is a dummy endpoint to display documentation about the events that this service emits.
+     * Events
+     */
+    events(initOverrides) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const response = yield this.eventsRaw(initOverrides);
             return yield response.value();
         });
     }

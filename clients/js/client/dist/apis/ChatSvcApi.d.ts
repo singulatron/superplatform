@@ -10,7 +10,7 @@
  * Do not edit the class manually.
  */
 import * as runtime from '../runtime';
-import type { ChatSvcAddMessageRequest, ChatSvcAddThreadRequest, ChatSvcAddThreadResponse, ChatSvcGetMessagesResponse, ChatSvcGetThreadResponse, ChatSvcGetThreadsResponse, ChatSvcUpdateThreadRequest } from '../models/index';
+import type { ChatSvcAddMessageRequest, ChatSvcAddThreadRequest, ChatSvcAddThreadResponse, ChatSvcEventThreadUpdate, ChatSvcGetMessagesResponse, ChatSvcGetThreadResponse, ChatSvcGetThreadsResponse, ChatSvcUpdateThreadRequest } from '../models/index';
 export interface AddMessageRequest {
     threadId: string;
     request: ChatSvcAddMessageRequest;
@@ -93,6 +93,16 @@ export declare class ChatSvcApi extends runtime.BaseAPI {
     deleteThread(requestParameters: DeleteThreadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<{
         [key: string]: any;
     }>;
+    /**
+     * Events is a dummy endpoint to display documentation about the events that this service emits.
+     * Events
+     */
+    eventsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ChatSvcEventThreadUpdate>>;
+    /**
+     * Events is a dummy endpoint to display documentation about the events that this service emits.
+     * Events
+     */
+    events(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ChatSvcEventThreadUpdate>;
     /**
      * Fetch messages (and associated assets) for a specific chat thread.
      * List Messages
