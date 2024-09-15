@@ -15,7 +15,7 @@ import {
 	ConfigSvcApi,
 	ConfigSvcGetConfigResponse,
 	Configuration,
-	ConfigSvcConfig as Config
+	ConfigSvcConfig as Config,
 } from '@singulatron/client';
 
 @Injectable({

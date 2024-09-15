@@ -21,7 +21,7 @@ import {
 	ChatSvcThread as Thread,
 	ChatSvcEventMessageAdded,
 	ChatSvcEventThreadAdded,
-	ChatSvcEventThreadUpdate
+	ChatSvcEventThreadUpdate,
 } from '@singulatron/client';
 
 @Injectable({

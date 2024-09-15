@@ -150,7 +150,7 @@ export class CharacterService {
 	 * This will remove only the selection from SELECTED_CHARACTERS_TABLE_NAME
 	 */
 	async deleteCharacterSelection(characterId: string) {
-		console.log(characterId)
+		console.log(characterId);
 		this.dynamicService.delete(SELECTED_CHARACTERS_TABLE_NAME, [
 			//idCondition(characterId),
 		]);
