@@ -315,7 +315,7 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 		promptService.Add(w, r)
 	})).Methods("OPTIONS", "POST")
 
-	router.HandleFunc("/prompt-svc'/prompt/{promptId}", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/prompt-svc/prompt/{promptId}", appl(func(w http.ResponseWriter, r *http.Request) {
 		promptService.RemovePrompt(w, r)
 	})).Methods("OPTIONS", "DELETE")
 
