@@ -130,7 +130,7 @@ export class PromptsComponent {
 		query.count = true;
 		query.filters = query.filters || [];
 
-		if (!query.filters.find((f) => f.fields?.includes('status'))) {
+		if (!query.filters.some((f) => f.fields?.includes('status'))) {
 			query.filters.push({
 				fields: ['status'],
 				jsonValues: JSON.stringify(this.request.statuses),

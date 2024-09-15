@@ -190,7 +190,7 @@ export class UserService {
 		user: UserSvcUser,
 		password: string,
 		roleIds: string[]
-	): Promise<Object> {
+	): Promise<object> {
 		return this.userService.createUser({
 			request: {
 				user: user,
@@ -220,13 +220,13 @@ export class UserService {
 		});
 	}
 
-	deleteRole(roleId: string): Promise<Object> {
+	deleteRole(roleId: string): Promise<object> {
 		return this.userService.deleteRole({
 			roleId: roleId,
 		});
 	}
 
-	deleteUser(userId: string): Promise<Object> {
+	deleteUser(userId: string): Promise<object> {
 		return this.userService.deleteUser({
 			userId: userId,
 		});
