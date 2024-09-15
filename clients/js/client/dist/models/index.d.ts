@@ -49,7 +49,7 @@ export * from './DynamicSvcUpsertObjectRequest';
 export * from './DynamicSvcUpsertObjectResponse';
 export * from './FirehoseSvcErrorResponse';
 export * from './FirehoseSvcEvent';
-export * from './FirehoseSvcPublishRequest';
+export * from './FirehoseSvcEventPublishRequest';
 export * from './ModelSvcArchitectures';
 export * from './ModelSvcContainer';
 export * from './ModelSvcErrorResponse';

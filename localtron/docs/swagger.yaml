@@ -585,7 +585,7 @@ definitions:
       name:
         type: string
     type: object
-  firehose_svc.PublishRequest:
+  firehose_svc.EventPublishRequest:
     properties:
       event:
         $ref: '#/definitions/firehose_svc.Event'
@@ -2274,13 +2274,14 @@ paths:
       - application/json
       description: Publishes an event to the firehose service after authorization
         check
+      operationId: eventPublish
       parameters:
       - description: Event to publish
         in: body
         name: event
         required: true
         schema:
-          $ref: '#/definitions/firehose_svc.PublishRequest'
+          $ref: '#/definitions/firehose_svc.EventPublishRequest'
       produces:
       - application/json
       responses:
@@ -2305,6 +2306,7 @@ paths:
       - application/json
       description: Establish a subscription to the firehose events and accept a real
         time stream of them.
+      operationId: eventSubscribe
       produces:
       - text/event-stream
       responses:

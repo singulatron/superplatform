@@ -9,18 +9,16 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-class FirehoseSvcPublishRequest {
+export class FirehoseSvcEventPublishRequest {
     static getAttributeTypeMap() {
-        return FirehoseSvcPublishRequest.attributeTypeMap;
+        return FirehoseSvcEventPublishRequest.attributeTypeMap;
     }
 }
-FirehoseSvcPublishRequest.discriminator = undefined;
-FirehoseSvcPublishRequest.attributeTypeMap = [
+FirehoseSvcEventPublishRequest.discriminator = undefined;
+FirehoseSvcEventPublishRequest.attributeTypeMap = [
     {
         "name": "event",
         "baseName": "event",
         "type": "FirehoseSvcEvent"
     }
 ];
-
-export { FirehoseSvcPublishRequest };

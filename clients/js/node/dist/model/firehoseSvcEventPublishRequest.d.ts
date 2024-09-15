@@ -10,7 +10,7 @@
  * Do not edit the class manually.
  */
 import { FirehoseSvcEvent } from './firehoseSvcEvent';
-export declare class FirehoseSvcPublishRequest {
+export declare class FirehoseSvcEventPublishRequest {
     'event'?: FirehoseSvcEvent;
     static discriminator: string | undefined;
     static attributeTypeMap: Array<{

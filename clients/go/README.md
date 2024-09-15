@@ -104,8 +104,8 @@ Class | Method | HTTP request | Description
 *DynamicSvcAPI* | [**Query**](docs/DynamicSvcAPI.md#query) | **Post** /dynamic-svc/objects | Query Objects
 *DynamicSvcAPI* | [**UpdateObjects**](docs/DynamicSvcAPI.md#updateobjects) | **Post** /dynamic-svc/objects/update | Update Objects
 *DynamicSvcAPI* | [**UpsertObject**](docs/DynamicSvcAPI.md#upsertobject) | **Put** /dynamic-svc/object/{objectId} | Upsert a Generic Object
-*FirehoseSvcAPI* | [**FirehoseSvcPublishPost**](docs/FirehoseSvcAPI.md#firehosesvcpublishpost) | **Post** /firehose-svc/publish | Publish an Event
-*FirehoseSvcAPI* | [**FirehoseSvcSubscribeGet**](docs/FirehoseSvcAPI.md#firehosesvcsubscribeget) | **Get** /firehose-svc/subscribe | Subscribe to the Event Stream
+*FirehoseSvcAPI* | [**EventPublish**](docs/FirehoseSvcAPI.md#eventpublish) | **Post** /firehose-svc/publish | Publish an Event
+*FirehoseSvcAPI* | [**EventSubscribe**](docs/FirehoseSvcAPI.md#eventsubscribe) | **Get** /firehose-svc/subscribe | Subscribe to the Event Stream
 *ModelSvcAPI* | [**GetDefaultModelStatus**](docs/ModelSvcAPI.md#getdefaultmodelstatus) | **Get** /model-svc/default-model/status | Get Default Model Status
 *ModelSvcAPI* | [**GetModel**](docs/ModelSvcAPI.md#getmodel) | **Get** /model-svc/model/{modelId} | Get a Model
 *ModelSvcAPI* | [**GetModelStatus**](docs/ModelSvcAPI.md#getmodelstatus) | **Get** /model-svc/model/{modelId}/status | Get Model Status
@@ -196,7 +196,7 @@ Class | Method | HTTP request | Description
  - [DynamicSvcUpsertObjectResponse](docs/DynamicSvcUpsertObjectResponse.md)
  - [FirehoseSvcErrorResponse](docs/FirehoseSvcErrorResponse.md)
  - [FirehoseSvcEvent](docs/FirehoseSvcEvent.md)
- - [FirehoseSvcPublishRequest](docs/FirehoseSvcPublishRequest.md)
+ - [FirehoseSvcEventPublishRequest](docs/FirehoseSvcEventPublishRequest.md)
  - [ModelSvcArchitectures](docs/ModelSvcArchitectures.md)
  - [ModelSvcContainer](docs/ModelSvcContainer.md)
  - [ModelSvcErrorResponse](docs/ModelSvcErrorResponse.md)

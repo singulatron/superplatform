@@ -13,15 +13,15 @@
  */
 import { FirehoseSvcEventFromJSON, FirehoseSvcEventToJSON, } from './FirehoseSvcEvent';
 /**
- * Check if a given object implements the FirehoseSvcPublishRequest interface.
+ * Check if a given object implements the FirehoseSvcEventPublishRequest interface.
  */
-export function instanceOfFirehoseSvcPublishRequest(value) {
+export function instanceOfFirehoseSvcEventPublishRequest(value) {
     return true;
 }
-export function FirehoseSvcPublishRequestFromJSON(json) {
-    return FirehoseSvcPublishRequestFromJSONTyped(json, false);
+export function FirehoseSvcEventPublishRequestFromJSON(json) {
+    return FirehoseSvcEventPublishRequestFromJSONTyped(json, false);
 }
-export function FirehoseSvcPublishRequestFromJSONTyped(json, ignoreDiscriminator) {
+export function FirehoseSvcEventPublishRequestFromJSONTyped(json, ignoreDiscriminator) {
     if (json == null) {
         return json;
     }
@@ -29,7 +29,7 @@ export function FirehoseSvcPublishRequestFromJSONTyped(json, ignoreDiscriminator
         'event': json['event'] == null ? undefined : FirehoseSvcEventFromJSON(json['event']),
     };
 }
-export function FirehoseSvcPublishRequestToJSON(value) {
+export function FirehoseSvcEventPublishRequestToJSON(value) {
     if (value == null) {
         return value;
     }

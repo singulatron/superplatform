@@ -16,15 +16,15 @@ var FirehoseSvcEvent = require('./FirehoseSvcEvent.js');
  * Do not edit the class manually.
  */
 /**
- * Check if a given object implements the FirehoseSvcPublishRequest interface.
+ * Check if a given object implements the FirehoseSvcEventPublishRequest interface.
  */
-function instanceOfFirehoseSvcPublishRequest(value) {
+function instanceOfFirehoseSvcEventPublishRequest(value) {
     return true;
 }
-function FirehoseSvcPublishRequestFromJSON(json) {
-    return FirehoseSvcPublishRequestFromJSONTyped(json);
+function FirehoseSvcEventPublishRequestFromJSON(json) {
+    return FirehoseSvcEventPublishRequestFromJSONTyped(json);
 }
-function FirehoseSvcPublishRequestFromJSONTyped(json, ignoreDiscriminator) {
+function FirehoseSvcEventPublishRequestFromJSONTyped(json, ignoreDiscriminator) {
     if (json == null) {
         return json;
     }
@@ -32,7 +32,7 @@ function FirehoseSvcPublishRequestFromJSONTyped(json, ignoreDiscriminator) {
         'event': json['event'] == null ? undefined : FirehoseSvcEvent.FirehoseSvcEventFromJSON(json['event']),
     };
 }
-function FirehoseSvcPublishRequestToJSON(value) {
+function FirehoseSvcEventPublishRequestToJSON(value) {
     if (value == null) {
         return value;
     }
@@ -41,7 +41,7 @@ function FirehoseSvcPublishRequestToJSON(value) {
     };
 }
 
-exports.FirehoseSvcPublishRequestFromJSON = FirehoseSvcPublishRequestFromJSON;
-exports.FirehoseSvcPublishRequestFromJSONTyped = FirehoseSvcPublishRequestFromJSONTyped;
-exports.FirehoseSvcPublishRequestToJSON = FirehoseSvcPublishRequestToJSON;
-exports.instanceOfFirehoseSvcPublishRequest = instanceOfFirehoseSvcPublishRequest;
+exports.FirehoseSvcEventPublishRequestFromJSON = FirehoseSvcEventPublishRequestFromJSON;
+exports.FirehoseSvcEventPublishRequestFromJSONTyped = FirehoseSvcEventPublishRequestFromJSONTyped;
+exports.FirehoseSvcEventPublishRequestToJSON = FirehoseSvcEventPublishRequestToJSON;
+exports.instanceOfFirehoseSvcEventPublishRequest = instanceOfFirehoseSvcEventPublishRequest;

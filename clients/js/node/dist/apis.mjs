@@ -66,7 +66,7 @@ import './dynamicSvcUpsertObjectRequest.mjs';
 import './dynamicSvcUpsertObjectResponse.mjs';
 import './firehoseSvcErrorResponse.mjs';
 import './firehoseSvcEvent.mjs';
-import './firehoseSvcPublishRequest.mjs';
+import './firehoseSvcEventPublishRequest.mjs';
 import './modelSvcArchitectures.mjs';
 import './modelSvcContainer.mjs';
 import './modelSvcErrorResponse.mjs';
@@ -56114,7 +56114,7 @@ class FirehoseSvcApi {
      * @summary Publish an Event
      * @param event Event to publish
      */
-    firehoseSvcPublishPost(event_1) {
+    eventPublish(event_1) {
         return __awaiter(this, arguments, void 0, function* (event, options = { headers: {} }) {
             const localVarPath = this.basePath + '/firehose-svc/publish';
             let localVarQueryParameters = {};
@@ -56130,7 +56130,7 @@ class FirehoseSvcApi {
             let localVarFormParams = {};
             // verify required parameter 'event' is not null or undefined
             if (event === null || event === undefined) {
-                throw new Error('Required parameter event was null or undefined when calling firehoseSvcPublishPost.');
+                throw new Error('Required parameter event was null or undefined when calling eventPublish.');
             }
             Object.assign(localVarHeaderParams, options.headers);
             let localVarRequestOptions = {
@@ -56140,7 +56140,7 @@ class FirehoseSvcApi {
                 uri: localVarPath,
                 useQuerystring: this._useQuerystring,
                 json: true,
-                body: ObjectSerializer.serialize(event, "FirehoseSvcPublishRequest")
+                body: ObjectSerializer.serialize(event, "FirehoseSvcEventPublishRequest")
             };
             let authenticationPromise = Promise.resolve();
             if (this.authentications.BearerAuth.apiKey) {
@@ -56179,7 +56179,7 @@ class FirehoseSvcApi {
      * Establish a subscription to the firehose events and accept a real time stream of them.
      * @summary Subscribe to the Event Stream
      */
-    firehoseSvcSubscribeGet() {
+    eventSubscribe() {
         return __awaiter(this, arguments, void 0, function* (options = { headers: {} }) {
             const localVarPath = this.basePath + '/firehose-svc/subscribe';
             let localVarQueryParameters = {};

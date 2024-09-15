@@ -51,7 +51,7 @@ export { DynamicSvcUpsertObjectRequest } from './dynamicSvcUpsertObjectRequest.m
 export { DynamicSvcUpsertObjectResponse } from './dynamicSvcUpsertObjectResponse.mjs';
 export { FirehoseSvcErrorResponse } from './firehoseSvcErrorResponse.mjs';
 export { FirehoseSvcEvent } from './firehoseSvcEvent.mjs';
-export { FirehoseSvcPublishRequest } from './firehoseSvcPublishRequest.mjs';
+export { FirehoseSvcEventPublishRequest } from './firehoseSvcEventPublishRequest.mjs';
 export { ModelSvcArchitectures } from './modelSvcArchitectures.mjs';
 export { ModelSvcContainer } from './modelSvcContainer.mjs';
 export { ModelSvcErrorResponse } from './modelSvcErrorResponse.mjs';

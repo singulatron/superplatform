@@ -14,15 +14,15 @@ import { FirehoseSvcEventFromJSON, FirehoseSvcEventToJSON } from './FirehoseSvcE
  * Do not edit the class manually.
  */
 /**
- * Check if a given object implements the FirehoseSvcPublishRequest interface.
+ * Check if a given object implements the FirehoseSvcEventPublishRequest interface.
  */
-function instanceOfFirehoseSvcPublishRequest(value) {
+function instanceOfFirehoseSvcEventPublishRequest(value) {
     return true;
 }
-function FirehoseSvcPublishRequestFromJSON(json) {
-    return FirehoseSvcPublishRequestFromJSONTyped(json);
+function FirehoseSvcEventPublishRequestFromJSON(json) {
+    return FirehoseSvcEventPublishRequestFromJSONTyped(json);
 }
-function FirehoseSvcPublishRequestFromJSONTyped(json, ignoreDiscriminator) {
+function FirehoseSvcEventPublishRequestFromJSONTyped(json, ignoreDiscriminator) {
     if (json == null) {
         return json;
     }
@@ -30,7 +30,7 @@ function FirehoseSvcPublishRequestFromJSONTyped(json, ignoreDiscriminator) {
         'event': json['event'] == null ? undefined : FirehoseSvcEventFromJSON(json['event']),
     };
 }
-function FirehoseSvcPublishRequestToJSON(value) {
+function FirehoseSvcEventPublishRequestToJSON(value) {
     if (value == null) {
         return value;
     }
@@ -39,4 +39,4 @@ function FirehoseSvcPublishRequestToJSON(value) {
     };
 }
 
-export { FirehoseSvcPublishRequestFromJSON, FirehoseSvcPublishRequestFromJSONTyped, FirehoseSvcPublishRequestToJSON, instanceOfFirehoseSvcPublishRequest };
+export { FirehoseSvcEventPublishRequestFromJSON, FirehoseSvcEventPublishRequestFromJSONTyped, FirehoseSvcEventPublishRequestToJSON, instanceOfFirehoseSvcEventPublishRequest };

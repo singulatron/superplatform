@@ -61,7 +61,7 @@ export { DynamicSvcUpsertObjectRequestFromJSON, DynamicSvcUpsertObjectRequestFro
 export { DynamicSvcUpsertObjectResponseFromJSON, DynamicSvcUpsertObjectResponseFromJSONTyped, DynamicSvcUpsertObjectResponseToJSON, instanceOfDynamicSvcUpsertObjectResponse } from './DynamicSvcUpsertObjectResponse.mjs';
 export { FirehoseSvcErrorResponseFromJSON, FirehoseSvcErrorResponseFromJSONTyped, FirehoseSvcErrorResponseToJSON, instanceOfFirehoseSvcErrorResponse } from './FirehoseSvcErrorResponse.mjs';
 export { FirehoseSvcEventFromJSON, FirehoseSvcEventFromJSONTyped, FirehoseSvcEventToJSON, instanceOfFirehoseSvcEvent } from './FirehoseSvcEvent.mjs';
-export { FirehoseSvcPublishRequestFromJSON, FirehoseSvcPublishRequestFromJSONTyped, FirehoseSvcPublishRequestToJSON, instanceOfFirehoseSvcPublishRequest } from './FirehoseSvcPublishRequest.mjs';
+export { FirehoseSvcEventPublishRequestFromJSON, FirehoseSvcEventPublishRequestFromJSONTyped, FirehoseSvcEventPublishRequestToJSON, instanceOfFirehoseSvcEventPublishRequest } from './FirehoseSvcEventPublishRequest.mjs';
 export { ModelSvcArchitecturesFromJSON, ModelSvcArchitecturesFromJSONTyped, ModelSvcArchitecturesToJSON, instanceOfModelSvcArchitectures } from './ModelSvcArchitectures.mjs';
 export { ModelSvcContainerFromJSON, ModelSvcContainerFromJSONTyped, ModelSvcContainerToJSON, instanceOfModelSvcContainer } from './ModelSvcContainer.mjs';
 export { ModelSvcErrorResponseFromJSON, ModelSvcErrorResponseFromJSONTyped, ModelSvcErrorResponseToJSON, instanceOfModelSvcErrorResponse } from './ModelSvcErrorResponse.mjs';

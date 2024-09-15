@@ -51,7 +51,7 @@ export * from './dynamicSvcUpsertObjectRequest';
 export * from './dynamicSvcUpsertObjectResponse';
 export * from './firehoseSvcErrorResponse';
 export * from './firehoseSvcEvent';
-export * from './firehoseSvcPublishRequest';
+export * from './firehoseSvcEventPublishRequest';
 export * from './modelSvcArchitectures';
 export * from './modelSvcContainer';
 export * from './modelSvcErrorResponse';
@@ -177,7 +177,7 @@ import { DynamicSvcUpsertObjectRequest } from './dynamicSvcUpsertObjectRequest';
 import { DynamicSvcUpsertObjectResponse } from './dynamicSvcUpsertObjectResponse';
 import { FirehoseSvcErrorResponse } from './firehoseSvcErrorResponse';
 import { FirehoseSvcEvent } from './firehoseSvcEvent';
-import { FirehoseSvcPublishRequest } from './firehoseSvcPublishRequest';
+import { FirehoseSvcEventPublishRequest } from './firehoseSvcEventPublishRequest';
 import { ModelSvcArchitectures } from './modelSvcArchitectures';
 import { ModelSvcContainer } from './modelSvcContainer';
 import { ModelSvcErrorResponse } from './modelSvcErrorResponse';
@@ -310,7 +310,7 @@ let typeMap: {[index: string]: any} = {
     "DynamicSvcUpsertObjectResponse": DynamicSvcUpsertObjectResponse,
     "FirehoseSvcErrorResponse": FirehoseSvcErrorResponse,
     "FirehoseSvcEvent": FirehoseSvcEvent,
-    "FirehoseSvcPublishRequest": FirehoseSvcPublishRequest,
+    "FirehoseSvcEventPublishRequest": FirehoseSvcEventPublishRequest,
     "ModelSvcArchitectures": ModelSvcArchitectures,
     "ModelSvcContainer": ModelSvcContainer,
     "ModelSvcErrorResponse": ModelSvcErrorResponse,

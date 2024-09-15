@@ -192,13 +192,13 @@ const sidebar: SidebarsConfig = {
       items: [
         {
           type: "doc",
-          id: "singulatron/publish-an-event",
+          id: "singulatron/event-publish",
           label: "Publish an Event",
           className: "api-method post",
         },
         {
           type: "doc",
-          id: "singulatron/subscribe-to-the-event-stream",
+          id: "singulatron/event-subscribe",
           label: "Subscribe to the Event Stream",
           className: "api-method get",
         },
