@@ -69,7 +69,7 @@ require('./dynamicSvcUpsertObjectRequest.js');
 require('./dynamicSvcUpsertObjectResponse.js');
 require('./firehoseSvcErrorResponse.js');
 require('./firehoseSvcEvent.js');
-require('./firehoseSvcPublishRequest.js');
+require('./firehoseSvcEventPublishRequest.js');
 require('./modelSvcArchitectures.js');
 require('./modelSvcContainer.js');
 require('./modelSvcErrorResponse.js');

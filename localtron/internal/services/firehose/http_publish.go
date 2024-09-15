@@ -14,16 +14,16 @@ import (
 	"net/http"
 
 	firehose "github.com/singulatron/singulatron/localtron/internal/services/firehose/types"
-	prompttypes "github.com/singulatron/singulatron/localtron/internal/services/prompt/types"
 	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
 )
 
 // @Summary Publish an Event
+// @ID eventPublish
 // @Description Publishes an event to the firehose service after authorization check
 // @Tags Firehose Svc
 // @Accept json
 // @Produce json
-// @Param event body firehose.PublishRequest true "Event to publish"
+// @Param event body firehose.EventPublishRequest true "Event to publish"
 // @Success 200 {object} nil "{}"
 // @Failure 400 {object} firehose.ErrorResponse "Invalid JSON"
 // @Failure 401 {object} firehose.ErrorResponse "Unauthorized"
@@ -34,7 +34,7 @@ func (p *FirehoseService) Publish(w http.ResponseWriter,
 	w.Header().Set("Content-Type", "application/json")
 
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := p.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", prompttypes.PermissionPromptCreate.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	err := p.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", firehose.PermissionFirehoseCreate.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(err.Error()))
@@ -46,7 +46,7 @@ func (p *FirehoseService) Publish(w http.ResponseWriter,
 		return
 	}
 
-	req := firehose.PublishRequest{}
+	req := firehose.EventPublishRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)

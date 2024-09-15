@@ -16,17 +16,17 @@
 import * as runtime from '../runtime';
 import type {
   FirehoseSvcErrorResponse,
-  FirehoseSvcPublishRequest,
+  FirehoseSvcEventPublishRequest,
 } from '../models/index';
 import {
     FirehoseSvcErrorResponseFromJSON,
     FirehoseSvcErrorResponseToJSON,
-    FirehoseSvcPublishRequestFromJSON,
-    FirehoseSvcPublishRequestToJSON,
+    FirehoseSvcEventPublishRequestFromJSON,
+    FirehoseSvcEventPublishRequestToJSON,
 } from '../models/index';
 
-export interface FirehoseSvcPublishPostRequest {
-    event: FirehoseSvcPublishRequest;
+export interface EventPublishRequest {
+    event: FirehoseSvcEventPublishRequest;
 }
 
 /**
@@ -38,11 +38,11 @@ export class FirehoseSvcApi extends runtime.BaseAPI {
      * Publishes an event to the firehose service after authorization check
      * Publish an Event
      */
-    async firehoseSvcPublishPostRaw(requestParameters: FirehoseSvcPublishPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async eventPublishRaw(requestParameters: EventPublishRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['event'] == null) {
             throw new runtime.RequiredError(
                 'event',
-                'Required parameter "event" was null or undefined when calling firehoseSvcPublishPost().'
+                'Required parameter "event" was null or undefined when calling eventPublish().'
             );
         }
 
@@ -61,7 +61,7 @@ export class FirehoseSvcApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: FirehoseSvcPublishRequestToJSON(requestParameters['event']),
+            body: FirehoseSvcEventPublishRequestToJSON(requestParameters['event']),
         }, initOverrides);
 
         return new runtime.VoidApiResponse(response);
@@ -71,15 +71,15 @@ export class FirehoseSvcApi extends runtime.BaseAPI {
      * Publishes an event to the firehose service after authorization check
      * Publish an Event
      */
-    async firehoseSvcPublishPost(requestParameters: FirehoseSvcPublishPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.firehoseSvcPublishPostRaw(requestParameters, initOverrides);
+    async eventPublish(requestParameters: EventPublishRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.eventPublishRaw(requestParameters, initOverrides);
     }
 
     /**
      * Establish a subscription to the firehose events and accept a real time stream of them.
      * Subscribe to the Event Stream
      */
-    async firehoseSvcSubscribeGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
+    async eventSubscribeRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -106,8 +106,8 @@ export class FirehoseSvcApi extends runtime.BaseAPI {
      * Establish a subscription to the firehose events and accept a real time stream of them.
      * Subscribe to the Event Stream
      */
-    async firehoseSvcSubscribeGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
-        const response = await this.firehoseSvcSubscribeGetRaw(initOverrides);
+    async eventSubscribe(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
+        const response = await this.eventSubscribeRaw(initOverrides);
         return await response.value();
     }
 

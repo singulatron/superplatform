@@ -67,7 +67,7 @@ import './dynamicSvcUpsertObjectRequest.mjs';
 import './dynamicSvcUpsertObjectResponse.mjs';
 import './firehoseSvcErrorResponse.mjs';
 import './firehoseSvcEvent.mjs';
-import './firehoseSvcPublishRequest.mjs';
+import './firehoseSvcEventPublishRequest.mjs';
 import './modelSvcArchitectures.mjs';
 import './modelSvcContainer.mjs';
 import './modelSvcErrorResponse.mjs';

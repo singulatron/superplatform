@@ -34,7 +34,7 @@ func (p *PromptService) removePrompt(promptId string) error {
 	ev := prompttypes.EventPromptRemoved{
 		PromptId: promptId,
 	}
-	err = p.router.Post(context.Background(), "firehose-svc", "/publish", firehosetypes.PublishRequest{
+	err = p.router.Post(context.Background(), "firehose-svc", "/publish", firehosetypes.EventPublishRequest{
 		Event: &firehosetypes.Event{
 			Name: ev.Name(),
 			Data: ev,

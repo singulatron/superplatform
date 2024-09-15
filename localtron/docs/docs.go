@@ -1387,6 +1387,7 @@ const docTemplate = `{
                     "Firehose Svc"
                 ],
                 "summary": "Publish an Event",
+                "operationId": "eventPublish",
                 "parameters": [
                     {
                         "description": "Event to publish",
@@ -1394,7 +1395,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/firehose_svc.PublishRequest"
+                            "$ref": "#/definitions/firehose_svc.EventPublishRequest"
                         }
                     }
                 ],
@@ -1435,6 +1436,7 @@ const docTemplate = `{
                     "Firehose Svc"
                 ],
                 "summary": "Subscribe to the Event Stream",
+                "operationId": "eventSubscribe",
                 "responses": {
                     "200": {
                         "description": "Event data",
@@ -4185,7 +4187,7 @@ const docTemplate = `{
                 }
             }
         },
-        "firehose_svc.PublishRequest": {
+        "firehose_svc.EventPublishRequest": {
             "type": "object",
             "properties": {
                 "event": {

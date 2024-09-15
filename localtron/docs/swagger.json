@@ -1381,6 +1381,7 @@
                     "Firehose Svc"
                 ],
                 "summary": "Publish an Event",
+                "operationId": "eventPublish",
                 "parameters": [
                     {
                         "description": "Event to publish",
@@ -1388,7 +1389,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/firehose_svc.PublishRequest"
+                            "$ref": "#/definitions/firehose_svc.EventPublishRequest"
                         }
                     }
                 ],
@@ -1429,6 +1430,7 @@
                     "Firehose Svc"
                 ],
                 "summary": "Subscribe to the Event Stream",
+                "operationId": "eventSubscribe",
                 "responses": {
                     "200": {
                         "description": "Event data",
@@ -4179,7 +4181,7 @@
                 }
             }
         },
-        "firehose_svc.PublishRequest": {
+        "firehose_svc.EventPublishRequest": {
             "type": "object",
             "properties": {
                 "event": {

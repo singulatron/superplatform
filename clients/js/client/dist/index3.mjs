@@ -54,7 +54,7 @@ import './DynamicSvcQueryResponse.mjs';
 import './DynamicSvcUpdateObjectRequest.mjs';
 import './DynamicSvcUpsertObjectRequest.mjs';
 import './DynamicSvcUpsertObjectResponse.mjs';
-import './FirehoseSvcPublishRequest.mjs';
+import './FirehoseSvcEventPublishRequest.mjs';
 import './FirehoseSvcEvent.mjs';
 import './ModelSvcGetModelResponse.mjs';
 import './ModelSvcModel.mjs';

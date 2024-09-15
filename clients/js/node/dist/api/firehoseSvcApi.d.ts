@@ -10,7 +10,7 @@
  * Do not edit the class manually.
  */
 import http from 'http';
-import { FirehoseSvcPublishRequest } from '../model/firehoseSvcPublishRequest';
+import { FirehoseSvcEventPublishRequest } from '../model/firehoseSvcEventPublishRequest';
 import { Authentication, Interceptor } from '../model/models';
 import { ApiKeyAuth } from '../model/models';
 export declare enum FirehoseSvcApiApiKeys {
@@ -39,7 +39,7 @@ export declare class FirehoseSvcApi {
      * @summary Publish an Event
      * @param event Event to publish
      */
-    firehoseSvcPublishPost(event: FirehoseSvcPublishRequest, options?: {
+    eventPublish(event: FirehoseSvcEventPublishRequest, options?: {
         headers: {
             [name: string]: string;
         };
@@ -51,7 +51,7 @@ export declare class FirehoseSvcApi {
      * Establish a subscription to the firehose events and accept a real time stream of them.
      * @summary Subscribe to the Event Stream
      */
-    firehoseSvcSubscribeGet(options?: {
+    eventSubscribe(options?: {
         headers: {
             [name: string]: string;
         };

@@ -1,7 +1,7 @@
 'use strict';
 
 var runtime = require('./runtime2.js');
-var FirehoseSvcPublishRequest = require('./FirehoseSvcPublishRequest.js');
+var FirehoseSvcEventPublishRequest = require('./FirehoseSvcEventPublishRequest.js');
 require('./FirehoseSvcEvent.js');
 
 /* tslint:disable */
@@ -25,10 +25,10 @@ class FirehoseSvcApi extends runtime.BaseAPI {
      * Publishes an event to the firehose service after authorization check
      * Publish an Event
      */
-    firehoseSvcPublishPostRaw(requestParameters, initOverrides) {
+    eventPublishRaw(requestParameters, initOverrides) {
         return runtime.__awaiter(this, void 0, void 0, function* () {
             if (requestParameters['event'] == null) {
-                throw new runtime.RequiredError('event', 'Required parameter "event" was null or undefined when calling firehoseSvcPublishPost().');
+                throw new runtime.RequiredError('event', 'Required parameter "event" was null or undefined when calling eventPublish().');
             }
             const queryParameters = {};
             const headerParameters = {};
@@ -41,7 +41,7 @@ class FirehoseSvcApi extends runtime.BaseAPI {
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,
-                body: FirehoseSvcPublishRequest.FirehoseSvcPublishRequestToJSON(requestParameters['event']),
+                body: FirehoseSvcEventPublishRequest.FirehoseSvcEventPublishRequestToJSON(requestParameters['event']),
             }, initOverrides);
             return new runtime.VoidApiResponse(response);
         });
@@ -50,16 +50,16 @@ class FirehoseSvcApi extends runtime.BaseAPI {
      * Publishes an event to the firehose service after authorization check
      * Publish an Event
      */
-    firehoseSvcPublishPost(requestParameters, initOverrides) {
+    eventPublish(requestParameters, initOverrides) {
         return runtime.__awaiter(this, void 0, void 0, function* () {
-            yield this.firehoseSvcPublishPostRaw(requestParameters, initOverrides);
+            yield this.eventPublishRaw(requestParameters, initOverrides);
         });
     }
     /**
      * Establish a subscription to the firehose events and accept a real time stream of them.
      * Subscribe to the Event Stream
      */
-    firehoseSvcSubscribeGetRaw(initOverrides) {
+    eventSubscribeRaw(initOverrides) {
         return runtime.__awaiter(this, void 0, void 0, function* () {
             const queryParameters = {};
             const headerParameters = {};
@@ -84,9 +84,9 @@ class FirehoseSvcApi extends runtime.BaseAPI {
      * Establish a subscription to the firehose events and accept a real time stream of them.
      * Subscribe to the Event Stream
      */
-    firehoseSvcSubscribeGet(initOverrides) {
+    eventSubscribe(initOverrides) {
         return runtime.__awaiter(this, void 0, void 0, function* () {
-            const response = yield this.firehoseSvcSubscribeGetRaw(initOverrides);
+            const response = yield this.eventSubscribeRaw(initOverrides);
             return yield response.value();
         });
     }

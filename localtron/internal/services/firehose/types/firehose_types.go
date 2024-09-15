@@ -16,8 +16,8 @@ type Event struct {
 	Data any    `json:"data"`
 }
 
-type PublishRequest struct {
+type EventPublishRequest struct {
 	Event *Event `json:"event"`
 }
 
-type PublishResponse struct{}
+type EventPublishResponse struct{}

@@ -50,7 +50,7 @@ export * from './dynamicSvcUpsertObjectRequest';
 export * from './dynamicSvcUpsertObjectResponse';
 export * from './firehoseSvcErrorResponse';
 export * from './firehoseSvcEvent';
-export * from './firehoseSvcPublishRequest';
+export * from './firehoseSvcEventPublishRequest';
 export * from './modelSvcArchitectures';
 export * from './modelSvcContainer';
 export * from './modelSvcErrorResponse';

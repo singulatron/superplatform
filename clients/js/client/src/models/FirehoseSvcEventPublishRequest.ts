@@ -23,29 +23,29 @@ import {
 /**
  * 
  * @export
- * @interface FirehoseSvcPublishRequest
+ * @interface FirehoseSvcEventPublishRequest
  */
-export interface FirehoseSvcPublishRequest {
+export interface FirehoseSvcEventPublishRequest {
     /**
      * 
      * @type {FirehoseSvcEvent}
-     * @memberof FirehoseSvcPublishRequest
+     * @memberof FirehoseSvcEventPublishRequest
      */
     event?: FirehoseSvcEvent;
 }
 
 /**
- * Check if a given object implements the FirehoseSvcPublishRequest interface.
+ * Check if a given object implements the FirehoseSvcEventPublishRequest interface.
  */
-export function instanceOfFirehoseSvcPublishRequest(value: object): value is FirehoseSvcPublishRequest {
+export function instanceOfFirehoseSvcEventPublishRequest(value: object): value is FirehoseSvcEventPublishRequest {
     return true;
 }
 
-export function FirehoseSvcPublishRequestFromJSON(json: any): FirehoseSvcPublishRequest {
-    return FirehoseSvcPublishRequestFromJSONTyped(json, false);
+export function FirehoseSvcEventPublishRequestFromJSON(json: any): FirehoseSvcEventPublishRequest {
+    return FirehoseSvcEventPublishRequestFromJSONTyped(json, false);
 }
 
-export function FirehoseSvcPublishRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): FirehoseSvcPublishRequest {
+export function FirehoseSvcEventPublishRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): FirehoseSvcEventPublishRequest {
     if (json == null) {
         return json;
     }
@@ -55,7 +55,7 @@ export function FirehoseSvcPublishRequestFromJSONTyped(json: any, ignoreDiscrimi
     };
 }
 
-export function FirehoseSvcPublishRequestToJSON(value?: FirehoseSvcPublishRequest | null): any {
+export function FirehoseSvcEventPublishRequestToJSON(value?: FirehoseSvcEventPublishRequest | null): any {
     if (value == null) {
         return value;
     }

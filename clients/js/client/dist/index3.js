@@ -56,7 +56,7 @@ require('./DynamicSvcQueryResponse.js');
 require('./DynamicSvcUpdateObjectRequest.js');
 require('./DynamicSvcUpsertObjectRequest.js');
 require('./DynamicSvcUpsertObjectResponse.js');
-require('./FirehoseSvcPublishRequest.js');
+require('./FirehoseSvcEventPublishRequest.js');
 require('./FirehoseSvcEvent.js');
 require('./ModelSvcGetModelResponse.js');
 require('./ModelSvcModel.js');

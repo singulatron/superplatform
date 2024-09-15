@@ -51,7 +51,7 @@ var dynamicSvcUpsertObjectRequest = require('./dynamicSvcUpsertObjectRequest.js'
 var dynamicSvcUpsertObjectResponse = require('./dynamicSvcUpsertObjectResponse.js');
 var firehoseSvcErrorResponse = require('./firehoseSvcErrorResponse.js');
 var firehoseSvcEvent = require('./firehoseSvcEvent.js');
-var firehoseSvcPublishRequest = require('./firehoseSvcPublishRequest.js');
+var firehoseSvcEventPublishRequest = require('./firehoseSvcEventPublishRequest.js');
 var modelSvcArchitectures = require('./modelSvcArchitectures.js');
 var modelSvcContainer = require('./modelSvcContainer.js');
 var modelSvcErrorResponse = require('./modelSvcErrorResponse.js');
@@ -182,7 +182,7 @@ let typeMap = {
     "DynamicSvcUpsertObjectResponse": dynamicSvcUpsertObjectResponse.DynamicSvcUpsertObjectResponse,
     "FirehoseSvcErrorResponse": firehoseSvcErrorResponse.FirehoseSvcErrorResponse,
     "FirehoseSvcEvent": firehoseSvcEvent.FirehoseSvcEvent,
-    "FirehoseSvcPublishRequest": firehoseSvcPublishRequest.FirehoseSvcPublishRequest,
+    "FirehoseSvcEventPublishRequest": firehoseSvcEventPublishRequest.FirehoseSvcEventPublishRequest,
     "ModelSvcArchitectures": modelSvcArchitectures.ModelSvcArchitectures,
     "ModelSvcContainer": modelSvcContainer.ModelSvcContainer,
     "ModelSvcErrorResponse": modelSvcErrorResponse.ModelSvcErrorResponse,
@@ -478,7 +478,7 @@ exports.DynamicSvcUpsertObjectRequest = dynamicSvcUpsertObjectRequest.DynamicSvc
 exports.DynamicSvcUpsertObjectResponse = dynamicSvcUpsertObjectResponse.DynamicSvcUpsertObjectResponse;
 exports.FirehoseSvcErrorResponse = firehoseSvcErrorResponse.FirehoseSvcErrorResponse;
 exports.FirehoseSvcEvent = firehoseSvcEvent.FirehoseSvcEvent;
-exports.FirehoseSvcPublishRequest = firehoseSvcPublishRequest.FirehoseSvcPublishRequest;
+exports.FirehoseSvcEventPublishRequest = firehoseSvcEventPublishRequest.FirehoseSvcEventPublishRequest;
 exports.ModelSvcArchitectures = modelSvcArchitectures.ModelSvcArchitectures;
 exports.ModelSvcContainer = modelSvcContainer.ModelSvcContainer;
 exports.ModelSvcErrorResponse = modelSvcErrorResponse.ModelSvcErrorResponse;

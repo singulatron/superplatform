@@ -72,7 +72,7 @@ docs/DynamicSvcUpsertObjectResponse.md
 docs/FirehoseSvcAPI.md
 docs/FirehoseSvcErrorResponse.md
 docs/FirehoseSvcEvent.md
-docs/FirehoseSvcPublishRequest.md
+docs/FirehoseSvcEventPublishRequest.md
 docs/ModelSvcAPI.md
 docs/ModelSvcArchitectures.md
 docs/ModelSvcContainer.md
@@ -192,7 +192,7 @@ model_dynamic_svc_upsert_object_request.go
 model_dynamic_svc_upsert_object_response.go
 model_firehose_svc_error_response.go
 model_firehose_svc_event.go
-model_firehose_svc_publish_request.go
+model_firehose_svc_event_publish_request.go
 model_model_svc_architectures.go
 model_model_svc_container.go
 model_model_svc_error_response.go

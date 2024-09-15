@@ -13,7 +13,7 @@
 import { RequestFile } from './models';
 import { FirehoseSvcEvent } from './firehoseSvcEvent';
 
-export class FirehoseSvcPublishRequest {
+export class FirehoseSvcEventPublishRequest {
     'event'?: FirehoseSvcEvent;
 
     static discriminator: string | undefined = undefined;
@@ -26,7 +26,7 @@ export class FirehoseSvcPublishRequest {
         }    ];
 
     static getAttributeTypeMap() {
-        return FirehoseSvcPublishRequest.attributeTypeMap;
+        return FirehoseSvcEventPublishRequest.attributeTypeMap;
     }
 }
 

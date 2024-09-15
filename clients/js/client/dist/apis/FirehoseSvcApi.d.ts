@@ -10,9 +10,9 @@
  * Do not edit the class manually.
  */
 import * as runtime from '../runtime';
-import type { FirehoseSvcPublishRequest } from '../models/index';
-export interface FirehoseSvcPublishPostRequest {
-    event: FirehoseSvcPublishRequest;
+import type { FirehoseSvcEventPublishRequest } from '../models/index';
+export interface EventPublishRequest {
+    event: FirehoseSvcEventPublishRequest;
 }
 /**
  *
@@ -22,20 +22,20 @@ export declare class FirehoseSvcApi extends runtime.BaseAPI {
      * Publishes an event to the firehose service after authorization check
      * Publish an Event
      */
-    firehoseSvcPublishPostRaw(requestParameters: FirehoseSvcPublishPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+    eventPublishRaw(requestParameters: EventPublishRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
     /**
      * Publishes an event to the firehose service after authorization check
      * Publish an Event
      */
-    firehoseSvcPublishPost(requestParameters: FirehoseSvcPublishPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+    eventPublish(requestParameters: EventPublishRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
     /**
      * Establish a subscription to the firehose events and accept a real time stream of them.
      * Subscribe to the Event Stream
      */
-    firehoseSvcSubscribeGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>>;
+    eventSubscribeRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>>;
     /**
      * Establish a subscription to the firehose events and accept a real time stream of them.
      * Subscribe to the Event Stream
      */
-    firehoseSvcSubscribeGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string>;
+    eventSubscribe(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string>;
 }

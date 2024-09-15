@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Singulatron
  * AI management and development platform.
@@ -11,13 +9,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-class FirehoseSvcPublishRequest {
+class FirehoseSvcEventPublishRequest {
     static getAttributeTypeMap() {
-        return FirehoseSvcPublishRequest.attributeTypeMap;
+        return FirehoseSvcEventPublishRequest.attributeTypeMap;
     }
 }
-FirehoseSvcPublishRequest.discriminator = undefined;
-FirehoseSvcPublishRequest.attributeTypeMap = [
+FirehoseSvcEventPublishRequest.discriminator = undefined;
+FirehoseSvcEventPublishRequest.attributeTypeMap = [
     {
         "name": "event",
         "baseName": "event",
@@ -25,4 +23,4 @@ FirehoseSvcPublishRequest.attributeTypeMap = [
     }
 ];
 
-exports.FirehoseSvcPublishRequest = FirehoseSvcPublishRequest;
+export { FirehoseSvcEventPublishRequest };
