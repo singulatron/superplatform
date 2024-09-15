@@ -18,6 +18,7 @@ import type {
   ChatSvcAddMessageRequest,
   ChatSvcAddThreadRequest,
   ChatSvcAddThreadResponse,
+  ChatSvcEventThreadUpdate,
   ChatSvcGetMessagesResponse,
   ChatSvcGetThreadResponse,
   ChatSvcGetThreadsResponse,
@@ -30,6 +31,8 @@ import {
     ChatSvcAddThreadRequestToJSON,
     ChatSvcAddThreadResponseFromJSON,
     ChatSvcAddThreadResponseToJSON,
+    ChatSvcEventThreadUpdateFromJSON,
+    ChatSvcEventThreadUpdateToJSON,
     ChatSvcGetMessagesResponseFromJSON,
     ChatSvcGetMessagesResponseToJSON,
     ChatSvcGetThreadResponseFromJSON,
@@ -245,6 +248,34 @@ export class ChatSvcApi extends runtime.BaseAPI {
      */
     async deleteThread(requestParameters: DeleteThreadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<{ [key: string]: any; }> {
         const response = await this.deleteThreadRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Events is a dummy endpoint to display documentation about the events that this service emits.
+     * Events
+     */
+    async eventsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ChatSvcEventThreadUpdate>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/chat-svc/events`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ChatSvcEventThreadUpdateFromJSON(jsonValue));
+    }
+
+    /**
+     * Events is a dummy endpoint to display documentation about the events that this service emits.
+     * Events
+     */
+    async events(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ChatSvcEventThreadUpdate> {
+        const response = await this.eventsRaw(initOverrides);
         return await response.value();
     }
 

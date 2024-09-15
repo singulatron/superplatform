@@ -20,12 +20,12 @@ var _ MappedNullable = &DatastoreQuery{}
 
 // DatastoreQuery struct for DatastoreQuery
 type DatastoreQuery struct {
-	// JSONAfter is used for cursor-based pagination, which is more effective in scalable and distributed environments compared to offset-based pagination.  JSONAfter is a JSON encoded string due to limitations of Swaggo (ie. []interface{} generates []map[stirng]interface{}).
-	After *string `json:"after,omitempty"`
 	// Count true means return the count of the dataset filtered by Filters without after or limit.
 	Count *bool `json:"count,omitempty"`
 	// Filters are filtering options of a query. It is advised to use It's advised to use helper functions in your respective client library such as filter constructors (`all`, `equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
 	Filters []DatastoreFilter `json:"filters,omitempty"`
+	// JSONAfter is used for cursor-based pagination, which is more effective in scalable and distributed environments compared to offset-based pagination.  JSONAfter is a JSON encoded string due to limitations of Swaggo (ie. []interface{} generates []map[stirng]interface{}).
+	JsonAfter *string `json:"jsonAfter,omitempty"`
 	// Limit the number of records in the result set.
 	Limit *int32 `json:"limit,omitempty"`
 	// OrderBys order the result set.
@@ -47,38 +47,6 @@ func NewDatastoreQuery() *DatastoreQuery {
 func NewDatastoreQueryWithDefaults() *DatastoreQuery {
 	this := DatastoreQuery{}
 	return &this
-}
-
-// GetAfter returns the After field value if set, zero value otherwise.
-func (o *DatastoreQuery) GetAfter() string {
-	if o == nil || IsNil(o.After) {
-		var ret string
-		return ret
-	}
-	return *o.After
-}
-
-// GetAfterOk returns a tuple with the After field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *DatastoreQuery) GetAfterOk() (*string, bool) {
-	if o == nil || IsNil(o.After) {
-		return nil, false
-	}
-	return o.After, true
-}
-
-// HasAfter returns a boolean if a field has been set.
-func (o *DatastoreQuery) HasAfter() bool {
-	if o != nil && !IsNil(o.After) {
-		return true
-	}
-
-	return false
-}
-
-// SetAfter gets a reference to the given string and assigns it to the After field.
-func (o *DatastoreQuery) SetAfter(v string) {
-	o.After = &v
 }
 
 // GetCount returns the Count field value if set, zero value otherwise.
@@ -143,6 +111,38 @@ func (o *DatastoreQuery) HasFilters() bool {
 // SetFilters gets a reference to the given []DatastoreFilter and assigns it to the Filters field.
 func (o *DatastoreQuery) SetFilters(v []DatastoreFilter) {
 	o.Filters = v
+}
+
+// GetJsonAfter returns the JsonAfter field value if set, zero value otherwise.
+func (o *DatastoreQuery) GetJsonAfter() string {
+	if o == nil || IsNil(o.JsonAfter) {
+		var ret string
+		return ret
+	}
+	return *o.JsonAfter
+}
+
+// GetJsonAfterOk returns a tuple with the JsonAfter field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *DatastoreQuery) GetJsonAfterOk() (*string, bool) {
+	if o == nil || IsNil(o.JsonAfter) {
+		return nil, false
+	}
+	return o.JsonAfter, true
+}
+
+// HasJsonAfter returns a boolean if a field has been set.
+func (o *DatastoreQuery) HasJsonAfter() bool {
+	if o != nil && !IsNil(o.JsonAfter) {
+		return true
+	}
+
+	return false
+}
+
+// SetJsonAfter gets a reference to the given string and assigns it to the JsonAfter field.
+func (o *DatastoreQuery) SetJsonAfter(v string) {
+	o.JsonAfter = &v
 }
 
 // GetLimit returns the Limit field value if set, zero value otherwise.
@@ -219,14 +219,14 @@ func (o DatastoreQuery) MarshalJSON() ([]byte, error) {
 
 func (o DatastoreQuery) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if !IsNil(o.After) {
-		toSerialize["after"] = o.After
-	}
 	if !IsNil(o.Count) {
 		toSerialize["count"] = o.Count
 	}
 	if !IsNil(o.Filters) {
 		toSerialize["filters"] = o.Filters
+	}
+	if !IsNil(o.JsonAfter) {
+		toSerialize["jsonAfter"] = o.JsonAfter
 	}
 	if !IsNil(o.Limit) {
 		toSerialize["limit"] = o.Limit

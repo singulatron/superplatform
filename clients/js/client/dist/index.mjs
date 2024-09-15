@@ -14,6 +14,9 @@ export { ChatSvcAddMessageRequestFromJSON, ChatSvcAddMessageRequestFromJSONTyped
 export { ChatSvcAddThreadRequestFromJSON, ChatSvcAddThreadRequestFromJSONTyped, ChatSvcAddThreadRequestToJSON, instanceOfChatSvcAddThreadRequest } from './ChatSvcAddThreadRequest.mjs';
 export { ChatSvcAddThreadResponseFromJSON, ChatSvcAddThreadResponseFromJSONTyped, ChatSvcAddThreadResponseToJSON, instanceOfChatSvcAddThreadResponse } from './ChatSvcAddThreadResponse.mjs';
 export { ChatSvcAssetFromJSON, ChatSvcAssetFromJSONTyped, ChatSvcAssetToJSON, instanceOfChatSvcAsset } from './ChatSvcAsset.mjs';
+export { ChatSvcEventMessageAddedFromJSON, ChatSvcEventMessageAddedFromJSONTyped, ChatSvcEventMessageAddedToJSON, instanceOfChatSvcEventMessageAdded } from './ChatSvcEventMessageAdded.mjs';
+export { ChatSvcEventThreadAddedFromJSON, ChatSvcEventThreadAddedFromJSONTyped, ChatSvcEventThreadAddedToJSON, instanceOfChatSvcEventThreadAdded } from './ChatSvcEventThreadAdded.mjs';
+export { ChatSvcEventThreadUpdateFromJSON, ChatSvcEventThreadUpdateFromJSONTyped, ChatSvcEventThreadUpdateToJSON, instanceOfChatSvcEventThreadUpdate } from './ChatSvcEventThreadUpdate.mjs';
 export { ChatSvcGetMessagesResponseFromJSON, ChatSvcGetMessagesResponseFromJSONTyped, ChatSvcGetMessagesResponseToJSON, instanceOfChatSvcGetMessagesResponse } from './ChatSvcGetMessagesResponse.mjs';
 export { ChatSvcGetThreadResponseFromJSON, ChatSvcGetThreadResponseFromJSONTyped, ChatSvcGetThreadResponseToJSON, instanceOfChatSvcGetThreadResponse } from './ChatSvcGetThreadResponse.mjs';
 export { ChatSvcGetThreadsResponseFromJSON, ChatSvcGetThreadsResponseFromJSONTyped, ChatSvcGetThreadsResponseToJSON, instanceOfChatSvcGetThreadsResponse } from './ChatSvcGetThreadsResponse.mjs';

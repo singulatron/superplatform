@@ -19,11 +19,6 @@ class DatastoreQuery {
 DatastoreQuery.discriminator = undefined;
 DatastoreQuery.attributeTypeMap = [
     {
-        "name": "after",
-        "baseName": "after",
-        "type": "string"
-    },
-    {
         "name": "count",
         "baseName": "count",
         "type": "boolean"
@@ -32,6 +27,11 @@ DatastoreQuery.attributeTypeMap = [
         "name": "filters",
         "baseName": "filters",
         "type": "Array<DatastoreFilter>"
+    },
+    {
+        "name": "jsonAfter",
+        "baseName": "jsonAfter",
+        "type": "string"
     },
     {
         "name": "limit",

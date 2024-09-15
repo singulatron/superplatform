@@ -12,26 +12,26 @@ import { first } from 'rxjs';
 import { UserService } from './user.service';
 import {
 	Configuration,
-	GenericSvcApi,
-	DatastoreCondition,
-	GenericSvcCreateObjectRequest as CreateObjectRequest,
-	GenericSvcQueryRequest as QueryRequest,
-	GenericSvcQueryResponse as QueryResponse,
-	GenericSvcGenericObject as GenericObject,
-	GenericSvcUpdateObjectRequest as UpdateObjectRequest,
-	GenericSvcCreateObjectResponse as UpdateObjectResponse,
-	GenericSvcUpsertObjectRequest as UpsertObjectRequest,
-	GenericSvcCreateObjectResponse,
-	GenericSvcUpsertObjectResponse,
-	// GenericSvcDeleteObjectRequest as DeleteObjectRequest,
-	// GenericSvcDeleteObjectResponse as DeleteObjectResponse,
+	DynamicSvcApi,
+	DatastoreFilter,
+	DynamicSvcCreateObjectRequest as CreateObjectRequest,
+	DynamicSvcQueryRequest as QueryRequest,
+	DynamicSvcQueryResponse as QueryResponse,
+	DynamicSvcObject as DynamicObject,
+	DynamicSvcUpdateObjectRequest as UpdateObjectRequest,
+	DynamicSvcCreateObjectResponse as UpdateObjectResponse,
+	DynamicSvcUpsertObjectRequest as UpsertObjectRequest,
+	DynamicSvcCreateObjectResponse,
+	DynamicSvcUpsertObjectResponse,
+	// DynamicSvcDeleteObjectRequest as DeleteObjectRequest,
+	// DynamicSvcDeleteObjectResponse as DeleteObjectResponse,
 } from '@singulatron/client';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class DynamicService {
-	dynamicService!: GenericSvcApi;
+	dynamicService!: DynamicSvcApi;
 
 	constructor(
 		private localtron: LocaltronService,
@@ -40,7 +40,7 @@ export class DynamicService {
 	) {
 		this.userService.user$.pipe(first()).subscribe(() => {
 			this.init();
-			this.dynamicService = new GenericSvcApi(
+			this.dynamicService = new DynamicSvcApi(
 				new Configuration({
 					apiKey: this.localtron.token(),
 					basePath: this.localtron.addr(),
@@ -59,8 +59,8 @@ export class DynamicService {
 
 	async create(
 		table: string,
-		object: GenericObject
-	): Promise<GenericSvcCreateObjectResponse> {
+		object: DynamicObject
+	): Promise<DynamicSvcCreateObjectResponse> {
 		object.table = table;
 		const request: CreateObjectRequest = {
 			object: object,
@@ -71,12 +71,12 @@ export class DynamicService {
 
 	async find(
 		table: string,
-		conditions: DatastoreCondition[]
+		filters: DatastoreFilter[]
 	): Promise<QueryResponse> {
 		const request: QueryRequest = {
 			table: table,
 			query: {
-				conditions: conditions,
+				filters: filters,
 			},
 		};
 
@@ -85,8 +85,8 @@ export class DynamicService {
 
 	async upsert(
 		table: string,
-		object: GenericObject
-	): Promise<GenericSvcUpsertObjectResponse> {
+		object: DynamicObject
+	): Promise<DynamicSvcUpsertObjectResponse> {
 		object.table = table;
 		const request: UpsertObjectRequest = {
 			object: object,
@@ -100,12 +100,12 @@ export class DynamicService {
 
 	async update(
 		table: string,
-		conditions: DatastoreCondition[],
-		object: GenericObject
+		filters: DatastoreFilter[],
+		object: DynamicObject
 	): Promise<UpdateObjectResponse> {
 		const request: UpdateObjectRequest = {
 			table: table,
-			conditions: conditions,
+			filters: filters,
 			object: object,
 		};
 
@@ -114,12 +114,12 @@ export class DynamicService {
 		});
 	}
 
-	async delete(table: string, conditions: DatastoreCondition[]): Promise<any> {
-		console.log(table, conditions);
+	async delete(table: string, filters: DatastoreFilter[]): Promise<any> {
+		console.log(table, filters);
 
 		// const request = {
 		// 	table: table,
-		// 	conditions: conditions,
+		// 	filters: filters,
 		// };
 		//eturn this.dynamicService.deleteObjects({
 		//	body: request,

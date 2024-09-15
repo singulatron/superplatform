@@ -33,16 +33,6 @@ import {
  */
 export interface DatastoreQuery {
     /**
-     * JSONAfter is used for cursor-based pagination, which is more
-     * effective in scalable and distributed environments compared
-     * to offset-based pagination.
-     * 
-     * JSONAfter is a JSON encoded string due to limitations of Swaggo (ie. []interface{} generates []map[stirng]interface{}).
-     * @type {string}
-     * @memberof DatastoreQuery
-     */
-    after?: string;
-    /**
      * Count true means return the count of the dataset filtered by Filters
      * without after or limit.
      * @type {boolean}
@@ -56,6 +46,16 @@ export interface DatastoreQuery {
      * @memberof DatastoreQuery
      */
     filters?: Array<DatastoreFilter>;
+    /**
+     * JSONAfter is used for cursor-based pagination, which is more
+     * effective in scalable and distributed environments compared
+     * to offset-based pagination.
+     * 
+     * JSONAfter is a JSON encoded string due to limitations of Swaggo (ie. []interface{} generates []map[stirng]interface{}).
+     * @type {string}
+     * @memberof DatastoreQuery
+     */
+    jsonAfter?: string;
     /**
      * Limit the number of records in the result set.
      * @type {number}
@@ -87,9 +87,9 @@ export function DatastoreQueryFromJSONTyped(json: any, ignoreDiscriminator: bool
     }
     return {
         
-        'after': json['after'] == null ? undefined : json['after'],
         'count': json['count'] == null ? undefined : json['count'],
         'filters': json['filters'] == null ? undefined : ((json['filters'] as Array<any>).map(DatastoreFilterFromJSON)),
+        'jsonAfter': json['jsonAfter'] == null ? undefined : json['jsonAfter'],
         'limit': json['limit'] == null ? undefined : json['limit'],
         'orderBys': json['orderBys'] == null ? undefined : ((json['orderBys'] as Array<any>).map(DatastoreOrderByFromJSON)),
     };
@@ -101,9 +101,9 @@ export function DatastoreQueryToJSON(value?: DatastoreQuery | null): any {
     }
     return {
         
-        'after': value['after'],
         'count': value['count'],
         'filters': value['filters'] == null ? undefined : ((value['filters'] as Array<any>).map(DatastoreFilterToJSON)),
+        'jsonAfter': value['jsonAfter'],
         'limit': value['limit'],
         'orderBys': value['orderBys'] == null ? undefined : ((value['orderBys'] as Array<any>).map(DatastoreOrderByToJSON)),
     };

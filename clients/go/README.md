@@ -83,6 +83,7 @@ Class | Method | HTTP request | Description
 *ChatSvcAPI* | [**AddThread**](docs/ChatSvcAPI.md#addthread) | **Post** /chat-svc/thread | Add Thread
 *ChatSvcAPI* | [**DeleteMessage**](docs/ChatSvcAPI.md#deletemessage) | **Delete** /chat-svc/message/{messageId} | Delete a Message
 *ChatSvcAPI* | [**DeleteThread**](docs/ChatSvcAPI.md#deletethread) | **Delete** /chat-svc/thread/{threadId} | Delete a Thread
+*ChatSvcAPI* | [**Events**](docs/ChatSvcAPI.md#events) | **Get** /chat-svc/events | Events
 *ChatSvcAPI* | [**GetMessages**](docs/ChatSvcAPI.md#getmessages) | **Post** /chat-svc/thread/{threadId}/messages | List Messages
 *ChatSvcAPI* | [**GetThread**](docs/ChatSvcAPI.md#getthread) | **Get** /chat-svc/thread/{threadId} | Get Thread
 *ChatSvcAPI* | [**GetThreads**](docs/ChatSvcAPI.md#getthreads) | **Post** /chat-svc/threads | Get Threads
@@ -148,6 +149,9 @@ Class | Method | HTTP request | Description
  - [ChatSvcAddThreadRequest](docs/ChatSvcAddThreadRequest.md)
  - [ChatSvcAddThreadResponse](docs/ChatSvcAddThreadResponse.md)
  - [ChatSvcAsset](docs/ChatSvcAsset.md)
+ - [ChatSvcEventMessageAdded](docs/ChatSvcEventMessageAdded.md)
+ - [ChatSvcEventThreadAdded](docs/ChatSvcEventThreadAdded.md)
+ - [ChatSvcEventThreadUpdate](docs/ChatSvcEventThreadUpdate.md)
  - [ChatSvcGetMessagesResponse](docs/ChatSvcGetMessagesResponse.md)
  - [ChatSvcGetThreadResponse](docs/ChatSvcGetThreadResponse.md)
  - [ChatSvcGetThreadsResponse](docs/ChatSvcGetThreadsResponse.md)

@@ -4,6 +4,9 @@ export * from './chatSvcAddMessageRequest';
 export * from './chatSvcAddThreadRequest';
 export * from './chatSvcAddThreadResponse';
 export * from './chatSvcAsset';
+export * from './chatSvcEventMessageAdded';
+export * from './chatSvcEventThreadAdded';
+export * from './chatSvcEventThreadUpdate';
 export * from './chatSvcGetMessagesResponse';
 export * from './chatSvcGetThreadResponse';
 export * from './chatSvcGetThreadsResponse';
@@ -127,6 +130,9 @@ import { ChatSvcAddMessageRequest } from './chatSvcAddMessageRequest';
 import { ChatSvcAddThreadRequest } from './chatSvcAddThreadRequest';
 import { ChatSvcAddThreadResponse } from './chatSvcAddThreadResponse';
 import { ChatSvcAsset } from './chatSvcAsset';
+import { ChatSvcEventMessageAdded } from './chatSvcEventMessageAdded';
+import { ChatSvcEventThreadAdded } from './chatSvcEventThreadAdded';
+import { ChatSvcEventThreadUpdate } from './chatSvcEventThreadUpdate';
 import { ChatSvcGetMessagesResponse } from './chatSvcGetMessagesResponse';
 import { ChatSvcGetThreadResponse } from './chatSvcGetThreadResponse';
 import { ChatSvcGetThreadsResponse } from './chatSvcGetThreadsResponse';
@@ -258,6 +264,9 @@ let typeMap: {[index: string]: any} = {
     "ChatSvcAddThreadRequest": ChatSvcAddThreadRequest,
     "ChatSvcAddThreadResponse": ChatSvcAddThreadResponse,
     "ChatSvcAsset": ChatSvcAsset,
+    "ChatSvcEventMessageAdded": ChatSvcEventMessageAdded,
+    "ChatSvcEventThreadAdded": ChatSvcEventThreadAdded,
+    "ChatSvcEventThreadUpdate": ChatSvcEventThreadUpdate,
     "ChatSvcGetMessagesResponse": ChatSvcGetMessagesResponse,
     "ChatSvcGetThreadResponse": ChatSvcGetThreadResponse,
     "ChatSvcGetThreadsResponse": ChatSvcGetThreadsResponse,

@@ -6,14 +6,7 @@
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
 import { Injectable } from '@angular/core';
-import {
-	Condition,
-	equal,
-	contains,
-	startsWith,
-	field,
-	Query,
-} from '@singulatron/types';
+import { DatastoreFilter, DatastoreQuery } from '@singulatron/client';
 
 @Injectable({
 	providedIn: 'root',
@@ -23,10 +16,10 @@ export class QueryService {
 }
 
 export class QueryParser {
-	defaultConditionFunc!: (value: any) => Condition;
+	defaultConditionFunc!: (value: any) => DatastoreFilter;
 
-	parse(queryString: string): Query {
-		const query: Query = {};
+	parse(queryString: string): DatastoreQuery {
+		const query: DatastoreQuery = {};
 
 		// Extract and remove 'orderBy', 'limit', and 'after' parts from the query string first
 		const orderByRegex = /orderBy:([\w,:-]+)/;
@@ -56,7 +49,7 @@ export class QueryParser {
 		}
 
 		if (afterMatch) {
-			query.after = afterMatch[1].split(',');
+			query.jsonAfter = JSON.stringify(afterMatch[1].split(','));
 		}
 
 		if (!queryString) {
@@ -65,7 +58,7 @@ export class QueryParser {
 
 		if (!queryString.includes(':')) {
 			if (this.defaultConditionFunc) {
-				query.conditions = [this.defaultConditionFunc(queryString)];
+				query.filters = [this.defaultConditionFunc(queryString)];
 			}
 
 			return query;
@@ -84,8 +77,8 @@ export class QueryParser {
 			}
 
 			for (const field of fields) {
-				if (!query.conditions) query.conditions = [];
-				query.conditions.push(this.createCondition(field, value));
+				if (!query.filters) query.filters = [];
+				query.filters.push(this.createCondition(field, value));
 			}
 		}
 
@@ -105,17 +98,29 @@ export class QueryParser {
 			.join(' ');
 	}
 
-	private createCondition(fieldName: string, value: string): Condition {
+	private createCondition(fieldName: string, value: string): DatastoreFilter {
 		if (value.startsWith('~')) {
-			return contains(field(fieldName), value.slice(1));
+			return {
+				fields: [fieldName],
+				jsonValues: JSON.stringify([value.slice(1)]),
+				op: 'containsSubstring',
+			};
 		} else if (value.startsWith('^')) {
-			return startsWith(field(fieldName), value.slice(1));
+			return {
+				fields: [fieldName],
+				jsonValues: JSON.stringify([value.slice(1)]),
+				op: 'containsSubstring',
+			};
 		} else {
 			const numericValue = Number(value);
-			return equal(
-				field(fieldName),
-				Number.isNaN(numericValue) ? value : numericValue
-			);
+
+			return {
+				fields: [fieldName],
+				jsonValues: JSON.stringify(
+					Number.isNaN(numericValue) ? value : numericValue
+				),
+				op: 'equals',
+			};
 		}
 	}
 }

@@ -11,11 +11,11 @@ import { FirehoseService } from './firehose.service';
 import { ReplaySubject } from 'rxjs';
 import { UserService } from './user.service';
 import { first } from 'rxjs';
-import { Config } from '@singulatron/types';
 import {
 	ConfigSvcApi,
 	ConfigSvcGetConfigResponse,
 	Configuration,
+	ConfigSvcConfig as Config
 } from '@singulatron/client';
 
 @Injectable({

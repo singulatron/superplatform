@@ -172,7 +172,7 @@ type Query struct {
 	// to offset-based pagination.
 	//
 	// JSONAfter is a JSON encoded string due to limitations of Swaggo (ie. []interface{} generates []map[stirng]interface{}).
-	JSONAfter string `json:"after,omitempty"`
+	JSONAfter string `json:"jsonAfter,omitempty"`
 
 	// Limit the number of records in the result set.
 	Limit int64 `json:"limit,omitempty"`

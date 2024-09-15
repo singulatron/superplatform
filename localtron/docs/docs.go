@@ -24,6 +24,30 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/chat-svc/events": {
+            "get": {
+                "description": "Events is a dummy endpoint to display documentation about the events that this service emits.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Chat Svc"
+                ],
+                "summary": "Events",
+                "operationId": "events",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/chat_svc.EventThreadUpdate"
+                        }
+                    }
+                }
+            }
+        },
         "/chat-svc/message/{messageId}": {
             "delete": {
                 "security": [
@@ -3413,6 +3437,30 @@ const docTemplate = `{
                 }
             }
         },
+        "chat_svc.EventMessageAdded": {
+            "type": "object",
+            "properties": {
+                "threadId": {
+                    "type": "string"
+                }
+            }
+        },
+        "chat_svc.EventThreadAdded": {
+            "type": "object",
+            "properties": {
+                "threadId": {
+                    "type": "string"
+                }
+            }
+        },
+        "chat_svc.EventThreadUpdate": {
+            "type": "object",
+            "properties": {
+                "threadId": {
+                    "type": "string"
+                }
+            }
+        },
         "chat_svc.GetMessagesResponse": {
             "type": "object",
             "properties": {
@@ -3647,10 +3695,6 @@ const docTemplate = `{
         "datastore.Query": {
             "type": "object",
             "properties": {
-                "after": {
-                    "description": "JSONAfter is used for cursor-based pagination, which is more\neffective in scalable and distributed environments compared\nto offset-based pagination.\n\nJSONAfter is a JSON encoded string due to limitations of Swaggo (ie. []interface{} generates []map[stirng]interface{}).",
-                    "type": "string"
-                },
                 "count": {
                     "description": "Count true means return the count of the dataset filtered by Filters\nwithout after or limit.",
                     "type": "boolean"
@@ -3661,6 +3705,10 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/datastore.Filter"
                     }
+                },
+                "jsonAfter": {
+                    "description": "JSONAfter is used for cursor-based pagination, which is more\neffective in scalable and distributed environments compared\nto offset-based pagination.\n\nJSONAfter is a JSON encoded string due to limitations of Swaggo (ie. []interface{} generates []map[stirng]interface{}).",
+                    "type": "string"
                 },
                 "limit": {
                     "description": "Limit the number of records in the result set.",

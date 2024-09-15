@@ -16,8 +16,6 @@ import {
 	BehaviorSubject,
 } from 'rxjs';
 import { Router } from '@angular/router';
-import { equal, field } from '@singulatron/types';
-import * as user from '@singulatron/types';
 import {
 	Configuration,
 	UserSvcApi,
@@ -27,6 +25,14 @@ import {
 	UserSvcLoginResponse,
 	UserSvcReadUserByTokenResponse,
 	UserSvcUser,
+	UserSvcGetUsersRequest,
+	UserSvcSaveProfileRequest,
+	UserSvcChangePasswordRequest,
+	UserSvcChangePasswordAdminRequest,
+	// UserSvcCreateUserResponse,
+	UserSvcSetRolePermissionsRequest,
+	// UserSvcDeleteRoleResponse,
+	// UserSvcDeleteUserResponse,
 } from '@singulatron/client';
 
 @Injectable({
@@ -82,7 +88,7 @@ export class UserService {
 		}
 
 		try {
-			const rsp = await this.readUserByToken(this.token);
+			const rsp = await this.readUserByToken();
 			this.userSubject.next(rsp.user!);
 		} catch (error) {
 			console.error('Cannot read user even with a token', error);
@@ -130,24 +136,19 @@ export class UserService {
 		});
 	}
 
-	readUserByToken(token: string): Promise<UserSvcReadUserByTokenResponse> {
-		return this.userService.readUserByToken({
-			body: {
-				token: token,
-			},
-		});
+	readUserByToken(): Promise<UserSvcReadUserByTokenResponse> {
+		return this.userService.readUserByToken({});
 	}
 
-	getUsers(request: user.GetUsersRequest): Promise<UserSvcGetUsersResponse> {
+	getUsers(request: UserSvcGetUsersRequest): Promise<UserSvcGetUsersResponse> {
 		return this.userService.getUsers({
 			request: request,
 		});
 	}
 
 	/** Save profile on behalf of a user */
-	saveProfile(email: string, name: string): Promise<object> {
-		const request: user.SaveProfileRequest = {
-			email: email,
+	saveProfile(name: string): Promise<object> {
+		const request: UserSvcSaveProfileRequest = {
 			name: name,
 		};
 		return this.userService.saveUserProfile({
@@ -157,12 +158,12 @@ export class UserService {
 	}
 
 	changePassword(
-		email: string,
+		slug: string,
 		currentPassword: string,
 		newPassword: string
 	): Promise<object> {
-		const request: user.ChangePasswordRequest = {
-			email: email,
+		const request: UserSvcChangePasswordRequest = {
+			slug: slug,
 			currentPassword: currentPassword,
 			newPassword: newPassword,
 		};
@@ -171,17 +172,16 @@ export class UserService {
 		});
 	}
 
-	changePasswordAdmin(
-		email: string,
-		newPassword: string
-	): Promise<user.ChangePasswordAdminResponse> {
-		const request: user.ChangePasswordAdminRequest = {
-			email: email,
+	changePasswordAdmin(slug: string, newPassword: string) {
+		const request: UserSvcChangePasswordAdminRequest = {
+			slug: slug,
 			newPassword: newPassword,
 		};
-		return this.userService.changePasswordAdmin({
+		this.userService.changePasswordAdmin({
 			request: request,
 		});
+
+		return;
 	}
 
 	/** Create a user - alternative to registration
@@ -190,7 +190,7 @@ export class UserService {
 		user: UserSvcUser,
 		password: string,
 		roleIds: string[]
-	): Promise<user.CreateUserResponse> {
+	): Promise<object> {
 		return this.userService.createUser({
 			request: {
 				user: user,
@@ -211,7 +211,7 @@ export class UserService {
 	}
 
 	setRolePermissions(roleId: string, permissionIds: string[]): Promise<object> {
-		const request: user.SetRolePermissionsRequest = {
+		const request: UserSvcSetRolePermissionsRequest = {
 			permissionIds: permissionIds,
 		};
 		return this.userService.setRolePermission({
@@ -220,13 +220,13 @@ export class UserService {
 		});
 	}
 
-	deleteRole(roleId: string): Promise<user.DeleteRoleResponse> {
+	deleteRole(roleId: string): Promise<object> {
 		return this.userService.deleteRole({
 			roleId: roleId,
 		});
 	}
 
-	deleteUser(userId: string): Promise<user.DeleteUserResponse> {
+	deleteUser(userId: string): Promise<object> {
 		return this.userService.deleteUser({
 			userId: userId,
 		});
@@ -249,7 +249,13 @@ export class UserService {
 			);
 			this.getUsers({
 				query: {
-					conditions: [equal(field('id'), id)],
+					filters: [
+						{
+							fields: ['id'],
+							jsonValues: JSON.stringify([id]),
+							op: 'equals',
+						},
+					],
 				},
 			}).then((rsp) => {
 				this.userCache[id].next(rsp.users![0]);

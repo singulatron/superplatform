@@ -14,7 +14,6 @@ import {
 	ReactiveFormsModule,
 } from '@angular/forms';
 import { UserService } from '../services/user.service';
-import { GetUsersRequest } from '@singulatron/types';
 import { first } from 'rxjs';
 import { ToastController, IonicModule } from '@ionic/angular';
 import { TranslatePipe } from '../translate.pipe';
@@ -27,13 +26,11 @@ import { IconMenuComponent } from '../components/icon-menu/icon-menu.component';
 import { Router, ActivatedRoute } from '@angular/router';
 import { QueryParser } from '../services/query.service';
 import {
-	fields,
-	conditionsToKeyValue,
-	contains,
-	Condition,
-	conditionFieldIs,
-} from '@singulatron/types';
-import { UserSvcUser } from '@singulatron/client';
+	DatastoreFilter,
+	UserSvcUser,
+	DatastoreOp,
+	UserSvcGetUsersRequest,
+} from '@singulatron/client';
 
 interface UserVisible extends UserSvcUser {
 	visible?: boolean;
@@ -78,8 +75,12 @@ export class UsersComponent {
 		this.userForms = new Map();
 
 		this.queryParser = new QueryParser();
-		this.queryParser.defaultConditionFunc = (value: any): Condition => {
-			return contains(fields(['name', 'slug']), value);
+		this.queryParser.defaultConditionFunc = (value: any): DatastoreFilter => {
+			return {
+				fields: ['name', 'slug'],
+				jsonValues: JSON.stringify([value]),
+				op: 'containsSubstring' as DatastoreOp,
+			};
 		};
 
 		this.userService.user$.pipe(first()).subscribe(() => {
@@ -106,12 +107,10 @@ export class UsersComponent {
 	public redirect() {
 		const query = this.queryParser.parse(this.searchTerm);
 
-		const kv = conditionsToKeyValue(
-			query.conditions
-				? query.conditions.filter((v) => {
-						return (
-							!conditionFieldIs(v, 'name') && !conditionFieldIs(v, 'email')
-						);
+		const kv = filtersToKeyValue(
+			query.filters
+				? query.filters.filter((v) => {
+						return !v.fields?.includes('name') && v.fields?.includes('email');
 					})
 				: []
 		);
@@ -138,14 +137,14 @@ export class UsersComponent {
 	public async fetchUsers() {
 		const query = this.queryParser.parse(this.searchTerm);
 		query.count = true;
-		query.conditions = query.conditions || [];
+		query.filters = query.filters || [];
 
-		const request: GetUsersRequest = {
+		const request: UserSvcGetUsersRequest = {
 			query: query,
 		};
 
 		if (this.after) {
-			request.query!.after = [this.after];
+			request.query!.jsonAfter = JSON.stringify([this.after]);
 		}
 
 		const response = await this.userService.getUsers(request);
@@ -209,7 +208,7 @@ export class UsersComponent {
 
 		try {
 			let toastMessage = `Profile ${name} saved`;
-			await this.userService.saveProfile(slug, name);
+			await this.userService.saveProfile(name);
 
 			if (password) {
 				toastMessage += ' and password changed';
@@ -287,4 +286,19 @@ export class UsersComponent {
 		}
 		await this.fetchUsers();
 	}
+}
+
+function filtersToKeyValue(filters: DatastoreFilter[]): {
+	[key: string]: any;
+} {
+	if (!filters) {
+		return {};
+	}
+	const object: { [key: string]: any } = {};
+
+	for (const filter of filters) {
+		object[filter.fields![0]] = JSON.parse(filter.jsonValues!)[0];
+	}
+
+	return object;
 }

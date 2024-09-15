@@ -17,6 +17,7 @@ require('./ChatSvcMessage.js');
 require('./ChatSvcAddThreadRequest.js');
 require('./ChatSvcThread.js');
 require('./ChatSvcAddThreadResponse.js');
+require('./ChatSvcEventThreadUpdate.js');
 require('./ChatSvcGetMessagesResponse.js');
 require('./ChatSvcAsset.js');
 require('./ChatSvcGetThreadResponse.js');

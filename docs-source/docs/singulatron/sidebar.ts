@@ -12,6 +12,12 @@ const sidebar: SidebarsConfig = {
       items: [
         {
           type: "doc",
+          id: "singulatron/events",
+          label: "Events",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
           id: "singulatron/delete-message",
           label: "Delete a Message",
           className: "api-method delete",

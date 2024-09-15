@@ -4,6 +4,7 @@ var runtime = require('./runtime2.js');
 var ChatSvcAddMessageRequest = require('./ChatSvcAddMessageRequest.js');
 var ChatSvcAddThreadRequest = require('./ChatSvcAddThreadRequest.js');
 var ChatSvcAddThreadResponse = require('./ChatSvcAddThreadResponse.js');
+var ChatSvcEventThreadUpdate = require('./ChatSvcEventThreadUpdate.js');
 var ChatSvcGetMessagesResponse = require('./ChatSvcGetMessagesResponse.js');
 var ChatSvcGetThreadResponse = require('./ChatSvcGetThreadResponse.js');
 var ChatSvcGetThreadsResponse = require('./ChatSvcGetThreadsResponse.js');
@@ -165,6 +166,33 @@ class ChatSvcApi extends runtime.BaseAPI {
     deleteThread(requestParameters, initOverrides) {
         return runtime.__awaiter(this, void 0, void 0, function* () {
             const response = yield this.deleteThreadRaw(requestParameters, initOverrides);
+            return yield response.value();
+        });
+    }
+    /**
+     * Events is a dummy endpoint to display documentation about the events that this service emits.
+     * Events
+     */
+    eventsRaw(initOverrides) {
+        return runtime.__awaiter(this, void 0, void 0, function* () {
+            const queryParameters = {};
+            const headerParameters = {};
+            const response = yield this.request({
+                path: `/chat-svc/events`,
+                method: 'GET',
+                headers: headerParameters,
+                query: queryParameters,
+            }, initOverrides);
+            return new runtime.JSONApiResponse(response, (jsonValue) => ChatSvcEventThreadUpdate.ChatSvcEventThreadUpdateFromJSON(jsonValue));
+        });
+    }
+    /**
+     * Events is a dummy endpoint to display documentation about the events that this service emits.
+     * Events
+     */
+    events(initOverrides) {
+        return runtime.__awaiter(this, void 0, void 0, function* () {
+            const response = yield this.eventsRaw(initOverrides);
             return yield response.value();
         });
     }

@@ -9,7 +9,6 @@ import { Injectable } from '@angular/core';
 import { LocaltronService } from './localtron.service';
 import { ReplaySubject, Subject } from 'rxjs';
 import { FirehoseService } from './firehose.service';
-import * as chat from '@singulatron/types';
 import { UserService } from './user.service';
 import { first } from 'rxjs';
 import {
@@ -20,6 +19,9 @@ import {
 	ChatSvcGetThreadsResponse,
 	Configuration,
 	ChatSvcThread as Thread,
+	ChatSvcEventMessageAdded,
+	ChatSvcEventThreadAdded,
+	ChatSvcEventThreadUpdate
 } from '@singulatron/client';
 
 @Injectable({
@@ -30,13 +32,13 @@ export class ChatService {
 
 	public activeThreadId: string = '';
 
-	onMessageAddedSubject = new ReplaySubject<chat.MessageAddedEvent>(1);
+	onMessageAddedSubject = new ReplaySubject<ChatSvcEventMessageAdded>(1);
 	onMessageAdded$ = this.onMessageAddedSubject.asObservable();
 
-	onThreadAddedSubject = new ReplaySubject<chat.ThreadAddedEvent>(1);
+	onThreadAddedSubject = new ReplaySubject<ChatSvcEventThreadAdded>(1);
 	onThreadAdded$ = this.onMessageAddedSubject.asObservable();
 
-	onThreadUpdateSubject = new ReplaySubject<chat.MessageAddedEvent>(1);
+	onThreadUpdateSubject = new ReplaySubject<ChatSvcEventThreadUpdate>(1);
 	onThreadUpdate$ = this.onMessageAddedSubject.asObservable();
 
 	onStartNewThreadSubject = new Subject<void>();
@@ -54,7 +56,7 @@ export class ChatService {
 				apiKey: this.localtron.token(),
 			})
 		);
-		
+
 		this.userService.user$.pipe(first()).subscribe(() => {
 			this.init();
 		});

@@ -13,6 +13,7 @@ import http from 'http';
 import { ChatSvcAddMessageRequest } from '../model/chatSvcAddMessageRequest';
 import { ChatSvcAddThreadRequest } from '../model/chatSvcAddThreadRequest';
 import { ChatSvcAddThreadResponse } from '../model/chatSvcAddThreadResponse';
+import { ChatSvcEventThreadUpdate } from '../model/chatSvcEventThreadUpdate';
 import { ChatSvcGetMessagesResponse } from '../model/chatSvcGetMessagesResponse';
 import { ChatSvcGetThreadResponse } from '../model/chatSvcGetThreadResponse';
 import { ChatSvcGetThreadsResponse } from '../model/chatSvcGetThreadsResponse';
@@ -98,6 +99,18 @@ export declare class ChatSvcApi {
         body: {
             [key: string]: any;
         };
+    }>;
+    /**
+     * Events is a dummy endpoint to display documentation about the events that this service emits.
+     * @summary Events
+     */
+    events(options?: {
+        headers: {
+            [name: string]: string;
+        };
+    }): Promise<{
+        response: http.IncomingMessage;
+        body: ChatSvcEventThreadUpdate;
     }>;
     /**
      * Fetch messages (and associated assets) for a specific chat thread.
