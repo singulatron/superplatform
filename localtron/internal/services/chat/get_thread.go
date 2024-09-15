@@ -23,5 +23,5 @@ func (a *ChatService) getThread(threadId string) (*chattypes.Thread, bool, error
 		return nil, false, nil
 	}
 
-	return threadI.(*chattypes.Thread), false, nil
+	return threadI.(*chattypes.Thread), true, nil
 }
