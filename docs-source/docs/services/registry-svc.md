@@ -1,15 +1,14 @@
 ---
-sidebar_position: 40
+sidebar_position: 80
 tags:
-  - user-svc
-  - permissions
-  - roles
+  - registry-service
+  - registry
+  - microservices
+  - addresses
   - authentication
-  - authorization
-  - service
 ---
 
-# Dynamic Svc
+# Registry Svc
 
 The dynamic service is designed to help build backendless applications: the goal is to be able to save and query data directly from the frontend. Similarly to Firebase.
 
