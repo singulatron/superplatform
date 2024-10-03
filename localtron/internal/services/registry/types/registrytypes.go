@@ -8,7 +8,10 @@
 
 package registry_svc
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+)
 
 type ErrorResponse struct {
 	Error string `json:"error"`
@@ -49,6 +52,21 @@ type ServiceInstance struct {
 	Host   string `json:"host,omitempty"`   // Required if URL is not provided
 	IP     string `json:"ip,omitempty"`     // Optional: to register by IP instead of host
 	Port   int    `json:"port,omitempty"`   // Required if URL is not provided
+}
+
+func (s *ServiceInstance) DeriveID() string {
+	if s.URL != "" {
+		return fmt.Sprintf("%s/%s", s.URL, s.Name)
+	}
+
+	var constructedURL string
+	if s.Host != "" {
+		constructedURL = fmt.Sprintf("%s://%s:%d", s.Scheme, s.Host, s.Port)
+	} else {
+		constructedURL = fmt.Sprintf("%s://%s:%d", s.Scheme, s.IP, s.Port)
+	}
+
+	return fmt.Sprintf("%s/%s", constructedURL, s.Name)
 }
 
 var ErrNotFound = errors.New("service not found")

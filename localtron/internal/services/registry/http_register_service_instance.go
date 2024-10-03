@@ -29,7 +29,6 @@ func (rs *RegistryService) RegisterService(
 ) {
 	w.Header().Set("Content-Type", "application/json")
 
-	// Check authorization from token
 	authRsp := &usertypes.IsAuthorizedResponse{}
 	err := rs.router.AsRequestMaker(r).Post(r.Context(), "user-svc", "/permission/register-service", &usertypes.IsAuthorizedRequest{}, authRsp)
 	if err != nil || !authRsp.Authorized {
@@ -46,14 +45,13 @@ func (rs *RegistryService) RegisterService(
 	}
 	defer r.Body.Close()
 
-	resp, err := rs.registerService(r.Context(), req, authRsp.User.Id)
+	err := rs.registerService(r.Context(), req, authRsp.User.Id)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(err.Error()))
 		return
 	}
 
-	// Return success
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(resp)
 }
@@ -68,4 +66,5 @@ func (rs *RegistryService) registerService(req *registry.RegisterServiceRequest)
 		}
 	}
 
+	rs.serviceInstanceStore.Upsert()
 }

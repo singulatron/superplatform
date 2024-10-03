@@ -18,7 +18,7 @@ import (
 )
 
 // @Summary Publish an Event
-// @ID eventPublish
+// @ID publishEvent
 // @Description Publishes an event to the firehose service after authorization check
 // @Tags Firehose Svc
 // @Accept json

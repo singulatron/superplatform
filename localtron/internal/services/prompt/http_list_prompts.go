@@ -18,7 +18,7 @@ import (
 )
 
 // List lists prompts
-// @ID getPrompts
+// @ID listPrompts
 // @Summary List Prompts
 // @Description List prompts that satisfy a query.
 // @Tags Prompt Svc
