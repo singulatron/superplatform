@@ -78,7 +78,7 @@ func TestFirehoseSubscription(t *testing.T) {
 			require.NoError(t, scanner.Err())
 		}()
 
-		_, err := firehoseSvc.EventPublish(context.Background()).Event(client.FirehoseSvcEventPublishRequest{
+		_, err := firehoseSvc.PublishEvent(context.Background()).Event(client.FirehoseSvcEventPublishRequest{
 			Event: event,
 		}).Execute()
 		require.NoError(t, err)

@@ -30,7 +30,7 @@ import (
 // @Failure 401 {object} firehose.ErrorResponse "Unauthorized"
 // @Failure 500 {object} firehose.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
-// @Router /firehose-svc/subscribe [get]
+// @Router /firehose-svc/events/subscribe [get]
 func (p *FirehoseService) Subscribe(
 	w http.ResponseWriter,
 	r *http.Request,

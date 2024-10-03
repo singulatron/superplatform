@@ -215,10 +215,10 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 		http.Error(w, "404 page not found", http.StatusNotFound)
 	})
 
-	router.HandleFunc("/firehose-svc/subscribe", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/firehose-svc/events/subscribe", appl(func(w http.ResponseWriter, r *http.Request) {
 		firehoseService.Subscribe(w, r)
 	})).Methods("OPTIONS", "GET")
-	router.HandleFunc("/firehose-svc/publish", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/firehose-svc/event", appl(func(w http.ResponseWriter, r *http.Request) {
 		firehoseService.Publish(w, r)
 	})).Methods("OPTIONS", "POST")
 
