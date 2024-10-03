@@ -67,7 +67,7 @@ func (a *FirehoseSvcAPIService) PublishEventExecute(r ApiPublishEventRequest) (*
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/firehose-svc/publish"
+	localVarPath := localBasePath + "/firehose-svc/event"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -197,7 +197,7 @@ func (a *FirehoseSvcAPIService) SubscribeToEventsExecute(r ApiSubscribeToEventsR
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/firehose-svc/subscribe"
+	localVarPath := localBasePath + "/firehose-svc/events/subscribe"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}

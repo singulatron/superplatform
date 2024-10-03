@@ -2341,7 +2341,7 @@ paths:
       summary: Update Objects
       tags:
       - Dynamic Svc
-  /firehose-svc/publish:
+  /firehose-svc/event:
     post:
       consumes:
       - application/json
@@ -2373,7 +2373,7 @@ paths:
       summary: Publish an Event
       tags:
       - Firehose Svc
-  /firehose-svc/subscribe:
+  /firehose-svc/events/subscribe:
     get:
       consumes:
       - application/json

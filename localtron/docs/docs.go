@@ -1369,7 +1369,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/firehose-svc/publish": {
+        "/firehose-svc/event": {
             "post": {
                 "security": [
                     {
@@ -1418,7 +1418,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/firehose-svc/subscribe": {
+        "/firehose-svc/events/subscribe": {
             "get": {
                 "security": [
                     {
