@@ -1,4 +1,4 @@
-export { APIS, ChatSvcApi, ChatSvcApiApiKeys, ConfigSvcApi, ConfigSvcApiApiKeys, DockerSvcApi, DockerSvcApiApiKeys, DownloadSvcApi, DownloadSvcApiApiKeys, DynamicSvcApi, DynamicSvcApiApiKeys, FirehoseSvcApi, FirehoseSvcApiApiKeys, HttpError, ModelSvcApi, ModelSvcApiApiKeys, NodeSvcApi, NodeSvcApiApiKeys, PolicySvcApi, PolicySvcApiApiKeys, PromptSvcApi, PromptSvcApiApiKeys, UserSvcApi, UserSvcApiApiKeys } from './apis.mjs';
+export { APIS, ChatSvcApi, ChatSvcApiApiKeys, ConfigSvcApi, ConfigSvcApiApiKeys, DockerSvcApi, DockerSvcApiApiKeys, DownloadSvcApi, DownloadSvcApiApiKeys, DynamicSvcApi, DynamicSvcApiApiKeys, FirehoseSvcApi, FirehoseSvcApiApiKeys, HttpError, ModelSvcApi, ModelSvcApiApiKeys, NodeSvcApi, NodeSvcApiApiKeys, PolicySvcApi, PolicySvcApiApiKeys, PromptSvcApi, PromptSvcApiApiKeys, RegistrySvcApi, RegistrySvcApiApiKeys, UserSvcApi, UserSvcApiApiKeys } from './apis.mjs';
 export { ApiKeyAuth, HttpBasicAuth, HttpBearerAuth, OAuth, ObjectSerializer, VoidAuth } from './models.mjs';
 export { ChatSvcAddMessageRequest } from './chatSvcAddMessageRequest.mjs';
 export { ChatSvcAddThreadRequest } from './chatSvcAddThreadRequest.mjs';
@@ -84,6 +84,10 @@ export { PromptSvcListPromptsResponse } from './promptSvcListPromptsResponse.mjs
 export { PromptSvcPrompt } from './promptSvcPrompt.mjs';
 export { PromptSvcPromptStatus } from './promptSvcPromptStatus.mjs';
 export { PromptSvcRemovePromptRequest } from './promptSvcRemovePromptRequest.mjs';
+export { RegistrySvcErrorResponse } from './registrySvcErrorResponse.mjs';
+export { RegistrySvcQueryServiceInstancesResponse } from './registrySvcQueryServiceInstancesResponse.mjs';
+export { RegistrySvcRegisterServiceInstanceRequest } from './registrySvcRegisterServiceInstanceRequest.mjs';
+export { RegistrySvcServiceInstance } from './registrySvcServiceInstance.mjs';
 export { UserSvcAddUserToOrganizationRequest } from './userSvcAddUserToOrganizationRequest.mjs';
 export { UserSvcAuthToken } from './userSvcAuthToken.mjs';
 export { UserSvcChangePasswordAdminRequest } from './userSvcChangePasswordAdminRequest.mjs';

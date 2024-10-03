@@ -84,6 +84,10 @@ var promptSvcListPromptsResponse = require('./promptSvcListPromptsResponse.js');
 var promptSvcPrompt = require('./promptSvcPrompt.js');
 var promptSvcPromptStatus = require('./promptSvcPromptStatus.js');
 var promptSvcRemovePromptRequest = require('./promptSvcRemovePromptRequest.js');
+var registrySvcErrorResponse = require('./registrySvcErrorResponse.js');
+var registrySvcQueryServiceInstancesResponse = require('./registrySvcQueryServiceInstancesResponse.js');
+var registrySvcRegisterServiceInstanceRequest = require('./registrySvcRegisterServiceInstanceRequest.js');
+var registrySvcServiceInstance = require('./registrySvcServiceInstance.js');
 var userSvcAddUserToOrganizationRequest = require('./userSvcAddUserToOrganizationRequest.js');
 var userSvcAuthToken = require('./userSvcAuthToken.js');
 var userSvcChangePasswordAdminRequest = require('./userSvcChangePasswordAdminRequest.js');
@@ -211,6 +215,10 @@ let typeMap = {
     "PromptSvcListPromptsResponse": promptSvcListPromptsResponse.PromptSvcListPromptsResponse,
     "PromptSvcPrompt": promptSvcPrompt.PromptSvcPrompt,
     "PromptSvcRemovePromptRequest": promptSvcRemovePromptRequest.PromptSvcRemovePromptRequest,
+    "RegistrySvcErrorResponse": registrySvcErrorResponse.RegistrySvcErrorResponse,
+    "RegistrySvcQueryServiceInstancesResponse": registrySvcQueryServiceInstancesResponse.RegistrySvcQueryServiceInstancesResponse,
+    "RegistrySvcRegisterServiceInstanceRequest": registrySvcRegisterServiceInstanceRequest.RegistrySvcRegisterServiceInstanceRequest,
+    "RegistrySvcServiceInstance": registrySvcServiceInstance.RegistrySvcServiceInstance,
     "UserSvcAddUserToOrganizationRequest": userSvcAddUserToOrganizationRequest.UserSvcAddUserToOrganizationRequest,
     "UserSvcAuthToken": userSvcAuthToken.UserSvcAuthToken,
     "UserSvcChangePasswordAdminRequest": userSvcChangePasswordAdminRequest.UserSvcChangePasswordAdminRequest,
@@ -523,6 +531,10 @@ Object.defineProperty(exports, 'PromptSvcPromptStatus', {
     get: function () { return promptSvcPromptStatus.PromptSvcPromptStatus; }
 });
 exports.PromptSvcRemovePromptRequest = promptSvcRemovePromptRequest.PromptSvcRemovePromptRequest;
+exports.RegistrySvcErrorResponse = registrySvcErrorResponse.RegistrySvcErrorResponse;
+exports.RegistrySvcQueryServiceInstancesResponse = registrySvcQueryServiceInstancesResponse.RegistrySvcQueryServiceInstancesResponse;
+exports.RegistrySvcRegisterServiceInstanceRequest = registrySvcRegisterServiceInstanceRequest.RegistrySvcRegisterServiceInstanceRequest;
+exports.RegistrySvcServiceInstance = registrySvcServiceInstance.RegistrySvcServiceInstance;
 exports.UserSvcAddUserToOrganizationRequest = userSvcAddUserToOrganizationRequest.UserSvcAddUserToOrganizationRequest;
 exports.UserSvcAuthToken = userSvcAuthToken.UserSvcAuthToken;
 exports.UserSvcChangePasswordAdminRequest = userSvcChangePasswordAdminRequest.UserSvcChangePasswordAdminRequest;

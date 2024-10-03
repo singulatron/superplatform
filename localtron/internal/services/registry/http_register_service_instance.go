@@ -9,21 +9,21 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
 )
 
-// Register a new service
-// @ID registerService
-// @Summary Register Service. Idempotent.
-// @Description Registers a new service, associating it with a domain or IP, identified from the bearer token.
+// Register a new service instance
+// @ID registerServiceInstance
+// @Summary Register Service Instance. Idempotent.
+// @Description Registers a new service instance, associating an service instance address with a slug acquired from the bearer token.
 // @Tags Registry Svc
 // @Accept json
 // @Produce json
-// @Param request body registry.RegisterServiceRequest true "Register Service Request"
-// @Success 201 {object} registry.RegisterServiceResponse
+// @Param request body registry.RegisterServiceInstanceRequest true "Register Service Instance Request"
+// @Success 201 {object} registry.RegisterServiceInstanceResponse
 // @Failure 400 {object} registry.ErrorResponse "Invalid JSON"
 // @Failure 401 {object} registry.ErrorResponse "Unauthorized"
 // @Failure 500 {object} registry.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
 // @Router /registry-svc/service-instance [post]
-func (rs *RegistryService) RegisterService(
+func (rs *RegistryService) RegisterServiceInstance(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
@@ -45,7 +45,7 @@ func (rs *RegistryService) RegisterService(
 	}
 	defer r.Body.Close()
 
-	err := rs.registerService(r.Context(), req, authRsp.User.Id)
+	err = rs.registerService(req, authRsp.User.Slug)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(err.Error()))
@@ -53,10 +53,10 @@ func (rs *RegistryService) RegisterService(
 	}
 
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(resp)
+	w.Write([]byte(`{}`))
 }
 
-func (rs *RegistryService) registerService(req *registry.RegisterServiceRequest) error {
+func (rs *RegistryService) registerService(req *registry.RegisterServiceInstanceRequest, userSlug string) error {
 	if req.URL == "" {
 		if req.Scheme == "" {
 			return fmt.Errorf("scheme is mandatory when full URL is not provided")
@@ -64,7 +64,31 @@ func (rs *RegistryService) registerService(req *registry.RegisterServiceRequest)
 		if req.Host == "" && req.IP == "" {
 			return fmt.Errorf("host or IP is mandatory when full URL is not provided")
 		}
+
+		host := req.Host
+		if host == "" {
+			host = req.IP
+		}
+
+		req.URL = fmt.Sprintf("%s://%s", req.Scheme, host)
+
+		if req.Port != 0 {
+			req.URL = fmt.Sprintf("%s:%d", req.URL, req.Port)
+		}
+		if req.Path != "" {
+			req.URL = fmt.Sprintf("%s%s", req.URL, req.Path)
+		}
 	}
 
-	rs.serviceInstanceStore.Upsert()
+	inst := &registry.ServiceInstance{
+		URL:    req.URL,
+		Scheme: req.Scheme,
+		Host:   req.Host,
+		IP:     req.IP,
+		Path:   req.Path,
+		Slug:   req.Slug,
+	}
+	inst.ID = inst.DeriveID()
+
+	return rs.serviceInstanceStore.Upsert(inst)
 }

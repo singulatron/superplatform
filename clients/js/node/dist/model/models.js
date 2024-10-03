@@ -82,6 +82,10 @@ export * from './promptSvcListPromptsResponse';
 export * from './promptSvcPrompt';
 export * from './promptSvcPromptStatus';
 export * from './promptSvcRemovePromptRequest';
+export * from './registrySvcErrorResponse';
+export * from './registrySvcQueryServiceInstancesResponse';
+export * from './registrySvcRegisterServiceInstanceRequest';
+export * from './registrySvcServiceInstance';
 export * from './userSvcAddUserToOrganizationRequest';
 export * from './userSvcAuthToken';
 export * from './userSvcChangePasswordAdminRequest';
@@ -194,6 +198,10 @@ import { PromptSvcListPromptsResponse } from './promptSvcListPromptsResponse';
 import { PromptSvcPrompt } from './promptSvcPrompt';
 import { PromptSvcPromptStatus } from './promptSvcPromptStatus';
 import { PromptSvcRemovePromptRequest } from './promptSvcRemovePromptRequest';
+import { RegistrySvcErrorResponse } from './registrySvcErrorResponse';
+import { RegistrySvcQueryServiceInstancesResponse } from './registrySvcQueryServiceInstancesResponse';
+import { RegistrySvcRegisterServiceInstanceRequest } from './registrySvcRegisterServiceInstanceRequest';
+import { RegistrySvcServiceInstance } from './registrySvcServiceInstance';
 import { UserSvcAddUserToOrganizationRequest } from './userSvcAddUserToOrganizationRequest';
 import { UserSvcAuthToken } from './userSvcAuthToken';
 import { UserSvcChangePasswordAdminRequest } from './userSvcChangePasswordAdminRequest';
@@ -320,6 +328,10 @@ let typeMap = {
     "PromptSvcListPromptsResponse": PromptSvcListPromptsResponse,
     "PromptSvcPrompt": PromptSvcPrompt,
     "PromptSvcRemovePromptRequest": PromptSvcRemovePromptRequest,
+    "RegistrySvcErrorResponse": RegistrySvcErrorResponse,
+    "RegistrySvcQueryServiceInstancesResponse": RegistrySvcQueryServiceInstancesResponse,
+    "RegistrySvcRegisterServiceInstanceRequest": RegistrySvcRegisterServiceInstanceRequest,
+    "RegistrySvcServiceInstance": RegistrySvcServiceInstance,
     "UserSvcAddUserToOrganizationRequest": UserSvcAddUserToOrganizationRequest,
     "UserSvcAuthToken": UserSvcAuthToken,
     "UserSvcChangePasswordAdminRequest": UserSvcChangePasswordAdminRequest,

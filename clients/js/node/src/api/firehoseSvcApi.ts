@@ -95,7 +95,7 @@ export class FirehoseSvcApi {
      * @summary Publish an Event
      * @param event Event to publish
      */
-    public async eventPublish (event: FirehoseSvcEventPublishRequest, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body?: any;  }> {
+    public async publishEvent (event: FirehoseSvcEventPublishRequest, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body?: any;  }> {
         const localVarPath = this.basePath + '/firehose-svc/publish';
         let localVarQueryParameters: any = {};
         let localVarHeaderParams: any = (<any>Object).assign({}, this._defaultHeaders);
@@ -110,7 +110,7 @@ export class FirehoseSvcApi {
 
         // verify required parameter 'event' is not null or undefined
         if (event === null || event === undefined) {
-            throw new Error('Required parameter event was null or undefined when calling eventPublish.');
+            throw new Error('Required parameter event was null or undefined when calling publishEvent.');
         }
 
         (<any>Object).assign(localVarHeaderParams, options.headers);
@@ -165,7 +165,7 @@ export class FirehoseSvcApi {
      * Establish a subscription to the firehose events and accept a real time stream of them.
      * @summary Subscribe to the Event Stream
      */
-    public async eventSubscribe (options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: string;  }> {
+    public async subscribeToEvents (options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: string;  }> {
         const localVarPath = this.basePath + '/firehose-svc/subscribe';
         let localVarQueryParameters: any = {};
         let localVarHeaderParams: any = (<any>Object).assign({}, this._defaultHeaders);

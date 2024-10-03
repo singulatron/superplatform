@@ -1,0 +1,316 @@
+---
+id: publish-event
+title: "Publish an Event"
+description: "Publishes an event to the firehose service after authorization check"
+sidebar_label: "Publish an Event"
+hide_title: true
+hide_table_of_contents: true
+api: eJy9VU1v5DYM/SsCz4o9m7RA4VOzRVqkXTRBZ3OanQPH5tjayJJWkmd2aui/L+iPxJmkRVEUvRg2RVKPj3x0DxWF0isXlTVQwH230yo0FAQaQQcyUUQrYkNirzw1NpAI5A+qJIH7SF5gFxvr1Z/ICUTZUPkIEqwjP1huKyjAjUlvOB1I8PSloxDf2+oERQ+lNZEPih7QOa3KITD/HBhQD6FsqEV+c57TRkWBvwZwr80VRnZOEgy2xJZ4cgQFhOiVqSElOVvs7jOV8U1Lkme83MxUTLVMZShPFRTRd5TYEJw1YcRxuVoNcF5k6RMkCd+9dXRrDqhVJX5d3/0O8l+T4r31/6zoNCB59xrJg5l7StX/hCRJCFR2XsUTFJse3hN68tddbKDYbNNWQsQ6QLGBn+cpXB9K2EpoKTZ2mDEbeLYccgzk87RehEOZP/eMZ5d8GC7pvGbPXNsSdWNDLL7/4fLqHfB1M5o1VzcWtMR0TtnHkyPxaXL5BGJvtbZHqsTuJFAEhywXU4loH8kILMfBEXtv20FbD4G8COtJWB9srYwgUzmrTMxAguJLGsKKPMyDDddL5cETrejUb3QaiOYe/fEstpuv2DpNL8RzLpdln5TZ21mgWA7u1KJi1gJqCj8GZepOY/TWZKVtF9Dub8W6c8567slIdBOjK/I8dI680xj31rcZqhxeae36VrRosKaWNce8VXQgbd3w/RQLErQqyYShovnmX+4/iMNVtnpxbyjy/Hg8ZrXpMuvrfIoLOdZOX1xlq6yJrWYkkXwb7vZTKxawj1jX5DNl88ElZ8JVZDZh/UwDSOD5GutYZZeckiezRbMAOS1ZXrHzTnzBwGIn/lcLeRqOSF9j7jQqw8gGgvpJMxtYaoalNKlmK4HVwR59v8NAD16nxOYvHXkW7FbCAb3CHdOx2SY5zyrL7JFOUMBPY0EXrBQmCXU3DuvZRklyjrguS3Lxb32X+r+/W38ECbvpp9LaimM8HnlT4xEKGH5LHD3IebD1oNHUHdbsO+bkwcdJ5M+KYkhyfuGq5iNzWiA8V+RYCD+5rDdD+n7Ua0pP/uPRX0Y8rYHRmzu5TSl9Ax72sLI=
+sidebar_class_name: "post api-method"
+info_path: docs/singulatron/singulatron
+custom_edit_url: null
+---
+
+import ApiTabs from "@theme/ApiTabs";
+import DiscriminatorTabs from "@theme/DiscriminatorTabs";
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import SecuritySchemes from "@theme/ApiExplorer/SecuritySchemes";
+import MimeTabs from "@theme/MimeTabs";
+import ParamsItem from "@theme/ParamsItem";
+import ResponseSamples from "@theme/ResponseSamples";
+import SchemaItem from "@theme/SchemaItem";
+import SchemaTabs from "@theme/SchemaTabs";
+import Markdown from "@theme/Markdown";
+import Heading from "@theme/Heading";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Publish an Event"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/firehose-svc/publish"}
+>
+  
+</MethodEndpoint>
+
+
+
+Publishes an event to the firehose service after authorization check
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<MimeTabs
+  className={"openapi-tabs__mime"}
+>
+  <TabItem
+    label={"application/json"}
+    value={"application/json-schema"}
+  >
+    <details
+      style={{}}
+      className={"openapi-markdown__details mime"}
+      data-collapsed={false}
+      open={true}
+    >
+      <summary
+        style={{}}
+        className={"openapi-markdown__details-summary-mime"}
+      >
+        <h3
+          className={"openapi-markdown__details-summary-header-body"}
+        >
+          Body
+        </h3><strong
+          className={"openapi-schema__required"}
+        >
+          required
+        </strong>
+      </summary><div
+        style={{"textAlign":"left","marginLeft":"1rem"}}
+      >
+        <div
+          style={{"marginTop":"1rem","marginBottom":"1rem"}}
+        >
+          
+          
+          Event to publish
+          
+          
+        </div>
+      </div><ul
+        style={{"marginLeft":"1rem"}}
+      >
+        <SchemaItem
+          collapsible={true}
+          className={"schemaItem"}
+        >
+          <details
+            style={{}}
+            className={"openapi-markdown__details"}
+          >
+            <summary
+              style={{}}
+            >
+              <span
+                className={"openapi-schema__container"}
+              >
+                <strong
+                  className={"openapi-schema__property"}
+                >
+                  event
+                </strong><span
+                  className={"openapi-schema__name"}
+                >
+                   object
+                </span>
+              </span>
+            </summary><div
+              style={{"marginLeft":"1rem"}}
+            >
+              <SchemaItem
+                collapsible={false}
+                name={"data"}
+                required={false}
+                schemaName={""}
+                qualifierMessage={undefined}
+                schema={{}}
+              >
+                
+              </SchemaItem><SchemaItem
+                collapsible={false}
+                name={"name"}
+                required={false}
+                schemaName={"string"}
+                qualifierMessage={undefined}
+                schema={{"type":"string"}}
+              >
+                
+              </SchemaItem>
+            </div>
+          </details>
+        </SchemaItem>
+      </ul>
+    </details>
+  </TabItem>
+</MimeTabs><div>
+  <div>
+    <ApiTabs
+      label={undefined}
+      id={undefined}
+    >
+      <TabItem
+        label={"200"}
+        value={"200"}
+      >
+        <div>
+          
+          
+          \{\}
+          
+          
+        </div><div>
+          
+        </div>
+      </TabItem><TabItem
+        label={"400"}
+        value={"400"}
+      >
+        <div>
+          
+          
+          Invalid JSON
+          
+          
+        </div><div>
+          <MimeTabs
+            className={"openapi-tabs__mime"}
+            schemaType={"response"}
+          >
+            <TabItem
+              label={"application/json"}
+              value={"application/json"}
+            >
+              <SchemaTabs
+                className={"openapi-tabs__schema"}
+              >
+                <TabItem
+                  label={"Schema"}
+                  value={"Schema"}
+                >
+                  <details
+                    style={{}}
+                    className={"openapi-markdown__details response"}
+                    data-collapsed={false}
+                    open={true}
+                  >
+                    <summary
+                      style={{}}
+                      className={"openapi-markdown__details-summary-response"}
+                    >
+                      <strong>
+                        Schema
+                      </strong>
+                    </summary><div
+                      style={{"textAlign":"left","marginLeft":"1rem"}}
+                    >
+                      
+                    </div><ul
+                      style={{"marginLeft":"1rem"}}
+                    >
+                      <SchemaItem
+                        collapsible={false}
+                        name={"error"}
+                        required={false}
+                        schemaName={"string"}
+                        qualifierMessage={undefined}
+                        schema={{"type":"string"}}
+                      >
+                        
+                      </SchemaItem>
+                    </ul>
+                  </details>
+                </TabItem><TabItem
+                  label={"Example (from schema)"}
+                  value={"Example (from schema)"}
+                >
+                  <ResponseSamples
+                    responseExample={"{\n  \"error\": \"string\"\n}"}
+                    language={"json"}
+                  >
+                    
+                  </ResponseSamples>
+                </TabItem>
+              </SchemaTabs>
+            </TabItem>
+          </MimeTabs>
+        </div>
+      </TabItem><TabItem
+        label={"401"}
+        value={"401"}
+      >
+        <div>
+          
+          
+          Unauthorized
+          
+          
+        </div><div>
+          <MimeTabs
+            className={"openapi-tabs__mime"}
+            schemaType={"response"}
+          >
+            <TabItem
+              label={"application/json"}
+              value={"application/json"}
+            >
+              <SchemaTabs
+                className={"openapi-tabs__schema"}
+              >
+                <TabItem
+                  label={"Schema"}
+                  value={"Schema"}
+                >
+                  <details
+                    style={{}}
+                    className={"openapi-markdown__details response"}
+                    data-collapsed={false}
+                    open={true}
+                  >
+                    <summary
+                      style={{}}
+                      className={"openapi-markdown__details-summary-response"}
+                    >
+                      <strong>
+                        Schema
+                      </strong>
+                    </summary><div
+                      style={{"textAlign":"left","marginLeft":"1rem"}}
+                    >
+                      
+                    </div><ul
+                      style={{"marginLeft":"1rem"}}
+                    >
+                      <SchemaItem
+                        collapsible={false}
+                        name={"error"}
+                        required={false}
+                        schemaName={"string"}
+                        qualifierMessage={undefined}
+                        schema={{"type":"string"}}
+                      >
+                        
+                      </SchemaItem>
+                    </ul>
+                  </details>
+                </TabItem><TabItem
+                  label={"Example (from schema)"}
+                  value={"Example (from schema)"}
+                >
+                  <ResponseSamples
+                    responseExample={"{\n  \"error\": \"string\"\n}"}
+                    language={"json"}
+                  >
+                    
+                  </ResponseSamples>
+                </TabItem>
+              </SchemaTabs>
+            </TabItem>
+          </MimeTabs>
+        </div>
+      </TabItem>
+    </ApiTabs>
+  </div>
+</div>
+      

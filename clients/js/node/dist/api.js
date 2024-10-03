@@ -86,6 +86,10 @@ var promptSvcListPromptsResponse = require('./promptSvcListPromptsResponse.js');
 var promptSvcPrompt = require('./promptSvcPrompt.js');
 var promptSvcPromptStatus = require('./promptSvcPromptStatus.js');
 var promptSvcRemovePromptRequest = require('./promptSvcRemovePromptRequest.js');
+var registrySvcErrorResponse = require('./registrySvcErrorResponse.js');
+var registrySvcQueryServiceInstancesResponse = require('./registrySvcQueryServiceInstancesResponse.js');
+var registrySvcRegisterServiceInstanceRequest = require('./registrySvcRegisterServiceInstanceRequest.js');
+var registrySvcServiceInstance = require('./registrySvcServiceInstance.js');
 var userSvcAddUserToOrganizationRequest = require('./userSvcAddUserToOrganizationRequest.js');
 var userSvcAuthToken = require('./userSvcAuthToken.js');
 var userSvcChangePasswordAdminRequest = require('./userSvcChangePasswordAdminRequest.js');
@@ -184,6 +188,11 @@ exports.PromptSvcApi = chatSvcApi.PromptSvcApi;
 Object.defineProperty(exports, 'PromptSvcApiApiKeys', {
 	enumerable: true,
 	get: function () { return chatSvcApi.PromptSvcApiApiKeys; }
+});
+exports.RegistrySvcApi = chatSvcApi.RegistrySvcApi;
+Object.defineProperty(exports, 'RegistrySvcApiApiKeys', {
+	enumerable: true,
+	get: function () { return chatSvcApi.RegistrySvcApiApiKeys; }
 });
 exports.UserSvcApi = chatSvcApi.UserSvcApi;
 Object.defineProperty(exports, 'UserSvcApiApiKeys', {
@@ -295,6 +304,10 @@ Object.defineProperty(exports, 'PromptSvcPromptStatus', {
 	get: function () { return promptSvcPromptStatus.PromptSvcPromptStatus; }
 });
 exports.PromptSvcRemovePromptRequest = promptSvcRemovePromptRequest.PromptSvcRemovePromptRequest;
+exports.RegistrySvcErrorResponse = registrySvcErrorResponse.RegistrySvcErrorResponse;
+exports.RegistrySvcQueryServiceInstancesResponse = registrySvcQueryServiceInstancesResponse.RegistrySvcQueryServiceInstancesResponse;
+exports.RegistrySvcRegisterServiceInstanceRequest = registrySvcRegisterServiceInstanceRequest.RegistrySvcRegisterServiceInstanceRequest;
+exports.RegistrySvcServiceInstance = registrySvcServiceInstance.RegistrySvcServiceInstance;
 exports.UserSvcAddUserToOrganizationRequest = userSvcAddUserToOrganizationRequest.UserSvcAddUserToOrganizationRequest;
 exports.UserSvcAuthToken = userSvcAuthToken.UserSvcAuthToken;
 exports.UserSvcChangePasswordAdminRequest = userSvcChangePasswordAdminRequest.UserSvcChangePasswordAdminRequest;

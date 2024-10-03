@@ -56,7 +56,7 @@ export declare class PromptSvcApi {
      * @summary List Prompts
      * @param request List Prompts Request
      */
-    getPrompts(request?: PromptSvcListPromptsRequest, options?: {
+    listPrompts(request?: PromptSvcListPromptsRequest, options?: {
         headers: {
             [name: string]: string;
         };
@@ -78,11 +78,11 @@ export declare class PromptSvcApi {
         body: object;
     }>;
     /**
-     * Subscribe to prompt responses via Server-Sent Events (SSE)
-     * @summary Subscribe to Prompt
+     * Subscribe to prompt responses by thread via Server-Sent Events (SSE)
+     * @summary Subscribe to Prompt Responses by Thread
      * @param threadId Thread ID
      */
-    subscribe(threadId: string, options?: {
+    subscribeToPromptResponses(threadId: string, options?: {
         headers: {
             [name: string]: string;
         };

@@ -12,6 +12,7 @@ api_model_svc.go
 api_node_svc.go
 api_policy_svc.go
 api_prompt_svc.go
+api_registry_svc.go
 api_user_svc.go
 client.go
 configuration.go
@@ -109,6 +110,11 @@ docs/PromptSvcListPromptsResponse.md
 docs/PromptSvcPrompt.md
 docs/PromptSvcPromptStatus.md
 docs/PromptSvcRemovePromptRequest.md
+docs/RegistrySvcAPI.md
+docs/RegistrySvcErrorResponse.md
+docs/RegistrySvcQueryServiceInstancesResponse.md
+docs/RegistrySvcRegisterServiceInstanceRequest.md
+docs/RegistrySvcServiceInstance.md
 docs/UserSvcAPI.md
 docs/UserSvcAddUserToOrganizationRequest.md
 docs/UserSvcAuthToken.md
@@ -225,6 +231,10 @@ model_prompt_svc_list_prompts_response.go
 model_prompt_svc_prompt.go
 model_prompt_svc_prompt_status.go
 model_prompt_svc_remove_prompt_request.go
+model_registry_svc_error_response.go
+model_registry_svc_query_service_instances_response.go
+model_registry_svc_register_service_instance_request.go
+model_registry_svc_service_instance.go
 model_user_svc_add_user_to_organization_request.go
 model_user_svc_auth_token.go
 model_user_svc_change_password_admin_request.go

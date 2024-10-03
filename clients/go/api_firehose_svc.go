@@ -23,46 +23,46 @@ import (
 // FirehoseSvcAPIService FirehoseSvcAPI service
 type FirehoseSvcAPIService service
 
-type ApiEventPublishRequest struct {
+type ApiPublishEventRequest struct {
 	ctx context.Context
 	ApiService *FirehoseSvcAPIService
 	event *FirehoseSvcEventPublishRequest
 }
 
 // Event to publish
-func (r ApiEventPublishRequest) Event(event FirehoseSvcEventPublishRequest) ApiEventPublishRequest {
+func (r ApiPublishEventRequest) Event(event FirehoseSvcEventPublishRequest) ApiPublishEventRequest {
 	r.event = &event
 	return r
 }
 
-func (r ApiEventPublishRequest) Execute() (*http.Response, error) {
-	return r.ApiService.EventPublishExecute(r)
+func (r ApiPublishEventRequest) Execute() (*http.Response, error) {
+	return r.ApiService.PublishEventExecute(r)
 }
 
 /*
-EventPublish Publish an Event
+PublishEvent Publish an Event
 
 Publishes an event to the firehose service after authorization check
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiEventPublishRequest
+ @return ApiPublishEventRequest
 */
-func (a *FirehoseSvcAPIService) EventPublish(ctx context.Context) ApiEventPublishRequest {
-	return ApiEventPublishRequest{
+func (a *FirehoseSvcAPIService) PublishEvent(ctx context.Context) ApiPublishEventRequest {
+	return ApiPublishEventRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-func (a *FirehoseSvcAPIService) EventPublishExecute(r ApiEventPublishRequest) (*http.Response, error) {
+func (a *FirehoseSvcAPIService) PublishEventExecute(r ApiPublishEventRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FirehoseSvcAPIService.EventPublish")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FirehoseSvcAPIService.PublishEvent")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -158,25 +158,25 @@ func (a *FirehoseSvcAPIService) EventPublishExecute(r ApiEventPublishRequest) (*
 	return localVarHTTPResponse, nil
 }
 
-type ApiEventSubscribeRequest struct {
+type ApiSubscribeToEventsRequest struct {
 	ctx context.Context
 	ApiService *FirehoseSvcAPIService
 }
 
-func (r ApiEventSubscribeRequest) Execute() (string, *http.Response, error) {
-	return r.ApiService.EventSubscribeExecute(r)
+func (r ApiSubscribeToEventsRequest) Execute() (string, *http.Response, error) {
+	return r.ApiService.SubscribeToEventsExecute(r)
 }
 
 /*
-EventSubscribe Subscribe to the Event Stream
+SubscribeToEvents Subscribe to the Event Stream
 
 Establish a subscription to the firehose events and accept a real time stream of them.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiEventSubscribeRequest
+ @return ApiSubscribeToEventsRequest
 */
-func (a *FirehoseSvcAPIService) EventSubscribe(ctx context.Context) ApiEventSubscribeRequest {
-	return ApiEventSubscribeRequest{
+func (a *FirehoseSvcAPIService) SubscribeToEvents(ctx context.Context) ApiSubscribeToEventsRequest {
+	return ApiSubscribeToEventsRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -184,7 +184,7 @@ func (a *FirehoseSvcAPIService) EventSubscribe(ctx context.Context) ApiEventSubs
 
 // Execute executes the request
 //  @return string
-func (a *FirehoseSvcAPIService) EventSubscribeExecute(r ApiEventSubscribeRequest) (string, *http.Response, error) {
+func (a *FirehoseSvcAPIService) SubscribeToEventsExecute(r ApiSubscribeToEventsRequest) (string, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -192,7 +192,7 @@ func (a *FirehoseSvcAPIService) EventSubscribeExecute(r ApiEventSubscribeRequest
 		localVarReturnValue  string
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FirehoseSvcAPIService.EventSubscribe")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FirehoseSvcAPIService.SubscribeToEvents")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

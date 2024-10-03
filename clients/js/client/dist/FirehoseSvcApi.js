@@ -25,10 +25,10 @@ class FirehoseSvcApi extends runtime.BaseAPI {
      * Publishes an event to the firehose service after authorization check
      * Publish an Event
      */
-    eventPublishRaw(requestParameters, initOverrides) {
+    publishEventRaw(requestParameters, initOverrides) {
         return runtime.__awaiter(this, void 0, void 0, function* () {
             if (requestParameters['event'] == null) {
-                throw new runtime.RequiredError('event', 'Required parameter "event" was null or undefined when calling eventPublish().');
+                throw new runtime.RequiredError('event', 'Required parameter "event" was null or undefined when calling publishEvent().');
             }
             const queryParameters = {};
             const headerParameters = {};
@@ -50,16 +50,16 @@ class FirehoseSvcApi extends runtime.BaseAPI {
      * Publishes an event to the firehose service after authorization check
      * Publish an Event
      */
-    eventPublish(requestParameters, initOverrides) {
+    publishEvent(requestParameters, initOverrides) {
         return runtime.__awaiter(this, void 0, void 0, function* () {
-            yield this.eventPublishRaw(requestParameters, initOverrides);
+            yield this.publishEventRaw(requestParameters, initOverrides);
         });
     }
     /**
      * Establish a subscription to the firehose events and accept a real time stream of them.
      * Subscribe to the Event Stream
      */
-    eventSubscribeRaw(initOverrides) {
+    subscribeToEventsRaw(initOverrides) {
         return runtime.__awaiter(this, void 0, void 0, function* () {
             const queryParameters = {};
             const headerParameters = {};
@@ -84,9 +84,9 @@ class FirehoseSvcApi extends runtime.BaseAPI {
      * Establish a subscription to the firehose events and accept a real time stream of them.
      * Subscribe to the Event Stream
      */
-    eventSubscribe(initOverrides) {
+    subscribeToEvents(initOverrides) {
         return runtime.__awaiter(this, void 0, void 0, function* () {
-            const response = yield this.eventSubscribeRaw(initOverrides);
+            const response = yield this.subscribeToEventsRaw(initOverrides);
             return yield response.value();
         });
     }

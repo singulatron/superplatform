@@ -18,6 +18,7 @@ import (
 	nodeservice "github.com/singulatron/singulatron/localtron/internal/services/node"
 	policyservice "github.com/singulatron/singulatron/localtron/internal/services/policy"
 	promptservice "github.com/singulatron/singulatron/localtron/internal/services/prompt"
+	registryservice "github.com/singulatron/singulatron/localtron/internal/services/registry"
 	userservice "github.com/singulatron/singulatron/localtron/internal/services/user"
 	"github.com/singulatron/singulatron/sdk/go/clients/llm"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
@@ -191,6 +192,12 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 	policyService, err := policyservice.NewPolicyService(options.Router, options.DatastoreFactory)
 	if err != nil {
 		logger.Error("Policy service creation failed", slog.String("error", err.Error()))
+		os.Exit(1)
+	}
+
+	registryService, err := registryservice.NewRegistryService(options.Router, options.DatastoreFactory)
+	if err != nil {
+		logger.Error("Node service creation failed", slog.String("error", err.Error()))
 		os.Exit(1)
 	}
 
@@ -418,6 +425,16 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 	router.HandleFunc("/policy-svc/instance/{instanceId}", appl(func(w http.ResponseWriter, r *http.Request) {
 		policyService.UpsertInstance(w, r)
 	})).Methods("OPTIONS", "PUT")
+
+	router.HandleFunc("/registry-svc/service-instance/{id}", appl(func(w http.ResponseWriter, r *http.Request) {
+		registryService.QueryServiceInstances(w, r)
+	})).Methods("OPTIONS", "DELETE")
+	router.HandleFunc("/registry-svc/service-instance", appl(func(w http.ResponseWriter, r *http.Request) {
+		registryService.RegisterServiceInstance(w, r)
+	})).Methods("OPTIONS", "DELETE")
+	router.HandleFunc("/registry-svc/service-instance/{id}", appl(func(w http.ResponseWriter, r *http.Request) {
+		registryService.RemoveServiceInstance(w, r)
+	})).Methods("OPTIONS", "DELETE")
 
 	return router, func() error {
 		err = configService.Start()

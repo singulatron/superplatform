@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	registry "github.com/singulatron/singulatron/localtron/internal/services/registry/types"
+	"github.com/singulatron/singulatron/sdk/go/datastore"
 )
 
 // Remove a registered service instance
@@ -21,7 +22,7 @@ import (
 // @Failure 500 {object} registry.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
 // @Router /registry-svc/service-instance/{id} [delete]
-func (rs *RegistryService) RemoveService(
+func (rs *RegistryService) RemoveServiceInstance(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
@@ -32,7 +33,7 @@ func (rs *RegistryService) RemoveService(
 		return
 	}
 
-	err := rs.removeServiceInstanceByID(r.Context(), serviceID)
+	err := rs.removeServiceInstanceByID(serviceID)
 	if err != nil {
 		if err == registry.ErrNotFound {
 			w.WriteHeader(http.StatusNotFound)
@@ -45,4 +46,8 @@ func (rs *RegistryService) RemoveService(
 	}
 
 	w.WriteHeader(http.StatusNoContent)
+}
+
+func (rs *RegistryService) removeServiceInstanceByID(id string) error {
+	return rs.serviceInstanceStore.Query(datastore.Id(id)).Delete()
 }
