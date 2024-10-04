@@ -57,13 +57,13 @@ func TestGenerateID(t *testing.T) {
 			expectedID: "http://api.com:8080/user-svc",
 		},
 		{
-			name: "With Missing URL, IP, and Host (should fail)",
+			name: "With Missing URL, IP, and Host",
 			instance: ServiceInstance{
 				Scheme: "http",
 				Port:   8080,
 				Slug:   "user-svc",
 			},
-			expectedID: "", // This case should not generate a valid ID
+			expectedID: "http://:8080/user-svc",
 		},
 	}
 

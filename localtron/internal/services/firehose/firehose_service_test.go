@@ -46,7 +46,7 @@ func TestFirehoseSubscription(t *testing.T) {
 		eventChannel := make(chan *firehose.Event, 1)
 
 		go func() {
-			req, err := http.NewRequestWithContext(context.Background(), http.MethodGet, server.URL+"/firehose-svc/subscribe", nil)
+			req, err := http.NewRequestWithContext(context.Background(), http.MethodGet, server.URL+"/firehose-svc/events/subscribe", nil)
 
 			require.NoError(t, err)
 			req.Header.Set("Authorization", "Bearer "+adminToken)
