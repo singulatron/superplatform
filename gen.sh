@@ -28,7 +28,7 @@ LATEST_SWAG_VERSION=$(go list -m -u -versions -json github.com/swaggo/swag | jq 
 if [[ -z "$INSTALLED_SWAG_VERSION" ]]; then
     echo "Swag not installed. Installing the latest version..."
     go install github.com/swaggo/swag/cmd/swag@latest
-elif [[ "$INSTALLED_SWAG_VERSION" != "$LATEST_SWAG_VERSION" ]]; then
+    elif [[ "$INSTALLED_SWAG_VERSION" != "$LATEST_SWAG_VERSION" ]]; then
     echo "Swag version is outdated. Updating to the latest version..."
     go install github.com/swaggo/swag/cmd/swag@latest
 else
@@ -43,7 +43,7 @@ LATEST_OPENAPI_VERSION=$(npm show @openapitools/openapi-generator-cli version)
 if [[ -z "$INSTALLED_OPENAPI_VERSION" ]]; then
     echo "openapi-generator-cli not installed. Installing..."
     npm install @openapitools/openapi-generator-cli -g
-elif [[ "$INSTALLED_OPENAPI_VERSION" != "$LATEST_OPENAPI_VERSION" ]]; then
+    elif [[ "$INSTALLED_OPENAPI_VERSION" != "$LATEST_OPENAPI_VERSION" ]]; then
     echo "openapi-generator-cli version is outdated. Updating..."
     npm install @openapitools/openapi-generator-cli -g
 else

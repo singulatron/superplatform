@@ -31,7 +31,7 @@ import (
 // @Failure 500 {object} prompt.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
 // @Router /prompt-svc/prompts [post]
-func (p *PromptService) GetPrompts(
+func (p *PromptService) ListPrompts(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
@@ -67,10 +67,10 @@ func (p *PromptService) GetPrompts(
 	}
 
 	if !options.Query.HasFieldFilter("status") {
-		options.Query.Filters = append(options.Query.Filters, datastore.Equals(datastore.Field("status"), []prompt.PromptStatus{
+		options.Query.Filters = append(options.Query.Filters, datastore.IsInList(datastore.Field("status"),
 			prompt.PromptStatusRunning,
 			prompt.PromptStatusScheduled,
-		}))
+		))
 	}
 	if options.Query.Limit == 0 {
 		options.Query.Limit = 20

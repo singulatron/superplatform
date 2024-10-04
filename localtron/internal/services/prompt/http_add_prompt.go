@@ -30,7 +30,7 @@ import (
 // @Failure 500 {object} prompt.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
 // @Router /prompt-svc/prompt [post]
-func (p *PromptService) Add(
+func (p *PromptService) AddPrompt(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {

@@ -319,19 +319,19 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 	})).Methods("OPTIONS", "GET")
 
 	router.HandleFunc("/prompt-svc/prompt", appl(func(w http.ResponseWriter, r *http.Request) {
-		promptService.Add(w, r)
+		promptService.AddPrompt(w, r)
 	})).Methods("OPTIONS", "POST")
 
 	router.HandleFunc("/prompt-svc/prompt/{promptId}", appl(func(w http.ResponseWriter, r *http.Request) {
 		promptService.RemovePrompt(w, r)
 	})).Methods("OPTIONS", "DELETE")
 
-	router.HandleFunc("/prompt-svc/{threadId}/subscribe", appl(func(w http.ResponseWriter, r *http.Request) {
-		promptService.GetSubscribe(w, r)
+	router.HandleFunc("/prompt-svc/prompts/{threadId}/responses/subscribe", appl(func(w http.ResponseWriter, r *http.Request) {
+		promptService.SubscribeToPromptResponses(w, r)
 	})).Methods("OPTIONS", "GET")
 
 	router.HandleFunc("/prompt-svc/prompts", appl(func(w http.ResponseWriter, r *http.Request) {
-		promptService.GetPrompts(w, r)
+		promptService.ListPrompts(w, r)
 	})).Methods("OPTIONS", "POST")
 
 	router.HandleFunc("/user-svc/login", appl(func(w http.ResponseWriter, r *http.Request) {

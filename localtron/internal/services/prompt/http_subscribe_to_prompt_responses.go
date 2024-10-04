@@ -32,7 +32,7 @@ import (
 // @Failure 401 {object} prompt.ErrorResponse "Unauthorized"
 // @Security BearerAuth
 // @Router /prompt-svc/prompts/{threadId}/responses/subscribe [get]
-func (p *PromptService) GetSubscribe(
+func (p *PromptService) SubscribeToPromptResponses(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {

@@ -44,7 +44,7 @@ export class FirehoseService {
 
 				const uri =
 					this.localtron.config.env.localtronAddress +
-					'/firehose-svc/subscribe';
+					'/firehose-svc/events/subscribe';
 
 				const headers = {
 					Authorization: 'Bearer ' + this.userService.getToken(),

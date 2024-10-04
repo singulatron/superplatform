@@ -245,6 +245,7 @@ func (d *DockerService) getMountedVolume(containerID, mountPoint string) (string
 }
 
 func isRunningInDocker() bool {
+	// Causes false positive outside Docker
 	// if checkDockerSocket() {
 	// 	return true
 	// }
@@ -261,6 +262,7 @@ func isRunningInDocker() bool {
 		return true
 	}
 
+	// Causes false positive outside Docker
 	//if checkMountInfoForDockerOrKubernetes() {
 	//	return true
 	//}
