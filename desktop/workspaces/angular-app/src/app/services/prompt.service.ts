@@ -118,7 +118,7 @@ export class PromptService {
 	async promptList(
 		request: PromptSvcListPromptsRequest
 	): Promise<PromptSvcListPromptsResponse> {
-		return this.promptService.getPrompts({
+		return this.promptService.listPrompts({
 			request: request,
 		});
 	}
@@ -141,7 +141,7 @@ export class PromptService {
 
 				const uri =
 					this.localtron.config.env.localtronAddress +
-					`/prompt-svc/${threadId}/subscribe`;
+					`/prompt-svc/prompts/${threadId}/responses/subscribe`;
 
 				const headers = {
 					Authorization: 'Bearer ' + this.userService.getToken(),

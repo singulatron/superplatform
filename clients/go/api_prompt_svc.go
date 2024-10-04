@@ -181,32 +181,32 @@ func (a *PromptSvcAPIService) AddPromptExecute(r ApiAddPromptRequest) (*PromptSv
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiGetPromptsRequest struct {
+type ApiListPromptsRequest struct {
 	ctx context.Context
 	ApiService *PromptSvcAPIService
 	request *PromptSvcListPromptsRequest
 }
 
 // List Prompts Request
-func (r ApiGetPromptsRequest) Request(request PromptSvcListPromptsRequest) ApiGetPromptsRequest {
+func (r ApiListPromptsRequest) Request(request PromptSvcListPromptsRequest) ApiListPromptsRequest {
 	r.request = &request
 	return r
 }
 
-func (r ApiGetPromptsRequest) Execute() (*PromptSvcListPromptsResponse, *http.Response, error) {
-	return r.ApiService.GetPromptsExecute(r)
+func (r ApiListPromptsRequest) Execute() (*PromptSvcListPromptsResponse, *http.Response, error) {
+	return r.ApiService.ListPromptsExecute(r)
 }
 
 /*
-GetPrompts List Prompts
+ListPrompts List Prompts
 
 List prompts that satisfy a query.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiGetPromptsRequest
+ @return ApiListPromptsRequest
 */
-func (a *PromptSvcAPIService) GetPrompts(ctx context.Context) ApiGetPromptsRequest {
-	return ApiGetPromptsRequest{
+func (a *PromptSvcAPIService) ListPrompts(ctx context.Context) ApiListPromptsRequest {
+	return ApiListPromptsRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -214,7 +214,7 @@ func (a *PromptSvcAPIService) GetPrompts(ctx context.Context) ApiGetPromptsReque
 
 // Execute executes the request
 //  @return PromptSvcListPromptsResponse
-func (a *PromptSvcAPIService) GetPromptsExecute(r ApiGetPromptsRequest) (*PromptSvcListPromptsResponse, *http.Response, error) {
+func (a *PromptSvcAPIService) ListPromptsExecute(r ApiListPromptsRequest) (*PromptSvcListPromptsResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -222,7 +222,7 @@ func (a *PromptSvcAPIService) GetPromptsExecute(r ApiGetPromptsRequest) (*Prompt
 		localVarReturnValue  *PromptSvcListPromptsResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PromptSvcAPIService.GetPrompts")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PromptSvcAPIService.ListPrompts")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -492,27 +492,27 @@ func (a *PromptSvcAPIService) RemovePromptExecute(r ApiRemovePromptRequest) (map
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiSubscribeRequest struct {
+type ApiSubscribeToPromptResponsesRequest struct {
 	ctx context.Context
 	ApiService *PromptSvcAPIService
 	threadId string
 }
 
-func (r ApiSubscribeRequest) Execute() (string, *http.Response, error) {
-	return r.ApiService.SubscribeExecute(r)
+func (r ApiSubscribeToPromptResponsesRequest) Execute() (string, *http.Response, error) {
+	return r.ApiService.SubscribeToPromptResponsesExecute(r)
 }
 
 /*
-Subscribe Subscribe to Prompt
+SubscribeToPromptResponses Subscribe to Prompt Responses by Thread
 
-Subscribe to prompt responses via Server-Sent Events (SSE)
+Subscribe to prompt responses by thread via Server-Sent Events (SSE)
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param threadId Thread ID
- @return ApiSubscribeRequest
+ @return ApiSubscribeToPromptResponsesRequest
 */
-func (a *PromptSvcAPIService) Subscribe(ctx context.Context, threadId string) ApiSubscribeRequest {
-	return ApiSubscribeRequest{
+func (a *PromptSvcAPIService) SubscribeToPromptResponses(ctx context.Context, threadId string) ApiSubscribeToPromptResponsesRequest {
+	return ApiSubscribeToPromptResponsesRequest{
 		ApiService: a,
 		ctx: ctx,
 		threadId: threadId,
@@ -521,7 +521,7 @@ func (a *PromptSvcAPIService) Subscribe(ctx context.Context, threadId string) Ap
 
 // Execute executes the request
 //  @return string
-func (a *PromptSvcAPIService) SubscribeExecute(r ApiSubscribeRequest) (string, *http.Response, error) {
+func (a *PromptSvcAPIService) SubscribeToPromptResponsesExecute(r ApiSubscribeToPromptResponsesRequest) (string, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -529,12 +529,12 @@ func (a *PromptSvcAPIService) SubscribeExecute(r ApiSubscribeRequest) (string, *
 		localVarReturnValue  string
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PromptSvcAPIService.Subscribe")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PromptSvcAPIService.SubscribeToPromptResponses")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/prompt-svc/{threadId}/subscribe"
+	localVarPath := localBasePath + "/prompt-svc/prompts/{threadId}/responses/subscribe"
 	localVarPath = strings.Replace(localVarPath, "{"+"threadId"+"}", url.PathEscape(parameterValueToString(r.threadId, "threadId")), -1)
 
 	localVarHeaderParams := make(map[string]string)

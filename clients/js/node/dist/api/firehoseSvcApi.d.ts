@@ -39,7 +39,7 @@ export declare class FirehoseSvcApi {
      * @summary Publish an Event
      * @param event Event to publish
      */
-    eventPublish(event: FirehoseSvcEventPublishRequest, options?: {
+    publishEvent(event: FirehoseSvcEventPublishRequest, options?: {
         headers: {
             [name: string]: string;
         };
@@ -51,7 +51,7 @@ export declare class FirehoseSvcApi {
      * Establish a subscription to the firehose events and accept a real time stream of them.
      * @summary Subscribe to the Event Stream
      */
-    eventSubscribe(options?: {
+    subscribeToEvents(options?: {
         headers: {
             [name: string]: string;
         };

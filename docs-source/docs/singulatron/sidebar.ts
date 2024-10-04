@@ -192,13 +192,13 @@ const sidebar: SidebarsConfig = {
       items: [
         {
           type: "doc",
-          id: "singulatron/event-publish",
+          id: "singulatron/publish-event",
           label: "Publish an Event",
           className: "api-method post",
         },
         {
           type: "doc",
-          id: "singulatron/event-subscribe",
+          id: "singulatron/subscribe-to-events",
           label: "Subscribe to the Event Stream",
           className: "api-method get",
         },
@@ -288,27 +288,51 @@ const sidebar: SidebarsConfig = {
       items: [
         {
           type: "doc",
-          id: "singulatron/subscribe",
-          label: "Subscribe to Prompt",
-          className: "api-method get",
-        },
-        {
-          type: "doc",
           id: "singulatron/add-prompt",
           label: "Add Prompt",
           className: "api-method post",
         },
         {
           type: "doc",
-          id: "singulatron/get-prompts",
+          id: "singulatron/list-prompts",
           label: "List Prompts",
           className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "singulatron/subscribe-to-prompt-responses",
+          label: "Subscribe to Prompt Responses by Thread",
+          className: "api-method get",
         },
         {
           type: "doc",
           id: "singulatron/remove-prompt",
           label: "Remove Prompt",
           className: "api-method post",
+        },
+      ],
+    },
+    {
+      type: "category",
+      label: "Registry Svc",
+      items: [
+        {
+          type: "doc",
+          id: "singulatron/register-service-instance",
+          label: "Register Service Instance. Idempotent.",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "singulatron/remove-service-instance",
+          label: "Remove Service Instance",
+          className: "api-method delete",
+        },
+        {
+          type: "doc",
+          id: "singulatron/query-service-instances",
+          label: "Query Service Instances",
+          className: "api-method get",
         },
       ],
     },

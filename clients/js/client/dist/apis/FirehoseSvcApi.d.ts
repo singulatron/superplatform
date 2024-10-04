@@ -11,7 +11,7 @@
  */
 import * as runtime from '../runtime';
 import type { FirehoseSvcEventPublishRequest } from '../models/index';
-export interface EventPublishRequest {
+export interface PublishEventRequest {
     event: FirehoseSvcEventPublishRequest;
 }
 /**
@@ -22,20 +22,20 @@ export declare class FirehoseSvcApi extends runtime.BaseAPI {
      * Publishes an event to the firehose service after authorization check
      * Publish an Event
      */
-    eventPublishRaw(requestParameters: EventPublishRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+    publishEventRaw(requestParameters: PublishEventRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
     /**
      * Publishes an event to the firehose service after authorization check
      * Publish an Event
      */
-    eventPublish(requestParameters: EventPublishRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+    publishEvent(requestParameters: PublishEventRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
     /**
      * Establish a subscription to the firehose events and accept a real time stream of them.
      * Subscribe to the Event Stream
      */
-    eventSubscribeRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>>;
+    subscribeToEventsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>>;
     /**
      * Establish a subscription to the firehose events and accept a real time stream of them.
      * Subscribe to the Event Stream
      */
-    eventSubscribe(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string>;
+    subscribeToEvents(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string>;
 }

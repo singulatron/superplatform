@@ -23,10 +23,10 @@ class FirehoseSvcApi extends BaseAPI {
      * Publishes an event to the firehose service after authorization check
      * Publish an Event
      */
-    eventPublishRaw(requestParameters, initOverrides) {
+    publishEventRaw(requestParameters, initOverrides) {
         return __awaiter(this, void 0, void 0, function* () {
             if (requestParameters['event'] == null) {
-                throw new RequiredError('event', 'Required parameter "event" was null or undefined when calling eventPublish().');
+                throw new RequiredError('event', 'Required parameter "event" was null or undefined when calling publishEvent().');
             }
             const queryParameters = {};
             const headerParameters = {};
@@ -35,7 +35,7 @@ class FirehoseSvcApi extends BaseAPI {
                 headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
             }
             const response = yield this.request({
-                path: `/firehose-svc/publish`,
+                path: `/firehose-svc/event`,
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,
@@ -48,16 +48,16 @@ class FirehoseSvcApi extends BaseAPI {
      * Publishes an event to the firehose service after authorization check
      * Publish an Event
      */
-    eventPublish(requestParameters, initOverrides) {
+    publishEvent(requestParameters, initOverrides) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.eventPublishRaw(requestParameters, initOverrides);
+            yield this.publishEventRaw(requestParameters, initOverrides);
         });
     }
     /**
      * Establish a subscription to the firehose events and accept a real time stream of them.
      * Subscribe to the Event Stream
      */
-    eventSubscribeRaw(initOverrides) {
+    subscribeToEventsRaw(initOverrides) {
         return __awaiter(this, void 0, void 0, function* () {
             const queryParameters = {};
             const headerParameters = {};
@@ -65,7 +65,7 @@ class FirehoseSvcApi extends BaseAPI {
                 headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
             }
             const response = yield this.request({
-                path: `/firehose-svc/subscribe`,
+                path: `/firehose-svc/events/subscribe`,
                 method: 'GET',
                 headers: headerParameters,
                 query: queryParameters,
@@ -82,9 +82,9 @@ class FirehoseSvcApi extends BaseAPI {
      * Establish a subscription to the firehose events and accept a real time stream of them.
      * Subscribe to the Event Stream
      */
-    eventSubscribe(initOverrides) {
+    subscribeToEvents(initOverrides) {
         return __awaiter(this, void 0, void 0, function* () {
-            const response = yield this.eventSubscribeRaw(initOverrides);
+            const response = yield this.subscribeToEventsRaw(initOverrides);
             return yield response.value();
         });
     }

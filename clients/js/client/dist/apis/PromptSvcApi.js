@@ -65,7 +65,7 @@ export class PromptSvcApi extends runtime.BaseAPI {
      * List prompts that satisfy a query.
      * List Prompts
      */
-    getPromptsRaw(requestParameters, initOverrides) {
+    listPromptsRaw(requestParameters, initOverrides) {
         return __awaiter(this, void 0, void 0, function* () {
             const queryParameters = {};
             const headerParameters = {};
@@ -87,9 +87,9 @@ export class PromptSvcApi extends runtime.BaseAPI {
      * List prompts that satisfy a query.
      * List Prompts
      */
-    getPrompts() {
+    listPrompts() {
         return __awaiter(this, arguments, void 0, function* (requestParameters = {}, initOverrides) {
-            const response = yield this.getPromptsRaw(requestParameters, initOverrides);
+            const response = yield this.listPromptsRaw(requestParameters, initOverrides);
             return yield response.value();
         });
     }
@@ -129,13 +129,13 @@ export class PromptSvcApi extends runtime.BaseAPI {
         });
     }
     /**
-     * Subscribe to prompt responses via Server-Sent Events (SSE)
-     * Subscribe to Prompt
+     * Subscribe to prompt responses by thread via Server-Sent Events (SSE)
+     * Subscribe to Prompt Responses by Thread
      */
-    subscribeRaw(requestParameters, initOverrides) {
+    subscribeToPromptResponsesRaw(requestParameters, initOverrides) {
         return __awaiter(this, void 0, void 0, function* () {
             if (requestParameters['threadId'] == null) {
-                throw new runtime.RequiredError('threadId', 'Required parameter "threadId" was null or undefined when calling subscribe().');
+                throw new runtime.RequiredError('threadId', 'Required parameter "threadId" was null or undefined when calling subscribeToPromptResponses().');
             }
             const queryParameters = {};
             const headerParameters = {};
@@ -143,7 +143,7 @@ export class PromptSvcApi extends runtime.BaseAPI {
                 headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
             }
             const response = yield this.request({
-                path: `/prompt-svc/{threadId}/subscribe`.replace(`{${"threadId"}}`, encodeURIComponent(String(requestParameters['threadId']))),
+                path: `/prompt-svc/prompts/{threadId}/responses/subscribe`.replace(`{${"threadId"}}`, encodeURIComponent(String(requestParameters['threadId']))),
                 method: 'GET',
                 headers: headerParameters,
                 query: queryParameters,
@@ -157,12 +157,12 @@ export class PromptSvcApi extends runtime.BaseAPI {
         });
     }
     /**
-     * Subscribe to prompt responses via Server-Sent Events (SSE)
-     * Subscribe to Prompt
+     * Subscribe to prompt responses by thread via Server-Sent Events (SSE)
+     * Subscribe to Prompt Responses by Thread
      */
-    subscribe(requestParameters, initOverrides) {
+    subscribeToPromptResponses(requestParameters, initOverrides) {
         return __awaiter(this, void 0, void 0, function* () {
-            const response = yield this.subscribeRaw(requestParameters, initOverrides);
+            const response = yield this.subscribeToPromptResponsesRaw(requestParameters, initOverrides);
             return yield response.value();
         });
     }

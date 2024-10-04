@@ -18,6 +18,7 @@ import (
 	nodeservice "github.com/singulatron/singulatron/localtron/internal/services/node"
 	policyservice "github.com/singulatron/singulatron/localtron/internal/services/policy"
 	promptservice "github.com/singulatron/singulatron/localtron/internal/services/prompt"
+	registryservice "github.com/singulatron/singulatron/localtron/internal/services/registry"
 	userservice "github.com/singulatron/singulatron/localtron/internal/services/user"
 	"github.com/singulatron/singulatron/sdk/go/clients/llm"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
@@ -194,6 +195,12 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 		os.Exit(1)
 	}
 
+	registryService, err := registryservice.NewRegistryService(options.Router, options.DatastoreFactory)
+	if err != nil {
+		logger.Error("Node service creation failed", slog.String("error", err.Error()))
+		os.Exit(1)
+	}
+
 	mws := []middlewares.Middleware{
 		middlewares.ThrottledLogger,
 		middlewares.Recover,
@@ -208,10 +215,10 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 		http.Error(w, "404 page not found", http.StatusNotFound)
 	})
 
-	router.HandleFunc("/firehose-svc/subscribe", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/firehose-svc/events/subscribe", appl(func(w http.ResponseWriter, r *http.Request) {
 		firehoseService.Subscribe(w, r)
 	})).Methods("OPTIONS", "GET")
-	router.HandleFunc("/firehose-svc/publish", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/firehose-svc/event", appl(func(w http.ResponseWriter, r *http.Request) {
 		firehoseService.Publish(w, r)
 	})).Methods("OPTIONS", "POST")
 
@@ -312,19 +319,19 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 	})).Methods("OPTIONS", "GET")
 
 	router.HandleFunc("/prompt-svc/prompt", appl(func(w http.ResponseWriter, r *http.Request) {
-		promptService.Add(w, r)
+		promptService.AddPrompt(w, r)
 	})).Methods("OPTIONS", "POST")
 
 	router.HandleFunc("/prompt-svc/prompt/{promptId}", appl(func(w http.ResponseWriter, r *http.Request) {
 		promptService.RemovePrompt(w, r)
 	})).Methods("OPTIONS", "DELETE")
 
-	router.HandleFunc("/prompt-svc/{threadId}/subscribe", appl(func(w http.ResponseWriter, r *http.Request) {
-		promptService.GetSubscribe(w, r)
+	router.HandleFunc("/prompt-svc/prompts/{threadId}/responses/subscribe", appl(func(w http.ResponseWriter, r *http.Request) {
+		promptService.SubscribeToPromptResponses(w, r)
 	})).Methods("OPTIONS", "GET")
 
 	router.HandleFunc("/prompt-svc/prompts", appl(func(w http.ResponseWriter, r *http.Request) {
-		promptService.GetPrompts(w, r)
+		promptService.ListPrompts(w, r)
 	})).Methods("OPTIONS", "POST")
 
 	router.HandleFunc("/user-svc/login", appl(func(w http.ResponseWriter, r *http.Request) {
@@ -418,6 +425,16 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 	router.HandleFunc("/policy-svc/instance/{instanceId}", appl(func(w http.ResponseWriter, r *http.Request) {
 		policyService.UpsertInstance(w, r)
 	})).Methods("OPTIONS", "PUT")
+
+	router.HandleFunc("/registry-svc/service-instances", appl(func(w http.ResponseWriter, r *http.Request) {
+		registryService.QueryServiceInstances(w, r)
+	})).Methods("OPTIONS", "DELETE")
+	router.HandleFunc("/registry-svc/service-instance", appl(func(w http.ResponseWriter, r *http.Request) {
+		registryService.RegisterServiceInstance(w, r)
+	})).Methods("OPTIONS", "DELETE")
+	router.HandleFunc("/registry-svc/service-instance/{id}", appl(func(w http.ResponseWriter, r *http.Request) {
+		registryService.RemoveServiceInstance(w, r)
+	})).Methods("OPTIONS", "DELETE")
 
 	return router, func() error {
 		err = configService.Start()

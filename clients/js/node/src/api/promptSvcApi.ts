@@ -171,7 +171,7 @@ export class PromptSvcApi {
      * @summary List Prompts
      * @param request List Prompts Request
      */
-    public async getPrompts (request?: PromptSvcListPromptsRequest, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: PromptSvcListPromptsResponse;  }> {
+    public async listPrompts (request?: PromptSvcListPromptsRequest, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: PromptSvcListPromptsResponse;  }> {
         const localVarPath = this.basePath + '/prompt-svc/prompts';
         let localVarQueryParameters: any = {};
         let localVarHeaderParams: any = (<any>Object).assign({}, this._defaultHeaders);
@@ -306,12 +306,12 @@ export class PromptSvcApi {
         });
     }
     /**
-     * Subscribe to prompt responses via Server-Sent Events (SSE)
-     * @summary Subscribe to Prompt
+     * Subscribe to prompt responses by thread via Server-Sent Events (SSE)
+     * @summary Subscribe to Prompt Responses by Thread
      * @param threadId Thread ID
      */
-    public async subscribe (threadId: string, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: string;  }> {
-        const localVarPath = this.basePath + '/prompt-svc/{threadId}/subscribe'
+    public async subscribeToPromptResponses (threadId: string, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: string;  }> {
+        const localVarPath = this.basePath + '/prompt-svc/prompts/{threadId}/responses/subscribe'
             .replace('{' + 'threadId' + '}', encodeURIComponent(String(threadId)));
         let localVarQueryParameters: any = {};
         let localVarHeaderParams: any = (<any>Object).assign({}, this._defaultHeaders);
@@ -326,7 +326,7 @@ export class PromptSvcApi {
 
         // verify required parameter 'threadId' is not null or undefined
         if (threadId === null || threadId === undefined) {
-            throw new Error('Required parameter threadId was null or undefined when calling subscribe.');
+            throw new Error('Required parameter threadId was null or undefined when calling subscribeToPromptResponses.');
         }
 
         (<any>Object).assign(localVarHeaderParams, options.headers);

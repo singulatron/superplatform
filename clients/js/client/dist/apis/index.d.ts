@@ -8,4 +8,5 @@ export * from './ModelSvcApi';
 export * from './NodeSvcApi';
 export * from './PolicySvcApi';
 export * from './PromptSvcApi';
+export * from './RegistrySvcApi';
 export * from './UserSvcApi';

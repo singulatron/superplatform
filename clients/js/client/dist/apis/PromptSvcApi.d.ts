@@ -14,13 +14,13 @@ import type { PromptSvcAddPromptRequest, PromptSvcAddPromptResponse, PromptSvcLi
 export interface AddPromptRequest {
     request: PromptSvcAddPromptRequest;
 }
-export interface GetPromptsRequest {
+export interface ListPromptsRequest {
     request?: PromptSvcListPromptsRequest;
 }
 export interface RemovePromptRequest {
     request: PromptSvcRemovePromptRequest;
 }
-export interface SubscribeRequest {
+export interface SubscribeToPromptResponsesRequest {
     threadId: string;
 }
 /**
@@ -41,12 +41,12 @@ export declare class PromptSvcApi extends runtime.BaseAPI {
      * List prompts that satisfy a query.
      * List Prompts
      */
-    getPromptsRaw(requestParameters: GetPromptsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PromptSvcListPromptsResponse>>;
+    listPromptsRaw(requestParameters: ListPromptsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PromptSvcListPromptsResponse>>;
     /**
      * List prompts that satisfy a query.
      * List Prompts
      */
-    getPrompts(requestParameters?: GetPromptsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PromptSvcListPromptsResponse>;
+    listPrompts(requestParameters?: ListPromptsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PromptSvcListPromptsResponse>;
     /**
      * Remove a prompt by ID.
      * Remove Prompt
@@ -58,13 +58,13 @@ export declare class PromptSvcApi extends runtime.BaseAPI {
      */
     removePrompt(requestParameters: RemovePromptRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
     /**
-     * Subscribe to prompt responses via Server-Sent Events (SSE)
-     * Subscribe to Prompt
+     * Subscribe to prompt responses by thread via Server-Sent Events (SSE)
+     * Subscribe to Prompt Responses by Thread
      */
-    subscribeRaw(requestParameters: SubscribeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>>;
+    subscribeToPromptResponsesRaw(requestParameters: SubscribeToPromptResponsesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>>;
     /**
-     * Subscribe to prompt responses via Server-Sent Events (SSE)
-     * Subscribe to Prompt
+     * Subscribe to prompt responses by thread via Server-Sent Events (SSE)
+     * Subscribe to Prompt Responses by Thread
      */
-    subscribe(requestParameters: SubscribeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string>;
+    subscribeToPromptResponses(requestParameters: SubscribeToPromptResponsesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string>;
 }

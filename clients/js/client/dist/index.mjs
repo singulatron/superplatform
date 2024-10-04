@@ -9,6 +9,7 @@ export { ModelSvcApi } from './ModelSvcApi.mjs';
 export { NodeSvcApi } from './NodeSvcApi.mjs';
 export { PolicySvcApi } from './PolicySvcApi.mjs';
 export { PromptSvcApi } from './PromptSvcApi.mjs';
+export { RegistrySvcApi } from './RegistrySvcApi.mjs';
 export { UserSvcApi } from './UserSvcApi.mjs';
 export { ChatSvcAddMessageRequestFromJSON, ChatSvcAddMessageRequestFromJSONTyped, ChatSvcAddMessageRequestToJSON, instanceOfChatSvcAddMessageRequest } from './ChatSvcAddMessageRequest.mjs';
 export { ChatSvcAddThreadRequestFromJSON, ChatSvcAddThreadRequestFromJSONTyped, ChatSvcAddThreadRequestToJSON, instanceOfChatSvcAddThreadRequest } from './ChatSvcAddThreadRequest.mjs';
@@ -94,6 +95,10 @@ export { PromptSvcListPromptsResponseFromJSON, PromptSvcListPromptsResponseFromJ
 export { PromptSvcPromptFromJSON, PromptSvcPromptFromJSONTyped, PromptSvcPromptToJSON, instanceOfPromptSvcPrompt } from './PromptSvcPrompt.mjs';
 export { PromptSvcPromptStatus, PromptSvcPromptStatusFromJSON, PromptSvcPromptStatusFromJSONTyped, PromptSvcPromptStatusToJSON, instanceOfPromptSvcPromptStatus } from './PromptSvcPromptStatus.mjs';
 export { PromptSvcRemovePromptRequestFromJSON, PromptSvcRemovePromptRequestFromJSONTyped, PromptSvcRemovePromptRequestToJSON, instanceOfPromptSvcRemovePromptRequest } from './PromptSvcRemovePromptRequest.mjs';
+export { RegistrySvcErrorResponseFromJSON, RegistrySvcErrorResponseFromJSONTyped, RegistrySvcErrorResponseToJSON, instanceOfRegistrySvcErrorResponse } from './RegistrySvcErrorResponse.mjs';
+export { RegistrySvcQueryServiceInstancesResponseFromJSON, RegistrySvcQueryServiceInstancesResponseFromJSONTyped, RegistrySvcQueryServiceInstancesResponseToJSON, instanceOfRegistrySvcQueryServiceInstancesResponse } from './RegistrySvcQueryServiceInstancesResponse.mjs';
+export { RegistrySvcRegisterServiceInstanceRequestFromJSON, RegistrySvcRegisterServiceInstanceRequestFromJSONTyped, RegistrySvcRegisterServiceInstanceRequestToJSON, instanceOfRegistrySvcRegisterServiceInstanceRequest } from './RegistrySvcRegisterServiceInstanceRequest.mjs';
+export { RegistrySvcServiceInstanceFromJSON, RegistrySvcServiceInstanceFromJSONTyped, RegistrySvcServiceInstanceToJSON, instanceOfRegistrySvcServiceInstance } from './RegistrySvcServiceInstance.mjs';
 export { UserSvcAddUserToOrganizationRequestFromJSON, UserSvcAddUserToOrganizationRequestFromJSONTyped, UserSvcAddUserToOrganizationRequestToJSON, instanceOfUserSvcAddUserToOrganizationRequest } from './UserSvcAddUserToOrganizationRequest.mjs';
 export { UserSvcAuthTokenFromJSON, UserSvcAuthTokenFromJSONTyped, UserSvcAuthTokenToJSON, instanceOfUserSvcAuthToken } from './UserSvcAuthToken.mjs';
 export { UserSvcChangePasswordAdminRequestFromJSON, UserSvcChangePasswordAdminRequestFromJSONTyped, UserSvcChangePasswordAdminRequestToJSON, instanceOfUserSvcChangePasswordAdminRequest } from './UserSvcChangePasswordAdminRequest.mjs';

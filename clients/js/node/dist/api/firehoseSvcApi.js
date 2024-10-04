@@ -80,9 +80,9 @@ export class FirehoseSvcApi {
      * @summary Publish an Event
      * @param event Event to publish
      */
-    eventPublish(event_1) {
+    publishEvent(event_1) {
         return __awaiter(this, arguments, void 0, function* (event, options = { headers: {} }) {
-            const localVarPath = this.basePath + '/firehose-svc/publish';
+            const localVarPath = this.basePath + '/firehose-svc/event';
             let localVarQueryParameters = {};
             let localVarHeaderParams = Object.assign({}, this._defaultHeaders);
             const produces = ['application/json'];
@@ -96,7 +96,7 @@ export class FirehoseSvcApi {
             let localVarFormParams = {};
             // verify required parameter 'event' is not null or undefined
             if (event === null || event === undefined) {
-                throw new Error('Required parameter event was null or undefined when calling eventPublish.');
+                throw new Error('Required parameter event was null or undefined when calling publishEvent.');
             }
             Object.assign(localVarHeaderParams, options.headers);
             let localVarUseFormData = false;
@@ -149,9 +149,9 @@ export class FirehoseSvcApi {
      * Establish a subscription to the firehose events and accept a real time stream of them.
      * @summary Subscribe to the Event Stream
      */
-    eventSubscribe() {
+    subscribeToEvents() {
         return __awaiter(this, arguments, void 0, function* (options = { headers: {} }) {
-            const localVarPath = this.basePath + '/firehose-svc/subscribe';
+            const localVarPath = this.basePath + '/firehose-svc/events/subscribe';
             let localVarQueryParameters = {};
             let localVarHeaderParams = Object.assign({}, this._defaultHeaders);
             const produces = ['text/event-stream'];

@@ -8,12 +8,12 @@
 /* https://ionicframework.com/docs/theming/color-generator */
 
 :root {
-	--ion-color-primary: #00ccff;
-	--ion-color-primary-rgb: 0, 204, 255;
-	--ion-color-primary-contrast: #000000;
-	--ion-color-primary-contrast-rgb: 0, 0, 0;
-	--ion-color-primary-shade: #00b4e0;
-	--ion-color-primary-tint: #1ad1ff;
+	--ion-color-primary: #444444; /* Dark Grey */
+	--ion-color-primary-rgb: 68, 68, 68; /* RGB for Dark Grey */
+	--ion-color-primary-contrast: #ffffff; /* White for contrast */
+	--ion-color-primary-contrast-rgb: 255, 255, 255; /* RGB for White */
+	--ion-color-primary-shade: #3d3d3d; /* Slightly darker grey */
+	--ion-color-primary-tint: #4d4d4d; /* Slightly lighter grey */
 
 	--ion-color-secondary: #2660a4;
 	--ion-color-secondary-rgb: 38, 96, 164;

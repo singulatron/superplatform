@@ -1369,7 +1369,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/firehose-svc/publish": {
+        "/firehose-svc/event": {
             "post": {
                 "security": [
                     {
@@ -1387,7 +1387,7 @@ const docTemplate = `{
                     "Firehose Svc"
                 ],
                 "summary": "Publish an Event",
-                "operationId": "eventPublish",
+                "operationId": "publishEvent",
                 "parameters": [
                     {
                         "description": "Event to publish",
@@ -1418,7 +1418,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/firehose-svc/subscribe": {
+        "/firehose-svc/events/subscribe": {
             "get": {
                 "security": [
                     {
@@ -1436,7 +1436,7 @@ const docTemplate = `{
                     "Firehose Svc"
                 ],
                 "summary": "Subscribe to the Event Stream",
-                "operationId": "eventSubscribe",
+                "operationId": "subscribeToEvents",
                 "responses": {
                     "200": {
                         "description": "Event data",
@@ -2056,7 +2056,7 @@ const docTemplate = `{
                     "Prompt Svc"
                 ],
                 "summary": "List Prompts",
-                "operationId": "getPrompts",
+                "operationId": "listPrompts",
                 "parameters": [
                     {
                         "description": "List Prompts Request",
@@ -2088,6 +2088,50 @@ const docTemplate = `{
                     },
                     "500": {
                         "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/prompt_svc.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/prompt-svc/prompts/{threadId}/responses/subscribe": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Subscribe to prompt responses by thread via Server-Sent Events (SSE)",
+                "tags": [
+                    "Prompt Svc"
+                ],
+                "summary": "Subscribe to Prompt Responses by Thread",
+                "operationId": "subscribeToPromptResponses",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Thread ID",
+                        "name": "threadId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Streaming response",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Missing threadId parameter",
+                        "schema": {
+                            "$ref": "#/definitions/prompt_svc.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "schema": {
                             "$ref": "#/definitions/prompt_svc.ErrorResponse"
                         }
@@ -2153,45 +2197,194 @@ const docTemplate = `{
                 }
             }
         },
-        "/prompt-svc/{threadId}/subscribe": {
+        "/registry-svc/service-instance": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Registers a new service instance, associating an service instance address with a slug acquired from the bearer token.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Registry Svc"
+                ],
+                "summary": "Register Service Instance. Idempotent.",
+                "operationId": "registerServiceInstance",
+                "parameters": [
+                    {
+                        "description": "Register Service Instance Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.RegisterServiceInstanceRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.RegisterServiceInstanceResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/registry-svc/service-instance/{id}": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Removes a registered service instance based on the service ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Registry Svc"
+                ],
+                "summary": "Remove Service Instance",
+                "operationId": "removeServiceInstance",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Service Instance ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Invalid ID",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Service not found",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/registry-svc/services": {
             "get": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "Subscribe to prompt responses via Server-Sent Events (SSE)",
-                "tags": [
-                    "Prompt Svc"
+                "description": "Retrieves a list of all registered service instances or filters them by specific criteria (e.g., host, IP).",
+                "consumes": [
+                    "application/json"
                 ],
-                "summary": "Subscribe to Prompt",
-                "operationId": "subscribe",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Registry Svc"
+                ],
+                "summary": "Query Service Instances",
+                "operationId": "queryServiceInstances",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Thread ID",
-                        "name": "threadId",
-                        "in": "path",
-                        "required": true
+                        "description": "Scheme to filter by",
+                        "name": "scheme",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "IP to filter by",
+                        "name": "ip",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Host to filter by",
+                        "name": "host",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "IP to filter by",
+                        "name": "ip",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Id to filter by",
+                        "name": "id",
+                        "in": "query"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Streaming response",
+                        "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/registry_svc.QueryServiceInstancesResponse"
+                            }
                         }
                     },
                     "400": {
-                        "description": "Missing threadId parameter",
+                        "description": "Invalid filters",
                         "schema": {
-                            "$ref": "#/definitions/prompt_svc.ErrorResponse"
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/prompt_svc.ErrorResponse"
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
                         }
                     }
                 }
@@ -4815,6 +5008,120 @@ const docTemplate = `{
         },
         "prompt_svc.RemovePromptResponse": {
             "type": "object"
+        },
+        "registry_svc.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "registry_svc.QueryServiceInstancesResponse": {
+            "type": "object",
+            "properties": {
+                "instances": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/registry_svc.ServiceInstance"
+                    }
+                }
+            }
+        },
+        "registry_svc.RegisterServiceInstanceRequest": {
+            "type": "object",
+            "required": [
+                "slug"
+            ],
+            "properties": {
+                "host": {
+                    "description": "Host of the service instance address. Required if URL is not provided",
+                    "type": "string",
+                    "example": "myserver.com"
+                },
+                "ip": {
+                    "description": "IP of the service instance address. Optional: to register by IP instead of host",
+                    "type": "string",
+                    "example": "8.8.8.8"
+                },
+                "path": {
+                    "description": "Path of the service instance address. Optional (e.g., \"/api\")",
+                    "type": "string",
+                    "example": "/your-svc"
+                },
+                "port": {
+                    "description": "Port of the service instance address. Required if URL is not provided",
+                    "type": "integer",
+                    "example": 8080
+                },
+                "scheme": {
+                    "description": "Scheme of the service instance address. Required if URL is not provided.",
+                    "type": "string",
+                    "example": "https"
+                },
+                "slug": {
+                    "description": "Slug of the service whose instance is being registered.",
+                    "type": "string",
+                    "example": "user-svc"
+                },
+                "url": {
+                    "description": "Full address URL of the service instance.",
+                    "type": "string",
+                    "example": "https://myserver.com:5981"
+                }
+            }
+        },
+        "registry_svc.RegisterServiceInstanceResponse": {
+            "type": "object"
+        },
+        "registry_svc.ServiceInstance": {
+            "type": "object",
+            "required": [
+                "id",
+                "slug"
+            ],
+            "properties": {
+                "host": {
+                    "description": "Host of the service instance address. Required if URL is not provided",
+                    "type": "string",
+                    "example": "myserver.com"
+                },
+                "id": {
+                    "description": "Required: ID of the service instance",
+                    "type": "string",
+                    "example": "https://api.com:999/user-svc"
+                },
+                "ip": {
+                    "description": "IP of the service instance address. Optional: to register by IP instead of host",
+                    "type": "string",
+                    "example": "8.8.8.8"
+                },
+                "path": {
+                    "description": "Path of the service instance address. Optional (e.g., \"/api\")",
+                    "type": "string",
+                    "example": "/your-svc"
+                },
+                "port": {
+                    "description": "Port of the service instance address. Required if URL is not provided",
+                    "type": "integer",
+                    "example": 8080
+                },
+                "scheme": {
+                    "description": "Scheme of the service instance address. Required if URL is not provided.",
+                    "type": "string",
+                    "example": "https"
+                },
+                "slug": {
+                    "description": "Slug of the service whose instance is being registered.",
+                    "type": "string",
+                    "example": "user-svc"
+                },
+                "url": {
+                    "description": "Full address URL of the service instance.",
+                    "type": "string",
+                    "example": "https://myserver.com:5981"
+                }
+            }
         },
         "user_svc.AddUserToOrganizationRequest": {
             "type": "object",

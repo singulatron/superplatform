@@ -96,7 +96,7 @@ func (p *PromptService) addPrompt(ctx context.Context, promptReq *prompttypes.Ad
 		PromptId: prompt.Id,
 	}
 
-	err = p.router.Post(context.Background(), "firehose-svc", "/publish", firehosetypes.EventPublishRequest{
+	err = p.router.Post(context.Background(), "firehose-svc", "/event", firehosetypes.EventPublishRequest{
 		Event: &firehosetypes.Event{
 			Name: ev.Name(),
 			Data: ev,

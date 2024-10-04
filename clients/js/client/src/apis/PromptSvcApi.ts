@@ -41,7 +41,7 @@ export interface AddPromptRequest {
     request: PromptSvcAddPromptRequest;
 }
 
-export interface GetPromptsRequest {
+export interface ListPromptsRequest {
     request?: PromptSvcListPromptsRequest;
 }
 
@@ -49,7 +49,7 @@ export interface RemovePromptRequest {
     request: PromptSvcRemovePromptRequest;
 }
 
-export interface SubscribeRequest {
+export interface SubscribeToPromptResponsesRequest {
     threadId: string;
 }
 
@@ -104,7 +104,7 @@ export class PromptSvcApi extends runtime.BaseAPI {
      * List prompts that satisfy a query.
      * List Prompts
      */
-    async getPromptsRaw(requestParameters: GetPromptsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PromptSvcListPromptsResponse>> {
+    async listPromptsRaw(requestParameters: ListPromptsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PromptSvcListPromptsResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -130,8 +130,8 @@ export class PromptSvcApi extends runtime.BaseAPI {
      * List prompts that satisfy a query.
      * List Prompts
      */
-    async getPrompts(requestParameters: GetPromptsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PromptSvcListPromptsResponse> {
-        const response = await this.getPromptsRaw(requestParameters, initOverrides);
+    async listPrompts(requestParameters: ListPromptsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PromptSvcListPromptsResponse> {
+        const response = await this.listPromptsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -178,14 +178,14 @@ export class PromptSvcApi extends runtime.BaseAPI {
     }
 
     /**
-     * Subscribe to prompt responses via Server-Sent Events (SSE)
-     * Subscribe to Prompt
+     * Subscribe to prompt responses by thread via Server-Sent Events (SSE)
+     * Subscribe to Prompt Responses by Thread
      */
-    async subscribeRaw(requestParameters: SubscribeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
+    async subscribeToPromptResponsesRaw(requestParameters: SubscribeToPromptResponsesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
         if (requestParameters['threadId'] == null) {
             throw new runtime.RequiredError(
                 'threadId',
-                'Required parameter "threadId" was null or undefined when calling subscribe().'
+                'Required parameter "threadId" was null or undefined when calling subscribeToPromptResponses().'
             );
         }
 
@@ -198,7 +198,7 @@ export class PromptSvcApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/prompt-svc/{threadId}/subscribe`.replace(`{${"threadId"}}`, encodeURIComponent(String(requestParameters['threadId']))),
+            path: `/prompt-svc/prompts/{threadId}/responses/subscribe`.replace(`{${"threadId"}}`, encodeURIComponent(String(requestParameters['threadId']))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -212,11 +212,11 @@ export class PromptSvcApi extends runtime.BaseAPI {
     }
 
     /**
-     * Subscribe to prompt responses via Server-Sent Events (SSE)
-     * Subscribe to Prompt
+     * Subscribe to prompt responses by thread via Server-Sent Events (SSE)
+     * Subscribe to Prompt Responses by Thread
      */
-    async subscribe(requestParameters: SubscribeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
-        const response = await this.subscribeRaw(requestParameters, initOverrides);
+    async subscribeToPromptResponses(requestParameters: SubscribeToPromptResponsesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
+        const response = await this.subscribeToPromptResponsesRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

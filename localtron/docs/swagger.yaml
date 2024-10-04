@@ -1029,6 +1029,99 @@ definitions:
     type: object
   prompt_svc.RemovePromptResponse:
     type: object
+  registry_svc.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  registry_svc.QueryServiceInstancesResponse:
+    properties:
+      instances:
+        items:
+          $ref: '#/definitions/registry_svc.ServiceInstance'
+        type: array
+    type: object
+  registry_svc.RegisterServiceInstanceRequest:
+    properties:
+      host:
+        description: Host of the service instance address. Required if URL is not
+          provided
+        example: myserver.com
+        type: string
+      ip:
+        description: 'IP of the service instance address. Optional: to register by
+          IP instead of host'
+        example: 8.8.8.8
+        type: string
+      path:
+        description: Path of the service instance address. Optional (e.g., "/api")
+        example: /your-svc
+        type: string
+      port:
+        description: Port of the service instance address. Required if URL is not
+          provided
+        example: 8080
+        type: integer
+      scheme:
+        description: Scheme of the service instance address. Required if URL is not
+          provided.
+        example: https
+        type: string
+      slug:
+        description: Slug of the service whose instance is being registered.
+        example: user-svc
+        type: string
+      url:
+        description: Full address URL of the service instance.
+        example: https://myserver.com:5981
+        type: string
+    required:
+    - slug
+    type: object
+  registry_svc.RegisterServiceInstanceResponse:
+    type: object
+  registry_svc.ServiceInstance:
+    properties:
+      host:
+        description: Host of the service instance address. Required if URL is not
+          provided
+        example: myserver.com
+        type: string
+      id:
+        description: 'Required: ID of the service instance'
+        example: https://api.com:999/user-svc
+        type: string
+      ip:
+        description: 'IP of the service instance address. Optional: to register by
+          IP instead of host'
+        example: 8.8.8.8
+        type: string
+      path:
+        description: Path of the service instance address. Optional (e.g., "/api")
+        example: /your-svc
+        type: string
+      port:
+        description: Port of the service instance address. Required if URL is not
+          provided
+        example: 8080
+        type: integer
+      scheme:
+        description: Scheme of the service instance address. Required if URL is not
+          provided.
+        example: https
+        type: string
+      slug:
+        description: Slug of the service whose instance is being registered.
+        example: user-svc
+        type: string
+      url:
+        description: Full address URL of the service instance.
+        example: https://myserver.com:5981
+        type: string
+    required:
+    - id
+    - slug
+    type: object
   user_svc.AddUserToOrganizationRequest:
     properties:
       userId:
@@ -2268,13 +2361,13 @@ paths:
       summary: Update Objects
       tags:
       - Dynamic Svc
-  /firehose-svc/publish:
+  /firehose-svc/event:
     post:
       consumes:
       - application/json
       description: Publishes an event to the firehose service after authorization
         check
-      operationId: eventPublish
+      operationId: publishEvent
       parameters:
       - description: Event to publish
         in: body
@@ -2300,13 +2393,13 @@ paths:
       summary: Publish an Event
       tags:
       - Firehose Svc
-  /firehose-svc/subscribe:
+  /firehose-svc/events/subscribe:
     get:
       consumes:
       - application/json
       description: Establish a subscription to the firehose events and accept a real
         time stream of them.
-      operationId: eventSubscribe
+      operationId: subscribeToEvents
       produces:
       - text/event-stream
       responses:
@@ -2676,34 +2769,6 @@ paths:
       summary: Upsert an Instance
       tags:
       - Policy Svc
-  /prompt-svc/{threadId}/subscribe:
-    get:
-      description: Subscribe to prompt responses via Server-Sent Events (SSE)
-      operationId: subscribe
-      parameters:
-      - description: Thread ID
-        in: path
-        name: threadId
-        required: true
-        type: string
-      responses:
-        "200":
-          description: Streaming response
-          schema:
-            type: string
-        "400":
-          description: Missing threadId parameter
-          schema:
-            $ref: '#/definitions/prompt_svc.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/prompt_svc.ErrorResponse'
-      security:
-      - BearerAuth: []
-      summary: Subscribe to Prompt
-      tags:
-      - Prompt Svc
   /prompt-svc/prompt:
     post:
       consumes:
@@ -2747,7 +2812,7 @@ paths:
       consumes:
       - application/json
       description: List prompts that satisfy a query.
-      operationId: getPrompts
+      operationId: listPrompts
       parameters:
       - description: List Prompts Request
         in: body
@@ -2776,6 +2841,35 @@ paths:
       security:
       - BearerAuth: []
       summary: List Prompts
+      tags:
+      - Prompt Svc
+  /prompt-svc/prompts/{threadId}/responses/subscribe:
+    get:
+      description: Subscribe to prompt responses by thread via Server-Sent Events
+        (SSE)
+      operationId: subscribeToPromptResponses
+      parameters:
+      - description: Thread ID
+        in: path
+        name: threadId
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Streaming response
+          schema:
+            type: string
+        "400":
+          description: Missing threadId parameter
+          schema:
+            $ref: '#/definitions/prompt_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/prompt_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Subscribe to Prompt Responses by Thread
       tags:
       - Prompt Svc
   /prompt-svc/remove:
@@ -2815,6 +2909,132 @@ paths:
       summary: Remove Prompt
       tags:
       - Prompt Svc
+  /registry-svc/service-instance:
+    post:
+      consumes:
+      - application/json
+      description: Registers a new service instance, associating an service instance
+        address with a slug acquired from the bearer token.
+      operationId: registerServiceInstance
+      parameters:
+      - description: Register Service Instance Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/registry_svc.RegisterServiceInstanceRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/registry_svc.RegisterServiceInstanceResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Register Service Instance. Idempotent.
+      tags:
+      - Registry Svc
+  /registry-svc/service-instance/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Removes a registered service instance based on the service ID.
+      operationId: removeServiceInstance
+      parameters:
+      - description: Service Instance ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+        "404":
+          description: Service not found
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Remove Service Instance
+      tags:
+      - Registry Svc
+  /registry-svc/services:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of all registered service instances or filters
+        them by specific criteria (e.g., host, IP).
+      operationId: queryServiceInstances
+      parameters:
+      - description: Scheme to filter by
+        in: query
+        name: scheme
+        type: string
+      - description: IP to filter by
+        in: query
+        name: ip
+        type: string
+      - description: Host to filter by
+        in: query
+        name: host
+        type: string
+      - description: IP to filter by
+        in: query
+        name: ip
+        type: string
+      - description: Id to filter by
+        in: query
+        name: id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/registry_svc.QueryServiceInstancesResponse'
+            type: array
+        "400":
+          description: Invalid filters
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Query Service Instances
+      tags:
+      - Registry Svc
   /user-svc/change-password:
     post:
       consumes:

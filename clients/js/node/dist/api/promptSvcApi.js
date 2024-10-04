@@ -151,7 +151,7 @@ export class PromptSvcApi {
      * @summary List Prompts
      * @param request List Prompts Request
      */
-    getPrompts(request_1) {
+    listPrompts(request_1) {
         return __awaiter(this, arguments, void 0, function* (request, options = { headers: {} }) {
             const localVarPath = this.basePath + '/prompt-svc/prompts';
             let localVarQueryParameters = {};
@@ -285,13 +285,13 @@ export class PromptSvcApi {
         });
     }
     /**
-     * Subscribe to prompt responses via Server-Sent Events (SSE)
-     * @summary Subscribe to Prompt
+     * Subscribe to prompt responses by thread via Server-Sent Events (SSE)
+     * @summary Subscribe to Prompt Responses by Thread
      * @param threadId Thread ID
      */
-    subscribe(threadId_1) {
+    subscribeToPromptResponses(threadId_1) {
         return __awaiter(this, arguments, void 0, function* (threadId, options = { headers: {} }) {
-            const localVarPath = this.basePath + '/prompt-svc/{threadId}/subscribe'
+            const localVarPath = this.basePath + '/prompt-svc/prompts/{threadId}/responses/subscribe'
                 .replace('{' + 'threadId' + '}', encodeURIComponent(String(threadId)));
             let localVarQueryParameters = {};
             let localVarHeaderParams = Object.assign({}, this._defaultHeaders);
@@ -306,7 +306,7 @@ export class PromptSvcApi {
             let localVarFormParams = {};
             // verify required parameter 'threadId' is not null or undefined
             if (threadId === null || threadId === undefined) {
-                throw new Error('Required parameter threadId was null or undefined when calling subscribe.');
+                throw new Error('Required parameter threadId was null or undefined when calling subscribeToPromptResponses.');
             }
             Object.assign(localVarHeaderParams, options.headers);
             let localVarUseFormData = false;

@@ -18,6 +18,8 @@ export * from './policySvcApi';
 import { PolicySvcApi } from './policySvcApi';
 export * from './promptSvcApi';
 import { PromptSvcApi } from './promptSvcApi';
+export * from './registrySvcApi';
+import { RegistrySvcApi } from './registrySvcApi';
 export * from './userSvcApi';
 import { UserSvcApi } from './userSvcApi';
 import * as http from 'http';
@@ -31,4 +33,4 @@ export class HttpError extends Error {
 
 export { RequestFile } from '../model/models';
 
-export const APIS = [ChatSvcApi, ConfigSvcApi, DockerSvcApi, DownloadSvcApi, DynamicSvcApi, FirehoseSvcApi, ModelSvcApi, NodeSvcApi, PolicySvcApi, PromptSvcApi, UserSvcApi];
+export const APIS = [ChatSvcApi, ConfigSvcApi, DockerSvcApi, DownloadSvcApi, DynamicSvcApi, FirehoseSvcApi, ModelSvcApi, NodeSvcApi, PolicySvcApi, PromptSvcApi, RegistrySvcApi, UserSvcApi];

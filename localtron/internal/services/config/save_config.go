@@ -34,7 +34,7 @@ func (cs *ConfigService) saveConfig(config types.Config) error {
 	}
 
 	ev := types.EventConfigUpdate{}
-	err = cs.router.Post(context.Background(), "firehose-svc", "/publish", firehosetypes.EventPublishRequest{
+	err = cs.router.Post(context.Background(), "firehose-svc", "/event", firehosetypes.EventPublishRequest{
 		Event: &firehosetypes.Event{
 			Name: ev.Name(),
 			Data: ev,

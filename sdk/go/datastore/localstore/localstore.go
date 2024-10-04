@@ -33,6 +33,7 @@ type LocalStore struct {
 	inTransaction bool
 	originalStore *LocalStore // Reference to the original store in case of transaction
 	stateManager  *statemanager.StateManager
+	filePath      string
 }
 
 func NewLocalStore(instance any, filePath string) (*LocalStore, error) {
@@ -47,6 +48,7 @@ func NewLocalStore(instance any, filePath string) (*LocalStore, error) {
 	ls := &LocalStore{
 		instance: instance,
 		data:     make(map[string]any),
+		filePath: filePath,
 	}
 
 	sm := statemanager.New(instance, func() []any {
@@ -274,6 +276,10 @@ func (q *QueryBuilder) Limit(limit int64) datastore.QueryBuilder {
 }
 
 func (q *QueryBuilder) After(value ...any) datastore.QueryBuilder {
+	if len(value) == 0 {
+		return q
+	}
+
 	q.after = value
 	for i := range q.after {
 		str, ok := q.after[i].(string)
@@ -545,6 +551,7 @@ func (q *QueryBuilder) match(obj any) (bool, error) {
 				return false, nil
 			}
 		case datastore.OpIsInList:
+
 			matchFunc := func(subject, test any) bool {
 				subject = toBaseType(subject)
 				test = toBaseType(test)
@@ -743,6 +750,7 @@ func (q *QueryBuilder) match(obj any) (bool, error) {
 			return false, fmt.Errorf("unkown filter %v", cond)
 		}
 	}
+
 	return true, nil
 }
 

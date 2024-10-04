@@ -1,5 +1,5 @@
 ---
-sidebar_position: 2
+sidebar_position: 40
 tags:
   - user-svc
   - permissions
@@ -20,6 +20,12 @@ Aimed at prototyping or where building a service to store the data feels like an
 > Currently the Dynamic Svc is being used with internal apps but the goal is to have a permission model that works for public apps (where adversarial users might be present). If you find a logical inconsitency that hinders building public apps, please report it.
 
 ## How It Works
+
+### Data Model
+
+Multiple tenants (users, services) write to the same table/s. Rows are then owned by whoever created them and access is dictated by the permissions, see Permission Model below.
+
+### Permission Model
 
 The Dynamic Svc has a permission model with the following goals:
 

@@ -104,8 +104,8 @@ Class | Method | HTTP request | Description
 *DynamicSvcAPI* | [**Query**](docs/DynamicSvcAPI.md#query) | **Post** /dynamic-svc/objects | Query Objects
 *DynamicSvcAPI* | [**UpdateObjects**](docs/DynamicSvcAPI.md#updateobjects) | **Post** /dynamic-svc/objects/update | Update Objects
 *DynamicSvcAPI* | [**UpsertObject**](docs/DynamicSvcAPI.md#upsertobject) | **Put** /dynamic-svc/object/{objectId} | Upsert a Generic Object
-*FirehoseSvcAPI* | [**EventPublish**](docs/FirehoseSvcAPI.md#eventpublish) | **Post** /firehose-svc/publish | Publish an Event
-*FirehoseSvcAPI* | [**EventSubscribe**](docs/FirehoseSvcAPI.md#eventsubscribe) | **Get** /firehose-svc/subscribe | Subscribe to the Event Stream
+*FirehoseSvcAPI* | [**PublishEvent**](docs/FirehoseSvcAPI.md#publishevent) | **Post** /firehose-svc/event | Publish an Event
+*FirehoseSvcAPI* | [**SubscribeToEvents**](docs/FirehoseSvcAPI.md#subscribetoevents) | **Get** /firehose-svc/events/subscribe | Subscribe to the Event Stream
 *ModelSvcAPI* | [**GetDefaultModelStatus**](docs/ModelSvcAPI.md#getdefaultmodelstatus) | **Get** /model-svc/default-model/status | Get Default Model Status
 *ModelSvcAPI* | [**GetModel**](docs/ModelSvcAPI.md#getmodel) | **Get** /model-svc/model/{modelId} | Get a Model
 *ModelSvcAPI* | [**GetModelStatus**](docs/ModelSvcAPI.md#getmodelstatus) | **Get** /model-svc/model/{modelId}/status | Get Model Status
@@ -117,9 +117,12 @@ Class | Method | HTTP request | Description
 *PolicySvcAPI* | [**Check**](docs/PolicySvcAPI.md#check) | **Post** /policy-svc/check | Check
 *PolicySvcAPI* | [**UpsertInstance**](docs/PolicySvcAPI.md#upsertinstance) | **Put** /policy-svc/instance/{instanceId} | Upsert an Instance
 *PromptSvcAPI* | [**AddPrompt**](docs/PromptSvcAPI.md#addprompt) | **Post** /prompt-svc/prompt | Add Prompt
-*PromptSvcAPI* | [**GetPrompts**](docs/PromptSvcAPI.md#getprompts) | **Post** /prompt-svc/prompts | List Prompts
+*PromptSvcAPI* | [**ListPrompts**](docs/PromptSvcAPI.md#listprompts) | **Post** /prompt-svc/prompts | List Prompts
 *PromptSvcAPI* | [**RemovePrompt**](docs/PromptSvcAPI.md#removeprompt) | **Post** /prompt-svc/remove | Remove Prompt
-*PromptSvcAPI* | [**Subscribe**](docs/PromptSvcAPI.md#subscribe) | **Get** /prompt-svc/{threadId}/subscribe | Subscribe to Prompt
+*PromptSvcAPI* | [**SubscribeToPromptResponses**](docs/PromptSvcAPI.md#subscribetopromptresponses) | **Get** /prompt-svc/prompts/{threadId}/responses/subscribe | Subscribe to Prompt Responses by Thread
+*RegistrySvcAPI* | [**QueryServiceInstances**](docs/RegistrySvcAPI.md#queryserviceinstances) | **Get** /registry-svc/services | Query Service Instances
+*RegistrySvcAPI* | [**RegisterServiceInstance**](docs/RegistrySvcAPI.md#registerserviceinstance) | **Post** /registry-svc/service-instance | Register Service Instance. Idempotent.
+*RegistrySvcAPI* | [**RemoveServiceInstance**](docs/RegistrySvcAPI.md#removeserviceinstance) | **Delete** /registry-svc/service-instance/{id} | Remove Service Instance
 *UserSvcAPI* | [**AddPermissionToRole**](docs/UserSvcAPI.md#addpermissiontorole) | **Put** /user-svc/role/{roleId}/permission/{permissionId} | Add Permission to Role
 *UserSvcAPI* | [**AddUserToOrganization**](docs/UserSvcAPI.md#addusertoorganization) | **Post** /user-svc/organization/{organizationId}/user | Add a User to an Organization
 *UserSvcAPI* | [**ChangePassword**](docs/UserSvcAPI.md#changepassword) | **Post** /user-svc/change-password | Change User Password
@@ -229,6 +232,10 @@ Class | Method | HTTP request | Description
  - [PromptSvcPrompt](docs/PromptSvcPrompt.md)
  - [PromptSvcPromptStatus](docs/PromptSvcPromptStatus.md)
  - [PromptSvcRemovePromptRequest](docs/PromptSvcRemovePromptRequest.md)
+ - [RegistrySvcErrorResponse](docs/RegistrySvcErrorResponse.md)
+ - [RegistrySvcQueryServiceInstancesResponse](docs/RegistrySvcQueryServiceInstancesResponse.md)
+ - [RegistrySvcRegisterServiceInstanceRequest](docs/RegistrySvcRegisterServiceInstanceRequest.md)
+ - [RegistrySvcServiceInstance](docs/RegistrySvcServiceInstance.md)
  - [UserSvcAddUserToOrganizationRequest](docs/UserSvcAddUserToOrganizationRequest.md)
  - [UserSvcAuthToken](docs/UserSvcAuthToken.md)
  - [UserSvcChangePasswordAdminRequest](docs/UserSvcChangePasswordAdminRequest.md)

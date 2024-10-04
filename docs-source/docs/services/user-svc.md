@@ -1,5 +1,5 @@
 ---
-sidebar_position: 1
+sidebar_position: 90
 tags:
   - user-svc
   - permissions
@@ -66,6 +66,14 @@ You can do this in a few ways:
 - Use the [API](/docs/singulatron/register) directly
 - Use a language specific [client](https://github.com/singulatron/singulatron/tree/main/clients) that was generated from the API
 - Use a language specific [SDK](https://github.com/singulatron/singulatron/tree/main/localtron/sdk)
+
+### Services With Multiple Nodes
+
+You might now wonder what happens when a service has multiple instances/nodes. Won't their user accounts "clash" in the `User Svc`? The answer to this is that from the `User Svc` point of view, each node/instance of a service is the same account.
+
+This is possible because the platform is designed with services having a "Shared Database Access".
+
+Let's say you have a Cassandra network that spans multiple Availability Zones/Regions. Your nodes will also span multiple AZs/Regions and each instance of them will log in as `X Svc`.
 
 ### A Practical Example
 
