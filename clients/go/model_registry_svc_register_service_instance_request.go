@@ -13,6 +13,8 @@ package openapi
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the RegistrySvcRegisterServiceInstanceRequest type satisfies the MappedNullable interface at compile time
@@ -28,20 +30,23 @@ type RegistrySvcRegisterServiceInstanceRequest struct {
 	Path *string `json:"path,omitempty"`
 	// Port of the service instance address. Required if URL is not provided
 	Port *int32 `json:"port,omitempty"`
-	// Scheme of the service instance address. Required if URL is not provided
+	// Scheme of the service instance address. Required if URL is not provided.
 	Scheme *string `json:"scheme,omitempty"`
-	// Required: slug of the service (e.g., \"user-svc\")
-	Slug *string `json:"slug,omitempty"`
-	// Optional: full URL (e.g., \"https://myserver.com:5981\")
+	// Slug of the service whose instance is being registered.
+	Slug string `json:"slug"`
+	// Full address URL of the service instance.
 	Url *string `json:"url,omitempty"`
 }
+
+type _RegistrySvcRegisterServiceInstanceRequest RegistrySvcRegisterServiceInstanceRequest
 
 // NewRegistrySvcRegisterServiceInstanceRequest instantiates a new RegistrySvcRegisterServiceInstanceRequest object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewRegistrySvcRegisterServiceInstanceRequest() *RegistrySvcRegisterServiceInstanceRequest {
+func NewRegistrySvcRegisterServiceInstanceRequest(slug string) *RegistrySvcRegisterServiceInstanceRequest {
 	this := RegistrySvcRegisterServiceInstanceRequest{}
+	this.Slug = slug
 	return &this
 }
 
@@ -213,36 +218,28 @@ func (o *RegistrySvcRegisterServiceInstanceRequest) SetScheme(v string) {
 	o.Scheme = &v
 }
 
-// GetSlug returns the Slug field value if set, zero value otherwise.
+// GetSlug returns the Slug field value
 func (o *RegistrySvcRegisterServiceInstanceRequest) GetSlug() string {
-	if o == nil || IsNil(o.Slug) {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.Slug
+
+	return o.Slug
 }
 
-// GetSlugOk returns a tuple with the Slug field value if set, nil otherwise
+// GetSlugOk returns a tuple with the Slug field value
 // and a boolean to check if the value has been set.
 func (o *RegistrySvcRegisterServiceInstanceRequest) GetSlugOk() (*string, bool) {
-	if o == nil || IsNil(o.Slug) {
+	if o == nil {
 		return nil, false
 	}
-	return o.Slug, true
+	return &o.Slug, true
 }
 
-// HasSlug returns a boolean if a field has been set.
-func (o *RegistrySvcRegisterServiceInstanceRequest) HasSlug() bool {
-	if o != nil && !IsNil(o.Slug) {
-		return true
-	}
-
-	return false
-}
-
-// SetSlug gets a reference to the given string and assigns it to the Slug field.
+// SetSlug sets field value
 func (o *RegistrySvcRegisterServiceInstanceRequest) SetSlug(v string) {
-	o.Slug = &v
+	o.Slug = v
 }
 
 // GetUrl returns the Url field value if set, zero value otherwise.
@@ -302,13 +299,48 @@ func (o RegistrySvcRegisterServiceInstanceRequest) ToMap() (map[string]interface
 	if !IsNil(o.Scheme) {
 		toSerialize["scheme"] = o.Scheme
 	}
-	if !IsNil(o.Slug) {
-		toSerialize["slug"] = o.Slug
-	}
+	toSerialize["slug"] = o.Slug
 	if !IsNil(o.Url) {
 		toSerialize["url"] = o.Url
 	}
 	return toSerialize, nil
+}
+
+func (o *RegistrySvcRegisterServiceInstanceRequest) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"slug",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varRegistrySvcRegisterServiceInstanceRequest := _RegistrySvcRegisterServiceInstanceRequest{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varRegistrySvcRegisterServiceInstanceRequest)
+
+	if err != nil {
+		return err
+	}
+
+	*o = RegistrySvcRegisterServiceInstanceRequest(varRegistrySvcRegisterServiceInstanceRequest)
+
+	return err
 }
 
 type NullableRegistrySvcRegisterServiceInstanceRequest struct {

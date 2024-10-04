@@ -1046,28 +1046,37 @@ definitions:
       host:
         description: Host of the service instance address. Required if URL is not
           provided
+        example: myserver.com
         type: string
       ip:
         description: 'IP of the service instance address. Optional: to register by
           IP instead of host'
+        example: 8.8.8.8
         type: string
       path:
         description: Path of the service instance address. Optional (e.g., "/api")
+        example: /your-svc
         type: string
       port:
         description: Port of the service instance address. Required if URL is not
           provided
+        example: 8080
         type: integer
       scheme:
         description: Scheme of the service instance address. Required if URL is not
-          provided
+          provided.
+        example: https
         type: string
       slug:
-        description: 'Required: slug of the service (e.g., "user-svc")'
+        description: Slug of the service whose instance is being registered.
+        example: user-svc
         type: string
       url:
-        description: 'Optional: full URL (e.g., "https://myserver.com:5981")'
+        description: Full address URL of the service instance.
+        example: https://myserver.com:5981
         type: string
+    required:
+    - slug
     type: object
   registry_svc.RegisterServiceInstanceResponse:
     type: object
@@ -1076,31 +1085,42 @@ definitions:
       host:
         description: Host of the service instance address. Required if URL is not
           provided
+        example: myserver.com
         type: string
       id:
-        description: 'Required: ID of the service instance (e.g., "https://api.com:999/user-svc")'
+        description: 'Required: ID of the service instance'
+        example: https://api.com:999/user-svc
         type: string
       ip:
         description: 'IP of the service instance address. Optional: to register by
           IP instead of host'
+        example: 8.8.8.8
         type: string
       path:
         description: Path of the service instance address. Optional (e.g., "/api")
+        example: /your-svc
         type: string
       port:
         description: Port of the service instance address. Required if URL is not
           provided
+        example: 8080
         type: integer
       scheme:
         description: Scheme of the service instance address. Required if URL is not
-          provided
+          provided.
+        example: https
         type: string
       slug:
-        description: 'Required: slug of the service (e.g., "user-svc")'
+        description: Slug of the service whose instance is being registered.
+        example: user-svc
         type: string
       url:
-        description: 'Optional: full URL (e.g., "https://myserver.com:5981")'
+        description: Full address URL of the service instance.
+        example: https://myserver.com:5981
         type: string
+    required:
+    - id
+    - slug
     type: object
   user_svc.AddUserToOrganizationRequest:
     properties:
@@ -2341,7 +2361,7 @@ paths:
       summary: Update Objects
       tags:
       - Dynamic Svc
-  /firehose-svc/publish:
+  /firehose-svc/event:
     post:
       consumes:
       - application/json
@@ -2373,7 +2393,7 @@ paths:
       summary: Publish an Event
       tags:
       - Firehose Svc
-  /firehose-svc/subscribe:
+  /firehose-svc/events/subscribe:
     get:
       consumes:
       - application/json

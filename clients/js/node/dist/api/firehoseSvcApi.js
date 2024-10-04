@@ -82,7 +82,7 @@ export class FirehoseSvcApi {
      */
     publishEvent(event_1) {
         return __awaiter(this, arguments, void 0, function* (event, options = { headers: {} }) {
-            const localVarPath = this.basePath + '/firehose-svc/publish';
+            const localVarPath = this.basePath + '/firehose-svc/event';
             let localVarQueryParameters = {};
             let localVarHeaderParams = Object.assign({}, this._defaultHeaders);
             const produces = ['application/json'];
@@ -151,7 +151,7 @@ export class FirehoseSvcApi {
      */
     subscribeToEvents() {
         return __awaiter(this, arguments, void 0, function* (options = { headers: {} }) {
-            const localVarPath = this.basePath + '/firehose-svc/subscribe';
+            const localVarPath = this.basePath + '/firehose-svc/events/subscribe';
             let localVarQueryParameters = {};
             let localVarHeaderParams = Object.assign({}, this._defaultHeaders);
             const produces = ['text/event-stream'];

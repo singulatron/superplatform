@@ -96,7 +96,7 @@ export class FirehoseSvcApi {
      * @param event Event to publish
      */
     public async publishEvent (event: FirehoseSvcEventPublishRequest, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body?: any;  }> {
-        const localVarPath = this.basePath + '/firehose-svc/publish';
+        const localVarPath = this.basePath + '/firehose-svc/event';
         let localVarQueryParameters: any = {};
         let localVarHeaderParams: any = (<any>Object).assign({}, this._defaultHeaders);
         const produces = ['application/json'];
@@ -166,7 +166,7 @@ export class FirehoseSvcApi {
      * @summary Subscribe to the Event Stream
      */
     public async subscribeToEvents (options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: string;  }> {
-        const localVarPath = this.basePath + '/firehose-svc/subscribe';
+        const localVarPath = this.basePath + '/firehose-svc/events/subscribe';
         let localVarQueryParameters: any = {};
         let localVarHeaderParams: any = (<any>Object).assign({}, this._defaultHeaders);
         const produces = ['text/event-stream'];

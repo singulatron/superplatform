@@ -18,9 +18,9 @@ export class RegistrySvcServiceInstance {
     */
     'host'?: string;
     /**
-    * Required: ID of the service instance (e.g., \"https://api.com:999/user-svc\")
+    * Required: ID of the service instance
     */
-    'id'?: string;
+    'id': string;
     /**
     * IP of the service instance address. Optional: to register by IP instead of host
     */
@@ -34,15 +34,15 @@ export class RegistrySvcServiceInstance {
     */
     'port'?: number;
     /**
-    * Scheme of the service instance address. Required if URL is not provided
+    * Scheme of the service instance address. Required if URL is not provided.
     */
     'scheme'?: string;
     /**
-    * Required: slug of the service (e.g., \"user-svc\")
+    * Slug of the service whose instance is being registered.
     */
-    'slug'?: string;
+    'slug': string;
     /**
-    * Optional: full URL (e.g., \"https://myserver.com:5981\")
+    * Full address URL of the service instance.
     */
     'url'?: string;
 

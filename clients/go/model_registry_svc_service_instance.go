@@ -13,6 +13,8 @@ package openapi
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the RegistrySvcServiceInstance type satisfies the MappedNullable interface at compile time
@@ -22,28 +24,32 @@ var _ MappedNullable = &RegistrySvcServiceInstance{}
 type RegistrySvcServiceInstance struct {
 	// Host of the service instance address. Required if URL is not provided
 	Host *string `json:"host,omitempty"`
-	// Required: ID of the service instance (e.g., \"https://api.com:999/user-svc\")
-	Id *string `json:"id,omitempty"`
+	// Required: ID of the service instance
+	Id string `json:"id"`
 	// IP of the service instance address. Optional: to register by IP instead of host
 	Ip *string `json:"ip,omitempty"`
 	// Path of the service instance address. Optional (e.g., \"/api\")
 	Path *string `json:"path,omitempty"`
 	// Port of the service instance address. Required if URL is not provided
 	Port *int32 `json:"port,omitempty"`
-	// Scheme of the service instance address. Required if URL is not provided
+	// Scheme of the service instance address. Required if URL is not provided.
 	Scheme *string `json:"scheme,omitempty"`
-	// Required: slug of the service (e.g., \"user-svc\")
-	Slug *string `json:"slug,omitempty"`
-	// Optional: full URL (e.g., \"https://myserver.com:5981\")
+	// Slug of the service whose instance is being registered.
+	Slug string `json:"slug"`
+	// Full address URL of the service instance.
 	Url *string `json:"url,omitempty"`
 }
+
+type _RegistrySvcServiceInstance RegistrySvcServiceInstance
 
 // NewRegistrySvcServiceInstance instantiates a new RegistrySvcServiceInstance object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewRegistrySvcServiceInstance() *RegistrySvcServiceInstance {
+func NewRegistrySvcServiceInstance(id string, slug string) *RegistrySvcServiceInstance {
 	this := RegistrySvcServiceInstance{}
+	this.Id = id
+	this.Slug = slug
 	return &this
 }
 
@@ -87,36 +93,28 @@ func (o *RegistrySvcServiceInstance) SetHost(v string) {
 	o.Host = &v
 }
 
-// GetId returns the Id field value if set, zero value otherwise.
+// GetId returns the Id field value
 func (o *RegistrySvcServiceInstance) GetId() string {
-	if o == nil || IsNil(o.Id) {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.Id
+
+	return o.Id
 }
 
-// GetIdOk returns a tuple with the Id field value if set, nil otherwise
+// GetIdOk returns a tuple with the Id field value
 // and a boolean to check if the value has been set.
 func (o *RegistrySvcServiceInstance) GetIdOk() (*string, bool) {
-	if o == nil || IsNil(o.Id) {
+	if o == nil {
 		return nil, false
 	}
-	return o.Id, true
+	return &o.Id, true
 }
 
-// HasId returns a boolean if a field has been set.
-func (o *RegistrySvcServiceInstance) HasId() bool {
-	if o != nil && !IsNil(o.Id) {
-		return true
-	}
-
-	return false
-}
-
-// SetId gets a reference to the given string and assigns it to the Id field.
+// SetId sets field value
 func (o *RegistrySvcServiceInstance) SetId(v string) {
-	o.Id = &v
+	o.Id = v
 }
 
 // GetIp returns the Ip field value if set, zero value otherwise.
@@ -247,36 +245,28 @@ func (o *RegistrySvcServiceInstance) SetScheme(v string) {
 	o.Scheme = &v
 }
 
-// GetSlug returns the Slug field value if set, zero value otherwise.
+// GetSlug returns the Slug field value
 func (o *RegistrySvcServiceInstance) GetSlug() string {
-	if o == nil || IsNil(o.Slug) {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.Slug
+
+	return o.Slug
 }
 
-// GetSlugOk returns a tuple with the Slug field value if set, nil otherwise
+// GetSlugOk returns a tuple with the Slug field value
 // and a boolean to check if the value has been set.
 func (o *RegistrySvcServiceInstance) GetSlugOk() (*string, bool) {
-	if o == nil || IsNil(o.Slug) {
+	if o == nil {
 		return nil, false
 	}
-	return o.Slug, true
+	return &o.Slug, true
 }
 
-// HasSlug returns a boolean if a field has been set.
-func (o *RegistrySvcServiceInstance) HasSlug() bool {
-	if o != nil && !IsNil(o.Slug) {
-		return true
-	}
-
-	return false
-}
-
-// SetSlug gets a reference to the given string and assigns it to the Slug field.
+// SetSlug sets field value
 func (o *RegistrySvcServiceInstance) SetSlug(v string) {
-	o.Slug = &v
+	o.Slug = v
 }
 
 // GetUrl returns the Url field value if set, zero value otherwise.
@@ -324,9 +314,7 @@ func (o RegistrySvcServiceInstance) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Host) {
 		toSerialize["host"] = o.Host
 	}
-	if !IsNil(o.Id) {
-		toSerialize["id"] = o.Id
-	}
+	toSerialize["id"] = o.Id
 	if !IsNil(o.Ip) {
 		toSerialize["ip"] = o.Ip
 	}
@@ -339,13 +327,49 @@ func (o RegistrySvcServiceInstance) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Scheme) {
 		toSerialize["scheme"] = o.Scheme
 	}
-	if !IsNil(o.Slug) {
-		toSerialize["slug"] = o.Slug
-	}
+	toSerialize["slug"] = o.Slug
 	if !IsNil(o.Url) {
 		toSerialize["url"] = o.Url
 	}
 	return toSerialize, nil
+}
+
+func (o *RegistrySvcServiceInstance) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"id",
+		"slug",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varRegistrySvcServiceInstance := _RegistrySvcServiceInstance{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varRegistrySvcServiceInstance)
+
+	if err != nil {
+		return err
+	}
+
+	*o = RegistrySvcServiceInstance(varRegistrySvcServiceInstance)
+
+	return err
 }
 
 type NullableRegistrySvcServiceInstance struct {

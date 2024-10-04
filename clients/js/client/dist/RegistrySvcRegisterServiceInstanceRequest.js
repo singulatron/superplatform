@@ -17,6 +17,8 @@
  * Check if a given object implements the RegistrySvcRegisterServiceInstanceRequest interface.
  */
 function instanceOfRegistrySvcRegisterServiceInstanceRequest(value) {
+    if (!('slug' in value) || value['slug'] === undefined)
+        return false;
     return true;
 }
 function RegistrySvcRegisterServiceInstanceRequestFromJSON(json) {
@@ -32,7 +34,7 @@ function RegistrySvcRegisterServiceInstanceRequestFromJSONTyped(json, ignoreDisc
         'path': json['path'] == null ? undefined : json['path'],
         'port': json['port'] == null ? undefined : json['port'],
         'scheme': json['scheme'] == null ? undefined : json['scheme'],
-        'slug': json['slug'] == null ? undefined : json['slug'],
+        'slug': json['slug'],
         'url': json['url'] == null ? undefined : json['url'],
     };
 }

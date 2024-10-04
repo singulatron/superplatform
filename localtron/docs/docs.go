@@ -5030,34 +5030,44 @@ const docTemplate = `{
         },
         "registry_svc.RegisterServiceInstanceRequest": {
             "type": "object",
+            "required": [
+                "slug"
+            ],
             "properties": {
                 "host": {
                     "description": "Host of the service instance address. Required if URL is not provided",
-                    "type": "string"
+                    "type": "string",
+                    "example": "myserver.com"
                 },
                 "ip": {
                     "description": "IP of the service instance address. Optional: to register by IP instead of host",
-                    "type": "string"
+                    "type": "string",
+                    "example": "8.8.8.8"
                 },
                 "path": {
                     "description": "Path of the service instance address. Optional (e.g., \"/api\")",
-                    "type": "string"
+                    "type": "string",
+                    "example": "/your-svc"
                 },
                 "port": {
                     "description": "Port of the service instance address. Required if URL is not provided",
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 8080
                 },
                 "scheme": {
-                    "description": "Scheme of the service instance address. Required if URL is not provided",
-                    "type": "string"
+                    "description": "Scheme of the service instance address. Required if URL is not provided.",
+                    "type": "string",
+                    "example": "https"
                 },
                 "slug": {
-                    "description": "Required: slug of the service (e.g., \"user-svc\")",
-                    "type": "string"
+                    "description": "Slug of the service whose instance is being registered.",
+                    "type": "string",
+                    "example": "user-svc"
                 },
                 "url": {
-                    "description": "Optional: full URL (e.g., \"https://myserver.com:5981\")",
-                    "type": "string"
+                    "description": "Full address URL of the service instance.",
+                    "type": "string",
+                    "example": "https://myserver.com:5981"
                 }
             }
         },
@@ -5066,38 +5076,50 @@ const docTemplate = `{
         },
         "registry_svc.ServiceInstance": {
             "type": "object",
+            "required": [
+                "id",
+                "slug"
+            ],
             "properties": {
                 "host": {
                     "description": "Host of the service instance address. Required if URL is not provided",
-                    "type": "string"
+                    "type": "string",
+                    "example": "myserver.com"
                 },
                 "id": {
-                    "description": "Required: ID of the service instance (e.g., \"https://api.com:999/user-svc\")",
-                    "type": "string"
+                    "description": "Required: ID of the service instance",
+                    "type": "string",
+                    "example": "https://api.com:999/user-svc"
                 },
                 "ip": {
                     "description": "IP of the service instance address. Optional: to register by IP instead of host",
-                    "type": "string"
+                    "type": "string",
+                    "example": "8.8.8.8"
                 },
                 "path": {
                     "description": "Path of the service instance address. Optional (e.g., \"/api\")",
-                    "type": "string"
+                    "type": "string",
+                    "example": "/your-svc"
                 },
                 "port": {
                     "description": "Port of the service instance address. Required if URL is not provided",
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 8080
                 },
                 "scheme": {
-                    "description": "Scheme of the service instance address. Required if URL is not provided",
-                    "type": "string"
+                    "description": "Scheme of the service instance address. Required if URL is not provided.",
+                    "type": "string",
+                    "example": "https"
                 },
                 "slug": {
-                    "description": "Required: slug of the service (e.g., \"user-svc\")",
-                    "type": "string"
+                    "description": "Slug of the service whose instance is being registered.",
+                    "type": "string",
+                    "example": "user-svc"
                 },
                 "url": {
-                    "description": "Optional: full URL (e.g., \"https://myserver.com:5981\")",
-                    "type": "string"
+                    "description": "Full address URL of the service instance.",
+                    "type": "string",
+                    "example": "https://myserver.com:5981"
                 }
             }
         },

@@ -35,7 +35,7 @@ class FirehoseSvcApi extends BaseAPI {
                 headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
             }
             const response = yield this.request({
-                path: `/firehose-svc/publish`,
+                path: `/firehose-svc/event`,
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,
@@ -65,7 +65,7 @@ class FirehoseSvcApi extends BaseAPI {
                 headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
             }
             const response = yield this.request({
-                path: `/firehose-svc/subscribe`,
+                path: `/firehose-svc/events/subscribe`,
                 method: 'GET',
                 headers: headerParameters,
                 query: queryParameters,

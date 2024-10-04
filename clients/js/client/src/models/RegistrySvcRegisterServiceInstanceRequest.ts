@@ -44,19 +44,19 @@ export interface RegistrySvcRegisterServiceInstanceRequest {
      */
     port?: number;
     /**
-     * Scheme of the service instance address. Required if URL is not provided
+     * Scheme of the service instance address. Required if URL is not provided.
      * @type {string}
      * @memberof RegistrySvcRegisterServiceInstanceRequest
      */
     scheme?: string;
     /**
-     * Required: slug of the service (e.g., "user-svc")
+     * Slug of the service whose instance is being registered.
      * @type {string}
      * @memberof RegistrySvcRegisterServiceInstanceRequest
      */
-    slug?: string;
+    slug: string;
     /**
-     * Optional: full URL (e.g., "https://myserver.com:5981")
+     * Full address URL of the service instance.
      * @type {string}
      * @memberof RegistrySvcRegisterServiceInstanceRequest
      */
@@ -67,6 +67,7 @@ export interface RegistrySvcRegisterServiceInstanceRequest {
  * Check if a given object implements the RegistrySvcRegisterServiceInstanceRequest interface.
  */
 export function instanceOfRegistrySvcRegisterServiceInstanceRequest(value: object): value is RegistrySvcRegisterServiceInstanceRequest {
+    if (!('slug' in value) || value['slug'] === undefined) return false;
     return true;
 }
 
@@ -85,7 +86,7 @@ export function RegistrySvcRegisterServiceInstanceRequestFromJSONTyped(json: any
         'path': json['path'] == null ? undefined : json['path'],
         'port': json['port'] == null ? undefined : json['port'],
         'scheme': json['scheme'] == null ? undefined : json['scheme'],
-        'slug': json['slug'] == null ? undefined : json['slug'],
+        'slug': json['slug'],
         'url': json['url'] == null ? undefined : json['url'],
     };
 }

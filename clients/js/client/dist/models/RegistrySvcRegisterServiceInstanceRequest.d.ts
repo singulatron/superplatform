@@ -40,19 +40,19 @@ export interface RegistrySvcRegisterServiceInstanceRequest {
      */
     port?: number;
     /**
-     * Scheme of the service instance address. Required if URL is not provided
+     * Scheme of the service instance address. Required if URL is not provided.
      * @type {string}
      * @memberof RegistrySvcRegisterServiceInstanceRequest
      */
     scheme?: string;
     /**
-     * Required: slug of the service (e.g., "user-svc")
+     * Slug of the service whose instance is being registered.
      * @type {string}
      * @memberof RegistrySvcRegisterServiceInstanceRequest
      */
-    slug?: string;
+    slug: string;
     /**
-     * Optional: full URL (e.g., "https://myserver.com:5981")
+     * Full address URL of the service instance.
      * @type {string}
      * @memberof RegistrySvcRegisterServiceInstanceRequest
      */

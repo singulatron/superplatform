@@ -426,7 +426,7 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 		policyService.UpsertInstance(w, r)
 	})).Methods("OPTIONS", "PUT")
 
-	router.HandleFunc("/registry-svc/service-instance/{id}", appl(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/registry-svc/service-instances", appl(func(w http.ResponseWriter, r *http.Request) {
 		registryService.QueryServiceInstances(w, r)
 	})).Methods("OPTIONS", "DELETE")
 	router.HandleFunc("/registry-svc/service-instance", appl(func(w http.ResponseWriter, r *http.Request) {
