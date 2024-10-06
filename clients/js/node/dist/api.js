@@ -63,11 +63,6 @@ var modelSvcModel = require('./modelSvcModel.js');
 var modelSvcModelStatus = require('./modelSvcModelStatus.js');
 var modelSvcPlatform = require('./modelSvcPlatform.js');
 var modelSvcStatusResponse = require('./modelSvcStatusResponse.js');
-var nodeSvcErrorResponse = require('./nodeSvcErrorResponse.js');
-var nodeSvcGPU = require('./nodeSvcGPU.js');
-var nodeSvcListNodesResponse = require('./nodeSvcListNodesResponse.js');
-var nodeSvcNode = require('./nodeSvcNode.js');
-var nodeSvcProcess = require('./nodeSvcProcess.js');
 var policySvcBlocklistParameters = require('./policySvcBlocklistParameters.js');
 var policySvcCheckRequest = require('./policySvcCheckRequest.js');
 var policySvcCheckResponse = require('./policySvcCheckResponse.js');
@@ -87,6 +82,10 @@ var promptSvcPrompt = require('./promptSvcPrompt.js');
 var promptSvcPromptStatus = require('./promptSvcPromptStatus.js');
 var promptSvcRemovePromptRequest = require('./promptSvcRemovePromptRequest.js');
 var registrySvcErrorResponse = require('./registrySvcErrorResponse.js');
+var registrySvcGPU = require('./registrySvcGPU.js');
+var registrySvcListNodesResponse = require('./registrySvcListNodesResponse.js');
+var registrySvcNode = require('./registrySvcNode.js');
+var registrySvcProcess = require('./registrySvcProcess.js');
 var registrySvcQueryServiceInstancesResponse = require('./registrySvcQueryServiceInstancesResponse.js');
 var registrySvcRegisterServiceInstanceRequest = require('./registrySvcRegisterServiceInstanceRequest.js');
 var registrySvcServiceInstance = require('./registrySvcServiceInstance.js');
@@ -173,11 +172,6 @@ exports.ModelSvcApi = chatSvcApi.ModelSvcApi;
 Object.defineProperty(exports, 'ModelSvcApiApiKeys', {
 	enumerable: true,
 	get: function () { return chatSvcApi.ModelSvcApiApiKeys; }
-});
-exports.NodeSvcApi = chatSvcApi.NodeSvcApi;
-Object.defineProperty(exports, 'NodeSvcApiApiKeys', {
-	enumerable: true,
-	get: function () { return chatSvcApi.NodeSvcApiApiKeys; }
 });
 exports.PolicySvcApi = chatSvcApi.PolicySvcApi;
 Object.defineProperty(exports, 'PolicySvcApiApiKeys', {
@@ -269,11 +263,6 @@ exports.ModelSvcModel = modelSvcModel.ModelSvcModel;
 exports.ModelSvcModelStatus = modelSvcModelStatus.ModelSvcModelStatus;
 exports.ModelSvcPlatform = modelSvcPlatform.ModelSvcPlatform;
 exports.ModelSvcStatusResponse = modelSvcStatusResponse.ModelSvcStatusResponse;
-exports.NodeSvcErrorResponse = nodeSvcErrorResponse.NodeSvcErrorResponse;
-exports.NodeSvcGPU = nodeSvcGPU.NodeSvcGPU;
-exports.NodeSvcListNodesResponse = nodeSvcListNodesResponse.NodeSvcListNodesResponse;
-exports.NodeSvcNode = nodeSvcNode.NodeSvcNode;
-exports.NodeSvcProcess = nodeSvcProcess.NodeSvcProcess;
 exports.PolicySvcBlocklistParameters = policySvcBlocklistParameters.PolicySvcBlocklistParameters;
 exports.PolicySvcCheckRequest = policySvcCheckRequest.PolicySvcCheckRequest;
 exports.PolicySvcCheckResponse = policySvcCheckResponse.PolicySvcCheckResponse;
@@ -305,6 +294,10 @@ Object.defineProperty(exports, 'PromptSvcPromptStatus', {
 });
 exports.PromptSvcRemovePromptRequest = promptSvcRemovePromptRequest.PromptSvcRemovePromptRequest;
 exports.RegistrySvcErrorResponse = registrySvcErrorResponse.RegistrySvcErrorResponse;
+exports.RegistrySvcGPU = registrySvcGPU.RegistrySvcGPU;
+exports.RegistrySvcListNodesResponse = registrySvcListNodesResponse.RegistrySvcListNodesResponse;
+exports.RegistrySvcNode = registrySvcNode.RegistrySvcNode;
+exports.RegistrySvcProcess = registrySvcProcess.RegistrySvcProcess;
 exports.RegistrySvcQueryServiceInstancesResponse = registrySvcQueryServiceInstancesResponse.RegistrySvcQueryServiceInstancesResponse;
 exports.RegistrySvcRegisterServiceInstanceRequest = registrySvcRegisterServiceInstanceRequest.RegistrySvcRegisterServiceInstanceRequest;
 exports.RegistrySvcServiceInstance = registrySvcServiceInstance.RegistrySvcServiceInstance;

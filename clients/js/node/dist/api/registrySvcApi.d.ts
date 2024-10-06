@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 import http from 'http';
+import { RegistrySvcListNodesResponse } from '../model/registrySvcListNodesResponse';
 import { RegistrySvcQueryServiceInstancesResponse } from '../model/registrySvcQueryServiceInstancesResponse';
 import { RegistrySvcRegisterServiceInstanceRequest } from '../model/registrySvcRegisterServiceInstanceRequest';
 import { Authentication, Interceptor } from '../model/models';
@@ -36,6 +37,19 @@ export declare class RegistrySvcApi {
     setApiKey(key: RegistrySvcApiApiKeys, value: string): void;
     addInterceptor(interceptor: Interceptor): void;
     /**
+     * Retrieve a list of nodes.
+     * @summary List Nodes
+     * @param body List Registrys Request
+     */
+    listNodess(body?: object, options?: {
+        headers: {
+            [name: string]: string;
+        };
+    }): Promise<{
+        response: http.IncomingMessage;
+        body: RegistrySvcListNodesResponse;
+    }>;
+    /**
      * Retrieves a list of all registered service instances or filters them by specific criteria (e.g., host, IP).
      * @summary Query Service Instances
      * @param scheme Scheme to filter by
@@ -54,7 +68,7 @@ export declare class RegistrySvcApi {
     }>;
     /**
      * Registers a new service instance, associating an service instance address with a slug acquired from the bearer token.
-     * @summary Register Service Instance. Idempotent.
+     * @summary Register Service Instance
      * @param request Register Service Instance Request
      */
     registerServiceInstance(request: RegistrySvcRegisterServiceInstanceRequest, options?: {

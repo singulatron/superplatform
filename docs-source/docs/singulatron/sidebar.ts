@@ -254,18 +254,6 @@ const sidebar: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "Node Svc",
-      items: [
-        {
-          type: "doc",
-          id: "singulatron/list-nodes",
-          label: "List Nodes",
-          className: "api-method post",
-        },
-      ],
-    },
-    {
-      type: "category",
       label: "Policy Svc",
       items: [
         {
@@ -318,8 +306,14 @@ const sidebar: SidebarsConfig = {
       items: [
         {
           type: "doc",
+          id: "singulatron/list-nodess",
+          label: "List Nodes",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
           id: "singulatron/register-service-instance",
-          label: "Register Service Instance. Idempotent.",
+          label: "Register Service Instance",
           className: "api-method post",
         },
         {

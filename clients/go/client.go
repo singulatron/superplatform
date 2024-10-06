@@ -64,8 +64,6 @@ type APIClient struct {
 
 	ModelSvcAPI *ModelSvcAPIService
 
-	NodeSvcAPI *NodeSvcAPIService
-
 	PolicySvcAPI *PolicySvcAPIService
 
 	PromptSvcAPI *PromptSvcAPIService
@@ -98,7 +96,6 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 	c.DynamicSvcAPI = (*DynamicSvcAPIService)(&c.common)
 	c.FirehoseSvcAPI = (*FirehoseSvcAPIService)(&c.common)
 	c.ModelSvcAPI = (*ModelSvcAPIService)(&c.common)
-	c.NodeSvcAPI = (*NodeSvcAPIService)(&c.common)
 	c.PolicySvcAPI = (*PolicySvcAPIService)(&c.common)
 	c.PromptSvcAPI = (*PromptSvcAPIService)(&c.common)
 	c.RegistrySvcAPI = (*RegistrySvcAPIService)(&c.common)

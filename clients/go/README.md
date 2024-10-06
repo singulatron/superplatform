@@ -113,15 +113,15 @@ Class | Method | HTTP request | Description
 *ModelSvcAPI* | [**MakeDefault**](docs/ModelSvcAPI.md#makedefault) | **Put** /model-svc/model/{modelId}/make-default | Make a Model Default
 *ModelSvcAPI* | [**StartDefaultModel**](docs/ModelSvcAPI.md#startdefaultmodel) | **Put** /model-svc/default-model/start | Start the Default Model
 *ModelSvcAPI* | [**StartModel**](docs/ModelSvcAPI.md#startmodel) | **Put** /model-svc/model/{modelId}/start | Start a Model
-*NodeSvcAPI* | [**ListNodes**](docs/NodeSvcAPI.md#listnodes) | **Post** /node-svc/nodes | List Nodes
 *PolicySvcAPI* | [**Check**](docs/PolicySvcAPI.md#check) | **Post** /policy-svc/check | Check
 *PolicySvcAPI* | [**UpsertInstance**](docs/PolicySvcAPI.md#upsertinstance) | **Put** /policy-svc/instance/{instanceId} | Upsert an Instance
 *PromptSvcAPI* | [**AddPrompt**](docs/PromptSvcAPI.md#addprompt) | **Post** /prompt-svc/prompt | Add Prompt
 *PromptSvcAPI* | [**ListPrompts**](docs/PromptSvcAPI.md#listprompts) | **Post** /prompt-svc/prompts | List Prompts
 *PromptSvcAPI* | [**RemovePrompt**](docs/PromptSvcAPI.md#removeprompt) | **Post** /prompt-svc/remove | Remove Prompt
 *PromptSvcAPI* | [**SubscribeToPromptResponses**](docs/PromptSvcAPI.md#subscribetopromptresponses) | **Get** /prompt-svc/prompts/{threadId}/responses/subscribe | Subscribe to Prompt Responses by Thread
+*RegistrySvcAPI* | [**ListNodess**](docs/RegistrySvcAPI.md#listnodess) | **Post** /registry-svc/registrys | List Nodes
 *RegistrySvcAPI* | [**QueryServiceInstances**](docs/RegistrySvcAPI.md#queryserviceinstances) | **Get** /registry-svc/services | Query Service Instances
-*RegistrySvcAPI* | [**RegisterServiceInstance**](docs/RegistrySvcAPI.md#registerserviceinstance) | **Post** /registry-svc/service-instance | Register Service Instance. Idempotent.
+*RegistrySvcAPI* | [**RegisterServiceInstance**](docs/RegistrySvcAPI.md#registerserviceinstance) | **Post** /registry-svc/service-instance | Register Service Instance
 *RegistrySvcAPI* | [**RemoveServiceInstance**](docs/RegistrySvcAPI.md#removeserviceinstance) | **Delete** /registry-svc/service-instance/{id} | Remove Service Instance
 *UserSvcAPI* | [**AddPermissionToRole**](docs/UserSvcAPI.md#addpermissiontorole) | **Put** /user-svc/role/{roleId}/permission/{permissionId} | Add Permission to Role
 *UserSvcAPI* | [**AddUserToOrganization**](docs/UserSvcAPI.md#addusertoorganization) | **Post** /user-svc/organization/{organizationId}/user | Add a User to an Organization
@@ -209,11 +209,6 @@ Class | Method | HTTP request | Description
  - [ModelSvcModelStatus](docs/ModelSvcModelStatus.md)
  - [ModelSvcPlatform](docs/ModelSvcPlatform.md)
  - [ModelSvcStatusResponse](docs/ModelSvcStatusResponse.md)
- - [NodeSvcErrorResponse](docs/NodeSvcErrorResponse.md)
- - [NodeSvcGPU](docs/NodeSvcGPU.md)
- - [NodeSvcListNodesResponse](docs/NodeSvcListNodesResponse.md)
- - [NodeSvcNode](docs/NodeSvcNode.md)
- - [NodeSvcProcess](docs/NodeSvcProcess.md)
  - [PolicySvcBlocklistParameters](docs/PolicySvcBlocklistParameters.md)
  - [PolicySvcCheckRequest](docs/PolicySvcCheckRequest.md)
  - [PolicySvcCheckResponse](docs/PolicySvcCheckResponse.md)
@@ -233,6 +228,10 @@ Class | Method | HTTP request | Description
  - [PromptSvcPromptStatus](docs/PromptSvcPromptStatus.md)
  - [PromptSvcRemovePromptRequest](docs/PromptSvcRemovePromptRequest.md)
  - [RegistrySvcErrorResponse](docs/RegistrySvcErrorResponse.md)
+ - [RegistrySvcGPU](docs/RegistrySvcGPU.md)
+ - [RegistrySvcListNodesResponse](docs/RegistrySvcListNodesResponse.md)
+ - [RegistrySvcNode](docs/RegistrySvcNode.md)
+ - [RegistrySvcProcess](docs/RegistrySvcProcess.md)
  - [RegistrySvcQueryServiceInstancesResponse](docs/RegistrySvcQueryServiceInstancesResponse.md)
  - [RegistrySvcRegisterServiceInstanceRequest](docs/RegistrySvcRegisterServiceInstanceRequest.md)
  - [RegistrySvcServiceInstance](docs/RegistrySvcServiceInstance.md)

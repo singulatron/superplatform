@@ -12,8 +12,6 @@ export * from './firehoseSvcApi';
 import { FirehoseSvcApi } from './firehoseSvcApi';
 export * from './modelSvcApi';
 import { ModelSvcApi } from './modelSvcApi';
-export * from './nodeSvcApi';
-import { NodeSvcApi } from './nodeSvcApi';
 export * from './policySvcApi';
 import { PolicySvcApi } from './policySvcApi';
 export * from './promptSvcApi';
@@ -30,4 +28,4 @@ export declare class HttpError extends Error {
     constructor(response: http.IncomingMessage, body: any, statusCode?: number | undefined);
 }
 export { RequestFile } from '../model/models';
-export declare const APIS: (typeof ChatSvcApi | typeof ConfigSvcApi | typeof DockerSvcApi | typeof DownloadSvcApi | typeof DynamicSvcApi | typeof FirehoseSvcApi | typeof ModelSvcApi | typeof NodeSvcApi | typeof PolicySvcApi | typeof PromptSvcApi | typeof RegistrySvcApi | typeof UserSvcApi)[];
+export declare const APIS: (typeof ChatSvcApi | typeof ConfigSvcApi | typeof DockerSvcApi | typeof DownloadSvcApi | typeof DynamicSvcApi | typeof FirehoseSvcApi | typeof ModelSvcApi | typeof PolicySvcApi | typeof PromptSvcApi | typeof RegistrySvcApi | typeof UserSvcApi)[];

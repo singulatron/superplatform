@@ -10,7 +10,10 @@
  * Do not edit the class manually.
  */
 import * as runtime from '../runtime';
-import type { RegistrySvcQueryServiceInstancesResponse, RegistrySvcRegisterServiceInstanceRequest } from '../models/index';
+import type { RegistrySvcListNodesResponse, RegistrySvcQueryServiceInstancesResponse, RegistrySvcRegisterServiceInstanceRequest } from '../models/index';
+export interface ListNodessRequest {
+    body?: object;
+}
 export interface QueryServiceInstancesRequest {
     scheme?: string;
     ip?: string;
@@ -29,6 +32,16 @@ export interface RemoveServiceInstanceRequest {
  */
 export declare class RegistrySvcApi extends runtime.BaseAPI {
     /**
+     * Retrieve a list of nodes.
+     * List Nodes
+     */
+    listNodessRaw(requestParameters: ListNodessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RegistrySvcListNodesResponse>>;
+    /**
+     * Retrieve a list of nodes.
+     * List Nodes
+     */
+    listNodess(requestParameters?: ListNodessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RegistrySvcListNodesResponse>;
+    /**
      * Retrieves a list of all registered service instances or filters them by specific criteria (e.g., host, IP).
      * Query Service Instances
      */
@@ -40,12 +53,12 @@ export declare class RegistrySvcApi extends runtime.BaseAPI {
     queryServiceInstances(requestParameters?: QueryServiceInstancesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<RegistrySvcQueryServiceInstancesResponse>>;
     /**
      * Registers a new service instance, associating an service instance address with a slug acquired from the bearer token.
-     * Register Service Instance. Idempotent.
+     * Register Service Instance
      */
     registerServiceInstanceRaw(requestParameters: RegisterServiceInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
     /**
      * Registers a new service instance, associating an service instance address with a slug acquired from the bearer token.
-     * Register Service Instance. Idempotent.
+     * Register Service Instance
      */
     registerServiceInstance(requestParameters: RegisterServiceInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
     /**

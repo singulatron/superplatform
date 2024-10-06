@@ -59,11 +59,6 @@ export * from './modelSvcModel';
 export * from './modelSvcModelStatus';
 export * from './modelSvcPlatform';
 export * from './modelSvcStatusResponse';
-export * from './nodeSvcErrorResponse';
-export * from './nodeSvcGPU';
-export * from './nodeSvcListNodesResponse';
-export * from './nodeSvcNode';
-export * from './nodeSvcProcess';
 export * from './policySvcBlocklistParameters';
 export * from './policySvcCheckRequest';
 export * from './policySvcCheckResponse';
@@ -83,6 +78,10 @@ export * from './promptSvcPrompt';
 export * from './promptSvcPromptStatus';
 export * from './promptSvcRemovePromptRequest';
 export * from './registrySvcErrorResponse';
+export * from './registrySvcGPU';
+export * from './registrySvcListNodesResponse';
+export * from './registrySvcNode';
+export * from './registrySvcProcess';
 export * from './registrySvcQueryServiceInstancesResponse';
 export * from './registrySvcRegisterServiceInstanceRequest';
 export * from './registrySvcServiceInstance';
@@ -175,11 +174,6 @@ import { ModelSvcModel } from './modelSvcModel';
 import { ModelSvcModelStatus } from './modelSvcModelStatus';
 import { ModelSvcPlatform } from './modelSvcPlatform';
 import { ModelSvcStatusResponse } from './modelSvcStatusResponse';
-import { NodeSvcErrorResponse } from './nodeSvcErrorResponse';
-import { NodeSvcGPU } from './nodeSvcGPU';
-import { NodeSvcListNodesResponse } from './nodeSvcListNodesResponse';
-import { NodeSvcNode } from './nodeSvcNode';
-import { NodeSvcProcess } from './nodeSvcProcess';
 import { PolicySvcBlocklistParameters } from './policySvcBlocklistParameters';
 import { PolicySvcCheckRequest } from './policySvcCheckRequest';
 import { PolicySvcCheckResponse } from './policySvcCheckResponse';
@@ -199,6 +193,10 @@ import { PromptSvcPrompt } from './promptSvcPrompt';
 import { PromptSvcPromptStatus } from './promptSvcPromptStatus';
 import { PromptSvcRemovePromptRequest } from './promptSvcRemovePromptRequest';
 import { RegistrySvcErrorResponse } from './registrySvcErrorResponse';
+import { RegistrySvcGPU } from './registrySvcGPU';
+import { RegistrySvcListNodesResponse } from './registrySvcListNodesResponse';
+import { RegistrySvcNode } from './registrySvcNode';
+import { RegistrySvcProcess } from './registrySvcProcess';
 import { RegistrySvcQueryServiceInstancesResponse } from './registrySvcQueryServiceInstancesResponse';
 import { RegistrySvcRegisterServiceInstanceRequest } from './registrySvcRegisterServiceInstanceRequest';
 import { RegistrySvcServiceInstance } from './registrySvcServiceInstance';
@@ -309,11 +307,6 @@ let typeMap = {
     "ModelSvcModelStatus": ModelSvcModelStatus,
     "ModelSvcPlatform": ModelSvcPlatform,
     "ModelSvcStatusResponse": ModelSvcStatusResponse,
-    "NodeSvcErrorResponse": NodeSvcErrorResponse,
-    "NodeSvcGPU": NodeSvcGPU,
-    "NodeSvcListNodesResponse": NodeSvcListNodesResponse,
-    "NodeSvcNode": NodeSvcNode,
-    "NodeSvcProcess": NodeSvcProcess,
     "PolicySvcBlocklistParameters": PolicySvcBlocklistParameters,
     "PolicySvcCheckRequest": PolicySvcCheckRequest,
     "PolicySvcCheckResponse": PolicySvcCheckResponse,
@@ -329,6 +322,10 @@ let typeMap = {
     "PromptSvcPrompt": PromptSvcPrompt,
     "PromptSvcRemovePromptRequest": PromptSvcRemovePromptRequest,
     "RegistrySvcErrorResponse": RegistrySvcErrorResponse,
+    "RegistrySvcGPU": RegistrySvcGPU,
+    "RegistrySvcListNodesResponse": RegistrySvcListNodesResponse,
+    "RegistrySvcNode": RegistrySvcNode,
+    "RegistrySvcProcess": RegistrySvcProcess,
     "RegistrySvcQueryServiceInstancesResponse": RegistrySvcQueryServiceInstancesResponse,
     "RegistrySvcRegisterServiceInstanceRequest": RegistrySvcRegisterServiceInstanceRequest,
     "RegistrySvcServiceInstance": RegistrySvcServiceInstance,

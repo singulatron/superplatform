@@ -10,6 +10,7 @@ package registryservice
 import (
 	"encoding/csv"
 	"fmt"
+	"log/slog"
 	"os"
 	"os/exec"
 	"strconv"
@@ -98,13 +99,14 @@ func (ns *RegistryService) nodeHeartbeat() {
 			URL: ns.URL,
 		}
 
+		// @todo detect non-nvidia gpus
 		outp, err := ns.getNvidiaSmiOutput()
 		if err != nil {
-			logger.Warn("Failed to get smi output %v", err)
+			logger.Warn("Failed to get smi output", slog.Any("error", err))
 		} else {
 			gpus, err := ns.ParseNvidiaSmiOutput(outp)
 			if err != nil {
-				logger.Warn("Failed to get smi output", err)
+				logger.Warn("Failed to parse smi output", slog.Any("error", err))
 			} else {
 				node.GPUs = gpus
 			}

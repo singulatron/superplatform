@@ -9,7 +9,6 @@ api_download_svc.go
 api_dynamic_svc.go
 api_firehose_svc.go
 api_model_svc.go
-api_node_svc.go
 api_policy_svc.go
 api_prompt_svc.go
 api_registry_svc.go
@@ -84,12 +83,6 @@ docs/ModelSvcModel.md
 docs/ModelSvcModelStatus.md
 docs/ModelSvcPlatform.md
 docs/ModelSvcStatusResponse.md
-docs/NodeSvcAPI.md
-docs/NodeSvcErrorResponse.md
-docs/NodeSvcGPU.md
-docs/NodeSvcListNodesResponse.md
-docs/NodeSvcNode.md
-docs/NodeSvcProcess.md
 docs/PolicySvcAPI.md
 docs/PolicySvcBlocklistParameters.md
 docs/PolicySvcCheckRequest.md
@@ -112,6 +105,10 @@ docs/PromptSvcPromptStatus.md
 docs/PromptSvcRemovePromptRequest.md
 docs/RegistrySvcAPI.md
 docs/RegistrySvcErrorResponse.md
+docs/RegistrySvcGPU.md
+docs/RegistrySvcListNodesResponse.md
+docs/RegistrySvcNode.md
+docs/RegistrySvcProcess.md
 docs/RegistrySvcQueryServiceInstancesResponse.md
 docs/RegistrySvcRegisterServiceInstanceRequest.md
 docs/RegistrySvcServiceInstance.md
@@ -208,11 +205,6 @@ model_model_svc_model.go
 model_model_svc_model_status.go
 model_model_svc_platform.go
 model_model_svc_status_response.go
-model_node_svc_error_response.go
-model_node_svc_gpu.go
-model_node_svc_list_nodes_response.go
-model_node_svc_node.go
-model_node_svc_process.go
 model_policy_svc_blocklist_parameters.go
 model_policy_svc_check_request.go
 model_policy_svc_check_response.go
@@ -232,6 +224,10 @@ model_prompt_svc_prompt.go
 model_prompt_svc_prompt_status.go
 model_prompt_svc_remove_prompt_request.go
 model_registry_svc_error_response.go
+model_registry_svc_gpu.go
+model_registry_svc_list_nodes_response.go
+model_registry_svc_node.go
+model_registry_svc_process.go
 model_registry_svc_query_service_instances_response.go
 model_registry_svc_register_service_instance_request.go
 model_registry_svc_service_instance.go

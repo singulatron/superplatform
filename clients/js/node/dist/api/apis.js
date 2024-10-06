@@ -12,8 +12,6 @@ export * from './firehoseSvcApi';
 import { FirehoseSvcApi } from './firehoseSvcApi';
 export * from './modelSvcApi';
 import { ModelSvcApi } from './modelSvcApi';
-export * from './nodeSvcApi';
-import { NodeSvcApi } from './nodeSvcApi';
 export * from './policySvcApi';
 import { PolicySvcApi } from './policySvcApi';
 export * from './promptSvcApi';
@@ -31,4 +29,4 @@ export class HttpError extends Error {
         this.name = 'HttpError';
     }
 }
-export const APIS = [ChatSvcApi, ConfigSvcApi, DockerSvcApi, DownloadSvcApi, DynamicSvcApi, FirehoseSvcApi, ModelSvcApi, NodeSvcApi, PolicySvcApi, PromptSvcApi, RegistrySvcApi, UserSvcApi];
+export const APIS = [ChatSvcApi, ConfigSvcApi, DockerSvcApi, DownloadSvcApi, DynamicSvcApi, FirehoseSvcApi, ModelSvcApi, PolicySvcApi, PromptSvcApi, RegistrySvcApi, UserSvcApi];

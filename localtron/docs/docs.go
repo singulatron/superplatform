@@ -1800,63 +1800,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/node-svc/nodes": {
-            "post": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Retrieve a list of nodes.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Node Svc"
-                ],
-                "summary": "List Nodes",
-                "operationId": "listNodes",
-                "parameters": [
-                    {
-                        "description": "List Nodes Request",
-                        "name": "body",
-                        "in": "body",
-                        "schema": {
-                            "$ref": "#/definitions/node_svc.ListNodesRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/node_svc.ListNodesResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid JSON",
-                        "schema": {
-                            "$ref": "#/definitions/node_svc.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/node_svc.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/node_svc.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
         "/policy-svc/check": {
             "post": {
                 "security": [
@@ -2197,6 +2140,63 @@ const docTemplate = `{
                 }
             }
         },
+        "/registry-svc/registrys": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve a list of nodes.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Registry Svc"
+                ],
+                "summary": "List Nodes",
+                "operationId": "listNodess",
+                "parameters": [
+                    {
+                        "description": "List Registrys Request",
+                        "name": "body",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ListNodesRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ListNodesResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/registry-svc/service-instance": {
             "post": {
                 "security": [
@@ -2214,7 +2214,7 @@ const docTemplate = `{
                 "tags": [
                     "Registry Svc"
                 ],
-                "summary": "Register Service Instance. Idempotent.",
+                "summary": "Register Service Instance",
                 "operationId": "registerServiceInstance",
                 "parameters": [
                     {
@@ -4578,104 +4578,6 @@ const docTemplate = `{
                 }
             }
         },
-        "node_svc.ErrorResponse": {
-            "type": "object",
-            "properties": {
-                "error": {
-                    "type": "string"
-                }
-            }
-        },
-        "node_svc.GPU": {
-            "type": "object",
-            "properties": {
-                "busId": {
-                    "type": "string"
-                },
-                "computeMode": {
-                    "type": "string"
-                },
-                "gpuUtilization": {
-                    "type": "number"
-                },
-                "id": {
-                    "description": "Id Node.Hostname + IntraNodeId",
-                    "type": "string"
-                },
-                "intraNodeId": {
-                    "type": "integer"
-                },
-                "memoryTotal": {
-                    "type": "integer"
-                },
-                "memoryUsage": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "performanceState": {
-                    "type": "string"
-                },
-                "powerCap": {
-                    "type": "number"
-                },
-                "powerUsage": {
-                    "type": "number"
-                },
-                "processDetails": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/node_svc.Process"
-                    }
-                },
-                "temperature": {
-                    "type": "number"
-                }
-            }
-        },
-        "node_svc.ListNodesRequest": {
-            "type": "object"
-        },
-        "node_svc.ListNodesResponse": {
-            "type": "object",
-            "properties": {
-                "nodes": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/node_svc.Node"
-                    }
-                }
-            }
-        },
-        "node_svc.Node": {
-            "type": "object",
-            "properties": {
-                "gpus": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/node_svc.GPU"
-                    }
-                },
-                "hostname": {
-                    "type": "string"
-                }
-            }
-        },
-        "node_svc.Process": {
-            "type": "object",
-            "properties": {
-                "memoryUsage": {
-                    "type": "integer"
-                },
-                "pid": {
-                    "type": "integer"
-                },
-                "processName": {
-                    "type": "string"
-                }
-            }
-        },
         "policy_svc.BlocklistParameters": {
             "type": "object",
             "properties": {
@@ -5013,6 +4915,98 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "registry_svc.GPU": {
+            "type": "object",
+            "properties": {
+                "busId": {
+                    "type": "string"
+                },
+                "computeMode": {
+                    "type": "string"
+                },
+                "gpuUtilization": {
+                    "type": "number"
+                },
+                "id": {
+                    "description": "Id Node.URL + IntraNodeId",
+                    "type": "string"
+                },
+                "intraNodeId": {
+                    "type": "integer"
+                },
+                "memoryTotal": {
+                    "type": "integer"
+                },
+                "memoryUsage": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "performanceState": {
+                    "type": "string"
+                },
+                "powerCap": {
+                    "type": "number"
+                },
+                "powerUsage": {
+                    "type": "number"
+                },
+                "processDetails": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/registry_svc.Process"
+                    }
+                },
+                "temperature": {
+                    "type": "number"
+                }
+            }
+        },
+        "registry_svc.ListNodesRequest": {
+            "type": "object"
+        },
+        "registry_svc.ListNodesResponse": {
+            "type": "object",
+            "properties": {
+                "nodes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/registry_svc.Node"
+                    }
+                }
+            }
+        },
+        "registry_svc.Node": {
+            "type": "object",
+            "properties": {
+                "gpus": {
+                    "description": "List of GPUs available on the node",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/registry_svc.GPU"
+                    }
+                },
+                "url": {
+                    "description": "URL of the daemon running on the node.\nIf not configured defaults to hostname + default Singulatron daemon port.",
+                    "type": "string"
+                }
+            }
+        },
+        "registry_svc.Process": {
+            "type": "object",
+            "properties": {
+                "memoryUsage": {
+                    "type": "integer"
+                },
+                "pid": {
+                    "type": "integer"
+                },
+                "processName": {
                     "type": "string"
                 }
             }
