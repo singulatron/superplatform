@@ -6,14 +6,12 @@
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
 
-package node_svc
+package registry_svc
 
-type ErrorResponse struct {
-	Error string `json:"error"`
-}
-
-type Cluster struct {
-	Nodes []Node `json:"nodes"`
+type RegisterNodeRequest struct {
+	Hostname string `json:"hostname" binding:"required"` // Hostname of the node
+	IP       string `json:"ip,omitempty"`                // IP of the node. Optional: If not provided, resolved by hostname.
+	GPUs     []*GPU `json:"gpus,omitempty"`              // List of GPUs available on the node
 }
 
 type Node struct {

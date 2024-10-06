@@ -5,38 +5,38 @@
  * This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3).
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
-package nodeservice
+package registryservice
 
 import (
 	"encoding/json"
 	"fmt"
 	"net/http"
 
-	node "github.com/singulatron/singulatron/localtron/internal/services/node/types"
+	registry "github.com/singulatron/singulatron/localtron/internal/services/registry/types"
 	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
 )
 
-// @ID listNodes
+// @ID listNodess
 // @Summary List Nodes
 // @Description Retrieve a list of nodes.
-// @Tags Node Svc
+// @Tags Registry Svc
 // @Accept json
 // @Produce json
-// @Param body body node.ListNodesRequest false "List Nodes Request"
-// @Success 200 {object} node.ListNodesResponse
-// @Failure 400 {object} node.ErrorResponse "Invalid JSON"
-// @Failure 401 {object} node.ErrorResponse "Unauthorized"
-// @Failure 500 {object} node.ErrorResponse "Internal Server Error"
+// @Param body body registry.ListNodesRequest false "List Registrys Request"
+// @Success 200 {object} registry.ListNodesResponse
+// @Failure 400 {object} registry.ErrorResponse "Invalid JSON"
+// @Failure 401 {object} registry.ErrorResponse "Unauthorized"
+// @Failure 500 {object} registry.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
-// @Router /node-svc/nodes [post]
-func (ns *NodeService) List(
+// @Router /registry-svc/registrys [post]
+func (ns *RegistryService) List(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
 	w.Header().Set("Content-Type", "application/json")
 
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := ns.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", node.PermissionNodeView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	err := ns.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", registry.PermissionRegistryView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(err.Error()))
@@ -48,7 +48,7 @@ func (ns *NodeService) List(
 		return
 	}
 
-	req := node.ListNodesRequest{}
+	req := registry.ListNodesRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -64,7 +64,7 @@ func (ns *NodeService) List(
 		return
 	}
 
-	response := node.ListNodesResponse{
+	response := registry.ListNodesResponse{
 		Nodes: nodes,
 	}
 
