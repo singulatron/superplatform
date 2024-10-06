@@ -84,8 +84,8 @@ func (ns *RegistryService) listNodes() ([]*registry.Node, error) {
 
 	return []*registry.Node{
 		{
-			Hostname: ns.Hostname,
-			GPUs:     gpus,
+			URL:  ns.URL,
+			GPUs: gpus,
 		},
 	}, nil
 }

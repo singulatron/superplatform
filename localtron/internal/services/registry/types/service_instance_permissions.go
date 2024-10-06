@@ -33,8 +33,12 @@ var PermissionServiceInstanceDelete = usertypes.Permission{
 }
 
 var ServiceInstancePermissions = []usertypes.Permission{
-	PermissionServiceInstanceCreate,
 	PermissionServiceInstanceView,
+}
+
+var ServiceInstanceAdminPermissions = []usertypes.Permission{
+	PermissionServiceInstanceView,
+	PermissionServiceInstanceCreate,
 	PermissionServiceInstanceEdit,
 	PermissionServiceInstanceDelete,
 }

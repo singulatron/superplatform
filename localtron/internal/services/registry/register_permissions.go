@@ -15,13 +15,21 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
 )
 
+func app(permSlices ...[]usertypes.Permission) []usertypes.Permission {
+	ret := []usertypes.Permission{}
+	for _, ps := range permSlices {
+		ret = append(ret, ps...)
+	}
+	return ret
+}
+
 func (ns *RegistryService) registerPermissions() error {
-	for _, permission := range append(
-		append(
-			registrytypes.NodePermissions,
-			registrytypes.ServiceInstancePermissions...,
-		),
-		registrytypes.ServiceDefinitionPermissions...,
+	for _, permission := range app(
+		registrytypes.NodeAdminPermissions,
+		registrytypes.ServiceInstancePermissions,
+		registrytypes.ServiceInstanceAdminPermissions,
+		registrytypes.ServiceDefinitionPermissions,
+		registrytypes.ServiceDefinitionAdminPermissions,
 	) {
 		rsp := &usertypes.UpserPermissionResponse{}
 		err := ns.router.Put(context.Background(), "user-svc", fmt.Sprintf("/permission/%v", permission.Id), &usertypes.UpserPermissionRequest{
@@ -37,14 +45,27 @@ func (ns *RegistryService) registerPermissions() error {
 
 	for _, role := range []*usertypes.Role{
 		usertypes.RoleAdmin,
-		// registrytypes.RoleUser,
 	} {
-		for _, permission := range append(
-			append(
-				registrytypes.NodePermissions,
-				registrytypes.ServiceInstancePermissions...,
-			),
-			registrytypes.ServiceDefinitionPermissions...,
+		for _, permission := range app(
+			registrytypes.NodeAdminPermissions,
+			registrytypes.ServiceInstanceAdminPermissions,
+			registrytypes.ServiceDefinitionAdminPermissions,
+		) {
+			rsp := &usertypes.AddPermissionToRoleResponse{}
+			err := ns.router.Put(context.Background(), "user-svc",
+				fmt.Sprintf("/role/%v/permission/%v", role.Id, permission.Id), &usertypes.AddPermissionToRoleRequest{}, rsp)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	for _, role := range []*usertypes.Role{
+		usertypes.RoleUser,
+	} {
+		for _, permission := range app(
+			registrytypes.ServiceInstancePermissions,
+			registrytypes.ServiceDefinitionPermissions,
 		) {
 			rsp := &usertypes.AddPermissionToRoleResponse{}
 			err := ns.router.Put(context.Background(), "user-svc",

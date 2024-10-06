@@ -9,17 +9,18 @@
 package registry_svc
 
 type Node struct {
-	Hostname string `json:"hostname"`       // Hostname of the node
-	IP       string `json:"ip,omitempty"`   // IP of the node. Optional: If not provided, resolved by hostname.
-	GPUs     []*GPU `json:"gpus,omitempty"` // List of GPUs available on the node
+	// URL of the daemon running on the node.
+	// If not configured defaults to hostname + default Singulatron daemon port.
+	URL  string `json:"url"`
+	GPUs []*GPU `json:"gpus,omitempty"` // List of GPUs available on the node
 }
 
 func (n Node) GetId() string {
-	return n.Hostname
+	return n.URL
 }
 
 type GPU struct {
-	// Id Node.Hostname + IntraNodeId
+	// Id Node.URL + IntraNodeId
 	Id               string    `json:"id"`
 	IntraNodeId      int       `json:"intraNodeId"`
 	Name             string    `json:"name"`

@@ -16,7 +16,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/pkg/errors"
 	registry "github.com/singulatron/singulatron/localtron/internal/services/registry/types"
 	sdk "github.com/singulatron/singulatron/sdk/go"
@@ -26,8 +25,8 @@ import (
 )
 
 type RegistryService struct {
-	Hostname string
-	// InternalNodeAddress is the internal network address of the node.
+	URL string
+	// InternalNodeAddress is the internal network nodeUrless of the node.
 	InternalNodeAddress string
 
 	router *router.Router
@@ -39,14 +38,15 @@ type RegistryService struct {
 }
 
 func NewRegistryService(router *router.Router, datastoreFactory func(tableName string, instance any) (datastore.DataStore, error)) (*RegistryService, error) {
-	hostname := os.Getenv("SINGULATRON_HOSTNAME")
+	nodeUrl := os.Getenv("SINGULATRON_ADDRESS")
 	var err error
 
-	if hostname == "" {
-		hostname, err = os.Hostname()
+	if nodeUrl == "" {
+		nodeUrl, err = os.Hostname()
 		if err != nil {
 			return nil, err
 		}
+		nodeUrl = fmt.Sprintf("%v:%v", nodeUrl, "58231")
 	}
 
 	credentialStore, err := datastoreFactory("registrySvcCredentials", &sdk.Credential{})
@@ -67,7 +67,7 @@ func NewRegistryService(router *router.Router, datastoreFactory func(tableName s
 	}
 
 	service := &RegistryService{
-		Hostname:               hostname,
+		URL:                    nodeUrl,
 		router:                 router,
 		credentialStore:        credentialStore,
 		serviceDefinitionStore: serviceDefinitionStore,
@@ -95,7 +95,7 @@ func (ns *RegistryService) nodeHeartbeat() {
 		time.Sleep(5 * time.Second)
 
 		node := registry.Node{
-			Hostname: ns.Hostname,
+			URL: ns.URL,
 		}
 
 		outp, err := ns.getNvidiaSmiOutput()
@@ -110,7 +110,6 @@ func (ns *RegistryService) nodeHeartbeat() {
 			}
 		}
 
-		spew.Dump(node)
 		err = ns.nodeStore.Upsert(node)
 		if err != nil {
 			logger.Error("Failed to save node", err)
@@ -159,7 +158,7 @@ func (ns *RegistryService) ParseNvidiaSmiOutput(output string) ([]*registry.GPU,
 		}
 
 		gpu := registry.GPU{
-			Id:               fmt.Sprintf("%v:%v", ns.Hostname, strconv.Itoa(i)),
+			Id:               fmt.Sprintf("%v:%v", ns.URL, strconv.Itoa(i)),
 			IntraNodeId:      i,
 			Name:             record[0],
 			BusId:            record[8],

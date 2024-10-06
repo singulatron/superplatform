@@ -33,6 +33,10 @@ var PermissionServiceDefinitionDelete = usertypes.Permission{
 }
 
 var ServiceDefinitionPermissions = []usertypes.Permission{
+	PermissionServiceDefinitionView,
+}
+
+var ServiceDefinitionAdminPermissions = []usertypes.Permission{
 	PermissionServiceDefinitionCreate,
 	PermissionServiceDefinitionView,
 	PermissionServiceDefinitionEdit,

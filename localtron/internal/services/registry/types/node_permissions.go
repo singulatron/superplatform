@@ -37,7 +37,7 @@ var PermissionNodeStream = usertypes.Permission{
 	Name: "Node Stream",
 }
 
-var NodePermissions = []usertypes.Permission{
+var NodeAdminPermissions = []usertypes.Permission{
 	PermissionNodeCreate,
 	PermissionNodeView,
 	PermissionNodeEdit,

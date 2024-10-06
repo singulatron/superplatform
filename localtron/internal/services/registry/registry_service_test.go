@@ -16,7 +16,7 @@ NVIDIA GeForce RTX 3090, 52, 0, 24576, 2600, 26.85, 350.00, 535.183.01, 00000000
 `
 
 func TestNvidiaSmiOutput(t *testing.T) {
-	ns := registryservice.RegistryService{Hostname: "testhost"}
+	ns := registryservice.RegistryService{URL: "testhost:58231"}
 
 	gpus, err := ns.ParseNvidiaSmiOutput(nvidiaSmiOutput)
 	require.NoError(t, err)
