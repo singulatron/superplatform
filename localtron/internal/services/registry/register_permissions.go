@@ -16,7 +16,13 @@ import (
 )
 
 func (ns *RegistryService) registerPermissions() error {
-	for _, permission := range registrytypes.RegistryPermissions {
+	for _, permission := range append(
+		append(
+			registrytypes.NodePermissions,
+			registrytypes.ServiceInstancePermissions...,
+		),
+		registrytypes.ServiceDefinitionPermissions...,
+	) {
 		rsp := &usertypes.UpserPermissionResponse{}
 		err := ns.router.Put(context.Background(), "user-svc", fmt.Sprintf("/permission/%v", permission.Id), &usertypes.UpserPermissionRequest{
 			Permission: &usertypes.Permission{
@@ -33,7 +39,13 @@ func (ns *RegistryService) registerPermissions() error {
 		usertypes.RoleAdmin,
 		// registrytypes.RoleUser,
 	} {
-		for _, permission := range registrytypes.RegistryPermissions {
+		for _, permission := range append(
+			append(
+				registrytypes.NodePermissions,
+				registrytypes.ServiceInstancePermissions...,
+			),
+			registrytypes.ServiceDefinitionPermissions...,
+		) {
 			rsp := &usertypes.AddPermissionToRoleResponse{}
 			err := ns.router.Put(context.Background(), "user-svc",
 				fmt.Sprintf("/role/%v/permission/%v", role.Id, permission.Id), &usertypes.AddPermissionToRoleRequest{}, rsp)

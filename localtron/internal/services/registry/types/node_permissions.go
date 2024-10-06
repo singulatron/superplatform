@@ -13,27 +13,27 @@ import (
 )
 
 var PermissionNodeCreate = usertypes.Permission{
-	Id:   "node-svc:node:create",
+	Id:   "registry-svc:node:create",
 	Name: "Node Create",
 }
 
 var PermissionNodeView = usertypes.Permission{
-	Id:   "node-svc:node:view",
+	Id:   "registry-svc:node:view",
 	Name: "Node View",
 }
 
 var PermissionNodeEdit = usertypes.Permission{
-	Id:   "node-svc:node:edit",
+	Id:   "registry-svc:node:edit",
 	Name: "Node Edit",
 }
 
 var PermissionNodeDelete = usertypes.Permission{
-	Id:   "node-svc:node:delete",
+	Id:   "registry-svc:node:delete",
 	Name: "Node Delete",
 }
 
 var PermissionNodeStream = usertypes.Permission{
-	Id:   "node-svc:node:stream",
+	Id:   "registry-svc:node:stream",
 	Name: "Node Stream",
 }
 

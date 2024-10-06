@@ -36,7 +36,7 @@ func (ns *RegistryService) List(
 	w.Header().Set("Content-Type", "application/json")
 
 	rsp := &usertypes.IsAuthorizedResponse{}
-	err := ns.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", registry.PermissionRegistryView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	err := ns.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", registry.PermissionNodeView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(err.Error()))
@@ -70,4 +70,22 @@ func (ns *RegistryService) List(
 
 	bs, _ := json.Marshal(response)
 	w.Write(bs)
+}
+
+func (ns *RegistryService) listNodes() ([]*registry.Node, error) {
+	outp, err := ns.getNvidiaSmiOutput()
+	if err != nil {
+		return nil, err
+	}
+	gpus, err := ns.ParseNvidiaSmiOutput(outp)
+	if err != nil {
+		return nil, err
+	}
+
+	return []*registry.Node{
+		{
+			Hostname: ns.Hostname,
+			GPUs:     gpus,
+		},
+	}, nil
 }

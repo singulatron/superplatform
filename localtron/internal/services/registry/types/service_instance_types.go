@@ -17,34 +17,6 @@ type ErrorResponse struct {
 	Error string `json:"error"`
 }
 
-// RegisterServiceInstanceRequest represents the request body to register a service.
-//
-// The user must provide either:
-// 1. A full URL (e.g., "https://myserver.com:5981") -OR-
-// 2. A combination of the following fields:
-//   - scheme: "http" or "https" (required if URL is not provided)
-//   - host: the domain of the service (required if URL is not provided)
-//   - port: the port number (required if URL is not provided)
-//
-// Additionally, if both host and port are provided, they cannot both be specified at the same time.
-// The IP field is optional and can be used for registration by IP instead of host.
-type RegisterServiceInstanceRequest struct {
-	Slug   string `json:"slug,omitempty" example:"user-svc" binding:"required"` // Slug of the service whose instance is being registered.
-	URL    string `json:"url,omitempty" example:"https://myserver.com:5981"`    // Full address URL of the service instance.
-	Scheme string `json:"scheme,omitempty" example:"https"`                     // Scheme of the service instance address. Required if URL is not provided.
-	Host   string `json:"host,omitempty" example:"myserver.com"`                // Host of the service instance address. Required if URL is not provided
-	IP     string `json:"ip,omitempty" example:"8.8.8.8"`                       // IP of the service instance address. Optional: to register by IP instead of host
-	Port   int    `json:"port,omitempty" example:"8080"`                        // Port of the service instance address. Required if URL is not provided
-	Path   string `json:"path,omitempty" example:"/your-svc"`                   // Path of the service instance address. Optional (e.g., "/api")
-}
-
-type RegisterServiceInstanceResponse struct {
-}
-
-type QueryServiceInstancesResponse struct {
-	Instances []ServiceInstance `json:"instances,omitempty"`
-}
-
 type ServiceInstance struct {
 	ID     string `json:"id,omitempty" example:"https://api.com:999/user-svc" binding:"required"` // Required: ID of the service instance
 	Slug   string `json:"slug,omitempty" example:"user-svc" binding:"required"`                   // Slug of the service whose instance is being registered.
@@ -76,3 +48,31 @@ func (s *ServiceInstance) DeriveID() string {
 }
 
 var ErrNotFound = errors.New("service not found")
+
+// RegisterServiceInstanceRequest represents the request body to register a service.
+//
+// The user must provide either:
+// 1. A full URL (e.g., "https://myserver.com:5981") -OR-
+// 2. A combination of the following fields:
+//   - scheme: "http" or "https" (required if URL is not provided)
+//   - host: the domain of the service (required if URL is not provided)
+//   - port: the port number (required if URL is not provided)
+//
+// Additionally, if both host and port are provided, they cannot both be specified at the same time.
+// The IP field is optional and can be used for registration by IP instead of host.
+type RegisterServiceInstanceRequest struct {
+	Slug   string `json:"slug,omitempty" example:"user-svc" binding:"required"` // Slug of the service whose instance is being registered.
+	URL    string `json:"url,omitempty" example:"https://myserver.com:5981"`    // Full address URL of the service instance.
+	Scheme string `json:"scheme,omitempty" example:"https"`                     // Scheme of the service instance address. Required if URL is not provided.
+	Host   string `json:"host,omitempty" example:"myserver.com"`                // Host of the service instance address. Required if URL is not provided
+	IP     string `json:"ip,omitempty" example:"8.8.8.8"`                       // IP of the service instance address. Optional: to register by IP instead of host
+	Port   int    `json:"port,omitempty" example:"8080"`                        // Port of the service instance address. Required if URL is not provided
+	Path   string `json:"path,omitempty" example:"/your-svc"`                   // Path of the service instance address. Optional (e.g., "/api")
+}
+
+type RegisterServiceInstanceResponse struct {
+}
+
+type QueryServiceInstancesResponse struct {
+	Instances []ServiceInstance `json:"instances,omitempty"`
+}

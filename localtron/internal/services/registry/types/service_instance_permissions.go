@@ -12,35 +12,29 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
 )
 
-var PermissionRegistryCreate = usertypes.Permission{
-	Id:   "node-svc:node:create",
-	Name: "Registry Create",
+var PermissionServiceInstanceCreate = usertypes.Permission{
+	Id:   "registry-svc:service-instance:create",
+	Name: " Create",
 }
 
-var PermissionRegistryView = usertypes.Permission{
-	Id:   "node-svc:node:view",
-	Name: "Registry View",
+var PermissionServiceInstanceView = usertypes.Permission{
+	Id:   "registry-svc:service-instance:view",
+	Name: " View",
 }
 
-var PermissionRegistryEdit = usertypes.Permission{
-	Id:   "node-svc:node:edit",
-	Name: "Registry Edit",
+var PermissionServiceInstanceEdit = usertypes.Permission{
+	Id:   "registry-svc:service-instance:edit",
+	Name: " Edit",
 }
 
-var PermissionRegistryDelete = usertypes.Permission{
-	Id:   "node-svc:node:delete",
-	Name: "Registry Delete",
+var PermissionServiceInstanceDelete = usertypes.Permission{
+	Id:   "registry-svc:service-instance:delete",
+	Name: " Delete",
 }
 
-var PermissionRegistryStream = usertypes.Permission{
-	Id:   "node-svc:node:stream",
-	Name: "Registry Stream",
-}
-
-var RegistryPermissions = []usertypes.Permission{
-	PermissionRegistryCreate,
-	PermissionRegistryView,
-	PermissionRegistryEdit,
-	PermissionRegistryDelete,
-	PermissionRegistryStream,
+var ServiceInstancePermissions = []usertypes.Permission{
+	PermissionServiceInstanceCreate,
+	PermissionServiceInstanceView,
+	PermissionServiceInstanceEdit,
+	PermissionServiceInstanceDelete,
 }

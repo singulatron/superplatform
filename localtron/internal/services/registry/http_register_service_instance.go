@@ -11,7 +11,7 @@ import (
 
 // Register a new service instance
 // @ID registerServiceInstance
-// @Summary Register Service Instance. Idempotent.
+// @Summary Register Service Instance
 // @Description Registers a new service instance, associating an service instance address with a slug acquired from the bearer token.
 // @Tags Registry Svc
 // @Accept json

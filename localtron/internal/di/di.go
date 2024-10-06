@@ -466,6 +466,10 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 		if err != nil {
 			return err
 		}
+		err = registryService.Start()
+		if err != nil {
+			return err
+		}
 
 		return nil
 	}, nil

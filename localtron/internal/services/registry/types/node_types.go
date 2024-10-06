@@ -8,15 +8,14 @@
 
 package registry_svc
 
-type RegisterNodeRequest struct {
-	Hostname string `json:"hostname" binding:"required"` // Hostname of the node
-	IP       string `json:"ip,omitempty"`                // IP of the node. Optional: If not provided, resolved by hostname.
-	GPUs     []*GPU `json:"gpus,omitempty"`              // List of GPUs available on the node
+type Node struct {
+	Hostname string `json:"hostname"`       // Hostname of the node
+	IP       string `json:"ip,omitempty"`   // IP of the node. Optional: If not provided, resolved by hostname.
+	GPUs     []*GPU `json:"gpus,omitempty"` // List of GPUs available on the node
 }
 
-type Node struct {
-	Hostname string `json:"hostname"`
-	GPUs     []*GPU `json:"gpus"`
+func (n Node) GetId() string {
+	return n.Hostname
 }
 
 type GPU struct {

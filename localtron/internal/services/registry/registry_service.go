@@ -14,11 +14,14 @@ import (
 	"os/exec"
 	"strconv"
 	"strings"
+	"time"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/pkg/errors"
 	registry "github.com/singulatron/singulatron/localtron/internal/services/registry/types"
 	sdk "github.com/singulatron/singulatron/sdk/go"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
+	"github.com/singulatron/singulatron/sdk/go/logger"
 	"github.com/singulatron/singulatron/sdk/go/router"
 )
 
@@ -29,21 +32,32 @@ type RegistryService struct {
 
 	router *router.Router
 
-	credentialStore      datastore.DataStore
-	serviceInstanceStore datastore.DataStore
-	nodeStore            datastore.DataStore
+	credentialStore        datastore.DataStore
+	serviceDefinitionStore datastore.DataStore
+	serviceInstanceStore   datastore.DataStore
+	nodeStore              datastore.DataStore
 }
 
 func NewRegistryService(router *router.Router, datastoreFactory func(tableName string, instance any) (datastore.DataStore, error)) (*RegistryService, error) {
-	hostname, err := os.Hostname()
-	if err != nil {
-		return nil, err
+	hostname := os.Getenv("SINGULATRON_HOSTNAME")
+	var err error
+
+	if hostname == "" {
+		hostname, err = os.Hostname()
+		if err != nil {
+			return nil, err
+		}
 	}
+
 	credentialStore, err := datastoreFactory("registrySvcCredentials", &sdk.Credential{})
 	if err != nil {
 		return nil, err
 	}
 	serviceInstanceStore, err := datastoreFactory("registrySvcServiceInstances", &registry.ServiceInstance{})
+	if err != nil {
+		return nil, err
+	}
+	serviceDefinitionStore, err := datastoreFactory("registrySvcServiceInstances", &registry.ServiceInstance{})
 	if err != nil {
 		return nil, err
 	}
@@ -53,37 +67,55 @@ func NewRegistryService(router *router.Router, datastoreFactory func(tableName s
 	}
 
 	service := &RegistryService{
-		Hostname:             hostname,
-		router:               router,
-		credentialStore:      credentialStore,
-		serviceInstanceStore: serviceInstanceStore,
-		nodeStore:            nodeStore,
+		Hostname:               hostname,
+		router:                 router,
+		credentialStore:        credentialStore,
+		serviceDefinitionStore: serviceDefinitionStore,
+		serviceInstanceStore:   serviceInstanceStore,
+		nodeStore:              nodeStore,
 	}
 
 	return service, nil
 }
 
 func (ns *RegistryService) Start() error {
+	go ns.nodeHeartbeat()
+
+	token, err := sdk.RegisterService("registry-svc", "Registry Service", ns.router, ns.credentialStore)
+	if err != nil {
+		return err
+	}
+	ns.router = ns.router.SetBearerToken(token)
 
 	return ns.registerPermissions()
 }
 
-func (ns *RegistryService) listNodes() ([]*registry.Node, error) {
-	outp, err := ns.GetNvidiaSmiOutput()
-	if err != nil {
-		return nil, err
-	}
-	gpus, err := ns.ParseNvidiaSmiOutput(outp)
-	if err != nil {
-		return nil, err
-	}
+func (ns *RegistryService) nodeHeartbeat() {
+	for {
+		time.Sleep(5 * time.Second)
 
-	return []*registry.Node{
-		{
+		node := registry.Node{
 			Hostname: ns.Hostname,
-			GPUs:     gpus,
-		},
-	}, nil
+		}
+
+		outp, err := ns.getNvidiaSmiOutput()
+		if err != nil {
+			logger.Warn("Failed to get smi output %v", err)
+		} else {
+			gpus, err := ns.ParseNvidiaSmiOutput(outp)
+			if err != nil {
+				logger.Warn("Failed to get smi output", err)
+			} else {
+				node.GPUs = gpus
+			}
+		}
+
+		spew.Dump(node)
+		err = ns.nodeStore.Upsert(node)
+		if err != nil {
+			logger.Error("Failed to save node", err)
+		}
+	}
 }
 
 func (ns *RegistryService) ParseNvidiaSmiOutput(output string) ([]*registry.GPU, error) {
@@ -147,7 +179,7 @@ func (ns *RegistryService) ParseNvidiaSmiOutput(output string) ([]*registry.GPU,
 	return gpus, nil
 }
 
-func (ns *RegistryService) GetNvidiaSmiOutput() (string, error) {
+func (ns *RegistryService) getNvidiaSmiOutput() (string, error) {
 	cmd := exec.Command("nvidia-smi", "--query-gpu=name,temperature.gpu,utilization.gpu,memory.total,memory.used,power.draw,power.limit,driver_version,pci.bus_id,compute_mode,pstate", "--format=csv,noheader,nounits")
 	output, err := cmd.Output()
 	if err != nil {
