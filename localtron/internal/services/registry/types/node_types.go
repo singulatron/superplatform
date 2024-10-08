@@ -8,15 +8,34 @@
 
 package registry_svc
 
+import "time"
+
 type Node struct {
 	// URL of the daemon running on the node.
 	// If not configured defaults to hostname + default Singulatron daemon port.
-	URL  string `json:"url"`
-	GPUs []*GPU `json:"gpus,omitempty"` // List of GPUs available on the node
+	URL              string        `json:"url"`                        // Status of the node (online, offline, error, unknown)
+	AvailabilityZone string        `json:"availabilityZone,omitempty"` // The availability zone of the node
+	LastHeartbeat    time.Time     `json:"lastHeartbeat,omitempty"`    // Last active timestamp
+	Region           string        `json:"region,omitempty"`           // The region of the node
+	Usage            ResourceUsage `json:"usage,omitempty"`            // Resource usage metrics of the node.
+	GPUs             []*GPU        `json:"gpus,omitempty"`             // List of GPUs available on the node
 }
 
 func (n Node) GetId() string {
 	return n.URL
+}
+
+// Usage represents the usage metrics for a resource.
+type Usage struct {
+	Used    uint64  `json:"used"`    // Used amount (in bytes).
+	Total   uint64  `json:"total"`   // Total available amount (in bytes).
+	Percent float64 `json:"percent"` // Usage percentage.
+}
+
+type ResourceUsage struct {
+	CPU    Usage `json:"cpu"`    // CPU usage metrics.
+	Memory Usage `json:"memory"` // Memory usage metrics.
+	Disk   Usage `json:"disk"`   // Disk usage metrics.
 }
 
 type GPU struct {

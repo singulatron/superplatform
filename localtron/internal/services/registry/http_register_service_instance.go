@@ -29,9 +29,14 @@ func (rs *RegistryService) RegisterServiceInstance(
 ) {
 	w.Header().Set("Content-Type", "application/json")
 
-	authRsp := &usertypes.IsAuthorizedResponse{}
-	err := rs.router.AsRequestMaker(r).Post(r.Context(), "user-svc", "/permission/register-service", &usertypes.IsAuthorizedRequest{}, authRsp)
-	if err != nil || !authRsp.Authorized {
+	rsp := &usertypes.IsAuthorizedResponse{}
+	err := rs.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", registry.PermissionNodeView.Id), &usertypes.IsAuthorizedRequest{}, rsp)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+		return
+	}
+	if !rsp.Authorized {
 		w.WriteHeader(http.StatusUnauthorized)
 		w.Write([]byte(`Unauthorized`))
 		return
@@ -45,7 +50,7 @@ func (rs *RegistryService) RegisterServiceInstance(
 	}
 	defer r.Body.Close()
 
-	err = rs.registerService(req, authRsp.User.Slug)
+	err = rs.registerService(req, rsp.User.Slug)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(err.Error()))

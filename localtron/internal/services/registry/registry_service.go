@@ -10,6 +10,7 @@ package registryservice
 import (
 	"encoding/csv"
 	"fmt"
+	"log"
 	"log/slog"
 	"os"
 	"os/exec"
@@ -18,6 +19,9 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
+	"github.com/shirou/gopsutil/cpu"
+	"github.com/shirou/gopsutil/disk"
+	"github.com/shirou/gopsutil/mem"
 	registry "github.com/singulatron/singulatron/localtron/internal/services/registry/types"
 	sdk "github.com/singulatron/singulatron/sdk/go"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
@@ -26,9 +30,9 @@ import (
 )
 
 type RegistryService struct {
-	URL string
-	// InternalNodeAddress is the internal network nodeUrless of the node.
-	InternalNodeAddress string
+	URL              string
+	AvailabilityZone string
+	Region           string
 
 	router *router.Router
 
@@ -49,6 +53,9 @@ func NewRegistryService(router *router.Router, datastoreFactory func(tableName s
 		}
 		nodeUrl = fmt.Sprintf("%v:%v", nodeUrl, "58231")
 	}
+
+	az := os.Getenv("SINGULATRON_AZ")
+	region := os.Getenv("SINGULATRON_REGION")
 
 	credentialStore, err := datastoreFactory("registrySvcCredentials", &sdk.Credential{})
 	if err != nil {
@@ -74,6 +81,8 @@ func NewRegistryService(router *router.Router, datastoreFactory func(tableName s
 		serviceDefinitionStore: serviceDefinitionStore,
 		serviceInstanceStore:   serviceInstanceStore,
 		nodeStore:              nodeStore,
+		AvailabilityZone:       az,
+		Region:                 region,
 	}
 
 	return service, nil
@@ -92,12 +101,23 @@ func (ns *RegistryService) Start() error {
 }
 
 func (ns *RegistryService) nodeHeartbeat() {
+
 	for {
 		time.Sleep(5 * time.Second)
 
 		node := registry.Node{
-			URL: ns.URL,
+			URL:              ns.URL,
+			AvailabilityZone: ns.AvailabilityZone,
+			Region:           ns.Region,
+			LastHeartbeat:    time.Now(),
 		}
+
+		usage, err := getResourceUsage()
+		if err != nil {
+			logger.Warn("Failed to get resource usage", slog.Any("error", err))
+		}
+
+		node.Usage = usage
 
 		// @todo detect non-nvidia gpus
 		outp, err := ns.getNvidiaSmiOutput()
@@ -116,6 +136,7 @@ func (ns *RegistryService) nodeHeartbeat() {
 		if err != nil {
 			logger.Error("Failed to save node", err)
 		}
+
 	}
 }
 
@@ -187,4 +208,40 @@ func (ns *RegistryService) getNvidiaSmiOutput() (string, error) {
 		return "", errors.Wrap(err, fmt.Sprintf("executing nvidia-smi command: %v", string(output)))
 	}
 	return string(output), nil
+}
+
+func getResourceUsage() (registry.ResourceUsage, error) {
+	var usage registry.ResourceUsage
+
+	// Get CPU usage
+	cpuPercent, err := cpu.Percent(0, false)
+	if err != nil {
+		log.Println("Error getting CPU usage:", err)
+		return usage, err
+	}
+	usage.CPU.Percent = cpuPercent[0]            // Take the first element since it returns a slice
+	usage.CPU.Used = uint64(cpuPercent[0]) * 100 // Assume total is 100% for simplification
+	usage.CPU.Total = 100                        // This should be replaced with actual total if available
+
+	// Get Memory usage
+	memInfo, err := mem.VirtualMemory()
+	if err != nil {
+		log.Println("Error getting memory usage:", err)
+		return usage, err
+	}
+	usage.Memory.Used = memInfo.Used
+	usage.Memory.Total = memInfo.Total
+	usage.Memory.Percent = memInfo.UsedPercent
+
+	// Get Disk usage
+	diskUsage, err := disk.Usage("/")
+	if err != nil {
+		log.Println("Error getting disk usage:", err)
+		return usage, err
+	}
+	usage.Disk.Used = diskUsage.Used
+	usage.Disk.Total = diskUsage.Total
+	usage.Disk.Percent = diskUsage.UsedPercent
+
+	return usage, nil
 }

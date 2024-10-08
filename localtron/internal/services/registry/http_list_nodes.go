@@ -28,7 +28,7 @@ import (
 // @Failure 401 {object} registry.ErrorResponse "Unauthorized"
 // @Failure 500 {object} registry.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
-// @Router /registry-svc/registrys [post]
+// @Router /registry-svc/nodes [post]
 func (ns *RegistryService) List(
 	w http.ResponseWriter,
 	r *http.Request,
