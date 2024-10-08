@@ -1,5 +1,7 @@
 import { RegistrySvcGPUFromJSON, RegistrySvcGPUToJSON } from './RegistrySvcGPU.mjs';
+import { RegistrySvcResourceUsageFromJSON, RegistrySvcResourceUsageToJSON } from './RegistrySvcResourceUsage.mjs';
 import './RegistrySvcProcess.mjs';
+import './RegistrySvcUsage.mjs';
 
 /* tslint:disable */
 /* eslint-disable */
@@ -28,8 +30,12 @@ function RegistrySvcNodeFromJSONTyped(json, ignoreDiscriminator) {
         return json;
     }
     return {
+        'availabilityZone': json['availabilityZone'] == null ? undefined : json['availabilityZone'],
         'gpus': json['gpus'] == null ? undefined : (json['gpus'].map(RegistrySvcGPUFromJSON)),
+        'lastHeartbeat': json['lastHeartbeat'] == null ? undefined : json['lastHeartbeat'],
+        'region': json['region'] == null ? undefined : json['region'],
         'url': json['url'] == null ? undefined : json['url'],
+        'usage': json['usage'] == null ? undefined : RegistrySvcResourceUsageFromJSON(json['usage']),
     };
 }
 function RegistrySvcNodeToJSON(value) {
@@ -37,8 +43,12 @@ function RegistrySvcNodeToJSON(value) {
         return value;
     }
     return {
+        'availabilityZone': value['availabilityZone'],
         'gpus': value['gpus'] == null ? undefined : (value['gpus'].map(RegistrySvcGPUToJSON)),
+        'lastHeartbeat': value['lastHeartbeat'],
+        'region': value['region'],
         'url': value['url'],
+        'usage': RegistrySvcResourceUsageToJSON(value['usage']),
     };
 }
 

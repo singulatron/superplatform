@@ -86,7 +86,9 @@ var registrySvcNode = require('./registrySvcNode.js');
 var registrySvcProcess = require('./registrySvcProcess.js');
 var registrySvcQueryServiceInstancesResponse = require('./registrySvcQueryServiceInstancesResponse.js');
 var registrySvcRegisterServiceInstanceRequest = require('./registrySvcRegisterServiceInstanceRequest.js');
+var registrySvcResourceUsage = require('./registrySvcResourceUsage.js');
 var registrySvcServiceInstance = require('./registrySvcServiceInstance.js');
+var registrySvcUsage = require('./registrySvcUsage.js');
 var userSvcAddUserToOrganizationRequest = require('./userSvcAddUserToOrganizationRequest.js');
 var userSvcAuthToken = require('./userSvcAuthToken.js');
 var userSvcChangePasswordAdminRequest = require('./userSvcChangePasswordAdminRequest.js');
@@ -216,7 +218,9 @@ let typeMap = {
     "RegistrySvcProcess": registrySvcProcess.RegistrySvcProcess,
     "RegistrySvcQueryServiceInstancesResponse": registrySvcQueryServiceInstancesResponse.RegistrySvcQueryServiceInstancesResponse,
     "RegistrySvcRegisterServiceInstanceRequest": registrySvcRegisterServiceInstanceRequest.RegistrySvcRegisterServiceInstanceRequest,
+    "RegistrySvcResourceUsage": registrySvcResourceUsage.RegistrySvcResourceUsage,
     "RegistrySvcServiceInstance": registrySvcServiceInstance.RegistrySvcServiceInstance,
+    "RegistrySvcUsage": registrySvcUsage.RegistrySvcUsage,
     "UserSvcAddUserToOrganizationRequest": userSvcAddUserToOrganizationRequest.UserSvcAddUserToOrganizationRequest,
     "UserSvcAuthToken": userSvcAuthToken.UserSvcAuthToken,
     "UserSvcChangePasswordAdminRequest": userSvcChangePasswordAdminRequest.UserSvcChangePasswordAdminRequest,
@@ -531,7 +535,9 @@ exports.RegistrySvcNode = registrySvcNode.RegistrySvcNode;
 exports.RegistrySvcProcess = registrySvcProcess.RegistrySvcProcess;
 exports.RegistrySvcQueryServiceInstancesResponse = registrySvcQueryServiceInstancesResponse.RegistrySvcQueryServiceInstancesResponse;
 exports.RegistrySvcRegisterServiceInstanceRequest = registrySvcRegisterServiceInstanceRequest.RegistrySvcRegisterServiceInstanceRequest;
+exports.RegistrySvcResourceUsage = registrySvcResourceUsage.RegistrySvcResourceUsage;
 exports.RegistrySvcServiceInstance = registrySvcServiceInstance.RegistrySvcServiceInstance;
+exports.RegistrySvcUsage = registrySvcUsage.RegistrySvcUsage;
 exports.UserSvcAddUserToOrganizationRequest = userSvcAddUserToOrganizationRequest.UserSvcAddUserToOrganizationRequest;
 exports.UserSvcAuthToken = userSvcAuthToken.UserSvcAuthToken;
 exports.UserSvcChangePasswordAdminRequest = userSvcChangePasswordAdminRequest.UserSvcChangePasswordAdminRequest;

@@ -98,7 +98,7 @@ export class RegistrySvcApi {
      * @param body List Registrys Request
      */
     public async listNodess (body?: object, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: RegistrySvcListNodesResponse;  }> {
-        const localVarPath = this.basePath + '/registry-svc/registrys';
+        const localVarPath = this.basePath + '/registry-svc/nodes';
         let localVarQueryParameters: any = {};
         let localVarHeaderParams: any = (<any>Object).assign({}, this._defaultHeaders);
         const produces = ['application/json'];

@@ -86,7 +86,9 @@ export * from './registrySvcNode';
 export * from './registrySvcProcess';
 export * from './registrySvcQueryServiceInstancesResponse';
 export * from './registrySvcRegisterServiceInstanceRequest';
+export * from './registrySvcResourceUsage';
 export * from './registrySvcServiceInstance';
+export * from './registrySvcUsage';
 export * from './userSvcAddUserToOrganizationRequest';
 export * from './userSvcAuthToken';
 export * from './userSvcChangePasswordAdminRequest';
@@ -215,7 +217,9 @@ import { RegistrySvcNode } from './registrySvcNode';
 import { RegistrySvcProcess } from './registrySvcProcess';
 import { RegistrySvcQueryServiceInstancesResponse } from './registrySvcQueryServiceInstancesResponse';
 import { RegistrySvcRegisterServiceInstanceRequest } from './registrySvcRegisterServiceInstanceRequest';
+import { RegistrySvcResourceUsage } from './registrySvcResourceUsage';
 import { RegistrySvcServiceInstance } from './registrySvcServiceInstance';
+import { RegistrySvcUsage } from './registrySvcUsage';
 import { UserSvcAddUserToOrganizationRequest } from './userSvcAddUserToOrganizationRequest';
 import { UserSvcAuthToken } from './userSvcAuthToken';
 import { UserSvcChangePasswordAdminRequest } from './userSvcChangePasswordAdminRequest';
@@ -347,7 +351,9 @@ let typeMap: {[index: string]: any} = {
     "RegistrySvcProcess": RegistrySvcProcess,
     "RegistrySvcQueryServiceInstancesResponse": RegistrySvcQueryServiceInstancesResponse,
     "RegistrySvcRegisterServiceInstanceRequest": RegistrySvcRegisterServiceInstanceRequest,
+    "RegistrySvcResourceUsage": RegistrySvcResourceUsage,
     "RegistrySvcServiceInstance": RegistrySvcServiceInstance,
+    "RegistrySvcUsage": RegistrySvcUsage,
     "UserSvcAddUserToOrganizationRequest": UserSvcAddUserToOrganizationRequest,
     "UserSvcAuthToken": UserSvcAuthToken,
     "UserSvcChangePasswordAdminRequest": UserSvcChangePasswordAdminRequest,

@@ -3,6 +3,8 @@
 var RegistrySvcNode = require('./RegistrySvcNode.js');
 require('./RegistrySvcGPU.js');
 require('./RegistrySvcProcess.js');
+require('./RegistrySvcResourceUsage.js');
+require('./RegistrySvcUsage.js');
 
 /* tslint:disable */
 /* eslint-disable */

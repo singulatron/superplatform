@@ -10,15 +10,32 @@
  * Do not edit the class manually.
  */
 import { RegistrySvcGPU } from './registrySvcGPU';
+import { RegistrySvcResourceUsage } from './registrySvcResourceUsage';
 export declare class RegistrySvcNode {
+    /**
+    * The availability zone of the node
+    */
+    'availabilityZone'?: string;
     /**
     * List of GPUs available on the node
     */
     'gpus'?: Array<RegistrySvcGPU>;
     /**
+    * Last active timestamp
+    */
+    'lastHeartbeat'?: string;
+    /**
+    * The region of the node
+    */
+    'region'?: string;
+    /**
     * URL of the daemon running on the node. If not configured defaults to hostname + default Singulatron daemon port.
     */
     'url'?: string;
+    /**
+    * Resource usage metrics of the node.
+    */
+    'usage'?: RegistrySvcResourceUsage;
     static discriminator: string | undefined;
     static attributeTypeMap: Array<{
         name: string;

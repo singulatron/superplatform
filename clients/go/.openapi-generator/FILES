@@ -111,7 +111,9 @@ docs/RegistrySvcNode.md
 docs/RegistrySvcProcess.md
 docs/RegistrySvcQueryServiceInstancesResponse.md
 docs/RegistrySvcRegisterServiceInstanceRequest.md
+docs/RegistrySvcResourceUsage.md
 docs/RegistrySvcServiceInstance.md
+docs/RegistrySvcUsage.md
 docs/UserSvcAPI.md
 docs/UserSvcAddUserToOrganizationRequest.md
 docs/UserSvcAuthToken.md
@@ -230,7 +232,9 @@ model_registry_svc_node.go
 model_registry_svc_process.go
 model_registry_svc_query_service_instances_response.go
 model_registry_svc_register_service_instance_request.go
+model_registry_svc_resource_usage.go
 model_registry_svc_service_instance.go
+model_registry_svc_usage.go
 model_user_svc_add_user_to_organization_request.go
 model_user_svc_auth_token.go
 model_user_svc_change_password_admin_request.go

@@ -2140,7 +2140,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/registry-svc/registrys": {
+        "/registry-svc/nodes": {
             "post": {
                 "security": [
                     {
@@ -4984,6 +4984,10 @@ const docTemplate = `{
         "registry_svc.Node": {
             "type": "object",
             "properties": {
+                "availabilityZone": {
+                    "description": "The availability zone of the node",
+                    "type": "string"
+                },
                 "gpus": {
                     "description": "List of GPUs available on the node",
                     "type": "array",
@@ -4991,9 +4995,25 @@ const docTemplate = `{
                         "$ref": "#/definitions/registry_svc.GPU"
                     }
                 },
+                "lastHeartbeat": {
+                    "description": "Last active timestamp",
+                    "type": "string"
+                },
+                "region": {
+                    "description": "The region of the node",
+                    "type": "string"
+                },
                 "url": {
                     "description": "URL of the daemon running on the node.\nIf not configured defaults to hostname + default Singulatron daemon port.",
                     "type": "string"
+                },
+                "usage": {
+                    "description": "Resource usage metrics of the node.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/registry_svc.ResourceUsage"
+                        }
+                    ]
                 }
             }
         },
@@ -5068,6 +5088,35 @@ const docTemplate = `{
         "registry_svc.RegisterServiceInstanceResponse": {
             "type": "object"
         },
+        "registry_svc.ResourceUsage": {
+            "type": "object",
+            "properties": {
+                "cpu": {
+                    "description": "CPU usage metrics.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/registry_svc.Usage"
+                        }
+                    ]
+                },
+                "disk": {
+                    "description": "Disk usage metrics.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/registry_svc.Usage"
+                        }
+                    ]
+                },
+                "memory": {
+                    "description": "Memory usage metrics.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/registry_svc.Usage"
+                        }
+                    ]
+                }
+            }
+        },
         "registry_svc.ServiceInstance": {
             "type": "object",
             "required": [
@@ -5114,6 +5163,23 @@ const docTemplate = `{
                     "description": "Full address URL of the service instance.",
                     "type": "string",
                     "example": "https://myserver.com:5981"
+                }
+            }
+        },
+        "registry_svc.Usage": {
+            "type": "object",
+            "properties": {
+                "percent": {
+                    "description": "Usage percentage.",
+                    "type": "number"
+                },
+                "total": {
+                    "description": "Total available amount (in bytes).",
+                    "type": "integer"
+                },
+                "used": {
+                    "description": "Used amount (in bytes).",
+                    "type": "integer"
                 }
             }
         },

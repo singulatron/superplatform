@@ -70,7 +70,7 @@ func (a *RegistrySvcAPIService) ListNodessExecute(r ApiListNodessRequest) (*Regi
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/registry-svc/registrys"
+	localVarPath := localBasePath + "/registry-svc/nodes"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}

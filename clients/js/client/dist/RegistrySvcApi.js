@@ -7,6 +7,8 @@ var RegistrySvcRegisterServiceInstanceRequest = require('./RegistrySvcRegisterSe
 require('./RegistrySvcNode.js');
 require('./RegistrySvcGPU.js');
 require('./RegistrySvcProcess.js');
+require('./RegistrySvcResourceUsage.js');
+require('./RegistrySvcUsage.js');
 require('./RegistrySvcServiceInstance.js');
 
 /* tslint:disable */
@@ -39,7 +41,7 @@ class RegistrySvcApi extends runtime.BaseAPI {
                 headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
             }
             const response = yield this.request({
-                path: `/registry-svc/registrys`,
+                path: `/registry-svc/nodes`,
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,

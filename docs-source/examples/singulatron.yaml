@@ -1013,16 +1013,29 @@ definitions:
     type: object
   registry_svc.Node:
     properties:
+      availabilityZone:
+        description: The availability zone of the node
+        type: string
       gpus:
         description: List of GPUs available on the node
         items:
           $ref: '#/definitions/registry_svc.GPU'
         type: array
+      lastHeartbeat:
+        description: Last active timestamp
+        type: string
+      region:
+        description: The region of the node
+        type: string
       url:
         description: |-
           URL of the daemon running on the node.
           If not configured defaults to hostname + default Singulatron daemon port.
         type: string
+      usage:
+        allOf:
+        - $ref: '#/definitions/registry_svc.ResourceUsage'
+        description: Resource usage metrics of the node.
     type: object
   registry_svc.Process:
     properties:
@@ -1079,6 +1092,21 @@ definitions:
     type: object
   registry_svc.RegisterServiceInstanceResponse:
     type: object
+  registry_svc.ResourceUsage:
+    properties:
+      cpu:
+        allOf:
+        - $ref: '#/definitions/registry_svc.Usage'
+        description: CPU usage metrics.
+      disk:
+        allOf:
+        - $ref: '#/definitions/registry_svc.Usage'
+        description: Disk usage metrics.
+      memory:
+        allOf:
+        - $ref: '#/definitions/registry_svc.Usage'
+        description: Memory usage metrics.
+    type: object
   registry_svc.ServiceInstance:
     properties:
       host:
@@ -1120,6 +1148,18 @@ definitions:
     required:
     - id
     - slug
+    type: object
+  registry_svc.Usage:
+    properties:
+      percent:
+        description: Usage percentage.
+        type: number
+      total:
+        description: Total available amount (in bytes).
+        type: integer
+      used:
+        description: Used amount (in bytes).
+        type: integer
     type: object
   user_svc.AddUserToOrganizationRequest:
     properties:
@@ -2872,7 +2912,7 @@ paths:
       summary: Remove Prompt
       tags:
       - Prompt Svc
-  /registry-svc/registrys:
+  /registry-svc/nodes:
     post:
       consumes:
       - application/json

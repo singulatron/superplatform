@@ -5,6 +5,8 @@ import { RegistrySvcRegisterServiceInstanceRequestToJSON } from './RegistrySvcRe
 import './RegistrySvcNode.mjs';
 import './RegistrySvcGPU.mjs';
 import './RegistrySvcProcess.mjs';
+import './RegistrySvcResourceUsage.mjs';
+import './RegistrySvcUsage.mjs';
 import './RegistrySvcServiceInstance.mjs';
 
 /* tslint:disable */
@@ -37,7 +39,7 @@ class RegistrySvcApi extends BaseAPI {
                 headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
             }
             const response = yield this.request({
-                path: `/registry-svc/registrys`,
+                path: `/registry-svc/nodes`,
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,

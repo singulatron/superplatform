@@ -101,7 +101,9 @@ import './registrySvcNode.mjs';
 import './registrySvcProcess.mjs';
 import './registrySvcQueryServiceInstancesResponse.mjs';
 import './registrySvcRegisterServiceInstanceRequest.mjs';
+import './registrySvcResourceUsage.mjs';
 import './registrySvcServiceInstance.mjs';
+import './registrySvcUsage.mjs';
 import './userSvcAddUserToOrganizationRequest.mjs';
 import './userSvcAuthToken.mjs';
 import './userSvcChangePasswordAdminRequest.mjs';
@@ -57365,7 +57367,7 @@ class RegistrySvcApi {
      */
     listNodess(body_1) {
         return __awaiter(this, arguments, void 0, function* (body, options = { headers: {} }) {
-            const localVarPath = this.basePath + '/registry-svc/registrys';
+            const localVarPath = this.basePath + '/registry-svc/nodes';
             let localVarQueryParameters = {};
             let localVarHeaderParams = Object.assign({}, this._defaultHeaders);
             const produces = ['application/json'];
