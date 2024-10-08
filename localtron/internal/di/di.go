@@ -15,7 +15,6 @@ import (
 	dynamicservice "github.com/singulatron/singulatron/localtron/internal/services/dynamic"
 	firehoseservice "github.com/singulatron/singulatron/localtron/internal/services/firehose"
 	modelservice "github.com/singulatron/singulatron/localtron/internal/services/model"
-	nodeservice "github.com/singulatron/singulatron/localtron/internal/services/node"
 	policyservice "github.com/singulatron/singulatron/localtron/internal/services/policy"
 	promptservice "github.com/singulatron/singulatron/localtron/internal/services/prompt"
 	registryservice "github.com/singulatron/singulatron/localtron/internal/services/registry"
@@ -180,12 +179,6 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 	)
 	if err != nil {
 		logger.Error("Generic service creation failed", slog.String("error", err.Error()))
-		os.Exit(1)
-	}
-
-	nodeService, err := nodeservice.NewNodeService(options.Router, options.DatastoreFactory)
-	if err != nil {
-		logger.Error("Node service creation failed", slog.String("error", err.Error()))
 		os.Exit(1)
 	}
 
@@ -414,8 +407,8 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 		dynamicService.Upsert(w, r)
 	})).Methods("OPTIONS", "PUT")
 
-	router.HandleFunc("/node-svc/nodes", appl(func(w http.ResponseWriter, r *http.Request) {
-		nodeService.List(w, r)
+	router.HandleFunc("/registry-svc/nodes", appl(func(w http.ResponseWriter, r *http.Request) {
+		registryService.List(w, r)
 	})).Methods("OPTIONS", "POST")
 
 	router.HandleFunc("/policy-svc/check", appl(func(w http.ResponseWriter, r *http.Request) {
@@ -470,6 +463,10 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 			return err
 		}
 		err = policyService.Start()
+		if err != nil {
+			return err
+		}
+		err = registryService.Start()
 		if err != nil {
 			return err
 		}

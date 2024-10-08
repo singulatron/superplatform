@@ -21,11 +21,43 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import * as runtime from '../runtime';
-import { RegistrySvcQueryServiceInstancesResponseFromJSON, RegistrySvcRegisterServiceInstanceRequestToJSON, } from '../models/index';
+import { RegistrySvcListNodesResponseFromJSON, RegistrySvcQueryServiceInstancesResponseFromJSON, RegistrySvcRegisterServiceInstanceRequestToJSON, } from '../models/index';
 /**
  *
  */
 export class RegistrySvcApi extends runtime.BaseAPI {
+    /**
+     * Retrieve a list of nodes.
+     * List Nodes
+     */
+    listNodessRaw(requestParameters, initOverrides) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const queryParameters = {};
+            const headerParameters = {};
+            headerParameters['Content-Type'] = 'application/json';
+            if (this.configuration && this.configuration.apiKey) {
+                headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
+            }
+            const response = yield this.request({
+                path: `/registry-svc/registrys`,
+                method: 'POST',
+                headers: headerParameters,
+                query: queryParameters,
+                body: requestParameters['body'],
+            }, initOverrides);
+            return new runtime.JSONApiResponse(response, (jsonValue) => RegistrySvcListNodesResponseFromJSON(jsonValue));
+        });
+    }
+    /**
+     * Retrieve a list of nodes.
+     * List Nodes
+     */
+    listNodess() {
+        return __awaiter(this, arguments, void 0, function* (requestParameters = {}, initOverrides) {
+            const response = yield this.listNodessRaw(requestParameters, initOverrides);
+            return yield response.value();
+        });
+    }
     /**
      * Retrieves a list of all registered service instances or filters them by specific criteria (e.g., host, IP).
      * Query Service Instances
@@ -73,7 +105,7 @@ export class RegistrySvcApi extends runtime.BaseAPI {
     }
     /**
      * Registers a new service instance, associating an service instance address with a slug acquired from the bearer token.
-     * Register Service Instance. Idempotent.
+     * Register Service Instance
      */
     registerServiceInstanceRaw(requestParameters, initOverrides) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -98,7 +130,7 @@ export class RegistrySvcApi extends runtime.BaseAPI {
     }
     /**
      * Registers a new service instance, associating an service instance address with a slug acquired from the bearer token.
-     * Register Service Instance. Idempotent.
+     * Register Service Instance
      */
     registerServiceInstance(requestParameters, initOverrides) {
         return __awaiter(this, void 0, void 0, function* () {

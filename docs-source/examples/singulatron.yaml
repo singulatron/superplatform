@@ -716,70 +716,6 @@ definitions:
       status:
         $ref: '#/definitions/model_svc.ModelStatus'
     type: object
-  node_svc.ErrorResponse:
-    properties:
-      error:
-        type: string
-    type: object
-  node_svc.GPU:
-    properties:
-      busId:
-        type: string
-      computeMode:
-        type: string
-      gpuUtilization:
-        type: number
-      id:
-        description: Id Node.Hostname + IntraNodeId
-        type: string
-      intraNodeId:
-        type: integer
-      memoryTotal:
-        type: integer
-      memoryUsage:
-        type: integer
-      name:
-        type: string
-      performanceState:
-        type: string
-      powerCap:
-        type: number
-      powerUsage:
-        type: number
-      processDetails:
-        items:
-          $ref: '#/definitions/node_svc.Process'
-        type: array
-      temperature:
-        type: number
-    type: object
-  node_svc.ListNodesRequest:
-    type: object
-  node_svc.ListNodesResponse:
-    properties:
-      nodes:
-        items:
-          $ref: '#/definitions/node_svc.Node'
-        type: array
-    type: object
-  node_svc.Node:
-    properties:
-      gpus:
-        items:
-          $ref: '#/definitions/node_svc.GPU'
-        type: array
-      hostname:
-        type: string
-    type: object
-  node_svc.Process:
-    properties:
-      memoryUsage:
-        type: integer
-      pid:
-        type: integer
-      processName:
-        type: string
-    type: object
   policy_svc.BlocklistParameters:
     properties:
       blockedIPs:
@@ -1032,6 +968,69 @@ definitions:
   registry_svc.ErrorResponse:
     properties:
       error:
+        type: string
+    type: object
+  registry_svc.GPU:
+    properties:
+      busId:
+        type: string
+      computeMode:
+        type: string
+      gpuUtilization:
+        type: number
+      id:
+        description: Id Node.URL + IntraNodeId
+        type: string
+      intraNodeId:
+        type: integer
+      memoryTotal:
+        type: integer
+      memoryUsage:
+        type: integer
+      name:
+        type: string
+      performanceState:
+        type: string
+      powerCap:
+        type: number
+      powerUsage:
+        type: number
+      processDetails:
+        items:
+          $ref: '#/definitions/registry_svc.Process'
+        type: array
+      temperature:
+        type: number
+    type: object
+  registry_svc.ListNodesRequest:
+    type: object
+  registry_svc.ListNodesResponse:
+    properties:
+      nodes:
+        items:
+          $ref: '#/definitions/registry_svc.Node'
+        type: array
+    type: object
+  registry_svc.Node:
+    properties:
+      gpus:
+        description: List of GPUs available on the node
+        items:
+          $ref: '#/definitions/registry_svc.GPU'
+        type: array
+      url:
+        description: |-
+          URL of the daemon running on the node.
+          If not configured defaults to hostname + default Singulatron daemon port.
+        type: string
+    type: object
+  registry_svc.Process:
+    properties:
+      memoryUsage:
+        type: integer
+      pid:
+        type: integer
+      processName:
         type: string
     type: object
   registry_svc.QueryServiceInstancesResponse:
@@ -2654,42 +2653,6 @@ paths:
       summary: List Models
       tags:
       - Model Svc
-  /node-svc/nodes:
-    post:
-      consumes:
-      - application/json
-      description: Retrieve a list of nodes.
-      operationId: listNodes
-      parameters:
-      - description: List Nodes Request
-        in: body
-        name: body
-        schema:
-          $ref: '#/definitions/node_svc.ListNodesRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/node_svc.ListNodesResponse'
-        "400":
-          description: Invalid JSON
-          schema:
-            $ref: '#/definitions/node_svc.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/node_svc.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/node_svc.ErrorResponse'
-      security:
-      - BearerAuth: []
-      summary: List Nodes
-      tags:
-      - Node Svc
   /policy-svc/check:
     post:
       consumes:
@@ -2909,6 +2872,42 @@ paths:
       summary: Remove Prompt
       tags:
       - Prompt Svc
+  /registry-svc/registrys:
+    post:
+      consumes:
+      - application/json
+      description: Retrieve a list of nodes.
+      operationId: listNodess
+      parameters:
+      - description: List Registrys Request
+        in: body
+        name: body
+        schema:
+          $ref: '#/definitions/registry_svc.ListNodesRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/registry_svc.ListNodesResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: List Nodes
+      tags:
+      - Registry Svc
   /registry-svc/service-instance:
     post:
       consumes:
@@ -2944,7 +2943,7 @@ paths:
             $ref: '#/definitions/registry_svc.ErrorResponse'
       security:
       - BearerAuth: []
-      summary: Register Service Instance. Idempotent.
+      summary: Register Service Instance
       tags:
       - Registry Svc
   /registry-svc/service-instance/{id}:

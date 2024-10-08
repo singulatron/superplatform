@@ -59,11 +59,6 @@ import { ModelSvcModel } from './modelSvcModel.mjs';
 import { ModelSvcModelStatus } from './modelSvcModelStatus.mjs';
 import { ModelSvcPlatform } from './modelSvcPlatform.mjs';
 import { ModelSvcStatusResponse } from './modelSvcStatusResponse.mjs';
-import { NodeSvcErrorResponse } from './nodeSvcErrorResponse.mjs';
-import { NodeSvcGPU } from './nodeSvcGPU.mjs';
-import { NodeSvcListNodesResponse } from './nodeSvcListNodesResponse.mjs';
-import { NodeSvcNode } from './nodeSvcNode.mjs';
-import { NodeSvcProcess } from './nodeSvcProcess.mjs';
 import { PolicySvcBlocklistParameters } from './policySvcBlocklistParameters.mjs';
 import { PolicySvcCheckRequest } from './policySvcCheckRequest.mjs';
 import { PolicySvcCheckResponse } from './policySvcCheckResponse.mjs';
@@ -83,6 +78,10 @@ import { PromptSvcPrompt } from './promptSvcPrompt.mjs';
 import { PromptSvcPromptStatus } from './promptSvcPromptStatus.mjs';
 import { PromptSvcRemovePromptRequest } from './promptSvcRemovePromptRequest.mjs';
 import { RegistrySvcErrorResponse } from './registrySvcErrorResponse.mjs';
+import { RegistrySvcGPU } from './registrySvcGPU.mjs';
+import { RegistrySvcListNodesResponse } from './registrySvcListNodesResponse.mjs';
+import { RegistrySvcNode } from './registrySvcNode.mjs';
+import { RegistrySvcProcess } from './registrySvcProcess.mjs';
 import { RegistrySvcQueryServiceInstancesResponse } from './registrySvcQueryServiceInstancesResponse.mjs';
 import { RegistrySvcRegisterServiceInstanceRequest } from './registrySvcRegisterServiceInstanceRequest.mjs';
 import { RegistrySvcServiceInstance } from './registrySvcServiceInstance.mjs';
@@ -194,11 +193,6 @@ let typeMap = {
     "ModelSvcModelStatus": ModelSvcModelStatus,
     "ModelSvcPlatform": ModelSvcPlatform,
     "ModelSvcStatusResponse": ModelSvcStatusResponse,
-    "NodeSvcErrorResponse": NodeSvcErrorResponse,
-    "NodeSvcGPU": NodeSvcGPU,
-    "NodeSvcListNodesResponse": NodeSvcListNodesResponse,
-    "NodeSvcNode": NodeSvcNode,
-    "NodeSvcProcess": NodeSvcProcess,
     "PolicySvcBlocklistParameters": PolicySvcBlocklistParameters,
     "PolicySvcCheckRequest": PolicySvcCheckRequest,
     "PolicySvcCheckResponse": PolicySvcCheckResponse,
@@ -214,6 +208,10 @@ let typeMap = {
     "PromptSvcPrompt": PromptSvcPrompt,
     "PromptSvcRemovePromptRequest": PromptSvcRemovePromptRequest,
     "RegistrySvcErrorResponse": RegistrySvcErrorResponse,
+    "RegistrySvcGPU": RegistrySvcGPU,
+    "RegistrySvcListNodesResponse": RegistrySvcListNodesResponse,
+    "RegistrySvcNode": RegistrySvcNode,
+    "RegistrySvcProcess": RegistrySvcProcess,
     "RegistrySvcQueryServiceInstancesResponse": RegistrySvcQueryServiceInstancesResponse,
     "RegistrySvcRegisterServiceInstanceRequest": RegistrySvcRegisterServiceInstanceRequest,
     "RegistrySvcServiceInstance": RegistrySvcServiceInstance,
@@ -430,4 +428,4 @@ class VoidAuth {
     }
 }
 
-export { ApiKeyAuth, ChatSvcAddMessageRequest, ChatSvcAddThreadRequest, ChatSvcAddThreadResponse, ChatSvcAsset, ChatSvcEventMessageAdded, ChatSvcEventThreadAdded, ChatSvcEventThreadUpdate, ChatSvcGetMessagesResponse, ChatSvcGetThreadResponse, ChatSvcGetThreadsResponse, ChatSvcMessage, ChatSvcThread, ChatSvcUpdateThreadRequest, ConfigSvcAppServiceConfig, ConfigSvcConfig, ConfigSvcDownloadServiceConfig, ConfigSvcGetConfigResponse, ConfigSvcModelServiceConfig, ConfigSvcSaveConfigRequest, DatastoreFilter, DatastoreOp, DatastoreOrderBy, DatastoreQuery, DockerSvcContainerIsRunningResponse, DockerSvcDockerInfo, DockerSvcErrorResponse, DockerSvcGetContainerSummaryResponse, DockerSvcGetDockerHostResponse, DockerSvcGetInfoResponse, DockerSvcLaunchContainerOptions, DockerSvcLaunchContainerRequest, DockerSvcLaunchContainerResponse, DockerSvcLaunchInfo, DownloadSvcDownloadDetails, DownloadSvcDownloadRequest, DownloadSvcDownloadsResponse, DownloadSvcErrorResponse, DownloadSvcGetDownloadResponse, DynamicSvcCreateObjectRequest, DynamicSvcCreateObjectResponse, DynamicSvcDeleteObjectRequest, DynamicSvcErrorResponse, DynamicSvcObject, DynamicSvcObjectCreateFields, DynamicSvcQueryRequest, DynamicSvcQueryResponse, DynamicSvcUpdateObjectRequest, DynamicSvcUpsertObjectRequest, DynamicSvcUpsertObjectResponse, FirehoseSvcErrorResponse, FirehoseSvcEvent, FirehoseSvcEventPublishRequest, HttpBasicAuth, HttpBearerAuth, ModelSvcArchitectures, ModelSvcContainer, ModelSvcErrorResponse, ModelSvcGetModelResponse, ModelSvcListResponse, ModelSvcModel, ModelSvcModelStatus, ModelSvcPlatform, ModelSvcStatusResponse, NodeSvcErrorResponse, NodeSvcGPU, NodeSvcListNodesResponse, NodeSvcNode, NodeSvcProcess, OAuth, ObjectSerializer, PolicySvcBlocklistParameters, PolicySvcCheckRequest, PolicySvcCheckResponse, PolicySvcEntity, PolicySvcErrorResponse, PolicySvcInstance, PolicySvcRateLimitParameters, PolicySvcScope, PolicySvcTemplateId, PolicySvcUpsertInstanceRequest, PromptSvcAddPromptRequest, PromptSvcAddPromptResponse, PromptSvcErrorResponse, PromptSvcListPromptsRequest, PromptSvcListPromptsResponse, PromptSvcPrompt, PromptSvcPromptStatus, PromptSvcRemovePromptRequest, RegistrySvcErrorResponse, RegistrySvcQueryServiceInstancesResponse, RegistrySvcRegisterServiceInstanceRequest, RegistrySvcServiceInstance, UserSvcAddUserToOrganizationRequest, UserSvcAuthToken, UserSvcChangePasswordAdminRequest, UserSvcChangePasswordRequest, UserSvcContact, UserSvcCreateOrganizationRequest, UserSvcCreateRoleRequest, UserSvcCreateRoleResponse, UserSvcCreateUserRequest, UserSvcErrorResponse, UserSvcGetPermissionsResponse, UserSvcGetPublicKeyResponse, UserSvcGetRolesResponse, UserSvcGetUsersRequest, UserSvcGetUsersResponse, UserSvcIsAuthorizedRequest, UserSvcIsAuthorizedResponse, UserSvcLoginRequest, UserSvcLoginResponse, UserSvcOrganization, UserSvcPermission, UserSvcReadUserByTokenResponse, UserSvcRegisterRequest, UserSvcRole, UserSvcSaveProfileRequest, UserSvcSetRolePermissionsRequest, UserSvcUpserPermissionRequest, UserSvcUser, VoidAuth };
+export { ApiKeyAuth, ChatSvcAddMessageRequest, ChatSvcAddThreadRequest, ChatSvcAddThreadResponse, ChatSvcAsset, ChatSvcEventMessageAdded, ChatSvcEventThreadAdded, ChatSvcEventThreadUpdate, ChatSvcGetMessagesResponse, ChatSvcGetThreadResponse, ChatSvcGetThreadsResponse, ChatSvcMessage, ChatSvcThread, ChatSvcUpdateThreadRequest, ConfigSvcAppServiceConfig, ConfigSvcConfig, ConfigSvcDownloadServiceConfig, ConfigSvcGetConfigResponse, ConfigSvcModelServiceConfig, ConfigSvcSaveConfigRequest, DatastoreFilter, DatastoreOp, DatastoreOrderBy, DatastoreQuery, DockerSvcContainerIsRunningResponse, DockerSvcDockerInfo, DockerSvcErrorResponse, DockerSvcGetContainerSummaryResponse, DockerSvcGetDockerHostResponse, DockerSvcGetInfoResponse, DockerSvcLaunchContainerOptions, DockerSvcLaunchContainerRequest, DockerSvcLaunchContainerResponse, DockerSvcLaunchInfo, DownloadSvcDownloadDetails, DownloadSvcDownloadRequest, DownloadSvcDownloadsResponse, DownloadSvcErrorResponse, DownloadSvcGetDownloadResponse, DynamicSvcCreateObjectRequest, DynamicSvcCreateObjectResponse, DynamicSvcDeleteObjectRequest, DynamicSvcErrorResponse, DynamicSvcObject, DynamicSvcObjectCreateFields, DynamicSvcQueryRequest, DynamicSvcQueryResponse, DynamicSvcUpdateObjectRequest, DynamicSvcUpsertObjectRequest, DynamicSvcUpsertObjectResponse, FirehoseSvcErrorResponse, FirehoseSvcEvent, FirehoseSvcEventPublishRequest, HttpBasicAuth, HttpBearerAuth, ModelSvcArchitectures, ModelSvcContainer, ModelSvcErrorResponse, ModelSvcGetModelResponse, ModelSvcListResponse, ModelSvcModel, ModelSvcModelStatus, ModelSvcPlatform, ModelSvcStatusResponse, OAuth, ObjectSerializer, PolicySvcBlocklistParameters, PolicySvcCheckRequest, PolicySvcCheckResponse, PolicySvcEntity, PolicySvcErrorResponse, PolicySvcInstance, PolicySvcRateLimitParameters, PolicySvcScope, PolicySvcTemplateId, PolicySvcUpsertInstanceRequest, PromptSvcAddPromptRequest, PromptSvcAddPromptResponse, PromptSvcErrorResponse, PromptSvcListPromptsRequest, PromptSvcListPromptsResponse, PromptSvcPrompt, PromptSvcPromptStatus, PromptSvcRemovePromptRequest, RegistrySvcErrorResponse, RegistrySvcGPU, RegistrySvcListNodesResponse, RegistrySvcNode, RegistrySvcProcess, RegistrySvcQueryServiceInstancesResponse, RegistrySvcRegisterServiceInstanceRequest, RegistrySvcServiceInstance, UserSvcAddUserToOrganizationRequest, UserSvcAuthToken, UserSvcChangePasswordAdminRequest, UserSvcChangePasswordRequest, UserSvcContact, UserSvcCreateOrganizationRequest, UserSvcCreateRoleRequest, UserSvcCreateRoleResponse, UserSvcCreateUserRequest, UserSvcErrorResponse, UserSvcGetPermissionsResponse, UserSvcGetPublicKeyResponse, UserSvcGetRolesResponse, UserSvcGetUsersRequest, UserSvcGetUsersResponse, UserSvcIsAuthorizedRequest, UserSvcIsAuthorizedResponse, UserSvcLoginRequest, UserSvcLoginResponse, UserSvcOrganization, UserSvcPermission, UserSvcReadUserByTokenResponse, UserSvcRegisterRequest, UserSvcRole, UserSvcSaveProfileRequest, UserSvcSetRolePermissionsRequest, UserSvcUpserPermissionRequest, UserSvcUser, VoidAuth };

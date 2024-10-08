@@ -58,6 +58,7 @@ func (cs *PolicyService) Start() error {
 	if err != nil {
 		return err
 	}
+
 	for _, instanceI := range instances {
 		instance := instanceI.(*policytypes.Instance)
 		cs.instances = append(cs.instances, instance)

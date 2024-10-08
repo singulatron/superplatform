@@ -16,17 +16,24 @@
 import * as runtime from '../runtime';
 import type {
   RegistrySvcErrorResponse,
+  RegistrySvcListNodesResponse,
   RegistrySvcQueryServiceInstancesResponse,
   RegistrySvcRegisterServiceInstanceRequest,
 } from '../models/index';
 import {
     RegistrySvcErrorResponseFromJSON,
     RegistrySvcErrorResponseToJSON,
+    RegistrySvcListNodesResponseFromJSON,
+    RegistrySvcListNodesResponseToJSON,
     RegistrySvcQueryServiceInstancesResponseFromJSON,
     RegistrySvcQueryServiceInstancesResponseToJSON,
     RegistrySvcRegisterServiceInstanceRequestFromJSON,
     RegistrySvcRegisterServiceInstanceRequestToJSON,
 } from '../models/index';
+
+export interface ListNodessRequest {
+    body?: object;
+}
 
 export interface QueryServiceInstancesRequest {
     scheme?: string;
@@ -48,6 +55,41 @@ export interface RemoveServiceInstanceRequest {
  * 
  */
 export class RegistrySvcApi extends runtime.BaseAPI {
+
+    /**
+     * Retrieve a list of nodes.
+     * List Nodes
+     */
+    async listNodessRaw(requestParameters: ListNodessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RegistrySvcListNodesResponse>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = await this.configuration.apiKey("Authorization"); // BearerAuth authentication
+        }
+
+        const response = await this.request({
+            path: `/registry-svc/registrys`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['body'] as any,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => RegistrySvcListNodesResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Retrieve a list of nodes.
+     * List Nodes
+     */
+    async listNodess(requestParameters: ListNodessRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RegistrySvcListNodesResponse> {
+        const response = await this.listNodessRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * Retrieves a list of all registered service instances or filters them by specific criteria (e.g., host, IP).
@@ -103,7 +145,7 @@ export class RegistrySvcApi extends runtime.BaseAPI {
 
     /**
      * Registers a new service instance, associating an service instance address with a slug acquired from the bearer token.
-     * Register Service Instance. Idempotent.
+     * Register Service Instance
      */
     async registerServiceInstanceRaw(requestParameters: RegisterServiceInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
         if (requestParameters['request'] == null) {
@@ -136,7 +178,7 @@ export class RegistrySvcApi extends runtime.BaseAPI {
 
     /**
      * Registers a new service instance, associating an service instance address with a slug acquired from the bearer token.
-     * Register Service Instance. Idempotent.
+     * Register Service Instance
      */
     async registerServiceInstance(requestParameters: RegisterServiceInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
         const response = await this.registerServiceInstanceRaw(requestParameters, initOverrides);

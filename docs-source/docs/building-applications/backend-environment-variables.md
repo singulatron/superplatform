@@ -65,6 +65,10 @@ Host With Singulatron
  |-> Container Launched By Singulatron
 ```
 
+## `SINGULATRON_ADDRESS`
+
+This envar is used in by the `Registry Svc` to register the node. It should be an at least internally resolving address so the nodes can talk to each other.
+
 ## `SINGULATRON_DB`
 
 You can use this envar to make Singulatron actually use a database instead of local file storage to store data.
