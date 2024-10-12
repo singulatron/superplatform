@@ -16,6 +16,8 @@ import (
 	"time"
 
 	"github.com/singulatron/singulatron/localtron/internal/di"
+	"github.com/singulatron/singulatron/sdk/go/datastore"
+	"github.com/singulatron/singulatron/sdk/go/datastore/sqlstore"
 	"github.com/singulatron/singulatron/sdk/go/logger"
 	"github.com/singulatron/singulatron/sdk/go/router"
 
@@ -23,7 +25,7 @@ import (
 	httpSwagger "github.com/swaggo/http-swagger"
 )
 
-const port = router.DefaultPort
+var port = router.GetDefaultPort()
 
 // @title           Singulatron
 // @version         0.2
@@ -58,9 +60,23 @@ func main() {
 		}
 	}()
 
-	router, starter, err := di.BigBang(&di.Options{
+	options := &di.Options{
 		Test: false,
-	})
+	}
+	db := os.Getenv("SINGULATRON_DB")
+	if db != "" {
+		options.DatastoreFactory = func(tableName string, instance any) (datastore.DataStore, error) {
+			return sqlstore.NewSQLStore(
+				instance,
+				os.Getenv("SINGULATRON_DB_DRIVER"),
+				os.Getenv("SINGULATRON_DB_STRING"),
+				tableName,
+				false,
+			)
+		}
+	}
+
+	router, starter, err := di.BigBang(options)
 	if err != nil {
 		logger.Error("Cannot make universe", slog.Any("error", err))
 		os.Exit(1)
@@ -81,7 +97,7 @@ func main() {
 			os.Exit(1)
 		}
 	}()
-	err = http.ListenAndServe(":58231", srv.Handler)
+	err = http.ListenAndServe(fmt.Sprintf(":%v", port), srv.Handler)
 	if err != nil {
 		logger.Error("HTTP listen failed", slog.String("error", err.Error()))
 		os.Exit(1)
