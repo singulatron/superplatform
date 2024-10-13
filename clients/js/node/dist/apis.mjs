@@ -57365,7 +57365,7 @@ class RegistrySvcApi {
      * @summary List Nodes
      * @param body List Registrys Request
      */
-    listNodess(body_1) {
+    listNodes(body_1) {
         return __awaiter(this, arguments, void 0, function* (body, options = { headers: {} }) {
             const localVarPath = this.basePath + '/registry-svc/nodes';
             let localVarQueryParameters = {};

@@ -11,7 +11,7 @@
  */
 import * as runtime from '../runtime';
 import type { RegistrySvcListNodesResponse, RegistrySvcQueryServiceInstancesResponse, RegistrySvcRegisterServiceInstanceRequest } from '../models/index';
-export interface ListNodessRequest {
+export interface ListNodesRequest {
     body?: object;
 }
 export interface QueryServiceInstancesRequest {
@@ -35,12 +35,12 @@ export declare class RegistrySvcApi extends runtime.BaseAPI {
      * Retrieve a list of nodes.
      * List Nodes
      */
-    listNodessRaw(requestParameters: ListNodessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RegistrySvcListNodesResponse>>;
+    listNodesRaw(requestParameters: ListNodesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RegistrySvcListNodesResponse>>;
     /**
      * Retrieve a list of nodes.
      * List Nodes
      */
-    listNodess(requestParameters?: ListNodessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RegistrySvcListNodesResponse>;
+    listNodes(requestParameters?: ListNodesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RegistrySvcListNodesResponse>;
     /**
      * Retrieves a list of all registered service instances or filters them by specific criteria (e.g., host, IP).
      * Query Service Instances

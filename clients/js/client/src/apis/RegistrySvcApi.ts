@@ -31,7 +31,7 @@ import {
     RegistrySvcRegisterServiceInstanceRequestToJSON,
 } from '../models/index';
 
-export interface ListNodessRequest {
+export interface ListNodesRequest {
     body?: object;
 }
 
@@ -60,7 +60,7 @@ export class RegistrySvcApi extends runtime.BaseAPI {
      * Retrieve a list of nodes.
      * List Nodes
      */
-    async listNodessRaw(requestParameters: ListNodessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RegistrySvcListNodesResponse>> {
+    async listNodesRaw(requestParameters: ListNodesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RegistrySvcListNodesResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -86,8 +86,8 @@ export class RegistrySvcApi extends runtime.BaseAPI {
      * Retrieve a list of nodes.
      * List Nodes
      */
-    async listNodess(requestParameters: ListNodessRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RegistrySvcListNodesResponse> {
-        const response = await this.listNodessRaw(requestParameters, initOverrides);
+    async listNodes(requestParameters: ListNodesRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RegistrySvcListNodesResponse> {
+        const response = await this.listNodesRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

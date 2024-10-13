@@ -16,7 +16,7 @@ import (
 	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
 )
 
-// @ID listNodess
+// @ID listNodes
 // @Summary List Nodes
 // @Description Retrieve a list of nodes.
 // @Tags Registry Svc

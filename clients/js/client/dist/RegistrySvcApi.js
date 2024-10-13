@@ -32,7 +32,7 @@ class RegistrySvcApi extends runtime.BaseAPI {
      * Retrieve a list of nodes.
      * List Nodes
      */
-    listNodessRaw(requestParameters, initOverrides) {
+    listNodesRaw(requestParameters, initOverrides) {
         return runtime.__awaiter(this, void 0, void 0, function* () {
             const queryParameters = {};
             const headerParameters = {};
@@ -54,9 +54,9 @@ class RegistrySvcApi extends runtime.BaseAPI {
      * Retrieve a list of nodes.
      * List Nodes
      */
-    listNodess() {
+    listNodes() {
         return runtime.__awaiter(this, arguments, void 0, function* (requestParameters = {}, initOverrides) {
-            const response = yield this.listNodessRaw(requestParameters, initOverrides);
+            const response = yield this.listNodesRaw(requestParameters, initOverrides);
             return yield response.value();
         });
     }

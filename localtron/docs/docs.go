@@ -2158,7 +2158,7 @@ const docTemplate = `{
                     "Registry Svc"
                 ],
                 "summary": "List Nodes",
-                "operationId": "listNodess",
+                "operationId": "listNodes",
                 "parameters": [
                     {
                         "description": "List Registrys Request",
