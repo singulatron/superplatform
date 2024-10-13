@@ -58,7 +58,7 @@ func TestStart(t *testing.T) {
 	adminClient, _, err := test.AdminClient(server1.URL)
 	require.NoError(t, err)
 
-	rsp, _, err := adminClient.RegistrySvcAPI.ListNodess(context.Background()).Body(nil).Execute()
+	rsp, _, err := adminClient.RegistrySvcAPI.ListNodes(context.Background()).Body(nil).Execute()
 	require.NoError(t, err)
 	require.Equal(t, len(rsp.Nodes), 2)
 }
