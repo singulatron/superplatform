@@ -12,20 +12,16 @@ import (
 	"log/slog"
 	"net/http"
 	"os"
-	"runtime/debug"
 	"time"
 
-	"github.com/singulatron/singulatron/localtron/internal/di"
-	"github.com/singulatron/singulatron/sdk/go/datastore"
-	"github.com/singulatron/singulatron/sdk/go/datastore/sqlstore"
+	_ "github.com/singulatron/singulatron/localtron/docs"
+	"github.com/singulatron/singulatron/localtron/internal/node"
+	node_types "github.com/singulatron/singulatron/localtron/internal/node/types"
 	"github.com/singulatron/singulatron/sdk/go/logger"
 	"github.com/singulatron/singulatron/sdk/go/router"
-
-	_ "github.com/singulatron/singulatron/localtron/docs"
-	httpSwagger "github.com/swaggo/http-swagger"
 )
 
-var port = router.GetDefaultPort()
+var port = router.GetPort()
 
 // @title           Singulatron
 // @version         0.2
@@ -50,39 +46,11 @@ var port = router.GetDefaultPort()
 // @externalDocs.description  Singulatron API
 // @externalDocs.url          https://superplatform.ai/docs/category/singulatron-api
 func main() {
-	defer func() {
-		if r := recover(); r != nil {
-			logger.Error("Panic in main",
-				slog.String("error", fmt.Sprintf("%v", r)),
-				slog.String("trace", string(debug.Stack())),
-			)
-			os.Exit(1)
-		}
-	}()
-
-	options := &di.Options{
-		Test: false,
-	}
-	db := os.Getenv("SINGULATRON_DB")
-	if db != "" {
-		options.DatastoreFactory = func(tableName string, instance any) (datastore.DataStore, error) {
-			return sqlstore.NewSQLStore(
-				instance,
-				os.Getenv("SINGULATRON_DB_DRIVER"),
-				os.Getenv("SINGULATRON_DB_STRING"),
-				tableName,
-				false,
-			)
-		}
-	}
-
-	router, starter, err := di.BigBang(options)
+	router, starter, err := node.Start(node_types.Options{})
 	if err != nil {
-		logger.Error("Cannot make universe", slog.Any("error", err))
+		logger.Error("Cannot start node", slog.Any("error", err))
 		os.Exit(1)
 	}
-
-	router.HandleFunc("/swagger/", httpSwagger.WrapHandler)
 
 	srv := &http.Server{
 		Handler: router,
@@ -91,12 +59,13 @@ func main() {
 	logger.Info("Server started", slog.String("port", port))
 	go func() {
 		time.Sleep(5 * time.Millisecond)
-		err = starter()
+		err := starter()
 		if err != nil {
 			logger.Error("Cannot start universe", slog.Any("error", err))
 			os.Exit(1)
 		}
 	}()
+
 	err = http.ListenAndServe(fmt.Sprintf(":%v", port), srv.Handler)
 	if err != nil {
 		logger.Error("HTTP listen failed", slog.String("error", err.Error()))

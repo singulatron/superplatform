@@ -12,7 +12,6 @@ import (
 	"fmt"
 	"log/slog"
 	"net/url"
-	"os"
 
 	"github.com/pkg/errors"
 	configtypes "github.com/singulatron/singulatron/localtron/internal/services/config/types"
@@ -31,7 +30,7 @@ func (ms *ModelService) status(modelId string) (*modeltypes.ModelStatus, error) 
 	}
 
 	dockerHost := hostRsp.Host
-	singulatronLLMHost := os.Getenv("SINGULATRON_LLM_HOST")
+	singulatronLLMHost := ms.llmHost
 	if singulatronLLMHost != "" {
 		dockerHost = singulatronLLMHost
 	}

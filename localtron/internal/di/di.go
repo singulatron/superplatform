@@ -8,6 +8,7 @@ import (
 	"sync"
 
 	"github.com/gorilla/mux"
+	node_types "github.com/singulatron/singulatron/localtron/internal/node/types"
 	chatservice "github.com/singulatron/singulatron/localtron/internal/services/chat"
 	configservice "github.com/singulatron/singulatron/localtron/internal/services/config"
 	dockerservice "github.com/singulatron/singulatron/localtron/internal/services/docker"
@@ -30,8 +31,18 @@ import (
 const singulatronFolder = ".singulatron"
 
 type Options struct {
-	Url              string
-	Test             bool
+	// NodeOptions contains settings coming from envars
+	NodeOptions node_types.Options
+
+	// Url that will be passed down to the router when calling
+	// the Singulatron daemon from itself.
+	// (Inter-service calls go through the network.)
+	Url string
+
+	// Test mode if true will cause the localstore to
+	// save data into random temporary folders.
+	Test bool
+
 	LLMClient        llm.ClientI
 	Router           *router.Router
 	DatastoreFactory func(tableName string, instance any) (datastore.DataStore, error)
@@ -63,8 +74,8 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 	}
 
 	singulatronFolder := path.Join(homeDir, singulatronFolder)
-	if os.Getenv("SINGULATRON_CONFIG_PATH") != "" {
-		singulatronFolder = os.Getenv("SINGULATRON_CONFIG_PATH")
+	if options.NodeOptions.ConfigPath != "" {
+		singulatronFolder = options.NodeOptions.ConfigPath
 	}
 
 	configService.ConfigDirectory = singulatronFolder
@@ -139,13 +150,19 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 	downloadService.SetDefaultFolder(downloadFolder)
 	downloadService.SetStateFilePath(path.Join(singulatronFolder, "downloads.json"))
 
-	dockerService, err := dockerservice.NewDockerService(options.Router, options.DatastoreFactory)
+	dockerService, err := dockerservice.NewDockerService(
+		options.NodeOptions.VolumeName,
+		options.Router,
+		options.DatastoreFactory,
+	)
 	if err != nil {
 		logger.Error("Docker service creation failed", slog.String("error", err.Error()))
 		os.Exit(1)
 	}
 
 	modelService, err := modelservice.NewModelService(
+		options.NodeOptions.GpuPlatform,
+		options.NodeOptions.LLMHost,
 		options.Router,
 		options.DatastoreFactory,
 	)
@@ -188,7 +205,13 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 		os.Exit(1)
 	}
 
-	registryService, err := registryservice.NewRegistryService(options.Router, options.DatastoreFactory)
+	registryService, err := registryservice.NewRegistryService(
+		options.NodeOptions.Address,
+		options.NodeOptions.Az,
+		options.NodeOptions.Region,
+		options.Router,
+		options.DatastoreFactory,
+	)
 	if err != nil {
 		logger.Error("Node service creation failed", slog.String("error", err.Error()))
 		os.Exit(1)

@@ -14,14 +14,14 @@ import (
 	"github.com/singulatron/singulatron/sdk/go/datastore"
 )
 
-var defaultPort = "58231"
+var port = "58231"
 
-func GetDefaultPort() string {
-	return defaultPort
+func GetPort() string {
+	return port
 }
 
-func SetDefaultPort(i int) {
-	defaultPort = fmt.Sprintf("%v", i)
+func SetPort(i int) {
+	port = fmt.Sprintf("%v", i)
 }
 
 const defaultAddress = "http://127.0.0.1"
@@ -49,7 +49,7 @@ func (r *Router) Address() string {
 		return r.address
 	}
 
-	return fmt.Sprintf("%v:%v", defaultAddress, defaultPort)
+	return fmt.Sprintf("%v:%v", defaultAddress, port)
 }
 
 func (r *Router) AddMock(serviceName, path string, rsp any) {

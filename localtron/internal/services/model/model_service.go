@@ -26,15 +26,20 @@ type ModelService struct {
 	platformsStore datastore.DataStore
 
 	credentialStore datastore.DataStore
+
+	gpuPlatform string
+	llmHost     string
 }
 
 func NewModelService(
+	gpuPlatform string,
+	llmHost string,
 	router *router.Router,
 	datastoreFactory func(tableName string, insance any) (datastore.DataStore, error),
 ) (*ModelService, error) {
 	srv := &ModelService{
-		router: router,
-
+		gpuPlatform:  gpuPlatform,
+		router:       router,
 		modelPortMap: map[int]*modeltypes.ModelState{},
 	}
 	modelStore, err := datastoreFactory("modelSvcModels", &modeltypes.Model{})

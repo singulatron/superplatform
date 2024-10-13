@@ -42,8 +42,15 @@ type RegistryService struct {
 	nodeStore              datastore.DataStore
 }
 
-func NewRegistryService(router *router.Router, datastoreFactory func(tableName string, instance any) (datastore.DataStore, error)) (*RegistryService, error) {
-	nodeUrl := os.Getenv("SINGULATRON_ADDRESS")
+func NewRegistryService(
+	address string,
+	az string,
+	region string,
+	router *router.Router,
+	datastoreFactory func(tableName string, instance any,
+	) (datastore.DataStore, error)) (*RegistryService, error) {
+
+	nodeUrl := address
 	var err error
 
 	if nodeUrl == "" {
@@ -53,9 +60,6 @@ func NewRegistryService(router *router.Router, datastoreFactory func(tableName s
 		}
 		nodeUrl = fmt.Sprintf("%v:%v", nodeUrl, "58231")
 	}
-
-	az := os.Getenv("SINGULATRON_AZ")
-	region := os.Getenv("SINGULATRON_REGION")
 
 	credentialStore, err := datastoreFactory("registrySvcCredentials", &sdk.Credential{})
 	if err != nil {

@@ -31,9 +31,12 @@ type DockerService struct {
 	mutex                sync.Mutex
 
 	credentialStore datastore.DataStore
+
+	volumeName string
 }
 
 func NewDockerService(
+	volumeName string,
 	router *router.Router,
 	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error),
 ) (*DockerService, error) {
@@ -54,6 +57,8 @@ func NewDockerService(
 		client:           c,
 		imagePullMutexes: make(map[string]*sync.Mutex),
 		imagesCache:      make(map[string]bool),
+
+		volumeName: volumeName,
 	}
 
 	return service, nil
