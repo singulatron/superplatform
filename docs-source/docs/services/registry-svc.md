@@ -12,7 +12,7 @@ tags:
 
 The registry service is designed to maintain a database of services, service instances and nodes.
 
-> This page is a high level overview of the `Registry Svc`. For more details, please see the [Registry Svc API documentation](/docs/singulatron/register-service-instance).
+> This page is a high level overview of the `Registry Svc`. For more details, please see the [Registry Svc API documentation](/docs/superplatform/register-service-instance).
 
 ## Entities
 

@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunksingulatron_api_docs=self.webpackChunksingulatron_api_docs||[]).push([[9586],{41714:t=>{t.exports=JSON.parse('{"tag":{"label":"intro","permalink":"/docs/tags/intro","allTagsPath":"/docs/tags","count":1,"items":[{"id":"intro","title":"Welcome to Singulatron","description":"What is it?","permalink":"/docs/intro"}],"unlisted":false}}')}}]);

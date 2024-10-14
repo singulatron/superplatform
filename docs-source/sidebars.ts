@@ -18,16 +18,16 @@ const sidebars: SidebarsConfig = {
   openApiSidebar: [
     {
       type: "category",
-      label: "Singulatron",
+      label: "Superplatform",
       link: {
         type: "generated-index",
-        title: "Singulatron API",
+        title: "Superplatform API",
         description:
-          "API documentation for the batteries that are included with your Singulatron installation.",
-        slug: "/category/singulatron-api",
+          "API documentation for the batteries that are included with your Superplatform installation.",
+        slug: "/category/superplatform-api",
       },
       // @ts-ignore
-      items: require("./docs/singulatron/sidebar.js"),
+      items: require("./docs/superplatform/sidebar.js"),
     },
   ],
 

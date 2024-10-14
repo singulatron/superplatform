@@ -1,0 +1,3874 @@
+basePath: /
+definitions:
+  chat_svc.AddMessageRequest:
+    properties:
+      message:
+        $ref: '#/definitions/chat_svc.Message'
+    type: object
+  chat_svc.AddThreadRequest:
+    properties:
+      thread:
+        $ref: '#/definitions/chat_svc.Thread'
+    type: object
+  chat_svc.AddThreadResponse:
+    properties:
+      thread:
+        $ref: '#/definitions/chat_svc.Thread'
+    type: object
+  chat_svc.Asset:
+    properties:
+      content:
+        description: Content is the base64 encoded binary file direcly embedded in
+          the asset itself
+        type: string
+      createdAt:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      type:
+        type: string
+      updatedAt:
+        type: string
+      url:
+        description: Url of the asset where
+        type: string
+    type: object
+  chat_svc.EventMessageAdded:
+    properties:
+      threadId:
+        type: string
+    type: object
+  chat_svc.EventThreadAdded:
+    properties:
+      threadId:
+        type: string
+    type: object
+  chat_svc.EventThreadUpdate:
+    properties:
+      threadId:
+        type: string
+    type: object
+  chat_svc.GetMessagesResponse:
+    properties:
+      assets:
+        items:
+          $ref: '#/definitions/chat_svc.Asset'
+        type: array
+      messages:
+        items:
+          $ref: '#/definitions/chat_svc.Message'
+        type: array
+    type: object
+  chat_svc.GetThreadResponse:
+    properties:
+      exists:
+        type: boolean
+      thread:
+        $ref: '#/definitions/chat_svc.Thread'
+    type: object
+  chat_svc.GetThreadsRequest:
+    type: object
+  chat_svc.GetThreadsResponse:
+    properties:
+      threads:
+        items:
+          $ref: '#/definitions/chat_svc.Thread'
+        type: array
+    type: object
+  chat_svc.Message:
+    properties:
+      assetIds:
+        description: AssetIds defines the attachments the message has.
+        items:
+          type: string
+        type: array
+      content:
+        description: Content of the message eg. "Hi, what's up?"
+        type: string
+      createdAt:
+        type: string
+      id:
+        type: string
+      threadId:
+        description: ThreadId of the message.
+        type: string
+      updatedAt:
+        type: string
+      userId:
+        description: |-
+          UserId is the id of the user who wrote the message.
+          For AI messages this field is empty.
+        type: string
+    type: object
+  chat_svc.Thread:
+    properties:
+      createdAt:
+        type: string
+      id:
+        type: string
+      title:
+        description: Title of the thread.
+        type: string
+      topicIds:
+        description: |-
+          TopicIds defines which topics the thread belongs to.
+          Topics can roughly be thought of as tags for threads.
+        items:
+          type: string
+        type: array
+      updatedAt:
+        type: string
+      userIds:
+        description: UserIds the ids of the users who can see this thread.
+        items:
+          type: string
+        type: array
+    type: object
+  chat_svc.UpdateThreadRequest:
+    properties:
+      thread:
+        $ref: '#/definitions/chat_svc.Thread'
+    type: object
+  config_svc.AppServiceConfig:
+    properties:
+      loggingDisabled:
+        type: boolean
+    type: object
+  config_svc.Config:
+    properties:
+      app:
+        $ref: '#/definitions/config_svc.AppServiceConfig'
+      directory:
+        type: string
+      download:
+        $ref: '#/definitions/config_svc.DownloadServiceConfig'
+      isRuntimeInstalled:
+        description: "* This flag drives a minor UX feature:\n\t * if the user has
+          not installed the runtime we show an INSTALL\n\t * button, but if the user
+          has already installed the runtime we show\n\t * we show a START runtime
+          button.\n\t *"
+        type: boolean
+      model:
+        $ref: '#/definitions/config_svc.ModelServiceConfig'
+    type: object
+  config_svc.DownloadServiceConfig:
+    properties:
+      downloadFolder:
+        type: string
+    type: object
+  config_svc.GetConfigResponse:
+    properties:
+      config:
+        $ref: '#/definitions/config_svc.Config'
+    type: object
+  config_svc.ModelServiceConfig:
+    properties:
+      currentModelId:
+        type: string
+    type: object
+  config_svc.SaveConfigRequest:
+    properties:
+      config:
+        $ref: '#/definitions/config_svc.Config'
+    type: object
+  config_svc.SaveConfigResponse:
+    type: object
+  datastore.Filter:
+    properties:
+      fields:
+        items:
+          type: string
+        type: array
+      jsonValues:
+        description: |-
+          JSONValues is a JSON marshalled array of values.
+          It's JSON marhalled due to the limitations of the
+          Swaggo -> OpenAPI 2.0 -> OpenAPI Go generator toolchain.
+        type: string
+      op:
+        $ref: '#/definitions/datastore.Op'
+    type: object
+  datastore.Op:
+    enum:
+    - equals
+    - containsSubstring
+    - startsWith
+    - intersects
+    - isInList
+    type: string
+    x-enum-varnames:
+    - OpEquals
+    - OpContainsSubstring
+    - OpStartsWith
+    - OpIntersects
+    - OpIsInList
+  datastore.OrderBy:
+    properties:
+      desc:
+        description: Desc indicates whether the sorting should be in descending order.
+        type: boolean
+      field:
+        description: The field by which to order the results
+        type: string
+      randomize:
+        description: Randomize indicates that the results should be randomized instead
+          of ordered by the `field` and `desc` criteria
+        type: boolean
+    type: object
+  datastore.Query:
+    properties:
+      count:
+        description: |-
+          Count true means return the count of the dataset filtered by Filters
+          without after or limit.
+        type: boolean
+      filters:
+        description: |-
+          Filters are filtering options of a query. It is advised to use
+          It's advised to use helper functions in your respective client library such as filter constructors (`all`, `equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
+        items:
+          $ref: '#/definitions/datastore.Filter'
+        type: array
+      jsonAfter:
+        description: |-
+          JSONAfter is used for cursor-based pagination, which is more
+          effective in scalable and distributed environments compared
+          to offset-based pagination.
+
+          JSONAfter is a JSON encoded string due to limitations of Swaggo (ie. []interface{} generates []map[stirng]interface{}).
+        type: string
+      limit:
+        description: Limit the number of records in the result set.
+        type: integer
+      orderBys:
+        description: OrderBys order the result set.
+        items:
+          $ref: '#/definitions/datastore.OrderBy'
+        type: array
+    type: object
+  docker_svc.ContainerIsRunningResponse:
+    properties:
+      isRunning:
+        type: boolean
+    type: object
+  docker_svc.DockerInfo:
+    properties:
+      dockerDaemonAddress:
+        type: string
+      error:
+        type: string
+      hasDocker:
+        type: boolean
+    type: object
+  docker_svc.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  docker_svc.GetContainerSummaryResponse:
+    properties:
+      summary:
+        type: string
+    type: object
+  docker_svc.GetDockerHostResponse:
+    properties:
+      host:
+        type: string
+    type: object
+  docker_svc.GetInfoResponse:
+    properties:
+      info:
+        $ref: '#/definitions/docker_svc.DockerInfo'
+    type: object
+  docker_svc.LaunchContainerOptions:
+    properties:
+      assets:
+        additionalProperties:
+          type: string
+        description: |-
+          Assets maps environment variable names to file URLs.
+          Example: {"MODEL": "https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q2_K.gguf"}
+          These files are downloaded by the Download Svc and mounted in the container.
+          The environment variable `MODEL` will point to the local file path in the container.
+        type: object
+      envs:
+        description: Envs are environment variables to set in the container
+        items:
+          type: string
+        type: array
+      gpuEnabled:
+        description: GPUEnabled specifies if GPU support is enabled
+        type: boolean
+      hash:
+        description: Hash is a unique identifier for the container
+        type: string
+      labels:
+        additionalProperties:
+          type: string
+        description: Labels are metadata labels associated with the container
+        type: object
+      name:
+        description: Name is the name of the container
+        type: string
+      persistentPaths:
+        description: PersistentPaths are paths that should be persisted across container
+          restarts
+        items:
+          type: string
+        type: array
+    type: object
+  docker_svc.LaunchContainerRequest:
+    properties:
+      hostPort:
+        description: HostPort is the port on the host machine that will be mapped
+          to the container's port
+        example: 8081
+        type: integer
+      image:
+        description: Image is the Docker image to use for the container
+        example: nginx:latest
+        type: string
+      options:
+        allOf:
+        - $ref: '#/definitions/docker_svc.LaunchContainerOptions'
+        description: Options provides additional options for launching the container
+      port:
+        description: Port is the port number that the container will expose
+        example: 8080
+        type: integer
+    required:
+    - image
+    - port
+    type: object
+  docker_svc.LaunchContainerResponse:
+    properties:
+      info:
+        $ref: '#/definitions/docker_svc.LaunchInfo'
+    type: object
+  docker_svc.LaunchInfo:
+    properties:
+      newContainerStarted:
+        type: boolean
+      portNumber:
+        type: integer
+    type: object
+  download_svc.DownloadDetails:
+    properties:
+      cancelled:
+        type: boolean
+      dir:
+        type: string
+      downloadedBytes:
+        type: integer
+      error:
+        type: string
+      fileName:
+        type: string
+      filePath:
+        type: string
+      fullFileSize:
+        type: integer
+      id:
+        type: string
+      paused:
+        type: boolean
+      progress:
+        type: number
+      status:
+        type: string
+      url:
+        type: string
+    type: object
+  download_svc.DownloadRequest:
+    properties:
+      folderPath:
+        type: string
+      url:
+        type: string
+    type: object
+  download_svc.DownloadsResponse:
+    properties:
+      downloads:
+        items:
+          $ref: '#/definitions/download_svc.DownloadDetails'
+        type: array
+    type: object
+  download_svc.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  download_svc.GetDownloadResponse:
+    properties:
+      download:
+        $ref: '#/definitions/download_svc.DownloadDetails'
+      exists:
+        type: boolean
+    type: object
+  dynamic_svc.CreateObjectRequest:
+    properties:
+      object:
+        $ref: '#/definitions/dynamic_svc.ObjectCreateFields'
+    type: object
+  dynamic_svc.CreateObjectResponse:
+    properties:
+      object:
+        $ref: '#/definitions/dynamic_svc.Object'
+    type: object
+  dynamic_svc.DeleteObjectRequest:
+    properties:
+      filters:
+        items:
+          $ref: '#/definitions/datastore.Filter'
+        type: array
+      table:
+        type: string
+    type: object
+  dynamic_svc.DeleteObjectResponse:
+    type: object
+  dynamic_svc.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  dynamic_svc.Object:
+    properties:
+      authors:
+        description: |-
+          Authors is a list of user ID and organization ID who created the object.
+          If an organization ID is not provided, the currently active organization will
+          be queried from the User Svc.
+        example:
+        - '["usr_12345"'
+        - ' "org_67890"]'
+        items:
+          type: string
+        type: array
+      createdAt:
+        type: string
+      data:
+        additionalProperties: true
+        type: object
+      deleters:
+        description: |-
+          Deleters is a list of user IDs and role IDs that can delete the object.
+          `_self` can be used to refer to the caller user's userId and
+          `_org` can be used to refer to the user's currently active organization (if exists).
+        items:
+          type: string
+        type: array
+      id:
+        type: string
+      readers:
+        description: |-
+          Readers is a list of user IDs and role IDs that can read the object.
+          `_self` can be used to refer to the caller user's userId and
+          `_org` can be used to refer to the user's currently active organization (if exists).
+        items:
+          type: string
+        type: array
+      table:
+        type: string
+      updatedAt:
+        type: string
+      writers:
+        description: |-
+          Writers is a list of user IDs and role IDs that can write the object.
+          `_self` can be used to refer to the caller user's userId and
+          `_org` can be used to refer to the user's currently active organization (if exists).
+        items:
+          type: string
+        type: array
+    required:
+    - data
+    - table
+    type: object
+  dynamic_svc.ObjectCreateFields:
+    properties:
+      authors:
+        description: |-
+          Authors is a list of user ID and organization ID who created the object.
+          If an organization ID is not provided, the currently active organization will
+          be queried from the User Svc.
+        example:
+        - '["usr_12345"'
+        - ' "org_67890"]'
+        items:
+          type: string
+        type: array
+      data:
+        additionalProperties: true
+        type: object
+      deleters:
+        description: |-
+          Deleters is a list of user IDs and role IDs that can delete the object.
+          `_self` can be used to refer to the caller user's userId and
+          `_org` can be used to refer to the user's currently active organization (if exists).
+        items:
+          type: string
+        type: array
+      id:
+        type: string
+      readers:
+        description: |-
+          Readers is a list of user IDs and role IDs that can read the object.
+          `_self` can be used to refer to the caller user's userId and
+          `_org` can be used to refer to the user's currently active organization (if exists).
+        items:
+          type: string
+        type: array
+      table:
+        type: string
+      writers:
+        description: |-
+          Writers is a list of user IDs and role IDs that can write the object.
+          `_self` can be used to refer to the caller user's userId and
+          `_org` can be used to refer to the user's currently active organization (if exists).
+        items:
+          type: string
+        type: array
+    required:
+    - data
+    - table
+    type: object
+  dynamic_svc.QueryRequest:
+    properties:
+      query:
+        $ref: '#/definitions/datastore.Query'
+      readers:
+        items:
+          type: string
+        type: array
+      table:
+        type: string
+    type: object
+  dynamic_svc.QueryResponse:
+    properties:
+      objects:
+        items:
+          $ref: '#/definitions/dynamic_svc.Object'
+        type: array
+    type: object
+  dynamic_svc.UpdateObjectRequest:
+    properties:
+      filters:
+        items:
+          $ref: '#/definitions/datastore.Filter'
+        type: array
+      object:
+        $ref: '#/definitions/dynamic_svc.Object'
+      table:
+        type: string
+    type: object
+  dynamic_svc.UpdateObjectResponse:
+    type: object
+  dynamic_svc.UpsertObjectRequest:
+    properties:
+      object:
+        $ref: '#/definitions/dynamic_svc.ObjectCreateFields'
+    type: object
+  dynamic_svc.UpsertObjectResponse:
+    properties:
+      object:
+        $ref: '#/definitions/dynamic_svc.Object'
+    type: object
+  firehose_svc.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  firehose_svc.Event:
+    properties:
+      data: {}
+      name:
+        type: string
+    type: object
+  firehose_svc.EventPublishRequest:
+    properties:
+      event:
+        $ref: '#/definitions/firehose_svc.Event'
+    type: object
+  model_svc.Architectures:
+    properties:
+      cuda:
+        $ref: '#/definitions/model_svc.Container'
+      default:
+        $ref: '#/definitions/model_svc.Container'
+    type: object
+  model_svc.Container:
+    properties:
+      envars:
+        description: "Envars passed to the container. eg.\n\t'DEVICES=all'"
+        items:
+          type: string
+        type: array
+      image:
+        type: string
+      persistentPaths:
+        description: Paths in the container to persist.
+        items:
+          type: string
+        type: array
+      port:
+        description: Port is the internal port of the Container
+        type: integer
+    type: object
+  model_svc.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  model_svc.GetModelResponse:
+    properties:
+      exists:
+        type: boolean
+      model:
+        $ref: '#/definitions/model_svc.Model'
+      platform:
+        $ref: '#/definitions/model_svc.Platform'
+    type: object
+  model_svc.ListResponse:
+    properties:
+      models:
+        items:
+          $ref: '#/definitions/model_svc.Model'
+        type: array
+    type: object
+  model_svc.MakeDefaultResponse:
+    type: object
+  model_svc.Model:
+    properties:
+      assets:
+        additionalProperties:
+          type: string
+        type: object
+      bits:
+        type: integer
+      description:
+        type: string
+      extension:
+        type: string
+      flavour:
+        type: string
+      fullName:
+        type: string
+      id:
+        type: string
+      maxBits:
+        type: integer
+      maxRam:
+        type: number
+      mirrors:
+        items:
+          type: string
+        type: array
+      name:
+        type: string
+      parameters:
+        type: string
+      platformId:
+        type: string
+      promptTemplate:
+        type: string
+      quality:
+        type: string
+      quantComment:
+        type: string
+      size:
+        type: number
+      tags:
+        items:
+          type: string
+        type: array
+      uncensored:
+        type: boolean
+      version:
+        type: string
+    type: object
+  model_svc.ModelStatus:
+    properties:
+      address:
+        type: string
+      assetsReady:
+        type: boolean
+      running:
+        description: "Running triggers onModelLaunch on the frontend.\n\tRunning is
+          true when the model is both running and answering\n\t- fully loaded."
+        type: boolean
+    type: object
+  model_svc.Platform:
+    properties:
+      architectures:
+        $ref: '#/definitions/model_svc.Architectures'
+      id:
+        type: string
+      name:
+        type: string
+      version:
+        type: integer
+    type: object
+  model_svc.StartResponse:
+    type: object
+  model_svc.StatusResponse:
+    properties:
+      status:
+        $ref: '#/definitions/model_svc.ModelStatus'
+    type: object
+  policy_svc.BlocklistParameters:
+    properties:
+      blockedIPs:
+        items:
+          type: string
+        type: array
+    type: object
+  policy_svc.CheckRequest:
+    properties:
+      endpoint:
+        type: string
+      ip:
+        type: string
+      method:
+        type: string
+      userId:
+        type: string
+    type: object
+  policy_svc.CheckResponse:
+    properties:
+      allowed:
+        type: boolean
+    required:
+    - allowed
+    type: object
+  policy_svc.Entity:
+    enum:
+    - userId
+    - ip
+    type: string
+    x-enum-varnames:
+    - EntityUserID
+    - EntityIP
+  policy_svc.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  policy_svc.Instance:
+    properties:
+      blocklistParameters:
+        $ref: '#/definitions/policy_svc.BlocklistParameters'
+      endpoint:
+        example: /user-svc/register
+        type: string
+      id:
+        type: string
+      rateLimitParameters:
+        $ref: '#/definitions/policy_svc.RateLimitParameters'
+      templateId:
+        allOf:
+        - $ref: '#/definitions/policy_svc.TemplateId'
+        example: rate-limit
+    required:
+    - templateId
+    type: object
+  policy_svc.RateLimitParameters:
+    properties:
+      entity:
+        allOf:
+        - $ref: '#/definitions/policy_svc.Entity'
+        example: userId
+      maxRequests:
+        example: 10
+        type: integer
+      scope:
+        allOf:
+        - $ref: '#/definitions/policy_svc.Scope'
+        example: endpoint
+      timeWindow:
+        example: 1m
+        type: string
+    type: object
+  policy_svc.Scope:
+    enum:
+    - endpoint
+    - global
+    type: string
+    x-enum-varnames:
+    - ScopeEndpoint
+    - ScopeGlobal
+  policy_svc.TemplateId:
+    enum:
+    - rate-limit
+    - blocklist
+    type: string
+    x-enum-varnames:
+    - TemplateIdRateLimit
+    - TemplateIdBlocklist
+  policy_svc.UpsertInstanceRequest:
+    properties:
+      instance:
+        $ref: '#/definitions/policy_svc.Instance'
+    type: object
+  policy_svc.UpsertInstanceResponse:
+    type: object
+  prompt_svc.AddPromptRequest:
+    properties:
+      id:
+        description: Id is the unique ID of the prompt.
+        type: string
+      maxRetries:
+        description: MaxRetries specified how many times the system should retry a
+          prompt when it keeps erroring.
+        example: 10
+        type: integer
+      modelId:
+        description: ModelId is just the Singulatron internal ID of the model.
+        example: huggingface/TheBloke/mistral-7b-instruct-v0.2.Q3_K_S.gguf
+        type: string
+      prompt:
+        description: Prompt is the message itself eg. "What's a banana?
+        example: What's a banana?
+        type: string
+      sync:
+        description: |-
+          Sync drives whether prompt add request should wait and hang until
+          the prompt is done executing. By default the prompt just gets put on a queue
+          and the client will just subscribe to a Thread Stream.
+          For quick and dirty scripting however it's often times easier to do things syncronously.
+          In those cases set Sync to true.
+        type: boolean
+      template:
+        description: Template of the prompt. Optional. If not present it's derived
+          from ModelId.
+        example: '[INST]{prompt}[/INST]'
+        type: string
+      threadId:
+        description: |-
+          ThreadId is the ID of the thread a prompt belongs to.
+          Clients subscribe to Thread Streams to see the answer to a prompt,
+          or set `prompt.sync` to true for a blocking answer.
+        type: string
+    required:
+    - prompt
+    type: object
+  prompt_svc.AddPromptResponse:
+    properties:
+      answer:
+        type: string
+      prompt:
+        $ref: '#/definitions/prompt_svc.Prompt'
+    type: object
+  prompt_svc.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  prompt_svc.ListPromptsRequest:
+    properties:
+      query:
+        $ref: '#/definitions/datastore.Query'
+    type: object
+  prompt_svc.ListPromptsResponse:
+    properties:
+      after: {}
+      count:
+        type: integer
+      prompts:
+        items:
+          $ref: '#/definitions/prompt_svc.Prompt'
+        type: array
+    type: object
+  prompt_svc.Prompt:
+    properties:
+      createdAt:
+        description: CreatedAt is the time of the prompt creation.
+        type: string
+      error:
+        description: Error that arose during prompt execution, if any.
+        type: string
+      id:
+        description: Id is the unique ID of the prompt.
+        type: string
+      lastRun:
+        description: LastRun is the time of the last prompt run.
+        type: string
+      maxRetries:
+        description: MaxRetries specified how many times the system should retry a
+          prompt when it keeps erroring.
+        example: 10
+        type: integer
+      modelId:
+        description: ModelId is just the Singulatron internal ID of the model.
+        example: huggingface/TheBloke/mistral-7b-instruct-v0.2.Q3_K_S.gguf
+        type: string
+      prompt:
+        description: Prompt is the message itself eg. "What's a banana?
+        example: What's a banana?
+        type: string
+      runCount:
+        description: RunCount is the number of times the prompt was retried due to
+          errors
+        type: integer
+      status:
+        allOf:
+        - $ref: '#/definitions/prompt_svc.PromptStatus'
+        description: Status of the prompt.
+      sync:
+        description: |-
+          Sync drives whether prompt add request should wait and hang until
+          the prompt is done executing. By default the prompt just gets put on a queue
+          and the client will just subscribe to a Thread Stream.
+          For quick and dirty scripting however it's often times easier to do things syncronously.
+          In those cases set Sync to true.
+        type: boolean
+      template:
+        description: Template of the prompt. Optional. If not present it's derived
+          from ModelId.
+        example: '[INST]{prompt}[/INST]'
+        type: string
+      threadId:
+        description: |-
+          ThreadId is the ID of the thread a prompt belongs to.
+          Clients subscribe to Thread Streams to see the answer to a prompt,
+          or set `prompt.sync` to true for a blocking answer.
+        type: string
+      updatedAt:
+        description: UpdatedAt is the last time the prompt was updated.
+        type: string
+      userId:
+        description: UserId contains the ID of the user who submitted the prompt.
+        type: string
+    required:
+    - prompt
+    type: object
+  prompt_svc.PromptStatus:
+    enum:
+    - scheduled
+    - running
+    - completed
+    - errored
+    - abandoned
+    - canceled
+    type: string
+    x-enum-varnames:
+    - PromptStatusScheduled
+    - PromptStatusRunning
+    - PromptStatusCompleted
+    - PromptStatusErrored
+    - PromptStatusAbandoned
+    - PromptStatusCanceled
+  prompt_svc.RemovePromptRequest:
+    properties:
+      promptId:
+        type: string
+    type: object
+  prompt_svc.RemovePromptResponse:
+    type: object
+  registry_svc.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  registry_svc.GPU:
+    properties:
+      busId:
+        type: string
+      computeMode:
+        type: string
+      gpuUtilization:
+        type: number
+      id:
+        description: Id Node.URL + IntraNodeId
+        type: string
+      intraNodeId:
+        type: integer
+      memoryTotal:
+        type: integer
+      memoryUsage:
+        type: integer
+      name:
+        type: string
+      performanceState:
+        type: string
+      powerCap:
+        type: number
+      powerUsage:
+        type: number
+      processDetails:
+        items:
+          $ref: '#/definitions/registry_svc.Process'
+        type: array
+      temperature:
+        type: number
+    type: object
+  registry_svc.ListNodesRequest:
+    type: object
+  registry_svc.ListNodesResponse:
+    properties:
+      nodes:
+        items:
+          $ref: '#/definitions/registry_svc.Node'
+        type: array
+    type: object
+  registry_svc.Node:
+    properties:
+      availabilityZone:
+        description: The availability zone of the node
+        type: string
+      gpus:
+        description: List of GPUs available on the node
+        items:
+          $ref: '#/definitions/registry_svc.GPU'
+        type: array
+      lastHeartbeat:
+        description: Last active timestamp
+        type: string
+      region:
+        description: The region of the node
+        type: string
+      url:
+        description: |-
+          URL of the daemon running on the node.
+          If not configured defaults to hostname + default Singulatron daemon port.
+        type: string
+      usage:
+        allOf:
+        - $ref: '#/definitions/registry_svc.ResourceUsage'
+        description: Resource usage metrics of the node.
+    type: object
+  registry_svc.Process:
+    properties:
+      memoryUsage:
+        type: integer
+      pid:
+        type: integer
+      processName:
+        type: string
+    type: object
+  registry_svc.QueryServiceInstancesResponse:
+    properties:
+      instances:
+        items:
+          $ref: '#/definitions/registry_svc.ServiceInstance'
+        type: array
+    type: object
+  registry_svc.RegisterServiceInstanceRequest:
+    properties:
+      host:
+        description: Host of the service instance address. Required if URL is not
+          provided
+        example: myserver.com
+        type: string
+      ip:
+        description: 'IP of the service instance address. Optional: to register by
+          IP instead of host'
+        example: 8.8.8.8
+        type: string
+      path:
+        description: Path of the service instance address. Optional (e.g., "/api")
+        example: /your-svc
+        type: string
+      port:
+        description: Port of the service instance address. Required if URL is not
+          provided
+        example: 8080
+        type: integer
+      scheme:
+        description: Scheme of the service instance address. Required if URL is not
+          provided.
+        example: https
+        type: string
+      slug:
+        description: Slug of the service whose instance is being registered.
+        example: user-svc
+        type: string
+      url:
+        description: Full address URL of the service instance.
+        example: https://myserver.com:5981
+        type: string
+    required:
+    - slug
+    type: object
+  registry_svc.RegisterServiceInstanceResponse:
+    type: object
+  registry_svc.ResourceUsage:
+    properties:
+      cpu:
+        allOf:
+        - $ref: '#/definitions/registry_svc.Usage'
+        description: CPU usage metrics.
+      disk:
+        allOf:
+        - $ref: '#/definitions/registry_svc.Usage'
+        description: Disk usage metrics.
+      memory:
+        allOf:
+        - $ref: '#/definitions/registry_svc.Usage'
+        description: Memory usage metrics.
+    type: object
+  registry_svc.ServiceInstance:
+    properties:
+      host:
+        description: Host of the service instance address. Required if URL is not
+          provided
+        example: myserver.com
+        type: string
+      id:
+        description: 'Required: ID of the service instance'
+        example: https://api.com:999/user-svc
+        type: string
+      ip:
+        description: 'IP of the service instance address. Optional: to register by
+          IP instead of host'
+        example: 8.8.8.8
+        type: string
+      path:
+        description: Path of the service instance address. Optional (e.g., "/api")
+        example: /your-svc
+        type: string
+      port:
+        description: Port of the service instance address. Required if URL is not
+          provided
+        example: 8080
+        type: integer
+      scheme:
+        description: Scheme of the service instance address. Required if URL is not
+          provided.
+        example: https
+        type: string
+      slug:
+        description: Slug of the service whose instance is being registered.
+        example: user-svc
+        type: string
+      url:
+        description: Full address URL of the service instance.
+        example: https://myserver.com:5981
+        type: string
+    required:
+    - id
+    - slug
+    type: object
+  registry_svc.Usage:
+    properties:
+      percent:
+        description: Usage percentage.
+        type: number
+      total:
+        description: Total available amount (in bytes).
+        format: int64
+        type: integer
+      used:
+        description: Used amount (in bytes).
+        format: int64
+        type: integer
+    type: object
+  user_svc.AddUserToOrganizationRequest:
+    properties:
+      userId:
+        type: string
+    type: object
+  user_svc.AddUserToOrganizationResponse:
+    type: object
+  user_svc.AuthToken:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      id:
+        type: string
+      token:
+        type: string
+      updatedAt:
+        type: string
+      userId:
+        type: string
+    type: object
+  user_svc.ChangePasswordAdminRequest:
+    properties:
+      newPassword:
+        type: string
+      slug:
+        type: string
+    type: object
+  user_svc.ChangePasswordAdminResponse:
+    type: object
+  user_svc.ChangePasswordRequest:
+    properties:
+      currentPassword:
+        type: string
+      newPassword:
+        type: string
+      slug:
+        type: string
+    type: object
+  user_svc.ChangePasswordResponse:
+    type: object
+  user_svc.Contact:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      id:
+        description: |-
+          The unique identifier, which can be a URL.
+
+          Example values: "joe12" (singulatron username), "twitter.com/thejoe" (twitter url), "joe@joesdomain.com" (email)
+        example: twitter.com/thejoe
+        type: string
+      isPrimary:
+        description: If this is the primary contact method
+        type: boolean
+      platform:
+        description: Platform of the contact (e.g., "email", "phone", "twitter")
+        example: twitter
+        type: string
+      updatedAt:
+        type: string
+      userId:
+        type: string
+      value:
+        description: |-
+          Value is the platform local unique identifier.
+          Ie. while the `id` of a Twitter contact is `twitter.com/thejoe`, the value will be only `thejoe`.
+          For email and phones the `id` and the `value` will be the same.
+          This field mostly exists for display purposes.
+
+          Example values: "joe12" (singulatron username), "thejoe" (twitter username), "joe@joesdomain.com" (email)
+        example: thejoe
+        type: string
+      verified:
+        description: Whether the contact is verified
+        type: boolean
+    type: object
+  user_svc.CreateOrganizationRequest:
+    properties:
+      id:
+        type: string
+      name:
+        description: Full name of the organization.
+        type: string
+      slug:
+        description: URL-friendly unique (inside the Singularon platform) identifier
+          for the `organization`.
+        type: string
+    type: object
+  user_svc.CreateOrganizationResponse:
+    type: object
+  user_svc.CreateRoleRequest:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      permissionIds:
+        items:
+          type: string
+        type: array
+    type: object
+  user_svc.CreateRoleResponse:
+    properties:
+      role:
+        $ref: '#/definitions/user_svc.Role'
+    type: object
+  user_svc.CreateUserRequest:
+    properties:
+      password:
+        type: string
+      roleIds:
+        items:
+          type: string
+        type: array
+      user:
+        $ref: '#/definitions/user_svc.User'
+    type: object
+  user_svc.CreateUserResponse:
+    type: object
+  user_svc.DeleteRoleResponse:
+    type: object
+  user_svc.DeleteUserResponse:
+    type: object
+  user_svc.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  user_svc.GetPermissionsResponse:
+    properties:
+      permissions:
+        items:
+          $ref: '#/definitions/user_svc.Permission'
+        type: array
+    type: object
+  user_svc.GetPublicKeyResponse:
+    properties:
+      publicKey:
+        type: string
+    type: object
+  user_svc.GetRolesResponse:
+    properties:
+      roles:
+        items:
+          $ref: '#/definitions/user_svc.Role'
+        type: array
+    type: object
+  user_svc.GetUsersRequest:
+    properties:
+      query:
+        $ref: '#/definitions/datastore.Query'
+    type: object
+  user_svc.GetUsersResponse:
+    properties:
+      after:
+        type: string
+      count:
+        type: integer
+      users:
+        items:
+          $ref: '#/definitions/user_svc.User'
+        type: array
+    type: object
+  user_svc.IsAuthorizedRequest:
+    properties:
+      contactsGranted:
+        items:
+          type: string
+        type: array
+      slugsGranted:
+        items:
+          type: string
+        type: array
+    type: object
+  user_svc.IsAuthorizedResponse:
+    properties:
+      authorized:
+        type: boolean
+      user:
+        $ref: '#/definitions/user_svc.User'
+    type: object
+  user_svc.LoginRequest:
+    properties:
+      contact:
+        type: string
+      password:
+        type: string
+      slug:
+        type: string
+    type: object
+  user_svc.LoginResponse:
+    properties:
+      token:
+        $ref: '#/definitions/user_svc.AuthToken'
+    type: object
+  user_svc.Organization:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      id:
+        type: string
+      name:
+        description: Full name of the organization
+        example: Acme Corporation
+        type: string
+      slug:
+        description: URL-friendly unique (inside the Singularon platform) identifier
+          for the `organization`.
+        example: acme-corporation
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  user_svc.Permission:
+    properties:
+      createdAt:
+        type: string
+      description:
+        type: string
+      id:
+        description: eg. "user.viewer"
+        type: string
+      name:
+        description: eg. "User Viewer"
+        type: string
+      ownerId:
+        description: Service who owns the permission
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  user_svc.ReadUserByTokenResponse:
+    properties:
+      activeOrganizationId:
+        type: string
+      organizations:
+        items:
+          $ref: '#/definitions/user_svc.Organization'
+        type: array
+      user:
+        $ref: '#/definitions/user_svc.User'
+    type: object
+  user_svc.RegisterRequest:
+    properties:
+      contact:
+        $ref: '#/definitions/user_svc.Contact'
+      name:
+        type: string
+      password:
+        type: string
+      slug:
+        type: string
+    type: object
+  user_svc.RegisterResponse:
+    type: object
+  user_svc.RemoveUserFromOrganizationRequest:
+    type: object
+  user_svc.RemoveUserFromOrganizationResponse:
+    type: object
+  user_svc.Role:
+    properties:
+      createdAt:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      ownerId:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  user_svc.SaveProfileRequest:
+    properties:
+      name:
+        type: string
+      slug:
+        type: string
+    type: object
+  user_svc.SaveProfileResponse:
+    type: object
+  user_svc.SetRolePermissionsRequest:
+    properties:
+      permissionIds:
+        items:
+          type: string
+        type: array
+    type: object
+  user_svc.SetRolePermissionsResponse:
+    type: object
+  user_svc.UpserPermissionRequest:
+    properties:
+      permission:
+        $ref: '#/definitions/user_svc.Permission'
+    type: object
+  user_svc.User:
+    properties:
+      contacts:
+        description: Contacts are used for login and identification purposes.
+        items:
+          $ref: '#/definitions/user_svc.Contact'
+        type: array
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      id:
+        type: string
+      name:
+        description: Full name of the organization.
+        example: Jane Doe
+        type: string
+      passwordHash:
+        type: string
+      slug:
+        description: URL-friendly unique (inside the Singularon platform) identifier
+          for the `user`.
+        example: jane-doe
+        type: string
+      updatedAt:
+        type: string
+    type: object
+externalDocs:
+  description: Superplatform API
+  url: https://superplatform.ai/docs/category/singulatron-api
+host: localhost:58231
+info:
+  contact:
+    email: sales@singulatron.com
+    name: API Support
+    url: http://superplatform.ai/
+  description: AI management and development platform.
+  license:
+    name: AGPL v3.0
+    url: https://www.gnu.org/licenses/agpl-3.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Superplatform
+  version: "0.2"
+paths:
+  /chat-svc/events:
+    get:
+      consumes:
+      - application/json
+      description: Events is a dummy endpoint to display documentation about the events
+        that this service emits.
+      operationId: events
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/chat_svc.EventThreadUpdate'
+      summary: Events
+      tags:
+      - Chat Svc
+  /chat-svc/message/{messageId}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a specific message from a chat thread by its ID
+      operationId: deleteMessage
+      parameters:
+      - description: Message ID
+        in: path
+        name: messageId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Message successfully deleted
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid JSON
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Delete a Message
+      tags:
+      - Chat Svc
+  /chat-svc/thread:
+    post:
+      consumes:
+      - application/json
+      description: |-
+        Create a new chat thread and add the requesting user to it.
+        Requires the `chat-svc:thread:create` permission.
+      operationId: addThread
+      parameters:
+      - description: Add Thread Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/chat_svc.AddThreadRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Thread successfully created
+          schema:
+            $ref: '#/definitions/chat_svc.AddThreadResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Add Thread
+      tags:
+      - Chat Svc
+  /chat-svc/thread/{threadId}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a specific chat thread by its ID
+      operationId: deleteThread
+      parameters:
+      - description: Thread ID
+        in: path
+        name: threadId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Thread successfully deleted
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid JSON
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Delete a Thread
+      tags:
+      - Chat Svc
+    get:
+      consumes:
+      - application/json
+      description: Fetch information about a specific chat thread by its ID
+      operationId: getThread
+      parameters:
+      - description: Thread ID
+        in: path
+        name: threadId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Thread details successfully retrieved
+          schema:
+            $ref: '#/definitions/chat_svc.GetThreadResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Get Thread
+      tags:
+      - Chat Svc
+    put:
+      consumes:
+      - application/json
+      description: Modify the details of a specific chat thread
+      operationId: updateThread
+      parameters:
+      - description: Thread ID
+        in: path
+        name: threadId
+        required: true
+        type: string
+      - description: Update Thread Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/chat_svc.UpdateThreadRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Thread successfully updated
+          schema:
+            $ref: '#/definitions/chat_svc.AddThreadResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Update Thread
+      tags:
+      - Chat Svc
+  /chat-svc/thread/{threadId}/message:
+    post:
+      consumes:
+      - application/json
+      description: Add a new message to a specific thread.
+      operationId: addMessage
+      parameters:
+      - description: Thread ID
+        in: path
+        name: threadId
+        required: true
+        type: string
+      - description: Add Message Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/chat_svc.AddMessageRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Message successfully added
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid JSON
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Add Message
+      tags:
+      - Chat Svc
+  /chat-svc/thread/{threadId}/messages:
+    post:
+      consumes:
+      - application/json
+      description: Fetch messages (and associated assets) for a specific chat thread.
+      operationId: getMessages
+      parameters:
+      - description: Thread ID
+        in: path
+        name: threadId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Messages and assets successfully retrieved
+          schema:
+            $ref: '#/definitions/chat_svc.GetMessagesResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: List Messages
+      tags:
+      - Chat Svc
+  /chat-svc/threads:
+    post:
+      consumes:
+      - application/json
+      description: Fetch all chat threads associated with a specific user
+      operationId: getThreads
+      parameters:
+      - description: Get Threads Request
+        in: body
+        name: request
+        schema:
+          $ref: '#/definitions/chat_svc.GetThreadsRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Threads successfully retrieved
+          schema:
+            $ref: '#/definitions/chat_svc.GetThreadsResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Get Threads
+      tags:
+      - Chat Svc
+  /config-svc/config:
+    get:
+      consumes:
+      - application/json
+      description: Fetch the current configuration from the server
+      operationId: getConfig
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Current configuration retrieved successfully
+          schema:
+            $ref: '#/definitions/config_svc.GetConfigResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Get Config
+      tags:
+      - Config Svc
+    put:
+      consumes:
+      - application/json
+      description: Save the provided configuration to the server
+      operationId: saveConfig
+      parameters:
+      - description: Save Config Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/config_svc.SaveConfigRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Save Config Response
+          schema:
+            $ref: '#/definitions/config_svc.SaveConfigResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Save Config
+      tags:
+      - Config Svc
+  /docker-svc/container:
+    put:
+      consumes:
+      - application/json
+      description: |-
+        Launches a Docker container with the specified parameters.
+
+        Requires the `docker-svc:docker:create` permission.
+      operationId: launchContainer
+      parameters:
+      - description: Launch Container Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/docker_svc.LaunchContainerRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/docker_svc.LaunchContainerResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/docker_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/docker_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/docker_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Launch a Container
+      tags:
+      - Docker Svc
+  /docker-svc/container/{hash}/is-running:
+    get:
+      consumes:
+      - application/json
+      description: Check if a Docker container identified by the hash is running
+      operationId: isRunning
+      parameters:
+      - description: Container Hash
+        in: path
+        name: hash
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/docker_svc.ContainerIsRunningResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/docker_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/docker_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/docker_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Check If a Container Is Running
+      tags:
+      - Docker Svc
+  /docker-svc/container/{hash}/summary/{numberOfLines}:
+    get:
+      consumes:
+      - application/json
+      description: Get a summary of the Docker container identified by the hash, limited
+        to a specified number of lines
+      operationId: getContainerSummary
+      parameters:
+      - description: Container Hash
+        in: path
+        name: hash
+        required: true
+        type: string
+      - description: Number of Lines
+        in: path
+        name: numberOfLines
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/docker_svc.GetContainerSummaryResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/docker_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/docker_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/docker_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get Container Summary
+      tags:
+      - Docker Svc
+  /docker-svc/host:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve information about the Docker host
+      operationId: getHost
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/docker_svc.GetDockerHostResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/docker_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/docker_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get Docker Host
+      tags:
+      - Docker Svc
+  /docker-svc/info:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve detailed information about the Docker service
+      operationId: getInfo
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Service Information
+          schema:
+            $ref: '#/definitions/docker_svc.GetInfoResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/docker_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/docker_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get Docker Service Information
+      tags:
+      - Docker Svc
+  /download-svc/download:
+    put:
+      consumes:
+      - application/json
+      description: |-
+        Start a download for a specified URL.
+
+        Requires the `download-svc:download:create` permission.
+      operationId: download
+      parameters:
+      - description: Download Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/download_svc.DownloadRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Download initiated successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/download_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/download_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/download_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Download a File
+      tags:
+      - Download Svc
+  /download-svc/download/{downloadId}:
+    get:
+      consumes:
+      - application/json
+      description: |-
+        Get a download by ID.
+
+        Requires the `download-svc:download:view` permission.
+      operationId: getDownload
+      parameters:
+      - description: Download ID
+        in: path
+        name: downloadId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/download_svc.GetDownloadResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Get a Download
+      tags:
+      - Download Svc
+  /download-svc/download/{downloadId}/pause:
+    put:
+      consumes:
+      - application/json
+      description: |-
+        Pause a download that is currently in progress.
+
+        Requires the `download-svc:download:edit` permission.
+      operationId: pause
+      parameters:
+      - description: Download ID
+        in: path
+        name: downloadId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid JSON
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Pause a Download
+      tags:
+      - Download Svc
+  /download-svc/downloads:
+    post:
+      consumes:
+      - application/json
+      description: |-
+        Fetch a list of all download details.
+
+        Requires the `download-svc:download:view` permission.
+      operationId: listDownloads
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of downloads
+          schema:
+            $ref: '#/definitions/download_svc.DownloadsResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: List Downloads
+      tags:
+      - Download Svc
+  /dynamic-svc/object:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new object with the provided details. Requires authorization
+        and user authentication.
+      operationId: createObject
+      parameters:
+      - description: Create request payload
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dynamic_svc.CreateObjectRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/dynamic_svc.CreateObjectResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/dynamic_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dynamic_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dynamic_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create a Generic Object
+      tags:
+      - Dynamic Svc
+  /dynamic-svc/object/{objectId}:
+    put:
+      consumes:
+      - application/json
+      description: Creates a new dynamic object or updates an existing one based on
+        the provided data. Requires authorization and user authentication.
+      operationId: upsertObject
+      parameters:
+      - description: Object ID
+        in: path
+        name: objectId
+        required: true
+        type: string
+      - description: Upsert request payload
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dynamic_svc.UpsertObjectRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful creation or update of object
+          schema:
+            $ref: '#/definitions/dynamic_svc.UpsertObjectResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/dynamic_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dynamic_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dynamic_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Upsert a Generic Object
+      tags:
+      - Dynamic Svc
+  /dynamic-svc/objects:
+    post:
+      consumes:
+      - application/json
+      description: |-
+        Retrieves objects from a specified table based on search criteria.
+        Requires authorization and user authentication.
+
+
+        Use helper functions in your respective client library such as condition constructors (`equal`, `contains`, `startsWith`) and field selectors (`field`, `fields`, `id`) for easier access.
+      operationId: query
+      parameters:
+      - description: Query Request
+        in: body
+        name: body
+        schema:
+          $ref: '#/definitions/dynamic_svc.QueryRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful retrieval of objects
+          schema:
+            $ref: '#/definitions/dynamic_svc.QueryResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/dynamic_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dynamic_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dynamic_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Query Objects
+      tags:
+      - Dynamic Svc
+  /dynamic-svc/objects/delete:
+    post:
+      consumes:
+      - application/json
+      description: Removes a dynamic object from the system based on the provided
+        conditions. Requires authorization and user authentication.
+      operationId: deleteObjects
+      parameters:
+      - description: Delete request payload
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dynamic_svc.DeleteObjectRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful deletion of object
+          schema:
+            $ref: '#/definitions/dynamic_svc.DeleteObjectResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/dynamic_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dynamic_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dynamic_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete a Generic Object
+      tags:
+      - Dynamic Svc
+  /dynamic-svc/objects/update:
+    post:
+      consumes:
+      - application/json
+      description: Updates objects in a specified table based on provided conditions.
+        Requires authorization and user authentication.
+      operationId: updateObjects
+      parameters:
+      - description: Update request payload
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dynamic_svc.UpdateObjectRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful update of objects
+          schema:
+            $ref: '#/definitions/dynamic_svc.UpdateObjectResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/dynamic_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dynamic_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dynamic_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update Objects
+      tags:
+      - Dynamic Svc
+  /firehose-svc/event:
+    post:
+      consumes:
+      - application/json
+      description: Publishes an event to the firehose service after authorization
+        check
+      operationId: publishEvent
+      parameters:
+      - description: Event to publish
+        in: body
+        name: event
+        required: true
+        schema:
+          $ref: '#/definitions/firehose_svc.EventPublishRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{}'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/firehose_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/firehose_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Publish an Event
+      tags:
+      - Firehose Svc
+  /firehose-svc/events/subscribe:
+    get:
+      consumes:
+      - application/json
+      description: Establish a subscription to the firehose events and accept a real
+        time stream of them.
+      operationId: subscribeToEvents
+      produces:
+      - text/event-stream
+      responses:
+        "200":
+          description: Event data
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/firehose_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/firehose_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Subscribe to the Event Stream
+      tags:
+      - Firehose Svc
+  /model-svc/default-model/start:
+    put:
+      consumes:
+      - application/json
+      description: |-
+        Starts The Default Model.
+
+        Requires the `model-svc:model:create` permission.
+      operationId: startDefaultModel
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model_svc.StartResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/model_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/model_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Start the Default Model
+      tags:
+      - Model Svc
+  /model-svc/default-model/status:
+    get:
+      consumes:
+      - application/json
+      description: |-
+        Retrieves the status of the default model.
+
+        Requires the `model-svc:model:view` permission.
+      operationId: getDefaultModelStatus
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Model status retrieved successfully
+          schema:
+            $ref: '#/definitions/model_svc.StatusResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Get Default Model Status
+      tags:
+      - Model Svc
+  /model-svc/model/{modelId}:
+    get:
+      consumes:
+      - application/json
+      description: |-
+        Retrieves the details of a model by its ID.
+
+        the Requires `model.view` permission.
+      operationId: getModel
+      parameters:
+      - description: Model ID
+        in: path
+        name: modelId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model_svc.GetModelResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/model_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get a Model
+      tags:
+      - Model Svc
+  /model-svc/model/{modelId}/make-default:
+    put:
+      consumes:
+      - application/json
+      description: Sets a model as the default model — when prompts are sent without
+        a Model ID, the default model is used.
+      operationId: makeDefault
+      parameters:
+      - description: Model ID
+        in: path
+        name: modelId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model_svc.MakeDefaultResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/model_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/model_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Make a Model Default
+      tags:
+      - Model Svc
+  /model-svc/model/{modelId}/start:
+    put:
+      consumes:
+      - application/json
+      description: Starts a model by ID
+      operationId: startModel
+      parameters:
+      - description: Model ID
+        in: path
+        name: modelId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model_svc.StartResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/model_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/model_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Start a Model
+      tags:
+      - Model Svc
+  /model-svc/model/{modelId}/status:
+    get:
+      consumes:
+      - application/json
+      description: |-
+        Retrieves the status of a model by ID.
+
+        Requires the `model-svc:model:view` permission.
+      operationId: getModelStatus
+      parameters:
+      - description: Model ID
+        in: path
+        name: modelId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Model status retrieved successfully
+          schema:
+            $ref: '#/definitions/model_svc.StatusResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Get Model Status
+      tags:
+      - Model Svc
+  /model-svc/models:
+    post:
+      consumes:
+      - application/json
+      description: |-
+        Retrieves a list of models.
+
+        Requires `model-svc:model:view` permission.
+      operationId: listModels
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model_svc.ListResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/model_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: List Models
+      tags:
+      - Model Svc
+  /policy-svc/check:
+    post:
+      consumes:
+      - application/json
+      description: Check records a resource access and returns if the access is allowed.
+      operationId: check
+      parameters:
+      - description: Check Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/policy_svc.CheckRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Checked successfully
+          schema:
+            $ref: '#/definitions/policy_svc.CheckResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/policy_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/policy_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/policy_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Check
+      tags:
+      - Policy Svc
+  /policy-svc/instance/{instanceId}:
+    put:
+      consumes:
+      - application/json
+      description: Allows user to upsert a new policy instance based on a template.
+      operationId: upsertInstance
+      parameters:
+      - description: Instance ID
+        in: path
+        name: instanceId
+        required: true
+        type: string
+      - description: Upsert Instance Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/policy_svc.UpsertInstanceRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Instance upserted successfully
+          schema:
+            $ref: '#/definitions/policy_svc.UpsertInstanceResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/policy_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/policy_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/policy_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Upsert an Instance
+      tags:
+      - Policy Svc
+  /prompt-svc/prompt:
+    post:
+      consumes:
+      - application/json
+      description: Adds a new prompt to the prompt queue and either waits for the
+        response (if `sync` is set to true), or returns immediately.
+      operationId: addPrompt
+      parameters:
+      - description: Add Prompt Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/prompt_svc.AddPromptRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/prompt_svc.AddPromptResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/prompt_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/prompt_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/prompt_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Add Prompt
+      tags:
+      - Prompt Svc
+  /prompt-svc/prompts:
+    post:
+      consumes:
+      - application/json
+      description: List prompts that satisfy a query.
+      operationId: listPrompts
+      parameters:
+      - description: List Prompts Request
+        in: body
+        name: request
+        schema:
+          $ref: '#/definitions/prompt_svc.ListPromptsRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/prompt_svc.ListPromptsResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/prompt_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/prompt_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/prompt_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: List Prompts
+      tags:
+      - Prompt Svc
+  /prompt-svc/prompts/{threadId}/responses/subscribe:
+    get:
+      description: Subscribe to prompt responses by thread via Server-Sent Events
+        (SSE)
+      operationId: subscribeToPromptResponses
+      parameters:
+      - description: Thread ID
+        in: path
+        name: threadId
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Streaming response
+          schema:
+            type: string
+        "400":
+          description: Missing threadId parameter
+          schema:
+            $ref: '#/definitions/prompt_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/prompt_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Subscribe to Prompt Responses by Thread
+      tags:
+      - Prompt Svc
+  /prompt-svc/remove:
+    post:
+      consumes:
+      - application/json
+      description: Remove a prompt by ID.
+      operationId: removePrompt
+      parameters:
+      - description: Remove Prompt Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/prompt_svc.RemovePromptRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{}'
+          schema:
+            $ref: '#/definitions/prompt_svc.RemovePromptResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/prompt_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/prompt_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/prompt_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Remove Prompt
+      tags:
+      - Prompt Svc
+  /registry-svc/nodes:
+    post:
+      consumes:
+      - application/json
+      description: Retrieve a list of nodes.
+      operationId: listNodes
+      parameters:
+      - description: List Registrys Request
+        in: body
+        name: body
+        schema:
+          $ref: '#/definitions/registry_svc.ListNodesRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/registry_svc.ListNodesResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: List Nodes
+      tags:
+      - Registry Svc
+  /registry-svc/service-instance:
+    post:
+      consumes:
+      - application/json
+      description: Registers a new service instance, associating an service instance
+        address with a slug acquired from the bearer token.
+      operationId: registerServiceInstance
+      parameters:
+      - description: Register Service Instance Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/registry_svc.RegisterServiceInstanceRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/registry_svc.RegisterServiceInstanceResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Register Service Instance
+      tags:
+      - Registry Svc
+  /registry-svc/service-instance/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Removes a registered service instance based on the service ID.
+      operationId: removeServiceInstance
+      parameters:
+      - description: Service Instance ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+        "404":
+          description: Service not found
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Remove Service Instance
+      tags:
+      - Registry Svc
+  /registry-svc/services:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of all registered service instances or filters
+        them by specific criteria (e.g., host, IP).
+      operationId: queryServiceInstances
+      parameters:
+      - description: Scheme to filter by
+        in: query
+        name: scheme
+        type: string
+      - description: IP to filter by
+        in: query
+        name: ip
+        type: string
+      - description: Host to filter by
+        in: query
+        name: host
+        type: string
+      - description: IP to filter by
+        in: query
+        name: ip
+        type: string
+      - description: Id to filter by
+        in: query
+        name: id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/registry_svc.QueryServiceInstancesResponse'
+            type: array
+        "400":
+          description: Invalid filters
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Query Service Instances
+      tags:
+      - Registry Svc
+  /user-svc/change-password:
+    post:
+      consumes:
+      - application/json
+      description: Allows an authenticated user to change their own password.
+      operationId: changePassword
+      parameters:
+      - description: Change Password Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/user_svc.ChangePasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Password changed successfully
+          schema:
+            $ref: '#/definitions/user_svc.ChangePasswordResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Change User Password
+      tags:
+      - User Svc
+  /user-svc/change-password-admin:
+    post:
+      consumes:
+      - application/json
+      description: Allows an administrator to change a user's password.
+      operationId: changePasswordAdmin
+      parameters:
+      - description: Change Password Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/user_svc.ChangePasswordAdminRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Password changed successfully
+          schema:
+            $ref: '#/definitions/user_svc.ChangePasswordAdminResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Change User Password (Admin)
+      tags:
+      - User Svc
+  /user-svc/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticates a user and returns a token.
+      operationId: login
+      parameters:
+      - description: Login Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/user_svc.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Login successful
+          schema:
+            $ref: '#/definitions/user_svc.LoginResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+      summary: Login
+      tags:
+      - User Svc
+  /user-svc/organization:
+    post:
+      consumes:
+      - application/json
+      description: |-
+        Allows a logged-in user to create a new organization. The user initiating the request will be assigned the role of admin for that organization.
+        The initiating user will receive a dynamic role in the format `user-svc:org:{organizationId}:admin`, where `$organization-slug` is a unique identifier for the created organization.
+        Dynamic roles are generated based on specific user-resource associations, offering more flexible permission management compared to static roles.
+      operationId: createOrganization
+      parameters:
+      - description: Create User Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/user_svc.CreateOrganizationRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User created successfully
+          schema:
+            $ref: '#/definitions/user_svc.CreateOrganizationResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create an Organization
+      tags:
+      - User Svc
+  /user-svc/organization/{organizationId}/user:
+    post:
+      consumes:
+      - application/json
+      description: Allows an authorized user to add another user to a specific organization.
+        The user will be assigned a specific role within the organization.
+      operationId: addUserToOrganization
+      parameters:
+      - description: Organization ID
+        in: path
+        name: organizationId
+        required: true
+        type: string
+      - description: Add User to Organization Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/user_svc.AddUserToOrganizationRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User added successfully
+          schema:
+            $ref: '#/definitions/user_svc.AddUserToOrganizationResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+        "404":
+          description: Organization/User not found
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Add a User to an Organization
+      tags:
+      - User Svc
+  /user-svc/organization/{organizationId}/user/{userId}:
+    delete:
+      consumes:
+      - application/json
+      description: Allows an authorized user to add another user to a specific organization.
+        The user will be assigned a specific role within the organization.
+      operationId: removeUserFromOrganization
+      parameters:
+      - description: Organization ID
+        in: path
+        name: organizationId
+        required: true
+        type: string
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: string
+      - description: Add User to Organization Request
+        in: body
+        name: request
+        schema:
+          $ref: '#/definitions/user_svc.RemoveUserFromOrganizationRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User added successfully
+          schema:
+            $ref: '#/definitions/user_svc.RemoveUserFromOrganizationResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+        "404":
+          description: Organization/User not found
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Remove a User from an Organization
+      tags:
+      - User Svc
+  /user-svc/permission/{permissionId}:
+    put:
+      consumes:
+      - application/json
+      description: |-
+        Creates or updates a permission.
+        <b>The permission ID must be prefixed by the callers username (email).</b>
+        Eg. if the owner's email/username is `petstore-svc` the permission should look like `petstore-svc:pet:edit`.
+
+        Requires the `user-svc:permission:create` permission.
+      operationId: upsertPermission
+      parameters:
+      - description: Permission ID
+        in: path
+        name: permissionId
+        required: true
+        type: string
+      - description: Permission Details
+        in: body
+        name: requestBody
+        required: true
+        schema:
+          $ref: '#/definitions/user_svc.UpserPermissionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user_svc.CreateUserResponse'
+        "400":
+          description: 'Bad Request: Invalid JSON or Bad Namespace'
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Upsert a Permission
+      tags:
+      - User Svc
+  /user-svc/permission/{permissionId}/is-authorized:
+    post:
+      consumes:
+      - application/json
+      description: Check if a user is authorized for a specific permission.
+      operationId: isAuthorized
+      parameters:
+      - description: Permission ID
+        in: path
+        name: permissionId
+        required: true
+        type: string
+      - description: Is Authorized Request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/user_svc.IsAuthorizedRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user_svc.IsAuthorizedResponse'
+        "400":
+          description: Invalid JSON or missing permission id
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Is Authorized
+      tags:
+      - User Svc
+  /user-svc/public-key:
+    get:
+      consumes:
+      - application/json
+      description: Get the public key to descrypt the JWT.
+      operationId: getPublicKey
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user_svc.GetPublicKeyResponse'
+        "400":
+          description: Invalid JSON or missing permission id
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+      summary: Get Public Key
+      tags:
+      - User Svc
+  /user-svc/register:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user with a name, email, and password.
+      operationId: register
+      parameters:
+      - description: Register Request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/user_svc.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user_svc.RegisterResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+      summary: Register
+      tags:
+      - User Svc
+  /user-svc/role:
+    post:
+      consumes:
+      - application/json
+      description: |-
+        Create a new role.
+        <b>The role ID must be prefixed by the callers username (email).</b>
+        Eg. if the owner's slug is `petstore-svc` the role should look like `petstore-svc:admin`.
+        The user account who creates the role will become the owner of that role, and only the owner will be able to edit the role.
+
+        Requires the `user-svc:role:create` permission.
+      operationId: createRole
+      parameters:
+      - description: Create Role Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/user_svc.CreateRoleRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Role created successfully
+          schema:
+            $ref: '#/definitions/user_svc.CreateRoleResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create a New Role
+      tags:
+      - User Svc
+  /user-svc/role/{roleId}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a role based on the role ID.
+      operationId: deleteRole
+      parameters:
+      - description: Role ID
+        in: path
+        name: roleId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user_svc.DeleteRoleResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Delete a Role
+      tags:
+      - User Svc
+  /user-svc/role/{roleId}/permission/{permissionId}:
+    put:
+      consumes:
+      - application/json
+      description: |-
+        Adds a specific permission to a role identified by roleId.
+
+        Requires the `user-svc:permission:assign` permission.
+      operationId: addPermissionToRole
+      parameters:
+      - description: Role ID
+        in: path
+        name: roleId
+        required: true
+        type: string
+      - description: Permission ID
+        in: path
+        name: permissionId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user_svc.CreateUserResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Add Permission to Role
+      tags:
+      - User Svc
+  /user-svc/role/{roleId}/permissions:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve permissions associated with a specific role ID.
+      operationId: getPermissionsByRole
+      parameters:
+      - description: Role ID
+        in: path
+        name: roleId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user_svc.GetPermissionsResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Get Permissions by Role
+      tags:
+      - User Svc
+    put:
+      consumes:
+      - application/json
+      description: |-
+        Set permissions for a specified role. The caller can add permissions it owns to any role.
+        If the caller tries to add a permission it doesn't own to a role, `StatusBadRequest` will be returned.
+      operationId: setRolePermission
+      parameters:
+      - description: Role ID
+        in: path
+        name: roleId
+        required: true
+        type: string
+      - description: Set Role Permissions Request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/user_svc.SetRolePermissionsRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user_svc.SetRolePermissionsResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Set Role Permissions
+      tags:
+      - User Svc
+  /user-svc/roles:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve all roles from the user service.
+      operationId: getRoles
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user_svc.GetRolesResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Get all Roles
+      tags:
+      - User Svc
+  /user-svc/user:
+    post:
+      consumes:
+      - application/json
+      description: Allows an authenticated administrator to create a new user with
+        specified details.
+      operationId: createUser
+      parameters:
+      - description: Create User Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/user_svc.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User created successfully
+          schema:
+            $ref: '#/definitions/user_svc.CreateUserResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create a New User
+      tags:
+      - User Svc
+  /user-svc/user/{userId}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a user based on the user ID.
+      operationId: deleteUser
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user_svc.DeleteUserResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Delete a User
+      tags:
+      - User Svc
+    put:
+      consumes:
+      - application/json
+      description: Save user profile information based on the provided user ID.
+      operationId: saveUserProfile
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: string
+      - description: Save Profile Request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/user_svc.SaveProfileRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user_svc.SaveProfileResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Save User Profile
+      tags:
+      - User Svc
+  /user-svc/user/by-token:
+    post:
+      consumes:
+      - application/json
+      description: Retrieve user information based on an authentication token.
+      operationId: readUserByToken
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user_svc.ReadUserByTokenResponse'
+        "400":
+          description: Token Missing
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Read User by Token
+      tags:
+      - User Svc
+  /user-svc/users:
+    post:
+      consumes:
+      - application/json
+      description: Fetches a list of users with optional query filters and pagination.
+      operationId: getUsers
+      parameters:
+      - description: Get Users Request
+        in: body
+        name: request
+        schema:
+          $ref: '#/definitions/user_svc.GetUsersRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of users retrieved successfully
+          schema:
+            $ref: '#/definitions/user_svc.GetUsersResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/user_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: List Users
+      tags:
+      - User Svc
+securityDefinitions:
+  BearerAuth:
+    description: Type "Bearer" followed by a space and token acquired from the User
+      sService Login endpoint.
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

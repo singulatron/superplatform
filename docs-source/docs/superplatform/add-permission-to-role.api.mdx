@@ -1,0 +1,313 @@
+---
+id: add-permission-to-role
+title: "Add Permission to Role"
+description: "Adds a specific permission to a role identified by roleId."
+sidebar_label: "Add Permission to Role"
+hide_title: true
+hide_table_of_contents: true
+api: eJzFVcGO2zYQ/RViTi3ASM5uAxQ6dYsWhZEAMeLd066BzEpjiQlFMiRl1xX478FItmV7nQLJob3Ykjicee/xzbCHikLplYvKGijgrqqCQBEclWqtSuHItyoEZY2IVqDwVpNQFZmo1ooq8bwbPs2r7Mk8mQ/0pVOegogNiY9dIP8qbMpiSlJgCKo2H0/yZiDBOvLICOYVFIBVtTgu39sPVhNIcOixpUg+QPHYX8DmGDH/AyQofnUYG5BgsCUoYAQIEvwIr4Ii+o4khLKhFqHoIe4cR4bolakhJXlZYAL0zTITpe8stuLg4KwJFHj9Zjbjv3MA79+ChNKaSCbyKjqnVTmIln8KHNK/LGGfP1EZIaWUJPwye/0y7YPBLjbWq3+o+p4CzvOZRTUiJu+tv6rjVSRvrhGcm0jeoBZL8hvy4s8h538DKUkIVHZexd1grt8JPfm7LjZQPK74gCLW7Dt4COTFclPCSkJLsbFsWNfFwaAcDvnB9jn7Lu9H96V8skfen1olARdnyqOxO685S65tibqxIRZvfr25fQ2M4gByyaRHnqdQLyW93zkST/uQJxBrq7Xdjl3LPY4lCTSViPYzGYHlaFix9rYdOnggG/g8VEnina2VEWQqZ5WJ2aEJGsKK/NQGd3s/DccER7XRqbe0G/RXZm0ZLJ8slsPJUouKaQfUFH4LytSdxuityUrbnuRezMWyc856FnxUqonRFXkeOkfeaYxr69sMVQ5JXs62uWjRYE0tmTgQr2hD2rrh/bgXJGhVkgnEyA6V/1q8E5vbbHZWNxR5vt1us9p0mfV1vt8XcqydfnWbzbImtpqRRPJteL/ea3kCe4t1TT5TNh9CclZMRc0hy1NKIIEtMjKZZTec1NkQWzSnMKtKLM5G9n56ninRT031Pw38vSki/R1zp1EZpjPo2u/76BEO2XiWjiSK4ySfsvHns8m7ksBdwxn6/hkDPXidEn/+0pHn/l5J2KBX+Mwq81WiAj9XUKxRB/oXsX7a861+FtONc5XLwfVmxweHuuM3kPCZdtONNFwzP1L88jb6AQhnmqVVkodGZkXGkLuyJBdPNr+Yv+l0Ci4e7kEC7ifR1PacTB4eOPtVYJdjY4TAv6zS1S19Pw6VlI7x49I3dxxn1RjNOq1SSl8BvGoczw==
+sidebar_class_name: "put api-method"
+info_path: docs/superplatform/superplatform
+custom_edit_url: null
+---
+
+import ApiTabs from "@theme/ApiTabs";
+import DiscriminatorTabs from "@theme/DiscriminatorTabs";
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import SecuritySchemes from "@theme/ApiExplorer/SecuritySchemes";
+import MimeTabs from "@theme/MimeTabs";
+import ParamsItem from "@theme/ParamsItem";
+import ResponseSamples from "@theme/ResponseSamples";
+import SchemaItem from "@theme/SchemaItem";
+import SchemaTabs from "@theme/SchemaTabs";
+import Markdown from "@theme/Markdown";
+import Heading from "@theme/Heading";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Add Permission to Role"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"put"}
+  path={"/user-svc/role/{roleId}/permission/{permissionId}"}
+>
+  
+</MethodEndpoint>
+
+
+
+Adds a specific permission to a role identified by roleId.
+
+Requires the `user-svc:permission:assign` permission.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<details
+  style={{"marginBottom":"1rem"}}
+  className={"openapi-markdown__details"}
+  data-collapsed={false}
+  open={true}
+>
+  <summary
+    style={{}}
+  >
+    <h3
+      className={"openapi-markdown__details-summary-header-params"}
+    >
+      Path Parameters
+    </h3>
+  </summary><div>
+    <ul>
+      <ParamsItem
+        className={"paramsItem"}
+        param={{"description":"Role ID","in":"path","name":"roleId","required":true,"schema":{"type":"string"}}}
+      >
+        
+      </ParamsItem><ParamsItem
+        className={"paramsItem"}
+        param={{"description":"Permission ID","in":"path","name":"permissionId","required":true,"schema":{"type":"string"}}}
+      >
+        
+      </ParamsItem>
+    </ul>
+  </div>
+</details><div>
+  <div>
+    <ApiTabs
+      label={undefined}
+      id={undefined}
+    >
+      <TabItem
+        label={"200"}
+        value={"200"}
+      >
+        <div>
+          
+          
+          OK
+          
+          
+        </div><div>
+          <MimeTabs
+            className={"openapi-tabs__mime"}
+            schemaType={"response"}
+          >
+            <TabItem
+              label={"application/json"}
+              value={"application/json"}
+            >
+              <SchemaTabs
+                className={"openapi-tabs__schema"}
+              >
+                <TabItem
+                  label={"Schema"}
+                  value={"Schema"}
+                >
+                  <details
+                    style={{}}
+                    className={"openapi-markdown__details response"}
+                    data-collapsed={false}
+                    open={true}
+                  >
+                    <summary
+                      style={{}}
+                      className={"openapi-markdown__details-summary-response"}
+                    >
+                      <strong>
+                        Schema
+                      </strong>
+                    </summary><div
+                      style={{"textAlign":"left","marginLeft":"1rem"}}
+                    >
+                      
+                    </div><ul
+                      style={{"marginLeft":"1rem"}}
+                    >
+                      <div
+                        style={{"marginTop":".5rem","marginBottom":".5rem"}}
+                      >
+                        
+                        
+                        object
+                        
+                        
+                      </div>
+                    </ul>
+                  </details>
+                </TabItem><TabItem
+                  label={"Example (from schema)"}
+                  value={"Example (from schema)"}
+                >
+                  <ResponseSamples
+                    responseExample={"{}"}
+                    language={"json"}
+                  >
+                    
+                  </ResponseSamples>
+                </TabItem>
+              </SchemaTabs>
+            </TabItem>
+          </MimeTabs>
+        </div>
+      </TabItem><TabItem
+        label={"401"}
+        value={"401"}
+      >
+        <div>
+          
+          
+          Unauthorized
+          
+          
+        </div><div>
+          <MimeTabs
+            className={"openapi-tabs__mime"}
+            schemaType={"response"}
+          >
+            <TabItem
+              label={"application/json"}
+              value={"application/json"}
+            >
+              <SchemaTabs
+                className={"openapi-tabs__schema"}
+              >
+                <TabItem
+                  label={"Schema"}
+                  value={"Schema"}
+                >
+                  <details
+                    style={{}}
+                    className={"openapi-markdown__details response"}
+                    data-collapsed={false}
+                    open={true}
+                  >
+                    <summary
+                      style={{}}
+                      className={"openapi-markdown__details-summary-response"}
+                    >
+                      <strong>
+                        Schema
+                      </strong>
+                    </summary><div
+                      style={{"textAlign":"left","marginLeft":"1rem"}}
+                    >
+                      
+                    </div><ul
+                      style={{"marginLeft":"1rem"}}
+                    >
+                      <SchemaItem
+                        collapsible={false}
+                        name={"error"}
+                        required={false}
+                        schemaName={"string"}
+                        qualifierMessage={undefined}
+                        schema={{"type":"string"}}
+                      >
+                        
+                      </SchemaItem>
+                    </ul>
+                  </details>
+                </TabItem><TabItem
+                  label={"Example (from schema)"}
+                  value={"Example (from schema)"}
+                >
+                  <ResponseSamples
+                    responseExample={"{\n  \"error\": \"string\"\n}"}
+                    language={"json"}
+                  >
+                    
+                  </ResponseSamples>
+                </TabItem>
+              </SchemaTabs>
+            </TabItem>
+          </MimeTabs>
+        </div>
+      </TabItem><TabItem
+        label={"500"}
+        value={"500"}
+      >
+        <div>
+          
+          
+          Internal Server Error
+          
+          
+        </div><div>
+          <MimeTabs
+            className={"openapi-tabs__mime"}
+            schemaType={"response"}
+          >
+            <TabItem
+              label={"application/json"}
+              value={"application/json"}
+            >
+              <SchemaTabs
+                className={"openapi-tabs__schema"}
+              >
+                <TabItem
+                  label={"Schema"}
+                  value={"Schema"}
+                >
+                  <details
+                    style={{}}
+                    className={"openapi-markdown__details response"}
+                    data-collapsed={false}
+                    open={true}
+                  >
+                    <summary
+                      style={{}}
+                      className={"openapi-markdown__details-summary-response"}
+                    >
+                      <strong>
+                        Schema
+                      </strong>
+                    </summary><div
+                      style={{"textAlign":"left","marginLeft":"1rem"}}
+                    >
+                      
+                    </div><ul
+                      style={{"marginLeft":"1rem"}}
+                    >
+                      <SchemaItem
+                        collapsible={false}
+                        name={"error"}
+                        required={false}
+                        schemaName={"string"}
+                        qualifierMessage={undefined}
+                        schema={{"type":"string"}}
+                      >
+                        
+                      </SchemaItem>
+                    </ul>
+                  </details>
+                </TabItem><TabItem
+                  label={"Example (from schema)"}
+                  value={"Example (from schema)"}
+                >
+                  <ResponseSamples
+                    responseExample={"{\n  \"error\": \"string\"\n}"}
+                    language={"json"}
+                  >
+                    
+                  </ResponseSamples>
+                </TabItem>
+              </SchemaTabs>
+            </TabItem>
+          </MimeTabs>
+        </div>
+      </TabItem>
+    </ApiTabs>
+  </div>
+</div>
+      
