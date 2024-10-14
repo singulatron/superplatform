@@ -46,6 +46,8 @@ const (
 )
 
 type SQLStore struct {
+	DB *sql.DB
+
 	// an instance of the object for the type information
 	instance         any
 	db               *DebugDB
@@ -75,6 +77,7 @@ func NewSQLStore(instance any, driverName, connStr string, tableName string, deb
 	}
 
 	sstore := &SQLStore{
+		DB:               db,
 		instance:         instance,
 		driverName:       driverName,
 		tableName:        tableName,
