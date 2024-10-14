@@ -2,9 +2,9 @@
   <img width="150px" src="https://singulatron.com/assets/logo_circled_grey.svg?v=1" />
   <div align="center">
     <span>
-      <h1>Singulatron</h1>
+      <h1>Superplatform</h1>
     </span>
-    <div>AI management and development platform.</div>
+    <div>A microservices platform focused on distributed AI management and development.</div>
     <div>
       <a href="https://superplatform.ai">superplatform.ai</a> 
     </div>
