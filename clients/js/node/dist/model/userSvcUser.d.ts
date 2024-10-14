@@ -14,7 +14,7 @@ export declare class UserSvcUser {
     /**
     * Contacts are used for login and identification purposes.
     */
-    'contact'?: Array<UserSvcContact>;
+    'contacts'?: Array<UserSvcContact>;
     'createdAt'?: string;
     'deletedAt'?: string;
     'id'?: string;

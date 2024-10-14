@@ -4482,16 +4482,16 @@ const docTemplate = `{
                 "flavour": {
                     "type": "string"
                 },
-                "full_name": {
+                "fullName": {
                     "type": "string"
                 },
                 "id": {
                     "type": "string"
                 },
-                "max_bits": {
+                "maxBits": {
                     "type": "integer"
                 },
-                "max_ram": {
+                "maxRam": {
                     "type": "number"
                 },
                 "mirrors": {
@@ -4509,13 +4509,13 @@ const docTemplate = `{
                 "platformId": {
                     "type": "string"
                 },
-                "prompt_template": {
+                "promptTemplate": {
                     "type": "string"
                 },
                 "quality": {
                     "type": "string"
                 },
-                "quant_comment": {
+                "quantComment": {
                     "type": "string"
                 },
                 "size": {
@@ -5175,11 +5175,13 @@ const docTemplate = `{
                 },
                 "total": {
                     "description": "Total available amount (in bytes).",
-                    "type": "integer"
+                    "type": "integer",
+                    "format": "int64"
                 },
                 "used": {
                     "description": "Used amount (in bytes).",
-                    "type": "integer"
+                    "type": "integer",
+                    "format": "int64"
                 }
             }
         },
@@ -5262,14 +5264,14 @@ const docTemplate = `{
                     "type": "string",
                     "example": "twitter.com/thejoe"
                 },
+                "isPrimary": {
+                    "description": "If this is the primary contact method",
+                    "type": "boolean"
+                },
                 "platform": {
                     "description": "Platform of the contact (e.g., \"email\", \"phone\", \"twitter\")",
                     "type": "string",
                     "example": "twitter"
-                },
-                "primary": {
-                    "description": "If this is the primary contact method",
-                    "type": "boolean"
                 },
                 "updatedAt": {
                     "type": "string"
@@ -5629,7 +5631,7 @@ const docTemplate = `{
         "user_svc.User": {
             "type": "object",
             "properties": {
-                "contact": {
+                "contacts": {
                     "description": "Contacts are used for login and identification purposes.",
                     "type": "array",
                     "items": {

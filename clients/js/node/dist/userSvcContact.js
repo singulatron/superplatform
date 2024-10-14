@@ -34,14 +34,14 @@ UserSvcContact.attributeTypeMap = [
         "type": "string"
     },
     {
+        "name": "isPrimary",
+        "baseName": "isPrimary",
+        "type": "boolean"
+    },
+    {
         "name": "platform",
         "baseName": "platform",
         "type": "string"
-    },
-    {
-        "name": "primary",
-        "baseName": "primary",
-        "type": "boolean"
     },
     {
         "name": "updatedAt",

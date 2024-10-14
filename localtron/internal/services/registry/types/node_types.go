@@ -27,9 +27,9 @@ func (n Node) GetId() string {
 
 // Usage represents the usage metrics for a resource.
 type Usage struct {
-	Used    uint64  `json:"used"`    // Used amount (in bytes).
-	Total   uint64  `json:"total"`   // Total available amount (in bytes).
-	Percent float64 `json:"percent"` // Usage percentage.
+	Used    uint64  `json:"used" format:"int64"`  // Used amount (in bytes).
+	Total   uint64  `json:"total" format:"int64"` // Total available amount (in bytes).
+	Percent float64 `json:"percent"`              // Usage percentage.
 }
 
 type ResourceUsage struct {

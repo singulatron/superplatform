@@ -64,7 +64,7 @@ export class ModelSvcModel {
         },
         {
             "name": "fullName",
-            "baseName": "full_name",
+            "baseName": "fullName",
             "type": "string"
         },
         {
@@ -74,12 +74,12 @@ export class ModelSvcModel {
         },
         {
             "name": "maxBits",
-            "baseName": "max_bits",
+            "baseName": "maxBits",
             "type": "number"
         },
         {
             "name": "maxRam",
-            "baseName": "max_ram",
+            "baseName": "maxRam",
             "type": "number"
         },
         {
@@ -104,7 +104,7 @@ export class ModelSvcModel {
         },
         {
             "name": "promptTemplate",
-            "baseName": "prompt_template",
+            "baseName": "promptTemplate",
             "type": "string"
         },
         {
@@ -114,7 +114,7 @@ export class ModelSvcModel {
         },
         {
             "name": "quantComment",
-            "baseName": "quant_comment",
+            "baseName": "quantComment",
             "type": "string"
         },
         {

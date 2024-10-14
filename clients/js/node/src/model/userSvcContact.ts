@@ -20,13 +20,13 @@ export class UserSvcContact {
     */
     'id'?: string;
     /**
+    * If this is the primary contact method
+    */
+    'isPrimary'?: boolean;
+    /**
     * Platform of the contact (e.g., \"email\", \"phone\", \"twitter\")
     */
     'platform'?: string;
-    /**
-    * If this is the primary contact method
-    */
-    'primary'?: boolean;
     'updatedAt'?: string;
     'userId'?: string;
     /**
@@ -57,14 +57,14 @@ export class UserSvcContact {
             "type": "string"
         },
         {
+            "name": "isPrimary",
+            "baseName": "isPrimary",
+            "type": "boolean"
+        },
+        {
             "name": "platform",
             "baseName": "platform",
             "type": "string"
-        },
-        {
-            "name": "primary",
-            "baseName": "primary",
-            "type": "boolean"
         },
         {
             "name": "updatedAt",

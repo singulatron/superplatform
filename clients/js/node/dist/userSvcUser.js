@@ -19,8 +19,8 @@ class UserSvcUser {
 UserSvcUser.discriminator = undefined;
 UserSvcUser.attributeTypeMap = [
     {
-        "name": "contact",
-        "baseName": "contact",
+        "name": "contacts",
+        "baseName": "contacts",
         "type": "Array<UserSvcContact>"
     },
     {

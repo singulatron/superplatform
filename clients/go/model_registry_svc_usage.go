@@ -23,9 +23,9 @@ type RegistrySvcUsage struct {
 	// Usage percentage.
 	Percent *float32 `json:"percent,omitempty"`
 	// Total available amount (in bytes).
-	Total *int32 `json:"total,omitempty"`
+	Total *int64 `json:"total,omitempty"`
 	// Used amount (in bytes).
-	Used *int32 `json:"used,omitempty"`
+	Used *int64 `json:"used,omitempty"`
 }
 
 // NewRegistrySvcUsage instantiates a new RegistrySvcUsage object
@@ -78,9 +78,9 @@ func (o *RegistrySvcUsage) SetPercent(v float32) {
 }
 
 // GetTotal returns the Total field value if set, zero value otherwise.
-func (o *RegistrySvcUsage) GetTotal() int32 {
+func (o *RegistrySvcUsage) GetTotal() int64 {
 	if o == nil || IsNil(o.Total) {
-		var ret int32
+		var ret int64
 		return ret
 	}
 	return *o.Total
@@ -88,7 +88,7 @@ func (o *RegistrySvcUsage) GetTotal() int32 {
 
 // GetTotalOk returns a tuple with the Total field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *RegistrySvcUsage) GetTotalOk() (*int32, bool) {
+func (o *RegistrySvcUsage) GetTotalOk() (*int64, bool) {
 	if o == nil || IsNil(o.Total) {
 		return nil, false
 	}
@@ -104,15 +104,15 @@ func (o *RegistrySvcUsage) HasTotal() bool {
 	return false
 }
 
-// SetTotal gets a reference to the given int32 and assigns it to the Total field.
-func (o *RegistrySvcUsage) SetTotal(v int32) {
+// SetTotal gets a reference to the given int64 and assigns it to the Total field.
+func (o *RegistrySvcUsage) SetTotal(v int64) {
 	o.Total = &v
 }
 
 // GetUsed returns the Used field value if set, zero value otherwise.
-func (o *RegistrySvcUsage) GetUsed() int32 {
+func (o *RegistrySvcUsage) GetUsed() int64 {
 	if o == nil || IsNil(o.Used) {
-		var ret int32
+		var ret int64
 		return ret
 	}
 	return *o.Used
@@ -120,7 +120,7 @@ func (o *RegistrySvcUsage) GetUsed() int32 {
 
 // GetUsedOk returns a tuple with the Used field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *RegistrySvcUsage) GetUsedOk() (*int32, bool) {
+func (o *RegistrySvcUsage) GetUsedOk() (*int64, bool) {
 	if o == nil || IsNil(o.Used) {
 		return nil, false
 	}
@@ -136,8 +136,8 @@ func (o *RegistrySvcUsage) HasUsed() bool {
 	return false
 }
 
-// SetUsed gets a reference to the given int32 and assigns it to the Used field.
-func (o *RegistrySvcUsage) SetUsed(v int32) {
+// SetUsed gets a reference to the given int64 and assigns it to the Used field.
+func (o *RegistrySvcUsage) SetUsed(v int64) {
 	o.Used = &v
 }
 

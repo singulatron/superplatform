@@ -21,7 +21,7 @@ var _ MappedNullable = &UserSvcUser{}
 // UserSvcUser struct for UserSvcUser
 type UserSvcUser struct {
 	// Contacts are used for login and identification purposes.
-	Contact []UserSvcContact `json:"contact,omitempty"`
+	Contacts []UserSvcContact `json:"contacts,omitempty"`
 	CreatedAt *string `json:"createdAt,omitempty"`
 	DeletedAt *string `json:"deletedAt,omitempty"`
 	Id *string `json:"id,omitempty"`
@@ -50,36 +50,36 @@ func NewUserSvcUserWithDefaults() *UserSvcUser {
 	return &this
 }
 
-// GetContact returns the Contact field value if set, zero value otherwise.
-func (o *UserSvcUser) GetContact() []UserSvcContact {
-	if o == nil || IsNil(o.Contact) {
+// GetContacts returns the Contacts field value if set, zero value otherwise.
+func (o *UserSvcUser) GetContacts() []UserSvcContact {
+	if o == nil || IsNil(o.Contacts) {
 		var ret []UserSvcContact
 		return ret
 	}
-	return o.Contact
+	return o.Contacts
 }
 
-// GetContactOk returns a tuple with the Contact field value if set, nil otherwise
+// GetContactsOk returns a tuple with the Contacts field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *UserSvcUser) GetContactOk() ([]UserSvcContact, bool) {
-	if o == nil || IsNil(o.Contact) {
+func (o *UserSvcUser) GetContactsOk() ([]UserSvcContact, bool) {
+	if o == nil || IsNil(o.Contacts) {
 		return nil, false
 	}
-	return o.Contact, true
+	return o.Contacts, true
 }
 
-// HasContact returns a boolean if a field has been set.
-func (o *UserSvcUser) HasContact() bool {
-	if o != nil && !IsNil(o.Contact) {
+// HasContacts returns a boolean if a field has been set.
+func (o *UserSvcUser) HasContacts() bool {
+	if o != nil && !IsNil(o.Contacts) {
 		return true
 	}
 
 	return false
 }
 
-// SetContact gets a reference to the given []UserSvcContact and assigns it to the Contact field.
-func (o *UserSvcUser) SetContact(v []UserSvcContact) {
-	o.Contact = v
+// SetContacts gets a reference to the given []UserSvcContact and assigns it to the Contacts field.
+func (o *UserSvcUser) SetContacts(v []UserSvcContact) {
+	o.Contacts = v
 }
 
 // GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
@@ -316,8 +316,8 @@ func (o UserSvcUser) MarshalJSON() ([]byte, error) {
 
 func (o UserSvcUser) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if !IsNil(o.Contact) {
-		toSerialize["contact"] = o.Contact
+	if !IsNil(o.Contacts) {
+		toSerialize["contacts"] = o.Contacts
 	}
 	if !IsNil(o.CreatedAt) {
 		toSerialize["createdAt"] = o.CreatedAt

@@ -45,7 +45,7 @@ ModelSvcModel.attributeTypeMap = [
     },
     {
         "name": "fullName",
-        "baseName": "full_name",
+        "baseName": "fullName",
         "type": "string"
     },
     {
@@ -55,12 +55,12 @@ ModelSvcModel.attributeTypeMap = [
     },
     {
         "name": "maxBits",
-        "baseName": "max_bits",
+        "baseName": "maxBits",
         "type": "number"
     },
     {
         "name": "maxRam",
-        "baseName": "max_ram",
+        "baseName": "maxRam",
         "type": "number"
     },
     {
@@ -85,7 +85,7 @@ ModelSvcModel.attributeTypeMap = [
     },
     {
         "name": "promptTemplate",
-        "baseName": "prompt_template",
+        "baseName": "promptTemplate",
         "type": "string"
     },
     {
@@ -95,7 +95,7 @@ ModelSvcModel.attributeTypeMap = [
     },
     {
         "name": "quantComment",
-        "baseName": "quant_comment",
+        "baseName": "quantComment",
         "type": "string"
     },
     {

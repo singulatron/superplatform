@@ -17,13 +17,13 @@ export declare class UserSvcContact {
     */
     'id'?: string;
     /**
+    * If this is the primary contact method
+    */
+    'isPrimary'?: boolean;
+    /**
     * Platform of the contact (e.g., \"email\", \"phone\", \"twitter\")
     */
     'platform'?: string;
-    /**
-    * If this is the primary contact method
-    */
-    'primary'?: boolean;
     'updatedAt'?: string;
     'userId'?: string;
     /**
