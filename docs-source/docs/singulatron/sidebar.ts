@@ -306,7 +306,7 @@ const sidebar: SidebarsConfig = {
       items: [
         {
           type: "doc",
-          id: "singulatron/list-nodess",
+          id: "singulatron/list-nodes",
           label: "List Nodes",
           className: "api-method post",
         },

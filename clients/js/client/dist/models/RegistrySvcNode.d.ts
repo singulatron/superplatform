@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 import type { RegistrySvcGPU } from './RegistrySvcGPU';
+import type { RegistrySvcResourceUsage } from './RegistrySvcResourceUsage';
 /**
  *
  * @export
@@ -17,11 +18,29 @@ import type { RegistrySvcGPU } from './RegistrySvcGPU';
  */
 export interface RegistrySvcNode {
     /**
+     * The availability zone of the node
+     * @type {string}
+     * @memberof RegistrySvcNode
+     */
+    availabilityZone?: string;
+    /**
      * List of GPUs available on the node
      * @type {Array<RegistrySvcGPU>}
      * @memberof RegistrySvcNode
      */
     gpus?: Array<RegistrySvcGPU>;
+    /**
+     * Last active timestamp
+     * @type {string}
+     * @memberof RegistrySvcNode
+     */
+    lastHeartbeat?: string;
+    /**
+     * The region of the node
+     * @type {string}
+     * @memberof RegistrySvcNode
+     */
+    region?: string;
     /**
      * URL of the daemon running on the node.
      * If not configured defaults to hostname + default Singulatron daemon port.
@@ -29,6 +48,12 @@ export interface RegistrySvcNode {
      * @memberof RegistrySvcNode
      */
     url?: string;
+    /**
+     * Resource usage metrics of the node.
+     * @type {RegistrySvcResourceUsage}
+     * @memberof RegistrySvcNode
+     */
+    usage?: RegistrySvcResourceUsage;
 }
 /**
  * Check if a given object implements the RegistrySvcNode interface.

@@ -8,6 +8,7 @@
 package registryservice
 
 import (
+	"context"
 	"encoding/csv"
 	"fmt"
 	"log"
@@ -25,6 +26,7 @@ import (
 	registry "github.com/singulatron/singulatron/localtron/internal/services/registry/types"
 	sdk "github.com/singulatron/singulatron/sdk/go"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
+	"github.com/singulatron/singulatron/sdk/go/lock"
 	"github.com/singulatron/singulatron/sdk/go/logger"
 	"github.com/singulatron/singulatron/sdk/go/router"
 )
@@ -35,6 +37,7 @@ type RegistryService struct {
 	Region           string
 
 	router *router.Router
+	lock   lock.DistributedLock
 
 	credentialStore        datastore.DataStore
 	serviceDefinitionStore datastore.DataStore
@@ -42,8 +45,16 @@ type RegistryService struct {
 	nodeStore              datastore.DataStore
 }
 
-func NewRegistryService(router *router.Router, datastoreFactory func(tableName string, instance any) (datastore.DataStore, error)) (*RegistryService, error) {
-	nodeUrl := os.Getenv("SINGULATRON_ADDRESS")
+func NewRegistryService(
+	address string,
+	az string,
+	region string,
+	router *router.Router,
+	lock lock.DistributedLock,
+	datastoreFactory func(tableName string, instance any,
+	) (datastore.DataStore, error)) (*RegistryService, error) {
+
+	nodeUrl := address
 	var err error
 
 	if nodeUrl == "" {
@@ -54,9 +65,6 @@ func NewRegistryService(router *router.Router, datastoreFactory func(tableName s
 		nodeUrl = fmt.Sprintf("%v:%v", nodeUrl, "58231")
 	}
 
-	az := os.Getenv("SINGULATRON_AZ")
-	region := os.Getenv("SINGULATRON_REGION")
-
 	credentialStore, err := datastoreFactory("registrySvcCredentials", &sdk.Credential{})
 	if err != nil {
 		return nil, err
@@ -65,11 +73,11 @@ func NewRegistryService(router *router.Router, datastoreFactory func(tableName s
 	if err != nil {
 		return nil, err
 	}
-	serviceDefinitionStore, err := datastoreFactory("registrySvcServiceInstances", &registry.ServiceInstance{})
+	serviceDefinitionStore, err := datastoreFactory("registrySvcServiceInstances", &registry.ServiceDefinition{})
 	if err != nil {
 		return nil, err
 	}
-	nodeStore, err := datastoreFactory("registrySvcNodes", &registry.ServiceInstance{})
+	nodeStore, err := datastoreFactory("registrySvcNodes", &registry.Node{})
 	if err != nil {
 		return nil, err
 	}
@@ -77,6 +85,7 @@ func NewRegistryService(router *router.Router, datastoreFactory func(tableName s
 	service := &RegistryService{
 		URL:                    nodeUrl,
 		router:                 router,
+		lock:                   lock,
 		credentialStore:        credentialStore,
 		serviceDefinitionStore: serviceDefinitionStore,
 		serviceInstanceStore:   serviceInstanceStore,
@@ -91,6 +100,10 @@ func NewRegistryService(router *router.Router, datastoreFactory func(tableName s
 func (ns *RegistryService) Start() error {
 	go ns.nodeHeartbeat()
 
+	ctx := context.Background()
+	ns.lock.Acquire(ctx, "registry-service-start")
+	defer ns.lock.Release(ctx, "registry-service-start")
+
 	token, err := sdk.RegisterService("registry-svc", "Registry Service", ns.router, ns.credentialStore)
 	if err != nil {
 		return err
@@ -101,9 +114,12 @@ func (ns *RegistryService) Start() error {
 }
 
 func (ns *RegistryService) nodeHeartbeat() {
-
+	first := true
 	for {
-		time.Sleep(5 * time.Second)
+		if !first {
+			time.Sleep(2 * time.Second)
+			first = false
+		}
 
 		node := registry.Node{
 			URL:              ns.URL,

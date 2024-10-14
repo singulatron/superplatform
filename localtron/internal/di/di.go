@@ -8,6 +8,7 @@ import (
 	"sync"
 
 	"github.com/gorilla/mux"
+	node_types "github.com/singulatron/singulatron/localtron/internal/node/types"
 	chatservice "github.com/singulatron/singulatron/localtron/internal/services/chat"
 	configservice "github.com/singulatron/singulatron/localtron/internal/services/config"
 	dockerservice "github.com/singulatron/singulatron/localtron/internal/services/docker"
@@ -22,6 +23,8 @@ import (
 	"github.com/singulatron/singulatron/sdk/go/clients/llm"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
 	"github.com/singulatron/singulatron/sdk/go/datastore/localstore"
+	"github.com/singulatron/singulatron/sdk/go/lock"
+	distlock "github.com/singulatron/singulatron/sdk/go/lock/local"
 	"github.com/singulatron/singulatron/sdk/go/logger"
 	"github.com/singulatron/singulatron/sdk/go/middlewares"
 	"github.com/singulatron/singulatron/sdk/go/router"
@@ -30,8 +33,20 @@ import (
 const singulatronFolder = ".singulatron"
 
 type Options struct {
-	Url              string
-	Test             bool
+	// NodeOptions contains settings coming from envars
+	NodeOptions node_types.Options
+
+	// Url that will be passed down to the router when calling
+	// the Singulatron daemon from itself.
+	// (Inter-service calls go through the network.)
+	Url string
+
+	// Test mode if true will cause the localstore to
+	// save data into random temporary folders.
+	Test bool
+
+	Lock lock.DistributedLock
+
 	LLMClient        llm.ClientI
 	Router           *router.Router
 	DatastoreFactory func(tableName string, instance any) (datastore.DataStore, error)
@@ -56,15 +71,19 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 	}
 	options.HomeDir = homeDir
 
-	configService, err := configservice.NewConfigService()
+	if options.Lock == nil {
+		options.Lock = distlock.NewLocalDistributedLock()
+	}
+
+	configService, err := configservice.NewConfigService(options.Lock)
 	if err != nil {
 		logger.Error("Config service creation failed", slog.String("error", err.Error()))
 		os.Exit(1)
 	}
 
 	singulatronFolder := path.Join(homeDir, singulatronFolder)
-	if os.Getenv("SINGULATRON_CONFIG_PATH") != "" {
-		singulatronFolder = os.Getenv("SINGULATRON_CONFIG_PATH")
+	if options.NodeOptions.ConfigPath != "" {
+		singulatronFolder = options.NodeOptions.ConfigPath
 	}
 
 	configService.ConfigDirectory = singulatronFolder
@@ -111,7 +130,11 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 		os.Exit(1)
 	}
 
-	firehoseService, err := firehoseservice.NewFirehoseService(options.Router, options.DatastoreFactory)
+	firehoseService, err := firehoseservice.NewFirehoseService(
+		options.Router,
+		options.Lock,
+		options.DatastoreFactory,
+	)
 	if err != nil {
 		logger.Error("Firehose service creation failed", slog.String("error", err.Error()))
 		os.Exit(1)
@@ -130,7 +153,11 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 		os.Exit(1)
 	}
 
-	downloadService, err := downloadservice.NewDownloadService(options.Router, options.DatastoreFactory)
+	downloadService, err := downloadservice.NewDownloadService(
+		options.Router,
+		options.Lock,
+		options.DatastoreFactory,
+	)
 	if err != nil {
 		logger.Error("Download service creation failed", slog.String("error", err.Error()))
 		os.Exit(1)
@@ -139,14 +166,22 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 	downloadService.SetDefaultFolder(downloadFolder)
 	downloadService.SetStateFilePath(path.Join(singulatronFolder, "downloads.json"))
 
-	dockerService, err := dockerservice.NewDockerService(options.Router, options.DatastoreFactory)
+	dockerService, err := dockerservice.NewDockerService(
+		options.NodeOptions.VolumeName,
+		options.Router,
+		options.Lock,
+		options.DatastoreFactory,
+	)
 	if err != nil {
 		logger.Error("Docker service creation failed", slog.String("error", err.Error()))
 		os.Exit(1)
 	}
 
 	modelService, err := modelservice.NewModelService(
+		options.NodeOptions.GpuPlatform,
+		options.NodeOptions.LLMHost,
 		options.Router,
+		options.Lock,
 		options.DatastoreFactory,
 	)
 	if err != nil {
@@ -156,6 +191,7 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 
 	chatService, err := chatservice.NewChatService(
 		options.Router,
+		options.Lock,
 		options.DatastoreFactory,
 	)
 	if err != nil {
@@ -166,6 +202,7 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 	promptService, err := promptservice.NewPromptService(
 		options.Router,
 		options.LLMClient,
+		options.Lock,
 		options.DatastoreFactory,
 	)
 	if err != nil {
@@ -175,6 +212,7 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 
 	dynamicService, err := dynamicservice.NewDynamicService(
 		options.Router,
+		options.Lock,
 		options.DatastoreFactory,
 	)
 	if err != nil {
@@ -182,13 +220,24 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 		os.Exit(1)
 	}
 
-	policyService, err := policyservice.NewPolicyService(options.Router, options.DatastoreFactory)
+	policyService, err := policyservice.NewPolicyService(
+		options.Router,
+		options.Lock,
+		options.DatastoreFactory,
+	)
 	if err != nil {
 		logger.Error("Policy service creation failed", slog.String("error", err.Error()))
 		os.Exit(1)
 	}
 
-	registryService, err := registryservice.NewRegistryService(options.Router, options.DatastoreFactory)
+	registryService, err := registryservice.NewRegistryService(
+		options.NodeOptions.Address,
+		options.NodeOptions.Az,
+		options.NodeOptions.Region,
+		options.Router,
+		options.Lock,
+		options.DatastoreFactory,
+	)
 	if err != nil {
 		logger.Error("Node service creation failed", slog.String("error", err.Error()))
 		os.Exit(1)

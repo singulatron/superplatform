@@ -84,6 +84,8 @@ import './RegistrySvcListNodesResponse.mjs';
 import './RegistrySvcNode.mjs';
 import './RegistrySvcGPU.mjs';
 import './RegistrySvcProcess.mjs';
+import './RegistrySvcResourceUsage.mjs';
+import './RegistrySvcUsage.mjs';
 import './RegistrySvcQueryServiceInstancesResponse.mjs';
 import './RegistrySvcServiceInstance.mjs';
 import './RegistrySvcRegisterServiceInstanceRequest.mjs';

@@ -25,17 +25,17 @@ type ModelSvcModel struct {
 	Description *string `json:"description,omitempty"`
 	Extension *string `json:"extension,omitempty"`
 	Flavour *string `json:"flavour,omitempty"`
-	FullName *string `json:"full_name,omitempty"`
+	FullName *string `json:"fullName,omitempty"`
 	Id *string `json:"id,omitempty"`
-	MaxBits *int32 `json:"max_bits,omitempty"`
-	MaxRam *float32 `json:"max_ram,omitempty"`
+	MaxBits *int32 `json:"maxBits,omitempty"`
+	MaxRam *float32 `json:"maxRam,omitempty"`
 	Mirrors []string `json:"mirrors,omitempty"`
 	Name *string `json:"name,omitempty"`
 	Parameters *string `json:"parameters,omitempty"`
 	PlatformId *string `json:"platformId,omitempty"`
-	PromptTemplate *string `json:"prompt_template,omitempty"`
+	PromptTemplate *string `json:"promptTemplate,omitempty"`
 	Quality *string `json:"quality,omitempty"`
-	QuantComment *string `json:"quant_comment,omitempty"`
+	QuantComment *string `json:"quantComment,omitempty"`
 	Size *float32 `json:"size,omitempty"`
 	Tags []string `json:"tags,omitempty"`
 	Uncensored *bool `json:"uncensored,omitempty"`
@@ -725,16 +725,16 @@ func (o ModelSvcModel) ToMap() (map[string]interface{}, error) {
 		toSerialize["flavour"] = o.Flavour
 	}
 	if !IsNil(o.FullName) {
-		toSerialize["full_name"] = o.FullName
+		toSerialize["fullName"] = o.FullName
 	}
 	if !IsNil(o.Id) {
 		toSerialize["id"] = o.Id
 	}
 	if !IsNil(o.MaxBits) {
-		toSerialize["max_bits"] = o.MaxBits
+		toSerialize["maxBits"] = o.MaxBits
 	}
 	if !IsNil(o.MaxRam) {
-		toSerialize["max_ram"] = o.MaxRam
+		toSerialize["maxRam"] = o.MaxRam
 	}
 	if !IsNil(o.Mirrors) {
 		toSerialize["mirrors"] = o.Mirrors
@@ -749,13 +749,13 @@ func (o ModelSvcModel) ToMap() (map[string]interface{}, error) {
 		toSerialize["platformId"] = o.PlatformId
 	}
 	if !IsNil(o.PromptTemplate) {
-		toSerialize["prompt_template"] = o.PromptTemplate
+		toSerialize["promptTemplate"] = o.PromptTemplate
 	}
 	if !IsNil(o.Quality) {
 		toSerialize["quality"] = o.Quality
 	}
 	if !IsNil(o.QuantComment) {
-		toSerialize["quant_comment"] = o.QuantComment
+		toSerialize["quantComment"] = o.QuantComment
 	}
 	if !IsNil(o.Size) {
 		toSerialize["size"] = o.Size

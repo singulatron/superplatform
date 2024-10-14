@@ -119,7 +119,7 @@ Class | Method | HTTP request | Description
 *PromptSvcAPI* | [**ListPrompts**](docs/PromptSvcAPI.md#listprompts) | **Post** /prompt-svc/prompts | List Prompts
 *PromptSvcAPI* | [**RemovePrompt**](docs/PromptSvcAPI.md#removeprompt) | **Post** /prompt-svc/remove | Remove Prompt
 *PromptSvcAPI* | [**SubscribeToPromptResponses**](docs/PromptSvcAPI.md#subscribetopromptresponses) | **Get** /prompt-svc/prompts/{threadId}/responses/subscribe | Subscribe to Prompt Responses by Thread
-*RegistrySvcAPI* | [**ListNodess**](docs/RegistrySvcAPI.md#listnodess) | **Post** /registry-svc/registrys | List Nodes
+*RegistrySvcAPI* | [**ListNodes**](docs/RegistrySvcAPI.md#listnodes) | **Post** /registry-svc/nodes | List Nodes
 *RegistrySvcAPI* | [**QueryServiceInstances**](docs/RegistrySvcAPI.md#queryserviceinstances) | **Get** /registry-svc/services | Query Service Instances
 *RegistrySvcAPI* | [**RegisterServiceInstance**](docs/RegistrySvcAPI.md#registerserviceinstance) | **Post** /registry-svc/service-instance | Register Service Instance
 *RegistrySvcAPI* | [**RemoveServiceInstance**](docs/RegistrySvcAPI.md#removeserviceinstance) | **Delete** /registry-svc/service-instance/{id} | Remove Service Instance
@@ -234,7 +234,9 @@ Class | Method | HTTP request | Description
  - [RegistrySvcProcess](docs/RegistrySvcProcess.md)
  - [RegistrySvcQueryServiceInstancesResponse](docs/RegistrySvcQueryServiceInstancesResponse.md)
  - [RegistrySvcRegisterServiceInstanceRequest](docs/RegistrySvcRegisterServiceInstanceRequest.md)
+ - [RegistrySvcResourceUsage](docs/RegistrySvcResourceUsage.md)
  - [RegistrySvcServiceInstance](docs/RegistrySvcServiceInstance.md)
+ - [RegistrySvcUsage](docs/RegistrySvcUsage.md)
  - [UserSvcAddUserToOrganizationRequest](docs/UserSvcAddUserToOrganizationRequest.md)
  - [UserSvcAuthToken](docs/UserSvcAuthToken.md)
  - [UserSvcChangePasswordAdminRequest](docs/UserSvcChangePasswordAdminRequest.md)

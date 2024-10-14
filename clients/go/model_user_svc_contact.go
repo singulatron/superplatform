@@ -24,10 +24,10 @@ type UserSvcContact struct {
 	DeletedAt *string `json:"deletedAt,omitempty"`
 	// The unique identifier, which can be a URL.  Example values: \"joe12\" (singulatron username), \"twitter.com/thejoe\" (twitter url), \"joe@joesdomain.com\" (email)
 	Id *string `json:"id,omitempty"`
+	// If this is the primary contact method
+	IsPrimary *bool `json:"isPrimary,omitempty"`
 	// Platform of the contact (e.g., \"email\", \"phone\", \"twitter\")
 	Platform *string `json:"platform,omitempty"`
-	// If this is the primary contact method
-	Primary *bool `json:"primary,omitempty"`
 	UpdatedAt *string `json:"updatedAt,omitempty"`
 	UserId *string `json:"userId,omitempty"`
 	// Value is the platform local unique identifier. Ie. while the `id` of a Twitter contact is `twitter.com/thejoe`, the value will be only `thejoe`. For email and phones the `id` and the `value` will be the same. This field mostly exists for display purposes.  Example values: \"joe12\" (singulatron username), \"thejoe\" (twitter username), \"joe@joesdomain.com\" (email)
@@ -149,6 +149,38 @@ func (o *UserSvcContact) SetId(v string) {
 	o.Id = &v
 }
 
+// GetIsPrimary returns the IsPrimary field value if set, zero value otherwise.
+func (o *UserSvcContact) GetIsPrimary() bool {
+	if o == nil || IsNil(o.IsPrimary) {
+		var ret bool
+		return ret
+	}
+	return *o.IsPrimary
+}
+
+// GetIsPrimaryOk returns a tuple with the IsPrimary field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *UserSvcContact) GetIsPrimaryOk() (*bool, bool) {
+	if o == nil || IsNil(o.IsPrimary) {
+		return nil, false
+	}
+	return o.IsPrimary, true
+}
+
+// HasIsPrimary returns a boolean if a field has been set.
+func (o *UserSvcContact) HasIsPrimary() bool {
+	if o != nil && !IsNil(o.IsPrimary) {
+		return true
+	}
+
+	return false
+}
+
+// SetIsPrimary gets a reference to the given bool and assigns it to the IsPrimary field.
+func (o *UserSvcContact) SetIsPrimary(v bool) {
+	o.IsPrimary = &v
+}
+
 // GetPlatform returns the Platform field value if set, zero value otherwise.
 func (o *UserSvcContact) GetPlatform() string {
 	if o == nil || IsNil(o.Platform) {
@@ -179,38 +211,6 @@ func (o *UserSvcContact) HasPlatform() bool {
 // SetPlatform gets a reference to the given string and assigns it to the Platform field.
 func (o *UserSvcContact) SetPlatform(v string) {
 	o.Platform = &v
-}
-
-// GetPrimary returns the Primary field value if set, zero value otherwise.
-func (o *UserSvcContact) GetPrimary() bool {
-	if o == nil || IsNil(o.Primary) {
-		var ret bool
-		return ret
-	}
-	return *o.Primary
-}
-
-// GetPrimaryOk returns a tuple with the Primary field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *UserSvcContact) GetPrimaryOk() (*bool, bool) {
-	if o == nil || IsNil(o.Primary) {
-		return nil, false
-	}
-	return o.Primary, true
-}
-
-// HasPrimary returns a boolean if a field has been set.
-func (o *UserSvcContact) HasPrimary() bool {
-	if o != nil && !IsNil(o.Primary) {
-		return true
-	}
-
-	return false
-}
-
-// SetPrimary gets a reference to the given bool and assigns it to the Primary field.
-func (o *UserSvcContact) SetPrimary(v bool) {
-	o.Primary = &v
 }
 
 // GetUpdatedAt returns the UpdatedAt field value if set, zero value otherwise.
@@ -360,11 +360,11 @@ func (o UserSvcContact) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Id) {
 		toSerialize["id"] = o.Id
 	}
+	if !IsNil(o.IsPrimary) {
+		toSerialize["isPrimary"] = o.IsPrimary
+	}
 	if !IsNil(o.Platform) {
 		toSerialize["platform"] = o.Platform
-	}
-	if !IsNil(o.Primary) {
-		toSerialize["primary"] = o.Primary
 	}
 	if !IsNil(o.UpdatedAt) {
 		toSerialize["updatedAt"] = o.UpdatedAt

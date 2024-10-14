@@ -181,7 +181,7 @@ func (d *DockerService) additionalEnvsAndHostBinds(assets map[string]string, per
 	// If the Singulatron daemon is running directly on the host, we will just mount the ~/.singulatron folder in
 	// the containers the Singulatron daemon starts.
 
-	singulatronVolumeName := os.Getenv("SINGULATRON_VOLUME_NAME")
+	singulatronVolumeName := d.volumeName
 	if singulatronVolumeName == "" {
 		if isRunningInDocker() {
 			currentContainerId, err := getContainerID()

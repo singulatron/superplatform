@@ -86,6 +86,8 @@ require('./RegistrySvcListNodesResponse.js');
 require('./RegistrySvcNode.js');
 require('./RegistrySvcGPU.js');
 require('./RegistrySvcProcess.js');
+require('./RegistrySvcResourceUsage.js');
+require('./RegistrySvcUsage.js');
 require('./RegistrySvcQueryServiceInstancesResponse.js');
 require('./RegistrySvcServiceInstance.js');
 require('./RegistrySvcRegisterServiceInstanceRequest.js');

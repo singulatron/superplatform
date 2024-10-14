@@ -41,7 +41,7 @@ export declare class RegistrySvcApi {
      * @summary List Nodes
      * @param body List Registrys Request
      */
-    listNodess(body?: object, options?: {
+    listNodes(body?: object, options?: {
         headers: {
             [name: string]: string;
         };

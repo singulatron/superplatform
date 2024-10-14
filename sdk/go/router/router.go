@@ -14,29 +14,42 @@ import (
 	"github.com/singulatron/singulatron/sdk/go/datastore"
 )
 
-const DefaultPort = "58231"
+var port = "58231"
+
+func GetPort() string {
+	return port
+}
+
+func SetPort(i int) {
+	port = fmt.Sprintf("%v", i)
+}
+
+const defaultAddress = "http://127.0.0.1"
 
 type Router struct {
-	registry       map[string]string
-	defaultAddress string
-	bearerToken    string
-	mockEndpoints  map[string]any
+	registry      map[string]string
+	address       string
+	bearerToken   string
+	mockEndpoints map[string]any
 }
 
 func NewRouter(datastoreFactory func(tableName string, instance any) (datastore.DataStore, error)) (*Router, error) {
 	return &Router{
-		registry:       map[string]string{},
-		defaultAddress: "http://127.0.0.1:" + DefaultPort,
-		mockEndpoints:  map[string]any{},
+		registry:      map[string]string{},
+		mockEndpoints: map[string]any{},
 	}, nil
 }
 
 func (r *Router) SetDefaultAddress(address string) {
-	r.defaultAddress = address
+	r.address = address
 }
 
 func (r *Router) Address() string {
-	return r.defaultAddress
+	if r.address != "" {
+		return r.address
+	}
+
+	return fmt.Sprintf("%v:%v", defaultAddress, port)
 }
 
 func (r *Router) AddMock(serviceName, path string, rsp any) {
@@ -45,10 +58,10 @@ func (r *Router) AddMock(serviceName, path string, rsp any) {
 
 func (r *Router) SetBearerToken(token string) *Router {
 	return &Router{
-		registry:       r.registry,
-		defaultAddress: r.defaultAddress,
-		mockEndpoints:  r.mockEndpoints,
-		bearerToken:    token,
+		registry:      r.registry,
+		address:       r.address,
+		mockEndpoints: r.mockEndpoints,
+		bearerToken:   token,
 	}
 }
 
@@ -72,7 +85,7 @@ func (r *Router) request(ctx context.Context, method, serviceName, path string, 
 
 	address, ok := r.registry[serviceName]
 	if !ok {
-		address = r.defaultAddress
+		address = r.Address()
 	}
 
 	var bodyBytes []byte
@@ -138,7 +151,7 @@ func (r *Router) Get(ctx context.Context, serviceName, path string, queryParams 
 
 	address, ok := r.registry[serviceName]
 	if !ok {
-		address = r.defaultAddress
+		address = r.Address()
 	}
 
 	ur := fmt.Sprintf("%v/%v%v", address, serviceName, path)

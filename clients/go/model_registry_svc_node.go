@@ -20,10 +20,18 @@ var _ MappedNullable = &RegistrySvcNode{}
 
 // RegistrySvcNode struct for RegistrySvcNode
 type RegistrySvcNode struct {
+	// The availability zone of the node
+	AvailabilityZone *string `json:"availabilityZone,omitempty"`
 	// List of GPUs available on the node
 	Gpus []RegistrySvcGPU `json:"gpus,omitempty"`
+	// Last active timestamp
+	LastHeartbeat *string `json:"lastHeartbeat,omitempty"`
+	// The region of the node
+	Region *string `json:"region,omitempty"`
 	// URL of the daemon running on the node. If not configured defaults to hostname + default Singulatron daemon port.
 	Url *string `json:"url,omitempty"`
+	// Resource usage metrics of the node.
+	Usage *RegistrySvcResourceUsage `json:"usage,omitempty"`
 }
 
 // NewRegistrySvcNode instantiates a new RegistrySvcNode object
@@ -41,6 +49,38 @@ func NewRegistrySvcNode() *RegistrySvcNode {
 func NewRegistrySvcNodeWithDefaults() *RegistrySvcNode {
 	this := RegistrySvcNode{}
 	return &this
+}
+
+// GetAvailabilityZone returns the AvailabilityZone field value if set, zero value otherwise.
+func (o *RegistrySvcNode) GetAvailabilityZone() string {
+	if o == nil || IsNil(o.AvailabilityZone) {
+		var ret string
+		return ret
+	}
+	return *o.AvailabilityZone
+}
+
+// GetAvailabilityZoneOk returns a tuple with the AvailabilityZone field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RegistrySvcNode) GetAvailabilityZoneOk() (*string, bool) {
+	if o == nil || IsNil(o.AvailabilityZone) {
+		return nil, false
+	}
+	return o.AvailabilityZone, true
+}
+
+// HasAvailabilityZone returns a boolean if a field has been set.
+func (o *RegistrySvcNode) HasAvailabilityZone() bool {
+	if o != nil && !IsNil(o.AvailabilityZone) {
+		return true
+	}
+
+	return false
+}
+
+// SetAvailabilityZone gets a reference to the given string and assigns it to the AvailabilityZone field.
+func (o *RegistrySvcNode) SetAvailabilityZone(v string) {
+	o.AvailabilityZone = &v
 }
 
 // GetGpus returns the Gpus field value if set, zero value otherwise.
@@ -75,6 +115,70 @@ func (o *RegistrySvcNode) SetGpus(v []RegistrySvcGPU) {
 	o.Gpus = v
 }
 
+// GetLastHeartbeat returns the LastHeartbeat field value if set, zero value otherwise.
+func (o *RegistrySvcNode) GetLastHeartbeat() string {
+	if o == nil || IsNil(o.LastHeartbeat) {
+		var ret string
+		return ret
+	}
+	return *o.LastHeartbeat
+}
+
+// GetLastHeartbeatOk returns a tuple with the LastHeartbeat field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RegistrySvcNode) GetLastHeartbeatOk() (*string, bool) {
+	if o == nil || IsNil(o.LastHeartbeat) {
+		return nil, false
+	}
+	return o.LastHeartbeat, true
+}
+
+// HasLastHeartbeat returns a boolean if a field has been set.
+func (o *RegistrySvcNode) HasLastHeartbeat() bool {
+	if o != nil && !IsNil(o.LastHeartbeat) {
+		return true
+	}
+
+	return false
+}
+
+// SetLastHeartbeat gets a reference to the given string and assigns it to the LastHeartbeat field.
+func (o *RegistrySvcNode) SetLastHeartbeat(v string) {
+	o.LastHeartbeat = &v
+}
+
+// GetRegion returns the Region field value if set, zero value otherwise.
+func (o *RegistrySvcNode) GetRegion() string {
+	if o == nil || IsNil(o.Region) {
+		var ret string
+		return ret
+	}
+	return *o.Region
+}
+
+// GetRegionOk returns a tuple with the Region field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RegistrySvcNode) GetRegionOk() (*string, bool) {
+	if o == nil || IsNil(o.Region) {
+		return nil, false
+	}
+	return o.Region, true
+}
+
+// HasRegion returns a boolean if a field has been set.
+func (o *RegistrySvcNode) HasRegion() bool {
+	if o != nil && !IsNil(o.Region) {
+		return true
+	}
+
+	return false
+}
+
+// SetRegion gets a reference to the given string and assigns it to the Region field.
+func (o *RegistrySvcNode) SetRegion(v string) {
+	o.Region = &v
+}
+
 // GetUrl returns the Url field value if set, zero value otherwise.
 func (o *RegistrySvcNode) GetUrl() string {
 	if o == nil || IsNil(o.Url) {
@@ -107,6 +211,38 @@ func (o *RegistrySvcNode) SetUrl(v string) {
 	o.Url = &v
 }
 
+// GetUsage returns the Usage field value if set, zero value otherwise.
+func (o *RegistrySvcNode) GetUsage() RegistrySvcResourceUsage {
+	if o == nil || IsNil(o.Usage) {
+		var ret RegistrySvcResourceUsage
+		return ret
+	}
+	return *o.Usage
+}
+
+// GetUsageOk returns a tuple with the Usage field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RegistrySvcNode) GetUsageOk() (*RegistrySvcResourceUsage, bool) {
+	if o == nil || IsNil(o.Usage) {
+		return nil, false
+	}
+	return o.Usage, true
+}
+
+// HasUsage returns a boolean if a field has been set.
+func (o *RegistrySvcNode) HasUsage() bool {
+	if o != nil && !IsNil(o.Usage) {
+		return true
+	}
+
+	return false
+}
+
+// SetUsage gets a reference to the given RegistrySvcResourceUsage and assigns it to the Usage field.
+func (o *RegistrySvcNode) SetUsage(v RegistrySvcResourceUsage) {
+	o.Usage = &v
+}
+
 func (o RegistrySvcNode) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -117,11 +253,23 @@ func (o RegistrySvcNode) MarshalJSON() ([]byte, error) {
 
 func (o RegistrySvcNode) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
+	if !IsNil(o.AvailabilityZone) {
+		toSerialize["availabilityZone"] = o.AvailabilityZone
+	}
 	if !IsNil(o.Gpus) {
 		toSerialize["gpus"] = o.Gpus
 	}
+	if !IsNil(o.LastHeartbeat) {
+		toSerialize["lastHeartbeat"] = o.LastHeartbeat
+	}
+	if !IsNil(o.Region) {
+		toSerialize["region"] = o.Region
+	}
 	if !IsNil(o.Url) {
 		toSerialize["url"] = o.Url
+	}
+	if !IsNil(o.Usage) {
+		toSerialize["usage"] = o.Usage
 	}
 	return toSerialize, nil
 }

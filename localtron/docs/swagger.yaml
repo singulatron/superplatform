@@ -652,13 +652,13 @@ definitions:
         type: string
       flavour:
         type: string
-      full_name:
+      fullName:
         type: string
       id:
         type: string
-      max_bits:
+      maxBits:
         type: integer
-      max_ram:
+      maxRam:
         type: number
       mirrors:
         items:
@@ -670,11 +670,11 @@ definitions:
         type: string
       platformId:
         type: string
-      prompt_template:
+      promptTemplate:
         type: string
       quality:
         type: string
-      quant_comment:
+      quantComment:
         type: string
       size:
         type: number
@@ -1013,16 +1013,29 @@ definitions:
     type: object
   registry_svc.Node:
     properties:
+      availabilityZone:
+        description: The availability zone of the node
+        type: string
       gpus:
         description: List of GPUs available on the node
         items:
           $ref: '#/definitions/registry_svc.GPU'
         type: array
+      lastHeartbeat:
+        description: Last active timestamp
+        type: string
+      region:
+        description: The region of the node
+        type: string
       url:
         description: |-
           URL of the daemon running on the node.
           If not configured defaults to hostname + default Singulatron daemon port.
         type: string
+      usage:
+        allOf:
+        - $ref: '#/definitions/registry_svc.ResourceUsage'
+        description: Resource usage metrics of the node.
     type: object
   registry_svc.Process:
     properties:
@@ -1079,6 +1092,21 @@ definitions:
     type: object
   registry_svc.RegisterServiceInstanceResponse:
     type: object
+  registry_svc.ResourceUsage:
+    properties:
+      cpu:
+        allOf:
+        - $ref: '#/definitions/registry_svc.Usage'
+        description: CPU usage metrics.
+      disk:
+        allOf:
+        - $ref: '#/definitions/registry_svc.Usage'
+        description: Disk usage metrics.
+      memory:
+        allOf:
+        - $ref: '#/definitions/registry_svc.Usage'
+        description: Memory usage metrics.
+    type: object
   registry_svc.ServiceInstance:
     properties:
       host:
@@ -1120,6 +1148,20 @@ definitions:
     required:
     - id
     - slug
+    type: object
+  registry_svc.Usage:
+    properties:
+      percent:
+        description: Usage percentage.
+        type: number
+      total:
+        description: Total available amount (in bytes).
+        format: int64
+        type: integer
+      used:
+        description: Used amount (in bytes).
+        format: int64
+        type: integer
     type: object
   user_svc.AddUserToOrganizationRequest:
     properties:
@@ -1176,13 +1218,13 @@ definitions:
           Example values: "joe12" (singulatron username), "twitter.com/thejoe" (twitter url), "joe@joesdomain.com" (email)
         example: twitter.com/thejoe
         type: string
+      isPrimary:
+        description: If this is the primary contact method
+        type: boolean
       platform:
         description: Platform of the contact (e.g., "email", "phone", "twitter")
         example: twitter
         type: string
-      primary:
-        description: If this is the primary contact method
-        type: boolean
       updatedAt:
         type: string
       userId:
@@ -1426,7 +1468,7 @@ definitions:
     type: object
   user_svc.User:
     properties:
-      contact:
+      contacts:
         description: Contacts are used for login and identification purposes.
         items:
           $ref: '#/definitions/user_svc.Contact'
@@ -2872,12 +2914,12 @@ paths:
       summary: Remove Prompt
       tags:
       - Prompt Svc
-  /registry-svc/registrys:
+  /registry-svc/nodes:
     post:
       consumes:
       - application/json
       description: Retrieve a list of nodes.
-      operationId: listNodess
+      operationId: listNodes
       parameters:
       - description: List Registrys Request
         in: body

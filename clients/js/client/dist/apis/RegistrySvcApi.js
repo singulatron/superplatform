@@ -30,7 +30,7 @@ export class RegistrySvcApi extends runtime.BaseAPI {
      * Retrieve a list of nodes.
      * List Nodes
      */
-    listNodessRaw(requestParameters, initOverrides) {
+    listNodesRaw(requestParameters, initOverrides) {
         return __awaiter(this, void 0, void 0, function* () {
             const queryParameters = {};
             const headerParameters = {};
@@ -39,7 +39,7 @@ export class RegistrySvcApi extends runtime.BaseAPI {
                 headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
             }
             const response = yield this.request({
-                path: `/registry-svc/registrys`,
+                path: `/registry-svc/nodes`,
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,
@@ -52,9 +52,9 @@ export class RegistrySvcApi extends runtime.BaseAPI {
      * Retrieve a list of nodes.
      * List Nodes
      */
-    listNodess() {
+    listNodes() {
         return __awaiter(this, arguments, void 0, function* (requestParameters = {}, initOverrides) {
-            const response = yield this.listNodessRaw(requestParameters, initOverrides);
+            const response = yield this.listNodesRaw(requestParameters, initOverrides);
             return yield response.value();
         });
     }

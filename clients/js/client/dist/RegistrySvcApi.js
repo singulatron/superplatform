@@ -7,6 +7,8 @@ var RegistrySvcRegisterServiceInstanceRequest = require('./RegistrySvcRegisterSe
 require('./RegistrySvcNode.js');
 require('./RegistrySvcGPU.js');
 require('./RegistrySvcProcess.js');
+require('./RegistrySvcResourceUsage.js');
+require('./RegistrySvcUsage.js');
 require('./RegistrySvcServiceInstance.js');
 
 /* tslint:disable */
@@ -30,7 +32,7 @@ class RegistrySvcApi extends runtime.BaseAPI {
      * Retrieve a list of nodes.
      * List Nodes
      */
-    listNodessRaw(requestParameters, initOverrides) {
+    listNodesRaw(requestParameters, initOverrides) {
         return runtime.__awaiter(this, void 0, void 0, function* () {
             const queryParameters = {};
             const headerParameters = {};
@@ -39,7 +41,7 @@ class RegistrySvcApi extends runtime.BaseAPI {
                 headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
             }
             const response = yield this.request({
-                path: `/registry-svc/registrys`,
+                path: `/registry-svc/nodes`,
                 method: 'POST',
                 headers: headerParameters,
                 query: queryParameters,
@@ -52,9 +54,9 @@ class RegistrySvcApi extends runtime.BaseAPI {
      * Retrieve a list of nodes.
      * List Nodes
      */
-    listNodess() {
+    listNodes() {
         return runtime.__awaiter(this, arguments, void 0, function* (requestParameters = {}, initOverrides) {
-            const response = yield this.listNodessRaw(requestParameters, initOverrides);
+            const response = yield this.listNodesRaw(requestParameters, initOverrides);
             return yield response.value();
         });
     }

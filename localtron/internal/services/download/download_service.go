@@ -20,15 +20,18 @@ import (
 	firehosetypes "github.com/singulatron/singulatron/localtron/internal/services/firehose/types"
 	sdk "github.com/singulatron/singulatron/sdk/go"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
+	"github.com/singulatron/singulatron/sdk/go/lock"
 	"github.com/singulatron/singulatron/sdk/go/logger"
 	"github.com/singulatron/singulatron/sdk/go/router"
 )
 
 type DownloadService struct {
 	router *router.Router
+	dlock  lock.DistributedLock
 
-	downloads     map[string]*types.Download
-	lock          sync.Mutex
+	downloads map[string]*types.Download
+	lock      sync.Mutex
+
 	StateFilePath string
 	DefaultFolder string
 	hasChanged    bool
@@ -41,6 +44,7 @@ type DownloadService struct {
 
 func NewDownloadService(
 	router *router.Router,
+	lock lock.DistributedLock,
 	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error),
 ) (*DownloadService, error) {
 	home, _ := os.UserHomeDir()
@@ -53,6 +57,7 @@ func NewDownloadService(
 	ret := &DownloadService{
 		credentialStore: credentialStore,
 		router:          router,
+		dlock:           lock,
 
 		StateFilePath: path.Join(home, "downloads.json"),
 		downloads:     make(map[string]*types.Download),
@@ -70,6 +75,10 @@ func (dm *DownloadService) SetStateFilePath(s string) {
 }
 
 func (dm *DownloadService) Start() error {
+	ctx := context.Background()
+	dm.dlock.Acquire(ctx, "download-service-start")
+	defer dm.dlock.Release(ctx, "download-service-start")
+
 	token, err := sdk.RegisterService("download-svc", "Download Service", dm.router, dm.credentialStore)
 	if err != nil {
 		return err

@@ -12,18 +12,16 @@ import (
 	"log/slog"
 	"net/http"
 	"os"
-	"runtime/debug"
 	"time"
 
-	"github.com/singulatron/singulatron/localtron/internal/di"
+	_ "github.com/singulatron/singulatron/localtron/docs"
+	"github.com/singulatron/singulatron/localtron/internal/node"
+	node_types "github.com/singulatron/singulatron/localtron/internal/node/types"
 	"github.com/singulatron/singulatron/sdk/go/logger"
 	"github.com/singulatron/singulatron/sdk/go/router"
-
-	_ "github.com/singulatron/singulatron/localtron/docs"
-	httpSwagger "github.com/swaggo/http-swagger"
 )
 
-const port = router.DefaultPort
+var port = router.GetPort()
 
 // @title           Singulatron
 // @version         0.2
@@ -48,25 +46,11 @@ const port = router.DefaultPort
 // @externalDocs.description  Singulatron API
 // @externalDocs.url          https://superplatform.ai/docs/category/singulatron-api
 func main() {
-	defer func() {
-		if r := recover(); r != nil {
-			logger.Error("Panic in main",
-				slog.String("error", fmt.Sprintf("%v", r)),
-				slog.String("trace", string(debug.Stack())),
-			)
-			os.Exit(1)
-		}
-	}()
-
-	router, starter, err := di.BigBang(&di.Options{
-		Test: false,
-	})
+	router, starter, err := node.Start(node_types.Options{})
 	if err != nil {
-		logger.Error("Cannot make universe", slog.Any("error", err))
+		logger.Error("Cannot start node", slog.Any("error", err))
 		os.Exit(1)
 	}
-
-	router.HandleFunc("/swagger/", httpSwagger.WrapHandler)
 
 	srv := &http.Server{
 		Handler: router,
@@ -75,13 +59,14 @@ func main() {
 	logger.Info("Server started", slog.String("port", port))
 	go func() {
 		time.Sleep(5 * time.Millisecond)
-		err = starter()
+		err := starter()
 		if err != nil {
 			logger.Error("Cannot start universe", slog.Any("error", err))
 			os.Exit(1)
 		}
 	}()
-	err = http.ListenAndServe(":58231", srv.Handler)
+
+	err = http.ListenAndServe(fmt.Sprintf(":%v", port), srv.Handler)
 	if err != nil {
 		logger.Error("HTTP listen failed", slog.String("error", err.Error()))
 		os.Exit(1)

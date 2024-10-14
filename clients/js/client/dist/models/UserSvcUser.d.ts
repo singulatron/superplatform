@@ -21,7 +21,7 @@ export interface UserSvcUser {
      * @type {Array<UserSvcContact>}
      * @memberof UserSvcUser
      */
-    contact?: Array<UserSvcContact>;
+    contacts?: Array<UserSvcContact>;
     /**
      *
      * @type {string}

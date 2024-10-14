@@ -8,6 +8,7 @@
 package configservice
 
 import (
+	"context"
 	"fmt"
 	"io/ioutil"
 	"log/slog"
@@ -21,6 +22,7 @@ import (
 	types "github.com/singulatron/singulatron/localtron/internal/services/config/types"
 	sdk "github.com/singulatron/singulatron/sdk/go"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
+	"github.com/singulatron/singulatron/sdk/go/lock"
 	"github.com/singulatron/singulatron/sdk/go/router"
 
 	"github.com/singulatron/singulatron/sdk/go/logger"
@@ -30,6 +32,7 @@ const DefaultModelId = `huggingface/TheBloke/mistral-7b-instruct-v0.2.Q3_K_S.ggu
 
 type ConfigService struct {
 	router *router.Router
+	lock   lock.DistributedLock
 
 	ConfigDirectory string
 	ConfigFileName  string
@@ -40,9 +43,10 @@ type ConfigService struct {
 	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error)
 }
 
-func NewConfigService() (*ConfigService, error) {
+func NewConfigService(lock lock.DistributedLock) (*ConfigService, error) {
 	cs := &ConfigService{
 		ConfigFileName: "config.yaml",
+		lock:           lock,
 	}
 
 	return cs, nil
@@ -69,6 +73,10 @@ func (cs *ConfigService) Start() error {
 		return err
 	}
 	cs.credentialStore = credentialStore
+
+	ctx := context.Background()
+	cs.lock.Acquire(ctx, "config-service-start")
+	defer cs.lock.Release(ctx, "config-service-start")
 
 	token, err := sdk.RegisterService("config-svc", "Config Service", cs.router, cs.credentialStore)
 	if err != nil {

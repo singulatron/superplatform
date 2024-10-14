@@ -40,17 +40,17 @@ export interface UserSvcContact {
      */
     id?: string;
     /**
+     * If this is the primary contact method
+     * @type {boolean}
+     * @memberof UserSvcContact
+     */
+    isPrimary?: boolean;
+    /**
      * Platform of the contact (e.g., "email", "phone", "twitter")
      * @type {string}
      * @memberof UserSvcContact
      */
     platform?: string;
-    /**
-     * If this is the primary contact method
-     * @type {boolean}
-     * @memberof UserSvcContact
-     */
-    primary?: boolean;
     /**
      * 
      * @type {string}
@@ -102,8 +102,8 @@ export function UserSvcContactFromJSONTyped(json: any, ignoreDiscriminator: bool
         'createdAt': json['createdAt'] == null ? undefined : json['createdAt'],
         'deletedAt': json['deletedAt'] == null ? undefined : json['deletedAt'],
         'id': json['id'] == null ? undefined : json['id'],
+        'isPrimary': json['isPrimary'] == null ? undefined : json['isPrimary'],
         'platform': json['platform'] == null ? undefined : json['platform'],
-        'primary': json['primary'] == null ? undefined : json['primary'],
         'updatedAt': json['updatedAt'] == null ? undefined : json['updatedAt'],
         'userId': json['userId'] == null ? undefined : json['userId'],
         'value': json['value'] == null ? undefined : json['value'],
@@ -120,8 +120,8 @@ export function UserSvcContactToJSON(value?: UserSvcContact | null): any {
         'createdAt': value['createdAt'],
         'deletedAt': value['deletedAt'],
         'id': value['id'],
+        'isPrimary': value['isPrimary'],
         'platform': value['platform'],
-        'primary': value['primary'],
         'updatedAt': value['updatedAt'],
         'userId': value['userId'],
         'value': value['value'],

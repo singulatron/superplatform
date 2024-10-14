@@ -19,6 +19,12 @@ import {
     RegistrySvcGPUFromJSONTyped,
     RegistrySvcGPUToJSON,
 } from './RegistrySvcGPU';
+import type { RegistrySvcResourceUsage } from './RegistrySvcResourceUsage';
+import {
+    RegistrySvcResourceUsageFromJSON,
+    RegistrySvcResourceUsageFromJSONTyped,
+    RegistrySvcResourceUsageToJSON,
+} from './RegistrySvcResourceUsage';
 
 /**
  * 
@@ -27,11 +33,29 @@ import {
  */
 export interface RegistrySvcNode {
     /**
+     * The availability zone of the node
+     * @type {string}
+     * @memberof RegistrySvcNode
+     */
+    availabilityZone?: string;
+    /**
      * List of GPUs available on the node
      * @type {Array<RegistrySvcGPU>}
      * @memberof RegistrySvcNode
      */
     gpus?: Array<RegistrySvcGPU>;
+    /**
+     * Last active timestamp
+     * @type {string}
+     * @memberof RegistrySvcNode
+     */
+    lastHeartbeat?: string;
+    /**
+     * The region of the node
+     * @type {string}
+     * @memberof RegistrySvcNode
+     */
+    region?: string;
     /**
      * URL of the daemon running on the node.
      * If not configured defaults to hostname + default Singulatron daemon port.
@@ -39,6 +63,12 @@ export interface RegistrySvcNode {
      * @memberof RegistrySvcNode
      */
     url?: string;
+    /**
+     * Resource usage metrics of the node.
+     * @type {RegistrySvcResourceUsage}
+     * @memberof RegistrySvcNode
+     */
+    usage?: RegistrySvcResourceUsage;
 }
 
 /**
@@ -58,8 +88,12 @@ export function RegistrySvcNodeFromJSONTyped(json: any, ignoreDiscriminator: boo
     }
     return {
         
+        'availabilityZone': json['availabilityZone'] == null ? undefined : json['availabilityZone'],
         'gpus': json['gpus'] == null ? undefined : ((json['gpus'] as Array<any>).map(RegistrySvcGPUFromJSON)),
+        'lastHeartbeat': json['lastHeartbeat'] == null ? undefined : json['lastHeartbeat'],
+        'region': json['region'] == null ? undefined : json['region'],
         'url': json['url'] == null ? undefined : json['url'],
+        'usage': json['usage'] == null ? undefined : RegistrySvcResourceUsageFromJSON(json['usage']),
     };
 }
 
@@ -69,8 +103,12 @@ export function RegistrySvcNodeToJSON(value?: RegistrySvcNode | null): any {
     }
     return {
         
+        'availabilityZone': value['availabilityZone'],
         'gpus': value['gpus'] == null ? undefined : ((value['gpus'] as Array<any>).map(RegistrySvcGPUToJSON)),
+        'lastHeartbeat': value['lastHeartbeat'],
+        'region': value['region'],
         'url': value['url'],
+        'usage': RegistrySvcResourceUsageToJSON(value['usage']),
     };
 }
 

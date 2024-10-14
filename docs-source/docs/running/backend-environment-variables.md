@@ -73,7 +73,8 @@ You can use this envar to make Singulatron actually use a database instead of lo
 
 ```sh
 SINGULATRON_DB=postgres
-SINGULATRON_DB_SQL_CONNECTION_STRING="postgres://postgres:mysecretpassword@localhost:5432/mydatabase?sslmode=disable"
+SINGULATRON_DB_DRIVER="postgres" # or "mysql"
+SINGULATRON_DB_STRING="postgres://postgres:mysecretpassword@localhost:5432/mydatabase?sslmode=disable"
 ```
 
 Naturally, you should change the details of the connection string to reflect your environment.

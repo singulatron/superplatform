@@ -8,12 +8,14 @@
 package firehoseservice
 
 import (
+	"context"
 	"log"
 	"log/slog"
 	"sync"
 
 	sdk "github.com/singulatron/singulatron/sdk/go"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
+	"github.com/singulatron/singulatron/sdk/go/lock"
 	"github.com/singulatron/singulatron/sdk/go/logger"
 	"github.com/singulatron/singulatron/sdk/go/router"
 
@@ -22,6 +24,7 @@ import (
 
 type FirehoseService struct {
 	router *router.Router
+	lock   lock.DistributedLock
 
 	subscribers map[int]func(events []*firehosetypes.Event)
 	mu          sync.Mutex
@@ -30,7 +33,11 @@ type FirehoseService struct {
 	credentialStore datastore.DataStore
 }
 
-func NewFirehoseService(r *router.Router, datastoreFactory func(tableName string, instance any) (datastore.DataStore, error)) (*FirehoseService, error) {
+func NewFirehoseService(
+	r *router.Router,
+	lock lock.DistributedLock,
+	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error),
+) (*FirehoseService, error) {
 	credentialStore, err := datastoreFactory("firehoseSvcCredentials", &sdk.Credential{})
 	if err != nil {
 		return nil, err
@@ -38,6 +45,7 @@ func NewFirehoseService(r *router.Router, datastoreFactory func(tableName string
 
 	service := &FirehoseService{
 		router:          r,
+		lock:            lock,
 		credentialStore: credentialStore,
 		subscribers:     make(map[int]func(events []*firehosetypes.Event)),
 	}
@@ -46,6 +54,10 @@ func NewFirehoseService(r *router.Router, datastoreFactory func(tableName string
 }
 
 func (fs *FirehoseService) Start() error {
+	ctx := context.Background()
+	fs.lock.Acquire(ctx, "firehose-service-start")
+	defer fs.lock.Release(ctx, "firehose-service-start")
+
 	token, err := sdk.RegisterService("firehose-svc", "Firehose Service", fs.router, fs.credentialStore)
 	if err != nil {
 		return err

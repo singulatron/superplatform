@@ -36,17 +36,17 @@ export interface UserSvcContact {
      */
     id?: string;
     /**
+     * If this is the primary contact method
+     * @type {boolean}
+     * @memberof UserSvcContact
+     */
+    isPrimary?: boolean;
+    /**
      * Platform of the contact (e.g., "email", "phone", "twitter")
      * @type {string}
      * @memberof UserSvcContact
      */
     platform?: string;
-    /**
-     * If this is the primary contact method
-     * @type {boolean}
-     * @memberof UserSvcContact
-     */
-    primary?: boolean;
     /**
      *
      * @type {string}

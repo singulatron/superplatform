@@ -103,7 +103,9 @@ require('./registrySvcNode.js');
 require('./registrySvcProcess.js');
 require('./registrySvcQueryServiceInstancesResponse.js');
 require('./registrySvcRegisterServiceInstanceRequest.js');
+require('./registrySvcResourceUsage.js');
 require('./registrySvcServiceInstance.js');
+require('./registrySvcUsage.js');
 require('./userSvcAddUserToOrganizationRequest.js');
 require('./userSvcAuthToken.js');
 require('./userSvcChangePasswordAdminRequest.js');
@@ -57365,9 +57367,9 @@ class RegistrySvcApi {
      * @summary List Nodes
      * @param body List Registrys Request
      */
-    listNodess(body_1) {
+    listNodes(body_1) {
         return __awaiter(this, arguments, void 0, function* (body, options = { headers: {} }) {
-            const localVarPath = this.basePath + '/registry-svc/registrys';
+            const localVarPath = this.basePath + '/registry-svc/nodes';
             let localVarQueryParameters = {};
             let localVarHeaderParams = Object.assign({}, this._defaultHeaders);
             const produces = ['application/json'];

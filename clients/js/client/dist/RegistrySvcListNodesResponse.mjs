@@ -1,6 +1,8 @@
 import { RegistrySvcNodeFromJSON, RegistrySvcNodeToJSON } from './RegistrySvcNode.mjs';
 import './RegistrySvcGPU.mjs';
 import './RegistrySvcProcess.mjs';
+import './RegistrySvcResourceUsage.mjs';
+import './RegistrySvcUsage.mjs';
 
 /* tslint:disable */
 /* eslint-disable */

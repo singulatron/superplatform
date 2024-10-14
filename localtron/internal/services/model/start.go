@@ -15,7 +15,6 @@ import (
 	"fmt"
 	"log/slog"
 	"net"
-	"os"
 	"strings"
 	"time"
 
@@ -86,7 +85,7 @@ func (ms *ModelService) startWithDocker(model *modeltypes.Model, platform *model
 	launchOptions.PersistentPaths = platform.Architectures.Default.PersistentPaths
 	launchOptions.Assets = model.Assets
 
-	switch os.Getenv("SINGULATRON_GPU_PLATFORM") {
+	switch ms.gpuPlatform {
 	case "cuda":
 		launchOptions.GPUEnabled = true
 		if platform.Architectures.Cuda.Image != "" {
@@ -215,7 +214,7 @@ func (ms *ModelService) checkIfAnswers(
 		}
 		dockerHost := hostRsp.Host
 
-		singulatronLLMHost := os.Getenv("SINGULATRON_LLM_HOST")
+		singulatronLLMHost := ms.llmHost
 		if singulatronLLMHost != "" {
 			dockerHost = singulatronLLMHost
 		}

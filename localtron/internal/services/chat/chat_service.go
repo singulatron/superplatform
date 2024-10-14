@@ -8,8 +8,11 @@
 package chatservice
 
 import (
+	"context"
+
 	sdk "github.com/singulatron/singulatron/sdk/go"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
+	"github.com/singulatron/singulatron/sdk/go/lock"
 	"github.com/singulatron/singulatron/sdk/go/router"
 
 	chattypes "github.com/singulatron/singulatron/localtron/internal/services/chat/types"
@@ -17,6 +20,7 @@ import (
 
 type ChatService struct {
 	router *router.Router
+	lock   lock.DistributedLock
 
 	messagesStore   datastore.DataStore
 	threadsStore    datastore.DataStore
@@ -26,6 +30,7 @@ type ChatService struct {
 
 func NewChatService(
 	router *router.Router,
+	lock lock.DistributedLock,
 	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error),
 ) (*ChatService, error) {
 	threadsStore, err := datastoreFactory("chatSvcThreads", &chattypes.Thread{})
@@ -47,6 +52,7 @@ func NewChatService(
 
 	service := &ChatService{
 		router:          router,
+		lock:            lock,
 		messagesStore:   messagesStore,
 		threadsStore:    threadsStore,
 		assetsStore:     assetsStore,
@@ -57,6 +63,10 @@ func NewChatService(
 }
 
 func (cs *ChatService) Start() error {
+	ctx := context.Background()
+	cs.lock.Acquire(ctx, "chat-service-start")
+	defer cs.lock.Release(ctx, "chat-service-start")
+
 	token, err := sdk.RegisterService("chat-svc", "Chat Service", cs.router, cs.credentialStore)
 	if err != nil {
 		return err

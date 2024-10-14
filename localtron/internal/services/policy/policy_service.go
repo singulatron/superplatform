@@ -8,10 +8,12 @@
 package policyservice
 
 import (
+	"context"
 	"sync"
 
 	sdk "github.com/singulatron/singulatron/sdk/go"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
+	"github.com/singulatron/singulatron/sdk/go/lock"
 	"github.com/singulatron/singulatron/sdk/go/router"
 
 	policytypes "github.com/singulatron/singulatron/localtron/internal/services/policy/types"
@@ -19,6 +21,7 @@ import (
 
 type PolicyService struct {
 	router *router.Router
+	lock   lock.DistributedLock
 
 	instancesStore  datastore.DataStore
 	credentialStore datastore.DataStore
@@ -31,6 +34,7 @@ type PolicyService struct {
 
 func NewPolicyService(
 	router *router.Router,
+	lock lock.DistributedLock,
 	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error),
 ) (*PolicyService, error) {
 
@@ -45,7 +49,9 @@ func NewPolicyService(
 	}
 
 	service := &PolicyService{
-		router:          router,
+		router: router,
+		lock:   lock,
+
 		instancesStore:  instancesStore,
 		credentialStore: credentialStore,
 	}
@@ -54,6 +60,10 @@ func NewPolicyService(
 }
 
 func (cs *PolicyService) Start() error {
+	ctx := context.Background()
+	cs.lock.Acquire(ctx, "policy-service-start")
+	defer cs.lock.Release(ctx, "policy-service-start")
+
 	instances, err := cs.instancesStore.Query().Find()
 	if err != nil {
 		return err

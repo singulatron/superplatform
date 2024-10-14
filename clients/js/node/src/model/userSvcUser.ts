@@ -17,7 +17,7 @@ export class UserSvcUser {
     /**
     * Contacts are used for login and identification purposes.
     */
-    'contact'?: Array<UserSvcContact>;
+    'contacts'?: Array<UserSvcContact>;
     'createdAt'?: string;
     'deletedAt'?: string;
     'id'?: string;
@@ -36,8 +36,8 @@ export class UserSvcUser {
 
     static attributeTypeMap: Array<{name: string, baseName: string, type: string}> = [
         {
-            "name": "contact",
-            "baseName": "contact",
+            "name": "contacts",
+            "baseName": "contacts",
             "type": "Array<UserSvcContact>"
         },
         {

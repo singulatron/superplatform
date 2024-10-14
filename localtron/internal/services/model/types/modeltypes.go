@@ -58,16 +58,16 @@ type Model struct {
 	Version        string            `json:"version"`
 	Quality        string            `json:"quality"`
 	Extension      string            `json:"extension"`
-	FullName       string            `json:"full_name"`
+	FullName       string            `json:"fullName"`
 	Tags           []string          `json:"tags"`
 	Mirrors        []string          `json:"mirrors"`
 	Size           float64           `json:"size"`
 	Uncensored     bool              `json:"uncensored"`
-	MaxRam         float64           `json:"max_ram"`
+	MaxRam         float64           `json:"maxRam"`
 	Description    string            `json:"description"`
-	PromptTemplate string            `json:"prompt_template"`
-	QuantComment   string            `json:"quant_comment"`
-	MaxBits        int               `json:"max_bits"`
+	PromptTemplate string            `json:"promptTemplate"`
+	QuantComment   string            `json:"quantComment"`
+	MaxBits        int               `json:"maxBits"`
 	Bits           int               `json:"bits"`
 	Assets         map[string]string `json:"assets"`
 }

@@ -24,32 +24,32 @@ import (
 // RegistrySvcAPIService RegistrySvcAPI service
 type RegistrySvcAPIService service
 
-type ApiListNodessRequest struct {
+type ApiListNodesRequest struct {
 	ctx context.Context
 	ApiService *RegistrySvcAPIService
 	body *map[string]interface{}
 }
 
 // List Registrys Request
-func (r ApiListNodessRequest) Body(body map[string]interface{}) ApiListNodessRequest {
+func (r ApiListNodesRequest) Body(body map[string]interface{}) ApiListNodesRequest {
 	r.body = &body
 	return r
 }
 
-func (r ApiListNodessRequest) Execute() (*RegistrySvcListNodesResponse, *http.Response, error) {
-	return r.ApiService.ListNodessExecute(r)
+func (r ApiListNodesRequest) Execute() (*RegistrySvcListNodesResponse, *http.Response, error) {
+	return r.ApiService.ListNodesExecute(r)
 }
 
 /*
-ListNodess List Nodes
+ListNodes List Nodes
 
 Retrieve a list of nodes.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiListNodessRequest
+ @return ApiListNodesRequest
 */
-func (a *RegistrySvcAPIService) ListNodess(ctx context.Context) ApiListNodessRequest {
-	return ApiListNodessRequest{
+func (a *RegistrySvcAPIService) ListNodes(ctx context.Context) ApiListNodesRequest {
+	return ApiListNodesRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -57,7 +57,7 @@ func (a *RegistrySvcAPIService) ListNodess(ctx context.Context) ApiListNodessReq
 
 // Execute executes the request
 //  @return RegistrySvcListNodesResponse
-func (a *RegistrySvcAPIService) ListNodessExecute(r ApiListNodessRequest) (*RegistrySvcListNodesResponse, *http.Response, error) {
+func (a *RegistrySvcAPIService) ListNodesExecute(r ApiListNodesRequest) (*RegistrySvcListNodesResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -65,12 +65,12 @@ func (a *RegistrySvcAPIService) ListNodessExecute(r ApiListNodessRequest) (*Regi
 		localVarReturnValue  *RegistrySvcListNodesResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RegistrySvcAPIService.ListNodess")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RegistrySvcAPIService.ListNodes")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/registry-svc/registrys"
+	localVarPath := localBasePath + "/registry-svc/nodes"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}

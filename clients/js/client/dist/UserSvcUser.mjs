@@ -27,7 +27,7 @@ function UserSvcUserFromJSONTyped(json, ignoreDiscriminator) {
         return json;
     }
     return {
-        'contact': json['contact'] == null ? undefined : (json['contact'].map(UserSvcContactFromJSON)),
+        'contacts': json['contacts'] == null ? undefined : (json['contacts'].map(UserSvcContactFromJSON)),
         'createdAt': json['createdAt'] == null ? undefined : json['createdAt'],
         'deletedAt': json['deletedAt'] == null ? undefined : json['deletedAt'],
         'id': json['id'] == null ? undefined : json['id'],
@@ -42,7 +42,7 @@ function UserSvcUserToJSON(value) {
         return value;
     }
     return {
-        'contact': value['contact'] == null ? undefined : (value['contact'].map(UserSvcContactToJSON)),
+        'contacts': value['contacts'] == null ? undefined : (value['contacts'].map(UserSvcContactToJSON)),
         'createdAt': value['createdAt'],
         'deletedAt': value['deletedAt'],
         'id': value['id'],

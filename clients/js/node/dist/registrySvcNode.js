@@ -19,14 +19,34 @@ class RegistrySvcNode {
 RegistrySvcNode.discriminator = undefined;
 RegistrySvcNode.attributeTypeMap = [
     {
+        "name": "availabilityZone",
+        "baseName": "availabilityZone",
+        "type": "string"
+    },
+    {
         "name": "gpus",
         "baseName": "gpus",
         "type": "Array<RegistrySvcGPU>"
     },
     {
+        "name": "lastHeartbeat",
+        "baseName": "lastHeartbeat",
+        "type": "string"
+    },
+    {
+        "name": "region",
+        "baseName": "region",
+        "type": "string"
+    },
+    {
         "name": "url",
         "baseName": "url",
         "type": "string"
+    },
+    {
+        "name": "usage",
+        "baseName": "usage",
+        "type": "RegistrySvcResourceUsage"
     }
 ];
 
