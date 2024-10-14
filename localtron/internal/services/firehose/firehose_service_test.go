@@ -9,10 +9,10 @@ import (
 	"strings"
 	"testing"
 
-	client "github.com/singulatron/singulatron/clients/go"
-	"github.com/singulatron/singulatron/localtron/internal/di"
-	firehose "github.com/singulatron/singulatron/localtron/internal/services/firehose/types"
-	"github.com/singulatron/singulatron/sdk/go/test"
+	client "github.com/singulatron/superplatform/clients/go"
+	"github.com/singulatron/superplatform/sdk/go/test"
+	"github.com/singulatron/superplatform/server/internal/di"
+	firehose "github.com/singulatron/superplatform/server/internal/services/firehose/types"
 	"github.com/stretchr/testify/require"
 )
 

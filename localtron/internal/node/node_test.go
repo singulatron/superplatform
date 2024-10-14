@@ -10,10 +10,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/singulatron/singulatron/localtron/internal/di"
-	node_types "github.com/singulatron/singulatron/localtron/internal/node/types"
-	sdk "github.com/singulatron/singulatron/sdk/go"
-	"github.com/singulatron/singulatron/sdk/go/test"
+	sdk "github.com/singulatron/superplatform/sdk/go"
+	"github.com/singulatron/superplatform/sdk/go/test"
+	"github.com/singulatron/superplatform/server/internal/di"
+	node_types "github.com/singulatron/superplatform/server/internal/node/types"
 	"github.com/stretchr/testify/require"
 )
 

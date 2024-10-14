@@ -12,8 +12,8 @@ import (
 	"context"
 	"fmt"
 
-	dockertypes "github.com/singulatron/singulatron/localtron/internal/services/docker/types"
-	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	dockertypes "github.com/singulatron/superplatform/server/internal/services/docker/types"
+	usertypes "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
 func (p *DockerService) registerPermissions() error {

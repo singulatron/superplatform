@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	registryservice "github.com/singulatron/singulatron/localtron/internal/services/registry"
+	registryservice "github.com/singulatron/superplatform/server/internal/services/registry"
 )
 
 // output for

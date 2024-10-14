@@ -11,9 +11,9 @@ import (
 	"math"
 	"time"
 
-	"github.com/singulatron/singulatron/sdk/go/datastore"
+	"github.com/singulatron/superplatform/sdk/go/datastore"
 
-	prompttypes "github.com/singulatron/singulatron/localtron/internal/services/prompt/types"
+	prompttypes "github.com/singulatron/superplatform/server/internal/services/prompt/types"
 )
 
 func SelectPrompt(promptsMem datastore.DataStore) (*prompttypes.Prompt, error) {

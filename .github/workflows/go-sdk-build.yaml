@@ -44,4 +44,4 @@ jobs:
           npm install @openapitools/openapi-generator-cli -g
           swag init --parseDependency
           openapi-generator-cli generate -i docs/swagger.yaml -g typescript-fetch -o ./genn
-        working-directory: localtron
+        working-directory: server

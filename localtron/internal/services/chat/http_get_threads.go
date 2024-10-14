@@ -12,8 +12,8 @@ import (
 	"fmt"
 	"net/http"
 
-	chat "github.com/singulatron/singulatron/localtron/internal/services/chat/types"
-	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	chat "github.com/singulatron/superplatform/server/internal/services/chat/types"
+	usertypes "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
 // GetThreads retrieves a list of chat threads for a user

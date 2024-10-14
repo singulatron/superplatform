@@ -10,9 +10,9 @@ package userservice
 import (
 	"time"
 
-	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
-	sdk "github.com/singulatron/singulatron/sdk/go"
-	"github.com/singulatron/singulatron/sdk/go/datastore"
+	sdk "github.com/singulatron/superplatform/sdk/go"
+	"github.com/singulatron/superplatform/sdk/go/datastore"
+	usertypes "github.com/singulatron/superplatform/server/internal/services/user/types"
 	"golang.org/x/crypto/bcrypt"
 
 	"github.com/pkg/errors"

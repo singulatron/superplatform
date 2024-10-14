@@ -17,14 +17,14 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/pkg/errors"
-	"github.com/singulatron/singulatron/localtron/internal/di"
-	node_types "github.com/singulatron/singulatron/localtron/internal/node/types"
-	"github.com/singulatron/singulatron/sdk/go/datastore"
-	"github.com/singulatron/singulatron/sdk/go/datastore/sqlstore"
-	pglock "github.com/singulatron/singulatron/sdk/go/lock/pg"
-	"github.com/singulatron/singulatron/sdk/go/logger"
+	"github.com/singulatron/superplatform/sdk/go/datastore"
+	"github.com/singulatron/superplatform/sdk/go/datastore/sqlstore"
+	pglock "github.com/singulatron/superplatform/sdk/go/lock/pg"
+	"github.com/singulatron/superplatform/sdk/go/logger"
+	"github.com/singulatron/superplatform/server/internal/di"
+	node_types "github.com/singulatron/superplatform/server/internal/node/types"
 
-	_ "github.com/singulatron/singulatron/localtron/docs"
+	_ "github.com/singulatron/superplatform/server/docs"
 	httpSwagger "github.com/swaggo/http-swagger"
 )
 

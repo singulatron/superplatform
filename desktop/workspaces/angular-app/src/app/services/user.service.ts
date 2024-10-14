@@ -6,7 +6,7 @@
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
 import { Injectable } from '@angular/core';
-import { LocaltronService } from './localtron.service';
+import { LocaltronService } from './server.service';
 import { CookieService } from 'ngx-cookie-service';
 import {
 	ReplaySubject,
@@ -52,14 +52,14 @@ export class UserService {
 	} = {};
 
 	constructor(
-		private localtron: LocaltronService,
+		private server: LocaltronService,
 		private cookieService: CookieService,
 		private router: Router
 	) {
 		this.userService = new UserSvcApi(
 			new Configuration({
-				basePath: this.localtron.addr(),
-				apiKey: this.localtron.token(),
+				basePath: this.server.addr(),
+				apiKey: this.server.token(),
 			})
 		);
 		this.init();
@@ -112,7 +112,7 @@ export class UserService {
 			3650,
 			'/',
 			'',
-			this.localtron.config.env.production ? true : false
+			this.server.config.env.production ? true : false
 		);
 	}
 
@@ -121,7 +121,7 @@ export class UserService {
 			'the_token',
 			'/',
 			'',
-			this.localtron.config.env.production ? true : false
+			this.server.config.env.production ? true : false
 		);
 	}
 

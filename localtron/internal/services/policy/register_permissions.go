@@ -12,8 +12,8 @@ import (
 	"context"
 	"fmt"
 
-	policytypes "github.com/singulatron/singulatron/localtron/internal/services/policy/types"
-	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	policytypes "github.com/singulatron/superplatform/server/internal/services/policy/types"
+	usertypes "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
 func (p *PolicyService) registerPermissions() error {

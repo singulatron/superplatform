@@ -8,7 +8,7 @@
 package policy_svc
 
 import (
-	user "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	user "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
 type ErrorResponse struct {

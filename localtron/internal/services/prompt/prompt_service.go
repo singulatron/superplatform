@@ -11,14 +11,14 @@ import (
 	"context"
 	"sync"
 
-	sdk "github.com/singulatron/singulatron/sdk/go"
-	"github.com/singulatron/singulatron/sdk/go/clients/llm"
-	"github.com/singulatron/singulatron/sdk/go/datastore"
-	"github.com/singulatron/singulatron/sdk/go/lock"
-	"github.com/singulatron/singulatron/sdk/go/router"
+	sdk "github.com/singulatron/superplatform/sdk/go"
+	"github.com/singulatron/superplatform/sdk/go/clients/llm"
+	"github.com/singulatron/superplatform/sdk/go/datastore"
+	"github.com/singulatron/superplatform/sdk/go/lock"
+	"github.com/singulatron/superplatform/sdk/go/router"
 
-	streammanager "github.com/singulatron/singulatron/localtron/internal/services/prompt/sub/stream_manager"
-	prompttypes "github.com/singulatron/singulatron/localtron/internal/services/prompt/types"
+	streammanager "github.com/singulatron/superplatform/server/internal/services/prompt/sub/stream_manager"
+	prompttypes "github.com/singulatron/superplatform/server/internal/services/prompt/types"
 )
 
 type PromptService struct {

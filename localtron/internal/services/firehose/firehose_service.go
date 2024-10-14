@@ -13,13 +13,13 @@ import (
 	"log/slog"
 	"sync"
 
-	sdk "github.com/singulatron/singulatron/sdk/go"
-	"github.com/singulatron/singulatron/sdk/go/datastore"
-	"github.com/singulatron/singulatron/sdk/go/lock"
-	"github.com/singulatron/singulatron/sdk/go/logger"
-	"github.com/singulatron/singulatron/sdk/go/router"
+	sdk "github.com/singulatron/superplatform/sdk/go"
+	"github.com/singulatron/superplatform/sdk/go/datastore"
+	"github.com/singulatron/superplatform/sdk/go/lock"
+	"github.com/singulatron/superplatform/sdk/go/logger"
+	"github.com/singulatron/superplatform/sdk/go/router"
 
-	firehosetypes "github.com/singulatron/singulatron/localtron/internal/services/firehose/types"
+	firehosetypes "github.com/singulatron/superplatform/server/internal/services/firehose/types"
 )
 
 type FirehoseService struct {

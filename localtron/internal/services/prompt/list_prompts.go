@@ -10,8 +10,8 @@ package promptservice
 import (
 	"encoding/json"
 
-	prompttypes "github.com/singulatron/singulatron/localtron/internal/services/prompt/types"
-	"github.com/singulatron/singulatron/sdk/go/datastore"
+	"github.com/singulatron/superplatform/sdk/go/datastore"
+	prompttypes "github.com/singulatron/superplatform/server/internal/services/prompt/types"
 )
 
 func (p *PromptService) listPrompts(options *prompttypes.ListPromptOptions) ([]*prompttypes.Prompt, int64, error) {

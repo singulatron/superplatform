@@ -12,7 +12,7 @@ import (
 	"fmt"
 	"net/http"
 
-	user "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	user "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
 // GetRoles handles the retrieval of all roles.

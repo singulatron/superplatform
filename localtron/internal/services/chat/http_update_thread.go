@@ -13,8 +13,8 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	chat "github.com/singulatron/singulatron/localtron/internal/services/chat/types"
-	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	chat "github.com/singulatron/superplatform/server/internal/services/chat/types"
+	usertypes "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
 // UpdateThread updates the details of an existing chat thread

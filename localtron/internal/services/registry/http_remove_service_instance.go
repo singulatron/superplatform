@@ -3,8 +3,8 @@ package registryservice
 import (
 	"net/http"
 
-	registry "github.com/singulatron/singulatron/localtron/internal/services/registry/types"
-	"github.com/singulatron/singulatron/sdk/go/datastore"
+	"github.com/singulatron/superplatform/sdk/go/datastore"
+	registry "github.com/singulatron/superplatform/server/internal/services/registry/types"
 )
 
 // Remove a registered service instance

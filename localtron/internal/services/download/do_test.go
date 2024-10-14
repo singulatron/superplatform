@@ -19,11 +19,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/singulatron/singulatron/localtron/internal/di"
-	downloadservice "github.com/singulatron/singulatron/localtron/internal/services/download"
-	downloadtypes "github.com/singulatron/singulatron/localtron/internal/services/download/types"
-	types "github.com/singulatron/singulatron/localtron/internal/services/download/types"
-	sdk "github.com/singulatron/singulatron/sdk/go"
+	sdk "github.com/singulatron/superplatform/sdk/go"
+	"github.com/singulatron/superplatform/server/internal/di"
+	downloadservice "github.com/singulatron/superplatform/server/internal/services/download"
+	downloadtypes "github.com/singulatron/superplatform/server/internal/services/download/types"
+	types "github.com/singulatron/superplatform/server/internal/services/download/types"
 	"github.com/stretchr/testify/require"
 )
 

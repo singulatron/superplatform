@@ -11,9 +11,9 @@ import (
 	"encoding/json"
 	"errors"
 
-	"github.com/singulatron/singulatron/sdk/go/datastore"
+	"github.com/singulatron/superplatform/sdk/go/datastore"
 
-	dynamictypes "github.com/singulatron/singulatron/localtron/internal/services/dynamic/types"
+	dynamictypes "github.com/singulatron/superplatform/server/internal/services/dynamic/types"
 )
 
 func (g *DynamicService) query(readers []string, options dynamictypes.QueryOptions) ([]*dynamictypes.Object, error) {

@@ -12,9 +12,9 @@ import (
 	"fmt"
 	"net/http"
 
-	prompt "github.com/singulatron/singulatron/localtron/internal/services/prompt/types"
-	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
-	"github.com/singulatron/singulatron/sdk/go/datastore"
+	"github.com/singulatron/superplatform/sdk/go/datastore"
+	prompt "github.com/singulatron/superplatform/server/internal/services/prompt/types"
+	usertypes "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
 // List lists prompts

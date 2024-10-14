@@ -6,7 +6,7 @@
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
 import { Injectable } from '@angular/core';
-import { LocaltronService } from './localtron.service';
+import { LocaltronService } from './server.service';
 import { ReplaySubject, Observable, catchError } from 'rxjs';
 import { FirehoseService } from './firehose.service';
 import { first } from 'rxjs';
@@ -54,14 +54,14 @@ export class PromptService {
 	onPromptListUpdate$ = this.onPromptListUpdateSubject.asObservable();
 
 	constructor(
-		private localtron: LocaltronService,
+		private server: LocaltronService,
 		private userService: UserService,
 		private firehoseService: FirehoseService
 	) {
 		this.promptService = new PromptSvcApi(
 			new Configuration({
-				basePath: this.localtron.addr(),
-				apiKey: this.localtron.token(),
+				basePath: this.server.addr(),
+				apiKey: this.server.token(),
 			})
 		);
 
@@ -98,7 +98,7 @@ export class PromptService {
 
 	async promptAdd(prompt: Prompt): Promise<PromptSvcAddPromptResponse> {
 		if (!prompt.id) {
-			prompt.id = this.localtron.id('prom');
+			prompt.id = this.server.id('prom');
 		}
 		const request: PromptSvcAddPromptRequest = prompt;
 
@@ -140,7 +140,7 @@ export class PromptService {
 				});
 
 				const uri =
-					this.localtron.config.env.localtronAddress +
+					this.server.config.env.serverAddress +
 					`/prompt-svc/prompts/${threadId}/responses/subscribe`;
 
 				const headers = {

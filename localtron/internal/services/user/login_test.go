@@ -8,11 +8,11 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/singulatron/singulatron/localtron/internal/di"
-	sdk "github.com/singulatron/singulatron/sdk/go"
-	"github.com/singulatron/singulatron/sdk/go/test"
+	sdk "github.com/singulatron/superplatform/sdk/go"
+	"github.com/singulatron/superplatform/sdk/go/test"
+	"github.com/singulatron/superplatform/server/internal/di"
 
-	clients "github.com/singulatron/singulatron/clients/go"
+	clients "github.com/singulatron/superplatform/clients/go"
 )
 
 func TestRegistration(t *testing.T) {

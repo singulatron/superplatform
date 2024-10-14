@@ -12,8 +12,8 @@ import (
 	"fmt"
 	"net/http"
 
-	config "github.com/singulatron/singulatron/localtron/internal/services/config/types"
-	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	config "github.com/singulatron/superplatform/server/internal/services/config/types"
+	usertypes "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
 // Save saves the configuration

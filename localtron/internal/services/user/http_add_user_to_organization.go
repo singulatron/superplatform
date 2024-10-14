@@ -13,8 +13,8 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	user "github.com/singulatron/singulatron/localtron/internal/services/user/types"
-	"github.com/singulatron/singulatron/sdk/go/datastore"
+	"github.com/singulatron/superplatform/sdk/go/datastore"
+	user "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
 // AddUserToOrganization allows an authorized user to add another user to a specific organization.

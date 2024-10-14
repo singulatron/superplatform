@@ -8,7 +8,7 @@
 package userservice
 
 import (
-	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	usertypes "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
 func (s *UserService) createPermission(id, name, description string) (*usertypes.Permission, error) {

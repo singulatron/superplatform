@@ -7,7 +7,7 @@
  */
 import { Injectable } from '@angular/core';
 import { DynamicService } from './generic.service';
-import { LocaltronService } from './localtron.service';
+import { LocaltronService } from './server.service';
 import { UserService } from './user.service';
 import { first } from 'rxjs';
 import { DynamicSvcObject } from '@singulatron/client';
@@ -22,7 +22,7 @@ export class CharacterService {
 	public selectedCharacter!: Character;
 
 	constructor(
-		private localtron: LocaltronService,
+		private server: LocaltronService,
 		private dynamicService: DynamicService,
 		private userService: UserService
 	) {
@@ -53,7 +53,7 @@ export class CharacterService {
 	}
 
 	async createNewCharacter(character: Character) {
-		const id = this.localtron.id('char');
+		const id = this.server.id('char');
 		const now = new Date().toISOString();
 		character.id = id;
 		await this.dynamicService.create(CHARACTERS_TABLE_NAME, {
@@ -124,7 +124,7 @@ export class CharacterService {
 		let characterSelection = await this.getCharacterSelection();
 		if (!characterSelection) {
 			characterSelection = initCharacterSelection();
-			characterSelection.id = this.localtron.id('char');
+			characterSelection.id = this.server.id('char');
 			characterSelection.createdAt = now;
 		}
 		characterSelection.updatedAt = now;

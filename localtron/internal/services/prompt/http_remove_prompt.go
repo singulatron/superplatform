@@ -12,8 +12,8 @@ import (
 	"fmt"
 	"net/http"
 
-	prompt "github.com/singulatron/singulatron/localtron/internal/services/prompt/types"
-	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	prompt "github.com/singulatron/superplatform/server/internal/services/prompt/types"
+	usertypes "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
 // Remove removes a prompt

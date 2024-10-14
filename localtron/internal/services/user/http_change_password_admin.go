@@ -11,7 +11,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	user "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	user "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
 // ChangePasswordAdmin updates a user's password by an administrator

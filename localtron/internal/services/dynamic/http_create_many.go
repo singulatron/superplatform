@@ -12,8 +12,8 @@ import (
 	"fmt"
 	"net/http"
 
-	dynamictypes "github.com/singulatron/singulatron/localtron/internal/services/dynamic/types"
-	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	dynamictypes "github.com/singulatron/superplatform/server/internal/services/dynamic/types"
+	usertypes "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
 func (g *DynamicService) CreateMany(

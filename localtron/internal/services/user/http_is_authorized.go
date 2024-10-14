@@ -16,10 +16,10 @@ import (
 	"strings"
 
 	"github.com/gorilla/mux"
-	"github.com/singulatron/singulatron/sdk/go/datastore"
-	"github.com/singulatron/singulatron/sdk/go/logger"
+	"github.com/singulatron/superplatform/sdk/go/datastore"
+	"github.com/singulatron/superplatform/sdk/go/logger"
 
-	user "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	user "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
 // @ID isAuthorized

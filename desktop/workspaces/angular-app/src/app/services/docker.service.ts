@@ -8,7 +8,7 @@
 import { Injectable } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { OnDockerInfo } from 'shared-lib/models/event-request-response';
-import { LocaltronService } from './localtron.service';
+import { LocaltronService } from './server.service';
 import {
 	DockerSvcApi,
 	Configuration,
@@ -24,7 +24,7 @@ export class DockerService {
 	onDockerInfoSubject = new ReplaySubject<OnDockerInfo>(1);
 	onDockerInfo$ = this.onDockerInfoSubject.asObservable();
 
-	constructor(private localtron: LocaltronService) {
+	constructor(private server: LocaltronService) {
 		// @todo nothing to trigger docker info yet
 		// so we fall back to pollings
 		setInterval(() => {
@@ -42,8 +42,8 @@ export class DockerService {
 			if (!this.dockerService) {
 				this.dockerService = new DockerSvcApi(
 					new Configuration({
-						basePath: this.localtron.addr(),
-						apiKey: this.localtron.token(),
+						basePath: this.server.addr(),
+						apiKey: this.server.token(),
 					})
 				);
 			}

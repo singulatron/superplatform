@@ -12,10 +12,10 @@ import (
 	"log/slog"
 	"time"
 
-	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
-	sdk "github.com/singulatron/singulatron/sdk/go"
-	"github.com/singulatron/singulatron/sdk/go/datastore"
-	"github.com/singulatron/singulatron/sdk/go/logger"
+	sdk "github.com/singulatron/superplatform/sdk/go"
+	"github.com/singulatron/superplatform/sdk/go/datastore"
+	"github.com/singulatron/superplatform/sdk/go/logger"
+	usertypes "github.com/singulatron/superplatform/server/internal/services/user/types"
 	"golang.org/x/crypto/bcrypt"
 )
 

@@ -9,11 +9,11 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/singulatron/singulatron/localtron/internal/di"
-	configservice "github.com/singulatron/singulatron/localtron/internal/services/config"
-	configtypes "github.com/singulatron/singulatron/localtron/internal/services/config/types"
-	modeltypes "github.com/singulatron/singulatron/localtron/internal/services/model/types"
-	sdk "github.com/singulatron/singulatron/sdk/go"
+	sdk "github.com/singulatron/superplatform/sdk/go"
+	"github.com/singulatron/superplatform/server/internal/di"
+	configservice "github.com/singulatron/superplatform/server/internal/services/config"
+	configtypes "github.com/singulatron/superplatform/server/internal/services/config/types"
+	modeltypes "github.com/singulatron/superplatform/server/internal/services/model/types"
 )
 
 func TestModel(t *testing.T) {

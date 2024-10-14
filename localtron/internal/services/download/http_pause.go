@@ -14,8 +14,8 @@ import (
 	"net/url"
 
 	"github.com/gorilla/mux"
-	download "github.com/singulatron/singulatron/localtron/internal/services/download/types"
-	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	download "github.com/singulatron/superplatform/server/internal/services/download/types"
+	usertypes "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
 // Pause pauses an ongoing download

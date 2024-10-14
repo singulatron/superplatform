@@ -9,7 +9,7 @@
 package prompt_svc
 
 import (
-	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	usertypes "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
 var PermissionPromptCreate = usertypes.Permission{

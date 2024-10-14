@@ -1,14 +1,14 @@
 FROM golang:1.22.4 as build
 
-WORKDIR /app/localtron
+WORKDIR /app/server
 
-COPY localtron/go.mod localtron/go.sum ./
+COPY server/go.mod server/go.sum ./
 COPY clients/go /app/clients/go
 COPY sdk/go /app/sdk/go
 
 RUN go mod download
 
-COPY localtron/ .
+COPY server/ .
 
 RUN go build -o /app/main .
 

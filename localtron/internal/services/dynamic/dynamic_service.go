@@ -12,14 +12,14 @@ import (
 	"errors"
 	"strings"
 
-	sdk "github.com/singulatron/singulatron/sdk/go"
-	"github.com/singulatron/singulatron/sdk/go/datastore"
-	"github.com/singulatron/singulatron/sdk/go/lock"
-	"github.com/singulatron/singulatron/sdk/go/router"
+	sdk "github.com/singulatron/superplatform/sdk/go"
+	"github.com/singulatron/superplatform/sdk/go/datastore"
+	"github.com/singulatron/superplatform/sdk/go/lock"
+	"github.com/singulatron/superplatform/sdk/go/router"
 
-	dynamictypes "github.com/singulatron/singulatron/localtron/internal/services/dynamic/types"
+	dynamictypes "github.com/singulatron/superplatform/server/internal/services/dynamic/types"
 
-	clients "github.com/singulatron/singulatron/clients/go"
+	clients "github.com/singulatron/superplatform/clients/go"
 )
 
 type DynamicService struct {

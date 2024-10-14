@@ -13,7 +13,7 @@ import (
 	"strings"
 
 	"github.com/gorilla/mux"
-	user "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	user "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
 // UpsertPermission handles the creation or update of a permission

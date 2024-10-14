@@ -10,8 +10,8 @@ package prompt_svc
 import (
 	"time"
 
-	"github.com/singulatron/singulatron/sdk/go/clients/llm"
-	"github.com/singulatron/singulatron/sdk/go/datastore"
+	"github.com/singulatron/superplatform/sdk/go/clients/llm"
+	"github.com/singulatron/superplatform/sdk/go/datastore"
 )
 
 type ErrorResponse struct {

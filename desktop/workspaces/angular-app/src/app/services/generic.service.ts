@@ -6,7 +6,7 @@
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
 import { Injectable } from '@angular/core';
-import { LocaltronService } from './localtron.service';
+import { LocaltronService } from './server.service';
 import { FirehoseService } from './firehose.service';
 import { first } from 'rxjs';
 import { UserService } from './user.service';
@@ -34,7 +34,7 @@ export class DynamicService {
 	dynamicService!: DynamicSvcApi;
 
 	constructor(
-		private localtron: LocaltronService,
+		private server: LocaltronService,
 		private userService: UserService,
 		private firehoseService: FirehoseService
 	) {
@@ -42,8 +42,8 @@ export class DynamicService {
 			this.init();
 			this.dynamicService = new DynamicSvcApi(
 				new Configuration({
-					apiKey: this.localtron.token(),
-					basePath: this.localtron.addr(),
+					apiKey: this.server.token(),
+					basePath: this.server.addr(),
 				})
 			);
 		});

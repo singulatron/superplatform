@@ -12,8 +12,8 @@ import (
 	"context"
 	"fmt"
 
-	prompttypes "github.com/singulatron/singulatron/localtron/internal/services/prompt/types"
-	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	prompttypes "github.com/singulatron/superplatform/server/internal/services/prompt/types"
+	usertypes "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
 func (p *PromptService) registerPermissions() error {

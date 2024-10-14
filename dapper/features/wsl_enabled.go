@@ -8,7 +8,7 @@
 package features
 
 import (
-	dt "github.com/singulatron/singulatron/dapper/types"
+	dt "github.com/singulatron/superplatform/dapper/types"
 )
 
 var WslEnabled = dt.Feature{

@@ -20,12 +20,12 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/singulatron/singulatron/sdk/go/datastore"
-	"github.com/singulatron/singulatron/sdk/go/logger"
+	"github.com/singulatron/superplatform/sdk/go/datastore"
+	"github.com/singulatron/superplatform/sdk/go/logger"
 
-	configtypes "github.com/singulatron/singulatron/localtron/internal/services/config/types"
-	dockertypes "github.com/singulatron/singulatron/localtron/internal/services/docker/types"
-	modeltypes "github.com/singulatron/singulatron/localtron/internal/services/model/types"
+	configtypes "github.com/singulatron/superplatform/server/internal/services/config/types"
+	dockertypes "github.com/singulatron/superplatform/server/internal/services/docker/types"
+	modeltypes "github.com/singulatron/superplatform/server/internal/services/model/types"
 )
 
 const hostPortNum = 8001

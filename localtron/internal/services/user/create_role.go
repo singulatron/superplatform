@@ -10,9 +10,9 @@ package userservice
 import (
 	"errors"
 
-	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
-	sdk "github.com/singulatron/singulatron/sdk/go"
-	"github.com/singulatron/singulatron/sdk/go/datastore"
+	sdk "github.com/singulatron/superplatform/sdk/go"
+	"github.com/singulatron/superplatform/sdk/go/datastore"
+	usertypes "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
 func (s *UserService) createRole(ownerId, name, description string, permissionIds []string) (*usertypes.Role, error) {

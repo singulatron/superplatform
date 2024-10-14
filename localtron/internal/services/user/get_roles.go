@@ -8,8 +8,8 @@
 package userservice
 
 import (
-	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
-	"github.com/singulatron/singulatron/sdk/go/datastore"
+	"github.com/singulatron/superplatform/sdk/go/datastore"
+	usertypes "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
 func (s *UserService) getRoles() ([]*usertypes.Role, error) {

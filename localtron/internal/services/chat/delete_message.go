@@ -8,7 +8,7 @@
 package chatservice
 
 import (
-	"github.com/singulatron/singulatron/sdk/go/datastore"
+	"github.com/singulatron/superplatform/sdk/go/datastore"
 )
 
 func (a *ChatService) deleteMessage(id string) error {

@@ -12,8 +12,8 @@ import (
 	"context"
 	"fmt"
 
-	configtypes "github.com/singulatron/singulatron/localtron/internal/services/config/types"
-	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	configtypes "github.com/singulatron/superplatform/server/internal/services/config/types"
+	usertypes "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
 // this is called in the Start not in constructor to avoid import cycles

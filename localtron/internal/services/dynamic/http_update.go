@@ -12,8 +12,8 @@ import (
 	"fmt"
 	"net/http"
 
-	dynamic "github.com/singulatron/singulatron/localtron/internal/services/dynamic/types"
-	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	dynamic "github.com/singulatron/superplatform/server/internal/services/dynamic/types"
+	usertypes "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
 // Update modifies existing dynamic objects based on given conditions

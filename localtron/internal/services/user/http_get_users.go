@@ -11,8 +11,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	user "github.com/singulatron/singulatron/localtron/internal/services/user/types"
-	"github.com/singulatron/singulatron/sdk/go/datastore"
+	"github.com/singulatron/superplatform/sdk/go/datastore"
+	user "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
 // GetUsers retrieves a list of users based on query parameters

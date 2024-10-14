@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	registry "github.com/singulatron/singulatron/localtron/internal/services/registry/types"
+	registry "github.com/singulatron/superplatform/server/internal/services/registry/types"
 )
 
 // Query all registered service instances or filter by criteria

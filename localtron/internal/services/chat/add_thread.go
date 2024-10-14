@@ -12,10 +12,10 @@ import (
 	"errors"
 	"time"
 
-	chattypes "github.com/singulatron/singulatron/localtron/internal/services/chat/types"
-	firehosetypes "github.com/singulatron/singulatron/localtron/internal/services/firehose/types"
-	sdk "github.com/singulatron/singulatron/sdk/go"
-	"github.com/singulatron/singulatron/sdk/go/logger"
+	sdk "github.com/singulatron/superplatform/sdk/go"
+	"github.com/singulatron/superplatform/sdk/go/logger"
+	chattypes "github.com/singulatron/superplatform/server/internal/services/chat/types"
+	firehosetypes "github.com/singulatron/superplatform/server/internal/services/firehose/types"
 )
 
 func (a *ChatService) addThread(chatThread *chattypes.Thread) (*chattypes.Thread, error) {

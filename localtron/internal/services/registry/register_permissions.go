@@ -11,8 +11,8 @@ import (
 	"context"
 	"fmt"
 
-	registrytypes "github.com/singulatron/singulatron/localtron/internal/services/registry/types"
-	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	registrytypes "github.com/singulatron/superplatform/server/internal/services/registry/types"
+	usertypes "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
 func app(permSlices ...[]usertypes.Permission) []usertypes.Permission {

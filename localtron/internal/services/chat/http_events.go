@@ -10,8 +10,8 @@ package chatservice
 import (
 	"net/http"
 
-	chat "github.com/singulatron/singulatron/localtron/internal/services/chat/types"
-	"github.com/singulatron/singulatron/sdk/go/logger"
+	"github.com/singulatron/superplatform/sdk/go/logger"
+	chat "github.com/singulatron/superplatform/server/internal/services/chat/types"
 )
 
 // Events is a dummy endpoint to display documentation about the events that this service emits.

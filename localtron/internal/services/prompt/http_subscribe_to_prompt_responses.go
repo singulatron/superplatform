@@ -14,11 +14,11 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/singulatron/singulatron/sdk/go/clients/llm"
-	"github.com/singulatron/singulatron/sdk/go/logger"
+	"github.com/singulatron/superplatform/sdk/go/clients/llm"
+	"github.com/singulatron/superplatform/sdk/go/logger"
 
-	prompt "github.com/singulatron/singulatron/localtron/internal/services/prompt/types"
-	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	prompt "github.com/singulatron/superplatform/server/internal/services/prompt/types"
+	usertypes "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
 // Subscribe streams prompt responses to the client by thread.

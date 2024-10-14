@@ -11,8 +11,8 @@ import (
 	"context"
 	"fmt"
 
-	downloadtypes "github.com/singulatron/singulatron/localtron/internal/services/download/types"
-	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	downloadtypes "github.com/singulatron/superplatform/server/internal/services/download/types"
+	usertypes "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
 func (ds *DownloadService) registerPermissions() error {

@@ -12,8 +12,8 @@ import (
 	"fmt"
 	"net/http"
 
-	registry "github.com/singulatron/singulatron/localtron/internal/services/registry/types"
-	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	registry "github.com/singulatron/superplatform/server/internal/services/registry/types"
+	usertypes "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
 // @ID listNodes

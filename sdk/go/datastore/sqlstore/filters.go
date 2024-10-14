@@ -14,7 +14,7 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/singulatron/singulatron/sdk/go/datastore"
+	"github.com/singulatron/superplatform/sdk/go/datastore"
 )
 
 func (s *SQLStore) placeholder(counter int) string {

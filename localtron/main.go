@@ -14,11 +14,11 @@ import (
 	"os"
 	"time"
 
-	_ "github.com/singulatron/singulatron/localtron/docs"
-	"github.com/singulatron/singulatron/localtron/internal/node"
-	node_types "github.com/singulatron/singulatron/localtron/internal/node/types"
-	"github.com/singulatron/singulatron/sdk/go/logger"
-	"github.com/singulatron/singulatron/sdk/go/router"
+	"github.com/singulatron/superplatform/sdk/go/logger"
+	"github.com/singulatron/superplatform/sdk/go/router"
+	_ "github.com/singulatron/superplatform/server/docs"
+	"github.com/singulatron/superplatform/server/internal/node"
+	node_types "github.com/singulatron/superplatform/server/internal/node/types"
 )
 
 var port = router.GetPort()

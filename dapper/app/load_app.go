@@ -11,7 +11,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 
-	dt "github.com/singulatron/singulatron/dapper/types"
+	dt "github.com/singulatron/superplatform/dapper/types"
 )
 
 // LoadAppConfiguration loads an application configuration from a JSON file.

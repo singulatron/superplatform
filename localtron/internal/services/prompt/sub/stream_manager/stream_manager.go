@@ -10,8 +10,8 @@ package streammanager
 import (
 	"sync"
 
-	prompttypes "github.com/singulatron/singulatron/localtron/internal/services/prompt/types"
-	"github.com/singulatron/singulatron/sdk/go/clients/llm"
+	"github.com/singulatron/superplatform/sdk/go/clients/llm"
+	prompttypes "github.com/singulatron/superplatform/server/internal/services/prompt/types"
 )
 
 type StreamManager struct {

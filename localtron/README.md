@@ -1,4 +1,4 @@
-# localtron
+# server
 
 Localtron is the backend engine of Singulatron, written in Go. It is responsible for running and scheduling prompts, downloading models, auth and many other things.
 
@@ -8,7 +8,7 @@ It serves both the desktop app/exe locally (on a laptop or PC) and the web UI ov
 ## How to start
 
 ```sh
-crufter@cruftop:~/mono/localtron$ go run main.go
+crufter@cruftop:~/mono/server$ go run main.go
 2024/04/22 11:53:16 Server started on :58231
 ```
 

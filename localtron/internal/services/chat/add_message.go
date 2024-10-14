@@ -13,12 +13,12 @@ import (
 	"log/slog"
 	"time"
 
-	sdk "github.com/singulatron/singulatron/sdk/go"
-	"github.com/singulatron/singulatron/sdk/go/datastore"
-	"github.com/singulatron/singulatron/sdk/go/logger"
+	sdk "github.com/singulatron/superplatform/sdk/go"
+	"github.com/singulatron/superplatform/sdk/go/datastore"
+	"github.com/singulatron/superplatform/sdk/go/logger"
 
-	chattypes "github.com/singulatron/singulatron/localtron/internal/services/chat/types"
-	firehosetypes "github.com/singulatron/singulatron/localtron/internal/services/firehose/types"
+	chattypes "github.com/singulatron/superplatform/server/internal/services/chat/types"
+	firehosetypes "github.com/singulatron/superplatform/server/internal/services/firehose/types"
 )
 
 func (a *ChatService) addMessage(chatMessage *chattypes.Message) error {

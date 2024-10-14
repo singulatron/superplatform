@@ -13,7 +13,7 @@ package dapper
 import (
 	"testing"
 
-	dt "github.com/singulatron/singulatron/dapper/types"
+	dt "github.com/singulatron/superplatform/dapper/types"
 	"github.com/stretchr/testify/assert"
 )
 

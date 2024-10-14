@@ -13,10 +13,10 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/singulatron/singulatron/sdk/go/logger"
+	"github.com/singulatron/superplatform/sdk/go/logger"
 
-	firehose "github.com/singulatron/singulatron/localtron/internal/services/firehose/types"
-	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	firehose "github.com/singulatron/superplatform/server/internal/services/firehose/types"
+	usertypes "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
 // Subscribe subscribes to a firehose stream and streams events to the client

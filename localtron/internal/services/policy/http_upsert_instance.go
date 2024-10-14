@@ -6,9 +6,9 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	policy "github.com/singulatron/singulatron/localtron/internal/services/policy/types"
-	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
-	sdk "github.com/singulatron/singulatron/sdk/go"
+	sdk "github.com/singulatron/superplatform/sdk/go"
+	policy "github.com/singulatron/superplatform/server/internal/services/policy/types"
+	usertypes "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
 // UpsertInstance allows a user to upsert a new policy instance

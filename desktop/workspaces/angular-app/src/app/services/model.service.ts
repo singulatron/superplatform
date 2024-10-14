@@ -6,7 +6,7 @@
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
 import { Injectable } from '@angular/core';
-import { LocaltronService } from './localtron.service';
+import { LocaltronService } from './server.service';
 import { DockerService } from './docker.service';
 import { ReplaySubject, combineLatest } from 'rxjs';
 import {
@@ -41,13 +41,13 @@ export class ModelService {
 	public onModelReady$ = this.onModelReadySubject.asObservable();
 
 	constructor(
-		private localtron: LocaltronService,
+		private server: LocaltronService,
 		private dockerService: DockerService
 	) {
 		this.modelService = new ModelSvcApi(
 			new Configuration({
-				basePath: this.localtron.addr(),
-				apiKey: this.localtron.token(),
+				basePath: this.server.addr(),
+				apiKey: this.server.token(),
 			})
 		);
 

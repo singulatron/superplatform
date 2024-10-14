@@ -13,9 +13,9 @@ import (
 	"path"
 
 	"github.com/pkg/errors"
-	types "github.com/singulatron/singulatron/localtron/internal/services/config/types"
-	firehosetypes "github.com/singulatron/singulatron/localtron/internal/services/firehose/types"
-	"github.com/singulatron/singulatron/sdk/go/logger"
+	"github.com/singulatron/superplatform/sdk/go/logger"
+	types "github.com/singulatron/superplatform/server/internal/services/config/types"
+	firehosetypes "github.com/singulatron/superplatform/server/internal/services/firehose/types"
 	"gopkg.in/yaml.v2"
 )
 

@@ -12,7 +12,7 @@ import (
 	"net/http"
 	"strings"
 
-	user "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	user "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
 // CreateRole creates a new role

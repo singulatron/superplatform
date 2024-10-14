@@ -8,8 +8,8 @@
 package modelservice
 
 import (
-	modeltypes "github.com/singulatron/singulatron/localtron/internal/services/model/types"
-	"github.com/singulatron/singulatron/sdk/go/datastore"
+	"github.com/singulatron/superplatform/sdk/go/datastore"
+	modeltypes "github.com/singulatron/superplatform/server/internal/services/model/types"
 )
 
 func (ms *ModelService) getModels() ([]*modeltypes.Model, error) {

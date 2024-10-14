@@ -13,8 +13,8 @@ import (
 	"fmt"
 	"net/http"
 
-	firehose "github.com/singulatron/singulatron/localtron/internal/services/firehose/types"
-	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	firehose "github.com/singulatron/superplatform/server/internal/services/firehose/types"
+	usertypes "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
 // @Summary Publish an Event

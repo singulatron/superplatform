@@ -12,7 +12,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	user "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	user "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
 // DeleteRole handles the deletion of a role by role ID.

@@ -10,7 +10,7 @@ package downloadservice
 import (
 	"path/filepath"
 
-	types "github.com/singulatron/singulatron/localtron/internal/services/download/types"
+	types "github.com/singulatron/superplatform/server/internal/services/download/types"
 )
 
 func (ds *DownloadService) list() ([]types.DownloadDetails, error) {

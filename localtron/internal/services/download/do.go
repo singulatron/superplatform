@@ -18,8 +18,8 @@ import (
 	"strings"
 
 	"github.com/pkg/errors"
-	types "github.com/singulatron/singulatron/localtron/internal/services/download/types"
-	"github.com/singulatron/singulatron/sdk/go/logger"
+	"github.com/singulatron/superplatform/sdk/go/logger"
+	types "github.com/singulatron/superplatform/server/internal/services/download/types"
 )
 
 /*

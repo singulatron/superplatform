@@ -4,11 +4,11 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/singulatron/singulatron/sdk/go/datastore"
-	"github.com/singulatron/singulatron/sdk/go/logger"
-	"github.com/singulatron/singulatron/sdk/go/router"
+	"github.com/singulatron/superplatform/sdk/go/datastore"
+	"github.com/singulatron/superplatform/sdk/go/logger"
+	"github.com/singulatron/superplatform/sdk/go/router"
 
-	client "github.com/singulatron/singulatron/clients/go"
+	client "github.com/singulatron/superplatform/clients/go"
 )
 
 // RegisterService registers a service or logs in with credentials loaded

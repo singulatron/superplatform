@@ -11,12 +11,12 @@ import (
 	"context"
 	"sync"
 
-	sdk "github.com/singulatron/singulatron/sdk/go"
-	"github.com/singulatron/singulatron/sdk/go/datastore"
-	"github.com/singulatron/singulatron/sdk/go/lock"
-	"github.com/singulatron/singulatron/sdk/go/router"
+	sdk "github.com/singulatron/superplatform/sdk/go"
+	"github.com/singulatron/superplatform/sdk/go/datastore"
+	"github.com/singulatron/superplatform/sdk/go/lock"
+	"github.com/singulatron/superplatform/sdk/go/router"
 
-	modeltypes "github.com/singulatron/singulatron/localtron/internal/services/model/types"
+	modeltypes "github.com/singulatron/superplatform/server/internal/services/model/types"
 )
 
 type ModelService struct {

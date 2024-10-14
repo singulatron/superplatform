@@ -14,8 +14,8 @@ import (
 	"net/url"
 
 	"github.com/gorilla/mux"
-	model "github.com/singulatron/singulatron/localtron/internal/services/model/types"
-	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	model "github.com/singulatron/superplatform/server/internal/services/model/types"
+	usertypes "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
 // Status godoc

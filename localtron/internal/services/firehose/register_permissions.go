@@ -12,8 +12,8 @@ import (
 	"context"
 	"fmt"
 
-	firehosetypes "github.com/singulatron/singulatron/localtron/internal/services/firehose/types"
-	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	firehosetypes "github.com/singulatron/superplatform/server/internal/services/firehose/types"
+	usertypes "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
 func (p *FirehoseService) registerPermissions() error {

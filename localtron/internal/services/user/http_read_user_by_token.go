@@ -11,8 +11,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	user "github.com/singulatron/singulatron/localtron/internal/services/user/types"
-	sdk "github.com/singulatron/singulatron/sdk/go"
+	sdk "github.com/singulatron/superplatform/sdk/go"
+	user "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
 // @ID readUserByToken

@@ -18,18 +18,18 @@ import (
 
 	"github.com/pkg/errors"
 
-	sdk "github.com/singulatron/singulatron/sdk/go"
-	"github.com/singulatron/singulatron/sdk/go/clients/llm"
-	"github.com/singulatron/singulatron/sdk/go/clients/stable_diffusion"
-	"github.com/singulatron/singulatron/sdk/go/datastore"
-	"github.com/singulatron/singulatron/sdk/go/logger"
+	sdk "github.com/singulatron/superplatform/sdk/go"
+	"github.com/singulatron/superplatform/sdk/go/clients/llm"
+	"github.com/singulatron/superplatform/sdk/go/clients/stable_diffusion"
+	"github.com/singulatron/superplatform/sdk/go/datastore"
+	"github.com/singulatron/superplatform/sdk/go/logger"
 
-	apptypes "github.com/singulatron/singulatron/localtron/internal/services/chat/types"
-	chattypes "github.com/singulatron/singulatron/localtron/internal/services/chat/types"
-	configtypes "github.com/singulatron/singulatron/localtron/internal/services/config/types"
-	firehosetypes "github.com/singulatron/singulatron/localtron/internal/services/firehose/types"
-	modeltypes "github.com/singulatron/singulatron/localtron/internal/services/model/types"
-	prompttypes "github.com/singulatron/singulatron/localtron/internal/services/prompt/types"
+	apptypes "github.com/singulatron/superplatform/server/internal/services/chat/types"
+	chattypes "github.com/singulatron/superplatform/server/internal/services/chat/types"
+	configtypes "github.com/singulatron/superplatform/server/internal/services/config/types"
+	firehosetypes "github.com/singulatron/superplatform/server/internal/services/firehose/types"
+	modeltypes "github.com/singulatron/superplatform/server/internal/services/model/types"
+	prompttypes "github.com/singulatron/superplatform/server/internal/services/prompt/types"
 )
 
 var TimeNow = time.Now

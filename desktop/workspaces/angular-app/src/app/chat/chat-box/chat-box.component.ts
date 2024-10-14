@@ -22,7 +22,7 @@ import {
 } from '@angular/core';
 import { Subscription, filter } from 'rxjs';
 
-import { LocaltronService } from '../../services/localtron.service';
+import { LocaltronService } from '../../services/server.service';
 import { ChatService } from '../../services/chat.service';
 import { PromptService } from '../../services/prompt.service';
 import { PromptSvcPrompt as Prompt } from '@singulatron/client';
@@ -95,7 +95,7 @@ export class ChatBoxComponent implements OnChanges, AfterViewInit, OnDestroy {
 	private mutationObserver!: MutationObserver;
 
 	constructor(
-		private localtron: LocaltronService,
+		private server: LocaltronService,
 		public lapi: ElectronAppService,
 		private cd: ChangeDetectorRef,
 		private promptService: PromptService,
@@ -216,7 +216,7 @@ export class ChatBoxComponent implements OnChanges, AfterViewInit, OnDestroy {
 		}
 
 		await this.promptService.promptAdd({
-			id: this.localtron.id('prom'),
+			id: this.server.id('prom'),
 			prompt: emitted.message,
 			// characterId: emitted.characterId,
 			template: this.promptTemplate,
@@ -260,7 +260,7 @@ export class ChatBoxComponent implements OnChanges, AfterViewInit, OnDestroy {
 				this.assets = rsp.assets!;
 			} else {
 				this.thread = {
-					id: this.localtron.id('thr'),
+					id: this.server.id('thr'),
 				};
 				threadId = this.thread.id as string;
 			}

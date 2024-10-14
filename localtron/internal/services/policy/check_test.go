@@ -7,9 +7,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	clients "github.com/singulatron/singulatron/clients/go"
-	"github.com/singulatron/singulatron/localtron/internal/di"
-	policytypes "github.com/singulatron/singulatron/localtron/internal/services/policy/types"
+	clients "github.com/singulatron/superplatform/clients/go"
+	"github.com/singulatron/superplatform/server/internal/di"
+	policytypes "github.com/singulatron/superplatform/server/internal/services/policy/types"
 )
 
 func TestRateLimiting(t *testing.T) {

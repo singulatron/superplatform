@@ -12,8 +12,8 @@ import (
 	"context"
 	"fmt"
 
-	chattypes "github.com/singulatron/singulatron/localtron/internal/services/chat/types"
-	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	chattypes "github.com/singulatron/superplatform/server/internal/services/chat/types"
+	usertypes "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
 func (p *ChatService) registerPermissions() error {

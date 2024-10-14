@@ -11,7 +11,7 @@ import (
 	"context"
 	"fmt"
 
-	configtypes "github.com/singulatron/singulatron/localtron/internal/services/config/types"
+	configtypes "github.com/singulatron/superplatform/server/internal/services/config/types"
 )
 
 func (ms *ModelService) makeDefault(modelId string) error {

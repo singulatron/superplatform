@@ -11,7 +11,7 @@ import {
 	Component,
 	OnInit,
 } from '@angular/core';
-import { LocaltronService } from '../services/localtron.service';
+import { LocaltronService } from '../services/server.service';
 
 import { ElectronIpcService } from '../services/electron-ipc.service';
 import { WindowApiConst } from 'shared-lib';
@@ -61,7 +61,7 @@ export class ChatComponent implements OnInit {
 	private subscriptions: Subscription[] = [];
 
 	constructor(
-		private localtron: LocaltronService,
+		private server: LocaltronService,
 		private chatService: ChatService,
 		private configService: ConfigService,
 		public promptService: PromptService,
@@ -99,7 +99,7 @@ export class ChatComponent implements OnInit {
 		}
 		if (!this.activeThread) {
 			this.activeThread = {
-				id: this.localtron.id('thr'),
+				id: this.server.id('thr'),
 			};
 		}
 
@@ -156,7 +156,7 @@ export class ChatComponent implements OnInit {
 
 	public async openNewThread() {
 		this.activeThread = {
-			id: this.localtron.id('thr'),
+			id: this.server.id('thr'),
 		};
 		console.debug('Opened empty thread', {
 			threadId: this.activeThread.id,

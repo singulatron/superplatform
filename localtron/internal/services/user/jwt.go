@@ -9,9 +9,9 @@ import (
 	"log"
 
 	"github.com/golang-jwt/jwt/v4"
-	"github.com/singulatron/singulatron/sdk/go"
+	"github.com/singulatron/superplatform/sdk/go"
 
-	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	usertypes "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
 func generateRSAKeys(bits int) (privateKeyPem, publicKeyPem string, err error) {

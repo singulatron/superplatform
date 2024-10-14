@@ -6,7 +6,7 @@
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
 import { Injectable } from '@angular/core';
-import { LocaltronService } from './localtron.service';
+import { LocaltronService } from './server.service';
 import { FirehoseService } from './firehose.service';
 import { ReplaySubject } from 'rxjs';
 import { UserService } from './user.service';
@@ -31,7 +31,7 @@ export class ConfigService {
 	onConfigUpdate$ = this.onConfigUpdateSubject.asObservable();
 
 	constructor(
-		private localtron: LocaltronService,
+		private server: LocaltronService,
 		private userService: UserService,
 		private firehoseService: FirehoseService
 	) {
@@ -39,8 +39,8 @@ export class ConfigService {
 		this.userService.user$.pipe(first()).subscribe(() => {
 			this.configService = new ConfigSvcApi(
 				new Configuration({
-					basePath: this.localtron.addr(),
-					apiKey: this.localtron.token(),
+					basePath: this.server.addr(),
+					apiKey: this.server.token(),
 				})
 			);
 			this.loggedInInit();

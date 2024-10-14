@@ -8,7 +8,7 @@
 package configservice
 
 import (
-	types "github.com/singulatron/singulatron/localtron/internal/services/config/types"
+	types "github.com/singulatron/superplatform/server/internal/services/config/types"
 )
 
 func (cs *ConfigService) getConfig() (types.Config, error) {

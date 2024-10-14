@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"time"
 
-	policy "github.com/singulatron/singulatron/localtron/internal/services/policy/types"
-	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	policy "github.com/singulatron/superplatform/server/internal/services/policy/types"
+	usertypes "github.com/singulatron/superplatform/server/internal/services/user/types"
 	"golang.org/x/time/rate"
 )
 

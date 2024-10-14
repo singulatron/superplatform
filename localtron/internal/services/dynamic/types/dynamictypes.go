@@ -1,7 +1,7 @@
 package dynamic_svc
 
 import (
-	"github.com/singulatron/singulatron/sdk/go/datastore"
+	"github.com/singulatron/superplatform/sdk/go/datastore"
 )
 
 const AnyIdentifier string = "any"

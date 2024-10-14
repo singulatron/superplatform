@@ -13,8 +13,8 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	chattypes "github.com/singulatron/singulatron/localtron/internal/services/chat/types"
-	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	chattypes "github.com/singulatron/superplatform/server/internal/services/chat/types"
+	usertypes "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
 // DeleteThread removes a chat thread

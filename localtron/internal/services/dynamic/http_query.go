@@ -14,9 +14,9 @@ import (
 
 	"github.com/samber/lo"
 
-	dynamic "github.com/singulatron/singulatron/localtron/internal/services/dynamic/types"
-	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
-	sdk "github.com/singulatron/singulatron/sdk/go"
+	sdk "github.com/singulatron/superplatform/sdk/go"
+	dynamic "github.com/singulatron/superplatform/server/internal/services/dynamic/types"
+	usertypes "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
 // Query retrieves objects based on provided criteria

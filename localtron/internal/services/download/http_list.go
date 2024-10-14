@@ -12,8 +12,8 @@ import (
 	"fmt"
 	"net/http"
 
-	download "github.com/singulatron/singulatron/localtron/internal/services/download/types"
-	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	download "github.com/singulatron/superplatform/server/internal/services/download/types"
+	usertypes "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
 // List retrieves a list of download details

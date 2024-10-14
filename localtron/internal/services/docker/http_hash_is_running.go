@@ -13,8 +13,8 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	docker "github.com/singulatron/singulatron/localtron/internal/services/docker/types"
-	usertypes "github.com/singulatron/singulatron/localtron/internal/services/user/types"
+	docker "github.com/singulatron/superplatform/server/internal/services/docker/types"
+	usertypes "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
 // @ID isRunning

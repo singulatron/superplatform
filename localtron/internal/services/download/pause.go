@@ -10,7 +10,7 @@ package downloadservice
 import (
 	"fmt"
 
-	downloadtypes "github.com/singulatron/singulatron/localtron/internal/services/download/types"
+	downloadtypes "github.com/singulatron/superplatform/server/internal/services/download/types"
 )
 
 /*
