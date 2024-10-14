@@ -5,7 +5,7 @@ on:
     paths:
       - "desktop/**"
       - "dapper/**"
-      - "localtron/**"
+      - "server/**"
       - ".github/workflows/desktop-build-github.yaml"
 
 jobs:

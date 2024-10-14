@@ -6,7 +6,7 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Define relevant paths
-LOCALTRON_DIR="$SCRIPT_DIR/../localtron"
+LOCALTRON_DIR="$SCRIPT_DIR/../server"
 DOCS_SOURCE_DIR="$SCRIPT_DIR/../docs-source"
 DOCS_DIR="$SCRIPT_DIR/../docs"
 BUILD_DIR="$DOCS_SOURCE_DIR/build"
@@ -17,7 +17,7 @@ CNAME_FILE="$DOCS_SOURCE_DIR/CNAME"
 # Error handler
 trap 'echo "Error occurred in script at line $LINENO"; exit 1' ERR
 
-# Initialize Swagger in localtron
+# Initialize Swagger in server
 echo "Initializing Swagger in $LOCALTRON_DIR"
 cd "$LOCALTRON_DIR"
 swag init --parseDependency

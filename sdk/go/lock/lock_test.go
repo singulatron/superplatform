@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	pglock "github.com/singulatron/singulatron/sdk/go/lock/pg"
+	pglock "github.com/singulatron/superplatform/sdk/go/lock/pg"
 
 	"github.com/stretchr/testify/require"
 )

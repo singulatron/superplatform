@@ -1,4 +1,4 @@
-module github.com/singulatron/singulatron/clients/go
+module github.com/singulatron/superplatform/clients/go
 
 go 1.21
 

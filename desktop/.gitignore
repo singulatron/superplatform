@@ -105,7 +105,7 @@ docker-latest.tar
 *.zip
 dapper
 dapperfaker
-localtron
+server
 mycert.pfx.base64
 mycert.pfx
 mycert.pass

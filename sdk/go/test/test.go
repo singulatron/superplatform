@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	client "github.com/singulatron/singulatron/clients/go"
-	sdk "github.com/singulatron/singulatron/sdk/go"
-	"github.com/singulatron/singulatron/sdk/go/router"
+	client "github.com/singulatron/superplatform/clients/go"
+	sdk "github.com/singulatron/superplatform/sdk/go"
+	"github.com/singulatron/superplatform/sdk/go/router"
 )
 
 func Client(url string) *client.APIClient {

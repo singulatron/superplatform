@@ -12,7 +12,7 @@ import (
 	"net/http"
 	"runtime/debug"
 
-	"github.com/singulatron/singulatron/sdk/go/logger"
+	"github.com/singulatron/superplatform/sdk/go/logger"
 )
 
 // Panic Recovery Middleware

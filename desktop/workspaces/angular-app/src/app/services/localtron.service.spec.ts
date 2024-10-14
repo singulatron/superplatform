@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { LocaltronService } from './localtron.service';
+import { LocaltronService } from './server.service';
 
 describe('LocaltronService', () => {
 	let service: LocaltronService;

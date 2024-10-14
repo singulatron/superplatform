@@ -6,7 +6,7 @@
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
 import { Injectable } from '@angular/core';
-import { LocaltronService } from './localtron.service';
+import { LocaltronService } from './server.service';
 import {
 	NodeSvcApi,
 	NodeSvcListNodesResponse,
@@ -22,13 +22,13 @@ export class NodeService {
 	private nodeService!: NodeSvcApi;
 
 	constructor(
-		private localtron: LocaltronService,
+		private server: LocaltronService,
 		private userService: UserService
 	) {
 		this.nodeService = new NodeSvcApi(
 			new Configuration({
-				basePath: this.localtron.addr(),
-				apiKey: this.localtron.token(),
+				basePath: this.server.addr(),
+				apiKey: this.server.token(),
 			})
 		);
 

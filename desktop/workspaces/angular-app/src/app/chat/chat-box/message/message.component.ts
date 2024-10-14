@@ -18,7 +18,7 @@ import {
 	ChatSvcAsset as Asset,
 } from '@singulatron/client';
 import { PromptService } from '../../../services/prompt.service';
-import { LocaltronService } from '../../../services/localtron.service';
+import { LocaltronService } from '../../../services/server.service';
 import { MarkdownComponent } from 'ngx-markdown';
 import { IonicModule } from '@ionic/angular';
 import { NgIf, DatePipe, AsyncPipe } from '@angular/common';
@@ -38,7 +38,7 @@ export class MessageComponent {
 		private chatService: ChatService,
 		private promptService: PromptService,
 		public userService: UserService,
-		private localtron: LocaltronService,
+		private server: LocaltronService,
 		public mobile: MobileService
 	) {}
 	hasAsset = false;
@@ -62,7 +62,7 @@ export class MessageComponent {
 		}
 
 		await this.promptService.promptAdd({
-			id: this.localtron.id('msg'),
+			id: this.server.id('msg'),
 			prompt: message.content!,
 			threadId: message.threadId as string,
 			modelId: this.modelId as string,

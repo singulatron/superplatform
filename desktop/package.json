@@ -13,7 +13,7 @@
 		"workspaces/shared-lib"
 	],
 	"scripts": {
-		"pre-scripts": "node pre-scripts.js && shx cp ../dapper/fixture/app.json . && go build -o dapper ../dapper/main.go && go build -o localtron ../localtron/main.go",
+		"pre-scripts": "node pre-scripts.js && shx cp ../dapper/fixture/app.json . && go build -o dapper ../dapper/main.go && go build -o server ../server/main.go",
 		"start": "npm run pre-scripts && npm-run-all -p start:shared-lib start:angular-app start:electron-app",
 		"start:shared-lib": "tsc -b workspaces/shared-lib -w",
 		"start:angular-app": "wait-on workspaces/shared-lib/.dist/index.d.ts && cd workspaces/angular-app && npm run start",

@@ -6,7 +6,7 @@
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
  */
 import { Injectable } from '@angular/core';
-import { LocaltronService } from './localtron.service';
+import { LocaltronService } from './server.service';
 import { Observable, Subject, first } from 'rxjs';
 import { UserService } from './user.service';
 import { catchError } from 'rxjs/operators';
@@ -19,7 +19,7 @@ export class FirehoseService {
 	public firehoseEvent$ = this.firehoseEventSubject.asObservable();
 
 	constructor(
-		private localtron: LocaltronService,
+		private server: LocaltronService,
 		private userService: UserService
 	) {
 		this.userService.user$.pipe(first()).subscribe(() => {
@@ -43,7 +43,7 @@ export class FirehoseService {
 				console.info('Subscribing to the firehose');
 
 				const uri =
-					this.localtron.config.env.localtronAddress +
+					this.server.config.env.serverAddress +
 					'/firehose-svc/events/subscribe';
 
 				const headers = {

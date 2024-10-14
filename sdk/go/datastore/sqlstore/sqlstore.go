@@ -21,8 +21,8 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/lib/pq"
 	_ "github.com/lib/pq"
-	"github.com/singulatron/singulatron/sdk/go/datastore"
-	"github.com/singulatron/singulatron/sdk/go/logger"
+	"github.com/singulatron/superplatform/sdk/go/datastore"
+	"github.com/singulatron/superplatform/sdk/go/logger"
 
 	"github.com/pkg/errors"
 )

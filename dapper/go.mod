@@ -1,4 +1,4 @@
-module github.com/singulatron/singulatron/dapper
+module github.com/singulatron/superplatform/dapper
 
 go 1.21
 

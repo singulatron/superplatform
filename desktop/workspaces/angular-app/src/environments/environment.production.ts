@@ -7,5 +7,5 @@ export const environment = {
 	 * can supply their own servers.
 	 */
 	backendAddress: 'https://api.commonagi.com',
-	localtronAddress: 'http://127.0.0.1:58231',
+	serverAddress: 'http://127.0.0.1:58231',
 };

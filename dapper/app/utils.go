@@ -11,7 +11,7 @@ import (
 	"fmt"
 	"strings"
 
-	dt "github.com/singulatron/singulatron/dapper/types"
+	dt "github.com/singulatron/superplatform/dapper/types"
 )
 
 func (cm ConfigurationManager) flatDefinitionsOfInvokedFunctions(featureInvocations []any) ([]dt.Feature, error) {

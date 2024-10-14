@@ -27,7 +27,7 @@ export class OSManager {
 			this.initializeEnvironment();
 		});
 
-		// @todo fix path, config service is now in localtron
+		// @todo fix path, config service is now in server
 		this.logFilePath = path.join(os.homedir(), 'singulatron_install.log');
 
 		this.initLogFile();

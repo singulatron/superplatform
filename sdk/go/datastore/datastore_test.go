@@ -14,9 +14,9 @@ import (
 	"testing"
 
 	"github.com/google/uuid"
-	"github.com/singulatron/singulatron/sdk/go/datastore"
-	localstore "github.com/singulatron/singulatron/sdk/go/datastore/localstore"
-	"github.com/singulatron/singulatron/sdk/go/datastore/sqlstore"
+	"github.com/singulatron/superplatform/sdk/go/datastore"
+	localstore "github.com/singulatron/superplatform/sdk/go/datastore/localstore"
+	"github.com/singulatron/superplatform/sdk/go/datastore/sqlstore"
 	"github.com/stretchr/testify/require"
 )
 

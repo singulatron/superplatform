@@ -30,7 +30,7 @@ const config: Config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            "https://github.com/singulatron/singulatron/tree/main/docs-source/",
+            "https://github.com/singulatron/superplatform/tree/main/docs-source/",
           docItemComponent: "@theme/ApiItem", // Derived from docusaurus-theme-openapi
         },
         blog: {
@@ -38,7 +38,7 @@ const config: Config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            "https://github.com/singulatron/singulatron/tree/main/docs-source/",
+            "https://github.com/singulatron/superplatform/tree/main/docs-source/",
         },
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
@@ -93,7 +93,7 @@ const config: Config = {
           to: "/docs/category/singulatron-api",
         },
         {
-          href: "https://github.com/singulatron/singulatron",
+          href: "https://github.com/singulatron/superplatform",
           label: "GitHub",
           position: "right",
         },
@@ -133,7 +133,7 @@ const config: Config = {
           items: [
             {
               label: "GitHub",
-              href: "https://github.com/singulatron/singulatron",
+              href: "https://github.com/singulatron/superplatform",
             },
           ],
         },
@@ -214,7 +214,7 @@ const config: Config = {
             specPath: "examples/singulatron.yaml",
             outputDir: "docs/singulatron",
             downloadUrl:
-              "https://raw.githubusercontent.com/singulatron/singulatron/main/localtron/docs/swagger.yaml",
+              "https://raw.githubusercontent.com/singulatron/superplatform/main/server/docs/swagger.yaml",
             sidebarOptions: {
               groupPathsBy: "tag",
               categoryLinkSource: "tag",

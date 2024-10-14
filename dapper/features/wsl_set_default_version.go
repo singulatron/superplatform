@@ -7,7 +7,7 @@
  */
 package features
 
-import dt "github.com/singulatron/singulatron/dapper/types"
+import dt "github.com/singulatron/superplatform/dapper/types"
 
 // @todo this became redundant, WslUpdated is a superset of this
 // nothing uses this anymore, can remove?

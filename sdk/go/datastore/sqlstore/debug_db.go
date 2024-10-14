@@ -12,7 +12,7 @@ import (
 	"fmt"
 
 	"github.com/davecgh/go-spew/spew"
-	"github.com/singulatron/singulatron/sdk/go/logger"
+	"github.com/singulatron/superplatform/sdk/go/logger"
 )
 
 type DebugDB struct {

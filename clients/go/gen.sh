@@ -4,7 +4,7 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-LOCALTRON_DIR="$SCRIPT_DIR/../../localtron"
+LOCALTRON_DIR="$SCRIPT_DIR/../../server"
 
 cd "$LOCALTRON_DIR"
 swag init --parseDependency

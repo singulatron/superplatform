@@ -28,7 +28,7 @@ export function selectFolderRequest(): (
 					let data = {
 						location: result.filePaths[0],
 					};
-					// sender will receive this and save the selected folder to localtron
+					// sender will receive this and save the selected folder to server
 					event?.sender.send(WindowApiConst.ON_FOLDER_SELECT, data);
 				}
 			});

@@ -4,7 +4,7 @@ on:
   push:
     paths:
       - "dapper/**"
-      - "localtron/**"
+      - "server/**"
       - ".github/workflows/backend-build-github.yaml"
 
 jobs:
@@ -22,7 +22,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd localtron
+          cd server
           go mod tidy
 
       - name: Run tests
@@ -44,7 +44,7 @@ jobs:
             SINGULATRON_DB_DEBUG=true \
             SINGULATRON_DB_SQL_CONNECTION_STRING="postgres://postgres:mysecretpassword@localhost:5432/mydatabase?sslmode=disable" \
             go test ./... -tags=dist
-        working-directory: localtron
+        working-directory: server
 
       - name: Test OpenAPI annotations
         run: |
@@ -52,4 +52,4 @@ jobs:
           npm install @openapitools/openapi-generator-cli -g
           swag init --parseDependency
           openapi-generator-cli generate -i docs/swagger.yaml -g typescript-fetch -o ./genn
-        working-directory: localtron
+        working-directory: server

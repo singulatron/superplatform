@@ -26,7 +26,7 @@ declare global {
 }
 
 const PORT = 59517;
-let localtronProcess: cp.ChildProcessWithoutNullStreams;
+let serverProcess: cp.ChildProcessWithoutNullStreams;
 
 installWindows();
 launchFrontendServer();
@@ -224,8 +224,8 @@ function installWindows() {
 
 process.on('SIGTERM', () => {
 	console.log('SIGTERM signal received: closing Localron');
-	if (localtronProcess) {
-		localtronProcess.kill();
+	if (serverProcess) {
+		serverProcess.kill();
 	}
 });
 
@@ -234,20 +234,20 @@ function launchLocaltron() {
 
 	app.on('before-quit', (event) => {
 		console.log('Application is quitting - closing Localtron');
-		if (localtronProcess) {
-			localtronProcess.kill();
+		if (serverProcess) {
+			serverProcess.kill();
 			console.log('Localtron closed');
 		}
 	});
 
 	process.on('SIGINT', () => {
 		console.log('SIGINT signal received: closing Localtron');
-		if (localtronProcess) {
-			localtronProcess.kill();
+		if (serverProcess) {
+			serverProcess.kill();
 		}
 	});
 
-	let exeName = 'localtron';
+	let exeName = 'server';
 	if (process.platform == 'win32') {
 		exeName += '.exe';
 	}
@@ -266,7 +266,7 @@ function launchLocaltron() {
 			detached: false,
 			stdio: ['pipe', 'pipe', 'pipe'],
 		});
-		localtronProcess = child;
+		serverProcess = child;
 
 		child.stdout.on('data', (data) => {
 			consoleLogLocaltron(data?.toString()?.replace(/\n+$/, ''));
@@ -292,7 +292,7 @@ function launchLocaltron() {
 			});
 		});
 	} catch (err) {
-		console.error('Error spawning localtron', {
+		console.error('Error spawning server', {
 			error: JSON.stringify(err),
 		});
 		throw `Error spawning Localtron: ${err}`;
@@ -305,7 +305,7 @@ function splitStringByNewline(inputString: string) {
 
 function consoleLogLocaltron(jsonMessages: string) {
 	// this split is needed because sometimes two or more logs
-	// are coming back from localtron, like this:
+	// are coming back from server, like this:
 	// {one json}\n{another json}
 	// this happens when they are logged at exactly the same time
 	const lines = splitStringByNewline(jsonMessages);
@@ -325,7 +325,7 @@ function consoleLogLocaltron(jsonMessages: string) {
 			fields: {},
 			time: msg.time as string,
 			message: msg.msg as string,
-			source: 'localtron',
+			source: 'server',
 		};
 
 		for (let k in msg) {

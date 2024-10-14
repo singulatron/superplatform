@@ -13,8 +13,8 @@ import (
 	"path"
 	"runtime"
 
-	features "github.com/singulatron/singulatron/dapper/features"
-	dt "github.com/singulatron/singulatron/dapper/types"
+	features "github.com/singulatron/superplatform/dapper/features"
+	dt "github.com/singulatron/superplatform/dapper/types"
 )
 
 // ConfigurationManager manages configurations and feature dependencies.

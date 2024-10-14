@@ -23,7 +23,7 @@ services:
   singulatron-backend:
     build:
       context: .
-      dockerfile: ./localtron/docker/Dockerfile
+      dockerfile: ./server/docker/Dockerfile
     ports:
       - "58231:58231"
     volumes:

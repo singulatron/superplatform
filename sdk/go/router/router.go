@@ -11,7 +11,7 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/singulatron/singulatron/sdk/go/datastore"
+	"github.com/singulatron/superplatform/sdk/go/datastore"
 )
 
 var port = "58231"

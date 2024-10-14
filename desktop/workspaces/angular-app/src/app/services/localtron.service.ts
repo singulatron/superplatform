@@ -18,7 +18,7 @@ export interface Environment {
 	shortBrandName: string;
 	backendAddress: string;
 	localPromptAddress: string;
-	localtronAddress: string;
+	serverAddress: string;
 }
 
 export interface LocaltronServiceConfig {
@@ -45,7 +45,7 @@ export class LocaltronService {
 	}
 
 	addr(): string {
-		return this.config.env.localtronAddress;
+		return this.config.env.serverAddress;
 	}
 
 	id(prefix: string): string {

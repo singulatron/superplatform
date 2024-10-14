@@ -20,18 +20,18 @@ class SingulatronAfterEmitPlugin {
 			async (compilation) => {
 				const outputPath = compilation.outputOptions.path;
 
-				fs.chmodSync(path.join(outputPath, '..', 'localtron'), 0o755);
+				fs.chmodSync(path.join(outputPath, '..', 'server'), 0o755);
 				fs.chmodSync(path.join(outputPath, '..', 'dapper'), 0o755);
 
 				// Rename for Windows
 				if (os.platform() === 'win32') {
-					let localtronOriginal = path.join(outputPath, '..', 'localtron');
-					let localtronFinal = path.join(outputPath, '..', 'localtron.exe');
+					let serverOriginal = path.join(outputPath, '..', 'server');
+					let serverFinal = path.join(outputPath, '..', 'server.exe');
 					let dapperOriginal = path.join(outputPath, '..', 'dapper');
 					let dapperFinal = path.join(outputPath, '..', 'dapper.exe');
 
 					try {
-						fs.renameSync(localtronOriginal, localtronFinal);
+						fs.renameSync(serverOriginal, serverFinal);
 						fs.renameSync(dapperOriginal, dapperFinal);
 					} catch (err) {
 						console.log('Failed to rename', err);
@@ -46,14 +46,14 @@ class SingulatronAfterEmitPlugin {
 
 					if (os.platform() === 'win32') {
 						child_process.execSync(
-							`signtool sign /fd sha256 /f "${path.join(__dirname, 'mycert.pfx')}" /p ${password} "${path.join(outputPath, '..', 'localtron.exe')}"`
+							`signtool sign /fd sha256 /f "${path.join(__dirname, 'mycert.pfx')}" /p ${password} "${path.join(outputPath, '..', 'server.exe')}"`
 						);
 						child_process.execSync(
 							`signtool sign /fd sha256 /f "${path.join(__dirname, 'mycert.pfx')}" /p ${password} "${path.join(outputPath, '..', 'dapper.exe')}"`
 						);
 					} else if (os.platform() === 'darwin') {
 						child_process.execSync(
-							`codesign --sign "Developer ID Application: Your Developer ID" --keychain /path/to/keychain "${path.join(outputPath, '..', 'localtron')}"`
+							`codesign --sign "Developer ID Application: Your Developer ID" --keychain /path/to/keychain "${path.join(outputPath, '..', 'server')}"`
 						);
 						child_process.execSync(
 							`codesign --sign "Developer ID Application: Your Developer ID" --keychain /path/to/keychain "${path.join(outputPath, '..', 'dapper')}"`
@@ -104,7 +104,7 @@ module.exports = {
 					to: '../',
 				},
 				{
-					from: 'localtron',
+					from: 'server',
 					to: '../',
 				},
 			],

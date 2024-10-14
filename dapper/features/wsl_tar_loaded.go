@@ -7,7 +7,7 @@
  */
 package features
 
-import dt "github.com/singulatron/singulatron/dapper/types"
+import dt "github.com/singulatron/superplatform/dapper/types"
 
 var WSLTarLoaded = dt.Feature{
 	ID:   "wsl-tar-loaded",
