@@ -3,7 +3,7 @@ import { UserSvcContactFromJSON, UserSvcContactToJSON } from './UserSvcContact.m
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Singulatron
+ * Superplatform
  * AI management and development platform.
  *
  * The version of the OpenAPI document: 0.2

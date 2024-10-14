@@ -2,7 +2,7 @@
     "swagger": "2.0",
     "info": {
         "description": "AI management and development platform.",
-        "title": "Singulatron",
+        "title": "Superplatform",
         "termsOfService": "http://swagger.io/terms/",
         "contact": {
             "name": "API Support",
@@ -5669,7 +5669,7 @@
         }
     },
     "externalDocs": {
-        "description": "Singulatron API",
+        "description": "Superplatform API",
         "url": "https://superplatform.ai/docs/category/singulatron-api"
     }
 }

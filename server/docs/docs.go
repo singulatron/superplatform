@@ -5675,7 +5675,7 @@ const docTemplate = `{
         }
     },
     "externalDocs": {
-        "description": "Singulatron API",
+        "description": "Superplatform API",
         "url": "https://superplatform.ai/docs/category/singulatron-api"
     }
 }`
@@ -5686,7 +5686,7 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "localhost:58231",
 	BasePath:         "/",
 	Schemes:          []string{},
-	Title:            "Singulatron",
+	Title:            "Superplatform",
 	Description:      "AI management and development platform.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,

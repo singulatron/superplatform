@@ -1494,7 +1494,7 @@ definitions:
         type: string
     type: object
 externalDocs:
-  description: Singulatron API
+  description: Superplatform API
   url: https://superplatform.ai/docs/category/singulatron-api
 host: localhost:58231
 info:
@@ -1507,7 +1507,7 @@ info:
     name: AGPL v3.0
     url: https://www.gnu.org/licenses/agpl-3.0.html
   termsOfService: http://swagger.io/terms/
-  title: Singulatron
+  title: Superplatform
   version: "0.2"
 paths:
   /chat-svc/events:

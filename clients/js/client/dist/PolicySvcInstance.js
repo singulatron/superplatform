@@ -9,7 +9,7 @@ require('./PolicySvcEntity.js');
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Singulatron
+ * Superplatform
  * AI management and development platform.
  *
  * The version of the OpenAPI document: 0.2
