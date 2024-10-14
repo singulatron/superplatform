@@ -54063,7 +54063,7 @@ Object.defineProperty(request, 'debug', {
 var localVarRequest = /*@__PURE__*/getDefaultExportFromCjs(request_1);
 
 /**
- * Singulatron
+ * Superplatform
  * AI management and development platform.
  *
  * The version of the OpenAPI document: 0.2
@@ -54731,7 +54731,7 @@ class ChatSvcApi {
 }
 
 /**
- * Singulatron
+ * Superplatform
  * AI management and development platform.
  *
  * The version of the OpenAPI document: 0.2
@@ -54925,7 +54925,7 @@ class ConfigSvcApi {
 }
 
 /**
- * Singulatron
+ * Superplatform
  * AI management and development platform.
  *
  * The version of the OpenAPI document: 0.2
@@ -55320,7 +55320,7 @@ class DockerSvcApi {
 }
 
 /**
- * Singulatron
+ * Superplatform
  * AI management and development platform.
  *
  * The version of the OpenAPI document: 0.2
@@ -55648,7 +55648,7 @@ class DownloadSvcApi {
 }
 
 /**
- * Singulatron
+ * Superplatform
  * AI management and development platform.
  *
  * The version of the OpenAPI document: 0.2
@@ -56051,7 +56051,7 @@ class DynamicSvcApi {
 }
 
 /**
- * Singulatron
+ * Superplatform
  * AI management and development platform.
  *
  * The version of the OpenAPI document: 0.2
@@ -56244,7 +56244,7 @@ class FirehoseSvcApi {
 }
 
 /**
- * Singulatron
+ * Superplatform
  * AI management and development platform.
  *
  * The version of the OpenAPI document: 0.2
@@ -56761,7 +56761,7 @@ class ModelSvcApi {
 }
 
 /**
- * Singulatron
+ * Superplatform
  * AI management and development platform.
  *
  * The version of the OpenAPI document: 0.2
@@ -56967,7 +56967,7 @@ class PolicySvcApi {
 }
 
 /**
- * Singulatron
+ * Superplatform
  * AI management and development platform.
  *
  * The version of the OpenAPI document: 0.2
@@ -57297,7 +57297,7 @@ class PromptSvcApi {
 }
 
 /**
- * Singulatron
+ * Superplatform
  * AI management and development platform.
  *
  * The version of the OpenAPI document: 0.2
@@ -57640,7 +57640,7 @@ class RegistrySvcApi {
 }
 
 /**
- * Singulatron
+ * Superplatform
  * AI management and development platform.
  *
  * The version of the OpenAPI document: 0.2

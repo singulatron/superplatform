@@ -1,5 +1,5 @@
 /*
-Singulatron
+Superplatform
 
 AI management and development platform.
 

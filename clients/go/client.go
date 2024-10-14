@@ -1,5 +1,5 @@
 /*
-Singulatron
+Superplatform
 
 AI management and development platform.
 
@@ -42,7 +42,7 @@ var (
 	queryDescape    = strings.NewReplacer( "%5B", "[", "%5D", "]" )
 )
 
-// APIClient manages communication with the Singulatron API v0.2
+// APIClient manages communication with the Superplatform API v0.2
 // In most cases there should be only one, shared, APIClient.
 type APIClient struct {
 	cfg    *Configuration

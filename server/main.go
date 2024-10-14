@@ -23,7 +23,7 @@ import (
 
 var port = router.GetPort()
 
-// @title           Singulatron
+// @title           Superplatform
 // @version         0.2
 // @description     AI management and development platform.
 // @termsOfService  http://swagger.io/terms/
@@ -43,7 +43,7 @@ var port = router.GetPort()
 // @name Authorization
 // @description Type "Bearer" followed by a space and token acquired from the User sService Login endpoint.
 
-// @externalDocs.description  Singulatron API
+// @externalDocs.description  Superplatform API
 // @externalDocs.url          https://superplatform.ai/docs/category/singulatron-api
 func main() {
 	router, starter, err := node.Start(node_types.Options{})

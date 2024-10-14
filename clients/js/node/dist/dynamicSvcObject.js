@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Singulatron
+ * Superplatform
  * AI management and development platform.
  *
  * The version of the OpenAPI document: 0.2
