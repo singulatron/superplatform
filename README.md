@@ -15,7 +15,7 @@
 ![backend build](https://github.com/singulatron/superplatform/actions/workflows/backend-build-github.yaml/badge.svg)
 ![frontend build](https://github.com/singulatron/superplatform/actions/workflows/frontend-container-build-github.yaml/badge.svg)
 
-Singulatron enables you to self-host AI models, build apps that leverage those models in any language, and utilize a microservices-based communal backend designed to support a diverse range of projects.
+Superplatform enables you to self-host AI models, build apps that leverage those models in any language, and utilize a microservices-based communal backend designed to support a diverse range of projects.
 
 ## Primary Use Cases
 
@@ -25,15 +25,15 @@ Run open-source AI models privately on your own infrastructure, ensuring that yo
 
 ### Quickly Build Backendless AI Apps [x]
 
-Build backendless application by using Singulatron as a database and AI prompting API. Like Firebase, but with a focus on AI.
+Build backendless application by using Superplatform as a database and AI prompting API. Like Firebase, but with a focus on AI.
 
 ### Develop Microservices-Based AI Applications [ ]
 
-Build your own backend services around Singulatron, which itself is built on a microservices architecture. Run these services outside or inside the Singulatron platform.
+Build your own backend services around Superplatform, which itself is built on a microservices architecture. Run these services outside or inside the Superplatform platform.
 
 ### Deploy Third-Party AI Apps Easily [ ]
 
-Singulatron is designed to make deploying third-party AI applications straightforward. With its focus on virtualization and containers (primarily Docker) and a microservices, API-first approach (using OpenAPI), Singulatron seamlessly integrates other applications into its ecosystem.
+Superplatform is designed to make deploying third-party AI applications straightforward. With its focus on virtualization and containers (primarily Docker) and a microservices, API-first approach (using OpenAPI), Superplatform seamlessly integrates other applications into its ecosystem.
 
 <p align="center">
   <a href="https://singulatron.com/assets/chat.png?refresh=3" target="_blank">
@@ -80,7 +80,7 @@ Get information about your nodes and GPUs like temperature, VRAM usage etc.
 
 ### Dynamic svc
 
-A dynamically typed (schema-free) datastore service that lets you piggyback on Singulatron's database. Lets you build backendless applications on top of Singulatorn. Think Firebase but for AI.
+A dynamically typed (schema-free) datastore service that lets you piggyback on Superplatform's database. Lets you build backendless applications on top of Singulatorn. Think Firebase but for AI.
 
 ## Run On Your Laptop/PC
 
@@ -92,7 +92,7 @@ It is an Electron application, with Angular on the frontend and Go on the backen
 
 ## License
 
-Singulatron is licensed under AGPL-3.0.
+Superplatform is licensed under AGPL-3.0.
 
 ## Status
 
