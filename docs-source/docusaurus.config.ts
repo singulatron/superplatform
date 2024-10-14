@@ -7,9 +7,9 @@ import type * as Plugin from "@docusaurus/types/src/plugin";
 import type * as OpenApiPlugin from "docusaurus-plugin-openapi-docs";
 
 const config: Config = {
-  title: "Singulatron",
+  title: "Superplatform",
   tagline:
-    "AI management and development platform. Self-host AI models and build apps with them.",
+    "A microservices platform focused on distributed AI management and development.",
   url: "https://superplatform.ai",
   baseUrl: "/",
   onBrokenLinks: "throw",
@@ -19,7 +19,7 @@ const config: Config = {
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: "singulatron", // Usually your GitHub org/user name.
-  projectName: "singulatron", // Usually your repo name.
+  projectName: "superplatform", // Usually your repo name.
 
   presets: [
     [
@@ -61,18 +61,18 @@ const config: Config = {
       },
       {
         name: "title",
-        content: "Singulatron Documentation",
+        content: "Superplatform Documentation",
       },
       {
         name: "description",
-        content: "Singulatron API, Tutorials, Snippets and more",
+        content: "Superplatform API, Tutorials, Snippets and more",
       },
       { name: "twitter:card", content: "summary_large_image" },
     ],
     navbar: {
-      title: "Singulatron",
+      title: "Superplatform",
       logo: {
-        alt: "Singulatron Logo",
+        alt: "Superplatform Logo",
         src: "img/logo_circled_grey.svg",
       },
       items: [
@@ -90,7 +90,7 @@ const config: Config = {
         {
           label: "API",
           position: "left",
-          to: "/docs/category/singulatron-api",
+          to: "/docs/category/superplatform-api",
         },
         {
           href: "https://github.com/singulatron/superplatform",
@@ -210,9 +210,9 @@ const config: Config = {
         id: "openapi",
         docsPluginId: "classic",
         config: {
-          singulatron: {
-            specPath: "examples/singulatron.yaml",
-            outputDir: "docs/singulatron",
+          superplatform: {
+            specPath: "examples/superplatform.yaml",
+            outputDir: "docs/superplatform",
             downloadUrl:
               "https://raw.githubusercontent.com/singulatron/superplatform/main/server/docs/swagger.yaml",
             sidebarOptions: {

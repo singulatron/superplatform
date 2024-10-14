@@ -11,7 +11,7 @@ tags:
 
 The prompt service provides an easy to use interface to prompt LLMs and use AI models. Aims to serve humans and machines alike with its resilient queue based architecture.
 
-> This page is a high level overview of the `Prompt Svc`. For more details, please see the [Prompt Svc API documentation](/docs/singulatron/upsert-instance).
+> This page is a high level overview of the `Prompt Svc`. For more details, please see the [Prompt Svc API documentation](/docs/superplatform/upsert-instance).
 
 ## Responsibilities
 
@@ -23,7 +23,7 @@ The prompt service:
 - Streams prompt answers
 - Handles retries of prompts that errored with an exponential backoff
 
-It's able to stream back LLM responses, or it can respond syncronously if that's what the caller wants, for details see the [Add Prompt (`/prompt-svc/prompt`) Endpoint](/docs/singulatron/add-prompt).
+It's able to stream back LLM responses, or it can respond syncronously if that's what the caller wants, for details see the [Add Prompt (`/prompt-svc/prompt`) Endpoint](/docs/superplatform/add-prompt).
 
 ## Dependencies
 

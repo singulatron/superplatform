@@ -11,7 +11,7 @@ tags:
 
 The docker service maintains AI model containers on a node. It expects the docker socket to be mounted.
 
-> This page is a high level overview of the `Docker Svc`. For more details, please see the [Docker Svc API documentation](/docs/singulatron/launch-container).
+> This page is a high level overview of the `Docker Svc`. For more details, please see the [Docker Svc API documentation](/docs/superplatform/launch-container).
 
 ## Responsibilities
 

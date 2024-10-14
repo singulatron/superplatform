@@ -24,13 +24,13 @@ swag init --parseDependency
 
 # Copy Swagger file to docs-source examples
 echo "Copying Swagger file to $EXAMPLES_DIR"
-cp "$SWAGGER_FILE" "$EXAMPLES_DIR/singulatron.yaml"
+cp "$SWAGGER_FILE" "$EXAMPLES_DIR/superplatform.yaml"
 
 # Clean and generate API documentation
 echo "Cleaning and generating API documentation"
 cd "$DOCS_SOURCE_DIR"
-yarn clean-api-docs singulatron
-yarn gen-api-docs singulatron
+yarn clean-api-docs superplatform
+yarn gen-api-docs superplatform
 
 # Build the project
 echo "Building the project"

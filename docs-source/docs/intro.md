@@ -4,11 +4,11 @@ tags:
   - intro
 ---
 
-# Welcome to Singulatron
+# Welcome to Superplatform
 
 ## What is it?
 
-Singulatron enables you to self-host AI models, build apps that leverage those models in any language, and utilize a microservices-based communal backend designed to support a diverse range of projects.
+Superplatform enables you to self-host AI models, build apps that leverage those models in any language, and utilize a microservices-based communal backend designed to support a diverse range of projects.
 
 ## It lets you:
 
@@ -18,19 +18,19 @@ Run open-source AI models privately on your own infrastructure, ensuring that yo
 
 ### Quickly Build Backendless AI Apps [x]
 
-Build backendless application by using Singulatron as a database and AI prompting API.
+Build backendless application by using Superplatform as a database and AI prompting API.
 
 ### Develop Microservices-Based AI Applications [ ]
 
-Singulatron itself is built on a microservices architecture. The platform's built-in services communicate with each other through the same APIs that you'll use to build apps on top of Singulatron.
+Superplatform itself is built on a microservices architecture. The platform's built-in services communicate with each other through the same APIs that you'll use to build apps on top of Superplatform.
 
 ### Deploy Third-Party AI Apps Easily [ ]
 
-Singulatron is designed to make deploying third-party AI applications straightforward. With its focus on virtualization and containers (primarily Docker) and a microservices, API-first approach (using OpenAPI), Singulatron seamlessly integrates other applications into its ecosystem.
+Superplatform is designed to make deploying third-party AI applications straightforward. With its focus on virtualization and containers (primarily Docker) and a microservices, API-first approach (using OpenAPI), Superplatform seamlessly integrates other applications into its ecosystem.
 
 ## Running
 
-To run Singulatron on your servers, or even to lauch on your own laptop, see [Start](./category/running/).
+To run Superplatform on your servers, or even to lauch on your own laptop, see [Start](./category/running/).
 
 ## Privacy Notice
 
