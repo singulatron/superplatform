@@ -75,9 +75,9 @@ func LockTryAcquire(t *testing.T, lock, lock2 DistributedLock) {
 	require.True(t, success, "should acquire the lock successfully")
 
 	// second try
-	//success, err = lock.TryAcquire(ctx, key)
-	//require.NoError(t, err, "should try acquire the lock without error")
-	//require.True(t, success, "should acquire the lock successfully")
+	success, err = lock.TryAcquire(ctx, key)
+	require.NoError(t, err, "should try acquire the lock without error")
+	require.True(t, success, "should acquire the lock successfully")
 
 	success, err = lock2.TryAcquire(ctx, key)
 	require.NoError(t, err, "should try acquire the lock without error")
@@ -94,6 +94,7 @@ func LockContention(t *testing.T, lock, lock2 DistributedLock) {
 	err := lock.Acquire(ctx, key)
 	require.NoError(t, err, "should acquire the lock without error")
 
+	// this blocks here but not in the goroutine below?
 	//err = lock.Acquire(ctx, key)
 	//require.NoError(t, err, "should acquire the lock without error second time too")
 
