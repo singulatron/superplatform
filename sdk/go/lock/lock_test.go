@@ -13,17 +13,27 @@ import (
 )
 
 func TestLocks(t *testing.T) {
-	lockStores := map[string]func(instance any) DistributedLock{
-		"pgLock": func(instance any) DistributedLock {
+	lockStores := map[string]func(instance any) (DistributedLock, DistributedLock){
+		"pgLock": func(instance any) (DistributedLock, DistributedLock) {
 			// Use the same PostgreSQL connection string as in your existing tests
 			db, err := sql.Open("postgres", "postgres://postgres:mysecretpassword@localhost:5432/mydatabase?sslmode=disable")
 			require.NoError(t, err)
-			lockService := pglock.NewPGDistributedLock(db)
-			return lockService
+			conn, err := db.Conn(context.Background())
+			require.NoError(t, err)
+
+			db2, err := sql.Open("postgres", "postgres://postgres:mysecretpassword@localhost:5432/mydatabase?sslmode=disable")
+			require.NoError(t, err)
+			conn2, err := db2.Conn(context.Background())
+			require.NoError(t, err)
+
+			lockService := pglock.NewPGDistributedLock(conn)
+			lockService2 := pglock.NewPGDistributedLock(conn2)
+
+			return lockService, lockService2
 		},
 	}
 
-	tests := map[string]func(t *testing.T, lock DistributedLock){
+	tests := map[string]func(t *testing.T, lock, lock2 DistributedLock){
 		"AcquireRelease": LockAcquireRelease,
 		"TryAcquire":     LockTryAcquire,
 		"LockContention": LockContention,
@@ -32,68 +42,67 @@ func TestLocks(t *testing.T) {
 	for testName, test := range tests {
 		for storeName, storeFunc := range lockStores {
 			t.Run(fmt.Sprintf("%v %v", storeName, testName), func(t *testing.T) {
-				lock := storeFunc(nil)
-				test(t, lock)
+				lock, lock2 := storeFunc(nil)
+				test(t, lock, lock2)
 			})
 		}
 	}
 }
 
-// LockAcquireRelease tests acquiring and releasing a lock
-func LockAcquireRelease(t *testing.T, lock DistributedLock) {
+func LockAcquireRelease(t *testing.T, lock, lock2 DistributedLock) {
 	ctx := context.Background()
 	key := "test_lock_acquire_release"
 
-	// Acquire the lock
 	err := lock.Acquire(ctx, key)
 	require.NoError(t, err, "should acquire the lock without error")
 
-	// Release the lock
+	held := lock.IsHeld(key)
+	require.True(t, held, "lock should be held after acquire")
+
 	err = lock.Release(ctx, key)
 	require.NoError(t, err, "should release the lock without error")
 
-	// Ensure IsHeld returns false after release
-	held := lock.IsHeld(key)
+	held = lock.IsHeld(key)
 	require.False(t, held, "lock should not be held after release")
 }
 
-// LockTryAcquire tests non-blocking lock acquisition
-func LockTryAcquire(t *testing.T, lock DistributedLock) {
+func LockTryAcquire(t *testing.T, lock, lock2 DistributedLock) {
 	ctx := context.Background()
 	key := "test_lock_try_acquire"
 
-	// Try acquiring the lock, should succeed
 	success, err := lock.TryAcquire(ctx, key)
 	require.NoError(t, err, "should try acquire the lock without error")
 	require.True(t, success, "should acquire the lock successfully")
 
-	// Try acquiring the lock again, should fail
-	success, err = lock.TryAcquire(ctx, key)
+	// second try
+	//success, err = lock.TryAcquire(ctx, key)
+	//require.NoError(t, err, "should try acquire the lock without error")
+	//require.True(t, success, "should acquire the lock successfully")
+
+	success, err = lock2.TryAcquire(ctx, key)
 	require.NoError(t, err, "should try acquire the lock without error")
 	require.False(t, success, "should not acquire the lock a second time")
 
-	// Release the lock
 	err = lock.Release(ctx, key)
 	require.NoError(t, err, "should release the lock without error")
 }
 
-// TestLockContention tests contention between two "clients" trying to acquire the same lock
-func LockContention(t *testing.T, lock DistributedLock) {
+func LockContention(t *testing.T, lock, lock2 DistributedLock) {
 	ctx := context.Background()
 	key := "test_lock_contention"
 
-	// First acquire the lock
 	err := lock.Acquire(ctx, key)
 	require.NoError(t, err, "should acquire the lock without error")
 
-	// Spin up a goroutine to try acquiring the same lock (this should block)
+	//err = lock.Acquire(ctx, key)
+	//require.NoError(t, err, "should acquire the lock without error second time too")
+
 	acquireResult := make(chan error, 1)
 	go func() {
-		err := lock.Acquire(ctx, key)
+		err := lock2.Acquire(ctx, key)
 		acquireResult <- err
 	}()
 
-	// Ensure that the goroutine is blocked (it shouldn't be able to acquire the lock)
 	select {
 	case <-acquireResult:
 		t.Fatal("lock acquisition should be blocked by the first acquisition")
@@ -101,11 +110,9 @@ func LockContention(t *testing.T, lock DistributedLock) {
 		// No response, as expected
 	}
 
-	// Release the lock and allow the goroutine to acquire it
 	err = lock.Release(ctx, key)
 	require.NoError(t, err, "should release the lock without error")
 
-	// The goroutine should now be able to acquire the lock
 	err = <-acquireResult
 	require.NoError(t, err, "second acquisition should succeed after release")
 }
