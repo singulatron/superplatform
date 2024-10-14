@@ -73,7 +73,7 @@ func TestStart(t *testing.T) {
 
 	c := 0
 	for {
-		time.Sleep(1 * time.Second)
+		time.Sleep(100 * time.Millisecond)
 		c++
 
 		adminClient, _, err := test.AdminClient(server1.URL)
