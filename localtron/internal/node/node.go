@@ -8,16 +8,20 @@
 package node
 
 import (
+	"context"
+	"database/sql"
 	"fmt"
 	"log/slog"
 	"os"
 	"runtime/debug"
 
 	"github.com/gorilla/mux"
+	"github.com/pkg/errors"
 	"github.com/singulatron/singulatron/localtron/internal/di"
 	node_types "github.com/singulatron/singulatron/localtron/internal/node/types"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
 	"github.com/singulatron/singulatron/sdk/go/datastore/sqlstore"
+	pglock "github.com/singulatron/singulatron/sdk/go/lock/pg"
 	"github.com/singulatron/singulatron/sdk/go/logger"
 
 	_ "github.com/singulatron/singulatron/localtron/docs"
@@ -72,12 +76,15 @@ func Start(options node_types.Options) (*mux.Router, func() error, error) {
 	diopt := &di.Options{
 		NodeOptions: options,
 		Test:        false,
+		Url:         options.Address,
 	}
 
 	var tablePrefix string
 	if options.DbPrefix != "" {
 		tablePrefix = options.DbPrefix
 	}
+
+	ctx := context.Background()
 
 	if options.Db != "" {
 		if options.DbDriver == "" {
@@ -87,11 +94,22 @@ func Start(options node_types.Options) (*mux.Router, func() error, error) {
 			options.DbString = "postgres://postgres:mysecretpassword@localhost:5432/mydatabase?sslmode=disable"
 		}
 
+		db, err := sql.Open(options.DbDriver, options.DbString)
+		if err != nil {
+			return nil, nil, errors.Wrap(err, "error opening sql db")
+		}
+
+		conn, err := db.Conn(ctx)
+		if err != nil {
+			return nil, nil, err
+		}
+		diopt.Lock = pglock.NewPGDistributedLock(conn)
+
 		diopt.DatastoreFactory = func(tableName string, instance any) (datastore.DataStore, error) {
 			return sqlstore.NewSQLStore(
 				instance,
 				options.DbDriver,
-				options.DbString,
+				db,
 				tablePrefix+"_"+tableName,
 				false,
 			)

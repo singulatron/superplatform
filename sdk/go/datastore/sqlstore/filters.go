@@ -2,11 +2,8 @@
  * @license
  * Copyright (c) The Authors (see the AUTHORS file)
  *
- * This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3) for personal, non-commercial use.
+ * This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3).
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
- *
- * For commercial use, a separate license must be obtained by purchasing from The Authors.
- * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
 package sqlstore
 
@@ -63,7 +60,7 @@ func (q *SQLQueryBuilder) buildFilters(start ...int) ([]string, []interface{}, e
 				if len(values) > 1 {
 					orFilters = append(orFilters, fmt.Sprintf("%s = ANY(%s)", placeHolder, fieldName))
 					param, err = q.store.convertParam(values)
-				} else if q.store.fieldTypes[lowercaseFirstChar(parts[0])].Kind() == reflect.Slice {
+				} else if v := q.store.fieldTypes[lowercaseFirstChar(parts[0])]; v != nil && v.Kind() == reflect.Slice {
 					orFilters = append(orFilters, fmt.Sprintf("%s = ANY(%s)", placeHolder, fieldName))
 					param, err = q.store.convertParam(values[0])
 				} else {

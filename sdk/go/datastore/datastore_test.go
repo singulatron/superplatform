@@ -8,6 +8,7 @@
 package datastore_test
 
 import (
+	"database/sql"
 	"fmt"
 	"strings"
 	"testing"
@@ -29,10 +30,16 @@ func TestAll(t *testing.T) {
 		"sqlStore": func(instance any) datastore.DataStore {
 			table := uuid.New().String()
 			table = strings.Replace(table, "-", "", -1)[0:10]
+
+			db, err := sql.Open("postgres", "postgres://postgres:mysecretpassword@localhost:5432/mydatabase?sslmode=disable")
+			if err != nil {
+				require.NoError(t, err)
+			}
+
 			store, err := sqlstore.NewSQLStore(
 				instance,
 				sqlstore.DriverPostGRES,
-				"postgres://postgres:mysecretpassword@localhost:5432/mydatabase?sslmode=disable",
+				db,
 				"table_"+table,
 				true,
 			)
@@ -49,10 +56,16 @@ func TestAll(t *testing.T) {
 		"sqlStore": func(instance any) datastore.DataStore {
 			table := uuid.New().String()
 			table = strings.Replace(table, "-", "", -1)[0:10]
+
+			db, err := sql.Open("postgres", "postgres://postgres:mysecretpassword@localhost:5432/mydatabase?sslmode=disable")
+			if err != nil {
+				require.NoError(t, err)
+			}
+
 			store, err := sqlstore.NewSQLStore(
 				instance,
 				sqlstore.DriverPostGRES,
-				"postgres://postgres:mysecretpassword@localhost:5432/mydatabase?sslmode=disable",
+				db,
 				"table_"+table,
 				true,
 			)

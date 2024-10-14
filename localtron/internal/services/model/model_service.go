@@ -8,10 +8,12 @@
 package modelservice
 
 import (
+	"context"
 	"sync"
 
 	sdk "github.com/singulatron/singulatron/sdk/go"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
+	"github.com/singulatron/singulatron/sdk/go/lock"
 	"github.com/singulatron/singulatron/sdk/go/router"
 
 	modeltypes "github.com/singulatron/singulatron/localtron/internal/services/model/types"
@@ -21,7 +23,9 @@ type ModelService struct {
 	modelStateMutex sync.Mutex
 	modelPortMap    map[int]*modeltypes.ModelState
 
-	router         *router.Router
+	router *router.Router
+	lock   lock.DistributedLock
+
 	modelsStore    datastore.DataStore
 	platformsStore datastore.DataStore
 
@@ -35,11 +39,13 @@ func NewModelService(
 	gpuPlatform string,
 	llmHost string,
 	router *router.Router,
+	lock lock.DistributedLock,
 	datastoreFactory func(tableName string, insance any) (datastore.DataStore, error),
 ) (*ModelService, error) {
 	srv := &ModelService{
 		gpuPlatform:  gpuPlatform,
 		router:       router,
+		lock:         lock,
 		modelPortMap: map[int]*modeltypes.ModelState{},
 	}
 	modelStore, err := datastoreFactory("modelSvcModels", &modeltypes.Model{})
@@ -69,6 +75,10 @@ func NewModelService(
 }
 
 func (ms *ModelService) Start() error {
+	ctx := context.Background()
+	ms.lock.Acquire(ctx, "model-service-start")
+	defer ms.lock.Release(ctx, "model-service-start")
+
 	token, err := sdk.RegisterService("model-svc", "Model Service", ms.router, ms.credentialStore)
 	if err != nil {
 		return err

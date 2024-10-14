@@ -14,6 +14,7 @@ import (
 
 	sdk "github.com/singulatron/singulatron/sdk/go"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
+	"github.com/singulatron/singulatron/sdk/go/lock"
 	"github.com/singulatron/singulatron/sdk/go/router"
 
 	dynamictypes "github.com/singulatron/singulatron/localtron/internal/services/dynamic/types"
@@ -22,7 +23,9 @@ import (
 )
 
 type DynamicService struct {
-	router          *router.Router
+	router *router.Router
+	lock   lock.DistributedLock
+
 	store           datastore.DataStore
 	credentialStore datastore.DataStore
 	publicKey       string
@@ -31,6 +34,7 @@ type DynamicService struct {
 
 func NewDynamicService(
 	router *router.Router,
+	lock lock.DistributedLock,
 	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error),
 ) (*DynamicService, error) {
 	store, err := datastoreFactory("genericSvcObjects", &dynamictypes.Object{})
@@ -45,6 +49,7 @@ func NewDynamicService(
 	service := &DynamicService{
 		credentialStore: credentialStore,
 		router:          router,
+		lock:            lock,
 		store:           store,
 	}
 
@@ -52,6 +57,10 @@ func NewDynamicService(
 }
 
 func (g *DynamicService) Start() error {
+	ctx := context.Background()
+	g.lock.Acquire(ctx, "model-service-start")
+	defer g.lock.Release(ctx, "model-service-start")
+
 	g.client = clients.NewAPIClient(&clients.Configuration{
 		Servers: clients.ServerConfigurations{
 			{

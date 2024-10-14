@@ -73,19 +73,15 @@ func (ns *RegistryService) List(
 }
 
 func (ns *RegistryService) listNodes() ([]*registry.Node, error) {
-	outp, err := ns.getNvidiaSmiOutput()
-	if err != nil {
-		return nil, err
-	}
-	gpus, err := ns.ParseNvidiaSmiOutput(outp)
+	nodeIs, err := ns.nodeStore.Query().Find()
 	if err != nil {
 		return nil, err
 	}
 
-	return []*registry.Node{
-		{
-			URL:  ns.URL,
-			GPUs: gpus,
-		},
-	}, nil
+	ret := []*registry.Node{}
+	for _, nodeI := range nodeIs {
+		ret = append(ret, nodeI.(*registry.Node))
+	}
+
+	return ret, err
 }

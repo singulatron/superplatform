@@ -16,11 +16,14 @@ import (
 	"github.com/docker/docker/client"
 	sdk "github.com/singulatron/singulatron/sdk/go"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
+	"github.com/singulatron/singulatron/sdk/go/lock"
 	"github.com/singulatron/singulatron/sdk/go/router"
 )
 
 type DockerService struct {
-	router               *router.Router
+	router *router.Router
+	lock   lock.DistributedLock
+
 	imagesCache          map[string]bool
 	imagePullMutexes     map[string]*sync.Mutex
 	imagePullGlobalMutex sync.Mutex
@@ -38,6 +41,7 @@ type DockerService struct {
 func NewDockerService(
 	volumeName string,
 	router *router.Router,
+	lock lock.DistributedLock,
 	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error),
 ) (*DockerService, error) {
 	c, err := client.NewClientWithOpts(client.FromEnv, client.WithAPIVersionNegotiation())
@@ -52,6 +56,7 @@ func NewDockerService(
 
 	service := &DockerService{
 		router:          router,
+		lock:            lock,
 		credentialStore: credentialStore,
 
 		client:           c,
@@ -65,6 +70,10 @@ func NewDockerService(
 }
 
 func (ds *DockerService) Start() error {
+	ctx := context.Background()
+	ds.lock.Acquire(ctx, "docker-service-start")
+	defer ds.lock.Release(ctx, "docker-service-start")
+
 	token, err := sdk.RegisterService("docker-svc", "Docker Service", ds.router, ds.credentialStore)
 	if err != nil {
 		return err

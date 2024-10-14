@@ -2,11 +2,8 @@
  * @license
  * Copyright (c) The Authors (see the AUTHORS file)
  *
- * This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3) for personal, non-commercial use.
+ * This source code is licensed under the GNU Affero General Public License v3.0 (AGPLv3).
  * You may obtain a copy of the AGPL v3.0 at https://www.gnu.org/licenses/agpl-3.0.html.
- *
- * For commercial use, a separate license must be obtained by purchasing from The Authors.
- * For commercial licensing inquiries, please contact The Authors listed in the AUTHORS file.
  */
 package sqlstore
 
@@ -25,17 +22,39 @@ func (s *SQLStore) createTable(instance any, db *DebugDB, tableName string) erro
 
 	var fields []string
 
-	for i := 0; i < typ.NumField(); i++ {
-		field := typ.Field(i)
-		if !field.IsExported() {
-			continue
-		}
-		fieldName := s.fieldName(field.Name)
-		s.fieldTypes[fieldName] = field.Type
-		fieldType := s.sqlType(field.Type)
+	// Recursive function to process struct fields (including embedded fields)
+	var processFields func(reflect.Type)
+	processFields = func(typ reflect.Type) {
+		for i := 0; i < typ.NumField(); i++ {
+			field := typ.Field(i)
+			if !field.IsExported() {
+				continue
+			}
 
-		fields = append(fields, fmt.Sprintf("%s %s", fieldName, fieldType))
+			// Handle embedded structs by recursion
+			if field.Anonymous && field.Type.Kind() == reflect.Struct {
+				processFields(field.Type)
+				continue
+			}
+
+			// Use the json tag for the field name, if available, and strip out ",omitempty"
+			fieldName := field.Tag.Get("json")
+			if fieldName == "" {
+				fieldName = s.fieldName(field.Name)
+			} else if idx := strings.Index(fieldName, ","); idx != -1 {
+				fieldName = fieldName[:idx]
+			}
+			fieldName = escape(fieldName)
+
+			// Map field type to SQL type
+			fieldType := s.sqlType(field.Type)
+
+			fields = append(fields, fmt.Sprintf("%s %s", fieldName, fieldType))
+		}
 	}
+
+	// Process all fields of the instance's struct
+	processFields(typ)
 
 	if tableName == "" {
 		tableName = strings.ToLower(typ.Name())
@@ -87,10 +106,13 @@ func (s *SQLStore) sqlType(t reflect.Type) string {
 			return "JSON"
 		case DriverPostGRES:
 			elemType := s.sqlType(t.Elem())
-			if elemType != "" {
-				return fmt.Sprintf("%s[]", elemType)
+			if elemType != "JSONB" {
+				// You can store as JSONB, or as native array if preferred
+				return fmt.Sprintf("%s[]", elemType) // Use PostgreSQL array type
 			}
-			// ??
+
+			// Default to JSONB for complex slices or fallback
+			return "JSONB"
 		}
 
 	default:

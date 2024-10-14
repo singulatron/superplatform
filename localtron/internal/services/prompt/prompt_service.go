@@ -8,11 +8,13 @@
 package promptservice
 
 import (
+	"context"
 	"sync"
 
 	sdk "github.com/singulatron/singulatron/sdk/go"
 	"github.com/singulatron/singulatron/sdk/go/clients/llm"
 	"github.com/singulatron/singulatron/sdk/go/datastore"
+	"github.com/singulatron/singulatron/sdk/go/lock"
 	"github.com/singulatron/singulatron/sdk/go/router"
 
 	streammanager "github.com/singulatron/singulatron/localtron/internal/services/prompt/sub/stream_manager"
@@ -22,6 +24,7 @@ import (
 type PromptService struct {
 	llmCLient llm.ClientI
 	router    *router.Router
+	lock      lock.DistributedLock
 
 	*streammanager.StreamManager
 
@@ -35,6 +38,7 @@ type PromptService struct {
 func NewPromptService(
 	router *router.Router,
 	llmClient llm.ClientI,
+	lock lock.DistributedLock,
 	datastoreFactory func(tableName string, instance any) (datastore.DataStore, error),
 ) (*PromptService, error) {
 	promptsStore, err := datastoreFactory("promptSvcPrompts", &prompttypes.Prompt{})
@@ -50,6 +54,7 @@ func NewPromptService(
 	service := &PromptService{
 		llmCLient: llmClient,
 		router:    router,
+		lock:      lock,
 
 		StreamManager: streammanager.NewStreamManager(),
 
@@ -85,6 +90,10 @@ func NewPromptService(
 }
 
 func (cs *PromptService) Start() error {
+	ctx := context.Background()
+	cs.lock.Acquire(ctx, "prompt-service-start")
+	defer cs.lock.Release(ctx, "prompt-service-start")
+
 	token, err := sdk.RegisterService("prompt-svc", "Prompt Service", cs.router, cs.credentialStore)
 	if err != nil {
 		return err

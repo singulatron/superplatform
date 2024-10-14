@@ -35,7 +35,7 @@ type User struct {
 	Slug string `json:"slug,omitempty" example:"jane-doe"`
 
 	// Contacts are used for login and identification purposes.
-	Contacts []Contact `json:"contact,omitempty"`
+	Contacts []Contact `json:"contacts,omitempty"`
 
 	PasswordHash string `json:"passwordHash,omitempty"`
 }
@@ -67,7 +67,7 @@ type Contact struct {
 	Verified bool `json:"verified,omitempty"`
 
 	// If this is the primary contact method
-	Primary bool `json:"primary,omitempty"`
+	IsPrimary bool `json:"isPrimary,omitempty"`
 }
 
 type UserRoleLink struct {

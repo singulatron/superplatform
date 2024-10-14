@@ -58,12 +58,7 @@ type SQLStore struct {
 	idFieldName      string
 }
 
-func NewSQLStore(instance any, driverName, connStr string, tableName string, debug bool) (*SQLStore, error) {
-	db, err := sql.Open(driverName, connStr)
-	if err != nil {
-		return nil, errors.Wrap(err, "error opening sql db")
-	}
-
+func NewSQLStore(instance any, driverName string, db *sql.DB, tableName string, debug bool) (*SQLStore, error) {
 	placeholderStyle := DollarSignPlaceholder
 	if driverName == "mysql" {
 		placeholderStyle = QuestionMarkPlaceholder
@@ -98,7 +93,7 @@ func NewSQLStore(instance any, driverName, connStr string, tableName string, deb
 	fieldName := sstore.fieldName(typ.Field(0).Name)
 	sstore.idFieldName = fieldName
 
-	_, err = sstore.db.Exec(fmt.Sprintf("ALTER TABLE %v ADD CONSTRAINT %v_%v_unique UNIQUE (%v);",
+	_, err := sstore.db.Exec(fmt.Sprintf("ALTER TABLE %v ADD CONSTRAINT %v_%v_unique UNIQUE (%v);",
 		sstore.tableName,
 		sstore.tableName,
 		fieldName,
@@ -327,7 +322,17 @@ func (s *SQLStore) convertParam(param any) (any, error) {
 			}
 			return string(bs), nil
 		case DriverPostGRES:
+			if t.Elem().Kind() == reflect.Struct {
+				bs, err := json.Marshal(param)
+				if err != nil {
+					return nil, err
+				}
+
+				return string(bs), nil
+			}
+
 			return pq.Array(param), nil
+
 		default:
 			return nil, fmt.Errorf("unrecognized driver: '%v'", s.driverName)
 		}
@@ -503,9 +508,14 @@ func (q *SQLQueryBuilder) Find() ([]datastore.Row, error) {
 			switch {
 			case fieldType.Kind() == reflect.Slice:
 				// Create a GenericArray with the appropriate type
+				// elemType := fieldType.Elem()
+				// slicePtr := reflect.New(reflect.SliceOf(elemType)).Interface()
+				// fields[i] = &GenericArray{Array: slicePtr}
+
 				elemType := fieldType.Elem()
-				slicePtr := reflect.New(reflect.SliceOf(elemType)).Interface()
-				fields[i] = &GenericArray{Array: slicePtr}
+				slicePtr := reflect.MakeSlice(reflect.SliceOf(elemType), 0, 0).Interface() // Create an empty slice
+				fields[i] = &slicePtr
+
 			case fieldType.Kind() == reflect.Pointer:
 				var str sql.NullString
 				fields[i] = &str

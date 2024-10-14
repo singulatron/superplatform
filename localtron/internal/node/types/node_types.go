@@ -10,15 +10,16 @@ package node_types
 type Options struct {
 	Port        int
 	GpuPlatform string
-	Address     string
-	Az          string
-	Region      string
-	LLMHost     string
-	VolumeName  string
-	ConfigPath  string
-	Db          string
-	DbDriver    string
-	DbString    string
+	// Singulatron Server Address
+	Address    string
+	Az         string
+	Region     string
+	LLMHost    string
+	VolumeName string
+	ConfigPath string
+	Db         string
+	DbDriver   string
+	DbString   string
 
 	// DbPrefix allows us to have isolated envs for different test cases
 	// but still make multiple nodes in those test cases use the same
