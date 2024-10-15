@@ -84,7 +84,7 @@ A dynamically typed (schema-free) datastore service that lets you piggyback on S
 
 ## Run On Your Laptop/PC
 
-We have temporarily discontinued the distribution of binaries. Please refer to this page for alternative methods to run the software.
+We have temporarily discontinued the distribution of the desktop version. Please refer to this page for alternative methods to run the software.
 
 ## Stack
 
