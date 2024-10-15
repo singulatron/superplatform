@@ -86,14 +86,6 @@ A dynamically typed (schema-free) datastore service that lets you piggyback on S
 
 We have temporarily discontinued the distribution of the desktop version. Please refer to this page for alternative methods to run the software.
 
-## Stack
-
-It is an Electron application, with Angular on the frontend and Go on the backend. It becomes a simple web app without electron when hosted over the network.
-
 ## License
 
 Superplatform is licensed under AGPL-3.0.
-
-## Status
-
-Fairly early phase but there are quite a few installations chugging along nicely already. Why don't you join them?
