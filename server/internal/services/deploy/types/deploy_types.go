@@ -7,3 +7,62 @@
  */
 
 package deploy_svc
+
+type Deployment struct {
+	ID            string             `json:"replicas,omitempty"`      // ID of the deployment
+	Replicas      int                `json:"replicas,omitempty"`      // Number of container instances to run
+	Strategy      DeploymentStrategy `json:"strategy,omitempty"`      // Deployment strategy (e.g., rolling update)
+	Resources     ResourceLimits     `json:"resources,omitempty"`     // Resource requirements for each replica
+	AutoScaling   *AutoScalingConfig `json:"autoScaling,omitempty"`   // Optional: Auto-scaling rules
+	TargetRegions []TargetRegion     `json:"targetRegions,omitempty"` // Target deployment regions or clusters
+}
+
+func (d Deployment) GetId() string {
+
+}
+
+type DeploymentStrategy struct {
+	Type           StrategyType `json:"type,omitempty"`           // Deployment strategy type (RollingUpdate, Recreate, etc.)
+	MaxUnavailable int          `json:"maxUnavailable,omitempty"` // Max unavailable replicas during update
+	MaxSurge       int          `json:"maxSurge,omitempty"`       // Max extra replicas during update
+}
+
+type StrategyType string
+
+const (
+	StrategyRollingUpdate StrategyType = "RollingUpdate"
+	StrategyRecreate      StrategyType = "Recreate"
+)
+
+type ResourceLimits struct {
+	CPU    string `json:"cpu,omitempty"`    // CPU limit, e.g., "500m" for 0.5 cores
+	Memory string `json:"memory,omitempty"` // Memory limit, e.g., "128Mi"
+	VRAM   string `json:"vram,omitempty"`   // Optional: GPU VRAM requirement, e.g., "48GB"
+}
+
+type AutoScalingConfig struct {
+	MinReplicas  int `json:"minReplicas,omitempty"`  // Minimum number of replicas to run
+	MaxReplicas  int `json:"maxReplicas,omitempty"`  // Maximum number of replicas to run
+	CPUThreshold int `json:"cpuThreshold,omitempty"` // CPU usage threshold for scaling (as a percentage)
+
+	// @todo need to measure and describe the utilization of GPUs
+}
+
+type TargetRegion struct {
+	Cluster string `json:"cluster,omitempty"` // Cluster or node where service should be deployed (e.g., "us-west1", "local-docker")
+	Zone    string `json:"zone,omitempty"`    // Optional: Specific zone for the deployment
+}
+
+type ListDeploymentsRequest struct {
+}
+
+type ListDeploymentsResponse struct {
+	Deployments []*Deployment `json:"deployments,omitempty"`
+}
+
+type SaveuDeploymentsRequest struct {
+	Deployment *Deployment `json:"deployment,omitempty"`
+}
+
+type SaveDeploymentsResponse struct {
+}

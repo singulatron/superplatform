@@ -23,13 +23,9 @@ func app(permSlices ...[]usertypes.Permission) []usertypes.Permission {
 	return ret
 }
 
-func (ns *RegistryService) registerPermissions() error {
+func (ns *DeployService) registerPermissions() error {
 	for _, permission := range app(
-		deploytypes.NodeAdminPermissions,
-		deploytypes.ServiceInstancePermissions,
-		deploytypes.ServiceInstanceAdminPermissions,
-		deploytypes.ServiceDefinitionPermissions,
-		deploytypes.ServiceDefinitionAdminPermissions,
+		deploytypes.DeployAdminPermissions,
 	) {
 		rsp := &usertypes.UpserPermissionResponse{}
 		err := ns.router.Put(context.Background(), "user-svc", fmt.Sprintf("/permission/%v", permission.Id), &usertypes.UpserPermissionRequest{
@@ -47,25 +43,7 @@ func (ns *RegistryService) registerPermissions() error {
 		usertypes.RoleAdmin,
 	} {
 		for _, permission := range app(
-			deploytypes.NodeAdminPermissions,
-			deploytypes.ServiceInstanceAdminPermissions,
-			deploytypes.ServiceDefinitionAdminPermissions,
-		) {
-			rsp := &usertypes.AddPermissionToRoleResponse{}
-			err := ns.router.Put(context.Background(), "user-svc",
-				fmt.Sprintf("/role/%v/permission/%v", role.Id, permission.Id), &usertypes.AddPermissionToRoleRequest{}, rsp)
-			if err != nil {
-				return err
-			}
-		}
-	}
-
-	for _, role := range []*usertypes.Role{
-		usertypes.RoleUser,
-	} {
-		for _, permission := range app(
-			deploytypes.ServiceInstancePermissions,
-			deploytypes.ServiceDefinitionPermissions,
+			deploytypes.DeployAdminPermissions,
 		) {
 			rsp := &usertypes.AddPermissionToRoleResponse{}
 			err := ns.router.Put(context.Background(), "user-svc",

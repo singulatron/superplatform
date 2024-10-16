@@ -12,11 +12,29 @@ import (
 	usertypes "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
-var PermissionDeployCreate = usertypes.Permission{
-	Id:   "deploy-svc:deploy",
-	Name: "Deploy",
+var PermissionDeploymentCreate = usertypes.Permission{
+	Id:   "deploy-svc:deployment:create",
+	Name: "Deploy Svc - Deployment Create",
+}
+
+var PermissionDeploymentView = usertypes.Permission{
+	Id:   "deploy-svc:deployment:view",
+	Name: "Deploy Svc - Deployment View",
+}
+
+var PermissionDeploymentEdit = usertypes.Permission{
+	Id:   "deploy-svc:deployment:create",
+	Name: "Deploy Svc - Deployment Create",
+}
+
+var PermissionDeploymentDelete = usertypes.Permission{
+	Id:   "deploy-svc:deployment:delete",
+	Name: "Deploy Svc - Deployment Delete",
 }
 
 var DeployAdminPermissions = []usertypes.Permission{
-	PermissionDeployCreate,
+	PermissionDeploymentCreate,
+	PermissionDeploymentEdit,
+	PermissionDeploymentView,
+	PermissionDeploymentDelete,
 }
