@@ -32,16 +32,16 @@ func (rs *RegistryService) QueryServiceInstances(
 
 	host := r.URL.Query().Get("host")
 	ip := r.URL.Query().Get("ip")
-	slug := r.URL.Query().Get("slug")
+	serviceSlug := r.URL.Query().Get("serviceSlug")
 	id := r.URL.Query().Get("ip")
 	path := r.URL.Query().Get("path")
 
 	serviceInstances, err := rs.getServiceInstances(Query{
-		Id:   id,
-		Host: host,
-		Slug: slug,
-		IP:   ip,
-		Path: path,
+		Id:          id,
+		Host:        host,
+		ServiceSlug: serviceSlug,
+		IP:          ip,
+		Path:        path,
 	})
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -55,12 +55,12 @@ func (rs *RegistryService) QueryServiceInstances(
 }
 
 type Query struct {
-	Id     string
-	Slug   string
-	Host   string
-	IP     string
-	Scheme string
-	Path   string
+	Id          string
+	ServiceSlug string
+	Host        string
+	IP          string
+	Scheme      string
+	Path        string
 }
 
 func (rs *RegistryService) getServiceInstances(query Query) ([]*registry.ServiceInstance, error) {
@@ -94,7 +94,7 @@ func (rs *RegistryService) getServiceInstances(query Query) ([]*registry.Service
 			match = false
 		}
 
-		if query.Slug != "" && v.Slug != query.Slug {
+		if query.ServiceSlug != "" && v.ServiceSlug != query.ServiceSlug {
 			match = false
 		}
 

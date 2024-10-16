@@ -4,7 +4,7 @@ tags:
   - model-svc
   - models
   - ai
-  - service
+  - services
 ---
 
 # Model Svc

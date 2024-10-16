@@ -2,9 +2,10 @@
 sidebar_position: 10
 tags:
   - chat-svc
-  - chat
+  - chats
   - threads
   - messages
+  - services
 ---
 
 # Chat Svc

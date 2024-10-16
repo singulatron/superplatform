@@ -9,9 +9,9 @@
 package registry_svc
 
 type ServiceDefinition struct {
-	Slug     string    `json:"slug,omitempty" example:"user-svc" binding:"required"` // Slug of the service whose instance is being registered.
-	APISpecs []APISpec `json:"apiSpecs,omitempty"`                                   // API Specs such as OpenAPI definitions etc.
-	Clients  []Client  `json:"clients,omitempty"`                                    // Programming language clients.
+	ServiceSlug string    `json:"serviceSlug,omitempty" example:"user-svc" binding:"required"` // The User Svc slug of the service whose instance is being registered.
+	APISpecs    []APISpec `json:"apiSpecs,omitempty"`                                          // API Specs such as OpenAPI definitions etc.
+	Clients     []Client  `json:"clients,omitempty"`                                           // Programming language clients.
 }
 
 type APISpec struct {
