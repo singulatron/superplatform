@@ -4,7 +4,7 @@
     <span>
       <h1>Superplatform</h1>
     </span>
-    <div>On-premise AI platform and a microservices ecosystem focused on distributed AI management and development.</div>
+    <div>On-premise AI platform and microservices ecosystem.</div>
     <div>
       <a href="https://superplatform.ai">superplatform.ai</a> 
     </div>
