@@ -9,16 +9,16 @@
 package deploy_svc
 
 type Deployment struct {
-	ID            string             `json:"replicas,omitempty"`      // ID of the deployment
-	Replicas      int                `json:"replicas,omitempty"`      // Number of container instances to run
-	Strategy      DeploymentStrategy `json:"strategy,omitempty"`      // Deployment strategy (e.g., rolling update)
-	Resources     ResourceLimits     `json:"resources,omitempty"`     // Resource requirements for each replica
-	AutoScaling   *AutoScalingConfig `json:"autoScaling,omitempty"`   // Optional: Auto-scaling rules
-	TargetRegions []TargetRegion     `json:"targetRegions,omitempty"` // Target deployment regions or clusters
+	ID            string             `json:"id,omitempty" example:"depl_dbOdi5eLQK"` // ID of the deployment (e.g., "depl_dbOdi5eLQK")
+	Replicas      int                `json:"replicas,omitempty"`                     // Number of container instances to run
+	Strategy      DeploymentStrategy `json:"strategy,omitempty"`                     // Deployment strategy (e.g., rolling update)
+	Resources     ResourceLimits     `json:"resources,omitempty"`                    // Resource requirements for each replica
+	AutoScaling   *AutoScalingConfig `json:"autoScaling,omitempty"`                  // Optional: Auto-scaling rules
+	TargetRegions []TargetRegion     `json:"targetRegions,omitempty"`                // Target deployment regions or clusters
 }
 
 func (d Deployment) GetId() string {
-
+	return d.ID
 }
 
 type DeploymentStrategy struct {

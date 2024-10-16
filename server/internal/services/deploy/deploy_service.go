@@ -9,8 +9,6 @@ package deployservice
 
 import (
 	"context"
-	"fmt"
-	"os"
 
 	sdk "github.com/singulatron/superplatform/sdk/go"
 	"github.com/singulatron/superplatform/sdk/go/datastore"
@@ -35,17 +33,6 @@ func NewDeployService(
 	lock lock.DistributedLock,
 	datastoreFactory func(tableName string, instance any,
 	) (datastore.DataStore, error)) (*DeployService, error) {
-
-	nodeUrl := address
-	var err error
-
-	if nodeUrl == "" {
-		nodeUrl, err = os.Hostname()
-		if err != nil {
-			return nil, err
-		}
-		nodeUrl = fmt.Sprintf("%v:%v", nodeUrl, "58231")
-	}
 
 	credentialStore, err := datastoreFactory("deploySvcCredentials", &sdk.Credential{})
 	if err != nil {
