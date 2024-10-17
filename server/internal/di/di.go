@@ -8,6 +8,7 @@ import (
 	"sync"
 
 	"github.com/gorilla/mux"
+	sdk "github.com/singulatron/superplatform/sdk/go"
 	"github.com/singulatron/superplatform/sdk/go/clients/llm"
 	"github.com/singulatron/superplatform/sdk/go/datastore"
 	"github.com/singulatron/superplatform/sdk/go/datastore/localstore"
@@ -19,6 +20,7 @@ import (
 	node_types "github.com/singulatron/superplatform/server/internal/node/types"
 	chatservice "github.com/singulatron/superplatform/server/internal/services/chat"
 	configservice "github.com/singulatron/superplatform/server/internal/services/config"
+	deployservice "github.com/singulatron/superplatform/server/internal/services/deploy"
 	dockerservice "github.com/singulatron/superplatform/server/internal/services/docker"
 	downloadservice "github.com/singulatron/superplatform/server/internal/services/download"
 	dynamicservice "github.com/singulatron/superplatform/server/internal/services/dynamic"
@@ -235,6 +237,18 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 		options.NodeOptions.Az,
 		options.NodeOptions.Region,
 		options.Router,
+		options.Lock,
+		options.DatastoreFactory,
+	)
+	if err != nil {
+		logger.Error("Node service creation failed", slog.String("error", err.Error()))
+		os.Exit(1)
+	}
+
+	clientFactory := sdk.NewApiClientFactory(router.SelfAddress())
+
+	deployService, err := deployservice.NewDeployService(
+		clientFactory,
 		options.Lock,
 		options.DatastoreFactory,
 	)
@@ -477,6 +491,13 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 	router.HandleFunc("/registry-svc/service-instance/{id}", appl(func(w http.ResponseWriter, r *http.Request) {
 		registryService.RemoveServiceInstance(w, r)
 	})).Methods("OPTIONS", "DELETE")
+
+	router.HandleFunc("/deploy-svc/deployment", appl(func(w http.ResponseWriter, r *http.Request) {
+		deployService.SaveDeployment(w, r)
+	})).Methods("OPTIONS", "PUT")
+	router.HandleFunc("/deploy-svc/deployments", appl(func(w http.ResponseWriter, r *http.Request) {
+		deployService.ListDeployments(w, r)
+	})).Methods("OPTIONS", "POST")
 
 	return router, func() error {
 		err = configService.Start()

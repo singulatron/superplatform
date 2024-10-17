@@ -9,12 +9,13 @@
 package deploy_svc
 
 type Deployment struct {
-	ID            string             `json:"id,omitempty" example:"depl_dbOdi5eLQK"` // ID of the deployment (e.g., "depl_dbOdi5eLQK")
-	Replicas      int                `json:"replicas,omitempty"`                     // Number of container instances to run
-	Strategy      DeploymentStrategy `json:"strategy,omitempty"`                     // Deployment strategy (e.g., rolling update)
-	Resources     ResourceLimits     `json:"resources,omitempty"`                    // Resource requirements for each replica
-	AutoScaling   *AutoScalingConfig `json:"autoScaling,omitempty"`                  // Optional: Auto-scaling rules
-	TargetRegions []TargetRegion     `json:"targetRegions,omitempty"`                // Target deployment regions or clusters
+	ID            string             `json:"id,omitempty" example:"depl_dbOdi5eLQK"`                      // ID of the deployment (e.g., "depl_dbOdi5eLQK")
+	ServiceSlug   string             `json:"serviceSlug,omitempty" example:"user-svc" binding:"required"` // The User Svc slug of the service that is being deployed.
+	Replicas      int                `json:"replicas,omitempty"`                                          // Number of container instances to run
+	Strategy      DeploymentStrategy `json:"strategy,omitempty"`                                          // Deployment strategy (e.g., rolling update)
+	Resources     ResourceLimits     `json:"resources,omitempty"`                                         // Resource requirements for each replica
+	AutoScaling   *AutoScalingConfig `json:"autoScaling,omitempty"`                                       // Optional: Auto-scaling rules
+	TargetRegions []TargetRegion     `json:"targetRegions,omitempty"`                                     // Target deployment regions or clusters
 }
 
 func (d Deployment) GetId() string {
@@ -60,9 +61,9 @@ type ListDeploymentsResponse struct {
 	Deployments []*Deployment `json:"deployments,omitempty"`
 }
 
-type SaveuDeploymentsRequest struct {
+type SaveDeploymentRequest struct {
 	Deployment *Deployment `json:"deployment,omitempty"`
 }
 
-type SaveDeploymentsResponse struct {
+type SaveDeploymentResponse struct {
 }

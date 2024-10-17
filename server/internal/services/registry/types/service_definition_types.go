@@ -9,10 +9,12 @@
 package registry_svc
 
 type ServiceDefinition struct {
-	ServiceSlug string          `json:"serviceSlug,omitempty" example:"user-svc" binding:"required"` // The User Svc slug of the service whose instance is being registered.
-	APISpecs    []APISpec       `json:"apiSpecs,omitempty"`                                          // API Specs such as OpenAPI definitions etc.
-	Clients     []Client        `json:"clients,omitempty"`
-	Containers  []ContainerSpec `json:"containers,omitempty"` // Container specifications for Docker, K8s, etc.                                        // Programming language clients.
+	// No id as there is only one definition per service slug.
+
+	ServiceSlug string     `json:"serviceSlug,omitempty" example:"user-svc" binding:"required"` // The User Svc slug of the service whose instance is being registered.
+	APISpecs    []APISpec  `json:"apiSpecs,omitempty"`                                          // API Specs such as OpenAPI definitions etc.
+	Clients     []Client   `json:"clients,omitempty"`
+	Image       *ImageSpec `json:"image,omitempty"` // Container specifications for Docker, K8s, etc.                                        // Programming language clients.
 }
 
 type APISpec struct {
@@ -27,24 +29,21 @@ type Client struct {
 	URL      string   `json:"url,omitempty" example:"https://example.com/client.js" binding:"required"` // The URL of the client.
 }
 
-type ContainerSpec struct {
-	ImageSpec ImageSpec   `json:"imageSpec,omitempty"` // Container image specifications.
-	Runtime   RuntimeType `json:"runtime,omitempty"`   // Runtime environment (e.g., Docker, K8s).
+type Image struct {
+	// Image name/URL of the container
+	Image string `json:"image" example:"nginx:latest" binding:"required"`
 
-	// HostPort is the port on the host machine that will be mapped to the container's port
-	HostPort int `json:"hostPort" example:"8081"`
+	// Runtime environment (e.g., Docker, K8s)
+	Runtime RuntimeType `json:"runtime,omitempty"`
 
-	// PersistentPaths are paths that should be persisted across container restarts
+	// Port is the port number that the container will expose
+	Port int `json:"port" example:"8080" binding:"required"`
+
+	// PersistentPaths are paths inside the container which should be persisted across container restarts
 	PersistentPaths []string `json:"persistentPaths,omitempty"`
 
 	// GPUEnabled specifies if GPU support is enabled
 	GPUEnabled bool `json:"gpuEnabled,omitempty"`
-
-	// Assets maps environment variable names to file URLs.
-	// Example: {"MODEL": "https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q2_K.gguf"}
-	// These files are downloaded by the Download Svc and mounted in the container.
-	// The environment variable `MODEL` will point to the local file path in the container.
-	Assets map[string]string `json:"assets,omitempty"`
 }
 
 type ImageSpec struct {

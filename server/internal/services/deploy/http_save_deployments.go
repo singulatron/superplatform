@@ -16,20 +16,20 @@ import (
 	deploy "github.com/singulatron/superplatform/server/internal/services/deploy/types"
 )
 
-// @ID listDeployments
-// @Summary List Deployments
-// @Description Retrieve a list of deployments.
+// @ID saveDeployment
+// @Summary Save Deployment
+// @Description Save a deployment.
 // @Tags Deploy Svc
 // @Accept json
 // @Produce json
-// @Param body body deploy.ListDeploymentsRequest false "List Deploys Request"
-// @Success 200 {object} deploy.ListDeploymentsResponse
+// @Param body body deploy.SaveDeploymentRequest false "Save Deploys Request"
+// @Success 200 {object} deploy.SaveDeploymentResponse
 // @Failure 400 {object} deploy.ErrorResponse "Invalid JSON"
 // @Failure 401 {object} deploy.ErrorResponse "Unauthorized"
 // @Failure 500 {object} deploy.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
-// @Router /deploy-svc/deployments [post]
-func (ns *DeployService) ListDeployments(
+// @Router /deploy-svc/deployment [put]
+func (ns *DeployService) SaveDeployment(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
@@ -47,7 +47,7 @@ func (ns *DeployService) ListDeployments(
 		return
 	}
 
-	req := deploy.ListDeploymentsRequest{}
+	req := deploy.SaveDeploymentRequest{}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -56,31 +56,16 @@ func (ns *DeployService) ListDeployments(
 	}
 	defer r.Body.Close()
 
-	deployments, err := ns.listDeployments()
+	err = ns.saveDeployment(req.Deployment)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(err.Error()))
 		return
 	}
 
-	response := deploy.ListDeploymentsResponse{
-		Deployments: deployments,
-	}
-
-	bs, _ := json.Marshal(response)
-	w.Write(bs)
+	w.Write([]byte(`{}`))
 }
 
-func (ns *DeployService) listDeployments() ([]*deploy.Deployment, error) {
-	deploymentIs, err := ns.deploymentStore.Query().Find()
-	if err != nil {
-		return nil, err
-	}
-
-	ret := []*deploy.Deployment{}
-	for _, deploymentI := range deploymentIs {
-		ret = append(ret, deploymentI.(*deploy.Deployment))
-	}
-
-	return ret, err
+func (ns *DeployService) saveDeployment(deployment *deploy.Deployment) error {
+	return ns.deploymentStore.Upsert(deployment)
 }

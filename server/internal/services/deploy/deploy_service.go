@@ -13,23 +13,21 @@ import (
 	sdk "github.com/singulatron/superplatform/sdk/go"
 	"github.com/singulatron/superplatform/sdk/go/datastore"
 	"github.com/singulatron/superplatform/sdk/go/lock"
-	"github.com/singulatron/superplatform/sdk/go/router"
 	deploy "github.com/singulatron/superplatform/server/internal/services/deploy/types"
 )
 
 type DeployService struct {
-	router *router.Router
-	lock   lock.DistributedLock
+	clientFactory sdk.ClientFactory
+
+	lock  lock.DistributedLock
+	token string
 
 	credentialStore datastore.DataStore
 	deploymentStore datastore.DataStore
 }
 
 func NewDeployService(
-	address string,
-	az string,
-	region string,
-	router *router.Router,
+	clientFactory sdk.ClientFactory,
 	lock lock.DistributedLock,
 	datastoreFactory func(tableName string, instance any,
 	) (datastore.DataStore, error)) (*DeployService, error) {
@@ -44,7 +42,8 @@ func NewDeployService(
 	}
 
 	service := &DeployService{
-		router:          router,
+		clientFactory: clientFactory,
+
 		lock:            lock,
 		credentialStore: credentialStore,
 		deploymentStore: deploymentStore,
@@ -58,11 +57,12 @@ func (ns *DeployService) Start() error {
 	ns.lock.Acquire(ctx, "deploy-service-start")
 	defer ns.lock.Release(ctx, "deploy-service-start")
 
-	token, err := sdk.RegisterService("deploy-svc", "Deploy Service", ns.router, ns.credentialStore)
+	token, err := sdk.RegisterServiceNoRouter(ns.clientFactory.Client().UserSvcAPI, "deploy-svc", "Deploy Service", ns.credentialStore)
 	if err != nil {
 		return err
 	}
-	ns.router = ns.router.SetBearerToken(token)
+
+	ns.token = token
 
 	return ns.registerPermissions()
 }
