@@ -9,6 +9,7 @@ package deployservice
 
 import (
 	"context"
+	"time"
 
 	sdk "github.com/singulatron/superplatform/sdk/go"
 	"github.com/singulatron/superplatform/sdk/go/datastore"
@@ -64,5 +65,14 @@ func (ns *DeployService) Start() error {
 
 	ns.token = token
 
+	go ns.loop()
+
 	return ns.registerPermissions()
+}
+
+func (ns *DeployService) loop() {
+	for {
+		ns.cycle()
+		time.Sleep(5 * time.Second)
+	}
 }

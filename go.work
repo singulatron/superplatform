@@ -1,4 +1,4 @@
-go 1.21
+go 1.21.1
 
 use ./server
 
@@ -7,3 +7,5 @@ use ./dapper
 use ./clients/go
 
 use ./sdk/go
+
+use ./cli

@@ -8,7 +8,7 @@ const FeatureList = [
     Svg: require("@site/static/img/undraw_docusaurus_mountain.svg").default,
     description: (
       <>
-        Singulatron was designed from the ground up to be easily installed and
+        Superplatform was designed from the ground up to be easily installed and
         used to get your projects up and running quickly.
       </>
     ),
@@ -18,7 +18,7 @@ const FeatureList = [
     Svg: require("@site/static/img/undraw_docusaurus_tree.svg").default,
     description: (
       <>
-        Singulatron lets you focus on using and building AI apps while getting
+        Superplatform lets you focus on using and building AI apps while getting
         the nitty-gritty details out of the way.
       </>
     ),
