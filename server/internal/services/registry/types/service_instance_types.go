@@ -80,6 +80,6 @@ type RegisterServiceInstanceRequest struct {
 type RegisterServiceInstanceResponse struct {
 }
 
-type QueryServiceInstancesResponse struct {
+type ListServiceInstancesResponse struct {
 	Instances []ServiceInstance `json:"instances,omitempty"`
 }

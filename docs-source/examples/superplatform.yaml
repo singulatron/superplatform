@@ -1074,6 +1074,38 @@ definitions:
     type: object
   prompt_svc.RemovePromptResponse:
     type: object
+  registry_svc.APISpec:
+    properties:
+      metadata:
+        additionalProperties:
+          type: string
+        description: Additional metadata about the API (e.g., author, license, etc.)
+        type: object
+      protocolType:
+        description: Protocol type (e.g., OpenAPI, Swagger, etc.)
+        type: string
+      url:
+        description: URL to the OpenAPI file or other API definition
+        type: string
+      version:
+        description: Version of the API specification (e.g., 3.0.0)
+        type: string
+    type: object
+  registry_svc.Client:
+    properties:
+      language:
+        allOf:
+        - $ref: '#/definitions/registry_svc.Language'
+        description: Programming language.
+        example: JavaScript
+      url:
+        description: The URL of the client.
+        example: https://example.com/client.js
+        type: string
+    required:
+    - language
+    - url
+    type: object
   registry_svc.ErrorResponse:
     properties:
       error:
@@ -1111,6 +1143,62 @@ definitions:
       temperature:
         type: number
     type: object
+  registry_svc.ImageSpec:
+    properties:
+      image:
+        description: Image is the Docker image to use for the container
+        example: nginx:latest
+        type: string
+      port:
+        description: Port is the port number that the container will expose
+        example: 8080
+        type: integer
+    required:
+    - image
+    - port
+    type: object
+  registry_svc.Language:
+    enum:
+    - JavaScript
+    - Python
+    - Java
+    - C#
+    - C++
+    - Ruby
+    - Go
+    - Swift
+    - PHP
+    - TypeScript
+    - Kotlin
+    - Scala
+    - Perl
+    - Rust
+    - Haskell
+    - Clojure
+    - Elixir
+    - Objective-C
+    - F#
+    type: string
+    x-enum-varnames:
+    - JavaScript
+    - Python
+    - Java
+    - CSharp
+    - CPlusPlus
+    - Ruby
+    - Go
+    - Swift
+    - PHP
+    - TypeScript
+    - Kotlin
+    - Scala
+    - Perl
+    - Rust
+    - Haskell
+    - Clojure
+    - Elixir
+    - ObjectiveC
+    - FSharp
   registry_svc.ListNodesRequest:
     type: object
   registry_svc.ListNodesResponse:
@@ -1118,6 +1206,20 @@ definitions:
       nodes:
         items:
           $ref: '#/definitions/registry_svc.Node'
+        type: array
+    type: object
+  registry_svc.ListServiceDefinitionsResponse:
+    properties:
+      serviceDefinitions:
+        items:
+          $ref: '#/definitions/registry_svc.ServiceDefinition'
+        type: array
+    type: object
+  registry_svc.ListServiceInstancesResponse:
+    properties:
+      instances:
+        items:
+          $ref: '#/definitions/registry_svc.ServiceInstance'
         type: array
     type: object
   registry_svc.Node:
@@ -1154,13 +1256,6 @@ definitions:
         type: integer
       processName:
         type: string
-    type: object
-  registry_svc.QueryServiceInstancesResponse:
-    properties:
-      instances:
-        items:
-          $ref: '#/definitions/registry_svc.ServiceInstance'
-        type: array
     type: object
   registry_svc.RegisterServiceInstanceRequest:
     properties:
@@ -1215,6 +1310,36 @@ definitions:
         allOf:
         - $ref: '#/definitions/registry_svc.Usage'
         description: Memory usage metrics.
+    type: object
+  registry_svc.SaveServiceDefinitionRequest:
+    properties:
+      serviceDefinition:
+        $ref: '#/definitions/registry_svc.ServiceDefinition'
+    type: object
+  registry_svc.SaveServiceDefinitionResponse:
+    type: object
+  registry_svc.ServiceDefinition:
+    properties:
+      apiSpecs:
+        description: API Specs such as OpenAPI definitions etc.
+        items:
+          $ref: '#/definitions/registry_svc.APISpec'
+        type: array
+      clients:
+        items:
+          $ref: '#/definitions/registry_svc.Client'
+        type: array
+      image:
+        allOf:
+        - $ref: '#/definitions/registry_svc.ImageSpec'
+        description: Container specifications for Docker, K8s, etc.                                        //
+          Programming language clients.
+      serviceSlug:
+        description: The User Svc slug of the service whose instance is being registered.
+        example: user-svc
+        type: string
+    required:
+    - serviceSlug
     type: object
   registry_svc.ServiceInstance:
     properties:
@@ -3139,8 +3264,84 @@ paths:
       summary: List Nodes
       tags:
       - Registry Svc
+  /registry-svc/service-definition:
+    put:
+      consumes:
+      - application/json
+      description: Registers a new service definition, associating an service definition
+        address with a slug acquired from the bearer token.
+      operationId: saveServiceDefinition
+      parameters:
+      - description: Register Service Definition Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/registry_svc.SaveServiceDefinitionRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/registry_svc.SaveServiceDefinitionResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Register Service Definition
+      tags:
+      - Registry Svc
+  /registry-svc/service-definition/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a registered service definition based on the service ID.
+      operationId: deleteServiceDefinition
+      parameters:
+      - description: Service Definition ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+        "404":
+          description: Service not found
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete Service Definition
+      tags:
+      - Registry Svc
   /registry-svc/service-instance:
-    post:
+    put:
       consumes:
       - application/json
       description: Registers a new service instance, associating an service instance
@@ -3249,7 +3450,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/registry_svc.QueryServiceInstancesResponse'
+            $ref: '#/definitions/registry_svc.ListServiceInstancesResponse'
         "400":
           description: Invalid filters
           schema:
@@ -3260,7 +3461,7 @@ paths:
             $ref: '#/definitions/registry_svc.ErrorResponse'
       security:
       - BearerAuth: []
-      summary: Query Service Instances
+      summary: List Service Instances
       tags:
       - Registry Svc
   /user-svc/change-password:

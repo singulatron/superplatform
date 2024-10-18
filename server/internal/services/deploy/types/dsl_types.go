@@ -8,9 +8,17 @@
 
 package deploy_svc
 
+type CommandType string
+
+const (
+	CommandTypeStart CommandType = "START"
+	CommandTypeKill  CommandType = "KILL"
+	CommandTypeScale CommandType = "SCALE"
+)
+
 type Command struct {
-	Action      string  // e.g., "START", "KILL", "SCALE"
-	ServiceSlug string  // The service affected
-	Node        *string // Optional: Node where the command applies (if applicable)
-	InstanceId  *string // Optional: Service instance ID (if applicable)
+	Action      CommandType // e.g., "START", "KILL", "SCALE"
+	ServiceSlug string      // The User Svc slug of the service affected
+	NodeUrl     *string     // Node address, e.g., "https://api.com:999"
+	InstanceId  *string     // Instance id, e.g., "https://api.com:999/user-svc"
 }

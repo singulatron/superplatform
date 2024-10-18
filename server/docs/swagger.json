@@ -2305,8 +2305,125 @@
                 }
             }
         },
+        "/registry-svc/service-definition": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Registers a new service definition, associating an service definition address with a slug acquired from the bearer token.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Registry Svc"
+                ],
+                "summary": "Register Service Definition",
+                "operationId": "saveServiceDefinition",
+                "parameters": [
+                    {
+                        "description": "Register Service Definition Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.SaveServiceDefinitionRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.SaveServiceDefinitionResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/registry-svc/service-definition/{id}": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Deletes a registered service definition based on the service ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Registry Svc"
+                ],
+                "summary": "Delete Service Definition",
+                "operationId": "deleteServiceDefinition",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Service Definition ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Invalid ID",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Service not found",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/registry-svc/service-instance": {
-            "post": {
+            "put": {
                 "security": [
                     {
                         "BearerAuth": []
@@ -2439,7 +2556,7 @@
                 "tags": [
                     "Registry Svc"
                 ],
-                "summary": "Query Service Instances",
+                "summary": "List Service Instances",
                 "operationId": "queryServiceInstances",
                 "parameters": [
                     {
@@ -2477,7 +2594,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/registry_svc.QueryServiceInstancesResponse"
+                            "$ref": "#/definitions/registry_svc.ListServiceInstancesResponse"
                         }
                     },
                     "400": {
@@ -5181,6 +5298,53 @@
         "prompt_svc.RemovePromptResponse": {
             "type": "object"
         },
+        "registry_svc.APISpec": {
+            "type": "object",
+            "properties": {
+                "metadata": {
+                    "description": "Additional metadata about the API (e.g., author, license, etc.)",
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "protocolType": {
+                    "description": "Protocol type (e.g., OpenAPI, Swagger, etc.)",
+                    "type": "string"
+                },
+                "url": {
+                    "description": "URL to the OpenAPI file or other API definition",
+                    "type": "string"
+                },
+                "version": {
+                    "description": "Version of the API specification (e.g., 3.0.0)",
+                    "type": "string"
+                }
+            }
+        },
+        "registry_svc.Client": {
+            "type": "object",
+            "required": [
+                "language",
+                "url"
+            ],
+            "properties": {
+                "language": {
+                    "description": "Programming language.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/registry_svc.Language"
+                        }
+                    ],
+                    "example": "JavaScript"
+                },
+                "url": {
+                    "description": "The URL of the client.",
+                    "type": "string",
+                    "example": "https://example.com/client.js"
+                }
+            }
+        },
         "registry_svc.ErrorResponse": {
             "type": "object",
             "properties": {
@@ -5237,6 +5401,70 @@
                 }
             }
         },
+        "registry_svc.ImageSpec": {
+            "type": "object",
+            "required": [
+                "image",
+                "port"
+            ],
+            "properties": {
+                "image": {
+                    "description": "Image is the Docker image to use for the container",
+                    "type": "string",
+                    "example": "nginx:latest"
+                },
+                "port": {
+                    "description": "Port is the port number that the container will expose",
+                    "type": "integer",
+                    "example": 8080
+                }
+            }
+        },
+        "registry_svc.Language": {
+            "type": "string",
+            "enum": [
+                "JavaScript",
+                "Python",
+                "Java",
+                "C#",
+                "C++",
+                "Ruby",
+                "Go",
+                "Swift",
+                "PHP",
+                "TypeScript",
+                "Kotlin",
+                "Scala",
+                "Perl",
+                "Rust",
+                "Haskell",
+                "Clojure",
+                "Elixir",
+                "Objective-C",
+                "F#"
+            ],
+            "x-enum-varnames": [
+                "JavaScript",
+                "Python",
+                "Java",
+                "CSharp",
+                "CPlusPlus",
+                "Ruby",
+                "Go",
+                "Swift",
+                "PHP",
+                "TypeScript",
+                "Kotlin",
+                "Scala",
+                "Perl",
+                "Rust",
+                "Haskell",
+                "Clojure",
+                "Elixir",
+                "ObjectiveC",
+                "FSharp"
+            ]
+        },
         "registry_svc.ListNodesRequest": {
             "type": "object"
         },
@@ -5247,6 +5475,28 @@
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/registry_svc.Node"
+                    }
+                }
+            }
+        },
+        "registry_svc.ListServiceDefinitionsResponse": {
+            "type": "object",
+            "properties": {
+                "serviceDefinitions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/registry_svc.ServiceDefinition"
+                    }
+                }
+            }
+        },
+        "registry_svc.ListServiceInstancesResponse": {
+            "type": "object",
+            "properties": {
+                "instances": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/registry_svc.ServiceInstance"
                     }
                 }
             }
@@ -5298,17 +5548,6 @@
                 },
                 "processName": {
                     "type": "string"
-                }
-            }
-        },
-        "registry_svc.QueryServiceInstancesResponse": {
-            "type": "object",
-            "properties": {
-                "instances": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/registry_svc.ServiceInstance"
-                    }
                 }
             }
         },
@@ -5384,6 +5623,51 @@
                             "$ref": "#/definitions/registry_svc.Usage"
                         }
                     ]
+                }
+            }
+        },
+        "registry_svc.SaveServiceDefinitionRequest": {
+            "type": "object",
+            "properties": {
+                "serviceDefinition": {
+                    "$ref": "#/definitions/registry_svc.ServiceDefinition"
+                }
+            }
+        },
+        "registry_svc.SaveServiceDefinitionResponse": {
+            "type": "object"
+        },
+        "registry_svc.ServiceDefinition": {
+            "type": "object",
+            "required": [
+                "serviceSlug"
+            ],
+            "properties": {
+                "apiSpecs": {
+                    "description": "API Specs such as OpenAPI definitions etc.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/registry_svc.APISpec"
+                    }
+                },
+                "clients": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/registry_svc.Client"
+                    }
+                },
+                "image": {
+                    "description": "Container specifications for Docker, K8s, etc.                                        // Programming language clients.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/registry_svc.ImageSpec"
+                        }
+                    ]
+                },
+                "serviceSlug": {
+                    "description": "The User Svc slug of the service whose instance is being registered.",
+                    "type": "string",
+                    "example": "user-svc"
                 }
             }
         },

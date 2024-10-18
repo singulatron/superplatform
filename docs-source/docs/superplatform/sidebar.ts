@@ -330,9 +330,21 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
+          id: "superplatform/save-service-definition",
+          label: "Register Service Definition",
+          className: "api-method put",
+        },
+        {
+          type: "doc",
+          id: "superplatform/delete-service-definition",
+          label: "Delete Service Definition",
+          className: "api-method delete",
+        },
+        {
+          type: "doc",
           id: "superplatform/register-service-instance",
           label: "Register Service Instance",
-          className: "api-method post",
+          className: "api-method put",
         },
         {
           type: "doc",
@@ -343,7 +355,7 @@ const sidebar: SidebarsConfig = {
         {
           type: "doc",
           id: "superplatform/query-service-instances",
-          label: "Query Service Instances",
+          label: "List Service Instances",
           className: "api-method get",
         },
       ],

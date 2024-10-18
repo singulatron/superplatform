@@ -121,10 +121,12 @@ Class | Method | HTTP request | Description
 *PromptSvcAPI* | [**ListPrompts**](docs/PromptSvcAPI.md#listprompts) | **Post** /prompt-svc/prompts | List Prompts
 *PromptSvcAPI* | [**RemovePrompt**](docs/PromptSvcAPI.md#removeprompt) | **Post** /prompt-svc/remove | Remove Prompt
 *PromptSvcAPI* | [**SubscribeToPromptResponses**](docs/PromptSvcAPI.md#subscribetopromptresponses) | **Get** /prompt-svc/prompts/{threadId}/responses/subscribe | Subscribe to Prompt Responses by Thread
+*RegistrySvcAPI* | [**DeleteServiceDefinition**](docs/RegistrySvcAPI.md#deleteservicedefinition) | **Delete** /registry-svc/service-definition/{id} | Delete Service Definition
 *RegistrySvcAPI* | [**ListNodes**](docs/RegistrySvcAPI.md#listnodes) | **Post** /registry-svc/nodes | List Nodes
-*RegistrySvcAPI* | [**QueryServiceInstances**](docs/RegistrySvcAPI.md#queryserviceinstances) | **Get** /registry-svc/services | Query Service Instances
-*RegistrySvcAPI* | [**RegisterServiceInstance**](docs/RegistrySvcAPI.md#registerserviceinstance) | **Post** /registry-svc/service-instance | Register Service Instance
+*RegistrySvcAPI* | [**QueryServiceInstances**](docs/RegistrySvcAPI.md#queryserviceinstances) | **Get** /registry-svc/services | List Service Instances
+*RegistrySvcAPI* | [**RegisterServiceInstance**](docs/RegistrySvcAPI.md#registerserviceinstance) | **Put** /registry-svc/service-instance | Register Service Instance
 *RegistrySvcAPI* | [**RemoveServiceInstance**](docs/RegistrySvcAPI.md#removeserviceinstance) | **Delete** /registry-svc/service-instance/{id} | Remove Service Instance
+*RegistrySvcAPI* | [**SaveServiceDefinition**](docs/RegistrySvcAPI.md#saveservicedefinition) | **Put** /registry-svc/service-definition | Register Service Definition
 *UserSvcAPI* | [**AddPermissionToRole**](docs/UserSvcAPI.md#addpermissiontorole) | **Put** /user-svc/role/{roleId}/permission/{permissionId} | Add Permission to Role
 *UserSvcAPI* | [**AddUserToOrganization**](docs/UserSvcAPI.md#addusertoorganization) | **Post** /user-svc/organization/{organizationId}/user | Add a User to an Organization
 *UserSvcAPI* | [**ChangePassword**](docs/UserSvcAPI.md#changepassword) | **Post** /user-svc/change-password | Change User Password
@@ -238,14 +240,21 @@ Class | Method | HTTP request | Description
  - [PromptSvcPrompt](docs/PromptSvcPrompt.md)
  - [PromptSvcPromptStatus](docs/PromptSvcPromptStatus.md)
  - [PromptSvcRemovePromptRequest](docs/PromptSvcRemovePromptRequest.md)
+ - [RegistrySvcAPISpec](docs/RegistrySvcAPISpec.md)
+ - [RegistrySvcClient](docs/RegistrySvcClient.md)
  - [RegistrySvcErrorResponse](docs/RegistrySvcErrorResponse.md)
  - [RegistrySvcGPU](docs/RegistrySvcGPU.md)
+ - [RegistrySvcImageSpec](docs/RegistrySvcImageSpec.md)
+ - [RegistrySvcLanguage](docs/RegistrySvcLanguage.md)
  - [RegistrySvcListNodesResponse](docs/RegistrySvcListNodesResponse.md)
+ - [RegistrySvcListServiceDefinitionsResponse](docs/RegistrySvcListServiceDefinitionsResponse.md)
+ - [RegistrySvcListServiceInstancesResponse](docs/RegistrySvcListServiceInstancesResponse.md)
  - [RegistrySvcNode](docs/RegistrySvcNode.md)
  - [RegistrySvcProcess](docs/RegistrySvcProcess.md)
- - [RegistrySvcQueryServiceInstancesResponse](docs/RegistrySvcQueryServiceInstancesResponse.md)
  - [RegistrySvcRegisterServiceInstanceRequest](docs/RegistrySvcRegisterServiceInstanceRequest.md)
  - [RegistrySvcResourceUsage](docs/RegistrySvcResourceUsage.md)
+ - [RegistrySvcSaveServiceDefinitionRequest](docs/RegistrySvcSaveServiceDefinitionRequest.md)
+ - [RegistrySvcServiceDefinition](docs/RegistrySvcServiceDefinition.md)
  - [RegistrySvcServiceInstance](docs/RegistrySvcServiceInstance.md)
  - [RegistrySvcUsage](docs/RegistrySvcUsage.md)
  - [UserSvcAddUserToOrganizationRequest](docs/UserSvcAddUserToOrganizationRequest.md)

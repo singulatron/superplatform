@@ -12,6 +12,8 @@ import (
 	"log/slog"
 	"time"
 
+	openapi "github.com/singulatron/superplatform/clients/go"
+	sdk "github.com/singulatron/superplatform/sdk/go"
 	"github.com/singulatron/superplatform/sdk/go/logger"
 	"github.com/singulatron/superplatform/server/internal/services/deploy/allocator"
 	deploy "github.com/singulatron/superplatform/server/internal/services/deploy/types"
@@ -58,12 +60,40 @@ func (ns *DeployService) cycle() error {
 		return err
 	}
 
-	serviceInstances, _, err := registry.QueryServiceInstances(ctx).Execute()
+	queryServiceInstancesRsp, _, err := registry.QueryServiceInstances(ctx).Execute()
 	if err != nil {
 		return err
 	}
 
-	allocator.GenerateCommands(listNodesRsp.Nodes, serviceInstances)
+	commands := allocator.GenerateCommands(listNodesRsp.Nodes, queryServiceInstancesRsp.Instances, deployments)
+	for _, command := range commands {
+		var node *openapi.RegistrySvcNode
+
+		for _, v := range listNodesRsp.Nodes {
+			if v.Url == command.NodeUrl {
+				node = &v
+			}
+		}
+
+		err := ns.processCommand(ctx, command, node)
+		if err != nil {
+			logger.Error("Error processing deploy command", slog.Any("error", err))
+		}
+	}
+
+	return nil
+}
+
+func (ns *DeployService) processCommand(ctx context.Context, command *deploy.Command, node *openapi.RegistrySvcNode) error {
+	switch command.Action {
+	case deploy.CommandTypeStart:
+
+		ns.clientFactory.Client(sdk.WithAddress(*command.NodeUrl)).DockerSvcAPI.LaunchContainer(ctx).Request(
+			openapi.DockerSvcLaunchContainerRequest{},
+		)
+	case deploy.CommandTypeScale:
+	case deploy.CommandTypeKill:
+	}
 
 	return nil
 }

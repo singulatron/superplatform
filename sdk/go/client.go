@@ -32,6 +32,17 @@ func WithTokenFromRequest(req *http.Request) ClientOption {
 	}
 }
 
+func WithAddress(address string) ClientOption {
+	return func(cfg *client.Configuration) {
+		cfg.Servers = client.ServerConfigurations{
+			{
+				URL:         address,
+				Description: "Default server",
+			},
+		}
+	}
+}
+
 func CustomHeader(key, value string) ClientOption {
 	return func(cfg *client.Configuration) {
 		if cfg.DefaultHeader == nil {

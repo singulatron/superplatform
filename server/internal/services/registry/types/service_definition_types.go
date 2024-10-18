@@ -17,6 +17,10 @@ type ServiceDefinition struct {
 	Image       *ImageSpec `json:"image,omitempty"` // Container specifications for Docker, K8s, etc.                                        // Programming language clients.
 }
 
+func (s ServiceDefinition) GetId() string {
+	return s.ServiceSlug
+}
+
 type APISpec struct {
 	URL          string            `json:"url,omitempty"`          // URL to the OpenAPI file or other API definition
 	ProtocolType string            `json:"protocolType,omitempty"` // Protocol type (e.g., OpenAPI, Swagger, etc.)
@@ -86,5 +90,15 @@ const (
 	FSharp     Language = "F#"
 )
 
-type RegisterServiceResponse struct {
+type SaveServiceDefinitionRequest struct {
+	ServiceDefinition ServiceDefinition `json:"serviceDefinition,omitempty"`
+}
+
+type SaveServiceDefinitionResponse struct {
+}
+
+type ListServiceDefinitionsRequest struct{}
+
+type ListServiceDefinitionsResponse struct {
+	ServiceDefinitions []*ServiceDefinition `json:"serviceDefinitions,omitempty"`
 }

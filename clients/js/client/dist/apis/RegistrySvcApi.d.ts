@@ -10,7 +10,10 @@
  * Do not edit the class manually.
  */
 import * as runtime from '../runtime';
-import type { RegistrySvcListNodesResponse, RegistrySvcQueryServiceInstancesResponse, RegistrySvcRegisterServiceInstanceRequest } from '../models/index';
+import type { RegistrySvcListNodesResponse, RegistrySvcListServiceInstancesResponse, RegistrySvcRegisterServiceInstanceRequest, RegistrySvcSaveServiceDefinitionRequest } from '../models/index';
+export interface DeleteServiceDefinitionRequest {
+    id: string;
+}
 export interface ListNodesRequest {
     body?: object;
 }
@@ -27,10 +30,23 @@ export interface RegisterServiceInstanceRequest {
 export interface RemoveServiceInstanceRequest {
     id: string;
 }
+export interface SaveServiceDefinitionRequest {
+    request: RegistrySvcSaveServiceDefinitionRequest;
+}
 /**
  *
  */
 export declare class RegistrySvcApi extends runtime.BaseAPI {
+    /**
+     * Deletes a registered service definition based on the service ID.
+     * Delete Service Definition
+     */
+    deleteServiceDefinitionRaw(requestParameters: DeleteServiceDefinitionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+    /**
+     * Deletes a registered service definition based on the service ID.
+     * Delete Service Definition
+     */
+    deleteServiceDefinition(requestParameters: DeleteServiceDefinitionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
     /**
      * Retrieve a list of nodes.
      * List Nodes
@@ -43,14 +59,14 @@ export declare class RegistrySvcApi extends runtime.BaseAPI {
     listNodes(requestParameters?: ListNodesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RegistrySvcListNodesResponse>;
     /**
      * Retrieves a list of all registered service instances or filters them by specific criteria (e.g., host, IP).
-     * Query Service Instances
+     * List Service Instances
      */
-    queryServiceInstancesRaw(requestParameters: QueryServiceInstancesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RegistrySvcQueryServiceInstancesResponse>>;
+    queryServiceInstancesRaw(requestParameters: QueryServiceInstancesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RegistrySvcListServiceInstancesResponse>>;
     /**
      * Retrieves a list of all registered service instances or filters them by specific criteria (e.g., host, IP).
-     * Query Service Instances
+     * List Service Instances
      */
-    queryServiceInstances(requestParameters?: QueryServiceInstancesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RegistrySvcQueryServiceInstancesResponse>;
+    queryServiceInstances(requestParameters?: QueryServiceInstancesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RegistrySvcListServiceInstancesResponse>;
     /**
      * Registers a new service instance, associating an service instance address with a slug acquired from the bearer token.
      * Register Service Instance
@@ -71,4 +87,14 @@ export declare class RegistrySvcApi extends runtime.BaseAPI {
      * Remove Service Instance
      */
     removeServiceInstance(requestParameters: RemoveServiceInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+    /**
+     * Registers a new service definition, associating an service definition address with a slug acquired from the bearer token.
+     * Register Service Definition
+     */
+    saveServiceDefinitionRaw(requestParameters: SaveServiceDefinitionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
+    /**
+     * Registers a new service definition, associating an service definition address with a slug acquired from the bearer token.
+     * Register Service Definition
+     */
+    saveServiceDefinition(requestParameters: SaveServiceDefinitionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
 }

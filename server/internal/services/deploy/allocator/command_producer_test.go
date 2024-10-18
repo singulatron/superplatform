@@ -32,12 +32,12 @@ func TestGenerateCommands_ScaleUp(t *testing.T) {
 	commands := allocator.GenerateCommands(nodes, serviceInstances, deployments)
 
 	require.Equal(t, 2, len(commands))
-	require.Equal(t, "START", commands[0].Action)
+	require.Equal(t, deploy.CommandType("START"), commands[0].Action)
 	require.Equal(t, "service-A", commands[0].ServiceSlug)
-	require.Equal(t, "node1", *commands[0].Node)
-	require.Equal(t, "START", commands[1].Action)
+	require.Equal(t, "node1", *commands[0].NodeUrl)
+	require.Equal(t, deploy.CommandType("START"), commands[1].Action)
 	require.Equal(t, "service-A", commands[1].ServiceSlug)
-	require.Equal(t, "node2", *commands[1].Node)
+	require.Equal(t, "node2", *commands[1].NodeUrl)
 }
 
 func TestGenerateCommands_ScaleDown(t *testing.T) {
@@ -56,9 +56,9 @@ func TestGenerateCommands_ScaleDown(t *testing.T) {
 	commands := allocator.GenerateCommands(nodes, serviceInstances, deployments)
 
 	require.Equal(t, 2, len(commands))
-	require.Equal(t, "KILL", commands[0].Action)
+	require.Equal(t, deploy.CommandType("KILL"), commands[0].Action)
 	require.Equal(t, "service-A", commands[0].ServiceSlug)
-	require.Equal(t, "KILL", commands[1].Action)
+	require.Equal(t, deploy.CommandType("KILL"), commands[1].Action)
 	require.Equal(t, "service-A", commands[1].ServiceSlug)
 }
 
@@ -76,7 +76,7 @@ func TestGenerateCommands_KillUnhealthy(t *testing.T) {
 	commands := allocator.GenerateCommands(nodes, serviceInstances, deployments)
 
 	require.Equal(t, 1, len(commands))
-	require.Equal(t, "KILL", commands[0].Action)
+	require.Equal(t, deploy.CommandType("KILL"), commands[0].Action)
 	require.Equal(t, "service-A", commands[0].ServiceSlug)
 	require.Equal(t, "instance1", *commands[0].InstanceId)
 }

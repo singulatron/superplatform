@@ -21,11 +21,43 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import * as runtime from '../runtime';
-import { RegistrySvcListNodesResponseFromJSON, RegistrySvcQueryServiceInstancesResponseFromJSON, RegistrySvcRegisterServiceInstanceRequestToJSON, } from '../models/index';
+import { RegistrySvcListNodesResponseFromJSON, RegistrySvcListServiceInstancesResponseFromJSON, RegistrySvcRegisterServiceInstanceRequestToJSON, RegistrySvcSaveServiceDefinitionRequestToJSON, } from '../models/index';
 /**
  *
  */
 export class RegistrySvcApi extends runtime.BaseAPI {
+    /**
+     * Deletes a registered service definition based on the service ID.
+     * Delete Service Definition
+     */
+    deleteServiceDefinitionRaw(requestParameters, initOverrides) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (requestParameters['id'] == null) {
+                throw new runtime.RequiredError('id', 'Required parameter "id" was null or undefined when calling deleteServiceDefinition().');
+            }
+            const queryParameters = {};
+            const headerParameters = {};
+            if (this.configuration && this.configuration.apiKey) {
+                headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
+            }
+            const response = yield this.request({
+                path: `/registry-svc/service-definition/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+                method: 'DELETE',
+                headers: headerParameters,
+                query: queryParameters,
+            }, initOverrides);
+            return new runtime.VoidApiResponse(response);
+        });
+    }
+    /**
+     * Deletes a registered service definition based on the service ID.
+     * Delete Service Definition
+     */
+    deleteServiceDefinition(requestParameters, initOverrides) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.deleteServiceDefinitionRaw(requestParameters, initOverrides);
+        });
+    }
     /**
      * Retrieve a list of nodes.
      * List Nodes
@@ -60,7 +92,7 @@ export class RegistrySvcApi extends runtime.BaseAPI {
     }
     /**
      * Retrieves a list of all registered service instances or filters them by specific criteria (e.g., host, IP).
-     * Query Service Instances
+     * List Service Instances
      */
     queryServiceInstancesRaw(requestParameters, initOverrides) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -90,12 +122,12 @@ export class RegistrySvcApi extends runtime.BaseAPI {
                 headers: headerParameters,
                 query: queryParameters,
             }, initOverrides);
-            return new runtime.JSONApiResponse(response, (jsonValue) => RegistrySvcQueryServiceInstancesResponseFromJSON(jsonValue));
+            return new runtime.JSONApiResponse(response, (jsonValue) => RegistrySvcListServiceInstancesResponseFromJSON(jsonValue));
         });
     }
     /**
      * Retrieves a list of all registered service instances or filters them by specific criteria (e.g., host, IP).
-     * Query Service Instances
+     * List Service Instances
      */
     queryServiceInstances() {
         return __awaiter(this, arguments, void 0, function* (requestParameters = {}, initOverrides) {
@@ -120,7 +152,7 @@ export class RegistrySvcApi extends runtime.BaseAPI {
             }
             const response = yield this.request({
                 path: `/registry-svc/service-instance`,
-                method: 'POST',
+                method: 'PUT',
                 headers: headerParameters,
                 query: queryParameters,
                 body: RegistrySvcRegisterServiceInstanceRequestToJSON(requestParameters['request']),
@@ -168,6 +200,41 @@ export class RegistrySvcApi extends runtime.BaseAPI {
     removeServiceInstance(requestParameters, initOverrides) {
         return __awaiter(this, void 0, void 0, function* () {
             yield this.removeServiceInstanceRaw(requestParameters, initOverrides);
+        });
+    }
+    /**
+     * Registers a new service definition, associating an service definition address with a slug acquired from the bearer token.
+     * Register Service Definition
+     */
+    saveServiceDefinitionRaw(requestParameters, initOverrides) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (requestParameters['request'] == null) {
+                throw new runtime.RequiredError('request', 'Required parameter "request" was null or undefined when calling saveServiceDefinition().');
+            }
+            const queryParameters = {};
+            const headerParameters = {};
+            headerParameters['Content-Type'] = 'application/json';
+            if (this.configuration && this.configuration.apiKey) {
+                headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
+            }
+            const response = yield this.request({
+                path: `/registry-svc/service-definition`,
+                method: 'PUT',
+                headers: headerParameters,
+                query: queryParameters,
+                body: RegistrySvcSaveServiceDefinitionRequestToJSON(requestParameters['request']),
+            }, initOverrides);
+            return new runtime.JSONApiResponse(response);
+        });
+    }
+    /**
+     * Registers a new service definition, associating an service definition address with a slug acquired from the bearer token.
+     * Register Service Definition
+     */
+    saveServiceDefinition(requestParameters, initOverrides) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const response = yield this.saveServiceDefinitionRaw(requestParameters, initOverrides);
+            return yield response.value();
         });
     }
 }

@@ -11,8 +11,9 @@
  */
 import http from 'http';
 import { RegistrySvcListNodesResponse } from '../model/registrySvcListNodesResponse';
-import { RegistrySvcQueryServiceInstancesResponse } from '../model/registrySvcQueryServiceInstancesResponse';
+import { RegistrySvcListServiceInstancesResponse } from '../model/registrySvcListServiceInstancesResponse';
 import { RegistrySvcRegisterServiceInstanceRequest } from '../model/registrySvcRegisterServiceInstanceRequest';
+import { RegistrySvcSaveServiceDefinitionRequest } from '../model/registrySvcSaveServiceDefinitionRequest';
 import { Authentication, Interceptor } from '../model/models';
 import { ApiKeyAuth } from '../model/models';
 export declare enum RegistrySvcApiApiKeys {
@@ -37,6 +38,19 @@ export declare class RegistrySvcApi {
     setApiKey(key: RegistrySvcApiApiKeys, value: string): void;
     addInterceptor(interceptor: Interceptor): void;
     /**
+     * Deletes a registered service definition based on the service ID.
+     * @summary Delete Service Definition
+     * @param id Service Definition ID
+     */
+    deleteServiceDefinition(id: string, options?: {
+        headers: {
+            [name: string]: string;
+        };
+    }): Promise<{
+        response: http.IncomingMessage;
+        body?: any;
+    }>;
+    /**
      * Retrieve a list of nodes.
      * @summary List Nodes
      * @param body List Registrys Request
@@ -51,7 +65,7 @@ export declare class RegistrySvcApi {
     }>;
     /**
      * Retrieves a list of all registered service instances or filters them by specific criteria (e.g., host, IP).
-     * @summary Query Service Instances
+     * @summary List Service Instances
      * @param scheme Scheme to filter by
      * @param ip IP to filter by
      * @param host Host to filter by
@@ -64,7 +78,7 @@ export declare class RegistrySvcApi {
         };
     }): Promise<{
         response: http.IncomingMessage;
-        body: RegistrySvcQueryServiceInstancesResponse;
+        body: RegistrySvcListServiceInstancesResponse;
     }>;
     /**
      * Registers a new service instance, associating an service instance address with a slug acquired from the bearer token.
@@ -91,5 +105,18 @@ export declare class RegistrySvcApi {
     }): Promise<{
         response: http.IncomingMessage;
         body?: any;
+    }>;
+    /**
+     * Registers a new service definition, associating an service definition address with a slug acquired from the bearer token.
+     * @summary Register Service Definition
+     * @param request Register Service Definition Request
+     */
+    saveServiceDefinition(request: RegistrySvcSaveServiceDefinitionRequest, options?: {
+        headers: {
+            [name: string]: string;
+        };
+    }): Promise<{
+        response: http.IncomingMessage;
+        body: object;
     }>;
 }

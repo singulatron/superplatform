@@ -88,14 +88,21 @@ var promptSvcListPromptsResponse = require('./promptSvcListPromptsResponse.js');
 var promptSvcPrompt = require('./promptSvcPrompt.js');
 var promptSvcPromptStatus = require('./promptSvcPromptStatus.js');
 var promptSvcRemovePromptRequest = require('./promptSvcRemovePromptRequest.js');
+var registrySvcAPISpec = require('./registrySvcAPISpec.js');
+var registrySvcClient = require('./registrySvcClient.js');
 var registrySvcErrorResponse = require('./registrySvcErrorResponse.js');
 var registrySvcGPU = require('./registrySvcGPU.js');
+var registrySvcImageSpec = require('./registrySvcImageSpec.js');
+var registrySvcLanguage = require('./registrySvcLanguage.js');
 var registrySvcListNodesResponse = require('./registrySvcListNodesResponse.js');
+var registrySvcListServiceDefinitionsResponse = require('./registrySvcListServiceDefinitionsResponse.js');
+var registrySvcListServiceInstancesResponse = require('./registrySvcListServiceInstancesResponse.js');
 var registrySvcNode = require('./registrySvcNode.js');
 var registrySvcProcess = require('./registrySvcProcess.js');
-var registrySvcQueryServiceInstancesResponse = require('./registrySvcQueryServiceInstancesResponse.js');
 var registrySvcRegisterServiceInstanceRequest = require('./registrySvcRegisterServiceInstanceRequest.js');
 var registrySvcResourceUsage = require('./registrySvcResourceUsage.js');
+var registrySvcSaveServiceDefinitionRequest = require('./registrySvcSaveServiceDefinitionRequest.js');
+var registrySvcServiceDefinition = require('./registrySvcServiceDefinition.js');
 var registrySvcServiceInstance = require('./registrySvcServiceInstance.js');
 var registrySvcUsage = require('./registrySvcUsage.js');
 var userSvcAddUserToOrganizationRequest = require('./userSvcAddUserToOrganizationRequest.js');
@@ -145,6 +152,7 @@ let enumsMap = {
     "PolicySvcScope": policySvcScope.PolicySvcScope,
     "PolicySvcTemplateId": policySvcTemplateId.PolicySvcTemplateId,
     "PromptSvcPromptStatus": promptSvcPromptStatus.PromptSvcPromptStatus,
+    "RegistrySvcLanguage": registrySvcLanguage.RegistrySvcLanguage,
 };
 let typeMap = {
     "ChatSvcAddMessageRequest": chatSvcAddMessageRequest.ChatSvcAddMessageRequest,
@@ -229,14 +237,20 @@ let typeMap = {
     "PromptSvcListPromptsResponse": promptSvcListPromptsResponse.PromptSvcListPromptsResponse,
     "PromptSvcPrompt": promptSvcPrompt.PromptSvcPrompt,
     "PromptSvcRemovePromptRequest": promptSvcRemovePromptRequest.PromptSvcRemovePromptRequest,
+    "RegistrySvcAPISpec": registrySvcAPISpec.RegistrySvcAPISpec,
+    "RegistrySvcClient": registrySvcClient.RegistrySvcClient,
     "RegistrySvcErrorResponse": registrySvcErrorResponse.RegistrySvcErrorResponse,
     "RegistrySvcGPU": registrySvcGPU.RegistrySvcGPU,
+    "RegistrySvcImageSpec": registrySvcImageSpec.RegistrySvcImageSpec,
     "RegistrySvcListNodesResponse": registrySvcListNodesResponse.RegistrySvcListNodesResponse,
+    "RegistrySvcListServiceDefinitionsResponse": registrySvcListServiceDefinitionsResponse.RegistrySvcListServiceDefinitionsResponse,
+    "RegistrySvcListServiceInstancesResponse": registrySvcListServiceInstancesResponse.RegistrySvcListServiceInstancesResponse,
     "RegistrySvcNode": registrySvcNode.RegistrySvcNode,
     "RegistrySvcProcess": registrySvcProcess.RegistrySvcProcess,
-    "RegistrySvcQueryServiceInstancesResponse": registrySvcQueryServiceInstancesResponse.RegistrySvcQueryServiceInstancesResponse,
     "RegistrySvcRegisterServiceInstanceRequest": registrySvcRegisterServiceInstanceRequest.RegistrySvcRegisterServiceInstanceRequest,
     "RegistrySvcResourceUsage": registrySvcResourceUsage.RegistrySvcResourceUsage,
+    "RegistrySvcSaveServiceDefinitionRequest": registrySvcSaveServiceDefinitionRequest.RegistrySvcSaveServiceDefinitionRequest,
+    "RegistrySvcServiceDefinition": registrySvcServiceDefinition.RegistrySvcServiceDefinition,
     "RegistrySvcServiceInstance": registrySvcServiceInstance.RegistrySvcServiceInstance,
     "RegistrySvcUsage": registrySvcUsage.RegistrySvcUsage,
     "UserSvcAddUserToOrganizationRequest": userSvcAddUserToOrganizationRequest.UserSvcAddUserToOrganizationRequest,
@@ -558,14 +572,24 @@ Object.defineProperty(exports, 'PromptSvcPromptStatus', {
     get: function () { return promptSvcPromptStatus.PromptSvcPromptStatus; }
 });
 exports.PromptSvcRemovePromptRequest = promptSvcRemovePromptRequest.PromptSvcRemovePromptRequest;
+exports.RegistrySvcAPISpec = registrySvcAPISpec.RegistrySvcAPISpec;
+exports.RegistrySvcClient = registrySvcClient.RegistrySvcClient;
 exports.RegistrySvcErrorResponse = registrySvcErrorResponse.RegistrySvcErrorResponse;
 exports.RegistrySvcGPU = registrySvcGPU.RegistrySvcGPU;
+exports.RegistrySvcImageSpec = registrySvcImageSpec.RegistrySvcImageSpec;
+Object.defineProperty(exports, 'RegistrySvcLanguage', {
+    enumerable: true,
+    get: function () { return registrySvcLanguage.RegistrySvcLanguage; }
+});
 exports.RegistrySvcListNodesResponse = registrySvcListNodesResponse.RegistrySvcListNodesResponse;
+exports.RegistrySvcListServiceDefinitionsResponse = registrySvcListServiceDefinitionsResponse.RegistrySvcListServiceDefinitionsResponse;
+exports.RegistrySvcListServiceInstancesResponse = registrySvcListServiceInstancesResponse.RegistrySvcListServiceInstancesResponse;
 exports.RegistrySvcNode = registrySvcNode.RegistrySvcNode;
 exports.RegistrySvcProcess = registrySvcProcess.RegistrySvcProcess;
-exports.RegistrySvcQueryServiceInstancesResponse = registrySvcQueryServiceInstancesResponse.RegistrySvcQueryServiceInstancesResponse;
 exports.RegistrySvcRegisterServiceInstanceRequest = registrySvcRegisterServiceInstanceRequest.RegistrySvcRegisterServiceInstanceRequest;
 exports.RegistrySvcResourceUsage = registrySvcResourceUsage.RegistrySvcResourceUsage;
+exports.RegistrySvcSaveServiceDefinitionRequest = registrySvcSaveServiceDefinitionRequest.RegistrySvcSaveServiceDefinitionRequest;
+exports.RegistrySvcServiceDefinition = registrySvcServiceDefinition.RegistrySvcServiceDefinition;
 exports.RegistrySvcServiceInstance = registrySvcServiceInstance.RegistrySvcServiceInstance;
 exports.RegistrySvcUsage = registrySvcUsage.RegistrySvcUsage;
 exports.UserSvcAddUserToOrganizationRequest = userSvcAddUserToOrganizationRequest.UserSvcAddUserToOrganizationRequest;
