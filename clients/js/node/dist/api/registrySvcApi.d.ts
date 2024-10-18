@@ -11,6 +11,7 @@
  */
 import http from 'http';
 import { RegistrySvcListNodesResponse } from '../model/registrySvcListNodesResponse';
+import { RegistrySvcListServiceDefinitionsResponse } from '../model/registrySvcListServiceDefinitionsResponse';
 import { RegistrySvcListServiceInstancesResponse } from '../model/registrySvcListServiceInstancesResponse';
 import { RegistrySvcRegisterServiceInstanceRequest } from '../model/registrySvcRegisterServiceInstanceRequest';
 import { RegistrySvcSaveServiceDefinitionRequest } from '../model/registrySvcSaveServiceDefinitionRequest';
@@ -64,6 +65,18 @@ export declare class RegistrySvcApi {
         body: RegistrySvcListNodesResponse;
     }>;
     /**
+     * Retrieves a list of all service definitions or filters them by specific criteria.
+     * @summary List Service Definitions
+     */
+    listServiceDefinitions(options?: {
+        headers: {
+            [name: string]: string;
+        };
+    }): Promise<{
+        response: http.IncomingMessage;
+        body: RegistrySvcListServiceDefinitionsResponse;
+    }>;
+    /**
      * Retrieves a list of all registered service instances or filters them by specific criteria (e.g., host, IP).
      * @summary List Service Instances
      * @param scheme Scheme to filter by
@@ -72,7 +85,7 @@ export declare class RegistrySvcApi {
      * @param ip2 IP to filter by
      * @param id Id to filter by
      */
-    queryServiceInstances(scheme?: string, ip?: string, host?: string, ip2?: string, id?: string, options?: {
+    listServiceInstances(scheme?: string, ip?: string, host?: string, ip2?: string, id?: string, options?: {
         headers: {
             [name: string]: string;
         };

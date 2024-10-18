@@ -8,7 +8,7 @@ import (
 )
 
 // List all registered service instances or filter by criteria
-// @ID queryServiceInstances
+// @ID listServiceInstances
 // @Summary List Service Instances
 // @Description Retrieves a list of all registered service instances or filters them by specific criteria (e.g., host, IP).
 // @Tags Registry Svc

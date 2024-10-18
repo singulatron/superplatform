@@ -4,17 +4,17 @@ import (
 	"net/http"
 	"strings"
 
-	client "github.com/singulatron/superplatform/clients/go"
+	openapi "github.com/singulatron/superplatform/clients/go"
 )
 
 type ClientFactory interface {
-	Client(opts ...ClientOption) *client.APIClient
+	Client(opts ...ClientOption) *openapi.APIClient
 }
 
-type ClientOption func(*client.Configuration)
+type ClientOption func(*openapi.Configuration)
 
 func WithToken(token string) ClientOption {
-	return func(cfg *client.Configuration) {
+	return func(cfg *openapi.Configuration) {
 		cfg.DefaultHeader = map[string]string{
 			"Authorization": "Bearer " + token,
 		}
@@ -25,7 +25,7 @@ func WithTokenFromRequest(req *http.Request) ClientOption {
 	authHeader := req.Header.Get("Authorization")
 	authHeader = strings.Replace(authHeader, "Bearer ", "", 1)
 
-	return func(cfg *client.Configuration) {
+	return func(cfg *openapi.Configuration) {
 		cfg.DefaultHeader = map[string]string{
 			"Authorization": "Bearer " + authHeader,
 		}
@@ -33,8 +33,8 @@ func WithTokenFromRequest(req *http.Request) ClientOption {
 }
 
 func WithAddress(address string) ClientOption {
-	return func(cfg *client.Configuration) {
-		cfg.Servers = client.ServerConfigurations{
+	return func(cfg *openapi.Configuration) {
+		cfg.Servers = openapi.ServerConfigurations{
 			{
 				URL:         address,
 				Description: "Default server",
@@ -44,7 +44,7 @@ func WithAddress(address string) ClientOption {
 }
 
 func CustomHeader(key, value string) ClientOption {
-	return func(cfg *client.Configuration) {
+	return func(cfg *openapi.Configuration) {
 		if cfg.DefaultHeader == nil {
 			cfg.DefaultHeader = make(map[string]string)
 		}
@@ -62,9 +62,9 @@ func NewApiClientFactory(url string) *APIClientFactory {
 	}
 }
 
-func (f *APIClientFactory) Client(opts ...ClientOption) *client.APIClient {
-	cfg := &client.Configuration{
-		Servers: client.ServerConfigurations{
+func (f *APIClientFactory) Client(opts ...ClientOption) *openapi.APIClient {
+	cfg := &openapi.Configuration{
+		Servers: openapi.ServerConfigurations{
 			{
 				URL:         f.url,
 				Description: "Default server",
@@ -76,5 +76,5 @@ func (f *APIClientFactory) Client(opts ...ClientOption) *client.APIClient {
 		opt(cfg)
 	}
 
-	return client.NewAPIClient(cfg)
+	return openapi.NewAPIClient(cfg)
 }

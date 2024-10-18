@@ -3340,6 +3340,33 @@ paths:
       summary: Delete Service Definition
       tags:
       - Registry Svc
+  /registry-svc/service-definitions:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of all service definitions or filters them by
+        specific criteria.
+      operationId: listServiceDefinitions
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/registry_svc.ListServiceDefinitionsResponse'
+        "400":
+          description: Invalid filters
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: List Service Definitions
+      tags:
+      - Registry Svc
   /registry-svc/service-instance:
     put:
       consumes:
@@ -3422,7 +3449,7 @@ paths:
       - application/json
       description: Retrieves a list of all registered service instances or filters
         them by specific criteria (e.g., host, IP).
-      operationId: queryServiceInstances
+      operationId: listServiceInstances
       parameters:
       - description: Scheme to filter by
         in: query

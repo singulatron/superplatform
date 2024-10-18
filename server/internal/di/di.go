@@ -484,10 +484,10 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 
 	router.HandleFunc("/registry-svc/service-instances", appl(func(w http.ResponseWriter, r *http.Request) {
 		registryService.ListServiceInstances(w, r)
-	})).Methods("OPTIONS", "POST")
+	})).Methods("OPTIONS", "GET")
 	router.HandleFunc("/registry-svc/service-definitions", appl(func(w http.ResponseWriter, r *http.Request) {
 		registryService.ListServiceDefinitions(w, r)
-	})).Methods("OPTIONS", "POST")
+	})).Methods("OPTIONS", "GET")
 	router.HandleFunc("/registry-svc/service-instance", appl(func(w http.ResponseWriter, r *http.Request) {
 		registryService.RegisterServiceInstance(w, r)
 	})).Methods("OPTIONS", "PUT")
@@ -546,6 +546,10 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 			return err
 		}
 		err = registryService.Start()
+		if err != nil {
+			return err
+		}
+		err = deployService.Start()
 		if err != nil {
 			return err
 		}

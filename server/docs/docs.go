@@ -2428,6 +2428,47 @@ const docTemplate = `{
                 }
             }
         },
+        "/registry-svc/service-definitions": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieves a list of all service definitions or filters them by specific criteria.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Registry Svc"
+                ],
+                "summary": "List Service Definitions",
+                "operationId": "listServiceDefinitions",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ListServiceDefinitionsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid filters",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/registry-svc/service-instance": {
             "put": {
                 "security": [
@@ -2563,7 +2604,7 @@ const docTemplate = `{
                     "Registry Svc"
                 ],
                 "summary": "List Service Instances",
-                "operationId": "queryServiceInstances",
+                "operationId": "listServiceInstances",
                 "parameters": [
                     {
                         "type": "string",

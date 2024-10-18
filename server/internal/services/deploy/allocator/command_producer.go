@@ -58,7 +58,7 @@ func scaleDeployment(
 				commands = append(commands, &deploy.Command{
 					Action:      "START",
 					ServiceSlug: deployment.ServiceSlug,
-					Node:        node.Url,
+					NodeUrl:     node.Url,
 				})
 				assignedNodes[*node.Url] = true // Mark this node as assigned for this service
 			}

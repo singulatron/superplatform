@@ -60,7 +60,12 @@ func (ns *DeployService) cycle() error {
 		return err
 	}
 
-	queryServiceInstancesRsp, _, err := registry.QueryServiceInstances(ctx).Execute()
+	queryServiceInstancesRsp, _, err := registry.ListServiceInstances(ctx).Execute()
+	if err != nil {
+		return err
+	}
+
+	listServiceDefinitionsRsp, _, err := registry.ListServiceDefinitions(ctx).Execute()
 	if err != nil {
 		return err
 	}
@@ -68,6 +73,7 @@ func (ns *DeployService) cycle() error {
 	commands := allocator.GenerateCommands(listNodesRsp.Nodes, queryServiceInstancesRsp.Instances, deployments)
 	for _, command := range commands {
 		var node *openapi.RegistrySvcNode
+		var definition *openapi.RegistrySvcServiceDefinition
 
 		for _, v := range listNodesRsp.Nodes {
 			if v.Url == command.NodeUrl {
@@ -75,7 +81,13 @@ func (ns *DeployService) cycle() error {
 			}
 		}
 
-		err := ns.processCommand(ctx, command, node)
+		for _, v := range listServiceDefinitionsRsp.ServiceDefinitions {
+			if v.ServiceSlug == command.ServiceSlug {
+				definition = &v
+			}
+		}
+
+		err := ns.processCommand(ctx, command, node, definition)
 		if err != nil {
 			logger.Error("Error processing deploy command", slog.Any("error", err))
 		}
@@ -84,12 +96,19 @@ func (ns *DeployService) cycle() error {
 	return nil
 }
 
-func (ns *DeployService) processCommand(ctx context.Context, command *deploy.Command, node *openapi.RegistrySvcNode) error {
+func (ns *DeployService) processCommand(
+	ctx context.Context,
+	command *deploy.Command,
+	node *openapi.RegistrySvcNode,
+	serviceDefinition *openapi.RegistrySvcServiceDefinition,
+) error {
 	switch command.Action {
 	case deploy.CommandTypeStart:
-
 		ns.clientFactory.Client(sdk.WithAddress(*command.NodeUrl)).DockerSvcAPI.LaunchContainer(ctx).Request(
-			openapi.DockerSvcLaunchContainerRequest{},
+			openapi.DockerSvcLaunchContainerRequest{
+				Image: serviceDefinition.Image.Image,
+				Port:  serviceDefinition.Image.Port,
+			},
 		)
 	case deploy.CommandTypeScale:
 	case deploy.CommandTypeKill:

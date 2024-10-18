@@ -1,5 +1,6 @@
 import { a as BaseAPI, _ as __awaiter, b as RequiredError, V as VoidApiResponse, J as JSONApiResponse } from './runtime2.mjs';
 import { RegistrySvcListNodesResponseFromJSON } from './RegistrySvcListNodesResponse.mjs';
+import { RegistrySvcListServiceDefinitionsResponseFromJSON } from './RegistrySvcListServiceDefinitionsResponse.mjs';
 import { RegistrySvcListServiceInstancesResponseFromJSON } from './RegistrySvcListServiceInstancesResponse.mjs';
 import { RegistrySvcRegisterServiceInstanceRequestToJSON } from './RegistrySvcRegisterServiceInstanceRequest.mjs';
 import { RegistrySvcSaveServiceDefinitionRequestToJSON } from './RegistrySvcSaveServiceDefinitionRequest.mjs';
@@ -8,12 +9,12 @@ import './RegistrySvcGPU.mjs';
 import './RegistrySvcProcess.mjs';
 import './RegistrySvcResourceUsage.mjs';
 import './RegistrySvcUsage.mjs';
-import './RegistrySvcServiceInstance.mjs';
 import './RegistrySvcServiceDefinition.mjs';
 import './RegistrySvcAPISpec.mjs';
 import './RegistrySvcImageSpec.mjs';
 import './RegistrySvcClient.mjs';
 import './RegistrySvcLanguage.mjs';
+import './RegistrySvcServiceInstance.mjs';
 
 /* tslint:disable */
 /* eslint-disable */
@@ -97,10 +98,40 @@ class RegistrySvcApi extends BaseAPI {
         });
     }
     /**
+     * Retrieves a list of all service definitions or filters them by specific criteria.
+     * List Service Definitions
+     */
+    listServiceDefinitionsRaw(initOverrides) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const queryParameters = {};
+            const headerParameters = {};
+            if (this.configuration && this.configuration.apiKey) {
+                headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
+            }
+            const response = yield this.request({
+                path: `/registry-svc/service-definitions`,
+                method: 'GET',
+                headers: headerParameters,
+                query: queryParameters,
+            }, initOverrides);
+            return new JSONApiResponse(response, (jsonValue) => RegistrySvcListServiceDefinitionsResponseFromJSON(jsonValue));
+        });
+    }
+    /**
+     * Retrieves a list of all service definitions or filters them by specific criteria.
+     * List Service Definitions
+     */
+    listServiceDefinitions(initOverrides) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const response = yield this.listServiceDefinitionsRaw(initOverrides);
+            return yield response.value();
+        });
+    }
+    /**
      * Retrieves a list of all registered service instances or filters them by specific criteria (e.g., host, IP).
      * List Service Instances
      */
-    queryServiceInstancesRaw(requestParameters, initOverrides) {
+    listServiceInstancesRaw(requestParameters, initOverrides) {
         return __awaiter(this, void 0, void 0, function* () {
             const queryParameters = {};
             if (requestParameters['scheme'] != null) {
@@ -135,9 +166,9 @@ class RegistrySvcApi extends BaseAPI {
      * Retrieves a list of all registered service instances or filters them by specific criteria (e.g., host, IP).
      * List Service Instances
      */
-    queryServiceInstances() {
+    listServiceInstances() {
         return __awaiter(this, arguments, void 0, function* (requestParameters = {}, initOverrides) {
-            const response = yield this.queryServiceInstancesRaw(requestParameters, initOverrides);
+            const response = yield this.listServiceInstancesRaw(requestParameters, initOverrides);
             return yield response.value();
         });
     }

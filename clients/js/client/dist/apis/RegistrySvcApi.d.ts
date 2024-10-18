@@ -10,14 +10,14 @@
  * Do not edit the class manually.
  */
 import * as runtime from '../runtime';
-import type { RegistrySvcListNodesResponse, RegistrySvcListServiceInstancesResponse, RegistrySvcRegisterServiceInstanceRequest, RegistrySvcSaveServiceDefinitionRequest } from '../models/index';
+import type { RegistrySvcListNodesResponse, RegistrySvcListServiceDefinitionsResponse, RegistrySvcListServiceInstancesResponse, RegistrySvcRegisterServiceInstanceRequest, RegistrySvcSaveServiceDefinitionRequest } from '../models/index';
 export interface DeleteServiceDefinitionRequest {
     id: string;
 }
 export interface ListNodesRequest {
     body?: object;
 }
-export interface QueryServiceInstancesRequest {
+export interface ListServiceInstancesRequest {
     scheme?: string;
     ip?: string;
     host?: string;
@@ -58,15 +58,25 @@ export declare class RegistrySvcApi extends runtime.BaseAPI {
      */
     listNodes(requestParameters?: ListNodesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RegistrySvcListNodesResponse>;
     /**
-     * Retrieves a list of all registered service instances or filters them by specific criteria (e.g., host, IP).
-     * List Service Instances
+     * Retrieves a list of all service definitions or filters them by specific criteria.
+     * List Service Definitions
      */
-    queryServiceInstancesRaw(requestParameters: QueryServiceInstancesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RegistrySvcListServiceInstancesResponse>>;
+    listServiceDefinitionsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RegistrySvcListServiceDefinitionsResponse>>;
+    /**
+     * Retrieves a list of all service definitions or filters them by specific criteria.
+     * List Service Definitions
+     */
+    listServiceDefinitions(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RegistrySvcListServiceDefinitionsResponse>;
     /**
      * Retrieves a list of all registered service instances or filters them by specific criteria (e.g., host, IP).
      * List Service Instances
      */
-    queryServiceInstances(requestParameters?: QueryServiceInstancesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RegistrySvcListServiceInstancesResponse>;
+    listServiceInstancesRaw(requestParameters: ListServiceInstancesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RegistrySvcListServiceInstancesResponse>>;
+    /**
+     * Retrieves a list of all registered service instances or filters them by specific criteria (e.g., host, IP).
+     * List Service Instances
+     */
+    listServiceInstances(requestParameters?: ListServiceInstancesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RegistrySvcListServiceInstancesResponse>;
     /**
      * Registers a new service instance, associating an service instance address with a slug acquired from the bearer token.
      * Register Service Instance

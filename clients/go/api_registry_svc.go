@@ -327,7 +327,141 @@ func (a *RegistrySvcAPIService) ListNodesExecute(r ApiListNodesRequest) (*Regist
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiQueryServiceInstancesRequest struct {
+type ApiListServiceDefinitionsRequest struct {
+	ctx context.Context
+	ApiService *RegistrySvcAPIService
+}
+
+func (r ApiListServiceDefinitionsRequest) Execute() (*RegistrySvcListServiceDefinitionsResponse, *http.Response, error) {
+	return r.ApiService.ListServiceDefinitionsExecute(r)
+}
+
+/*
+ListServiceDefinitions List Service Definitions
+
+Retrieves a list of all service definitions or filters them by specific criteria.
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiListServiceDefinitionsRequest
+*/
+func (a *RegistrySvcAPIService) ListServiceDefinitions(ctx context.Context) ApiListServiceDefinitionsRequest {
+	return ApiListServiceDefinitionsRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return RegistrySvcListServiceDefinitionsResponse
+func (a *RegistrySvcAPIService) ListServiceDefinitionsExecute(r ApiListServiceDefinitionsRequest) (*RegistrySvcListServiceDefinitionsResponse, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *RegistrySvcListServiceDefinitionsResponse
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RegistrySvcAPIService.ListServiceDefinitions")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/registry-svc/service-definitions"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	if r.ctx != nil {
+		// API Key Authentication
+		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
+			if apiKey, ok := auth["BearerAuth"]; ok {
+				var key string
+				if apiKey.Prefix != "" {
+					key = apiKey.Prefix + " " + apiKey.Key
+				} else {
+					key = apiKey.Key
+				}
+				localVarHeaderParams["Authorization"] = key
+			}
+		}
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 400 {
+			var v RegistrySvcErrorResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 500 {
+			var v RegistrySvcErrorResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiListServiceInstancesRequest struct {
 	ctx context.Context
 	ApiService *RegistrySvcAPIService
 	scheme *string
@@ -338,49 +472,49 @@ type ApiQueryServiceInstancesRequest struct {
 }
 
 // Scheme to filter by
-func (r ApiQueryServiceInstancesRequest) Scheme(scheme string) ApiQueryServiceInstancesRequest {
+func (r ApiListServiceInstancesRequest) Scheme(scheme string) ApiListServiceInstancesRequest {
 	r.scheme = &scheme
 	return r
 }
 
 // IP to filter by
-func (r ApiQueryServiceInstancesRequest) Ip(ip string) ApiQueryServiceInstancesRequest {
+func (r ApiListServiceInstancesRequest) Ip(ip string) ApiListServiceInstancesRequest {
 	r.ip = &ip
 	return r
 }
 
 // Host to filter by
-func (r ApiQueryServiceInstancesRequest) Host(host string) ApiQueryServiceInstancesRequest {
+func (r ApiListServiceInstancesRequest) Host(host string) ApiListServiceInstancesRequest {
 	r.host = &host
 	return r
 }
 
 // IP to filter by
-func (r ApiQueryServiceInstancesRequest) Ip2(ip2 string) ApiQueryServiceInstancesRequest {
+func (r ApiListServiceInstancesRequest) Ip2(ip2 string) ApiListServiceInstancesRequest {
 	r.ip2 = &ip2
 	return r
 }
 
 // Id to filter by
-func (r ApiQueryServiceInstancesRequest) Id(id string) ApiQueryServiceInstancesRequest {
+func (r ApiListServiceInstancesRequest) Id(id string) ApiListServiceInstancesRequest {
 	r.id = &id
 	return r
 }
 
-func (r ApiQueryServiceInstancesRequest) Execute() (*RegistrySvcListServiceInstancesResponse, *http.Response, error) {
-	return r.ApiService.QueryServiceInstancesExecute(r)
+func (r ApiListServiceInstancesRequest) Execute() (*RegistrySvcListServiceInstancesResponse, *http.Response, error) {
+	return r.ApiService.ListServiceInstancesExecute(r)
 }
 
 /*
-QueryServiceInstances List Service Instances
+ListServiceInstances List Service Instances
 
 Retrieves a list of all registered service instances or filters them by specific criteria (e.g., host, IP).
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiQueryServiceInstancesRequest
+ @return ApiListServiceInstancesRequest
 */
-func (a *RegistrySvcAPIService) QueryServiceInstances(ctx context.Context) ApiQueryServiceInstancesRequest {
-	return ApiQueryServiceInstancesRequest{
+func (a *RegistrySvcAPIService) ListServiceInstances(ctx context.Context) ApiListServiceInstancesRequest {
+	return ApiListServiceInstancesRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -388,7 +522,7 @@ func (a *RegistrySvcAPIService) QueryServiceInstances(ctx context.Context) ApiQu
 
 // Execute executes the request
 //  @return RegistrySvcListServiceInstancesResponse
-func (a *RegistrySvcAPIService) QueryServiceInstancesExecute(r ApiQueryServiceInstancesRequest) (*RegistrySvcListServiceInstancesResponse, *http.Response, error) {
+func (a *RegistrySvcAPIService) ListServiceInstancesExecute(r ApiListServiceInstancesRequest) (*RegistrySvcListServiceInstancesResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -396,7 +530,7 @@ func (a *RegistrySvcAPIService) QueryServiceInstancesExecute(r ApiQueryServiceIn
 		localVarReturnValue  *RegistrySvcListServiceInstancesResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RegistrySvcAPIService.QueryServiceInstances")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RegistrySvcAPIService.ListServiceInstances")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

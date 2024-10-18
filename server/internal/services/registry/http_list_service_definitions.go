@@ -8,9 +8,9 @@ import (
 )
 
 // List all registered service definitions or filter by criteria
-// @ID queryServiceDefinitions
+// @ID listServiceDefinitions
 // @Summary List Service Definitions
-// @Description Retrieves a list of all registered service definitions or filters them by specific criteria (e.g., host, IP).
+// @Description Retrieves a list of all service definitions or filters them by specific criteria.
 // @Tags Registry Svc
 // @Accept json
 // @Produce json
@@ -18,7 +18,7 @@ import (
 // @Failure 400 {object} registry.ErrorResponse "Invalid filters"
 // @Failure 500 {object} registry.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
-// @Router /registry-svc/services [get]
+// @Router /registry-svc/service-definitions [get]
 func (rs *RegistryService) ListServiceDefinitions(
 	w http.ResponseWriter,
 	r *http.Request,

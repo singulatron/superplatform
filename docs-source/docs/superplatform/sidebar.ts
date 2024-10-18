@@ -342,6 +342,12 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
+          id: "superplatform/list-service-definitions",
+          label: "List Service Definitions",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
           id: "superplatform/register-service-instance",
           label: "Register Service Instance",
           className: "api-method put",
@@ -354,7 +360,7 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
-          id: "superplatform/query-service-instances",
+          id: "superplatform/list-service-instances",
           label: "List Service Instances",
           className: "api-method get",
         },
