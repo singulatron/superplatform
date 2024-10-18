@@ -13,13 +13,37 @@ import (
 
 func LoadConfig() (types.Config, error) {
 	var config types.Config
-	configPath := filepath.Join(os.Getenv("HOME"), ".singulatron", "cliConfig.yaml")
+	configDir := filepath.Join(os.Getenv("HOME"), ".singulatron")
+	configPath := filepath.Join(configDir, "cliConfig.yaml")
+
+	if _, err := os.Stat(configDir); os.IsNotExist(err) {
+		err = os.MkdirAll(configDir, 0755)
+		if err != nil {
+			return config, fmt.Errorf("failed to create config directory: %v", err)
+		}
+	}
+
+	if _, err := os.Stat(configPath); os.IsNotExist(err) {
+		file, err := os.Create(configPath)
+		if err != nil {
+			return config, fmt.Errorf("failed to create config file: %v", err)
+		}
+		file.Close()
+	}
 
 	file, err := os.Open(configPath)
 	if err != nil {
 		return config, fmt.Errorf("failed to open config file: %v", err)
 	}
 	defer file.Close()
+
+	fileInfo, err := file.Stat()
+	if err != nil {
+		return config, fmt.Errorf("failed to stat config file: %v", err)
+	}
+	if fileInfo.Size() == 0 {
+		return config, nil
+	}
 
 	decoder := yaml.NewDecoder(file)
 	if err := decoder.Decode(&config); err != nil {

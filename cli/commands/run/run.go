@@ -8,6 +8,8 @@ import (
 )
 
 func Run(cmd *cobra.Command, args []string) error {
+	fmt.Println("Run is not implemented yet")
+
 	_, err := config.LoadConfig()
 	if err != nil {
 		return fmt.Errorf("failed to load config: %w", err)

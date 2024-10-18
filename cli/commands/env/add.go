@@ -17,15 +17,22 @@ func Add(cmd *cobra.Command, args []string) error {
 
 	shortName := args[0]
 	url := args[1]
-	longDesc := args[2]
+	var longDesc string
+	if len(args) > 2 {
+		longDesc = args[2]
+	}
 
 	env, ok := conf.Environments[shortName]
 	if !ok {
+		if conf.Environments == nil {
+			conf.Environments = map[string]*types.Environment{}
+		}
 		conf.Environments[shortName] = &types.Environment{
 			ShortName:   shortName,
 			URL:         url,
 			Description: longDesc,
 		}
+		conf.SelectedEnvironment = shortName
 		return config.SaveConfig(conf)
 	}
 

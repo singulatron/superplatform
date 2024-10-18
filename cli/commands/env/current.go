@@ -9,8 +9,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// List
-func List(cmd *cobra.Command, args []string) error {
+// Current
+func Current(cmd *cobra.Command, args []string) error {
 	conf, err := config.LoadConfig()
 	if err != nil {
 		return fmt.Errorf("failed to load config: %w", err)
@@ -24,16 +24,12 @@ func List(cmd *cobra.Command, args []string) error {
 	writer := tabwriter.NewWriter(os.Stdout, 0, 0, 3, ' ', 0)
 	defer writer.Flush()
 
-	fmt.Fprintln(writer, "SELECTED\tNAME\tURL\tDESCRIPTION")
+	fmt.Fprintln(writer, "SELECTED\tUSERS\tURL\tDESCRIPTION")
 
-	for name, env := range conf.Environments {
-		selected := ""
-		if conf.SelectedEnvironment == name {
-			selected = "*"
-		}
+	env := conf.Environments[conf.SelectedEnvironment]
+	selected := "*"
 
-		fmt.Fprintf(writer, "%s\t%s\t%s\t%s\t\n", selected, name, env.URL, env.Description)
-	}
+	fmt.Fprintf(writer, "%s\t%s\t%s\t%s\t\n", selected, env.ShortName, env.URL, env.Description)
 
 	return nil
 }

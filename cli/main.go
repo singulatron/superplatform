@@ -7,7 +7,9 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/singulatron/superplatform/cli/commands/env"
+	"github.com/singulatron/superplatform/cli/commands/login"
 	"github.com/singulatron/superplatform/cli/commands/run"
+	"github.com/singulatron/superplatform/cli/commands/whoami"
 )
 
 func main() {
@@ -22,6 +24,8 @@ func main() {
 
 	addEnvCommands(rootCmd)
 	addRunCommands(rootCmd)
+	addLoginCommands(rootCmd)
+	addWhoamiCommands(rootCmd)
 
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
@@ -45,7 +49,7 @@ func addEnvCommands(rootCmd *cobra.Command) {
 	var envRemoveCmd = &cobra.Command{
 		Use:   "remove [name]",
 		Short: "Remove an environment",
-		Args:  cobra.ExactArgs(1), // Requires exactly 1 argument
+		Args:  cobra.ExactArgs(1),
 		RunE:  env.Remove,
 	}
 
@@ -55,9 +59,16 @@ func addEnvCommands(rootCmd *cobra.Command) {
 		RunE:  env.List,
 	}
 
+	var envCurrentCmd = &cobra.Command{
+		Use:   "current",
+		Short: "Display current environment",
+		RunE:  env.Current,
+	}
+
 	envCmd.AddCommand(envAddCmd)
 	envCmd.AddCommand(envRemoveCmd)
 	envCmd.AddCommand(envListCmd)
+	envCmd.AddCommand(envCurrentCmd)
 
 	rootCmd.AddCommand(envCmd)
 }
@@ -70,6 +81,27 @@ func addRunCommands(rootCmd *cobra.Command) {
 		RunE:  run.Run,
 	}
 
-	// Add 'run' command to the root command
+	rootCmd.AddCommand(runCmd)
+}
+
+func addLoginCommands(rootCmd *cobra.Command) {
+	var runCmd = &cobra.Command{
+		Use:   "login [userName] [password]",
+		Args:  cobra.ExactArgs(2),
+		Short: "Log in to the currently selected env.",
+		RunE:  login.Login,
+	}
+
+	rootCmd.AddCommand(runCmd)
+}
+
+func addWhoamiCommands(rootCmd *cobra.Command) {
+	var runCmd = &cobra.Command{
+		Use:   "whoami",
+		Args:  cobra.ExactArgs(0),
+		Short: "Display the user currently logged in",
+		RunE:  whoami.Whoami,
+	}
+
 	rootCmd.AddCommand(runCmd)
 }
