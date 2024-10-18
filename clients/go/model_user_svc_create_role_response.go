@@ -1,7 +1,7 @@
 /*
 Superplatform
 
-AI management and development platform.
+On-premise AI platform and microservices ecosystem.
 
 API version: 0.2
 Contact: sales@singulatron.com

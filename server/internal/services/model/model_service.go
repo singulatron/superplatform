@@ -76,8 +76,8 @@ func NewModelService(
 
 func (ms *ModelService) Start() error {
 	ctx := context.Background()
-	ms.lock.Acquire(ctx, "model-service-start")
-	defer ms.lock.Release(ctx, "model-service-start")
+	ms.lock.Acquire(ctx, "model-svc-start")
+	defer ms.lock.Release(ctx, "model-svc-start")
 
 	token, err := sdk.RegisterService("model-svc", "Model Service", ms.router, ms.credentialStore)
 	if err != nil {

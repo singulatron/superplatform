@@ -1,6 +1,6 @@
 /**
  * Superplatform
- * AI management and development platform.
+ * On-premise AI platform and microservices ecosystem.
  *
  * The version of the OpenAPI document: 0.2
  * Contact: sales@singulatron.com
@@ -31,7 +31,7 @@ export declare class RegistrySvcRegisterServiceInstanceRequest {
     */
     'scheme'?: string;
     /**
-    * Slug of the service whose instance is being registered.
+    * The User Svc slug of the service whose instance is being registered.
     */
     'slug': string;
     /**

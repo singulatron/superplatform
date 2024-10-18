@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// Remove envName
+// Remove prod
 func Remove(cmd *cobra.Command, args []string) error {
 	conf, err := config.LoadConfig()
 	if err != nil {

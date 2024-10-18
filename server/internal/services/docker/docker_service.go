@@ -71,8 +71,8 @@ func NewDockerService(
 
 func (ds *DockerService) Start() error {
 	ctx := context.Background()
-	ds.lock.Acquire(ctx, "docker-service-start")
-	defer ds.lock.Release(ctx, "docker-service-start")
+	ds.lock.Acquire(ctx, "docker-svc-start")
+	defer ds.lock.Release(ctx, "docker-svc-start")
 
 	token, err := sdk.RegisterService("docker-svc", "Docker Service", ds.router, ds.credentialStore)
 	if err != nil {

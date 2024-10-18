@@ -76,8 +76,8 @@ func (dm *DownloadService) SetStateFilePath(s string) {
 
 func (dm *DownloadService) Start() error {
 	ctx := context.Background()
-	dm.dlock.Acquire(ctx, "download-service-start")
-	defer dm.dlock.Release(ctx, "download-service-start")
+	dm.dlock.Acquire(ctx, "download-svc-start")
+	defer dm.dlock.Release(ctx, "download-svc-start")
 
 	token, err := sdk.RegisterService("download-svc", "Download Service", dm.router, dm.credentialStore)
 	if err != nil {

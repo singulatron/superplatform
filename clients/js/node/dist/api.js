@@ -25,6 +25,15 @@ var datastoreFilter = require('./datastoreFilter.js');
 var datastoreOp = require('./datastoreOp.js');
 var datastoreOrderBy = require('./datastoreOrderBy.js');
 var datastoreQuery = require('./datastoreQuery.js');
+var deploySvcAutoScalingConfig = require('./deploySvcAutoScalingConfig.js');
+var deploySvcDeployment = require('./deploySvcDeployment.js');
+var deploySvcDeploymentStrategy = require('./deploySvcDeploymentStrategy.js');
+var deploySvcErrorResponse = require('./deploySvcErrorResponse.js');
+var deploySvcListDeploymentsResponse = require('./deploySvcListDeploymentsResponse.js');
+var deploySvcResourceLimits = require('./deploySvcResourceLimits.js');
+var deploySvcSaveDeploymentRequest = require('./deploySvcSaveDeploymentRequest.js');
+var deploySvcStrategyType = require('./deploySvcStrategyType.js');
+var deploySvcTargetRegion = require('./deploySvcTargetRegion.js');
 var dockerSvcContainerIsRunningResponse = require('./dockerSvcContainerIsRunningResponse.js');
 var dockerSvcDockerInfo = require('./dockerSvcDockerInfo.js');
 var dockerSvcErrorResponse = require('./dockerSvcErrorResponse.js');
@@ -149,6 +158,11 @@ Object.defineProperty(exports, 'ConfigSvcApiApiKeys', {
 	enumerable: true,
 	get: function () { return chatSvcApi.ConfigSvcApiApiKeys; }
 });
+exports.DeploySvcApi = chatSvcApi.DeploySvcApi;
+Object.defineProperty(exports, 'DeploySvcApiApiKeys', {
+	enumerable: true,
+	get: function () { return chatSvcApi.DeploySvcApiApiKeys; }
+});
 exports.DockerSvcApi = chatSvcApi.DockerSvcApi;
 Object.defineProperty(exports, 'DockerSvcApiApiKeys', {
 	enumerable: true,
@@ -227,6 +241,18 @@ Object.defineProperty(exports, 'DatastoreOp', {
 });
 exports.DatastoreOrderBy = datastoreOrderBy.DatastoreOrderBy;
 exports.DatastoreQuery = datastoreQuery.DatastoreQuery;
+exports.DeploySvcAutoScalingConfig = deploySvcAutoScalingConfig.DeploySvcAutoScalingConfig;
+exports.DeploySvcDeployment = deploySvcDeployment.DeploySvcDeployment;
+exports.DeploySvcDeploymentStrategy = deploySvcDeploymentStrategy.DeploySvcDeploymentStrategy;
+exports.DeploySvcErrorResponse = deploySvcErrorResponse.DeploySvcErrorResponse;
+exports.DeploySvcListDeploymentsResponse = deploySvcListDeploymentsResponse.DeploySvcListDeploymentsResponse;
+exports.DeploySvcResourceLimits = deploySvcResourceLimits.DeploySvcResourceLimits;
+exports.DeploySvcSaveDeploymentRequest = deploySvcSaveDeploymentRequest.DeploySvcSaveDeploymentRequest;
+Object.defineProperty(exports, 'DeploySvcStrategyType', {
+	enumerable: true,
+	get: function () { return deploySvcStrategyType.DeploySvcStrategyType; }
+});
+exports.DeploySvcTargetRegion = deploySvcTargetRegion.DeploySvcTargetRegion;
 exports.DockerSvcContainerIsRunningResponse = dockerSvcContainerIsRunningResponse.DockerSvcContainerIsRunningResponse;
 exports.DockerSvcDockerInfo = dockerSvcDockerInfo.DockerSvcDockerInfo;
 exports.DockerSvcErrorResponse = dockerSvcErrorResponse.DockerSvcErrorResponse;

@@ -8,6 +8,10 @@
 
 package deploy_svc
 
+type ErrorResponse struct {
+	Error string `json:"error"`
+}
+
 type Deployment struct {
 	ID            string             `json:"id,omitempty" example:"depl_dbOdi5eLQK"`                      // ID of the deployment (e.g., "depl_dbOdi5eLQK")
 	ServiceSlug   string             `json:"serviceSlug,omitempty" example:"user-svc" binding:"required"` // The User Svc slug of the service that is being deployed.

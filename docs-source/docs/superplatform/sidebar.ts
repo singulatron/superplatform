@@ -86,6 +86,24 @@ const sidebar: SidebarsConfig = {
     },
     {
       type: "category",
+      label: "Deploy Svc",
+      items: [
+        {
+          type: "doc",
+          id: "superplatform/save-deployment",
+          label: "Save Deployment",
+          className: "api-method put",
+        },
+        {
+          type: "doc",
+          id: "superplatform/list-deployments",
+          label: "List Deployments",
+          className: "api-method post",
+        },
+      ],
+    },
+    {
+      type: "category",
       label: "Docker Svc",
       items: [
         {

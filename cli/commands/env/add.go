@@ -8,7 +8,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// Add envName http://address.com:8090 "A description"
+// Add prod http://someaddress.com:8090 "A description"
 func Add(cmd *cobra.Command, args []string) error {
 	conf, err := config.LoadConfig()
 	if err != nil {

@@ -4,7 +4,7 @@ import { ChatSvcMessageFromJSON, ChatSvcMessageToJSON } from './ChatSvcMessage.m
 /* eslint-disable */
 /**
  * Superplatform
- * AI management and development platform.
+ * On-premise AI platform and microservices ecosystem.
  *
  * The version of the OpenAPI document: 0.2
  * Contact: sales@singulatron.com

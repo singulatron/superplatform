@@ -1,7 +1,7 @@
 /*
 Superplatform
 
-AI management and development platform.
+On-premise AI platform and microservices ecosystem.
 
 API version: 0.2
 Contact: sales@singulatron.com
@@ -54,6 +54,8 @@ type APIClient struct {
 
 	ConfigSvcAPI *ConfigSvcAPIService
 
+	DeploySvcAPI *DeploySvcAPIService
+
 	DockerSvcAPI *DockerSvcAPIService
 
 	DownloadSvcAPI *DownloadSvcAPIService
@@ -91,6 +93,7 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 	// API Services
 	c.ChatSvcAPI = (*ChatSvcAPIService)(&c.common)
 	c.ConfigSvcAPI = (*ConfigSvcAPIService)(&c.common)
+	c.DeploySvcAPI = (*DeploySvcAPIService)(&c.common)
 	c.DockerSvcAPI = (*DockerSvcAPIService)(&c.common)
 	c.DownloadSvcAPI = (*DownloadSvcAPIService)(&c.common)
 	c.DynamicSvcAPI = (*DynamicSvcAPIService)(&c.common)

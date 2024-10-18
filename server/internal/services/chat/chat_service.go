@@ -64,8 +64,8 @@ func NewChatService(
 
 func (cs *ChatService) Start() error {
 	ctx := context.Background()
-	cs.lock.Acquire(ctx, "chat-service-start")
-	defer cs.lock.Release(ctx, "chat-service-start")
+	cs.lock.Acquire(ctx, "chat-svc-start")
+	defer cs.lock.Release(ctx, "chat-svc-start")
 
 	token, err := sdk.RegisterService("chat-svc", "Chat Service", cs.router, cs.credentialStore)
 	if err != nil {

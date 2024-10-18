@@ -101,8 +101,8 @@ func (ns *RegistryService) Start() error {
 	go ns.nodeHeartbeat()
 
 	ctx := context.Background()
-	ns.lock.Acquire(ctx, "registry-service-start")
-	defer ns.lock.Release(ctx, "registry-service-start")
+	ns.lock.Acquire(ctx, "registry-svc-start")
+	defer ns.lock.Release(ctx, "registry-svc-start")
 
 	token, err := sdk.RegisterService("registry-svc", "Registry Service", ns.router, ns.credentialStore)
 	if err != nil {

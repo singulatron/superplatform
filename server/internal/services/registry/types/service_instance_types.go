@@ -21,7 +21,7 @@ type ErrorResponse struct {
 type ServiceInstance struct {
 	ID            string    `json:"id,omitempty" example:"https://api.com:999/user-svc" binding:"required"` // Required: ID of the service instance
 	ServiceSlug   string    `json:"serviceSlug,omitempty" example:"user-svc" binding:"required"`            // The User Svc slug of the service whose instance is being registered.
-	URL           string    `json:"url,omitempty" example:"https://myserver.com:5981"`                      // Full address URL of the service instance.
+	URL           string    `json:"url,omitempty" example:"https://myserver.com:5981" binding:"required"`   // Full address URL of the service instance.
 	Path          string    `json:"path,omitempty" example:"/your-svc"`                                     // Path of the service instance address. Optional (e.g., "/api")
 	NodeURL       string    `json:"nodeUrl,omitempty" example:"https://myserver.com:58231"`                 // URL of the Singulatron daemon
 	LastHeartbeat time.Time `json:"lastHeartbeat,omitempty"`                                                // Last time the instance gave a sign of life

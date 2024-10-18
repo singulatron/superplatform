@@ -248,6 +248,115 @@ definitions:
           $ref: '#/definitions/datastore.OrderBy'
         type: array
     type: object
+  deploy_svc.AutoScalingConfig:
+    properties:
+      cpuThreshold:
+        description: CPU usage threshold for scaling (as a percentage)
+        type: integer
+      maxReplicas:
+        description: Maximum number of replicas to run
+        type: integer
+      minReplicas:
+        description: Minimum number of replicas to run
+        type: integer
+    type: object
+  deploy_svc.Deployment:
+    properties:
+      autoScaling:
+        allOf:
+        - $ref: '#/definitions/deploy_svc.AutoScalingConfig'
+        description: 'Optional: Auto-scaling rules'
+      id:
+        description: ID of the deployment (e.g., "depl_dbOdi5eLQK")
+        example: depl_dbOdi5eLQK
+        type: string
+      replicas:
+        description: Number of container instances to run
+        type: integer
+      resources:
+        allOf:
+        - $ref: '#/definitions/deploy_svc.ResourceLimits'
+        description: Resource requirements for each replica
+      serviceSlug:
+        description: The User Svc slug of the service that is being deployed.
+        example: user-svc
+        type: string
+      strategy:
+        allOf:
+        - $ref: '#/definitions/deploy_svc.DeploymentStrategy'
+        description: Deployment strategy (e.g., rolling update)
+      targetRegions:
+        description: Target deployment regions or clusters
+        items:
+          $ref: '#/definitions/deploy_svc.TargetRegion'
+        type: array
+    required:
+    - serviceSlug
+    type: object
+  deploy_svc.DeploymentStrategy:
+    properties:
+      maxSurge:
+        description: Max extra replicas during update
+        type: integer
+      maxUnavailable:
+        description: Max unavailable replicas during update
+        type: integer
+      type:
+        allOf:
+        - $ref: '#/definitions/deploy_svc.StrategyType'
+        description: Deployment strategy type (RollingUpdate, Recreate, etc.)
+    type: object
+  deploy_svc.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  deploy_svc.ListDeploymentsRequest:
+    type: object
+  deploy_svc.ListDeploymentsResponse:
+    properties:
+      deployments:
+        items:
+          $ref: '#/definitions/deploy_svc.Deployment'
+        type: array
+    type: object
+  deploy_svc.ResourceLimits:
+    properties:
+      cpu:
+        description: CPU limit, e.g., "500m" for 0.5 cores
+        type: string
+      memory:
+        description: Memory limit, e.g., "128Mi"
+        type: string
+      vram:
+        description: 'Optional: GPU VRAM requirement, e.g., "48GB"'
+        type: string
+    type: object
+  deploy_svc.SaveDeploymentRequest:
+    properties:
+      deployment:
+        $ref: '#/definitions/deploy_svc.Deployment'
+    type: object
+  deploy_svc.SaveDeploymentResponse:
+    type: object
+  deploy_svc.StrategyType:
+    enum:
+    - RollingUpdate
+    - Recreate
+    type: string
+    x-enum-varnames:
+    - StrategyRollingUpdate
+    - StrategyRecreate
+  deploy_svc.TargetRegion:
+    properties:
+      cluster:
+        description: Cluster or node where service should be deployed (e.g., "us-west1",
+          "local-docker")
+        type: string
+      zone:
+        description: 'Optional: Specific zone for the deployment'
+        type: string
+    type: object
   docker_svc.ContainerIsRunningResponse:
     properties:
       isRunning:
@@ -1022,7 +1131,7 @@ definitions:
           $ref: '#/definitions/registry_svc.GPU'
         type: array
       lastHeartbeat:
-        description: Last active timestamp
+        description: Last time the instance gave a sign of life
         type: string
       region:
         description: The region of the node
@@ -1080,7 +1189,7 @@ definitions:
         example: https
         type: string
       slug:
-        description: Slug of the service whose instance is being registered.
+        description: The User Svc slug of the service whose instance is being registered.
         example: user-svc
         type: string
       url:
@@ -1123,6 +1232,13 @@ definitions:
           IP instead of host'
         example: 8.8.8.8
         type: string
+      lastHeartbeat:
+        description: Last time the instance gave a sign of life
+        type: string
+      nodeUrl:
+        description: URL of the Singulatron daemon
+        example: https://myserver.com:58231
+        type: string
       path:
         description: Path of the service instance address. Optional (e.g., "/api")
         example: /your-svc
@@ -1137,8 +1253,8 @@ definitions:
           provided.
         example: https
         type: string
-      slug:
-        description: Slug of the service whose instance is being registered.
+      serviceSlug:
+        description: The User Svc slug of the service whose instance is being registered.
         example: user-svc
         type: string
       url:
@@ -1147,7 +1263,7 @@ definitions:
         type: string
     required:
     - id
-    - slug
+    - serviceSlug
     type: object
   registry_svc.Usage:
     properties:
@@ -1502,7 +1618,7 @@ info:
     email: sales@singulatron.com
     name: API Support
     url: http://superplatform.ai/
-  description: AI management and development platform.
+  description: On-premise AI platform and microservices ecosystem.
   license:
     name: AGPL v3.0
     url: https://www.gnu.org/licenses/agpl-3.0.html
@@ -1889,6 +2005,78 @@ paths:
       summary: Save Config
       tags:
       - Config Svc
+  /deploy-svc/deployment:
+    put:
+      consumes:
+      - application/json
+      description: Save a deployment.
+      operationId: saveDeployment
+      parameters:
+      - description: Save Deploys Request
+        in: body
+        name: body
+        schema:
+          $ref: '#/definitions/deploy_svc.SaveDeploymentRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/deploy_svc.SaveDeploymentResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/deploy_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/deploy_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/deploy_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Save Deployment
+      tags:
+      - Deploy Svc
+  /deploy-svc/deployments:
+    post:
+      consumes:
+      - application/json
+      description: Retrieve a list of deployments.
+      operationId: listDeployments
+      parameters:
+      - description: List Deploys Request
+        in: body
+        name: body
+        schema:
+          $ref: '#/definitions/deploy_svc.ListDeploymentsRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/deploy_svc.ListDeploymentsResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/deploy_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/deploy_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/deploy_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: List Deployments
+      tags:
+      - Deploy Svc
   /docker-svc/container:
     put:
       consumes:

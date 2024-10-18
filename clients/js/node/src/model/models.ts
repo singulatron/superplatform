@@ -23,6 +23,15 @@ export * from './datastoreFilter';
 export * from './datastoreOp';
 export * from './datastoreOrderBy';
 export * from './datastoreQuery';
+export * from './deploySvcAutoScalingConfig';
+export * from './deploySvcDeployment';
+export * from './deploySvcDeploymentStrategy';
+export * from './deploySvcErrorResponse';
+export * from './deploySvcListDeploymentsResponse';
+export * from './deploySvcResourceLimits';
+export * from './deploySvcSaveDeploymentRequest';
+export * from './deploySvcStrategyType';
+export * from './deploySvcTargetRegion';
 export * from './dockerSvcContainerIsRunningResponse';
 export * from './dockerSvcDockerInfo';
 export * from './dockerSvcErrorResponse';
@@ -154,6 +163,15 @@ import { DatastoreFilter } from './datastoreFilter';
 import { DatastoreOp } from './datastoreOp';
 import { DatastoreOrderBy } from './datastoreOrderBy';
 import { DatastoreQuery } from './datastoreQuery';
+import { DeploySvcAutoScalingConfig } from './deploySvcAutoScalingConfig';
+import { DeploySvcDeployment } from './deploySvcDeployment';
+import { DeploySvcDeploymentStrategy } from './deploySvcDeploymentStrategy';
+import { DeploySvcErrorResponse } from './deploySvcErrorResponse';
+import { DeploySvcListDeploymentsResponse } from './deploySvcListDeploymentsResponse';
+import { DeploySvcResourceLimits } from './deploySvcResourceLimits';
+import { DeploySvcSaveDeploymentRequest } from './deploySvcSaveDeploymentRequest';
+import { DeploySvcStrategyType } from './deploySvcStrategyType';
+import { DeploySvcTargetRegion } from './deploySvcTargetRegion';
 import { DockerSvcContainerIsRunningResponse } from './dockerSvcContainerIsRunningResponse';
 import { DockerSvcDockerInfo } from './dockerSvcDockerInfo';
 import { DockerSvcErrorResponse } from './dockerSvcErrorResponse';
@@ -263,6 +281,7 @@ let primitives = [
 
 let enumsMap: {[index: string]: any} = {
         "DatastoreOp": DatastoreOp,
+        "DeploySvcStrategyType": DeploySvcStrategyType,
         "PolicySvcEntity": PolicySvcEntity,
         "PolicySvcScope": PolicySvcScope,
         "PolicySvcTemplateId": PolicySvcTemplateId,
@@ -292,6 +311,14 @@ let typeMap: {[index: string]: any} = {
     "DatastoreFilter": DatastoreFilter,
     "DatastoreOrderBy": DatastoreOrderBy,
     "DatastoreQuery": DatastoreQuery,
+    "DeploySvcAutoScalingConfig": DeploySvcAutoScalingConfig,
+    "DeploySvcDeployment": DeploySvcDeployment,
+    "DeploySvcDeploymentStrategy": DeploySvcDeploymentStrategy,
+    "DeploySvcErrorResponse": DeploySvcErrorResponse,
+    "DeploySvcListDeploymentsResponse": DeploySvcListDeploymentsResponse,
+    "DeploySvcResourceLimits": DeploySvcResourceLimits,
+    "DeploySvcSaveDeploymentRequest": DeploySvcSaveDeploymentRequest,
+    "DeploySvcTargetRegion": DeploySvcTargetRegion,
     "DockerSvcContainerIsRunningResponse": DockerSvcContainerIsRunningResponse,
     "DockerSvcDockerInfo": DockerSvcDockerInfo,
     "DockerSvcErrorResponse": DockerSvcErrorResponse,

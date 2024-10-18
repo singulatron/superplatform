@@ -9,11 +9,14 @@ package deployservice
 
 import (
 	"context"
+	"log/slog"
 	"time"
 
+	"github.com/davecgh/go-spew/spew"
 	sdk "github.com/singulatron/superplatform/sdk/go"
 	"github.com/singulatron/superplatform/sdk/go/datastore"
 	"github.com/singulatron/superplatform/sdk/go/lock"
+	"github.com/singulatron/superplatform/sdk/go/logger"
 	deploy "github.com/singulatron/superplatform/server/internal/services/deploy/types"
 )
 
@@ -55,8 +58,8 @@ func NewDeployService(
 
 func (ns *DeployService) Start() error {
 	ctx := context.Background()
-	ns.lock.Acquire(ctx, "deploy-service-start")
-	defer ns.lock.Release(ctx, "deploy-service-start")
+	ns.lock.Acquire(ctx, "deploy-svc-start")
+	defer ns.lock.Release(ctx, "deploy-svc-start")
 
 	token, err := sdk.RegisterServiceNoRouter(ns.clientFactory.Client().UserSvcAPI, "deploy-svc", "Deploy Service", ns.credentialStore)
 	if err != nil {
@@ -72,7 +75,51 @@ func (ns *DeployService) Start() error {
 
 func (ns *DeployService) loop() {
 	for {
-		ns.cycle()
-		time.Sleep(5 * time.Second)
+		func() {
+			if r := recover(); r != nil {
+				logger.Error("Deploy cycle panic", slog.Any("panic", r))
+			}
+
+			err := ns.cycle()
+			if err != nil {
+				logger.Error("Deploy cycle error", slog.Any("error", err))
+			}
+			time.Sleep(5 * time.Second)
+		}()
 	}
+}
+
+func (ns *DeployService) cycle() error {
+	ctx := context.Background()
+
+	ns.lock.Acquire(ctx, "deploy-svc-deploy")
+	defer ns.lock.Release(ctx, "deploy-svc-deploy")
+
+	registry := ns.clientFactory.Client().RegistrySvcAPI
+
+	deploymentIs, err := ns.deploymentStore.Query().Find()
+	if err != nil {
+		return err
+	}
+
+	deployments := []*deploy.Deployment{}
+
+	for _, deploymentI := range deploymentIs {
+		deployment := deploymentI.(*deploy.Deployment)
+		deployments = append(deployments, deployment)
+	}
+
+	listNodesRsp, _, err := registry.ListNodes(ctx).Execute()
+	if err != nil {
+		return err
+	}
+
+	serviceInstances, _, err := registry.QueryServiceInstances(ctx).Execute()
+	if err != nil {
+		return err
+	}
+
+	spew.Dump(listNodesRsp, serviceInstances)
+
+	return nil
 }

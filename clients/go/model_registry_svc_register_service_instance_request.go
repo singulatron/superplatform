@@ -1,7 +1,7 @@
 /*
 Superplatform
 
-AI management and development platform.
+On-premise AI platform and microservices ecosystem.
 
 API version: 0.2
 Contact: sales@singulatron.com
@@ -32,7 +32,7 @@ type RegistrySvcRegisterServiceInstanceRequest struct {
 	Port *int32 `json:"port,omitempty"`
 	// Scheme of the service instance address. Required if URL is not provided.
 	Scheme *string `json:"scheme,omitempty"`
-	// Slug of the service whose instance is being registered.
+	// The User Svc slug of the service whose instance is being registered.
 	Slug string `json:"slug"`
 	// Full address URL of the service instance.
 	Url *string `json:"url,omitempty"`

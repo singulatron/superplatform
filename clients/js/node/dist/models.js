@@ -23,6 +23,15 @@ var datastoreFilter = require('./datastoreFilter.js');
 var datastoreOp = require('./datastoreOp.js');
 var datastoreOrderBy = require('./datastoreOrderBy.js');
 var datastoreQuery = require('./datastoreQuery.js');
+var deploySvcAutoScalingConfig = require('./deploySvcAutoScalingConfig.js');
+var deploySvcDeployment = require('./deploySvcDeployment.js');
+var deploySvcDeploymentStrategy = require('./deploySvcDeploymentStrategy.js');
+var deploySvcErrorResponse = require('./deploySvcErrorResponse.js');
+var deploySvcListDeploymentsResponse = require('./deploySvcListDeploymentsResponse.js');
+var deploySvcResourceLimits = require('./deploySvcResourceLimits.js');
+var deploySvcSaveDeploymentRequest = require('./deploySvcSaveDeploymentRequest.js');
+var deploySvcStrategyType = require('./deploySvcStrategyType.js');
+var deploySvcTargetRegion = require('./deploySvcTargetRegion.js');
 var dockerSvcContainerIsRunningResponse = require('./dockerSvcContainerIsRunningResponse.js');
 var dockerSvcDockerInfo = require('./dockerSvcDockerInfo.js');
 var dockerSvcErrorResponse = require('./dockerSvcErrorResponse.js');
@@ -131,6 +140,7 @@ let primitives = [
 ];
 let enumsMap = {
     "DatastoreOp": datastoreOp.DatastoreOp,
+    "DeploySvcStrategyType": deploySvcStrategyType.DeploySvcStrategyType,
     "PolicySvcEntity": policySvcEntity.PolicySvcEntity,
     "PolicySvcScope": policySvcScope.PolicySvcScope,
     "PolicySvcTemplateId": policySvcTemplateId.PolicySvcTemplateId,
@@ -159,6 +169,14 @@ let typeMap = {
     "DatastoreFilter": datastoreFilter.DatastoreFilter,
     "DatastoreOrderBy": datastoreOrderBy.DatastoreOrderBy,
     "DatastoreQuery": datastoreQuery.DatastoreQuery,
+    "DeploySvcAutoScalingConfig": deploySvcAutoScalingConfig.DeploySvcAutoScalingConfig,
+    "DeploySvcDeployment": deploySvcDeployment.DeploySvcDeployment,
+    "DeploySvcDeploymentStrategy": deploySvcDeploymentStrategy.DeploySvcDeploymentStrategy,
+    "DeploySvcErrorResponse": deploySvcErrorResponse.DeploySvcErrorResponse,
+    "DeploySvcListDeploymentsResponse": deploySvcListDeploymentsResponse.DeploySvcListDeploymentsResponse,
+    "DeploySvcResourceLimits": deploySvcResourceLimits.DeploySvcResourceLimits,
+    "DeploySvcSaveDeploymentRequest": deploySvcSaveDeploymentRequest.DeploySvcSaveDeploymentRequest,
+    "DeploySvcTargetRegion": deploySvcTargetRegion.DeploySvcTargetRegion,
     "DockerSvcContainerIsRunningResponse": dockerSvcContainerIsRunningResponse.DockerSvcContainerIsRunningResponse,
     "DockerSvcDockerInfo": dockerSvcDockerInfo.DockerSvcDockerInfo,
     "DockerSvcErrorResponse": dockerSvcErrorResponse.DockerSvcErrorResponse,
@@ -460,6 +478,18 @@ Object.defineProperty(exports, 'DatastoreOp', {
 });
 exports.DatastoreOrderBy = datastoreOrderBy.DatastoreOrderBy;
 exports.DatastoreQuery = datastoreQuery.DatastoreQuery;
+exports.DeploySvcAutoScalingConfig = deploySvcAutoScalingConfig.DeploySvcAutoScalingConfig;
+exports.DeploySvcDeployment = deploySvcDeployment.DeploySvcDeployment;
+exports.DeploySvcDeploymentStrategy = deploySvcDeploymentStrategy.DeploySvcDeploymentStrategy;
+exports.DeploySvcErrorResponse = deploySvcErrorResponse.DeploySvcErrorResponse;
+exports.DeploySvcListDeploymentsResponse = deploySvcListDeploymentsResponse.DeploySvcListDeploymentsResponse;
+exports.DeploySvcResourceLimits = deploySvcResourceLimits.DeploySvcResourceLimits;
+exports.DeploySvcSaveDeploymentRequest = deploySvcSaveDeploymentRequest.DeploySvcSaveDeploymentRequest;
+Object.defineProperty(exports, 'DeploySvcStrategyType', {
+    enumerable: true,
+    get: function () { return deploySvcStrategyType.DeploySvcStrategyType; }
+});
+exports.DeploySvcTargetRegion = deploySvcTargetRegion.DeploySvcTargetRegion;
 exports.DockerSvcContainerIsRunningResponse = dockerSvcContainerIsRunningResponse.DockerSvcContainerIsRunningResponse;
 exports.DockerSvcDockerInfo = dockerSvcDockerInfo.DockerSvcDockerInfo;
 exports.DockerSvcErrorResponse = dockerSvcErrorResponse.DockerSvcErrorResponse;
