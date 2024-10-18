@@ -45,12 +45,12 @@ export declare class RegistrySvcApi extends runtime.BaseAPI {
      * Retrieves a list of all registered service instances or filters them by specific criteria (e.g., host, IP).
      * Query Service Instances
      */
-    queryServiceInstancesRaw(requestParameters: QueryServiceInstancesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<RegistrySvcQueryServiceInstancesResponse>>>;
+    queryServiceInstancesRaw(requestParameters: QueryServiceInstancesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RegistrySvcQueryServiceInstancesResponse>>;
     /**
      * Retrieves a list of all registered service instances or filters them by specific criteria (e.g., host, IP).
      * Query Service Instances
      */
-    queryServiceInstances(requestParameters?: QueryServiceInstancesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<RegistrySvcQueryServiceInstancesResponse>>;
+    queryServiceInstances(requestParameters?: QueryServiceInstancesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RegistrySvcQueryServiceInstancesResponse>;
     /**
      * Registers a new service instance, associating an service instance address with a slug acquired from the bearer token.
      * Register Service Instance

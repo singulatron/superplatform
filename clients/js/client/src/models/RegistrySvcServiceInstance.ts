@@ -78,7 +78,7 @@ export interface RegistrySvcServiceInstance {
      * @type {string}
      * @memberof RegistrySvcServiceInstance
      */
-    url?: string;
+    url: string;
 }
 
 /**
@@ -87,6 +87,7 @@ export interface RegistrySvcServiceInstance {
 export function instanceOfRegistrySvcServiceInstance(value: object): value is RegistrySvcServiceInstance {
     if (!('id' in value) || value['id'] === undefined) return false;
     if (!('serviceSlug' in value) || value['serviceSlug'] === undefined) return false;
+    if (!('url' in value) || value['url'] === undefined) return false;
     return true;
 }
 
@@ -109,7 +110,7 @@ export function RegistrySvcServiceInstanceFromJSONTyped(json: any, ignoreDiscrim
         'port': json['port'] == null ? undefined : json['port'],
         'scheme': json['scheme'] == null ? undefined : json['scheme'],
         'serviceSlug': json['serviceSlug'],
-        'url': json['url'] == null ? undefined : json['url'],
+        'url': json['url'],
     };
 }
 

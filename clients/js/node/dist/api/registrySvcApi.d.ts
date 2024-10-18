@@ -64,7 +64,7 @@ export declare class RegistrySvcApi {
         };
     }): Promise<{
         response: http.IncomingMessage;
-        body: Array<RegistrySvcQueryServiceInstancesResponse>;
+        body: RegistrySvcQueryServiceInstancesResponse;
     }>;
     /**
      * Registers a new service instance, associating an service instance address with a slug acquired from the bearer token.

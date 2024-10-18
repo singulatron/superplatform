@@ -74,7 +74,7 @@ export interface RegistrySvcServiceInstance {
      * @type {string}
      * @memberof RegistrySvcServiceInstance
      */
-    url?: string;
+    url: string;
 }
 /**
  * Check if a given object implements the RegistrySvcServiceInstance interface.

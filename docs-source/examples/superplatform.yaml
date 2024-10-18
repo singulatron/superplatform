@@ -1264,6 +1264,7 @@ definitions:
     required:
     - id
     - serviceSlug
+    - url
     type: object
   registry_svc.Usage:
     properties:
@@ -3248,9 +3249,7 @@ paths:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/registry_svc.QueryServiceInstancesResponse'
-            type: array
+            $ref: '#/definitions/registry_svc.QueryServiceInstancesResponse'
         "400":
           description: Invalid filters
           schema:

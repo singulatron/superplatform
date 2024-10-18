@@ -57693,7 +57693,7 @@ class RegistrySvcApi {
                         }
                         else {
                             if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
-                                body = ObjectSerializer.deserialize(body, "Array<RegistrySvcQueryServiceInstancesResponse>");
+                                body = ObjectSerializer.deserialize(body, "RegistrySvcQueryServiceInstancesResponse");
                                 resolve({ response: response, body: body });
                             }
                             else {

@@ -218,7 +218,7 @@ func (r ApiQueryServiceInstancesRequest) Id(id string) ApiQueryServiceInstancesR
 	return r
 }
 
-func (r ApiQueryServiceInstancesRequest) Execute() ([]RegistrySvcQueryServiceInstancesResponse, *http.Response, error) {
+func (r ApiQueryServiceInstancesRequest) Execute() (*RegistrySvcQueryServiceInstancesResponse, *http.Response, error) {
 	return r.ApiService.QueryServiceInstancesExecute(r)
 }
 
@@ -238,13 +238,13 @@ func (a *RegistrySvcAPIService) QueryServiceInstances(ctx context.Context) ApiQu
 }
 
 // Execute executes the request
-//  @return []RegistrySvcQueryServiceInstancesResponse
-func (a *RegistrySvcAPIService) QueryServiceInstancesExecute(r ApiQueryServiceInstancesRequest) ([]RegistrySvcQueryServiceInstancesResponse, *http.Response, error) {
+//  @return RegistrySvcQueryServiceInstancesResponse
+func (a *RegistrySvcAPIService) QueryServiceInstancesExecute(r ApiQueryServiceInstancesRequest) (*RegistrySvcQueryServiceInstancesResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  []RegistrySvcQueryServiceInstancesResponse
+		localVarReturnValue  *RegistrySvcQueryServiceInstancesResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RegistrySvcAPIService.QueryServiceInstances")

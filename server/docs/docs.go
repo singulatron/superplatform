@@ -2483,10 +2483,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/registry_svc.QueryServiceInstancesResponse"
-                            }
+                            "$ref": "#/definitions/registry_svc.QueryServiceInstancesResponse"
                         }
                     },
                     "400": {
@@ -5400,7 +5397,8 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "id",
-                "serviceSlug"
+                "serviceSlug",
+                "url"
             ],
             "properties": {
                 "host": {

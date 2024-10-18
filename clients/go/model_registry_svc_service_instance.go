@@ -41,7 +41,7 @@ type RegistrySvcServiceInstance struct {
 	// The User Svc slug of the service whose instance is being registered.
 	ServiceSlug string `json:"serviceSlug"`
 	// Full address URL of the service instance.
-	Url *string `json:"url,omitempty"`
+	Url string `json:"url"`
 }
 
 type _RegistrySvcServiceInstance RegistrySvcServiceInstance
@@ -50,10 +50,11 @@ type _RegistrySvcServiceInstance RegistrySvcServiceInstance
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewRegistrySvcServiceInstance(id string, serviceSlug string) *RegistrySvcServiceInstance {
+func NewRegistrySvcServiceInstance(id string, serviceSlug string, url string) *RegistrySvcServiceInstance {
 	this := RegistrySvcServiceInstance{}
 	this.Id = id
 	this.ServiceSlug = serviceSlug
+	this.Url = url
 	return &this
 }
 
@@ -337,36 +338,28 @@ func (o *RegistrySvcServiceInstance) SetServiceSlug(v string) {
 	o.ServiceSlug = v
 }
 
-// GetUrl returns the Url field value if set, zero value otherwise.
+// GetUrl returns the Url field value
 func (o *RegistrySvcServiceInstance) GetUrl() string {
-	if o == nil || IsNil(o.Url) {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.Url
+
+	return o.Url
 }
 
-// GetUrlOk returns a tuple with the Url field value if set, nil otherwise
+// GetUrlOk returns a tuple with the Url field value
 // and a boolean to check if the value has been set.
 func (o *RegistrySvcServiceInstance) GetUrlOk() (*string, bool) {
-	if o == nil || IsNil(o.Url) {
+	if o == nil {
 		return nil, false
 	}
-	return o.Url, true
+	return &o.Url, true
 }
 
-// HasUrl returns a boolean if a field has been set.
-func (o *RegistrySvcServiceInstance) HasUrl() bool {
-	if o != nil && !IsNil(o.Url) {
-		return true
-	}
-
-	return false
-}
-
-// SetUrl gets a reference to the given string and assigns it to the Url field.
+// SetUrl sets field value
 func (o *RegistrySvcServiceInstance) SetUrl(v string) {
-	o.Url = &v
+	o.Url = v
 }
 
 func (o RegistrySvcServiceInstance) MarshalJSON() ([]byte, error) {
@@ -402,9 +395,7 @@ func (o RegistrySvcServiceInstance) ToMap() (map[string]interface{}, error) {
 		toSerialize["scheme"] = o.Scheme
 	}
 	toSerialize["serviceSlug"] = o.ServiceSlug
-	if !IsNil(o.Url) {
-		toSerialize["url"] = o.Url
-	}
+	toSerialize["url"] = o.Url
 	return toSerialize, nil
 }
 
@@ -415,6 +406,7 @@ func (o *RegistrySvcServiceInstance) UnmarshalJSON(data []byte) (err error) {
 	requiredProperties := []string{
 		"id",
 		"serviceSlug",
+		"url",
 	}
 
 	allProperties := make(map[string]interface{})

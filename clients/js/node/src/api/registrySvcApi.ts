@@ -168,7 +168,7 @@ export class RegistrySvcApi {
      * @param ip2 IP to filter by
      * @param id Id to filter by
      */
-    public async queryServiceInstances (scheme?: string, ip?: string, host?: string, ip2?: string, id?: string, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: Array<RegistrySvcQueryServiceInstancesResponse>;  }> {
+    public async queryServiceInstances (scheme?: string, ip?: string, host?: string, ip2?: string, id?: string, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: RegistrySvcQueryServiceInstancesResponse;  }> {
         const localVarPath = this.basePath + '/registry-svc/services';
         let localVarQueryParameters: any = {};
         let localVarHeaderParams: any = (<any>Object).assign({}, this._defaultHeaders);
@@ -233,13 +233,13 @@ export class RegistrySvcApi {
                     localVarRequestOptions.form = localVarFormParams;
                 }
             }
-            return new Promise<{ response: http.IncomingMessage; body: Array<RegistrySvcQueryServiceInstancesResponse>;  }>((resolve, reject) => {
+            return new Promise<{ response: http.IncomingMessage; body: RegistrySvcQueryServiceInstancesResponse;  }>((resolve, reject) => {
                 localVarRequest(localVarRequestOptions, (error, response, body) => {
                     if (error) {
                         reject(error);
                     } else {
                         if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
-                            body = ObjectSerializer.deserialize(body, "Array<RegistrySvcQueryServiceInstancesResponse>");
+                            body = ObjectSerializer.deserialize(body, "RegistrySvcQueryServiceInstancesResponse");
                             resolve({ response: response, body: body });
                         } else {
                             reject(new HttpError(response, body, response.statusCode));

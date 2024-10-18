@@ -49,7 +49,7 @@ export declare class RegistrySvcServiceInstance {
     /**
     * Full address URL of the service instance.
     */
-    'url'?: string;
+    'url': string;
     static discriminator: string | undefined;
     static attributeTypeMap: Array<{
         name: string;

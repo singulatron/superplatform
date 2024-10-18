@@ -90,7 +90,7 @@ class RegistrySvcApi extends BaseAPI {
                 headers: headerParameters,
                 query: queryParameters,
             }, initOverrides);
-            return new JSONApiResponse(response, (jsonValue) => jsonValue.map(RegistrySvcQueryServiceInstancesResponseFromJSON));
+            return new JSONApiResponse(response, (jsonValue) => RegistrySvcQueryServiceInstancesResponseFromJSON(jsonValue));
         });
     }
     /**

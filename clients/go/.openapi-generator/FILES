@@ -284,5 +284,4 @@ model_user_svc_set_role_permissions_request.go
 model_user_svc_upser_permission_request.go
 model_user_svc_user.go
 response.go
-test/api_deploy_svc_test.go
 utils.go

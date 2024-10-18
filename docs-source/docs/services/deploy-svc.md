@@ -13,7 +13,7 @@ The deploy service is responsible of launching containers on whatever infrastruc
 
 It registers services it launches since services are not expected to self register. This is to support services that are not using the Superplatform SDK to build themselves—in other words, Superplatform is designed to be able to run non-Superplatform services too.
 
-> This page is a high level overview of the `Deploy Svc`. For more details, please see the [Deploy Svc API documentation](/docs/superplatform/deploy-service-instance).
+> This page is a high level overview of the `Deploy Svc`. For more details, please see the [Deploy Svc API documentation](/docs/superplatform/save-deployment).
 
 ## Dependencies
 

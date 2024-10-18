@@ -19,7 +19,7 @@ import (
 // @Param host query string false "Host to filter by"
 // @Param ip query string false "IP to filter by"
 // @Param id query string false "Id to filter by"
-// @Success 200 {array} registry.QueryServiceInstancesResponse
+// @Success 200 {object} registry.QueryServiceInstancesResponse
 // @Failure 400 {object} registry.ErrorResponse "Invalid filters"
 // @Failure 500 {object} registry.ErrorResponse "Internal Server Error"
 // @Security BearerAuth

@@ -19,6 +19,8 @@ export function instanceOfRegistrySvcServiceInstance(value) {
         return false;
     if (!('serviceSlug' in value) || value['serviceSlug'] === undefined)
         return false;
+    if (!('url' in value) || value['url'] === undefined)
+        return false;
     return true;
 }
 export function RegistrySvcServiceInstanceFromJSON(json) {
@@ -38,7 +40,7 @@ export function RegistrySvcServiceInstanceFromJSONTyped(json, ignoreDiscriminato
         'port': json['port'] == null ? undefined : json['port'],
         'scheme': json['scheme'] == null ? undefined : json['scheme'],
         'serviceSlug': json['serviceSlug'],
-        'url': json['url'] == null ? undefined : json['url'],
+        'url': json['url'],
     };
 }
 export function RegistrySvcServiceInstanceToJSON(value) {

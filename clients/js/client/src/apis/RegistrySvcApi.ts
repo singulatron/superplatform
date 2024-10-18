@@ -95,7 +95,7 @@ export class RegistrySvcApi extends runtime.BaseAPI {
      * Retrieves a list of all registered service instances or filters them by specific criteria (e.g., host, IP).
      * Query Service Instances
      */
-    async queryServiceInstancesRaw(requestParameters: QueryServiceInstancesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<RegistrySvcQueryServiceInstancesResponse>>> {
+    async queryServiceInstancesRaw(requestParameters: QueryServiceInstancesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RegistrySvcQueryServiceInstancesResponse>> {
         const queryParameters: any = {};
 
         if (requestParameters['scheme'] != null) {
@@ -131,14 +131,14 @@ export class RegistrySvcApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(RegistrySvcQueryServiceInstancesResponseFromJSON));
+        return new runtime.JSONApiResponse(response, (jsonValue) => RegistrySvcQueryServiceInstancesResponseFromJSON(jsonValue));
     }
 
     /**
      * Retrieves a list of all registered service instances or filters them by specific criteria (e.g., host, IP).
      * Query Service Instances
      */
-    async queryServiceInstances(requestParameters: QueryServiceInstancesRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<RegistrySvcQueryServiceInstancesResponse>> {
+    async queryServiceInstances(requestParameters: QueryServiceInstancesRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RegistrySvcQueryServiceInstancesResponse> {
         const response = await this.queryServiceInstancesRaw(requestParameters, initOverrides);
         return await response.value();
     }

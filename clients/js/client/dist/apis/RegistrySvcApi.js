@@ -90,7 +90,7 @@ export class RegistrySvcApi extends runtime.BaseAPI {
                 headers: headerParameters,
                 query: queryParameters,
             }, initOverrides);
-            return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(RegistrySvcQueryServiceInstancesResponseFromJSON));
+            return new runtime.JSONApiResponse(response, (jsonValue) => RegistrySvcQueryServiceInstancesResponseFromJSON(jsonValue));
         });
     }
     /**
