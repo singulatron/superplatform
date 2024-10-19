@@ -245,7 +245,11 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 		os.Exit(1)
 	}
 
-	clientFactory := sdk.NewApiClientFactory(router.SelfAddress())
+	ur := router.SelfAddress()
+	if options.Url != "" {
+		ur = options.Url
+	}
+	clientFactory := sdk.NewApiClientFactory(ur)
 
 	deployService, err := deployservice.NewDeployService(
 		clientFactory,
