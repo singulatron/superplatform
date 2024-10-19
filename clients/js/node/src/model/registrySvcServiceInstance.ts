@@ -1,6 +1,6 @@
 /**
  * Superplatform
- * AI management and development platform.
+ * On-premise AI platform and microservices ecosystem.
  *
  * The version of the OpenAPI document: 0.2
  * Contact: sales@singulatron.com
@@ -26,6 +26,14 @@ export class RegistrySvcServiceInstance {
     */
     'ip'?: string;
     /**
+    * Last time the instance gave a sign of life
+    */
+    'lastHeartbeat'?: string;
+    /**
+    * URL of the Singulatron daemon
+    */
+    'nodeUrl'?: string;
+    /**
     * Path of the service instance address. Optional (e.g., \"/api\")
     */
     'path'?: string;
@@ -38,13 +46,13 @@ export class RegistrySvcServiceInstance {
     */
     'scheme'?: string;
     /**
-    * Slug of the service whose instance is being registered.
+    * The User Svc slug of the service whose instance is being registered.
     */
-    'slug': string;
+    'serviceSlug': string;
     /**
     * Full address URL of the service instance.
     */
-    'url'?: string;
+    'url': string;
 
     static discriminator: string | undefined = undefined;
 
@@ -65,6 +73,16 @@ export class RegistrySvcServiceInstance {
             "type": "string"
         },
         {
+            "name": "lastHeartbeat",
+            "baseName": "lastHeartbeat",
+            "type": "string"
+        },
+        {
+            "name": "nodeUrl",
+            "baseName": "nodeUrl",
+            "type": "string"
+        },
+        {
             "name": "path",
             "baseName": "path",
             "type": "string"
@@ -80,8 +98,8 @@ export class RegistrySvcServiceInstance {
             "type": "string"
         },
         {
-            "name": "slug",
-            "baseName": "slug",
+            "name": "serviceSlug",
+            "baseName": "serviceSlug",
             "type": "string"
         },
         {

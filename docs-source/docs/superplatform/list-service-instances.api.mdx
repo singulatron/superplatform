@@ -1,0 +1,450 @@
+---
+id: list-service-instances
+title: "List Service Instances"
+description: "Retrieves a list of all registered service instances or filters them by specific criteria (e.g., host, IP)."
+sidebar_label: "List Service Instances"
+hide_title: true
+hide_table_of_contents: true
+api: eJzNV1Fv2zYQ/isEn1ZAkbxkBRI9LcO61miAGnHzlOThLJ1lthTJkpRdz9B/L46SYtlSvKwbiiKAY4vU3Xd333087niOLrPCeKEVT/kteitwjY4Bk8J5ppcMpGQWC+E8WsyZQ7sWGTKhnAeVoWPasqWQHq1jfoUlW2yZM5iJpchYZoVHK4D9gnERR2ylnY/YdPYq5hHXBi2Q52nOU07+5o3xaWebR9yAhRLJOk/vd0d459kKS2RetwjYYssjLmjpS4WWfigokafchZ08ar4AT3fcb01Y8Vaogtd1dGx9OnuJZWH+ndV32vmX2KVU/Qx4p/mLrOYnrT5G3KIzWjl0tH4+mdC/Q08f3vOIZ1p5VJ5WwRgpssCQ5JOjLbueC2OJP140Bt0xc9IdFx5LN9waEjtwHsqil0ThAccZ5LlF52J2i18qQW0gluzu9oYJx5T2zFi9FjlSDvArlEZS8OWW7KCNM13y6DglEaVsgKKzn7Lpn8+hOXCy8t64NEnACPKTXl1dJZVDe+bW2ahTM3Q6nf1z4B/CZpApkaGTA2r16SzsRsjJSEvaPb7LOPyNQZHg/DsE6xcIIwW5AeoTQe296iEqYI0MmBOFIodSLHHMuNI53lk5NEtVa6OdC1VUErzViuWApVajqe3XMX19eX7x65hDA3419DYDv3p5cjuVfOBUzwf+6gBPstXVs3U12o7kcKbt/0vqy8nl5Mm7UB4LtOS+ldcBgFag/yuEeFiYsSS09ueyKoZQPq6Q3Tm0bL7OmJNVcYxqs9Kuh004tkChit7hdwjjVJtVY9T7q5KyC5n1eHiclpFoBzS8uhxhYU0q2ySSp/etJvdy0uB6fHpPLz5h5glv+wCshW2wc7Sjpme/jYn2VK1BirwbAb5fwdFabUdPpFEwr8fBeLTUSPOQKvYm2PwxkAL/ssoKvw2Tyh8IFu11RbJw/0gnoIeChhh+Gwhlt8REqkaJfqVpBCrQ805JeGLbbcSxpC3jmeiNRg0fmrkoEI4nidQZSFLhVqnIbweracYQWR/coFG2BtlDu+WBs6WWUm8wJ7UH5gxQ4yqaCj6jYpC1nbu0ugx0Dk3m2lGO3ehCKIYqN1ooH3fjwwohR7ufHwiKtuLvUJg9s8GI99gwUqilJrBUS8hCLbEEQWE7kOh+d3s5b4/czvZsyuaVCRLZtmboqjRJXGXQGgl+qW0Zg0ioGY6mEnVmLJbCIbuesm5vyEApMqvbyjiGmXZb57GkIKXIULmgiB2Kt7Mbtr6IJwcYqLM3m01cqCrWtkja91wChZFnF/EkXvlShhZFW7oPyzavvRA2UBRoY6GTsCWh7AkftGPeD49HnOjSRDWJz5tjw/kSVA/mDY39XfH6g/hBVnb7lvrBl4aWGB6/+sRIEKont03n3PN+5+wlsNc7j1E7Bd7z3W4BjkaFuqbHzVgbbhrCwUKSki5BOjyRgPFbyCjQz7jtX0bWICvaxMPY/WKHw0H/hLMw73+no7G7yglX7fT3s0c1vNGccpQfOHqkH1aQpyDrUadkRJnmjessQ9PPw+DIqfui//bNRx5xaKV4r3tkLOq+kPVuSW17to91s4FAn5ST0Vd2u0ZV6/ppf7P07BtPYt2mhCKo6/ob2byREg==
+sidebar_class_name: "get api-method"
+info_path: docs/superplatform/superplatform
+custom_edit_url: null
+---
+
+import ApiTabs from "@theme/ApiTabs";
+import DiscriminatorTabs from "@theme/DiscriminatorTabs";
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import SecuritySchemes from "@theme/ApiExplorer/SecuritySchemes";
+import MimeTabs from "@theme/MimeTabs";
+import ParamsItem from "@theme/ParamsItem";
+import ResponseSamples from "@theme/ResponseSamples";
+import SchemaItem from "@theme/SchemaItem";
+import SchemaTabs from "@theme/SchemaTabs";
+import Markdown from "@theme/Markdown";
+import Heading from "@theme/Heading";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"List Service Instances"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/registry-svc/service-instances"}
+>
+  
+</MethodEndpoint>
+
+
+
+Retrieves a list of all registered service instances or filters them by specific criteria (e.g., host, IP).
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<details
+  style={{"marginBottom":"1rem"}}
+  className={"openapi-markdown__details"}
+  data-collapsed={false}
+  open={true}
+>
+  <summary
+    style={{}}
+  >
+    <h3
+      className={"openapi-markdown__details-summary-header-params"}
+    >
+      Query Parameters
+    </h3>
+  </summary><div>
+    <ul>
+      <ParamsItem
+        className={"paramsItem"}
+        param={{"description":"Scheme to filter by","in":"query","name":"scheme","schema":{"type":"string"}}}
+      >
+        
+      </ParamsItem><ParamsItem
+        className={"paramsItem"}
+        param={{"description":"IP to filter by","in":"query","name":"ip","schema":{"type":"string"}}}
+      >
+        
+      </ParamsItem><ParamsItem
+        className={"paramsItem"}
+        param={{"description":"Host to filter by","in":"query","name":"host","schema":{"type":"string"}}}
+      >
+        
+      </ParamsItem><ParamsItem
+        className={"paramsItem"}
+        param={{"description":"IP to filter by","in":"query","name":"ip","schema":{"type":"string"}}}
+      >
+        
+      </ParamsItem><ParamsItem
+        className={"paramsItem"}
+        param={{"description":"Id to filter by","in":"query","name":"id","schema":{"type":"string"}}}
+      >
+        
+      </ParamsItem>
+    </ul>
+  </div>
+</details><div>
+  <div>
+    <ApiTabs
+      label={undefined}
+      id={undefined}
+    >
+      <TabItem
+        label={"200"}
+        value={"200"}
+      >
+        <div>
+          
+          
+          OK
+          
+          
+        </div><div>
+          <MimeTabs
+            className={"openapi-tabs__mime"}
+            schemaType={"response"}
+          >
+            <TabItem
+              label={"application/json"}
+              value={"application/json"}
+            >
+              <SchemaTabs
+                className={"openapi-tabs__schema"}
+              >
+                <TabItem
+                  label={"Schema"}
+                  value={"Schema"}
+                >
+                  <details
+                    style={{}}
+                    className={"openapi-markdown__details response"}
+                    data-collapsed={false}
+                    open={true}
+                  >
+                    <summary
+                      style={{}}
+                      className={"openapi-markdown__details-summary-response"}
+                    >
+                      <strong>
+                        Schema
+                      </strong>
+                    </summary><div
+                      style={{"textAlign":"left","marginLeft":"1rem"}}
+                    >
+                      
+                    </div><ul
+                      style={{"marginLeft":"1rem"}}
+                    >
+                      <SchemaItem
+                        collapsible={true}
+                        className={"schemaItem"}
+                      >
+                        <details
+                          style={{}}
+                          className={"openapi-markdown__details"}
+                        >
+                          <summary
+                            style={{}}
+                          >
+                            <span
+                              className={"openapi-schema__container"}
+                            >
+                              <strong
+                                className={"openapi-schema__property"}
+                              >
+                                serviceInstances
+                              </strong><span
+                                className={"openapi-schema__name"}
+                              >
+                                 object[]
+                              </span>
+                            </span>
+                          </summary><div
+                            style={{"marginLeft":"1rem"}}
+                          >
+                            <li>
+                              <div
+                                style={{"fontSize":"var(--ifm-code-font-size)","opacity":"0.6","marginLeft":"-.5rem","paddingBottom":".5rem"}}
+                              >
+                                Array [
+                              </div>
+                            </li><SchemaItem
+                              collapsible={false}
+                              name={"host"}
+                              required={false}
+                              schemaName={"string"}
+                              qualifierMessage={undefined}
+                              schema={{"description":"Host of the service instance address. Required if URL is not provided","example":"myserver.com","type":"string"}}
+                            >
+                              
+                            </SchemaItem><SchemaItem
+                              collapsible={false}
+                              name={"id"}
+                              required={true}
+                              schemaName={"string"}
+                              qualifierMessage={undefined}
+                              schema={{"description":"Required: ID of the service instance","example":"https://api.com:999/user-svc","type":"string"}}
+                            >
+                              
+                            </SchemaItem><SchemaItem
+                              collapsible={false}
+                              name={"ip"}
+                              required={false}
+                              schemaName={"string"}
+                              qualifierMessage={undefined}
+                              schema={{"description":"IP of the service instance address. Optional: to register by IP instead of host","example":"8.8.8.8","type":"string"}}
+                            >
+                              
+                            </SchemaItem><SchemaItem
+                              collapsible={false}
+                              name={"lastHeartbeat"}
+                              required={false}
+                              schemaName={"string"}
+                              qualifierMessage={undefined}
+                              schema={{"description":"Last time the instance gave a sign of life","type":"string"}}
+                            >
+                              
+                            </SchemaItem><SchemaItem
+                              collapsible={false}
+                              name={"nodeUrl"}
+                              required={false}
+                              schemaName={"string"}
+                              qualifierMessage={undefined}
+                              schema={{"description":"URL of the Singulatron daemon","example":"https://myserver.com:58231","type":"string"}}
+                            >
+                              
+                            </SchemaItem><SchemaItem
+                              collapsible={false}
+                              name={"path"}
+                              required={false}
+                              schemaName={"string"}
+                              qualifierMessage={undefined}
+                              schema={{"description":"Path of the service instance address. Optional (e.g., \"/api\")","example":"/your-svc","type":"string"}}
+                            >
+                              
+                            </SchemaItem><SchemaItem
+                              collapsible={false}
+                              name={"port"}
+                              required={false}
+                              schemaName={"integer"}
+                              qualifierMessage={undefined}
+                              schema={{"description":"Port of the service instance address. Required if URL is not provided","example":8080,"type":"integer"}}
+                            >
+                              
+                            </SchemaItem><SchemaItem
+                              collapsible={false}
+                              name={"scheme"}
+                              required={false}
+                              schemaName={"string"}
+                              qualifierMessage={undefined}
+                              schema={{"description":"Scheme of the service instance address. Required if URL is not provided.","example":"https","type":"string"}}
+                            >
+                              
+                            </SchemaItem><SchemaItem
+                              collapsible={false}
+                              name={"serviceSlug"}
+                              required={true}
+                              schemaName={"string"}
+                              qualifierMessage={undefined}
+                              schema={{"description":"The User Svc slug of the service whose instance is being registered.","example":"user-svc","type":"string"}}
+                            >
+                              
+                            </SchemaItem><SchemaItem
+                              collapsible={false}
+                              name={"url"}
+                              required={true}
+                              schemaName={"string"}
+                              qualifierMessage={undefined}
+                              schema={{"description":"Full address URL of the service instance.","example":"https://myserver.com:5981","type":"string"}}
+                            >
+                              
+                            </SchemaItem><li>
+                              <div
+                                style={{"fontSize":"var(--ifm-code-font-size)","opacity":"0.6","marginLeft":"-.5rem"}}
+                              >
+                                ]
+                              </div>
+                            </li>
+                          </div>
+                        </details>
+                      </SchemaItem>
+                    </ul>
+                  </details>
+                </TabItem><TabItem
+                  label={"Example (from schema)"}
+                  value={"Example (from schema)"}
+                >
+                  <ResponseSamples
+                    responseExample={"{\n  \"serviceInstances\": [\n    {\n      \"host\": \"myserver.com\",\n      \"id\": \"https://api.com:999/user-svc\",\n      \"ip\": \"8.8.8.8\",\n      \"lastHeartbeat\": \"string\",\n      \"nodeUrl\": \"https://myserver.com:58231\",\n      \"path\": \"/your-svc\",\n      \"port\": 8080,\n      \"scheme\": \"https\",\n      \"serviceSlug\": \"user-svc\",\n      \"url\": \"https://myserver.com:5981\"\n    }\n  ]\n}"}
+                    language={"json"}
+                  >
+                    
+                  </ResponseSamples>
+                </TabItem>
+              </SchemaTabs>
+            </TabItem>
+          </MimeTabs>
+        </div>
+      </TabItem><TabItem
+        label={"400"}
+        value={"400"}
+      >
+        <div>
+          
+          
+          Invalid filters
+          
+          
+        </div><div>
+          <MimeTabs
+            className={"openapi-tabs__mime"}
+            schemaType={"response"}
+          >
+            <TabItem
+              label={"application/json"}
+              value={"application/json"}
+            >
+              <SchemaTabs
+                className={"openapi-tabs__schema"}
+              >
+                <TabItem
+                  label={"Schema"}
+                  value={"Schema"}
+                >
+                  <details
+                    style={{}}
+                    className={"openapi-markdown__details response"}
+                    data-collapsed={false}
+                    open={true}
+                  >
+                    <summary
+                      style={{}}
+                      className={"openapi-markdown__details-summary-response"}
+                    >
+                      <strong>
+                        Schema
+                      </strong>
+                    </summary><div
+                      style={{"textAlign":"left","marginLeft":"1rem"}}
+                    >
+                      
+                    </div><ul
+                      style={{"marginLeft":"1rem"}}
+                    >
+                      <SchemaItem
+                        collapsible={false}
+                        name={"error"}
+                        required={false}
+                        schemaName={"string"}
+                        qualifierMessage={undefined}
+                        schema={{"type":"string"}}
+                      >
+                        
+                      </SchemaItem>
+                    </ul>
+                  </details>
+                </TabItem><TabItem
+                  label={"Example (from schema)"}
+                  value={"Example (from schema)"}
+                >
+                  <ResponseSamples
+                    responseExample={"{\n  \"error\": \"string\"\n}"}
+                    language={"json"}
+                  >
+                    
+                  </ResponseSamples>
+                </TabItem>
+              </SchemaTabs>
+            </TabItem>
+          </MimeTabs>
+        </div>
+      </TabItem><TabItem
+        label={"500"}
+        value={"500"}
+      >
+        <div>
+          
+          
+          Internal Server Error
+          
+          
+        </div><div>
+          <MimeTabs
+            className={"openapi-tabs__mime"}
+            schemaType={"response"}
+          >
+            <TabItem
+              label={"application/json"}
+              value={"application/json"}
+            >
+              <SchemaTabs
+                className={"openapi-tabs__schema"}
+              >
+                <TabItem
+                  label={"Schema"}
+                  value={"Schema"}
+                >
+                  <details
+                    style={{}}
+                    className={"openapi-markdown__details response"}
+                    data-collapsed={false}
+                    open={true}
+                  >
+                    <summary
+                      style={{}}
+                      className={"openapi-markdown__details-summary-response"}
+                    >
+                      <strong>
+                        Schema
+                      </strong>
+                    </summary><div
+                      style={{"textAlign":"left","marginLeft":"1rem"}}
+                    >
+                      
+                    </div><ul
+                      style={{"marginLeft":"1rem"}}
+                    >
+                      <SchemaItem
+                        collapsible={false}
+                        name={"error"}
+                        required={false}
+                        schemaName={"string"}
+                        qualifierMessage={undefined}
+                        schema={{"type":"string"}}
+                      >
+                        
+                      </SchemaItem>
+                    </ul>
+                  </details>
+                </TabItem><TabItem
+                  label={"Example (from schema)"}
+                  value={"Example (from schema)"}
+                >
+                  <ResponseSamples
+                    responseExample={"{\n  \"error\": \"string\"\n}"}
+                    language={"json"}
+                  >
+                    
+                  </ResponseSamples>
+                </TabItem>
+              </SchemaTabs>
+            </TabItem>
+          </MimeTabs>
+        </div>
+      </TabItem>
+    </ApiTabs>
+  </div>
+</div>
+      

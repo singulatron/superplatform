@@ -607,6 +607,120 @@ const docTemplate = `{
                 }
             }
         },
+        "/deploy-svc/deployment": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Save a deployment.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Deploy Svc"
+                ],
+                "summary": "Save Deployment",
+                "operationId": "saveDeployment",
+                "parameters": [
+                    {
+                        "description": "Save Deploys Request",
+                        "name": "body",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/deploy_svc.SaveDeploymentRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/deploy_svc.SaveDeploymentResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/deploy_svc.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/deploy_svc.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/deploy_svc.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/deploy-svc/deployments": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve a list of deployments.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Deploy Svc"
+                ],
+                "summary": "List Deployments",
+                "operationId": "listDeployments",
+                "parameters": [
+                    {
+                        "description": "List Deploys Request",
+                        "name": "body",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/deploy_svc.ListDeploymentsRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/deploy_svc.ListDeploymentsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/deploy_svc.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/deploy_svc.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/deploy_svc.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/docker-svc/container": {
             "put": {
                 "security": [
@@ -2197,8 +2311,166 @@ const docTemplate = `{
                 }
             }
         },
+        "/registry-svc/service-definition": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Registers a new service definition, associating an service definition address with a slug acquired from the bearer token.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Registry Svc"
+                ],
+                "summary": "Register Service Definition",
+                "operationId": "saveServiceDefinition",
+                "parameters": [
+                    {
+                        "description": "Register Service Definition Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.SaveServiceDefinitionRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.SaveServiceDefinitionResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/registry-svc/service-definition/{id}": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Deletes a registered service definition based on the service ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Registry Svc"
+                ],
+                "summary": "Delete Service Definition",
+                "operationId": "deleteServiceDefinition",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Service Definition ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Invalid ID",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Service not found",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/registry-svc/service-definitions": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieves a list of all service definitions or filters them by specific criteria.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Registry Svc"
+                ],
+                "summary": "List Service Definitions",
+                "operationId": "listServiceDefinitions",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ListServiceDefinitionsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid filters",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/registry-svc/service-instance": {
-            "post": {
+            "put": {
                 "security": [
                     {
                         "BearerAuth": []
@@ -2314,7 +2586,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/registry-svc/services": {
+        "/registry-svc/service-instances": {
             "get": {
                 "security": [
                     {
@@ -2331,8 +2603,8 @@ const docTemplate = `{
                 "tags": [
                     "Registry Svc"
                 ],
-                "summary": "Query Service Instances",
-                "operationId": "queryServiceInstances",
+                "summary": "List Service Instances",
+                "operationId": "listServiceInstances",
                 "parameters": [
                     {
                         "type": "string",
@@ -2369,10 +2641,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/registry_svc.QueryServiceInstancesResponse"
-                            }
+                            "$ref": "#/definitions/registry_svc.ListServiceInstancesResponse"
                         }
                     },
                     "400": {
@@ -3918,6 +4187,171 @@ const docTemplate = `{
                 }
             }
         },
+        "deploy_svc.AutoScalingConfig": {
+            "type": "object",
+            "properties": {
+                "cpuThreshold": {
+                    "description": "CPU usage threshold for scaling (as a percentage)",
+                    "type": "integer"
+                },
+                "maxReplicas": {
+                    "description": "Maximum number of replicas to run",
+                    "type": "integer"
+                },
+                "minReplicas": {
+                    "description": "Minimum number of replicas to run",
+                    "type": "integer"
+                }
+            }
+        },
+        "deploy_svc.Deployment": {
+            "type": "object",
+            "required": [
+                "serviceSlug"
+            ],
+            "properties": {
+                "autoScaling": {
+                    "description": "Optional: Auto-scaling rules",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/deploy_svc.AutoScalingConfig"
+                        }
+                    ]
+                },
+                "id": {
+                    "description": "ID of the deployment (e.g., \"depl_dbOdi5eLQK\")",
+                    "type": "string",
+                    "example": "depl_dbOdi5eLQK"
+                },
+                "replicas": {
+                    "description": "Number of container instances to run",
+                    "type": "integer"
+                },
+                "resources": {
+                    "description": "Resource requirements for each replica",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/deploy_svc.ResourceLimits"
+                        }
+                    ]
+                },
+                "serviceSlug": {
+                    "description": "The User Svc slug of the service that is being deployed.",
+                    "type": "string",
+                    "example": "user-svc"
+                },
+                "strategy": {
+                    "description": "Deployment strategy (e.g., rolling update)",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/deploy_svc.DeploymentStrategy"
+                        }
+                    ]
+                },
+                "targetRegions": {
+                    "description": "Target deployment regions or clusters",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/deploy_svc.TargetRegion"
+                    }
+                }
+            }
+        },
+        "deploy_svc.DeploymentStrategy": {
+            "type": "object",
+            "properties": {
+                "maxSurge": {
+                    "description": "Max extra replicas during update",
+                    "type": "integer"
+                },
+                "maxUnavailable": {
+                    "description": "Max unavailable replicas during update",
+                    "type": "integer"
+                },
+                "type": {
+                    "description": "Deployment strategy type (RollingUpdate, Recreate, etc.)",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/deploy_svc.StrategyType"
+                        }
+                    ]
+                }
+            }
+        },
+        "deploy_svc.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "deploy_svc.ListDeploymentsRequest": {
+            "type": "object"
+        },
+        "deploy_svc.ListDeploymentsResponse": {
+            "type": "object",
+            "properties": {
+                "deployments": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/deploy_svc.Deployment"
+                    }
+                }
+            }
+        },
+        "deploy_svc.ResourceLimits": {
+            "type": "object",
+            "properties": {
+                "cpu": {
+                    "description": "CPU limit, e.g., \"500m\" for 0.5 cores",
+                    "type": "string"
+                },
+                "memory": {
+                    "description": "Memory limit, e.g., \"128Mi\"",
+                    "type": "string"
+                },
+                "vram": {
+                    "description": "Optional: GPU VRAM requirement, e.g., \"48GB\"",
+                    "type": "string"
+                }
+            }
+        },
+        "deploy_svc.SaveDeploymentRequest": {
+            "type": "object",
+            "properties": {
+                "deployment": {
+                    "$ref": "#/definitions/deploy_svc.Deployment"
+                }
+            }
+        },
+        "deploy_svc.SaveDeploymentResponse": {
+            "type": "object"
+        },
+        "deploy_svc.StrategyType": {
+            "type": "string",
+            "enum": [
+                "RollingUpdate",
+                "Recreate"
+            ],
+            "x-enum-varnames": [
+                "StrategyRollingUpdate",
+                "StrategyRecreate"
+            ]
+        },
+        "deploy_svc.TargetRegion": {
+            "type": "object",
+            "properties": {
+                "cluster": {
+                    "description": "Cluster or node where service should be deployed (e.g., \"us-west1\", \"local-docker\")",
+                    "type": "string"
+                },
+                "zone": {
+                    "description": "Optional: Specific zone for the deployment",
+                    "type": "string"
+                }
+            }
+        },
         "docker_svc.ContainerIsRunningResponse": {
             "type": "object",
             "properties": {
@@ -4911,6 +5345,53 @@ const docTemplate = `{
         "prompt_svc.RemovePromptResponse": {
             "type": "object"
         },
+        "registry_svc.APISpec": {
+            "type": "object",
+            "properties": {
+                "metadata": {
+                    "description": "Additional metadata about the API (e.g., author, license, etc.)",
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "protocolType": {
+                    "description": "Protocol type (e.g., OpenAPI, Swagger, etc.)",
+                    "type": "string"
+                },
+                "url": {
+                    "description": "URL to the OpenAPI file or other API definition",
+                    "type": "string"
+                },
+                "version": {
+                    "description": "Version of the API specification (e.g., 3.0.0)",
+                    "type": "string"
+                }
+            }
+        },
+        "registry_svc.Client": {
+            "type": "object",
+            "required": [
+                "language",
+                "url"
+            ],
+            "properties": {
+                "language": {
+                    "description": "Programming language.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/registry_svc.Language"
+                        }
+                    ],
+                    "example": "JavaScript"
+                },
+                "url": {
+                    "description": "The URL of the client.",
+                    "type": "string",
+                    "example": "https://example.com/client.js"
+                }
+            }
+        },
         "registry_svc.ErrorResponse": {
             "type": "object",
             "properties": {
@@ -4967,6 +5448,70 @@ const docTemplate = `{
                 }
             }
         },
+        "registry_svc.ImageSpec": {
+            "type": "object",
+            "required": [
+                "image",
+                "port"
+            ],
+            "properties": {
+                "image": {
+                    "description": "Image is the Docker image to use for the container",
+                    "type": "string",
+                    "example": "nginx:latest"
+                },
+                "port": {
+                    "description": "Port is the port number that the container will expose",
+                    "type": "integer",
+                    "example": 8080
+                }
+            }
+        },
+        "registry_svc.Language": {
+            "type": "string",
+            "enum": [
+                "JavaScript",
+                "Python",
+                "Java",
+                "C#",
+                "C++",
+                "Ruby",
+                "Go",
+                "Swift",
+                "PHP",
+                "TypeScript",
+                "Kotlin",
+                "Scala",
+                "Perl",
+                "Rust",
+                "Haskell",
+                "Clojure",
+                "Elixir",
+                "Objective-C",
+                "F#"
+            ],
+            "x-enum-varnames": [
+                "JavaScript",
+                "Python",
+                "Java",
+                "CSharp",
+                "CPlusPlus",
+                "Ruby",
+                "Go",
+                "Swift",
+                "PHP",
+                "TypeScript",
+                "Kotlin",
+                "Scala",
+                "Perl",
+                "Rust",
+                "Haskell",
+                "Clojure",
+                "Elixir",
+                "ObjectiveC",
+                "FSharp"
+            ]
+        },
         "registry_svc.ListNodesRequest": {
             "type": "object"
         },
@@ -4977,6 +5522,28 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/registry_svc.Node"
+                    }
+                }
+            }
+        },
+        "registry_svc.ListServiceDefinitionsResponse": {
+            "type": "object",
+            "properties": {
+                "serviceDefinitions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/registry_svc.ServiceDefinition"
+                    }
+                }
+            }
+        },
+        "registry_svc.ListServiceInstancesResponse": {
+            "type": "object",
+            "properties": {
+                "serviceInstances": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/registry_svc.ServiceInstance"
                     }
                 }
             }
@@ -4996,7 +5563,7 @@ const docTemplate = `{
                     }
                 },
                 "lastHeartbeat": {
-                    "description": "Last active timestamp",
+                    "description": "Last time the instance gave a sign of life",
                     "type": "string"
                 },
                 "region": {
@@ -5028,17 +5595,6 @@ const docTemplate = `{
                 },
                 "processName": {
                     "type": "string"
-                }
-            }
-        },
-        "registry_svc.QueryServiceInstancesResponse": {
-            "type": "object",
-            "properties": {
-                "instances": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/registry_svc.ServiceInstance"
-                    }
                 }
             }
         },
@@ -5074,7 +5630,7 @@ const docTemplate = `{
                     "example": "https"
                 },
                 "slug": {
-                    "description": "Slug of the service whose instance is being registered.",
+                    "description": "The User Svc slug of the service whose instance is being registered.",
                     "type": "string",
                     "example": "user-svc"
                 },
@@ -5117,11 +5673,57 @@ const docTemplate = `{
                 }
             }
         },
+        "registry_svc.SaveServiceDefinitionRequest": {
+            "type": "object",
+            "properties": {
+                "serviceDefinition": {
+                    "$ref": "#/definitions/registry_svc.ServiceDefinition"
+                }
+            }
+        },
+        "registry_svc.SaveServiceDefinitionResponse": {
+            "type": "object"
+        },
+        "registry_svc.ServiceDefinition": {
+            "type": "object",
+            "required": [
+                "serviceSlug"
+            ],
+            "properties": {
+                "apiSpecs": {
+                    "description": "API Specs such as OpenAPI definitions etc.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/registry_svc.APISpec"
+                    }
+                },
+                "clients": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/registry_svc.Client"
+                    }
+                },
+                "image": {
+                    "description": "Container specifications for Docker, K8s, etc.                                        // Programming language clients.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/registry_svc.ImageSpec"
+                        }
+                    ]
+                },
+                "serviceSlug": {
+                    "description": "The User Svc slug of the service whose instance is being registered.",
+                    "type": "string",
+                    "example": "user-svc"
+                }
+            }
+        },
         "registry_svc.ServiceInstance": {
             "type": "object",
             "required": [
                 "id",
-                "slug"
+                "serviceSlug",
+                "url"
             ],
             "properties": {
                 "host": {
@@ -5139,6 +5741,15 @@ const docTemplate = `{
                     "type": "string",
                     "example": "8.8.8.8"
                 },
+                "lastHeartbeat": {
+                    "description": "Last time the instance gave a sign of life",
+                    "type": "string"
+                },
+                "nodeUrl": {
+                    "description": "URL of the Singulatron daemon",
+                    "type": "string",
+                    "example": "https://myserver.com:58231"
+                },
                 "path": {
                     "description": "Path of the service instance address. Optional (e.g., \"/api\")",
                     "type": "string",
@@ -5154,8 +5765,8 @@ const docTemplate = `{
                     "type": "string",
                     "example": "https"
                 },
-                "slug": {
-                    "description": "Slug of the service whose instance is being registered.",
+                "serviceSlug": {
+                    "description": "The User Svc slug of the service whose instance is being registered.",
                     "type": "string",
                     "example": "user-svc"
                 },
@@ -5687,7 +6298,7 @@ var SwaggerInfo = &swag.Spec{
 	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "Superplatform",
-	Description:      "AI management and development platform.",
+	Description:      "On-premise AI platform and microservices ecosystem.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

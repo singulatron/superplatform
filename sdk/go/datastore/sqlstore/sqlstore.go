@@ -79,9 +79,11 @@ func NewSQLStore(instance any, driverName string, db *sql.DB, tableName string, 
 	}
 	sstore.db.Debug = debug
 
-	if err := sstore.createTable(instance, sstore.db, tableName); err != nil {
+	typeMap, err := sstore.createTable(instance, sstore.db, tableName)
+	if err != nil {
 		return nil, errors.Wrap(err, "error creating table")
 	}
+	sstore.fieldTypes = typeMap
 
 	v := createNewElement(instance)
 
@@ -93,7 +95,7 @@ func NewSQLStore(instance any, driverName string, db *sql.DB, tableName string, 
 	fieldName := sstore.fieldName(typ.Field(0).Name)
 	sstore.idFieldName = fieldName
 
-	_, err := sstore.db.Exec(fmt.Sprintf("ALTER TABLE %v ADD CONSTRAINT %v_%v_unique UNIQUE (%v);",
+	_, err = sstore.db.Exec(fmt.Sprintf("ALTER TABLE %v ADD CONSTRAINT %v_%v_unique UNIQUE (%v);",
 		sstore.tableName,
 		sstore.tableName,
 		fieldName,
@@ -508,14 +510,9 @@ func (q *SQLQueryBuilder) Find() ([]datastore.Row, error) {
 			switch {
 			case fieldType.Kind() == reflect.Slice:
 				// Create a GenericArray with the appropriate type
-				// elemType := fieldType.Elem()
-				// slicePtr := reflect.New(reflect.SliceOf(elemType)).Interface()
-				// fields[i] = &GenericArray{Array: slicePtr}
-
 				elemType := fieldType.Elem()
-				slicePtr := reflect.MakeSlice(reflect.SliceOf(elemType), 0, 0).Interface() // Create an empty slice
-				fields[i] = &slicePtr
-
+				slicePtr := reflect.New(reflect.SliceOf(elemType)).Interface()
+				fields[i] = &GenericArray{Array: slicePtr}
 			case fieldType.Kind() == reflect.Pointer:
 				var str sql.NullString
 				fields[i] = &str

@@ -58,8 +58,8 @@ func NewDynamicService(
 
 func (g *DynamicService) Start() error {
 	ctx := context.Background()
-	g.lock.Acquire(ctx, "model-service-start")
-	defer g.lock.Release(ctx, "model-service-start")
+	g.lock.Acquire(ctx, "model-svc-start")
+	defer g.lock.Release(ctx, "model-svc-start")
 
 	g.client = clients.NewAPIClient(&clients.Configuration{
 		Servers: clients.ServerConfigurations{

@@ -15,7 +15,7 @@ type Node struct {
 	// If not configured defaults to hostname + default Singulatron daemon port.
 	URL              string        `json:"url"`                        // Status of the node (online, offline, error, unknown)
 	AvailabilityZone string        `json:"availabilityZone,omitempty"` // The availability zone of the node
-	LastHeartbeat    time.Time     `json:"lastHeartbeat,omitempty"`    // Last active timestamp
+	LastHeartbeat    time.Time     `json:"lastHeartbeat,omitempty"`    // Last time the instance gave a sign of life
 	Region           string        `json:"region,omitempty"`           // The region of the node
 	Usage            ResourceUsage `json:"usage,omitempty"`            // Resource usage metrics of the node.
 	GPUs             []*GPU        `json:"gpus,omitempty"`             // List of GPUs available on the node

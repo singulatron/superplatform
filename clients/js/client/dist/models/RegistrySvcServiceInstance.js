@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Superplatform
- * AI management and development platform.
+ * On-premise AI platform and microservices ecosystem.
  *
  * The version of the OpenAPI document: 0.2
  * Contact: sales@singulatron.com
@@ -17,7 +17,9 @@
 export function instanceOfRegistrySvcServiceInstance(value) {
     if (!('id' in value) || value['id'] === undefined)
         return false;
-    if (!('slug' in value) || value['slug'] === undefined)
+    if (!('serviceSlug' in value) || value['serviceSlug'] === undefined)
+        return false;
+    if (!('url' in value) || value['url'] === undefined)
         return false;
     return true;
 }
@@ -32,11 +34,13 @@ export function RegistrySvcServiceInstanceFromJSONTyped(json, ignoreDiscriminato
         'host': json['host'] == null ? undefined : json['host'],
         'id': json['id'],
         'ip': json['ip'] == null ? undefined : json['ip'],
+        'lastHeartbeat': json['lastHeartbeat'] == null ? undefined : json['lastHeartbeat'],
+        'nodeUrl': json['nodeUrl'] == null ? undefined : json['nodeUrl'],
         'path': json['path'] == null ? undefined : json['path'],
         'port': json['port'] == null ? undefined : json['port'],
         'scheme': json['scheme'] == null ? undefined : json['scheme'],
-        'slug': json['slug'],
-        'url': json['url'] == null ? undefined : json['url'],
+        'serviceSlug': json['serviceSlug'],
+        'url': json['url'],
     };
 }
 export function RegistrySvcServiceInstanceToJSON(value) {
@@ -47,10 +51,12 @@ export function RegistrySvcServiceInstanceToJSON(value) {
         'host': value['host'],
         'id': value['id'],
         'ip': value['ip'],
+        'lastHeartbeat': value['lastHeartbeat'],
+        'nodeUrl': value['nodeUrl'],
         'path': value['path'],
         'port': value['port'],
         'scheme': value['scheme'],
-        'slug': value['slug'],
+        'serviceSlug': value['serviceSlug'],
         'url': value['url'],
     };
 }

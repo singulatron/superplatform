@@ -61,8 +61,8 @@ func NewPolicyService(
 
 func (cs *PolicyService) Start() error {
 	ctx := context.Background()
-	cs.lock.Acquire(ctx, "policy-service-start")
-	defer cs.lock.Release(ctx, "policy-service-start")
+	cs.lock.Acquire(ctx, "policy-svc-start")
+	defer cs.lock.Release(ctx, "policy-svc-start")
 
 	instances, err := cs.instancesStore.Query().Find()
 	if err != nil {

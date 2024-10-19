@@ -75,8 +75,8 @@ func (cs *ConfigService) Start() error {
 	cs.credentialStore = credentialStore
 
 	ctx := context.Background()
-	cs.lock.Acquire(ctx, "config-service-start")
-	defer cs.lock.Release(ctx, "config-service-start")
+	cs.lock.Acquire(ctx, "config-svc-start")
+	defer cs.lock.Release(ctx, "config-svc-start")
 
 	token, err := sdk.RegisterService("config-svc", "Config Service", cs.router, cs.credentialStore)
 	if err != nil {

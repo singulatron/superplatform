@@ -1,7 +1,7 @@
 /*
 Superplatform
 
-AI management and development platform.
+On-premise AI platform and microservices ecosystem.
 
 API version: 0.2
 Contact: sales@singulatron.com
@@ -28,16 +28,20 @@ type RegistrySvcServiceInstance struct {
 	Id string `json:"id"`
 	// IP of the service instance address. Optional: to register by IP instead of host
 	Ip *string `json:"ip,omitempty"`
+	// Last time the instance gave a sign of life
+	LastHeartbeat *string `json:"lastHeartbeat,omitempty"`
+	// URL of the Singulatron daemon
+	NodeUrl *string `json:"nodeUrl,omitempty"`
 	// Path of the service instance address. Optional (e.g., \"/api\")
 	Path *string `json:"path,omitempty"`
 	// Port of the service instance address. Required if URL is not provided
 	Port *int32 `json:"port,omitempty"`
 	// Scheme of the service instance address. Required if URL is not provided.
 	Scheme *string `json:"scheme,omitempty"`
-	// Slug of the service whose instance is being registered.
-	Slug string `json:"slug"`
+	// The User Svc slug of the service whose instance is being registered.
+	ServiceSlug string `json:"serviceSlug"`
 	// Full address URL of the service instance.
-	Url *string `json:"url,omitempty"`
+	Url string `json:"url"`
 }
 
 type _RegistrySvcServiceInstance RegistrySvcServiceInstance
@@ -46,10 +50,11 @@ type _RegistrySvcServiceInstance RegistrySvcServiceInstance
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewRegistrySvcServiceInstance(id string, slug string) *RegistrySvcServiceInstance {
+func NewRegistrySvcServiceInstance(id string, serviceSlug string, url string) *RegistrySvcServiceInstance {
 	this := RegistrySvcServiceInstance{}
 	this.Id = id
-	this.Slug = slug
+	this.ServiceSlug = serviceSlug
+	this.Url = url
 	return &this
 }
 
@@ -149,6 +154,70 @@ func (o *RegistrySvcServiceInstance) SetIp(v string) {
 	o.Ip = &v
 }
 
+// GetLastHeartbeat returns the LastHeartbeat field value if set, zero value otherwise.
+func (o *RegistrySvcServiceInstance) GetLastHeartbeat() string {
+	if o == nil || IsNil(o.LastHeartbeat) {
+		var ret string
+		return ret
+	}
+	return *o.LastHeartbeat
+}
+
+// GetLastHeartbeatOk returns a tuple with the LastHeartbeat field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RegistrySvcServiceInstance) GetLastHeartbeatOk() (*string, bool) {
+	if o == nil || IsNil(o.LastHeartbeat) {
+		return nil, false
+	}
+	return o.LastHeartbeat, true
+}
+
+// HasLastHeartbeat returns a boolean if a field has been set.
+func (o *RegistrySvcServiceInstance) HasLastHeartbeat() bool {
+	if o != nil && !IsNil(o.LastHeartbeat) {
+		return true
+	}
+
+	return false
+}
+
+// SetLastHeartbeat gets a reference to the given string and assigns it to the LastHeartbeat field.
+func (o *RegistrySvcServiceInstance) SetLastHeartbeat(v string) {
+	o.LastHeartbeat = &v
+}
+
+// GetNodeUrl returns the NodeUrl field value if set, zero value otherwise.
+func (o *RegistrySvcServiceInstance) GetNodeUrl() string {
+	if o == nil || IsNil(o.NodeUrl) {
+		var ret string
+		return ret
+	}
+	return *o.NodeUrl
+}
+
+// GetNodeUrlOk returns a tuple with the NodeUrl field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RegistrySvcServiceInstance) GetNodeUrlOk() (*string, bool) {
+	if o == nil || IsNil(o.NodeUrl) {
+		return nil, false
+	}
+	return o.NodeUrl, true
+}
+
+// HasNodeUrl returns a boolean if a field has been set.
+func (o *RegistrySvcServiceInstance) HasNodeUrl() bool {
+	if o != nil && !IsNil(o.NodeUrl) {
+		return true
+	}
+
+	return false
+}
+
+// SetNodeUrl gets a reference to the given string and assigns it to the NodeUrl field.
+func (o *RegistrySvcServiceInstance) SetNodeUrl(v string) {
+	o.NodeUrl = &v
+}
+
 // GetPath returns the Path field value if set, zero value otherwise.
 func (o *RegistrySvcServiceInstance) GetPath() string {
 	if o == nil || IsNil(o.Path) {
@@ -245,60 +314,52 @@ func (o *RegistrySvcServiceInstance) SetScheme(v string) {
 	o.Scheme = &v
 }
 
-// GetSlug returns the Slug field value
-func (o *RegistrySvcServiceInstance) GetSlug() string {
+// GetServiceSlug returns the ServiceSlug field value
+func (o *RegistrySvcServiceInstance) GetServiceSlug() string {
 	if o == nil {
 		var ret string
 		return ret
 	}
 
-	return o.Slug
+	return o.ServiceSlug
 }
 
-// GetSlugOk returns a tuple with the Slug field value
+// GetServiceSlugOk returns a tuple with the ServiceSlug field value
 // and a boolean to check if the value has been set.
-func (o *RegistrySvcServiceInstance) GetSlugOk() (*string, bool) {
+func (o *RegistrySvcServiceInstance) GetServiceSlugOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Slug, true
+	return &o.ServiceSlug, true
 }
 
-// SetSlug sets field value
-func (o *RegistrySvcServiceInstance) SetSlug(v string) {
-	o.Slug = v
+// SetServiceSlug sets field value
+func (o *RegistrySvcServiceInstance) SetServiceSlug(v string) {
+	o.ServiceSlug = v
 }
 
-// GetUrl returns the Url field value if set, zero value otherwise.
+// GetUrl returns the Url field value
 func (o *RegistrySvcServiceInstance) GetUrl() string {
-	if o == nil || IsNil(o.Url) {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.Url
+
+	return o.Url
 }
 
-// GetUrlOk returns a tuple with the Url field value if set, nil otherwise
+// GetUrlOk returns a tuple with the Url field value
 // and a boolean to check if the value has been set.
 func (o *RegistrySvcServiceInstance) GetUrlOk() (*string, bool) {
-	if o == nil || IsNil(o.Url) {
+	if o == nil {
 		return nil, false
 	}
-	return o.Url, true
+	return &o.Url, true
 }
 
-// HasUrl returns a boolean if a field has been set.
-func (o *RegistrySvcServiceInstance) HasUrl() bool {
-	if o != nil && !IsNil(o.Url) {
-		return true
-	}
-
-	return false
-}
-
-// SetUrl gets a reference to the given string and assigns it to the Url field.
+// SetUrl sets field value
 func (o *RegistrySvcServiceInstance) SetUrl(v string) {
-	o.Url = &v
+	o.Url = v
 }
 
 func (o RegistrySvcServiceInstance) MarshalJSON() ([]byte, error) {
@@ -318,6 +379,12 @@ func (o RegistrySvcServiceInstance) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Ip) {
 		toSerialize["ip"] = o.Ip
 	}
+	if !IsNil(o.LastHeartbeat) {
+		toSerialize["lastHeartbeat"] = o.LastHeartbeat
+	}
+	if !IsNil(o.NodeUrl) {
+		toSerialize["nodeUrl"] = o.NodeUrl
+	}
 	if !IsNil(o.Path) {
 		toSerialize["path"] = o.Path
 	}
@@ -327,10 +394,8 @@ func (o RegistrySvcServiceInstance) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Scheme) {
 		toSerialize["scheme"] = o.Scheme
 	}
-	toSerialize["slug"] = o.Slug
-	if !IsNil(o.Url) {
-		toSerialize["url"] = o.Url
-	}
+	toSerialize["serviceSlug"] = o.ServiceSlug
+	toSerialize["url"] = o.Url
 	return toSerialize, nil
 }
 
@@ -340,7 +405,8 @@ func (o *RegistrySvcServiceInstance) UnmarshalJSON(data []byte) (err error) {
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
 		"id",
-		"slug",
+		"serviceSlug",
+		"url",
 	}
 
 	allProperties := make(map[string]interface{})

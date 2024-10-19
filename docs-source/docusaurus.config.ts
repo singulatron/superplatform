@@ -8,8 +8,7 @@ import type * as OpenApiPlugin from "docusaurus-plugin-openapi-docs";
 
 const config: Config = {
   title: "Superplatform",
-  tagline:
-    "A microservices platform focused on distributed AI management and development.",
+  tagline: "On-premise AI platform and microservices ecosystem.",
   url: "https://superplatform.ai",
   baseUrl: "/",
   onBrokenLinks: "throw",

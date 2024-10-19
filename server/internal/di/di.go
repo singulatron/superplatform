@@ -8,6 +8,7 @@ import (
 	"sync"
 
 	"github.com/gorilla/mux"
+	sdk "github.com/singulatron/superplatform/sdk/go"
 	"github.com/singulatron/superplatform/sdk/go/clients/llm"
 	"github.com/singulatron/superplatform/sdk/go/datastore"
 	"github.com/singulatron/superplatform/sdk/go/datastore/localstore"
@@ -19,6 +20,7 @@ import (
 	node_types "github.com/singulatron/superplatform/server/internal/node/types"
 	chatservice "github.com/singulatron/superplatform/server/internal/services/chat"
 	configservice "github.com/singulatron/superplatform/server/internal/services/config"
+	deployservice "github.com/singulatron/superplatform/server/internal/services/deploy"
 	dockerservice "github.com/singulatron/superplatform/server/internal/services/docker"
 	downloadservice "github.com/singulatron/superplatform/server/internal/services/download"
 	dynamicservice "github.com/singulatron/superplatform/server/internal/services/dynamic"
@@ -235,6 +237,22 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 		options.NodeOptions.Az,
 		options.NodeOptions.Region,
 		options.Router,
+		options.Lock,
+		options.DatastoreFactory,
+	)
+	if err != nil {
+		logger.Error("Node service creation failed", slog.String("error", err.Error()))
+		os.Exit(1)
+	}
+
+	ur := router.SelfAddress()
+	if options.Url != "" {
+		ur = options.Url
+	}
+	clientFactory := sdk.NewApiClientFactory(ur)
+
+	deployService, err := deployservice.NewDeployService(
+		clientFactory,
 		options.Lock,
 		options.DatastoreFactory,
 	)
@@ -469,14 +487,30 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 	})).Methods("OPTIONS", "PUT")
 
 	router.HandleFunc("/registry-svc/service-instances", appl(func(w http.ResponseWriter, r *http.Request) {
-		registryService.QueryServiceInstances(w, r)
-	})).Methods("OPTIONS", "DELETE")
+		registryService.ListServiceInstances(w, r)
+	})).Methods("OPTIONS", "GET")
+	router.HandleFunc("/registry-svc/service-definitions", appl(func(w http.ResponseWriter, r *http.Request) {
+		registryService.ListServiceDefinitions(w, r)
+	})).Methods("OPTIONS", "GET")
 	router.HandleFunc("/registry-svc/service-instance", appl(func(w http.ResponseWriter, r *http.Request) {
 		registryService.RegisterServiceInstance(w, r)
-	})).Methods("OPTIONS", "DELETE")
+	})).Methods("OPTIONS", "PUT")
+	router.HandleFunc("/registry-svc/service-definition", appl(func(w http.ResponseWriter, r *http.Request) {
+		registryService.SaveServiceDefinition(w, r)
+	})).Methods("OPTIONS", "PUT")
 	router.HandleFunc("/registry-svc/service-instance/{id}", appl(func(w http.ResponseWriter, r *http.Request) {
 		registryService.RemoveServiceInstance(w, r)
 	})).Methods("OPTIONS", "DELETE")
+	router.HandleFunc("/registry-svc/service-definition/{id}", appl(func(w http.ResponseWriter, r *http.Request) {
+		registryService.DeleteServiceDefinition(w, r)
+	})).Methods("OPTIONS", "DELETE")
+
+	router.HandleFunc("/deploy-svc/deployment", appl(func(w http.ResponseWriter, r *http.Request) {
+		deployService.SaveDeployment(w, r)
+	})).Methods("OPTIONS", "PUT")
+	router.HandleFunc("/deploy-svc/deployments", appl(func(w http.ResponseWriter, r *http.Request) {
+		deployService.ListDeployments(w, r)
+	})).Methods("OPTIONS", "POST")
 
 	return router, func() error {
 		err = configService.Start()
@@ -516,6 +550,10 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 			return err
 		}
 		err = registryService.Start()
+		if err != nil {
+			return err
+		}
+		err = deployService.Start()
 		if err != nil {
 			return err
 		}

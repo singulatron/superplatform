@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Superplatform
- * AI management and development platform.
+ * On-premise AI platform and microservices ecosystem.
  *
  * The version of the OpenAPI document: 0.2
  * Contact: sales@singulatron.com
@@ -38,6 +38,18 @@ export interface RegistrySvcServiceInstance {
      */
     ip?: string;
     /**
+     * Last time the instance gave a sign of life
+     * @type {string}
+     * @memberof RegistrySvcServiceInstance
+     */
+    lastHeartbeat?: string;
+    /**
+     * URL of the Singulatron daemon
+     * @type {string}
+     * @memberof RegistrySvcServiceInstance
+     */
+    nodeUrl?: string;
+    /**
      * Path of the service instance address. Optional (e.g., "/api")
      * @type {string}
      * @memberof RegistrySvcServiceInstance
@@ -56,17 +68,17 @@ export interface RegistrySvcServiceInstance {
      */
     scheme?: string;
     /**
-     * Slug of the service whose instance is being registered.
+     * The User Svc slug of the service whose instance is being registered.
      * @type {string}
      * @memberof RegistrySvcServiceInstance
      */
-    slug: string;
+    serviceSlug: string;
     /**
      * Full address URL of the service instance.
      * @type {string}
      * @memberof RegistrySvcServiceInstance
      */
-    url?: string;
+    url: string;
 }
 
 /**
@@ -74,7 +86,8 @@ export interface RegistrySvcServiceInstance {
  */
 export function instanceOfRegistrySvcServiceInstance(value: object): value is RegistrySvcServiceInstance {
     if (!('id' in value) || value['id'] === undefined) return false;
-    if (!('slug' in value) || value['slug'] === undefined) return false;
+    if (!('serviceSlug' in value) || value['serviceSlug'] === undefined) return false;
+    if (!('url' in value) || value['url'] === undefined) return false;
     return true;
 }
 
@@ -91,11 +104,13 @@ export function RegistrySvcServiceInstanceFromJSONTyped(json: any, ignoreDiscrim
         'host': json['host'] == null ? undefined : json['host'],
         'id': json['id'],
         'ip': json['ip'] == null ? undefined : json['ip'],
+        'lastHeartbeat': json['lastHeartbeat'] == null ? undefined : json['lastHeartbeat'],
+        'nodeUrl': json['nodeUrl'] == null ? undefined : json['nodeUrl'],
         'path': json['path'] == null ? undefined : json['path'],
         'port': json['port'] == null ? undefined : json['port'],
         'scheme': json['scheme'] == null ? undefined : json['scheme'],
-        'slug': json['slug'],
-        'url': json['url'] == null ? undefined : json['url'],
+        'serviceSlug': json['serviceSlug'],
+        'url': json['url'],
     };
 }
 
@@ -108,10 +123,12 @@ export function RegistrySvcServiceInstanceToJSON(value?: RegistrySvcServiceInsta
         'host': value['host'],
         'id': value['id'],
         'ip': value['ip'],
+        'lastHeartbeat': value['lastHeartbeat'],
+        'nodeUrl': value['nodeUrl'],
         'path': value['path'],
         'port': value['port'],
         'scheme': value['scheme'],
-        'slug': value['slug'],
+        'serviceSlug': value['serviceSlug'],
         'url': value['url'],
     };
 }

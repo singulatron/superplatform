@@ -91,8 +91,8 @@ func NewPromptService(
 
 func (cs *PromptService) Start() error {
 	ctx := context.Background()
-	cs.lock.Acquire(ctx, "prompt-service-start")
-	defer cs.lock.Release(ctx, "prompt-service-start")
+	cs.lock.Acquire(ctx, "prompt-svc-start")
+	defer cs.lock.Release(ctx, "prompt-svc-start")
 
 	token, err := sdk.RegisterService("prompt-svc", "Prompt Service", cs.router, cs.credentialStore)
 	if err != nil {

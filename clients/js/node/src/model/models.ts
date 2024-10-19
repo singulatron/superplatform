@@ -23,6 +23,15 @@ export * from './datastoreFilter';
 export * from './datastoreOp';
 export * from './datastoreOrderBy';
 export * from './datastoreQuery';
+export * from './deploySvcAutoScalingConfig';
+export * from './deploySvcDeployment';
+export * from './deploySvcDeploymentStrategy';
+export * from './deploySvcErrorResponse';
+export * from './deploySvcListDeploymentsResponse';
+export * from './deploySvcResourceLimits';
+export * from './deploySvcSaveDeploymentRequest';
+export * from './deploySvcStrategyType';
+export * from './deploySvcTargetRegion';
 export * from './dockerSvcContainerIsRunningResponse';
 export * from './dockerSvcDockerInfo';
 export * from './dockerSvcErrorResponse';
@@ -79,14 +88,21 @@ export * from './promptSvcListPromptsResponse';
 export * from './promptSvcPrompt';
 export * from './promptSvcPromptStatus';
 export * from './promptSvcRemovePromptRequest';
+export * from './registrySvcAPISpec';
+export * from './registrySvcClient';
 export * from './registrySvcErrorResponse';
 export * from './registrySvcGPU';
+export * from './registrySvcImageSpec';
+export * from './registrySvcLanguage';
 export * from './registrySvcListNodesResponse';
+export * from './registrySvcListServiceDefinitionsResponse';
+export * from './registrySvcListServiceInstancesResponse';
 export * from './registrySvcNode';
 export * from './registrySvcProcess';
-export * from './registrySvcQueryServiceInstancesResponse';
 export * from './registrySvcRegisterServiceInstanceRequest';
 export * from './registrySvcResourceUsage';
+export * from './registrySvcSaveServiceDefinitionRequest';
+export * from './registrySvcServiceDefinition';
 export * from './registrySvcServiceInstance';
 export * from './registrySvcUsage';
 export * from './userSvcAddUserToOrganizationRequest';
@@ -154,6 +170,15 @@ import { DatastoreFilter } from './datastoreFilter';
 import { DatastoreOp } from './datastoreOp';
 import { DatastoreOrderBy } from './datastoreOrderBy';
 import { DatastoreQuery } from './datastoreQuery';
+import { DeploySvcAutoScalingConfig } from './deploySvcAutoScalingConfig';
+import { DeploySvcDeployment } from './deploySvcDeployment';
+import { DeploySvcDeploymentStrategy } from './deploySvcDeploymentStrategy';
+import { DeploySvcErrorResponse } from './deploySvcErrorResponse';
+import { DeploySvcListDeploymentsResponse } from './deploySvcListDeploymentsResponse';
+import { DeploySvcResourceLimits } from './deploySvcResourceLimits';
+import { DeploySvcSaveDeploymentRequest } from './deploySvcSaveDeploymentRequest';
+import { DeploySvcStrategyType } from './deploySvcStrategyType';
+import { DeploySvcTargetRegion } from './deploySvcTargetRegion';
 import { DockerSvcContainerIsRunningResponse } from './dockerSvcContainerIsRunningResponse';
 import { DockerSvcDockerInfo } from './dockerSvcDockerInfo';
 import { DockerSvcErrorResponse } from './dockerSvcErrorResponse';
@@ -210,14 +235,21 @@ import { PromptSvcListPromptsResponse } from './promptSvcListPromptsResponse';
 import { PromptSvcPrompt } from './promptSvcPrompt';
 import { PromptSvcPromptStatus } from './promptSvcPromptStatus';
 import { PromptSvcRemovePromptRequest } from './promptSvcRemovePromptRequest';
+import { RegistrySvcAPISpec } from './registrySvcAPISpec';
+import { RegistrySvcClient } from './registrySvcClient';
 import { RegistrySvcErrorResponse } from './registrySvcErrorResponse';
 import { RegistrySvcGPU } from './registrySvcGPU';
+import { RegistrySvcImageSpec } from './registrySvcImageSpec';
+import { RegistrySvcLanguage } from './registrySvcLanguage';
 import { RegistrySvcListNodesResponse } from './registrySvcListNodesResponse';
+import { RegistrySvcListServiceDefinitionsResponse } from './registrySvcListServiceDefinitionsResponse';
+import { RegistrySvcListServiceInstancesResponse } from './registrySvcListServiceInstancesResponse';
 import { RegistrySvcNode } from './registrySvcNode';
 import { RegistrySvcProcess } from './registrySvcProcess';
-import { RegistrySvcQueryServiceInstancesResponse } from './registrySvcQueryServiceInstancesResponse';
 import { RegistrySvcRegisterServiceInstanceRequest } from './registrySvcRegisterServiceInstanceRequest';
 import { RegistrySvcResourceUsage } from './registrySvcResourceUsage';
+import { RegistrySvcSaveServiceDefinitionRequest } from './registrySvcSaveServiceDefinitionRequest';
+import { RegistrySvcServiceDefinition } from './registrySvcServiceDefinition';
 import { RegistrySvcServiceInstance } from './registrySvcServiceInstance';
 import { RegistrySvcUsage } from './registrySvcUsage';
 import { UserSvcAddUserToOrganizationRequest } from './userSvcAddUserToOrganizationRequest';
@@ -263,10 +295,12 @@ let primitives = [
 
 let enumsMap: {[index: string]: any} = {
         "DatastoreOp": DatastoreOp,
+        "DeploySvcStrategyType": DeploySvcStrategyType,
         "PolicySvcEntity": PolicySvcEntity,
         "PolicySvcScope": PolicySvcScope,
         "PolicySvcTemplateId": PolicySvcTemplateId,
         "PromptSvcPromptStatus": PromptSvcPromptStatus,
+        "RegistrySvcLanguage": RegistrySvcLanguage,
 }
 
 let typeMap: {[index: string]: any} = {
@@ -292,6 +326,14 @@ let typeMap: {[index: string]: any} = {
     "DatastoreFilter": DatastoreFilter,
     "DatastoreOrderBy": DatastoreOrderBy,
     "DatastoreQuery": DatastoreQuery,
+    "DeploySvcAutoScalingConfig": DeploySvcAutoScalingConfig,
+    "DeploySvcDeployment": DeploySvcDeployment,
+    "DeploySvcDeploymentStrategy": DeploySvcDeploymentStrategy,
+    "DeploySvcErrorResponse": DeploySvcErrorResponse,
+    "DeploySvcListDeploymentsResponse": DeploySvcListDeploymentsResponse,
+    "DeploySvcResourceLimits": DeploySvcResourceLimits,
+    "DeploySvcSaveDeploymentRequest": DeploySvcSaveDeploymentRequest,
+    "DeploySvcTargetRegion": DeploySvcTargetRegion,
     "DockerSvcContainerIsRunningResponse": DockerSvcContainerIsRunningResponse,
     "DockerSvcDockerInfo": DockerSvcDockerInfo,
     "DockerSvcErrorResponse": DockerSvcErrorResponse,
@@ -344,14 +386,20 @@ let typeMap: {[index: string]: any} = {
     "PromptSvcListPromptsResponse": PromptSvcListPromptsResponse,
     "PromptSvcPrompt": PromptSvcPrompt,
     "PromptSvcRemovePromptRequest": PromptSvcRemovePromptRequest,
+    "RegistrySvcAPISpec": RegistrySvcAPISpec,
+    "RegistrySvcClient": RegistrySvcClient,
     "RegistrySvcErrorResponse": RegistrySvcErrorResponse,
     "RegistrySvcGPU": RegistrySvcGPU,
+    "RegistrySvcImageSpec": RegistrySvcImageSpec,
     "RegistrySvcListNodesResponse": RegistrySvcListNodesResponse,
+    "RegistrySvcListServiceDefinitionsResponse": RegistrySvcListServiceDefinitionsResponse,
+    "RegistrySvcListServiceInstancesResponse": RegistrySvcListServiceInstancesResponse,
     "RegistrySvcNode": RegistrySvcNode,
     "RegistrySvcProcess": RegistrySvcProcess,
-    "RegistrySvcQueryServiceInstancesResponse": RegistrySvcQueryServiceInstancesResponse,
     "RegistrySvcRegisterServiceInstanceRequest": RegistrySvcRegisterServiceInstanceRequest,
     "RegistrySvcResourceUsage": RegistrySvcResourceUsage,
+    "RegistrySvcSaveServiceDefinitionRequest": RegistrySvcSaveServiceDefinitionRequest,
+    "RegistrySvcServiceDefinition": RegistrySvcServiceDefinition,
     "RegistrySvcServiceInstance": RegistrySvcServiceInstance,
     "RegistrySvcUsage": RegistrySvcUsage,
     "UserSvcAddUserToOrganizationRequest": UserSvcAddUserToOrganizationRequest,

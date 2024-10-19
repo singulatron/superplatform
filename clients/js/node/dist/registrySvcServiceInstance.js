@@ -2,7 +2,7 @@
 
 /**
  * Superplatform
- * AI management and development platform.
+ * On-premise AI platform and microservices ecosystem.
  *
  * The version of the OpenAPI document: 0.2
  * Contact: sales@singulatron.com
@@ -34,6 +34,16 @@ RegistrySvcServiceInstance.attributeTypeMap = [
         "type": "string"
     },
     {
+        "name": "lastHeartbeat",
+        "baseName": "lastHeartbeat",
+        "type": "string"
+    },
+    {
+        "name": "nodeUrl",
+        "baseName": "nodeUrl",
+        "type": "string"
+    },
+    {
         "name": "path",
         "baseName": "path",
         "type": "string"
@@ -49,8 +59,8 @@ RegistrySvcServiceInstance.attributeTypeMap = [
         "type": "string"
     },
     {
-        "name": "slug",
-        "baseName": "slug",
+        "name": "serviceSlug",
+        "baseName": "serviceSlug",
         "type": "string"
     },
     {

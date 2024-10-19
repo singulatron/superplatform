@@ -1,7 +1,7 @@
 /*
 Superplatform
 
-AI management and development platform.
+On-premise AI platform and microservices ecosystem.
 
 API version: 0.2
 Contact: sales@singulatron.com
@@ -24,7 +24,7 @@ type RegistrySvcNode struct {
 	AvailabilityZone *string `json:"availabilityZone,omitempty"`
 	// List of GPUs available on the node
 	Gpus []RegistrySvcGPU `json:"gpus,omitempty"`
-	// Last active timestamp
+	// Last time the instance gave a sign of life
 	LastHeartbeat *string `json:"lastHeartbeat,omitempty"`
 	// The region of the node
 	Region *string `json:"region,omitempty"`

@@ -16,6 +16,8 @@ import (
 
 var port = "58231"
 
+const address = "http://127.0.0.1"
+
 func GetPort() string {
 	return port
 }
@@ -24,7 +26,9 @@ func SetPort(i int) {
 	port = fmt.Sprintf("%v", i)
 }
 
-const defaultAddress = "http://127.0.0.1"
+func SelfAddress() string {
+	return fmt.Sprintf("%v:%v", address, GetPort())
+}
 
 type Router struct {
 	registry      map[string]string
@@ -49,7 +53,7 @@ func (r *Router) Address() string {
 		return r.address
 	}
 
-	return fmt.Sprintf("%v:%v", defaultAddress, port)
+	return fmt.Sprintf("%v:%v", address, port)
 }
 
 func (r *Router) AddMock(serviceName, path string, rsp any) {

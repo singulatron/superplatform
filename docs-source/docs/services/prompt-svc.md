@@ -4,7 +4,7 @@ tags:
   - prompt-svc
   - prompts
   - ai
-  - service
+  - services
 ---
 
 # Prompt Svc

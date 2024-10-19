@@ -22,7 +22,7 @@ import (
 // @Failure 401 {object} registry.ErrorResponse "Unauthorized"
 // @Failure 500 {object} registry.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
-// @Router /registry-svc/service-instance [post]
+// @Router /registry-svc/service-instance [put]
 func (rs *RegistryService) RegisterServiceInstance(
 	w http.ResponseWriter,
 	r *http.Request,
@@ -50,7 +50,7 @@ func (rs *RegistryService) RegisterServiceInstance(
 	}
 	defer r.Body.Close()
 
-	err = rs.registerService(req, rsp.User.Slug)
+	err = rs.registerServiceInstance(req, rsp.User.Slug)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(err.Error()))
@@ -61,7 +61,7 @@ func (rs *RegistryService) RegisterServiceInstance(
 	w.Write([]byte(`{}`))
 }
 
-func (rs *RegistryService) registerService(req *registry.RegisterServiceInstanceRequest, userSlug string) error {
+func (rs *RegistryService) registerServiceInstance(req *registry.RegisterServiceInstanceRequest, userSlug string) error {
 	if req.URL == "" {
 		if req.Scheme == "" {
 			return fmt.Errorf("scheme is mandatory when full URL is not provided")
@@ -86,12 +86,12 @@ func (rs *RegistryService) registerService(req *registry.RegisterServiceInstance
 	}
 
 	inst := &registry.ServiceInstance{
-		URL:    req.URL,
-		Scheme: req.Scheme,
-		Host:   req.Host,
-		IP:     req.IP,
-		Path:   req.Path,
-		Slug:   req.Slug,
+		URL:         req.URL,
+		Scheme:      req.Scheme,
+		Host:        req.Host,
+		IP:          req.IP,
+		Path:        req.Path,
+		ServiceSlug: req.ServiceSlug,
 	}
 	inst.ID = inst.DeriveID()
 

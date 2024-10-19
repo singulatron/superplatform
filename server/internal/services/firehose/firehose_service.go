@@ -55,8 +55,8 @@ func NewFirehoseService(
 
 func (fs *FirehoseService) Start() error {
 	ctx := context.Background()
-	fs.lock.Acquire(ctx, "firehose-service-start")
-	defer fs.lock.Release(ctx, "firehose-service-start")
+	fs.lock.Acquire(ctx, "firehose-svc-start")
+	defer fs.lock.Release(ctx, "firehose-svc-start")
 
 	token, err := sdk.RegisterService("firehose-svc", "Firehose Service", fs.router, fs.credentialStore)
 	if err != nil {

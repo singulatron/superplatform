@@ -25,7 +25,7 @@ var port = router.GetPort()
 
 // @title           Superplatform
 // @version         0.2
-// @description     AI management and development platform.
+// @description     On-premise AI platform and microservices ecosystem.
 // @termsOfService  http://swagger.io/terms/
 
 // @contact.name   API Support

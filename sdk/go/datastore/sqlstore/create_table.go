@@ -14,7 +14,9 @@ import (
 	"time"
 )
 
-func (s *SQLStore) createTable(instance any, db *DebugDB, tableName string) error {
+func (s *SQLStore) createTable(instance any, db *DebugDB, tableName string) (map[string]reflect.Type, error) {
+	typeMap := map[string]reflect.Type{}
+
 	typ := reflect.TypeOf(instance)
 	if typ.Kind() == reflect.Pointer {
 		typ = typ.Elem()
@@ -46,6 +48,8 @@ func (s *SQLStore) createTable(instance any, db *DebugDB, tableName string) erro
 			}
 			fieldName = escape(fieldName)
 
+			typeMap[fieldName] = field.Type
+
 			// Map field type to SQL type
 			fieldType := s.sqlType(field.Type)
 
@@ -63,10 +67,10 @@ func (s *SQLStore) createTable(instance any, db *DebugDB, tableName string) erro
 
 	_, err := db.Exec(createQuery)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	return typeMap, nil
 }
 
 func (s *SQLStore) sqlType(t reflect.Type) string {

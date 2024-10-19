@@ -9,9 +9,16 @@
 package registry_svc
 
 type ServiceDefinition struct {
-	Slug     string    `json:"slug,omitempty" example:"user-svc" binding:"required"` // Slug of the service whose instance is being registered.
-	APISpecs []APISpec `json:"apiSpecs,omitempty"`                                   // API Specs such as OpenAPI definitions etc.
-	Clients  []Client  `json:"clients,omitempty"`                                    // Programming language clients.
+	// No id as there is only one definition per service slug.
+
+	ServiceSlug string     `json:"serviceSlug,omitempty" example:"user-svc" binding:"required"` // The User Svc slug of the service whose instance is being registered.
+	APISpecs    []APISpec  `json:"apiSpecs,omitempty"`                                          // API Specs such as OpenAPI definitions etc.
+	Clients     []Client   `json:"clients,omitempty"`
+	Image       *ImageSpec `json:"image,omitempty"` // Container specifications for Docker, K8s, etc.                                        // Programming language clients.
+}
+
+func (s ServiceDefinition) GetId() string {
+	return s.ServiceSlug
 }
 
 type APISpec struct {
@@ -26,11 +33,38 @@ type Client struct {
 	URL      string   `json:"url,omitempty" example:"https://example.com/client.js" binding:"required"` // The URL of the client.
 }
 
-type RegisterServiceRequest struct {
-	Hostname string `json:"hostname"`       // Hostname of the node
-	IP       string `json:"ip,omitempty"`   // IP of the node. Optional: If not provided, resolved by hostname.
-	GPUs     []*GPU `json:"gpus,omitempty"` // List of GPUs available on the node
+type Image struct {
+	// Image name/URL of the container
+	Image string `json:"image" example:"nginx:latest" binding:"required"`
+
+	// Runtime environment (e.g., Docker, K8s)
+	Runtime RuntimeType `json:"runtime,omitempty"`
+
+	// Port is the port number that the container will expose
+	Port int `json:"port" example:"8080" binding:"required"`
+
+	// PersistentPaths are paths inside the container which should be persisted across container restarts
+	PersistentPaths []string `json:"persistentPaths,omitempty"`
+
+	// GPUEnabled specifies if GPU support is enabled
+	GPUEnabled bool `json:"gpuEnabled,omitempty"`
 }
+
+type ImageSpec struct {
+	// Image is the Docker image to use for the container
+	Image string `json:"image" example:"nginx:latest" binding:"required"`
+
+	// Port is the port number that the container will expose
+	Port int `json:"port" example:"8080" binding:"required"`
+}
+
+type RuntimeType string
+
+const (
+	RuntimeDocker     RuntimeType = "Docker"
+	RuntimeContainerd RuntimeType = "containerd"
+	RuntimeCRIO       RuntimeType = "CRI-O"
+)
 
 type Language string
 
@@ -56,5 +90,15 @@ const (
 	FSharp     Language = "F#"
 )
 
-type RegisterServiceResponse struct {
+type SaveServiceDefinitionRequest struct {
+	ServiceDefinition ServiceDefinition `json:"serviceDefinition,omitempty"`
+}
+
+type SaveServiceDefinitionResponse struct {
+}
+
+type ListServiceDefinitionsRequest struct{}
+
+type ListServiceDefinitionsResponse struct {
+	ServiceDefinitions []*ServiceDefinition `json:"serviceDefinitions,omitempty"`
 }
