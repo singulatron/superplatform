@@ -1,6 +1,6 @@
 module github.com/singulatron/superplatform/cli
 
-go 1.21.1
+go 1.23
 
 replace github.com/singulatron/superplatform/clients/go => ../clients/go
 
