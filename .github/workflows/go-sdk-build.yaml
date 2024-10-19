@@ -1,5 +1,5 @@
 name: "Go SDK build"
-# .
+# ..
 on:
   push:
     paths:
