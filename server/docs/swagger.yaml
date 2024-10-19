@@ -1217,7 +1217,7 @@ definitions:
     type: object
   registry_svc.ListServiceInstancesResponse:
     properties:
-      instances:
+      serviceInstances:
         items:
           $ref: '#/definitions/registry_svc.ServiceInstance'
         type: array
@@ -3443,7 +3443,7 @@ paths:
       summary: Remove Service Instance
       tags:
       - Registry Svc
-  /registry-svc/services:
+  /registry-svc/service-instances:
     get:
       consumes:
       - application/json

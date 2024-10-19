@@ -147,7 +147,7 @@ export class RegistrySvcApi extends runtime.BaseAPI {
                 headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
             }
             const response = yield this.request({
-                path: `/registry-svc/services`,
+                path: `/registry-svc/service-instances`,
                 method: 'GET',
                 headers: headerParameters,
                 query: queryParameters,

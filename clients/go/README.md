@@ -124,7 +124,7 @@ Class | Method | HTTP request | Description
 *RegistrySvcAPI* | [**DeleteServiceDefinition**](docs/RegistrySvcAPI.md#deleteservicedefinition) | **Delete** /registry-svc/service-definition/{id} | Delete Service Definition
 *RegistrySvcAPI* | [**ListNodes**](docs/RegistrySvcAPI.md#listnodes) | **Post** /registry-svc/nodes | List Nodes
 *RegistrySvcAPI* | [**ListServiceDefinitions**](docs/RegistrySvcAPI.md#listservicedefinitions) | **Get** /registry-svc/service-definitions | List Service Definitions
-*RegistrySvcAPI* | [**ListServiceInstances**](docs/RegistrySvcAPI.md#listserviceinstances) | **Get** /registry-svc/services | List Service Instances
+*RegistrySvcAPI* | [**ListServiceInstances**](docs/RegistrySvcAPI.md#listserviceinstances) | **Get** /registry-svc/service-instances | List Service Instances
 *RegistrySvcAPI* | [**RegisterServiceInstance**](docs/RegistrySvcAPI.md#registerserviceinstance) | **Put** /registry-svc/service-instance | Register Service Instance
 *RegistrySvcAPI* | [**RemoveServiceInstance**](docs/RegistrySvcAPI.md#removeserviceinstance) | **Delete** /registry-svc/service-instance/{id} | Remove Service Instance
 *RegistrySvcAPI* | [**SaveServiceDefinition**](docs/RegistrySvcAPI.md#saveservicedefinition) | **Put** /registry-svc/service-definition | Register Service Definition

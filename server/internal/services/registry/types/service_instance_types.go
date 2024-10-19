@@ -81,5 +81,5 @@ type RegisterServiceInstanceResponse struct {
 }
 
 type ListServiceInstancesResponse struct {
-	Instances []ServiceInstance `json:"instances,omitempty"`
+	ServiceInstances []*ServiceInstance `json:"serviceInstances,omitempty"`
 }

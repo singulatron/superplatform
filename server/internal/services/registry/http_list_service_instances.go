@@ -23,7 +23,7 @@ import (
 // @Failure 400 {object} registry.ErrorResponse "Invalid filters"
 // @Failure 500 {object} registry.ErrorResponse "Internal Server Error"
 // @Security BearerAuth
-// @Router /registry-svc/services [get]
+// @Router /registry-svc/service-instances [get]
 func (rs *RegistryService) ListServiceInstances(
 	w http.ResponseWriter,
 	r *http.Request,
@@ -51,7 +51,9 @@ func (rs *RegistryService) ListServiceInstances(
 	}
 
 	w.WriteHeader(http.StatusOK)
-	bs, _ := json.Marshal(serviceInstances)
+	bs, _ := json.Marshal(registry.ListServiceInstancesResponse{
+		ServiceInstances: serviceInstances,
+	})
 	w.Write(bs)
 }
 

@@ -307,7 +307,7 @@ export class RegistrySvcApi {
      * @param id Id to filter by
      */
     public async listServiceInstances (scheme?: string, ip?: string, host?: string, ip2?: string, id?: string, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: RegistrySvcListServiceInstancesResponse;  }> {
-        const localVarPath = this.basePath + '/registry-svc/services';
+        const localVarPath = this.basePath + '/registry-svc/service-instances';
         let localVarQueryParameters: any = {};
         let localVarHeaderParams: any = (<any>Object).assign({}, this._defaultHeaders);
         const produces = ['application/json'];

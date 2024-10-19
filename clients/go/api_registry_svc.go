@@ -535,7 +535,7 @@ func (a *RegistrySvcAPIService) ListServiceInstancesExecute(r ApiListServiceInst
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/registry-svc/services"
+	localVarPath := localBasePath + "/registry-svc/service-instances"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}

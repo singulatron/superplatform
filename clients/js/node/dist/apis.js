@@ -57771,7 +57771,7 @@ class RegistrySvcApi {
      */
     listServiceInstances(scheme_1, ip_1, host_1, ip2_1, id_1) {
         return __awaiter(this, arguments, void 0, function* (scheme, ip, host, ip2, id, options = { headers: {} }) {
-            const localVarPath = this.basePath + '/registry-svc/services';
+            const localVarPath = this.basePath + '/registry-svc/service-instances';
             let localVarQueryParameters = {};
             let localVarHeaderParams = Object.assign({}, this._defaultHeaders);
             const produces = ['application/json'];

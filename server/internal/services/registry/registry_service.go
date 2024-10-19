@@ -117,9 +117,9 @@ func (ns *RegistryService) nodeHeartbeat() {
 	first := true
 	for {
 		if !first {
-			time.Sleep(2 * time.Second)
-			first = false
+			time.Sleep(30 * time.Second)
 		}
+		first = false
 
 		node := registry.Node{
 			URL:              ns.URL,
@@ -138,7 +138,7 @@ func (ns *RegistryService) nodeHeartbeat() {
 		// @todo detect non-nvidia gpus
 		outp, err := ns.getNvidiaSmiOutput()
 		if err != nil {
-			logger.Warn("Failed to get smi output", slog.Any("error", err))
+			logger.Debug("Failed to get smi output", slog.Any("error", err))
 		} else {
 			gpus, err := ns.ParseNvidiaSmiOutput(outp)
 			if err != nil {

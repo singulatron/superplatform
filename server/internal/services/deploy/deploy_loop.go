@@ -12,6 +12,7 @@ import (
 	"log/slog"
 	"time"
 
+	"github.com/pkg/errors"
 	openapi "github.com/singulatron/superplatform/clients/go"
 	sdk "github.com/singulatron/superplatform/sdk/go"
 	"github.com/singulatron/superplatform/sdk/go/logger"
@@ -41,7 +42,7 @@ func (ns *DeployService) cycle() error {
 	ns.lock.Acquire(ctx, "deploy-svc-deploy")
 	defer ns.lock.Release(ctx, "deploy-svc-deploy")
 
-	registry := ns.clientFactory.Client().RegistrySvcAPI
+	registry := ns.clientFactory.Client(sdk.WithToken(ns.token)).RegistrySvcAPI
 
 	deploymentIs, err := ns.deploymentStore.Query().Find()
 	if err != nil {
@@ -57,20 +58,20 @@ func (ns *DeployService) cycle() error {
 
 	listNodesRsp, _, err := registry.ListNodes(ctx).Execute()
 	if err != nil {
-		return err
+		return errors.Wrap(err, "Error calling list nodes")
 	}
 
 	queryServiceInstancesRsp, _, err := registry.ListServiceInstances(ctx).Execute()
 	if err != nil {
-		return err
+		return errors.Wrap(err, "Error calling list service instances")
 	}
 
 	listServiceDefinitionsRsp, _, err := registry.ListServiceDefinitions(ctx).Execute()
 	if err != nil {
-		return err
+		return errors.Wrap(err, "Error calling list service definitions")
 	}
 
-	commands := allocator.GenerateCommands(listNodesRsp.Nodes, queryServiceInstancesRsp.Instances, deployments)
+	commands := allocator.GenerateCommands(listNodesRsp.Nodes, queryServiceInstancesRsp.ServiceInstances, deployments)
 	for _, command := range commands {
 		var node *openapi.RegistrySvcNode
 		var definition *openapi.RegistrySvcServiceDefinition

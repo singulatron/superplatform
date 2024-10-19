@@ -209,7 +209,7 @@ export class RegistrySvcApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/registry-svc/services`,
+            path: `/registry-svc/service-instances`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,

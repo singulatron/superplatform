@@ -27,7 +27,7 @@ function RegistrySvcListServiceInstancesResponseFromJSONTyped(json, ignoreDiscri
         return json;
     }
     return {
-        'instances': json['instances'] == null ? undefined : (json['instances'].map(RegistrySvcServiceInstanceFromJSON)),
+        'serviceInstances': json['serviceInstances'] == null ? undefined : (json['serviceInstances'].map(RegistrySvcServiceInstanceFromJSON)),
     };
 }
 function RegistrySvcListServiceInstancesResponseToJSON(value) {
@@ -35,7 +35,7 @@ function RegistrySvcListServiceInstancesResponseToJSON(value) {
         return value;
     }
     return {
-        'instances': value['instances'] == null ? undefined : (value['instances'].map(RegistrySvcServiceInstanceToJSON)),
+        'serviceInstances': value['serviceInstances'] == null ? undefined : (value['serviceInstances'].map(RegistrySvcServiceInstanceToJSON)),
     };
 }
 

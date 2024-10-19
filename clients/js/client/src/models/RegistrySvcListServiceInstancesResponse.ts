@@ -31,7 +31,7 @@ export interface RegistrySvcListServiceInstancesResponse {
      * @type {Array<RegistrySvcServiceInstance>}
      * @memberof RegistrySvcListServiceInstancesResponse
      */
-    instances?: Array<RegistrySvcServiceInstance>;
+    serviceInstances?: Array<RegistrySvcServiceInstance>;
 }
 
 /**
@@ -51,7 +51,7 @@ export function RegistrySvcListServiceInstancesResponseFromJSONTyped(json: any, 
     }
     return {
         
-        'instances': json['instances'] == null ? undefined : ((json['instances'] as Array<any>).map(RegistrySvcServiceInstanceFromJSON)),
+        'serviceInstances': json['serviceInstances'] == null ? undefined : ((json['serviceInstances'] as Array<any>).map(RegistrySvcServiceInstanceFromJSON)),
     };
 }
 
@@ -61,7 +61,7 @@ export function RegistrySvcListServiceInstancesResponseToJSON(value?: RegistrySv
     }
     return {
         
-        'instances': value['instances'] == null ? undefined : ((value['instances'] as Array<any>).map(RegistrySvcServiceInstanceToJSON)),
+        'serviceInstances': value['serviceInstances'] == null ? undefined : ((value['serviceInstances'] as Array<any>).map(RegistrySvcServiceInstanceToJSON)),
     };
 }
 

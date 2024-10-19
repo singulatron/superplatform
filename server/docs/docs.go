@@ -2586,7 +2586,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/registry-svc/services": {
+        "/registry-svc/service-instances": {
             "get": {
                 "security": [
                     {
@@ -5540,7 +5540,7 @@ const docTemplate = `{
         "registry_svc.ListServiceInstancesResponse": {
             "type": "object",
             "properties": {
-                "instances": {
+                "serviceInstances": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/registry_svc.ServiceInstance"

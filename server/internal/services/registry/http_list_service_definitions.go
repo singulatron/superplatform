@@ -33,7 +33,9 @@ func (rs *RegistryService) ListServiceDefinitions(
 	}
 
 	w.WriteHeader(http.StatusOK)
-	bs, _ := json.Marshal(serviceDefinitions)
+	bs, _ := json.Marshal(registry.ListServiceDefinitionsResponse{
+		ServiceDefinitions: serviceDefinitions,
+	})
 	w.Write(bs)
 }
 
