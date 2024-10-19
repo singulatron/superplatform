@@ -335,13 +335,18 @@ func TestPointerFindOne(t *testing.T, store DataStore) {
 }
 
 func TestCreate(t *testing.T, store DataStore) {
-	obj1 := TestObject{Name: "AliceCreate", Value: 10, Age: 25}
+	obj1 := TestObject{Name: "AliceCreate", NickNames: []string{"A1", "A2"}, Value: 10, Age: 25}
 
 	err := store.Create(obj1)
 	require.NoError(t, err)
 
 	err = store.Create(obj1)
 	require.Error(t, err)
+
+	objs, err := store.Query().Find()
+	require.NoError(t, err)
+
+	require.Contains(t, objs, obj1)
 }
 
 func TestPointerCreate(t *testing.T, store DataStore) {
