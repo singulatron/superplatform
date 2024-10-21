@@ -33,7 +33,7 @@ function RegistrySvcSaveDefinitionRequestFromJSONTyped(json, ignoreDiscriminator
         return json;
     }
     return {
-        'serviceDefinition': json['serviceDefinition'] == null ? undefined : RegistrySvcDefinition.RegistrySvcDefinitionFromJSON(json['serviceDefinition']),
+        'definition': json['definition'] == null ? undefined : RegistrySvcDefinition.RegistrySvcDefinitionFromJSON(json['definition']),
     };
 }
 function RegistrySvcSaveDefinitionRequestToJSON(value) {
@@ -41,7 +41,7 @@ function RegistrySvcSaveDefinitionRequestToJSON(value) {
         return value;
     }
     return {
-        'serviceDefinition': RegistrySvcDefinition.RegistrySvcDefinitionToJSON(value['serviceDefinition']),
+        'definition': RegistrySvcDefinition.RegistrySvcDefinitionToJSON(value['definition']),
     };
 }
 

@@ -19,6 +19,10 @@ export declare class DeploySvcDeployment {
     */
     'autoScaling'?: DeploySvcAutoScalingConfig;
     /**
+    * The User Svc slug of the service that is being deployed.
+    */
+    'definitionId': string;
+    /**
     * Description of what this deployment does
     */
     'description'?: string;
@@ -38,10 +42,6 @@ export declare class DeploySvcDeployment {
     * Resource requirements for each replica
     */
     'resources'?: DeploySvcResourceLimits;
-    /**
-    * The User Svc slug of the service that is being deployed.
-    */
-    'serviceDefinitionId': string;
     /**
     * Deployment strategy (e.g., rolling update)
     */

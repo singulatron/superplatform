@@ -11,7 +11,7 @@
  */
 import { RegistrySvcInstance } from './registrySvcInstance';
 export declare class RegistrySvcListInstancesResponse {
-    'serviceInstances'?: Array<RegistrySvcInstance>;
+    'instances'?: Array<RegistrySvcInstance>;
     static discriminator: string | undefined;
     static attributeTypeMap: Array<{
         name: string;

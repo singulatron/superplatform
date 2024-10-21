@@ -21,7 +21,7 @@ export interface RegistrySvcSaveDefinitionRequest {
      * @type {RegistrySvcDefinition}
      * @memberof RegistrySvcSaveDefinitionRequest
      */
-    serviceDefinition?: RegistrySvcDefinition;
+    definition?: RegistrySvcDefinition;
 }
 /**
  * Check if a given object implements the RegistrySvcSaveDefinitionRequest interface.

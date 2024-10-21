@@ -133,7 +133,7 @@ export interface GetUsersRequest {
 
 export interface IsAuthorizedRequest {
     permissionId: string;
-    body: UserSvcIsAuthorizedRequest;
+    body?: UserSvcIsAuthorizedRequest;
 }
 
 export interface LoginRequest {
@@ -696,13 +696,6 @@ export class UserSvcApi extends runtime.BaseAPI {
             throw new runtime.RequiredError(
                 'permissionId',
                 'Required parameter "permissionId" was null or undefined when calling isAuthorized().'
-            );
-        }
-
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling isAuthorized().'
             );
         }
 

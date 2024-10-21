@@ -1,4 +1,4 @@
-package service_definitions
+package definition
 
 import (
 	"fmt"
@@ -31,8 +31,8 @@ func List(cmd *cobra.Command, args []string) error {
 
 	fmt.Fprintln(writer, "ID\tIMAGE NAME")
 
-	for _, serviceDefinition := range rsp.ServiceDefinitions {
-		fmt.Fprintf(writer, "%s\t%s\n", serviceDefinition.Id, serviceDefinition.Image.Name)
+	for _, definition := range rsp.Definitions {
+		fmt.Fprintf(writer, "%s\t%s\n", definition.Id, definition.Image.Name)
 	}
 
 	return nil

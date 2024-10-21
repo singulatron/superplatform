@@ -51,6 +51,12 @@ export interface DeploySvcDeployment {
      */
     autoScaling?: DeploySvcAutoScalingConfig;
     /**
+     * The User Svc slug of the service that is being deployed.
+     * @type {string}
+     * @memberof DeploySvcDeployment
+     */
+    definitionId: string;
+    /**
      * Description of what this deployment does
      * @type {string}
      * @memberof DeploySvcDeployment
@@ -81,12 +87,6 @@ export interface DeploySvcDeployment {
      */
     resources?: DeploySvcResourceLimits;
     /**
-     * The User Svc slug of the service that is being deployed.
-     * @type {string}
-     * @memberof DeploySvcDeployment
-     */
-    serviceDefinitionId: string;
-    /**
      * Deployment strategy (e.g., rolling update)
      * @type {DeploySvcDeploymentStrategy}
      * @memberof DeploySvcDeployment
@@ -104,8 +104,8 @@ export interface DeploySvcDeployment {
  * Check if a given object implements the DeploySvcDeployment interface.
  */
 export function instanceOfDeploySvcDeployment(value: object): value is DeploySvcDeployment {
+    if (!('definitionId' in value) || value['definitionId'] === undefined) return false;
     if (!('id' in value) || value['id'] === undefined) return false;
-    if (!('serviceDefinitionId' in value) || value['serviceDefinitionId'] === undefined) return false;
     return true;
 }
 
@@ -120,12 +120,12 @@ export function DeploySvcDeploymentFromJSONTyped(json: any, ignoreDiscriminator:
     return {
         
         'autoScaling': json['autoScaling'] == null ? undefined : DeploySvcAutoScalingConfigFromJSON(json['autoScaling']),
+        'definitionId': json['definitionId'],
         'description': json['description'] == null ? undefined : json['description'],
         'id': json['id'],
         'name': json['name'] == null ? undefined : json['name'],
         'replicas': json['replicas'] == null ? undefined : json['replicas'],
         'resources': json['resources'] == null ? undefined : DeploySvcResourceLimitsFromJSON(json['resources']),
-        'serviceDefinitionId': json['serviceDefinitionId'],
         'strategy': json['strategy'] == null ? undefined : DeploySvcDeploymentStrategyFromJSON(json['strategy']),
         'targetRegions': json['targetRegions'] == null ? undefined : ((json['targetRegions'] as Array<any>).map(DeploySvcTargetRegionFromJSON)),
     };
@@ -138,12 +138,12 @@ export function DeploySvcDeploymentToJSON(value?: DeploySvcDeployment | null): a
     return {
         
         'autoScaling': DeploySvcAutoScalingConfigToJSON(value['autoScaling']),
+        'definitionId': value['definitionId'],
         'description': value['description'],
         'id': value['id'],
         'name': value['name'],
         'replicas': value['replicas'],
         'resources': DeploySvcResourceLimitsToJSON(value['resources']),
-        'serviceDefinitionId': value['serviceDefinitionId'],
         'strategy': DeploySvcDeploymentStrategyToJSON(value['strategy']),
         'targetRegions': value['targetRegions'] == null ? undefined : ((value['targetRegions'] as Array<any>).map(DeploySvcTargetRegionToJSON)),
     };

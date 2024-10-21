@@ -21,7 +21,7 @@ export interface RegistrySvcListDefinitionsResponse {
      * @type {Array<RegistrySvcDefinition>}
      * @memberof RegistrySvcListDefinitionsResponse
      */
-    serviceDefinitions?: Array<RegistrySvcDefinition>;
+    definitions?: Array<RegistrySvcDefinition>;
 }
 /**
  * Check if a given object implements the RegistrySvcListDefinitionsResponse interface.

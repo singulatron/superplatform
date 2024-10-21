@@ -1,4 +1,4 @@
-package service_definitions
+package definition
 
 import (
 	"fmt"
@@ -11,7 +11,7 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-// Save /home/user/serviceA.yaml
+// Save /home/user/definitionA.yaml
 func Save(cmd *cobra.Command, args []string) error {
 	ctx := cmd.Context()
 
@@ -35,10 +35,10 @@ func Save(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("Service definition file is empty at '%v'", filePath)
 	}
 
-	serviceDefinition := openapi.RegistrySvcDefinition{}
+	definition := openapi.RegistrySvcDefinition{}
 
 	decoder := yaml.NewDecoder(file)
-	if err := decoder.Decode(&serviceDefinition); err != nil {
+	if err := decoder.Decode(&definition); err != nil {
 		return fmt.Errorf("Failed to decode service definition file: '%v'", err)
 	}
 
@@ -50,7 +50,7 @@ func Save(cmd *cobra.Command, args []string) error {
 	cf := sdk.NewApiClientFactory(url)
 
 	_, _, err = cf.Client(sdk.WithToken(token)).RegistrySvcAPI.SaveDefinition(ctx).Request(openapi.RegistrySvcSaveDefinitionRequest{
-		ServiceDefinition: &serviceDefinition,
+		Definition: &definition,
 	}).Execute()
 	if err != nil {
 		fmt.Errorf("Failed to save service definition: '%v'", err)

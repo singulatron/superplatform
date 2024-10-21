@@ -20,7 +20,7 @@ var _ MappedNullable = &RegistrySvcListInstancesResponse{}
 
 // RegistrySvcListInstancesResponse struct for RegistrySvcListInstancesResponse
 type RegistrySvcListInstancesResponse struct {
-	ServiceInstances []RegistrySvcInstance `json:"serviceInstances,omitempty"`
+	Instances []RegistrySvcInstance `json:"instances,omitempty"`
 }
 
 // NewRegistrySvcListInstancesResponse instantiates a new RegistrySvcListInstancesResponse object
@@ -40,36 +40,36 @@ func NewRegistrySvcListInstancesResponseWithDefaults() *RegistrySvcListInstances
 	return &this
 }
 
-// GetServiceInstances returns the ServiceInstances field value if set, zero value otherwise.
-func (o *RegistrySvcListInstancesResponse) GetServiceInstances() []RegistrySvcInstance {
-	if o == nil || IsNil(o.ServiceInstances) {
+// GetInstances returns the Instances field value if set, zero value otherwise.
+func (o *RegistrySvcListInstancesResponse) GetInstances() []RegistrySvcInstance {
+	if o == nil || IsNil(o.Instances) {
 		var ret []RegistrySvcInstance
 		return ret
 	}
-	return o.ServiceInstances
+	return o.Instances
 }
 
-// GetServiceInstancesOk returns a tuple with the ServiceInstances field value if set, nil otherwise
+// GetInstancesOk returns a tuple with the Instances field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *RegistrySvcListInstancesResponse) GetServiceInstancesOk() ([]RegistrySvcInstance, bool) {
-	if o == nil || IsNil(o.ServiceInstances) {
+func (o *RegistrySvcListInstancesResponse) GetInstancesOk() ([]RegistrySvcInstance, bool) {
+	if o == nil || IsNil(o.Instances) {
 		return nil, false
 	}
-	return o.ServiceInstances, true
+	return o.Instances, true
 }
 
-// HasServiceInstances returns a boolean if a field has been set.
-func (o *RegistrySvcListInstancesResponse) HasServiceInstances() bool {
-	if o != nil && !IsNil(o.ServiceInstances) {
+// HasInstances returns a boolean if a field has been set.
+func (o *RegistrySvcListInstancesResponse) HasInstances() bool {
+	if o != nil && !IsNil(o.Instances) {
 		return true
 	}
 
 	return false
 }
 
-// SetServiceInstances gets a reference to the given []RegistrySvcInstance and assigns it to the ServiceInstances field.
-func (o *RegistrySvcListInstancesResponse) SetServiceInstances(v []RegistrySvcInstance) {
-	o.ServiceInstances = v
+// SetInstances gets a reference to the given []RegistrySvcInstance and assigns it to the Instances field.
+func (o *RegistrySvcListInstancesResponse) SetInstances(v []RegistrySvcInstance) {
+	o.Instances = v
 }
 
 func (o RegistrySvcListInstancesResponse) MarshalJSON() ([]byte, error) {
@@ -82,8 +82,8 @@ func (o RegistrySvcListInstancesResponse) MarshalJSON() ([]byte, error) {
 
 func (o RegistrySvcListInstancesResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if !IsNil(o.ServiceInstances) {
-		toSerialize["serviceInstances"] = o.ServiceInstances
+	if !IsNil(o.Instances) {
+		toSerialize["instances"] = o.Instances
 	}
 	return toSerialize, nil
 }

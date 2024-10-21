@@ -26,6 +26,12 @@ export interface DeploySvcDeployment {
      */
     autoScaling?: DeploySvcAutoScalingConfig;
     /**
+     * The User Svc slug of the service that is being deployed.
+     * @type {string}
+     * @memberof DeploySvcDeployment
+     */
+    definitionId: string;
+    /**
      * Description of what this deployment does
      * @type {string}
      * @memberof DeploySvcDeployment
@@ -55,12 +61,6 @@ export interface DeploySvcDeployment {
      * @memberof DeploySvcDeployment
      */
     resources?: DeploySvcResourceLimits;
-    /**
-     * The User Svc slug of the service that is being deployed.
-     * @type {string}
-     * @memberof DeploySvcDeployment
-     */
-    serviceDefinitionId: string;
     /**
      * Deployment strategy (e.g., rolling update)
      * @type {DeploySvcDeploymentStrategy}

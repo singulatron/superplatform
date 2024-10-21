@@ -1044,7 +1044,7 @@ export class UserSvcApi {
      * @param permissionId Permission ID
      * @param body Is Authorized Request
      */
-    public async isAuthorized (permissionId: string, body: UserSvcIsAuthorizedRequest, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: UserSvcIsAuthorizedResponse;  }> {
+    public async isAuthorized (permissionId: string, body?: UserSvcIsAuthorizedRequest, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: UserSvcIsAuthorizedResponse;  }> {
         const localVarPath = this.basePath + '/user-svc/permission/{permissionId}/is-authorized'
             .replace('{' + 'permissionId' + '}', encodeURIComponent(String(permissionId)));
         let localVarQueryParameters: any = {};
@@ -1061,11 +1061,6 @@ export class UserSvcApi {
         // verify required parameter 'permissionId' is not null or undefined
         if (permissionId === null || permissionId === undefined) {
             throw new Error('Required parameter permissionId was null or undefined when calling isAuthorized.');
-        }
-
-        // verify required parameter 'body' is not null or undefined
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling isAuthorized.');
         }
 
         (<any>Object).assign(localVarHeaderParams, options.headers);

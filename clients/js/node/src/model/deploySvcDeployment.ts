@@ -22,6 +22,10 @@ export class DeploySvcDeployment {
     */
     'autoScaling'?: DeploySvcAutoScalingConfig;
     /**
+    * The User Svc slug of the service that is being deployed.
+    */
+    'definitionId': string;
+    /**
     * Description of what this deployment does
     */
     'description'?: string;
@@ -42,10 +46,6 @@ export class DeploySvcDeployment {
     */
     'resources'?: DeploySvcResourceLimits;
     /**
-    * The User Svc slug of the service that is being deployed.
-    */
-    'serviceDefinitionId': string;
-    /**
     * Deployment strategy (e.g., rolling update)
     */
     'strategy'?: DeploySvcDeploymentStrategy;
@@ -61,6 +61,11 @@ export class DeploySvcDeployment {
             "name": "autoScaling",
             "baseName": "autoScaling",
             "type": "DeploySvcAutoScalingConfig"
+        },
+        {
+            "name": "definitionId",
+            "baseName": "definitionId",
+            "type": "string"
         },
         {
             "name": "description",
@@ -86,11 +91,6 @@ export class DeploySvcDeployment {
             "name": "resources",
             "baseName": "resources",
             "type": "DeploySvcResourceLimits"
-        },
-        {
-            "name": "serviceDefinitionId",
-            "baseName": "serviceDefinitionId",
-            "type": "string"
         },
         {
             "name": "strategy",

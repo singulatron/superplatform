@@ -266,6 +266,10 @@ definitions:
         allOf:
         - $ref: '#/definitions/deploy_svc.AutoScalingConfig'
         description: 'Optional: Auto-scaling rules'
+      definitionId:
+        description: The User Svc slug of the service that is being deployed.
+        example: def_deBXZMpxrQ
+        type: string
       description:
         description: Description of what this deployment does
         example: Handles user service requests
@@ -285,10 +289,6 @@ definitions:
         allOf:
         - $ref: '#/definitions/deploy_svc.ResourceLimits'
         description: Resource requirements for each replica
-      serviceDefinitionId:
-        description: The User Svc slug of the service that is being deployed.
-        example: svcd_deBXZMpxrQ
-        type: string
       strategy:
         allOf:
         - $ref: '#/definitions/deploy_svc.DeploymentStrategy'
@@ -299,8 +299,8 @@ definitions:
           $ref: '#/definitions/deploy_svc.TargetRegion'
         type: array
     required:
+    - definitionId
     - id
-    - serviceDefinitionId
     type: object
   deploy_svc.DeploymentStrategy:
     properties:
@@ -1279,14 +1279,14 @@ definitions:
     - FSharp
   registry_svc.ListDefinitionsResponse:
     properties:
-      serviceDefinitions:
+      definitions:
         items:
           $ref: '#/definitions/registry_svc.Definition'
         type: array
     type: object
   registry_svc.ListInstancesResponse:
     properties:
-      serviceInstances:
+      instances:
         items:
           $ref: '#/definitions/registry_svc.Instance'
         type: array
@@ -1388,7 +1388,7 @@ definitions:
     type: object
   registry_svc.SaveDefinitionRequest:
     properties:
-      serviceDefinition:
+      definition:
         $ref: '#/definitions/registry_svc.Definition'
     type: object
   registry_svc.SaveDefinitionResponse:
@@ -3810,7 +3810,6 @@ paths:
       - description: Is Authorized Request
         in: body
         name: body
-        required: true
         schema:
           $ref: '#/definitions/user_svc.IsAuthorizedRequest'
       produces:

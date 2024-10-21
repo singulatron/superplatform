@@ -11,7 +11,7 @@
  */
 import { RegistrySvcDefinition } from './registrySvcDefinition';
 export declare class RegistrySvcListDefinitionsResponse {
-    'serviceDefinitions'?: Array<RegistrySvcDefinition>;
+    'definitions'?: Array<RegistrySvcDefinition>;
     static discriminator: string | undefined;
     static attributeTypeMap: Array<{
         name: string;

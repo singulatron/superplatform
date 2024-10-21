@@ -48,7 +48,7 @@ export interface GetUsersRequest {
 }
 export interface IsAuthorizedRequest {
     permissionId: string;
-    body: UserSvcIsAuthorizedRequest;
+    body?: UserSvcIsAuthorizedRequest;
 }
 export interface LoginRequest {
     request: UserSvcLoginRequest;

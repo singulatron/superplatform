@@ -33,7 +33,7 @@ function RegistrySvcListDefinitionsResponseFromJSONTyped(json, ignoreDiscriminat
         return json;
     }
     return {
-        'serviceDefinitions': json['serviceDefinitions'] == null ? undefined : (json['serviceDefinitions'].map(RegistrySvcDefinition.RegistrySvcDefinitionFromJSON)),
+        'definitions': json['definitions'] == null ? undefined : (json['definitions'].map(RegistrySvcDefinition.RegistrySvcDefinitionFromJSON)),
     };
 }
 function RegistrySvcListDefinitionsResponseToJSON(value) {
@@ -41,7 +41,7 @@ function RegistrySvcListDefinitionsResponseToJSON(value) {
         return value;
     }
     return {
-        'serviceDefinitions': value['serviceDefinitions'] == null ? undefined : (value['serviceDefinitions'].map(RegistrySvcDefinition.RegistrySvcDefinitionToJSON)),
+        'definitions': value['definitions'] == null ? undefined : (value['definitions'].map(RegistrySvcDefinition.RegistrySvcDefinitionToJSON)),
     };
 }
 

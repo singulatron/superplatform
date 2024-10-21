@@ -1,4 +1,4 @@
-package service_definitions
+package definition
 
 import (
 	"fmt"

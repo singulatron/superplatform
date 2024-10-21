@@ -17,8 +17,8 @@ class RegistrySvcListDefinitionsResponse {
 RegistrySvcListDefinitionsResponse.discriminator = undefined;
 RegistrySvcListDefinitionsResponse.attributeTypeMap = [
     {
-        "name": "serviceDefinitions",
-        "baseName": "serviceDefinitions",
+        "name": "definitions",
+        "baseName": "definitions",
         "type": "Array<RegistrySvcDefinition>"
     }
 ];

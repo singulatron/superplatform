@@ -3142,7 +3142,6 @@ const docTemplate = `{
                         "description": "Is Authorized Request",
                         "name": "body",
                         "in": "body",
-                        "required": true,
                         "schema": {
                             "$ref": "#/definitions/user_svc.IsAuthorizedRequest"
                         }
@@ -4213,8 +4212,8 @@ const docTemplate = `{
         "deploy_svc.Deployment": {
             "type": "object",
             "required": [
-                "id",
-                "serviceDefinitionId"
+                "definitionId",
+                "id"
             ],
             "properties": {
                 "autoScaling": {
@@ -4224,6 +4223,11 @@ const docTemplate = `{
                             "$ref": "#/definitions/deploy_svc.AutoScalingConfig"
                         }
                     ]
+                },
+                "definitionId": {
+                    "description": "The User Svc slug of the service that is being deployed.",
+                    "type": "string",
+                    "example": "def_deBXZMpxrQ"
                 },
                 "description": {
                     "description": "Description of what this deployment does",
@@ -4251,11 +4255,6 @@ const docTemplate = `{
                             "$ref": "#/definitions/deploy_svc.ResourceLimits"
                         }
                     ]
-                },
-                "serviceDefinitionId": {
-                    "description": "The User Svc slug of the service that is being deployed.",
-                    "type": "string",
-                    "example": "svcd_deBXZMpxrQ"
                 },
                 "strategy": {
                     "description": "Deployment strategy (e.g., rolling update)",
@@ -5625,7 +5624,7 @@ const docTemplate = `{
         "registry_svc.ListDefinitionsResponse": {
             "type": "object",
             "properties": {
-                "serviceDefinitions": {
+                "definitions": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/registry_svc.Definition"
@@ -5636,7 +5635,7 @@ const docTemplate = `{
         "registry_svc.ListInstancesResponse": {
             "type": "object",
             "properties": {
-                "serviceInstances": {
+                "instances": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/registry_svc.Instance"
@@ -5786,7 +5785,7 @@ const docTemplate = `{
         "registry_svc.SaveDefinitionRequest": {
             "type": "object",
             "properties": {
-                "serviceDefinition": {
+                "definition": {
                     "$ref": "#/definitions/registry_svc.Definition"
                 }
             }

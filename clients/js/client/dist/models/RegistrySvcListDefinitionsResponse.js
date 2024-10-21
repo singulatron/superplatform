@@ -26,7 +26,7 @@ export function RegistrySvcListDefinitionsResponseFromJSONTyped(json, ignoreDisc
         return json;
     }
     return {
-        'serviceDefinitions': json['serviceDefinitions'] == null ? undefined : (json['serviceDefinitions'].map(RegistrySvcDefinitionFromJSON)),
+        'definitions': json['definitions'] == null ? undefined : (json['definitions'].map(RegistrySvcDefinitionFromJSON)),
     };
 }
 export function RegistrySvcListDefinitionsResponseToJSON(value) {
@@ -34,6 +34,6 @@ export function RegistrySvcListDefinitionsResponseToJSON(value) {
         return value;
     }
     return {
-        'serviceDefinitions': value['serviceDefinitions'] == null ? undefined : (value['serviceDefinitions'].map(RegistrySvcDefinitionToJSON)),
+        'definitions': value['definitions'] == null ? undefined : (value['definitions'].map(RegistrySvcDefinitionToJSON)),
     };
 }

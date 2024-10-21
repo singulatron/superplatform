@@ -20,7 +20,7 @@ var _ MappedNullable = &RegistrySvcSaveDefinitionRequest{}
 
 // RegistrySvcSaveDefinitionRequest struct for RegistrySvcSaveDefinitionRequest
 type RegistrySvcSaveDefinitionRequest struct {
-	ServiceDefinition *RegistrySvcDefinition `json:"serviceDefinition,omitempty"`
+	Definition *RegistrySvcDefinition `json:"definition,omitempty"`
 }
 
 // NewRegistrySvcSaveDefinitionRequest instantiates a new RegistrySvcSaveDefinitionRequest object
@@ -40,36 +40,36 @@ func NewRegistrySvcSaveDefinitionRequestWithDefaults() *RegistrySvcSaveDefinitio
 	return &this
 }
 
-// GetServiceDefinition returns the ServiceDefinition field value if set, zero value otherwise.
-func (o *RegistrySvcSaveDefinitionRequest) GetServiceDefinition() RegistrySvcDefinition {
-	if o == nil || IsNil(o.ServiceDefinition) {
+// GetDefinition returns the Definition field value if set, zero value otherwise.
+func (o *RegistrySvcSaveDefinitionRequest) GetDefinition() RegistrySvcDefinition {
+	if o == nil || IsNil(o.Definition) {
 		var ret RegistrySvcDefinition
 		return ret
 	}
-	return *o.ServiceDefinition
+	return *o.Definition
 }
 
-// GetServiceDefinitionOk returns a tuple with the ServiceDefinition field value if set, nil otherwise
+// GetDefinitionOk returns a tuple with the Definition field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *RegistrySvcSaveDefinitionRequest) GetServiceDefinitionOk() (*RegistrySvcDefinition, bool) {
-	if o == nil || IsNil(o.ServiceDefinition) {
+func (o *RegistrySvcSaveDefinitionRequest) GetDefinitionOk() (*RegistrySvcDefinition, bool) {
+	if o == nil || IsNil(o.Definition) {
 		return nil, false
 	}
-	return o.ServiceDefinition, true
+	return o.Definition, true
 }
 
-// HasServiceDefinition returns a boolean if a field has been set.
-func (o *RegistrySvcSaveDefinitionRequest) HasServiceDefinition() bool {
-	if o != nil && !IsNil(o.ServiceDefinition) {
+// HasDefinition returns a boolean if a field has been set.
+func (o *RegistrySvcSaveDefinitionRequest) HasDefinition() bool {
+	if o != nil && !IsNil(o.Definition) {
 		return true
 	}
 
 	return false
 }
 
-// SetServiceDefinition gets a reference to the given RegistrySvcDefinition and assigns it to the ServiceDefinition field.
-func (o *RegistrySvcSaveDefinitionRequest) SetServiceDefinition(v RegistrySvcDefinition) {
-	o.ServiceDefinition = &v
+// SetDefinition gets a reference to the given RegistrySvcDefinition and assigns it to the Definition field.
+func (o *RegistrySvcSaveDefinitionRequest) SetDefinition(v RegistrySvcDefinition) {
+	o.Definition = &v
 }
 
 func (o RegistrySvcSaveDefinitionRequest) MarshalJSON() ([]byte, error) {
@@ -82,8 +82,8 @@ func (o RegistrySvcSaveDefinitionRequest) MarshalJSON() ([]byte, error) {
 
 func (o RegistrySvcSaveDefinitionRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if !IsNil(o.ServiceDefinition) {
-		toSerialize["serviceDefinition"] = o.ServiceDefinition
+	if !IsNil(o.Definition) {
+		toSerialize["definition"] = o.Definition
 	}
 	return toSerialize, nil
 }

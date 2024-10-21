@@ -14,14 +14,14 @@ import { RequestFile } from './models';
 import { RegistrySvcDefinition } from './registrySvcDefinition';
 
 export class RegistrySvcListDefinitionsResponse {
-    'serviceDefinitions'?: Array<RegistrySvcDefinition>;
+    'definitions'?: Array<RegistrySvcDefinition>;
 
     static discriminator: string | undefined = undefined;
 
     static attributeTypeMap: Array<{name: string, baseName: string, type: string}> = [
         {
-            "name": "serviceDefinitions",
-            "baseName": "serviceDefinitions",
+            "name": "definitions",
+            "baseName": "definitions",
             "type": "Array<RegistrySvcDefinition>"
         }    ];
 

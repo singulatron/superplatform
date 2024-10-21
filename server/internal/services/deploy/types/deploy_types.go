@@ -16,8 +16,8 @@ type Deployment struct {
 	// ID of the deployment (e.g., "depl_dbOdi5eLQK")
 	Id string `json:"id,omitempty" example:"depl_dbOdi5eLQK" binding:"required"`
 
-	// The User Svc slug of the service that is being deployed.
-	ServiceDefinitionId string `json:"serviceDefinitionId,omitempty" example:"svcd_deBXZMpxrQ" binding:"required"`
+	// DefinitionId is the id of the definition
+	DefinitionId string `json:"definitionId,omitempty" example:"def_deBXZMpxrQ" binding:"required"`
 
 	// Short name for easy reference (e.g., "user-service-v2")
 	Name string `json:"name,omitempty" example:"user-service-v2"`
@@ -29,10 +29,10 @@ type Deployment struct {
 	Replicas int `json:"replicas,omitempty"`
 
 	// Deployment strategy (e.g., rolling update)
-	Strategy DeploymentStrategy `json:"strategy,omitempty"`
+	Strategy *DeploymentStrategy `json:"strategy,omitempty"`
 
 	// Resource requirements for each replica
-	Resources ResourceLimits `json:"resources,omitempty"`
+	Resources *ResourceLimits `json:"resources,omitempty"`
 
 	// Optional: Auto-scaling rules
 	AutoScaling *AutoScalingConfig `json:"autoScaling,omitempty"`

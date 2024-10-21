@@ -229,7 +229,7 @@ export declare class UserSvcApi {
      * @param permissionId Permission ID
      * @param body Is Authorized Request
      */
-    isAuthorized(permissionId: string, body: UserSvcIsAuthorizedRequest, options?: {
+    isAuthorized(permissionId: string, body?: UserSvcIsAuthorizedRequest, options?: {
         headers: {
             [name: string]: string;
         };

@@ -17,8 +17,8 @@ class RegistrySvcListInstancesResponse {
 RegistrySvcListInstancesResponse.discriminator = undefined;
 RegistrySvcListInstancesResponse.attributeTypeMap = [
     {
-        "name": "serviceInstances",
-        "baseName": "serviceInstances",
+        "name": "instances",
+        "baseName": "instances",
         "type": "Array<RegistrySvcInstance>"
     }
 ];

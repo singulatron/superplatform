@@ -21,7 +21,7 @@ export interface RegistrySvcListInstancesResponse {
      * @type {Array<RegistrySvcInstance>}
      * @memberof RegistrySvcListInstancesResponse
      */
-    serviceInstances?: Array<RegistrySvcInstance>;
+    instances?: Array<RegistrySvcInstance>;
 }
 /**
  * Check if a given object implements the RegistrySvcListInstancesResponse interface.

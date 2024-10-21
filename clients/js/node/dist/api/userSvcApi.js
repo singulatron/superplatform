@@ -1016,10 +1016,6 @@ export class UserSvcApi {
             if (permissionId === null || permissionId === undefined) {
                 throw new Error('Required parameter permissionId was null or undefined when calling isAuthorized.');
             }
-            // verify required parameter 'body' is not null or undefined
-            if (body === null || body === undefined) {
-                throw new Error('Required parameter body was null or undefined when calling isAuthorized.');
-            }
             Object.assign(localVarHeaderParams, options.headers);
             let localVarUseFormData = false;
             let localVarRequestOptions = {

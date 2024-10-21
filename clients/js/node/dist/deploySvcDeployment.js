@@ -24,6 +24,11 @@ DeploySvcDeployment.attributeTypeMap = [
         "type": "DeploySvcAutoScalingConfig"
     },
     {
+        "name": "definitionId",
+        "baseName": "definitionId",
+        "type": "string"
+    },
+    {
         "name": "description",
         "baseName": "description",
         "type": "string"
@@ -47,11 +52,6 @@ DeploySvcDeployment.attributeTypeMap = [
         "name": "resources",
         "baseName": "resources",
         "type": "DeploySvcResourceLimits"
-    },
-    {
-        "name": "serviceDefinitionId",
-        "baseName": "serviceDefinitionId",
-        "type": "string"
     },
     {
         "name": "strategy",

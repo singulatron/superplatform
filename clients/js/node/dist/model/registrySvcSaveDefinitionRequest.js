@@ -17,8 +17,8 @@ export class RegistrySvcSaveDefinitionRequest {
 RegistrySvcSaveDefinitionRequest.discriminator = undefined;
 RegistrySvcSaveDefinitionRequest.attributeTypeMap = [
     {
-        "name": "serviceDefinition",
-        "baseName": "serviceDefinition",
+        "name": "definition",
+        "baseName": "definition",
         "type": "RegistrySvcDefinition"
     }
 ];

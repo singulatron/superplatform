@@ -31,7 +31,7 @@ export interface RegistrySvcListDefinitionsResponse {
      * @type {Array<RegistrySvcDefinition>}
      * @memberof RegistrySvcListDefinitionsResponse
      */
-    serviceDefinitions?: Array<RegistrySvcDefinition>;
+    definitions?: Array<RegistrySvcDefinition>;
 }
 
 /**
@@ -51,7 +51,7 @@ export function RegistrySvcListDefinitionsResponseFromJSONTyped(json: any, ignor
     }
     return {
         
-        'serviceDefinitions': json['serviceDefinitions'] == null ? undefined : ((json['serviceDefinitions'] as Array<any>).map(RegistrySvcDefinitionFromJSON)),
+        'definitions': json['definitions'] == null ? undefined : ((json['definitions'] as Array<any>).map(RegistrySvcDefinitionFromJSON)),
     };
 }
 
@@ -61,7 +61,7 @@ export function RegistrySvcListDefinitionsResponseToJSON(value?: RegistrySvcList
     }
     return {
         
-        'serviceDefinitions': value['serviceDefinitions'] == null ? undefined : ((value['serviceDefinitions'] as Array<any>).map(RegistrySvcDefinitionToJSON)),
+        'definitions': value['definitions'] == null ? undefined : ((value['definitions'] as Array<any>).map(RegistrySvcDefinitionToJSON)),
     };
 }
 

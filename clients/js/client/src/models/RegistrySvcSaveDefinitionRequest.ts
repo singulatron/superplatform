@@ -31,7 +31,7 @@ export interface RegistrySvcSaveDefinitionRequest {
      * @type {RegistrySvcDefinition}
      * @memberof RegistrySvcSaveDefinitionRequest
      */
-    serviceDefinition?: RegistrySvcDefinition;
+    definition?: RegistrySvcDefinition;
 }
 
 /**
@@ -51,7 +51,7 @@ export function RegistrySvcSaveDefinitionRequestFromJSONTyped(json: any, ignoreD
     }
     return {
         
-        'serviceDefinition': json['serviceDefinition'] == null ? undefined : RegistrySvcDefinitionFromJSON(json['serviceDefinition']),
+        'definition': json['definition'] == null ? undefined : RegistrySvcDefinitionFromJSON(json['definition']),
     };
 }
 
@@ -61,7 +61,7 @@ export function RegistrySvcSaveDefinitionRequestToJSON(value?: RegistrySvcSaveDe
     }
     return {
         
-        'serviceDefinition': RegistrySvcDefinitionToJSON(value['serviceDefinition']),
+        'definition': RegistrySvcDefinitionToJSON(value['definition']),
     };
 }
 

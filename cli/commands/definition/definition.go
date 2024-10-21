@@ -1,11 +1,11 @@
-package service_definitions
+package definition
 
 import "github.com/spf13/cobra"
 
-func AddServiceDefinitionCommands(rootCmd *cobra.Command) {
+func AddDefinitionCommands(rootCmd *cobra.Command) {
 	var envCmd = &cobra.Command{
 		Use:     "definition",
-		Aliases: []string{"d", "definitions"},
+		Aliases: []string{"def", "definitions"},
 		Short:   "Manage definitions",
 	}
 

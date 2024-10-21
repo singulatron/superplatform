@@ -80,7 +80,7 @@ const (
 )
 
 type SaveDefinitionRequest struct {
-	Definition Definition `json:"serviceDefinition,omitempty"`
+	Definition Definition `json:"definition,omitempty"`
 }
 
 type SaveDefinitionResponse struct {
@@ -89,5 +89,5 @@ type SaveDefinitionResponse struct {
 type ListDefinitionsRequest struct{}
 
 type ListDefinitionsResponse struct {
-	Definitions []*Definition `json:"serviceDefinitions,omitempty"`
+	Definitions []*Definition `json:"definitions,omitempty"`
 }

@@ -24,6 +24,8 @@ var _ MappedNullable = &DeploySvcDeployment{}
 type DeploySvcDeployment struct {
 	// Optional: Auto-scaling rules
 	AutoScaling *DeploySvcAutoScalingConfig `json:"autoScaling,omitempty"`
+	// The User Svc slug of the service that is being deployed.
+	DefinitionId string `json:"definitionId"`
 	// Description of what this deployment does
 	Description *string `json:"description,omitempty"`
 	// ID of the deployment (e.g., \"depl_dbOdi5eLQK\")
@@ -34,8 +36,6 @@ type DeploySvcDeployment struct {
 	Replicas *int32 `json:"replicas,omitempty"`
 	// Resource requirements for each replica
 	Resources *DeploySvcResourceLimits `json:"resources,omitempty"`
-	// The User Svc slug of the service that is being deployed.
-	ServiceDefinitionId string `json:"serviceDefinitionId"`
 	// Deployment strategy (e.g., rolling update)
 	Strategy *DeploySvcDeploymentStrategy `json:"strategy,omitempty"`
 	// Target deployment regions or clusters
@@ -48,10 +48,10 @@ type _DeploySvcDeployment DeploySvcDeployment
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewDeploySvcDeployment(id string, serviceDefinitionId string) *DeploySvcDeployment {
+func NewDeploySvcDeployment(definitionId string, id string) *DeploySvcDeployment {
 	this := DeploySvcDeployment{}
+	this.DefinitionId = definitionId
 	this.Id = id
-	this.ServiceDefinitionId = serviceDefinitionId
 	return &this
 }
 
@@ -93,6 +93,30 @@ func (o *DeploySvcDeployment) HasAutoScaling() bool {
 // SetAutoScaling gets a reference to the given DeploySvcAutoScalingConfig and assigns it to the AutoScaling field.
 func (o *DeploySvcDeployment) SetAutoScaling(v DeploySvcAutoScalingConfig) {
 	o.AutoScaling = &v
+}
+
+// GetDefinitionId returns the DefinitionId field value
+func (o *DeploySvcDeployment) GetDefinitionId() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.DefinitionId
+}
+
+// GetDefinitionIdOk returns a tuple with the DefinitionId field value
+// and a boolean to check if the value has been set.
+func (o *DeploySvcDeployment) GetDefinitionIdOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.DefinitionId, true
+}
+
+// SetDefinitionId sets field value
+func (o *DeploySvcDeployment) SetDefinitionId(v string) {
+	o.DefinitionId = v
 }
 
 // GetDescription returns the Description field value if set, zero value otherwise.
@@ -247,30 +271,6 @@ func (o *DeploySvcDeployment) SetResources(v DeploySvcResourceLimits) {
 	o.Resources = &v
 }
 
-// GetServiceDefinitionId returns the ServiceDefinitionId field value
-func (o *DeploySvcDeployment) GetServiceDefinitionId() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.ServiceDefinitionId
-}
-
-// GetServiceDefinitionIdOk returns a tuple with the ServiceDefinitionId field value
-// and a boolean to check if the value has been set.
-func (o *DeploySvcDeployment) GetServiceDefinitionIdOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.ServiceDefinitionId, true
-}
-
-// SetServiceDefinitionId sets field value
-func (o *DeploySvcDeployment) SetServiceDefinitionId(v string) {
-	o.ServiceDefinitionId = v
-}
-
 // GetStrategy returns the Strategy field value if set, zero value otherwise.
 func (o *DeploySvcDeployment) GetStrategy() DeploySvcDeploymentStrategy {
 	if o == nil || IsNil(o.Strategy) {
@@ -348,6 +348,7 @@ func (o DeploySvcDeployment) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.AutoScaling) {
 		toSerialize["autoScaling"] = o.AutoScaling
 	}
+	toSerialize["definitionId"] = o.DefinitionId
 	if !IsNil(o.Description) {
 		toSerialize["description"] = o.Description
 	}
@@ -361,7 +362,6 @@ func (o DeploySvcDeployment) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Resources) {
 		toSerialize["resources"] = o.Resources
 	}
-	toSerialize["serviceDefinitionId"] = o.ServiceDefinitionId
 	if !IsNil(o.Strategy) {
 		toSerialize["strategy"] = o.Strategy
 	}
@@ -376,8 +376,8 @@ func (o *DeploySvcDeployment) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
+		"definitionId",
 		"id",
-		"serviceDefinitionId",
 	}
 
 	allProperties := make(map[string]interface{})

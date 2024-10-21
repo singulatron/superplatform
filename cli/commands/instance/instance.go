@@ -1,14 +1,14 @@
-package service_instances
+package instance
 
 import (
 	"github.com/singulatron/superplatform/cli/commands/env"
 	"github.com/spf13/cobra"
 )
 
-func AddServiceInstanceCommands(rootCmd *cobra.Command) {
+func AddInstanceCommands(rootCmd *cobra.Command) {
 	var envCmd = &cobra.Command{
 		Use:     "instance",
-		Aliases: []string{"i", "instances"},
+		Aliases: []string{"inst", "instances"},
 		Short:   "Manage service instances",
 	}
 
