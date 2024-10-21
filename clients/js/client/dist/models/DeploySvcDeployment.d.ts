@@ -26,7 +26,7 @@ export interface DeploySvcDeployment {
      */
     autoScaling?: DeploySvcAutoScalingConfig;
     /**
-     * The User Svc slug of the service that is being deployed.
+     * DefinitionId is the id of the definition
      * @type {string}
      * @memberof DeploySvcDeployment
      */

@@ -19,7 +19,7 @@ export declare class DeploySvcDeployment {
     */
     'autoScaling'?: DeploySvcAutoScalingConfig;
     /**
-    * The User Svc slug of the service that is being deployed.
+    * DefinitionId is the id of the definition
     */
     'definitionId': string;
     /**

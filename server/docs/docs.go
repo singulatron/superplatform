@@ -4225,7 +4225,7 @@ const docTemplate = `{
                     ]
                 },
                 "definitionId": {
-                    "description": "The User Svc slug of the service that is being deployed.",
+                    "description": "DefinitionId is the id of the definition",
                     "type": "string",
                     "example": "def_deBXZMpxrQ"
                 },

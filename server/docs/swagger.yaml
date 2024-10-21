@@ -267,7 +267,7 @@ definitions:
         - $ref: '#/definitions/deploy_svc.AutoScalingConfig'
         description: 'Optional: Auto-scaling rules'
       definitionId:
-        description: The User Svc slug of the service that is being deployed.
+        description: DefinitionId is the id of the definition
         example: def_deBXZMpxrQ
         type: string
       description:
