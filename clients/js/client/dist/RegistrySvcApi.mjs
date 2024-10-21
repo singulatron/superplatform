@@ -1,20 +1,20 @@
 import { a as BaseAPI, _ as __awaiter, b as RequiredError, V as VoidApiResponse, J as JSONApiResponse } from './runtime2.mjs';
+import { RegistrySvcListDefinitionsResponseFromJSON } from './RegistrySvcListDefinitionsResponse.mjs';
+import { RegistrySvcListInstancesResponseFromJSON } from './RegistrySvcListInstancesResponse.mjs';
 import { RegistrySvcListNodesResponseFromJSON } from './RegistrySvcListNodesResponse.mjs';
-import { RegistrySvcListServiceDefinitionsResponseFromJSON } from './RegistrySvcListServiceDefinitionsResponse.mjs';
-import { RegistrySvcListServiceInstancesResponseFromJSON } from './RegistrySvcListServiceInstancesResponse.mjs';
-import { RegistrySvcRegisterServiceInstanceRequestToJSON } from './RegistrySvcRegisterServiceInstanceRequest.mjs';
-import { RegistrySvcSaveServiceDefinitionRequestToJSON } from './RegistrySvcSaveServiceDefinitionRequest.mjs';
+import { RegistrySvcRegisterInstanceRequestToJSON } from './RegistrySvcRegisterInstanceRequest.mjs';
+import { RegistrySvcSaveDefinitionRequestToJSON } from './RegistrySvcSaveDefinitionRequest.mjs';
+import './RegistrySvcDefinition.mjs';
+import './RegistrySvcAPISpec.mjs';
+import './RegistrySvcImageSpec.mjs';
+import './RegistrySvcClient.mjs';
+import './RegistrySvcLanguage.mjs';
+import './RegistrySvcInstance.mjs';
 import './RegistrySvcNode.mjs';
 import './RegistrySvcGPU.mjs';
 import './RegistrySvcProcess.mjs';
 import './RegistrySvcResourceUsage.mjs';
 import './RegistrySvcUsage.mjs';
-import './RegistrySvcServiceDefinition.mjs';
-import './RegistrySvcAPISpec.mjs';
-import './RegistrySvcImageSpec.mjs';
-import './RegistrySvcClient.mjs';
-import './RegistrySvcLanguage.mjs';
-import './RegistrySvcServiceInstance.mjs';
 
 /* tslint:disable */
 /* eslint-disable */
@@ -34,13 +34,13 @@ import './RegistrySvcServiceInstance.mjs';
  */
 class RegistrySvcApi extends BaseAPI {
     /**
-     * Deletes a registered service definition based on the service ID.
-     * Delete Service Definition
+     * Deletes a registered definition by ID.
+     * Delete Definition
      */
-    deleteServiceDefinitionRaw(requestParameters, initOverrides) {
+    deleteDefinitionRaw(requestParameters, initOverrides) {
         return __awaiter(this, void 0, void 0, function* () {
             if (requestParameters['id'] == null) {
-                throw new RequiredError('id', 'Required parameter "id" was null or undefined when calling deleteServiceDefinition().');
+                throw new RequiredError('id', 'Required parameter "id" was null or undefined when calling deleteDefinition().');
             }
             const queryParameters = {};
             const headerParameters = {};
@@ -48,7 +48,7 @@ class RegistrySvcApi extends BaseAPI {
                 headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
             }
             const response = yield this.request({
-                path: `/registry-svc/service-definition/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+                path: `/registry-svc/definition/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
                 method: 'DELETE',
                 headers: headerParameters,
                 query: queryParameters,
@@ -57,12 +57,90 @@ class RegistrySvcApi extends BaseAPI {
         });
     }
     /**
-     * Deletes a registered service definition based on the service ID.
-     * Delete Service Definition
+     * Deletes a registered definition by ID.
+     * Delete Definition
      */
-    deleteServiceDefinition(requestParameters, initOverrides) {
+    deleteDefinition(requestParameters, initOverrides) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.deleteServiceDefinitionRaw(requestParameters, initOverrides);
+            yield this.deleteDefinitionRaw(requestParameters, initOverrides);
+        });
+    }
+    /**
+     * Retrieves a list of all definitions or filters them by specific criteria.
+     * List Definitions
+     */
+    listDefinitionsRaw(initOverrides) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const queryParameters = {};
+            const headerParameters = {};
+            if (this.configuration && this.configuration.apiKey) {
+                headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
+            }
+            const response = yield this.request({
+                path: `/registry-svc/definitions`,
+                method: 'GET',
+                headers: headerParameters,
+                query: queryParameters,
+            }, initOverrides);
+            return new JSONApiResponse(response, (jsonValue) => RegistrySvcListDefinitionsResponseFromJSON(jsonValue));
+        });
+    }
+    /**
+     * Retrieves a list of all definitions or filters them by specific criteria.
+     * List Definitions
+     */
+    listDefinitions(initOverrides) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const response = yield this.listDefinitionsRaw(initOverrides);
+            return yield response.value();
+        });
+    }
+    /**
+     * Retrieves a list of all instances or filters them by specific criteria (e.g., host, IP).
+     * List Service Instances
+     */
+    listInstancesRaw(requestParameters, initOverrides) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const queryParameters = {};
+            if (requestParameters['scheme'] != null) {
+                queryParameters['scheme'] = requestParameters['scheme'];
+            }
+            if (requestParameters['ip'] != null) {
+                queryParameters['ip'] = requestParameters['ip'];
+            }
+            if (requestParameters['deploymentId'] != null) {
+                queryParameters['deploymentId'] = requestParameters['deploymentId'];
+            }
+            if (requestParameters['host'] != null) {
+                queryParameters['host'] = requestParameters['host'];
+            }
+            if (requestParameters['ip2'] != null) {
+                queryParameters['ip'] = requestParameters['ip2'];
+            }
+            if (requestParameters['id'] != null) {
+                queryParameters['id'] = requestParameters['id'];
+            }
+            const headerParameters = {};
+            if (this.configuration && this.configuration.apiKey) {
+                headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
+            }
+            const response = yield this.request({
+                path: `/registry-svc/instances`,
+                method: 'GET',
+                headers: headerParameters,
+                query: queryParameters,
+            }, initOverrides);
+            return new JSONApiResponse(response, (jsonValue) => RegistrySvcListInstancesResponseFromJSON(jsonValue));
+        });
+    }
+    /**
+     * Retrieves a list of all instances or filters them by specific criteria (e.g., host, IP).
+     * List Service Instances
+     */
+    listInstances() {
+        return __awaiter(this, arguments, void 0, function* (requestParameters = {}, initOverrides) {
+            const response = yield this.listInstancesRaw(requestParameters, initOverrides);
+            return yield response.value();
         });
     }
     /**
@@ -98,88 +176,13 @@ class RegistrySvcApi extends BaseAPI {
         });
     }
     /**
-     * Retrieves a list of all service definitions or filters them by specific criteria.
-     * List Service Definitions
+     * Registers an instance, associating an instance address with a slug acquired from the bearer token.
+     * Register Instance
      */
-    listServiceDefinitionsRaw(initOverrides) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const queryParameters = {};
-            const headerParameters = {};
-            if (this.configuration && this.configuration.apiKey) {
-                headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
-            }
-            const response = yield this.request({
-                path: `/registry-svc/service-definitions`,
-                method: 'GET',
-                headers: headerParameters,
-                query: queryParameters,
-            }, initOverrides);
-            return new JSONApiResponse(response, (jsonValue) => RegistrySvcListServiceDefinitionsResponseFromJSON(jsonValue));
-        });
-    }
-    /**
-     * Retrieves a list of all service definitions or filters them by specific criteria.
-     * List Service Definitions
-     */
-    listServiceDefinitions(initOverrides) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const response = yield this.listServiceDefinitionsRaw(initOverrides);
-            return yield response.value();
-        });
-    }
-    /**
-     * Retrieves a list of all registered service instances or filters them by specific criteria (e.g., host, IP).
-     * List Service Instances
-     */
-    listServiceInstancesRaw(requestParameters, initOverrides) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const queryParameters = {};
-            if (requestParameters['scheme'] != null) {
-                queryParameters['scheme'] = requestParameters['scheme'];
-            }
-            if (requestParameters['ip'] != null) {
-                queryParameters['ip'] = requestParameters['ip'];
-            }
-            if (requestParameters['host'] != null) {
-                queryParameters['host'] = requestParameters['host'];
-            }
-            if (requestParameters['ip2'] != null) {
-                queryParameters['ip'] = requestParameters['ip2'];
-            }
-            if (requestParameters['id'] != null) {
-                queryParameters['id'] = requestParameters['id'];
-            }
-            const headerParameters = {};
-            if (this.configuration && this.configuration.apiKey) {
-                headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
-            }
-            const response = yield this.request({
-                path: `/registry-svc/service-instances`,
-                method: 'GET',
-                headers: headerParameters,
-                query: queryParameters,
-            }, initOverrides);
-            return new JSONApiResponse(response, (jsonValue) => RegistrySvcListServiceInstancesResponseFromJSON(jsonValue));
-        });
-    }
-    /**
-     * Retrieves a list of all registered service instances or filters them by specific criteria (e.g., host, IP).
-     * List Service Instances
-     */
-    listServiceInstances() {
-        return __awaiter(this, arguments, void 0, function* (requestParameters = {}, initOverrides) {
-            const response = yield this.listServiceInstancesRaw(requestParameters, initOverrides);
-            return yield response.value();
-        });
-    }
-    /**
-     * Registers a new service instance, associating an service instance address with a slug acquired from the bearer token.
-     * Register Service Instance
-     */
-    registerServiceInstanceRaw(requestParameters, initOverrides) {
+    registerInstanceRaw(requestParameters, initOverrides) {
         return __awaiter(this, void 0, void 0, function* () {
             if (requestParameters['request'] == null) {
-                throw new RequiredError('request', 'Required parameter "request" was null or undefined when calling registerServiceInstance().');
+                throw new RequiredError('request', 'Required parameter "request" was null or undefined when calling registerInstance().');
             }
             const queryParameters = {};
             const headerParameters = {};
@@ -188,33 +191,33 @@ class RegistrySvcApi extends BaseAPI {
                 headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
             }
             const response = yield this.request({
-                path: `/registry-svc/service-instance`,
+                path: `/registry-svc/instance`,
                 method: 'PUT',
                 headers: headerParameters,
                 query: queryParameters,
-                body: RegistrySvcRegisterServiceInstanceRequestToJSON(requestParameters['request']),
+                body: RegistrySvcRegisterInstanceRequestToJSON(requestParameters['request']),
             }, initOverrides);
             return new JSONApiResponse(response);
         });
     }
     /**
-     * Registers a new service instance, associating an service instance address with a slug acquired from the bearer token.
-     * Register Service Instance
+     * Registers an instance, associating an instance address with a slug acquired from the bearer token.
+     * Register Instance
      */
-    registerServiceInstance(requestParameters, initOverrides) {
+    registerInstance(requestParameters, initOverrides) {
         return __awaiter(this, void 0, void 0, function* () {
-            const response = yield this.registerServiceInstanceRaw(requestParameters, initOverrides);
+            const response = yield this.registerInstanceRaw(requestParameters, initOverrides);
             return yield response.value();
         });
     }
     /**
-     * Removes a registered service instance based on the service ID.
-     * Remove Service Instance
+     * Removes a registered instance based on the instnce ID.
+     * Remove Instance
      */
-    removeServiceInstanceRaw(requestParameters, initOverrides) {
+    removeInstanceRaw(requestParameters, initOverrides) {
         return __awaiter(this, void 0, void 0, function* () {
             if (requestParameters['id'] == null) {
-                throw new RequiredError('id', 'Required parameter "id" was null or undefined when calling removeServiceInstance().');
+                throw new RequiredError('id', 'Required parameter "id" was null or undefined when calling removeInstance().');
             }
             const queryParameters = {};
             const headerParameters = {};
@@ -222,7 +225,7 @@ class RegistrySvcApi extends BaseAPI {
                 headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
             }
             const response = yield this.request({
-                path: `/registry-svc/service-instance/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+                path: `/registry-svc/instance/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
                 method: 'DELETE',
                 headers: headerParameters,
                 query: queryParameters,
@@ -231,22 +234,22 @@ class RegistrySvcApi extends BaseAPI {
         });
     }
     /**
-     * Removes a registered service instance based on the service ID.
-     * Remove Service Instance
+     * Removes a registered instance based on the instnce ID.
+     * Remove Instance
      */
-    removeServiceInstance(requestParameters, initOverrides) {
+    removeInstance(requestParameters, initOverrides) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.removeServiceInstanceRaw(requestParameters, initOverrides);
+            yield this.removeInstanceRaw(requestParameters, initOverrides);
         });
     }
     /**
-     * Registers a new service definition, associating an service definition address with a slug acquired from the bearer token.
-     * Register Service Definition
+     * Registers a new definition, associating an definition address with a slug acquired from the bearer token.
+     * Register a Definition
      */
-    saveServiceDefinitionRaw(requestParameters, initOverrides) {
+    saveDefinitionRaw(requestParameters, initOverrides) {
         return __awaiter(this, void 0, void 0, function* () {
             if (requestParameters['request'] == null) {
-                throw new RequiredError('request', 'Required parameter "request" was null or undefined when calling saveServiceDefinition().');
+                throw new RequiredError('request', 'Required parameter "request" was null or undefined when calling saveDefinition().');
             }
             const queryParameters = {};
             const headerParameters = {};
@@ -255,22 +258,22 @@ class RegistrySvcApi extends BaseAPI {
                 headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
             }
             const response = yield this.request({
-                path: `/registry-svc/service-definition`,
+                path: `/registry-svc/definition`,
                 method: 'PUT',
                 headers: headerParameters,
                 query: queryParameters,
-                body: RegistrySvcSaveServiceDefinitionRequestToJSON(requestParameters['request']),
+                body: RegistrySvcSaveDefinitionRequestToJSON(requestParameters['request']),
             }, initOverrides);
             return new JSONApiResponse(response);
         });
     }
     /**
-     * Registers a new service definition, associating an service definition address with a slug acquired from the bearer token.
-     * Register Service Definition
+     * Registers a new definition, associating an definition address with a slug acquired from the bearer token.
+     * Register a Definition
      */
-    saveServiceDefinition(requestParameters, initOverrides) {
+    saveDefinition(requestParameters, initOverrides) {
         return __awaiter(this, void 0, void 0, function* () {
-            const response = yield this.saveServiceDefinitionRaw(requestParameters, initOverrides);
+            const response = yield this.saveDefinitionRaw(requestParameters, initOverrides);
             return yield response.value();
         });
     }

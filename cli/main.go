@@ -6,9 +6,9 @@ import (
 
 	"github.com/spf13/cobra"
 
+	definitions "github.com/singulatron/superplatform/cli/commands/definitions"
 	"github.com/singulatron/superplatform/cli/commands/env"
-	service_definitions "github.com/singulatron/superplatform/cli/commands/service-definitions"
-	service_instances "github.com/singulatron/superplatform/cli/commands/service-instances"
+	instances "github.com/singulatron/superplatform/cli/commands/instances"
 	"github.com/singulatron/superplatform/cli/commands/user/login"
 	"github.com/singulatron/superplatform/cli/commands/user/whoami"
 )
@@ -27,8 +27,8 @@ func main() {
 	addLoginCommands(rootCmd)
 	addWhoamiCommands(rootCmd)
 
-	service_definitions.AddServiceDefinitionCommands(rootCmd)
-	service_instances.AddServiceInstanceCommands(rootCmd)
+	definitions.AddServiceDefinitionCommands(rootCmd)
+	instances.AddServiceInstanceCommands(rootCmd)
 
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)

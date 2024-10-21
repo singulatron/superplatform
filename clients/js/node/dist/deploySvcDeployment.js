@@ -24,8 +24,18 @@ DeploySvcDeployment.attributeTypeMap = [
         "type": "DeploySvcAutoScalingConfig"
     },
     {
+        "name": "description",
+        "baseName": "description",
+        "type": "string"
+    },
+    {
         "name": "id",
         "baseName": "id",
+        "type": "string"
+    },
+    {
+        "name": "name",
+        "baseName": "name",
         "type": "string"
     },
     {

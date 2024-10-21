@@ -26,11 +26,23 @@ export interface DeploySvcDeployment {
      */
     autoScaling?: DeploySvcAutoScalingConfig;
     /**
+     * Description of what this deployment does
+     * @type {string}
+     * @memberof DeploySvcDeployment
+     */
+    description?: string;
+    /**
      * ID of the deployment (e.g., "depl_dbOdi5eLQK")
      * @type {string}
      * @memberof DeploySvcDeployment
      */
-    id?: string;
+    id: string;
+    /**
+     * Short name for easy reference (e.g., "user-service-v2")
+     * @type {string}
+     * @memberof DeploySvcDeployment
+     */
+    name?: string;
     /**
      * Number of container instances to run
      * @type {number}

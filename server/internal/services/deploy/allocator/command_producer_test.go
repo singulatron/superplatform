@@ -22,7 +22,7 @@ func TestGenerateCommands_ScaleUp(t *testing.T) {
 		{Url: StrPtr("node1"), Usage: &openapi.RegistrySvcResourceUsage{Cpu: &openapi.RegistrySvcUsage{Used: Int64Ptr(50)}}},
 		{Url: StrPtr("node2"), Usage: &openapi.RegistrySvcResourceUsage{Cpu: &openapi.RegistrySvcUsage{Used: Int64Ptr(60)}}},
 	}
-	serviceInstances := []openapi.RegistrySvcServiceInstance{
+	serviceInstances := []openapi.RegistrySvcInstance{
 		{Id: "instance1", DeploymentId: "service-A", LastHeartbeat: StrPtr("valid")},
 	}
 	deployments := []*deploy.Deployment{
@@ -44,7 +44,7 @@ func TestGenerateCommands_ScaleDown(t *testing.T) {
 	nodes := []openapi.RegistrySvcNode{
 		{Url: StrPtr("node1"), Usage: &openapi.RegistrySvcResourceUsage{Cpu: &openapi.RegistrySvcUsage{Used: Int64Ptr(50)}}},
 	}
-	serviceInstances := []openapi.RegistrySvcServiceInstance{
+	serviceInstances := []openapi.RegistrySvcInstance{
 		{Id: "instance1", DeploymentId: "service-A", LastHeartbeat: StrPtr("valid")},
 		{Id: "instance2", DeploymentId: "service-A", LastHeartbeat: StrPtr("valid")},
 		{Id: "instance3", DeploymentId: "service-A", LastHeartbeat: StrPtr("valid")},
@@ -66,7 +66,7 @@ func TestGenerateCommands_KillUnhealthy(t *testing.T) {
 	nodes := []openapi.RegistrySvcNode{
 		{Url: StrPtr("node1"), Usage: &openapi.RegistrySvcResourceUsage{Cpu: &openapi.RegistrySvcUsage{Used: Int64Ptr(50)}}},
 	}
-	serviceInstances := []openapi.RegistrySvcServiceInstance{
+	serviceInstances := []openapi.RegistrySvcInstance{
 		{Id: "instance1", DeploymentId: "service-A", LastHeartbeat: nil},
 	}
 	deployments := []*deploy.Deployment{
@@ -85,7 +85,7 @@ func TestGenerateCommands_NoAction(t *testing.T) {
 	nodes := []openapi.RegistrySvcNode{
 		{Url: StrPtr("node1"), Usage: &openapi.RegistrySvcResourceUsage{Cpu: &openapi.RegistrySvcUsage{Used: Int64Ptr(50)}}},
 	}
-	serviceInstances := []openapi.RegistrySvcServiceInstance{
+	serviceInstances := []openapi.RegistrySvcInstance{
 		{Id: "instance1", DeploymentId: "service-A", LastHeartbeat: StrPtr("valid")},
 	}
 	deployments := []*deploy.Deployment{

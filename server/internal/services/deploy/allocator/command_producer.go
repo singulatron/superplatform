@@ -15,7 +15,7 @@ import (
 
 func GenerateCommands(
 	nodes []openapi.RegistrySvcNode,
-	serviceInstances []openapi.RegistrySvcServiceInstance,
+	serviceInstances []openapi.RegistrySvcInstance,
 	deployments []*deploy.Deployment) []*deploy.Command {
 
 	commands := []*deploy.Command{}
@@ -34,7 +34,7 @@ func GenerateCommands(
 func scaleDeployment(
 	deployment *deploy.Deployment,
 	nodes []openapi.RegistrySvcNode,
-	serviceInstances []openapi.RegistrySvcServiceInstance,
+	serviceInstances []openapi.RegistrySvcInstance,
 ) []*deploy.Command {
 	commands := []*deploy.Command{}
 	activeInstances := 0
@@ -78,7 +78,7 @@ func scaleDeployment(
 	return commands
 }
 
-func checkHealthAndKill(instance openapi.RegistrySvcServiceInstance) []*deploy.Command {
+func checkHealthAndKill(instance openapi.RegistrySvcInstance) []*deploy.Command {
 	commands := []*deploy.Command{}
 
 	if instance.LastHeartbeat == nil {

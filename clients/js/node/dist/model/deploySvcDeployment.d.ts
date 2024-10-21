@@ -19,9 +19,17 @@ export declare class DeploySvcDeployment {
     */
     'autoScaling'?: DeploySvcAutoScalingConfig;
     /**
+    * Description of what this deployment does
+    */
+    'description'?: string;
+    /**
     * ID of the deployment (e.g., \"depl_dbOdi5eLQK\")
     */
-    'id'?: string;
+    'id': string;
+    /**
+    * Short name for easy reference (e.g., \"user-service-v2\")
+    */
+    'name'?: string;
     /**
     * Number of container instances to run
     */

@@ -39,10 +39,10 @@ type RegistryService struct {
 	router *router.Router
 	lock   lock.DistributedLock
 
-	credentialStore        datastore.DataStore
-	serviceDefinitionStore datastore.DataStore
-	serviceInstanceStore   datastore.DataStore
-	nodeStore              datastore.DataStore
+	credentialStore datastore.DataStore
+	definitionStore datastore.DataStore
+	instanceStore   datastore.DataStore
+	nodeStore       datastore.DataStore
 }
 
 func NewRegistryService(
@@ -69,11 +69,11 @@ func NewRegistryService(
 	if err != nil {
 		return nil, err
 	}
-	serviceInstanceStore, err := datastoreFactory("registrySvcServiceInstances", &registry.ServiceInstance{})
+	instanceStore, err := datastoreFactory("registrySvcInstances", &registry.Instance{})
 	if err != nil {
 		return nil, err
 	}
-	serviceDefinitionStore, err := datastoreFactory("registrySvcServiceDefinitions", &registry.ServiceDefinition{})
+	definitionStore, err := datastoreFactory("registrySvcDefinitions", &registry.Definition{})
 	if err != nil {
 		return nil, err
 	}
@@ -83,15 +83,15 @@ func NewRegistryService(
 	}
 
 	service := &RegistryService{
-		URL:                    nodeUrl,
-		router:                 router,
-		lock:                   lock,
-		credentialStore:        credentialStore,
-		serviceDefinitionStore: serviceDefinitionStore,
-		serviceInstanceStore:   serviceInstanceStore,
-		nodeStore:              nodeStore,
-		AvailabilityZone:       az,
-		Region:                 region,
+		URL:              nodeUrl,
+		router:           router,
+		lock:             lock,
+		credentialStore:  credentialStore,
+		definitionStore:  definitionStore,
+		instanceStore:    instanceStore,
+		nodeStore:        nodeStore,
+		AvailabilityZone: az,
+		Region:           region,
 	}
 
 	return service, nil

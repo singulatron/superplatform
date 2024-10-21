@@ -24,8 +24,12 @@ var _ MappedNullable = &DeploySvcDeployment{}
 type DeploySvcDeployment struct {
 	// Optional: Auto-scaling rules
 	AutoScaling *DeploySvcAutoScalingConfig `json:"autoScaling,omitempty"`
+	// Description of what this deployment does
+	Description *string `json:"description,omitempty"`
 	// ID of the deployment (e.g., \"depl_dbOdi5eLQK\")
-	Id *string `json:"id,omitempty"`
+	Id string `json:"id"`
+	// Short name for easy reference (e.g., \"user-service-v2\")
+	Name *string `json:"name,omitempty"`
 	// Number of container instances to run
 	Replicas *int32 `json:"replicas,omitempty"`
 	// Resource requirements for each replica
@@ -44,8 +48,9 @@ type _DeploySvcDeployment DeploySvcDeployment
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewDeploySvcDeployment(serviceDefinitionId string) *DeploySvcDeployment {
+func NewDeploySvcDeployment(id string, serviceDefinitionId string) *DeploySvcDeployment {
 	this := DeploySvcDeployment{}
+	this.Id = id
 	this.ServiceDefinitionId = serviceDefinitionId
 	return &this
 }
@@ -90,36 +95,92 @@ func (o *DeploySvcDeployment) SetAutoScaling(v DeploySvcAutoScalingConfig) {
 	o.AutoScaling = &v
 }
 
-// GetId returns the Id field value if set, zero value otherwise.
-func (o *DeploySvcDeployment) GetId() string {
-	if o == nil || IsNil(o.Id) {
+// GetDescription returns the Description field value if set, zero value otherwise.
+func (o *DeploySvcDeployment) GetDescription() string {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
-	return *o.Id
+	return *o.Description
 }
 
-// GetIdOk returns a tuple with the Id field value if set, nil otherwise
+// GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *DeploySvcDeployment) GetIdOk() (*string, bool) {
-	if o == nil || IsNil(o.Id) {
+func (o *DeploySvcDeployment) GetDescriptionOk() (*string, bool) {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
-	return o.Id, true
+	return o.Description, true
 }
 
-// HasId returns a boolean if a field has been set.
-func (o *DeploySvcDeployment) HasId() bool {
-	if o != nil && !IsNil(o.Id) {
+// HasDescription returns a boolean if a field has been set.
+func (o *DeploySvcDeployment) HasDescription() bool {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
 	return false
 }
 
-// SetId gets a reference to the given string and assigns it to the Id field.
+// SetDescription gets a reference to the given string and assigns it to the Description field.
+func (o *DeploySvcDeployment) SetDescription(v string) {
+	o.Description = &v
+}
+
+// GetId returns the Id field value
+func (o *DeploySvcDeployment) GetId() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.Id
+}
+
+// GetIdOk returns a tuple with the Id field value
+// and a boolean to check if the value has been set.
+func (o *DeploySvcDeployment) GetIdOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.Id, true
+}
+
+// SetId sets field value
 func (o *DeploySvcDeployment) SetId(v string) {
-	o.Id = &v
+	o.Id = v
+}
+
+// GetName returns the Name field value if set, zero value otherwise.
+func (o *DeploySvcDeployment) GetName() string {
+	if o == nil || IsNil(o.Name) {
+		var ret string
+		return ret
+	}
+	return *o.Name
+}
+
+// GetNameOk returns a tuple with the Name field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *DeploySvcDeployment) GetNameOk() (*string, bool) {
+	if o == nil || IsNil(o.Name) {
+		return nil, false
+	}
+	return o.Name, true
+}
+
+// HasName returns a boolean if a field has been set.
+func (o *DeploySvcDeployment) HasName() bool {
+	if o != nil && !IsNil(o.Name) {
+		return true
+	}
+
+	return false
+}
+
+// SetName gets a reference to the given string and assigns it to the Name field.
+func (o *DeploySvcDeployment) SetName(v string) {
+	o.Name = &v
 }
 
 // GetReplicas returns the Replicas field value if set, zero value otherwise.
@@ -287,8 +348,12 @@ func (o DeploySvcDeployment) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.AutoScaling) {
 		toSerialize["autoScaling"] = o.AutoScaling
 	}
-	if !IsNil(o.Id) {
-		toSerialize["id"] = o.Id
+	if !IsNil(o.Description) {
+		toSerialize["description"] = o.Description
+	}
+	toSerialize["id"] = o.Id
+	if !IsNil(o.Name) {
+		toSerialize["name"] = o.Name
 	}
 	if !IsNil(o.Replicas) {
 		toSerialize["replicas"] = o.Replicas
@@ -311,6 +376,7 @@ func (o *DeploySvcDeployment) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
+		"id",
 		"serviceDefinitionId",
 	}
 

@@ -19,6 +19,8 @@ import { DeploySvcResourceLimitsFromJSON, DeploySvcResourceLimitsToJSON, } from 
  * Check if a given object implements the DeploySvcDeployment interface.
  */
 export function instanceOfDeploySvcDeployment(value) {
+    if (!('id' in value) || value['id'] === undefined)
+        return false;
     if (!('serviceDefinitionId' in value) || value['serviceDefinitionId'] === undefined)
         return false;
     return true;
@@ -32,7 +34,9 @@ export function DeploySvcDeploymentFromJSONTyped(json, ignoreDiscriminator) {
     }
     return {
         'autoScaling': json['autoScaling'] == null ? undefined : DeploySvcAutoScalingConfigFromJSON(json['autoScaling']),
-        'id': json['id'] == null ? undefined : json['id'],
+        'description': json['description'] == null ? undefined : json['description'],
+        'id': json['id'],
+        'name': json['name'] == null ? undefined : json['name'],
         'replicas': json['replicas'] == null ? undefined : json['replicas'],
         'resources': json['resources'] == null ? undefined : DeploySvcResourceLimitsFromJSON(json['resources']),
         'serviceDefinitionId': json['serviceDefinitionId'],
@@ -46,7 +50,9 @@ export function DeploySvcDeploymentToJSON(value) {
     }
     return {
         'autoScaling': DeploySvcAutoScalingConfigToJSON(value['autoScaling']),
+        'description': value['description'],
         'id': value['id'],
+        'name': value['name'],
         'replicas': value['replicas'],
         'resources': DeploySvcResourceLimitsToJSON(value['resources']),
         'serviceDefinitionId': value['serviceDefinitionId'],

@@ -16,11 +16,11 @@ import http from 'http';
 
 /* tslint:disable:no-unused-locals */
 import { RegistrySvcErrorResponse } from '../model/registrySvcErrorResponse';
+import { RegistrySvcListDefinitionsResponse } from '../model/registrySvcListDefinitionsResponse';
+import { RegistrySvcListInstancesResponse } from '../model/registrySvcListInstancesResponse';
 import { RegistrySvcListNodesResponse } from '../model/registrySvcListNodesResponse';
-import { RegistrySvcListServiceDefinitionsResponse } from '../model/registrySvcListServiceDefinitionsResponse';
-import { RegistrySvcListServiceInstancesResponse } from '../model/registrySvcListServiceInstancesResponse';
-import { RegistrySvcRegisterServiceInstanceRequest } from '../model/registrySvcRegisterServiceInstanceRequest';
-import { RegistrySvcSaveServiceDefinitionRequest } from '../model/registrySvcSaveServiceDefinitionRequest';
+import { RegistrySvcRegisterInstanceRequest } from '../model/registrySvcRegisterInstanceRequest';
+import { RegistrySvcSaveDefinitionRequest } from '../model/registrySvcSaveDefinitionRequest';
 
 import { ObjectSerializer, Authentication, VoidAuth, Interceptor } from '../model/models';
 import { HttpBasicAuth, HttpBearerAuth, ApiKeyAuth, OAuth } from '../model/models';
@@ -95,12 +95,12 @@ export class RegistrySvcApi {
     }
 
     /**
-     * Deletes a registered service definition based on the service ID.
-     * @summary Delete Service Definition
-     * @param id Service Definition ID
+     * Deletes a registered definition by ID.
+     * @summary Delete Definition
+     * @param id Definition ID
      */
-    public async deleteServiceDefinition (id: string, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body?: any;  }> {
-        const localVarPath = this.basePath + '/registry-svc/service-definition/{id}'
+    public async deleteDefinition (id: string, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body?: any;  }> {
+        const localVarPath = this.basePath + '/registry-svc/definition/{id}'
             .replace('{' + 'id' + '}', encodeURIComponent(String(id)));
         let localVarQueryParameters: any = {};
         let localVarHeaderParams: any = (<any>Object).assign({}, this._defaultHeaders);
@@ -115,7 +115,7 @@ export class RegistrySvcApi {
 
         // verify required parameter 'id' is not null or undefined
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling deleteServiceDefinition.');
+            throw new Error('Required parameter id was null or undefined when calling deleteDefinition.');
         }
 
         (<any>Object).assign(localVarHeaderParams, options.headers);
@@ -156,6 +156,166 @@ export class RegistrySvcApi {
                         reject(error);
                     } else {
                         if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
+                            resolve({ response: response, body: body });
+                        } else {
+                            reject(new HttpError(response, body, response.statusCode));
+                        }
+                    }
+                });
+            });
+        });
+    }
+    /**
+     * Retrieves a list of all definitions or filters them by specific criteria.
+     * @summary List Definitions
+     */
+    public async listDefinitions (options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: RegistrySvcListDefinitionsResponse;  }> {
+        const localVarPath = this.basePath + '/registry-svc/definitions';
+        let localVarQueryParameters: any = {};
+        let localVarHeaderParams: any = (<any>Object).assign({}, this._defaultHeaders);
+        const produces = ['application/json'];
+        // give precedence to 'application/json'
+        if (produces.indexOf('application/json') >= 0) {
+            localVarHeaderParams.Accept = 'application/json';
+        } else {
+            localVarHeaderParams.Accept = produces.join(',');
+        }
+        let localVarFormParams: any = {};
+
+        (<any>Object).assign(localVarHeaderParams, options.headers);
+
+        let localVarUseFormData = false;
+
+        let localVarRequestOptions: localVarRequest.Options = {
+            method: 'GET',
+            qs: localVarQueryParameters,
+            headers: localVarHeaderParams,
+            uri: localVarPath,
+            useQuerystring: this._useQuerystring,
+            json: true,
+        };
+
+        let authenticationPromise = Promise.resolve();
+        if (this.authentications.BearerAuth.apiKey) {
+            authenticationPromise = authenticationPromise.then(() => this.authentications.BearerAuth.applyToRequest(localVarRequestOptions));
+        }
+        authenticationPromise = authenticationPromise.then(() => this.authentications.default.applyToRequest(localVarRequestOptions));
+
+        let interceptorPromise = authenticationPromise;
+        for (const interceptor of this.interceptors) {
+            interceptorPromise = interceptorPromise.then(() => interceptor(localVarRequestOptions));
+        }
+
+        return interceptorPromise.then(() => {
+            if (Object.keys(localVarFormParams).length) {
+                if (localVarUseFormData) {
+                    (<any>localVarRequestOptions).formData = localVarFormParams;
+                } else {
+                    localVarRequestOptions.form = localVarFormParams;
+                }
+            }
+            return new Promise<{ response: http.IncomingMessage; body: RegistrySvcListDefinitionsResponse;  }>((resolve, reject) => {
+                localVarRequest(localVarRequestOptions, (error, response, body) => {
+                    if (error) {
+                        reject(error);
+                    } else {
+                        if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
+                            body = ObjectSerializer.deserialize(body, "RegistrySvcListDefinitionsResponse");
+                            resolve({ response: response, body: body });
+                        } else {
+                            reject(new HttpError(response, body, response.statusCode));
+                        }
+                    }
+                });
+            });
+        });
+    }
+    /**
+     * Retrieves a list of all instances or filters them by specific criteria (e.g., host, IP).
+     * @summary List Service Instances
+     * @param scheme Scheme to filter by
+     * @param ip IP to filter by
+     * @param deploymentId Deployment ID to filter by
+     * @param host Host to filter by
+     * @param ip2 IP to filter by
+     * @param id Id to filter by
+     */
+    public async listInstances (scheme?: string, ip?: string, deploymentId?: string, host?: string, ip2?: string, id?: string, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: RegistrySvcListInstancesResponse;  }> {
+        const localVarPath = this.basePath + '/registry-svc/instances';
+        let localVarQueryParameters: any = {};
+        let localVarHeaderParams: any = (<any>Object).assign({}, this._defaultHeaders);
+        const produces = ['application/json'];
+        // give precedence to 'application/json'
+        if (produces.indexOf('application/json') >= 0) {
+            localVarHeaderParams.Accept = 'application/json';
+        } else {
+            localVarHeaderParams.Accept = produces.join(',');
+        }
+        let localVarFormParams: any = {};
+
+        if (scheme !== undefined) {
+            localVarQueryParameters['scheme'] = ObjectSerializer.serialize(scheme, "string");
+        }
+
+        if (ip !== undefined) {
+            localVarQueryParameters['ip'] = ObjectSerializer.serialize(ip, "string");
+        }
+
+        if (deploymentId !== undefined) {
+            localVarQueryParameters['deploymentId'] = ObjectSerializer.serialize(deploymentId, "string");
+        }
+
+        if (host !== undefined) {
+            localVarQueryParameters['host'] = ObjectSerializer.serialize(host, "string");
+        }
+
+        if (ip2 !== undefined) {
+            localVarQueryParameters['ip'] = ObjectSerializer.serialize(ip2, "string");
+        }
+
+        if (id !== undefined) {
+            localVarQueryParameters['id'] = ObjectSerializer.serialize(id, "string");
+        }
+
+        (<any>Object).assign(localVarHeaderParams, options.headers);
+
+        let localVarUseFormData = false;
+
+        let localVarRequestOptions: localVarRequest.Options = {
+            method: 'GET',
+            qs: localVarQueryParameters,
+            headers: localVarHeaderParams,
+            uri: localVarPath,
+            useQuerystring: this._useQuerystring,
+            json: true,
+        };
+
+        let authenticationPromise = Promise.resolve();
+        if (this.authentications.BearerAuth.apiKey) {
+            authenticationPromise = authenticationPromise.then(() => this.authentications.BearerAuth.applyToRequest(localVarRequestOptions));
+        }
+        authenticationPromise = authenticationPromise.then(() => this.authentications.default.applyToRequest(localVarRequestOptions));
+
+        let interceptorPromise = authenticationPromise;
+        for (const interceptor of this.interceptors) {
+            interceptorPromise = interceptorPromise.then(() => interceptor(localVarRequestOptions));
+        }
+
+        return interceptorPromise.then(() => {
+            if (Object.keys(localVarFormParams).length) {
+                if (localVarUseFormData) {
+                    (<any>localVarRequestOptions).formData = localVarFormParams;
+                } else {
+                    localVarRequestOptions.form = localVarFormParams;
+                }
+            }
+            return new Promise<{ response: http.IncomingMessage; body: RegistrySvcListInstancesResponse;  }>((resolve, reject) => {
+                localVarRequest(localVarRequestOptions, (error, response, body) => {
+                    if (error) {
+                        reject(error);
+                    } else {
+                        if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
+                            body = ObjectSerializer.deserialize(body, "RegistrySvcListInstancesResponse");
                             resolve({ response: response, body: body });
                         } else {
                             reject(new HttpError(response, body, response.statusCode));
@@ -233,167 +393,12 @@ export class RegistrySvcApi {
         });
     }
     /**
-     * Retrieves a list of all service definitions or filters them by specific criteria.
-     * @summary List Service Definitions
+     * Registers an instance, associating an instance address with a slug acquired from the bearer token.
+     * @summary Register Instance
+     * @param request Register Instance Request
      */
-    public async listServiceDefinitions (options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: RegistrySvcListServiceDefinitionsResponse;  }> {
-        const localVarPath = this.basePath + '/registry-svc/service-definitions';
-        let localVarQueryParameters: any = {};
-        let localVarHeaderParams: any = (<any>Object).assign({}, this._defaultHeaders);
-        const produces = ['application/json'];
-        // give precedence to 'application/json'
-        if (produces.indexOf('application/json') >= 0) {
-            localVarHeaderParams.Accept = 'application/json';
-        } else {
-            localVarHeaderParams.Accept = produces.join(',');
-        }
-        let localVarFormParams: any = {};
-
-        (<any>Object).assign(localVarHeaderParams, options.headers);
-
-        let localVarUseFormData = false;
-
-        let localVarRequestOptions: localVarRequest.Options = {
-            method: 'GET',
-            qs: localVarQueryParameters,
-            headers: localVarHeaderParams,
-            uri: localVarPath,
-            useQuerystring: this._useQuerystring,
-            json: true,
-        };
-
-        let authenticationPromise = Promise.resolve();
-        if (this.authentications.BearerAuth.apiKey) {
-            authenticationPromise = authenticationPromise.then(() => this.authentications.BearerAuth.applyToRequest(localVarRequestOptions));
-        }
-        authenticationPromise = authenticationPromise.then(() => this.authentications.default.applyToRequest(localVarRequestOptions));
-
-        let interceptorPromise = authenticationPromise;
-        for (const interceptor of this.interceptors) {
-            interceptorPromise = interceptorPromise.then(() => interceptor(localVarRequestOptions));
-        }
-
-        return interceptorPromise.then(() => {
-            if (Object.keys(localVarFormParams).length) {
-                if (localVarUseFormData) {
-                    (<any>localVarRequestOptions).formData = localVarFormParams;
-                } else {
-                    localVarRequestOptions.form = localVarFormParams;
-                }
-            }
-            return new Promise<{ response: http.IncomingMessage; body: RegistrySvcListServiceDefinitionsResponse;  }>((resolve, reject) => {
-                localVarRequest(localVarRequestOptions, (error, response, body) => {
-                    if (error) {
-                        reject(error);
-                    } else {
-                        if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
-                            body = ObjectSerializer.deserialize(body, "RegistrySvcListServiceDefinitionsResponse");
-                            resolve({ response: response, body: body });
-                        } else {
-                            reject(new HttpError(response, body, response.statusCode));
-                        }
-                    }
-                });
-            });
-        });
-    }
-    /**
-     * Retrieves a list of all registered service instances or filters them by specific criteria (e.g., host, IP).
-     * @summary List Service Instances
-     * @param scheme Scheme to filter by
-     * @param ip IP to filter by
-     * @param host Host to filter by
-     * @param ip2 IP to filter by
-     * @param id Id to filter by
-     */
-    public async listServiceInstances (scheme?: string, ip?: string, host?: string, ip2?: string, id?: string, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: RegistrySvcListServiceInstancesResponse;  }> {
-        const localVarPath = this.basePath + '/registry-svc/service-instances';
-        let localVarQueryParameters: any = {};
-        let localVarHeaderParams: any = (<any>Object).assign({}, this._defaultHeaders);
-        const produces = ['application/json'];
-        // give precedence to 'application/json'
-        if (produces.indexOf('application/json') >= 0) {
-            localVarHeaderParams.Accept = 'application/json';
-        } else {
-            localVarHeaderParams.Accept = produces.join(',');
-        }
-        let localVarFormParams: any = {};
-
-        if (scheme !== undefined) {
-            localVarQueryParameters['scheme'] = ObjectSerializer.serialize(scheme, "string");
-        }
-
-        if (ip !== undefined) {
-            localVarQueryParameters['ip'] = ObjectSerializer.serialize(ip, "string");
-        }
-
-        if (host !== undefined) {
-            localVarQueryParameters['host'] = ObjectSerializer.serialize(host, "string");
-        }
-
-        if (ip2 !== undefined) {
-            localVarQueryParameters['ip'] = ObjectSerializer.serialize(ip2, "string");
-        }
-
-        if (id !== undefined) {
-            localVarQueryParameters['id'] = ObjectSerializer.serialize(id, "string");
-        }
-
-        (<any>Object).assign(localVarHeaderParams, options.headers);
-
-        let localVarUseFormData = false;
-
-        let localVarRequestOptions: localVarRequest.Options = {
-            method: 'GET',
-            qs: localVarQueryParameters,
-            headers: localVarHeaderParams,
-            uri: localVarPath,
-            useQuerystring: this._useQuerystring,
-            json: true,
-        };
-
-        let authenticationPromise = Promise.resolve();
-        if (this.authentications.BearerAuth.apiKey) {
-            authenticationPromise = authenticationPromise.then(() => this.authentications.BearerAuth.applyToRequest(localVarRequestOptions));
-        }
-        authenticationPromise = authenticationPromise.then(() => this.authentications.default.applyToRequest(localVarRequestOptions));
-
-        let interceptorPromise = authenticationPromise;
-        for (const interceptor of this.interceptors) {
-            interceptorPromise = interceptorPromise.then(() => interceptor(localVarRequestOptions));
-        }
-
-        return interceptorPromise.then(() => {
-            if (Object.keys(localVarFormParams).length) {
-                if (localVarUseFormData) {
-                    (<any>localVarRequestOptions).formData = localVarFormParams;
-                } else {
-                    localVarRequestOptions.form = localVarFormParams;
-                }
-            }
-            return new Promise<{ response: http.IncomingMessage; body: RegistrySvcListServiceInstancesResponse;  }>((resolve, reject) => {
-                localVarRequest(localVarRequestOptions, (error, response, body) => {
-                    if (error) {
-                        reject(error);
-                    } else {
-                        if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
-                            body = ObjectSerializer.deserialize(body, "RegistrySvcListServiceInstancesResponse");
-                            resolve({ response: response, body: body });
-                        } else {
-                            reject(new HttpError(response, body, response.statusCode));
-                        }
-                    }
-                });
-            });
-        });
-    }
-    /**
-     * Registers a new service instance, associating an service instance address with a slug acquired from the bearer token.
-     * @summary Register Service Instance
-     * @param request Register Service Instance Request
-     */
-    public async registerServiceInstance (request: RegistrySvcRegisterServiceInstanceRequest, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: object;  }> {
-        const localVarPath = this.basePath + '/registry-svc/service-instance';
+    public async registerInstance (request: RegistrySvcRegisterInstanceRequest, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: object;  }> {
+        const localVarPath = this.basePath + '/registry-svc/instance';
         let localVarQueryParameters: any = {};
         let localVarHeaderParams: any = (<any>Object).assign({}, this._defaultHeaders);
         const produces = ['application/json'];
@@ -407,7 +412,7 @@ export class RegistrySvcApi {
 
         // verify required parameter 'request' is not null or undefined
         if (request === null || request === undefined) {
-            throw new Error('Required parameter request was null or undefined when calling registerServiceInstance.');
+            throw new Error('Required parameter request was null or undefined when calling registerInstance.');
         }
 
         (<any>Object).assign(localVarHeaderParams, options.headers);
@@ -421,7 +426,7 @@ export class RegistrySvcApi {
             uri: localVarPath,
             useQuerystring: this._useQuerystring,
             json: true,
-            body: ObjectSerializer.serialize(request, "RegistrySvcRegisterServiceInstanceRequest")
+            body: ObjectSerializer.serialize(request, "RegistrySvcRegisterInstanceRequest")
         };
 
         let authenticationPromise = Promise.resolve();
@@ -460,12 +465,12 @@ export class RegistrySvcApi {
         });
     }
     /**
-     * Removes a registered service instance based on the service ID.
-     * @summary Remove Service Instance
-     * @param id Service Instance ID
+     * Removes a registered instance based on the instnce ID.
+     * @summary Remove Instance
+     * @param id Instance ID
      */
-    public async removeServiceInstance (id: string, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body?: any;  }> {
-        const localVarPath = this.basePath + '/registry-svc/service-instance/{id}'
+    public async removeInstance (id: string, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body?: any;  }> {
+        const localVarPath = this.basePath + '/registry-svc/instance/{id}'
             .replace('{' + 'id' + '}', encodeURIComponent(String(id)));
         let localVarQueryParameters: any = {};
         let localVarHeaderParams: any = (<any>Object).assign({}, this._defaultHeaders);
@@ -480,7 +485,7 @@ export class RegistrySvcApi {
 
         // verify required parameter 'id' is not null or undefined
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling removeServiceInstance.');
+            throw new Error('Required parameter id was null or undefined when calling removeInstance.');
         }
 
         (<any>Object).assign(localVarHeaderParams, options.headers);
@@ -531,12 +536,12 @@ export class RegistrySvcApi {
         });
     }
     /**
-     * Registers a new service definition, associating an service definition address with a slug acquired from the bearer token.
-     * @summary Register Service Definition
+     * Registers a new definition, associating an definition address with a slug acquired from the bearer token.
+     * @summary Register a Definition
      * @param request Register Service Definition Request
      */
-    public async saveServiceDefinition (request: RegistrySvcSaveServiceDefinitionRequest, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: object;  }> {
-        const localVarPath = this.basePath + '/registry-svc/service-definition';
+    public async saveDefinition (request: RegistrySvcSaveDefinitionRequest, options: {headers: {[name: string]: string}} = {headers: {}}) : Promise<{ response: http.IncomingMessage; body: object;  }> {
+        const localVarPath = this.basePath + '/registry-svc/definition';
         let localVarQueryParameters: any = {};
         let localVarHeaderParams: any = (<any>Object).assign({}, this._defaultHeaders);
         const produces = ['application/json'];
@@ -550,7 +555,7 @@ export class RegistrySvcApi {
 
         // verify required parameter 'request' is not null or undefined
         if (request === null || request === undefined) {
-            throw new Error('Required parameter request was null or undefined when calling saveServiceDefinition.');
+            throw new Error('Required parameter request was null or undefined when calling saveDefinition.');
         }
 
         (<any>Object).assign(localVarHeaderParams, options.headers);
@@ -564,7 +569,7 @@ export class RegistrySvcApi {
             uri: localVarPath,
             useQuerystring: this._useQuerystring,
             json: true,
-            body: ObjectSerializer.serialize(request, "RegistrySvcSaveServiceDefinitionRequest")
+            body: ObjectSerializer.serialize(request, "RegistrySvcSaveDefinitionRequest")
         };
 
         let authenticationPromise = Promise.resolve();

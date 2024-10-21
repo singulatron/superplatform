@@ -51,11 +51,23 @@ export interface DeploySvcDeployment {
      */
     autoScaling?: DeploySvcAutoScalingConfig;
     /**
+     * Description of what this deployment does
+     * @type {string}
+     * @memberof DeploySvcDeployment
+     */
+    description?: string;
+    /**
      * ID of the deployment (e.g., "depl_dbOdi5eLQK")
      * @type {string}
      * @memberof DeploySvcDeployment
      */
-    id?: string;
+    id: string;
+    /**
+     * Short name for easy reference (e.g., "user-service-v2")
+     * @type {string}
+     * @memberof DeploySvcDeployment
+     */
+    name?: string;
     /**
      * Number of container instances to run
      * @type {number}
@@ -92,6 +104,7 @@ export interface DeploySvcDeployment {
  * Check if a given object implements the DeploySvcDeployment interface.
  */
 export function instanceOfDeploySvcDeployment(value: object): value is DeploySvcDeployment {
+    if (!('id' in value) || value['id'] === undefined) return false;
     if (!('serviceDefinitionId' in value) || value['serviceDefinitionId'] === undefined) return false;
     return true;
 }
@@ -107,7 +120,9 @@ export function DeploySvcDeploymentFromJSONTyped(json: any, ignoreDiscriminator:
     return {
         
         'autoScaling': json['autoScaling'] == null ? undefined : DeploySvcAutoScalingConfigFromJSON(json['autoScaling']),
-        'id': json['id'] == null ? undefined : json['id'],
+        'description': json['description'] == null ? undefined : json['description'],
+        'id': json['id'],
+        'name': json['name'] == null ? undefined : json['name'],
         'replicas': json['replicas'] == null ? undefined : json['replicas'],
         'resources': json['resources'] == null ? undefined : DeploySvcResourceLimitsFromJSON(json['resources']),
         'serviceDefinitionId': json['serviceDefinitionId'],
@@ -123,7 +138,9 @@ export function DeploySvcDeploymentToJSON(value?: DeploySvcDeployment | null): a
     return {
         
         'autoScaling': DeploySvcAutoScalingConfigToJSON(value['autoScaling']),
+        'description': value['description'],
         'id': value['id'],
+        'name': value['name'],
         'replicas': value['replicas'],
         'resources': DeploySvcResourceLimitsToJSON(value['resources']),
         'serviceDefinitionId': value['serviceDefinitionId'],

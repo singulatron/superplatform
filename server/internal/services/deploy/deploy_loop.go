@@ -61,12 +61,12 @@ func (ns *DeployService) cycle() error {
 		return errors.Wrap(err, "Error calling list nodes")
 	}
 
-	listServiceInstancesRsp, _, err := registry.ListServiceInstances(ctx).Execute()
+	listServiceInstancesRsp, _, err := registry.ListInstances(ctx).Execute()
 	if err != nil {
 		return errors.Wrap(err, "Error calling list service instances")
 	}
 
-	listServiceDefinitionsRsp, _, err := registry.ListServiceDefinitions(ctx).Execute()
+	listServiceDefinitionsRsp, _, err := registry.ListDefinitions(ctx).Execute()
 	if err != nil {
 		return errors.Wrap(err, "Error calling list service definitions")
 	}
@@ -74,7 +74,7 @@ func (ns *DeployService) cycle() error {
 	commands := allocator.GenerateCommands(listNodesRsp.Nodes, listServiceInstancesRsp.ServiceInstances, deployments)
 	for _, command := range commands {
 		var node *openapi.RegistrySvcNode
-		var definition *openapi.RegistrySvcServiceDefinition
+		var definition *openapi.RegistrySvcDefinition
 
 		for _, v := range listNodesRsp.Nodes {
 			if v.Url == command.NodeUrl {
@@ -101,7 +101,7 @@ func (ns *DeployService) processCommand(
 	ctx context.Context,
 	command *deploy.Command,
 	node *openapi.RegistrySvcNode,
-	serviceDefinition *openapi.RegistrySvcServiceDefinition,
+	serviceDefinition *openapi.RegistrySvcDefinition,
 ) error {
 	switch command.Action {
 	case deploy.CommandTypeStart:

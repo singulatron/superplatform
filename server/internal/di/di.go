@@ -486,23 +486,23 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 		policyService.UpsertInstance(w, r)
 	})).Methods("OPTIONS", "PUT")
 
-	router.HandleFunc("/registry-svc/service-instances", appl(func(w http.ResponseWriter, r *http.Request) {
-		registryService.ListServiceInstances(w, r)
+	router.HandleFunc("/registry-svc/instances", appl(func(w http.ResponseWriter, r *http.Request) {
+		registryService.ListInstances(w, r)
 	})).Methods("OPTIONS", "GET")
-	router.HandleFunc("/registry-svc/service-definitions", appl(func(w http.ResponseWriter, r *http.Request) {
-		registryService.ListServiceDefinitions(w, r)
+	router.HandleFunc("/registry-svc/definitions", appl(func(w http.ResponseWriter, r *http.Request) {
+		registryService.ListDefinitions(w, r)
 	})).Methods("OPTIONS", "GET")
-	router.HandleFunc("/registry-svc/service-instance", appl(func(w http.ResponseWriter, r *http.Request) {
-		registryService.RegisterServiceInstance(w, r)
+	router.HandleFunc("/registry-svc/instance", appl(func(w http.ResponseWriter, r *http.Request) {
+		registryService.RegisterInstance(w, r)
 	})).Methods("OPTIONS", "PUT")
-	router.HandleFunc("/registry-svc/service-definition", appl(func(w http.ResponseWriter, r *http.Request) {
-		registryService.SaveServiceDefinition(w, r)
+	router.HandleFunc("/registry-svc/definition", appl(func(w http.ResponseWriter, r *http.Request) {
+		registryService.SaveDefinition(w, r)
 	})).Methods("OPTIONS", "PUT")
-	router.HandleFunc("/registry-svc/service-instance/{id}", appl(func(w http.ResponseWriter, r *http.Request) {
-		registryService.RemoveServiceInstance(w, r)
+	router.HandleFunc("/registry-svc/instance/{id}", appl(func(w http.ResponseWriter, r *http.Request) {
+		registryService.RemoveInstance(w, r)
 	})).Methods("OPTIONS", "DELETE")
-	router.HandleFunc("/registry-svc/service-definition/{id}", appl(func(w http.ResponseWriter, r *http.Request) {
-		registryService.DeleteServiceDefinition(w, r)
+	router.HandleFunc("/registry-svc/definition/{id}", appl(func(w http.ResponseWriter, r *http.Request) {
+		registryService.DeleteDefinition(w, r)
 	})).Methods("OPTIONS", "DELETE")
 
 	router.HandleFunc("/deploy-svc/deployment", appl(func(w http.ResponseWriter, r *http.Request) {

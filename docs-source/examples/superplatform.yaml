@@ -266,9 +266,17 @@ definitions:
         allOf:
         - $ref: '#/definitions/deploy_svc.AutoScalingConfig'
         description: 'Optional: Auto-scaling rules'
+      description:
+        description: Description of what this deployment does
+        example: Handles user service requests
+        type: string
       id:
         description: ID of the deployment (e.g., "depl_dbOdi5eLQK")
         example: depl_dbOdi5eLQK
+        type: string
+      name:
+        description: Short name for easy reference (e.g., "user-service-v2")
+        example: user-service-v2
         type: string
       replicas:
         description: Number of container instances to run
@@ -291,6 +299,7 @@ definitions:
           $ref: '#/definitions/deploy_svc.TargetRegion'
         type: array
     required:
+    - id
     - serviceDefinitionId
     type: object
   deploy_svc.DeploymentStrategy:
@@ -1106,6 +1115,28 @@ definitions:
     - language
     - url
     type: object
+  registry_svc.Definition:
+    properties:
+      apiSpecs:
+        description: API Specs such as OpenAPI definitions etc.
+        items:
+          $ref: '#/definitions/registry_svc.APISpec'
+        type: array
+      clients:
+        description: Programming language clients such as on npm or GitHub.
+        items:
+          $ref: '#/definitions/registry_svc.Client'
+        type: array
+      id:
+        type: string
+      image:
+        allOf:
+        - $ref: '#/definitions/registry_svc.ImageSpec'
+        description: Container specifications for Docker, K8s, etc.
+    required:
+    - id
+    - image
+    type: object
   registry_svc.ErrorResponse:
     properties:
       error:
@@ -1157,6 +1188,53 @@ definitions:
     - name
     - port
     type: object
+  registry_svc.Instance:
+    properties:
+      deploymentId:
+        description: The ID of the deployment that this instance is an instance of.
+        example: depl_deBUCtJirc
+        type: string
+      host:
+        description: Host of the instance address. Required if URL is not provided
+        example: myserver.com
+        type: string
+      id:
+        description: 'Required: ID of the instance'
+        example: https://api.com:999/user-svc
+        type: string
+      ip:
+        description: 'IP of the instance address. Optional: to register by IP instead
+          of host'
+        example: 8.8.8.8
+        type: string
+      lastHeartbeat:
+        description: Last time the instance gave a sign of life
+        type: string
+      nodeUrl:
+        description: URL of the Singulatron daemon
+        example: https://myserver.com:58231
+        type: string
+      path:
+        description: Path of the instance address. Optional (e.g., "/api")
+        example: /your-svc
+        type: string
+      port:
+        description: Port of the instance address. Required if URL is not provided
+        example: 8080
+        type: integer
+      scheme:
+        description: Scheme of the instance address. Required if URL is not provided.
+        example: https
+        type: string
+      url:
+        description: Full address URL of the instance.
+        example: https://myserver.com:5981
+        type: string
+    required:
+    - deploymentId
+    - id
+    - url
+    type: object
   registry_svc.Language:
     enum:
     - JavaScript
@@ -1199,6 +1277,20 @@ definitions:
     - Elixir
     - ObjectiveC
     - FSharp
+  registry_svc.ListDefinitionsResponse:
+    properties:
+      serviceDefinitions:
+        items:
+          $ref: '#/definitions/registry_svc.Definition'
+        type: array
+    type: object
+  registry_svc.ListInstancesResponse:
+    properties:
+      serviceInstances:
+        items:
+          $ref: '#/definitions/registry_svc.Instance'
+        type: array
+    type: object
   registry_svc.ListNodesRequest:
     type: object
   registry_svc.ListNodesResponse:
@@ -1206,20 +1298,6 @@ definitions:
       nodes:
         items:
           $ref: '#/definitions/registry_svc.Node'
-        type: array
-    type: object
-  registry_svc.ListServiceDefinitionsResponse:
-    properties:
-      serviceDefinitions:
-        items:
-          $ref: '#/definitions/registry_svc.ServiceDefinition'
-        type: array
-    type: object
-  registry_svc.ListServiceInstancesResponse:
-    properties:
-      serviceInstances:
-        items:
-          $ref: '#/definitions/registry_svc.ServiceInstance'
         type: array
     type: object
   registry_svc.Node:
@@ -1257,44 +1335,41 @@ definitions:
       processName:
         type: string
     type: object
-  registry_svc.RegisterServiceInstanceRequest:
+  registry_svc.RegisterInstanceRequest:
     properties:
-      host:
-        description: Host of the service instance address. Required if URL is not
-          provided
-        example: myserver.com
-        type: string
-      ip:
-        description: 'IP of the service instance address. Optional: to register by
-          IP instead of host'
-        example: 8.8.8.8
-        type: string
-      path:
-        description: Path of the service instance address. Optional (e.g., "/api")
-        example: /your-svc
-        type: string
-      port:
-        description: Port of the service instance address. Required if URL is not
-          provided
-        example: 8080
-        type: integer
-      scheme:
-        description: Scheme of the service instance address. Required if URL is not
-          provided.
-        example: https
-        type: string
-      serviceDefinitionId:
+      definitionId:
         description: The service definition id.
         example: user-svc
         type: string
+      host:
+        description: Host of the instance address. Required if URL is not provided
+        example: myserver.com
+        type: string
+      ip:
+        description: 'IP of the instance address. Optional: to register by IP instead
+          of host'
+        example: 8.8.8.8
+        type: string
+      path:
+        description: Path of the instance address. Optional (e.g., "/api")
+        example: /your-svc
+        type: string
+      port:
+        description: Port of the instance address. Required if URL is not provided
+        example: 8080
+        type: integer
+      scheme:
+        description: Scheme of the instance address. Required if URL is not provided.
+        example: https
+        type: string
       url:
-        description: Full address URL of the service instance.
+        description: Full address URL of the instance.
         example: https://myserver.com:5981
         type: string
     required:
-    - serviceDefinitionId
+    - definitionId
     type: object
-  registry_svc.RegisterServiceInstanceResponse:
+  registry_svc.RegisterInstanceResponse:
     type: object
   registry_svc.ResourceUsage:
     properties:
@@ -1311,81 +1386,12 @@ definitions:
         - $ref: '#/definitions/registry_svc.Usage'
         description: Memory usage metrics.
     type: object
-  registry_svc.SaveServiceDefinitionRequest:
+  registry_svc.SaveDefinitionRequest:
     properties:
       serviceDefinition:
-        $ref: '#/definitions/registry_svc.ServiceDefinition'
+        $ref: '#/definitions/registry_svc.Definition'
     type: object
-  registry_svc.SaveServiceDefinitionResponse:
-    type: object
-  registry_svc.ServiceDefinition:
-    properties:
-      apiSpecs:
-        description: API Specs such as OpenAPI definitions etc.
-        items:
-          $ref: '#/definitions/registry_svc.APISpec'
-        type: array
-      clients:
-        description: Programming language clients such as on npm or GitHub.
-        items:
-          $ref: '#/definitions/registry_svc.Client'
-        type: array
-      id:
-        type: string
-      image:
-        allOf:
-        - $ref: '#/definitions/registry_svc.ImageSpec'
-        description: Container specifications for Docker, K8s, etc.
-    type: object
-  registry_svc.ServiceInstance:
-    properties:
-      deploymentId:
-        description: The ID of the deployment that this instance is an instance of.
-        example: depl_deBUCtJirc
-        type: string
-      host:
-        description: Host of the service instance address. Required if URL is not
-          provided
-        example: myserver.com
-        type: string
-      id:
-        description: 'Required: ID of the service instance'
-        example: https://api.com:999/user-svc
-        type: string
-      ip:
-        description: 'IP of the service instance address. Optional: to register by
-          IP instead of host'
-        example: 8.8.8.8
-        type: string
-      lastHeartbeat:
-        description: Last time the instance gave a sign of life
-        type: string
-      nodeUrl:
-        description: URL of the Singulatron daemon
-        example: https://myserver.com:58231
-        type: string
-      path:
-        description: Path of the service instance address. Optional (e.g., "/api")
-        example: /your-svc
-        type: string
-      port:
-        description: Port of the service instance address. Required if URL is not
-          provided
-        example: 8080
-        type: integer
-      scheme:
-        description: Scheme of the service instance address. Required if URL is not
-          provided.
-        example: https
-        type: string
-      url:
-        description: Full address URL of the service instance.
-        example: https://myserver.com:5981
-        type: string
-    required:
-    - deploymentId
-    - id
-    - url
+  registry_svc.SaveDefinitionResponse:
     type: object
   registry_svc.Usage:
     properties:
@@ -3224,6 +3230,237 @@ paths:
       summary: Remove Prompt
       tags:
       - Prompt Svc
+  /registry-svc/definition:
+    put:
+      consumes:
+      - application/json
+      description: Registers a new definition, associating an definition address with
+        a slug acquired from the bearer token.
+      operationId: saveDefinition
+      parameters:
+      - description: Register Service Definition Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/registry_svc.SaveDefinitionRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/registry_svc.SaveDefinitionResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Register a Definition
+      tags:
+      - Registry Svc
+  /registry-svc/definition/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a registered definition by ID.
+      operationId: deleteDefinition
+      parameters:
+      - description: Definition ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+        "404":
+          description: Service not found
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete Definition
+      tags:
+      - Registry Svc
+  /registry-svc/definitions:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of all definitions or filters them by specific
+        criteria.
+      operationId: listDefinitions
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/registry_svc.ListDefinitionsResponse'
+        "400":
+          description: Invalid filters
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: List Definitions
+      tags:
+      - Registry Svc
+  /registry-svc/instance:
+    put:
+      consumes:
+      - application/json
+      description: Registers an instance, associating an instance address with a slug
+        acquired from the bearer token.
+      operationId: registerInstance
+      parameters:
+      - description: Register Instance Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/registry_svc.RegisterInstanceRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/registry_svc.RegisterInstanceResponse'
+        "400":
+          description: Invalid JSON
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Register Instance
+      tags:
+      - Registry Svc
+  /registry-svc/instance/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Removes a registered instance based on the instnce ID.
+      operationId: removeInstance
+      parameters:
+      - description: Instance ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+        "404":
+          description: Service not found
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Remove Instance
+      tags:
+      - Registry Svc
+  /registry-svc/instances:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of all instances or filters them by specific criteria
+        (e.g., host, IP).
+      operationId: listInstances
+      parameters:
+      - description: Scheme to filter by
+        in: query
+        name: scheme
+        type: string
+      - description: IP to filter by
+        in: query
+        name: ip
+        type: string
+      - description: Deployment ID to filter by
+        in: query
+        name: deploymentId
+        type: string
+      - description: Host to filter by
+        in: query
+        name: host
+        type: string
+      - description: IP to filter by
+        in: query
+        name: ip
+        type: string
+      - description: Id to filter by
+        in: query
+        name: id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/registry_svc.ListInstancesResponse'
+        "400":
+          description: Invalid filters
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: List Service Instances
+      tags:
+      - Registry Svc
   /registry-svc/nodes:
     post:
       consumes:
@@ -3258,233 +3495,6 @@ paths:
       security:
       - BearerAuth: []
       summary: List Nodes
-      tags:
-      - Registry Svc
-  /registry-svc/service-definition:
-    put:
-      consumes:
-      - application/json
-      description: Registers a new service definition, associating an service definition
-        address with a slug acquired from the bearer token.
-      operationId: saveServiceDefinition
-      parameters:
-      - description: Register Service Definition Request
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/registry_svc.SaveServiceDefinitionRequest'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Created
-          schema:
-            $ref: '#/definitions/registry_svc.SaveServiceDefinitionResponse'
-        "400":
-          description: Invalid JSON
-          schema:
-            $ref: '#/definitions/registry_svc.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/registry_svc.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/registry_svc.ErrorResponse'
-      security:
-      - BearerAuth: []
-      summary: Register Service Definition
-      tags:
-      - Registry Svc
-  /registry-svc/service-definition/{id}:
-    delete:
-      consumes:
-      - application/json
-      description: Deletes a registered service definition based on the service ID.
-      operationId: deleteServiceDefinition
-      parameters:
-      - description: Service Definition ID
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "204":
-          description: No Content
-        "400":
-          description: Invalid ID
-          schema:
-            $ref: '#/definitions/registry_svc.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/registry_svc.ErrorResponse'
-        "404":
-          description: Service not found
-          schema:
-            $ref: '#/definitions/registry_svc.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/registry_svc.ErrorResponse'
-      security:
-      - BearerAuth: []
-      summary: Delete Service Definition
-      tags:
-      - Registry Svc
-  /registry-svc/service-definitions:
-    get:
-      consumes:
-      - application/json
-      description: Retrieves a list of all service definitions or filters them by
-        specific criteria.
-      operationId: listServiceDefinitions
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/registry_svc.ListServiceDefinitionsResponse'
-        "400":
-          description: Invalid filters
-          schema:
-            $ref: '#/definitions/registry_svc.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/registry_svc.ErrorResponse'
-      security:
-      - BearerAuth: []
-      summary: List Service Definitions
-      tags:
-      - Registry Svc
-  /registry-svc/service-instance:
-    put:
-      consumes:
-      - application/json
-      description: Registers a new service instance, associating an service instance
-        address with a slug acquired from the bearer token.
-      operationId: registerServiceInstance
-      parameters:
-      - description: Register Service Instance Request
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/registry_svc.RegisterServiceInstanceRequest'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Created
-          schema:
-            $ref: '#/definitions/registry_svc.RegisterServiceInstanceResponse'
-        "400":
-          description: Invalid JSON
-          schema:
-            $ref: '#/definitions/registry_svc.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/registry_svc.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/registry_svc.ErrorResponse'
-      security:
-      - BearerAuth: []
-      summary: Register Service Instance
-      tags:
-      - Registry Svc
-  /registry-svc/service-instance/{id}:
-    delete:
-      consumes:
-      - application/json
-      description: Removes a registered service instance based on the service ID.
-      operationId: removeServiceInstance
-      parameters:
-      - description: Service Instance ID
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "204":
-          description: No Content
-        "400":
-          description: Invalid ID
-          schema:
-            $ref: '#/definitions/registry_svc.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/registry_svc.ErrorResponse'
-        "404":
-          description: Service not found
-          schema:
-            $ref: '#/definitions/registry_svc.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/registry_svc.ErrorResponse'
-      security:
-      - BearerAuth: []
-      summary: Remove Service Instance
-      tags:
-      - Registry Svc
-  /registry-svc/service-instances:
-    get:
-      consumes:
-      - application/json
-      description: Retrieves a list of all registered service instances or filters
-        them by specific criteria (e.g., host, IP).
-      operationId: listServiceInstances
-      parameters:
-      - description: Scheme to filter by
-        in: query
-        name: scheme
-        type: string
-      - description: IP to filter by
-        in: query
-        name: ip
-        type: string
-      - description: Host to filter by
-        in: query
-        name: host
-        type: string
-      - description: IP to filter by
-        in: query
-        name: ip
-        type: string
-      - description: Id to filter by
-        in: query
-        name: id
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/registry_svc.ListServiceInstancesResponse'
-        "400":
-          description: Invalid filters
-          schema:
-            $ref: '#/definitions/registry_svc.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/registry_svc.ErrorResponse'
-      security:
-      - BearerAuth: []
-      summary: List Service Instances
       tags:
       - Registry Svc
   /user-svc/change-password:
