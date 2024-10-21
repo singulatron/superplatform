@@ -22,9 +22,21 @@ export class DeploySvcDeployment {
     */
     'autoScaling'?: DeploySvcAutoScalingConfig;
     /**
+    * DefinitionId is the id of the definition
+    */
+    'definitionId': string;
+    /**
+    * Description of what this deployment does
+    */
+    'description'?: string;
+    /**
     * ID of the deployment (e.g., \"depl_dbOdi5eLQK\")
     */
-    'id'?: string;
+    'id': string;
+    /**
+    * Short name for easy reference (e.g., \"user-service-v2\")
+    */
+    'name'?: string;
     /**
     * Number of container instances to run
     */
@@ -33,10 +45,6 @@ export class DeploySvcDeployment {
     * Resource requirements for each replica
     */
     'resources'?: DeploySvcResourceLimits;
-    /**
-    * The User Svc slug of the service that is being deployed.
-    */
-    'serviceSlug': string;
     /**
     * Deployment strategy (e.g., rolling update)
     */
@@ -55,8 +63,23 @@ export class DeploySvcDeployment {
             "type": "DeploySvcAutoScalingConfig"
         },
         {
+            "name": "definitionId",
+            "baseName": "definitionId",
+            "type": "string"
+        },
+        {
+            "name": "description",
+            "baseName": "description",
+            "type": "string"
+        },
+        {
             "name": "id",
             "baseName": "id",
+            "type": "string"
+        },
+        {
+            "name": "name",
+            "baseName": "name",
             "type": "string"
         },
         {
@@ -68,11 +91,6 @@ export class DeploySvcDeployment {
             "name": "resources",
             "baseName": "resources",
             "type": "DeploySvcResourceLimits"
-        },
-        {
-            "name": "serviceSlug",
-            "baseName": "serviceSlug",
-            "type": "string"
         },
         {
             "name": "strategy",

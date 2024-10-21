@@ -494,9 +494,6 @@ class UserSvcApi extends BaseAPI {
             if (requestParameters['permissionId'] == null) {
                 throw new RequiredError('permissionId', 'Required parameter "permissionId" was null or undefined when calling isAuthorized().');
             }
-            if (requestParameters['body'] == null) {
-                throw new RequiredError('body', 'Required parameter "body" was null or undefined when calling isAuthorized().');
-            }
             const queryParameters = {};
             const headerParameters = {};
             headerParameters['Content-Type'] = 'application/json';

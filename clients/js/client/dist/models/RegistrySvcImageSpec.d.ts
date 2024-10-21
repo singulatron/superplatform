@@ -16,13 +16,13 @@
  */
 export interface RegistrySvcImageSpec {
     /**
-     * Image is the Docker image to use for the container
+     * Name is the container image name/URL to use for the container
      * @type {string}
      * @memberof RegistrySvcImageSpec
      */
-    image: string;
+    name: string;
     /**
-     * Port is the port number that the container will expose
+     * Port is the port number that the container will listen on internally
      * @type {number}
      * @memberof RegistrySvcImageSpec
      */

@@ -22,9 +22,9 @@ var _ MappedNullable = &RegistrySvcImageSpec{}
 
 // RegistrySvcImageSpec struct for RegistrySvcImageSpec
 type RegistrySvcImageSpec struct {
-	// Image is the Docker image to use for the container
-	Image string `json:"image"`
-	// Port is the port number that the container will expose
+	// Name is the container image name/URL to use for the container
+	Name string `json:"name"`
+	// Port is the port number that the container will listen on internally
 	Port int32 `json:"port"`
 }
 
@@ -34,9 +34,9 @@ type _RegistrySvcImageSpec RegistrySvcImageSpec
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewRegistrySvcImageSpec(image string, port int32) *RegistrySvcImageSpec {
+func NewRegistrySvcImageSpec(name string, port int32) *RegistrySvcImageSpec {
 	this := RegistrySvcImageSpec{}
-	this.Image = image
+	this.Name = name
 	this.Port = port
 	return &this
 }
@@ -49,28 +49,28 @@ func NewRegistrySvcImageSpecWithDefaults() *RegistrySvcImageSpec {
 	return &this
 }
 
-// GetImage returns the Image field value
-func (o *RegistrySvcImageSpec) GetImage() string {
+// GetName returns the Name field value
+func (o *RegistrySvcImageSpec) GetName() string {
 	if o == nil {
 		var ret string
 		return ret
 	}
 
-	return o.Image
+	return o.Name
 }
 
-// GetImageOk returns a tuple with the Image field value
+// GetNameOk returns a tuple with the Name field value
 // and a boolean to check if the value has been set.
-func (o *RegistrySvcImageSpec) GetImageOk() (*string, bool) {
+func (o *RegistrySvcImageSpec) GetNameOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Image, true
+	return &o.Name, true
 }
 
-// SetImage sets field value
-func (o *RegistrySvcImageSpec) SetImage(v string) {
-	o.Image = v
+// SetName sets field value
+func (o *RegistrySvcImageSpec) SetName(v string) {
+	o.Name = v
 }
 
 // GetPort returns the Port field value
@@ -107,7 +107,7 @@ func (o RegistrySvcImageSpec) MarshalJSON() ([]byte, error) {
 
 func (o RegistrySvcImageSpec) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["image"] = o.Image
+	toSerialize["name"] = o.Name
 	toSerialize["port"] = o.Port
 	return toSerialize, nil
 }
@@ -117,7 +117,7 @@ func (o *RegistrySvcImageSpec) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"image",
+		"name",
 		"port",
 	}
 

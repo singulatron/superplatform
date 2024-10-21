@@ -17,8 +17,12 @@ const (
 )
 
 type Command struct {
-	Action      CommandType // e.g., "START", "KILL", "SCALE"
-	ServiceSlug string      // The User Svc slug of the service affected
-	NodeUrl     *string     // Node address, e.g., "https://api.com:999"
-	InstanceId  *string     // Instance id, e.g., "https://api.com:999/user-svc"
+	Action CommandType // e.g., "START", "KILL", "SCALE"
+
+	// NodeUrl is the Superplatform daemon address
+	// E.g., "https://api.com:58231"
+	NodeUrl *string
+
+	DeploymentId string
+	InstanceId   *string // Instance id, e.g., "https://api.com:999/user-svc"
 }

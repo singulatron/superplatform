@@ -472,9 +472,6 @@ export class UserSvcApi extends runtime.BaseAPI {
             if (requestParameters['permissionId'] == null) {
                 throw new runtime.RequiredError('permissionId', 'Required parameter "permissionId" was null or undefined when calling isAuthorized().');
             }
-            if (requestParameters['body'] == null) {
-                throw new runtime.RequiredError('body', 'Required parameter "body" was null or undefined when calling isAuthorized().');
-            }
             const queryParameters = {};
             const headerParameters = {};
             headerParameters['Content-Type'] = 'application/json';

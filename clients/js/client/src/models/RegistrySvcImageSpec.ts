@@ -20,13 +20,13 @@ import { mapValues } from '../runtime';
  */
 export interface RegistrySvcImageSpec {
     /**
-     * Image is the Docker image to use for the container
+     * Name is the container image name/URL to use for the container
      * @type {string}
      * @memberof RegistrySvcImageSpec
      */
-    image: string;
+    name: string;
     /**
-     * Port is the port number that the container will expose
+     * Port is the port number that the container will listen on internally
      * @type {number}
      * @memberof RegistrySvcImageSpec
      */
@@ -37,7 +37,7 @@ export interface RegistrySvcImageSpec {
  * Check if a given object implements the RegistrySvcImageSpec interface.
  */
 export function instanceOfRegistrySvcImageSpec(value: object): value is RegistrySvcImageSpec {
-    if (!('image' in value) || value['image'] === undefined) return false;
+    if (!('name' in value) || value['name'] === undefined) return false;
     if (!('port' in value) || value['port'] === undefined) return false;
     return true;
 }
@@ -52,7 +52,7 @@ export function RegistrySvcImageSpecFromJSONTyped(json: any, ignoreDiscriminator
     }
     return {
         
-        'image': json['image'],
+        'name': json['name'],
         'port': json['port'],
     };
 }
@@ -63,7 +63,7 @@ export function RegistrySvcImageSpecToJSON(value?: RegistrySvcImageSpec | null):
     }
     return {
         
-        'image': value['image'],
+        'name': value['name'],
         'port': value['port'],
     };
 }

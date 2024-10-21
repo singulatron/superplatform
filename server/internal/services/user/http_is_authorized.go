@@ -29,7 +29,7 @@ import (
 // @Accept json
 // @Produce json
 // @Param permissionId path string true "Permission ID"
-// @Param body body user.IsAuthorizedRequest true "Is Authorized Request"
+// @Param body body user.IsAuthorizedRequest false "Is Authorized Request"
 // @Success 200 {object} user.IsAuthorizedResponse
 // @Failure 400 {object} user.ErrorResponse "Invalid JSON or missing permission id"
 // @Failure 401 {object} user.ErrorResponse "Unauthorized"
@@ -58,6 +58,10 @@ func (s *UserService) IsAuthorized(
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(`missing permission id`))
 		return
+	}
+
+	if req == nil {
+		req = &user.IsAuthorizedRequest{}
 	}
 
 	usr, err := s.isAuthorized(r, permissionId, req.SlugsGranted, nil)

@@ -16,53 +16,54 @@
 import * as runtime from '../runtime';
 import type {
   RegistrySvcErrorResponse,
+  RegistrySvcListDefinitionsResponse,
+  RegistrySvcListInstancesResponse,
   RegistrySvcListNodesResponse,
-  RegistrySvcListServiceDefinitionsResponse,
-  RegistrySvcListServiceInstancesResponse,
-  RegistrySvcRegisterServiceInstanceRequest,
-  RegistrySvcSaveServiceDefinitionRequest,
+  RegistrySvcRegisterInstanceRequest,
+  RegistrySvcSaveDefinitionRequest,
 } from '../models/index';
 import {
     RegistrySvcErrorResponseFromJSON,
     RegistrySvcErrorResponseToJSON,
+    RegistrySvcListDefinitionsResponseFromJSON,
+    RegistrySvcListDefinitionsResponseToJSON,
+    RegistrySvcListInstancesResponseFromJSON,
+    RegistrySvcListInstancesResponseToJSON,
     RegistrySvcListNodesResponseFromJSON,
     RegistrySvcListNodesResponseToJSON,
-    RegistrySvcListServiceDefinitionsResponseFromJSON,
-    RegistrySvcListServiceDefinitionsResponseToJSON,
-    RegistrySvcListServiceInstancesResponseFromJSON,
-    RegistrySvcListServiceInstancesResponseToJSON,
-    RegistrySvcRegisterServiceInstanceRequestFromJSON,
-    RegistrySvcRegisterServiceInstanceRequestToJSON,
-    RegistrySvcSaveServiceDefinitionRequestFromJSON,
-    RegistrySvcSaveServiceDefinitionRequestToJSON,
+    RegistrySvcRegisterInstanceRequestFromJSON,
+    RegistrySvcRegisterInstanceRequestToJSON,
+    RegistrySvcSaveDefinitionRequestFromJSON,
+    RegistrySvcSaveDefinitionRequestToJSON,
 } from '../models/index';
 
-export interface DeleteServiceDefinitionRequest {
+export interface DeleteDefinitionRequest {
     id: string;
+}
+
+export interface ListInstancesRequest {
+    scheme?: string;
+    ip?: string;
+    deploymentId?: string;
+    host?: string;
+    ip2?: string;
+    id?: string;
 }
 
 export interface ListNodesRequest {
     body?: object;
 }
 
-export interface ListServiceInstancesRequest {
-    scheme?: string;
-    ip?: string;
-    host?: string;
-    ip2?: string;
-    id?: string;
+export interface RegisterInstanceRequest {
+    request: RegistrySvcRegisterInstanceRequest;
 }
 
-export interface RegisterServiceInstanceRequest {
-    request: RegistrySvcRegisterServiceInstanceRequest;
-}
-
-export interface RemoveServiceInstanceRequest {
+export interface RemoveInstanceRequest {
     id: string;
 }
 
-export interface SaveServiceDefinitionRequest {
-    request: RegistrySvcSaveServiceDefinitionRequest;
+export interface SaveDefinitionRequest {
+    request: RegistrySvcSaveDefinitionRequest;
 }
 
 /**
@@ -71,14 +72,14 @@ export interface SaveServiceDefinitionRequest {
 export class RegistrySvcApi extends runtime.BaseAPI {
 
     /**
-     * Deletes a registered service definition based on the service ID.
-     * Delete Service Definition
+     * Deletes a registered definition by ID.
+     * Delete Definition
      */
-    async deleteServiceDefinitionRaw(requestParameters: DeleteServiceDefinitionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async deleteDefinitionRaw(requestParameters: DeleteDefinitionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling deleteServiceDefinition().'
+                'Required parameter "id" was null or undefined when calling deleteDefinition().'
             );
         }
 
@@ -91,7 +92,7 @@ export class RegistrySvcApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/registry-svc/service-definition/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/registry-svc/definition/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -101,11 +102,99 @@ export class RegistrySvcApi extends runtime.BaseAPI {
     }
 
     /**
-     * Deletes a registered service definition based on the service ID.
-     * Delete Service Definition
+     * Deletes a registered definition by ID.
+     * Delete Definition
      */
-    async deleteServiceDefinition(requestParameters: DeleteServiceDefinitionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.deleteServiceDefinitionRaw(requestParameters, initOverrides);
+    async deleteDefinition(requestParameters: DeleteDefinitionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteDefinitionRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Retrieves a list of all definitions or filters them by specific criteria.
+     * List Definitions
+     */
+    async listDefinitionsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RegistrySvcListDefinitionsResponse>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = await this.configuration.apiKey("Authorization"); // BearerAuth authentication
+        }
+
+        const response = await this.request({
+            path: `/registry-svc/definitions`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => RegistrySvcListDefinitionsResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Retrieves a list of all definitions or filters them by specific criteria.
+     * List Definitions
+     */
+    async listDefinitions(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RegistrySvcListDefinitionsResponse> {
+        const response = await this.listDefinitionsRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Retrieves a list of all instances or filters them by specific criteria (e.g., host, IP).
+     * List Service Instances
+     */
+    async listInstancesRaw(requestParameters: ListInstancesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RegistrySvcListInstancesResponse>> {
+        const queryParameters: any = {};
+
+        if (requestParameters['scheme'] != null) {
+            queryParameters['scheme'] = requestParameters['scheme'];
+        }
+
+        if (requestParameters['ip'] != null) {
+            queryParameters['ip'] = requestParameters['ip'];
+        }
+
+        if (requestParameters['deploymentId'] != null) {
+            queryParameters['deploymentId'] = requestParameters['deploymentId'];
+        }
+
+        if (requestParameters['host'] != null) {
+            queryParameters['host'] = requestParameters['host'];
+        }
+
+        if (requestParameters['ip2'] != null) {
+            queryParameters['ip'] = requestParameters['ip2'];
+        }
+
+        if (requestParameters['id'] != null) {
+            queryParameters['id'] = requestParameters['id'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = await this.configuration.apiKey("Authorization"); // BearerAuth authentication
+        }
+
+        const response = await this.request({
+            path: `/registry-svc/instances`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => RegistrySvcListInstancesResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Retrieves a list of all instances or filters them by specific criteria (e.g., host, IP).
+     * List Service Instances
+     */
+    async listInstances(requestParameters: ListInstancesRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RegistrySvcListInstancesResponse> {
+        const response = await this.listInstancesRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
@@ -144,98 +233,14 @@ export class RegistrySvcApi extends runtime.BaseAPI {
     }
 
     /**
-     * Retrieves a list of all service definitions or filters them by specific criteria.
-     * List Service Definitions
+     * Registers an instance, associating an instance address with a slug acquired from the bearer token.
+     * Register Instance
      */
-    async listServiceDefinitionsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RegistrySvcListServiceDefinitionsResponse>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = await this.configuration.apiKey("Authorization"); // BearerAuth authentication
-        }
-
-        const response = await this.request({
-            path: `/registry-svc/service-definitions`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => RegistrySvcListServiceDefinitionsResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * Retrieves a list of all service definitions or filters them by specific criteria.
-     * List Service Definitions
-     */
-    async listServiceDefinitions(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RegistrySvcListServiceDefinitionsResponse> {
-        const response = await this.listServiceDefinitionsRaw(initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Retrieves a list of all registered service instances or filters them by specific criteria (e.g., host, IP).
-     * List Service Instances
-     */
-    async listServiceInstancesRaw(requestParameters: ListServiceInstancesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RegistrySvcListServiceInstancesResponse>> {
-        const queryParameters: any = {};
-
-        if (requestParameters['scheme'] != null) {
-            queryParameters['scheme'] = requestParameters['scheme'];
-        }
-
-        if (requestParameters['ip'] != null) {
-            queryParameters['ip'] = requestParameters['ip'];
-        }
-
-        if (requestParameters['host'] != null) {
-            queryParameters['host'] = requestParameters['host'];
-        }
-
-        if (requestParameters['ip2'] != null) {
-            queryParameters['ip'] = requestParameters['ip2'];
-        }
-
-        if (requestParameters['id'] != null) {
-            queryParameters['id'] = requestParameters['id'];
-        }
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = await this.configuration.apiKey("Authorization"); // BearerAuth authentication
-        }
-
-        const response = await this.request({
-            path: `/registry-svc/service-instances`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => RegistrySvcListServiceInstancesResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * Retrieves a list of all registered service instances or filters them by specific criteria (e.g., host, IP).
-     * List Service Instances
-     */
-    async listServiceInstances(requestParameters: ListServiceInstancesRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RegistrySvcListServiceInstancesResponse> {
-        const response = await this.listServiceInstancesRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Registers a new service instance, associating an service instance address with a slug acquired from the bearer token.
-     * Register Service Instance
-     */
-    async registerServiceInstanceRaw(requestParameters: RegisterServiceInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
+    async registerInstanceRaw(requestParameters: RegisterInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
         if (requestParameters['request'] == null) {
             throw new runtime.RequiredError(
                 'request',
-                'Required parameter "request" was null or undefined when calling registerServiceInstance().'
+                'Required parameter "request" was null or undefined when calling registerInstance().'
             );
         }
 
@@ -250,34 +255,34 @@ export class RegistrySvcApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/registry-svc/service-instance`,
+            path: `/registry-svc/instance`,
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: RegistrySvcRegisterServiceInstanceRequestToJSON(requestParameters['request']),
+            body: RegistrySvcRegisterInstanceRequestToJSON(requestParameters['request']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse<any>(response);
     }
 
     /**
-     * Registers a new service instance, associating an service instance address with a slug acquired from the bearer token.
-     * Register Service Instance
+     * Registers an instance, associating an instance address with a slug acquired from the bearer token.
+     * Register Instance
      */
-    async registerServiceInstance(requestParameters: RegisterServiceInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
-        const response = await this.registerServiceInstanceRaw(requestParameters, initOverrides);
+    async registerInstance(requestParameters: RegisterInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
+        const response = await this.registerInstanceRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Removes a registered service instance based on the service ID.
-     * Remove Service Instance
+     * Removes a registered instance based on the instnce ID.
+     * Remove Instance
      */
-    async removeServiceInstanceRaw(requestParameters: RemoveServiceInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async removeInstanceRaw(requestParameters: RemoveInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling removeServiceInstance().'
+                'Required parameter "id" was null or undefined when calling removeInstance().'
             );
         }
 
@@ -290,7 +295,7 @@ export class RegistrySvcApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/registry-svc/service-instance/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/registry-svc/instance/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -300,22 +305,22 @@ export class RegistrySvcApi extends runtime.BaseAPI {
     }
 
     /**
-     * Removes a registered service instance based on the service ID.
-     * Remove Service Instance
+     * Removes a registered instance based on the instnce ID.
+     * Remove Instance
      */
-    async removeServiceInstance(requestParameters: RemoveServiceInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.removeServiceInstanceRaw(requestParameters, initOverrides);
+    async removeInstance(requestParameters: RemoveInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.removeInstanceRaw(requestParameters, initOverrides);
     }
 
     /**
-     * Registers a new service definition, associating an service definition address with a slug acquired from the bearer token.
-     * Register Service Definition
+     * Registers a new definition, associating an definition address with a slug acquired from the bearer token.
+     * Register a Definition
      */
-    async saveServiceDefinitionRaw(requestParameters: SaveServiceDefinitionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
+    async saveDefinitionRaw(requestParameters: SaveDefinitionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
         if (requestParameters['request'] == null) {
             throw new runtime.RequiredError(
                 'request',
-                'Required parameter "request" was null or undefined when calling saveServiceDefinition().'
+                'Required parameter "request" was null or undefined when calling saveDefinition().'
             );
         }
 
@@ -330,22 +335,22 @@ export class RegistrySvcApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/registry-svc/service-definition`,
+            path: `/registry-svc/definition`,
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: RegistrySvcSaveServiceDefinitionRequestToJSON(requestParameters['request']),
+            body: RegistrySvcSaveDefinitionRequestToJSON(requestParameters['request']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse<any>(response);
     }
 
     /**
-     * Registers a new service definition, associating an service definition address with a slug acquired from the bearer token.
-     * Register Service Definition
+     * Registers a new definition, associating an definition address with a slug acquired from the bearer token.
+     * Register a Definition
      */
-    async saveServiceDefinition(requestParameters: SaveServiceDefinitionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
-        const response = await this.saveServiceDefinitionRaw(requestParameters, initOverrides);
+    async saveDefinition(requestParameters: SaveDefinitionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
+        const response = await this.saveDefinitionRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

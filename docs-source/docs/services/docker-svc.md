@@ -10,7 +10,8 @@ tags:
 # Docker Svc
 
 The docker service maintains containers on a node. It expects the docker socket to be mounted.
-For simplicity the Docker Svc it is only concerned with the node it resides on.
+
+For simplicity the Docker Svc is only concerned with the node it resides on. In other words, the Docker Svc is not distributed, it only starts and stops containers locally.
 
 ## Used By
 

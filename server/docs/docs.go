@@ -2254,6 +2254,360 @@ const docTemplate = `{
                 }
             }
         },
+        "/registry-svc/definition": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Registers a new definition, associating an definition address with a slug acquired from the bearer token.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Registry Svc"
+                ],
+                "summary": "Register a Definition",
+                "operationId": "saveDefinition",
+                "parameters": [
+                    {
+                        "description": "Register Service Definition Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.SaveDefinitionRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.SaveDefinitionResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/registry-svc/definition/{id}": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Deletes a registered definition by ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Registry Svc"
+                ],
+                "summary": "Delete Definition",
+                "operationId": "deleteDefinition",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Definition ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Invalid ID",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Service not found",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/registry-svc/definitions": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieves a list of all definitions or filters them by specific criteria.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Registry Svc"
+                ],
+                "summary": "List Definitions",
+                "operationId": "listDefinitions",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ListDefinitionsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid filters",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/registry-svc/instance": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Registers an instance, associating an instance address with a slug acquired from the bearer token.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Registry Svc"
+                ],
+                "summary": "Register Instance",
+                "operationId": "registerInstance",
+                "parameters": [
+                    {
+                        "description": "Register Instance Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.RegisterInstanceRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.RegisterInstanceResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid JSON",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/registry-svc/instance/{id}": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Removes a registered instance based on the instnce ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Registry Svc"
+                ],
+                "summary": "Remove Instance",
+                "operationId": "removeInstance",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Instance ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Invalid ID",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Service not found",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/registry-svc/instances": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieves a list of all instances or filters them by specific criteria (e.g., host, IP).",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Registry Svc"
+                ],
+                "summary": "List Service Instances",
+                "operationId": "listInstances",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Scheme to filter by",
+                        "name": "scheme",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "IP to filter by",
+                        "name": "ip",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Deployment ID to filter by",
+                        "name": "deploymentId",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Host to filter by",
+                        "name": "host",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "IP to filter by",
+                        "name": "ip",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Id to filter by",
+                        "name": "id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ListInstancesResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid filters",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/registry-svc/nodes": {
             "post": {
                 "security": [
@@ -2298,354 +2652,6 @@ const docTemplate = `{
                     },
                     "401": {
                         "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/registry_svc.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/registry_svc.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/registry-svc/service-definition": {
-            "put": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Registers a new service definition, associating an service definition address with a slug acquired from the bearer token.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Registry Svc"
-                ],
-                "summary": "Register Service Definition",
-                "operationId": "saveServiceDefinition",
-                "parameters": [
-                    {
-                        "description": "Register Service Definition Request",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/registry_svc.SaveServiceDefinitionRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "$ref": "#/definitions/registry_svc.SaveServiceDefinitionResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid JSON",
-                        "schema": {
-                            "$ref": "#/definitions/registry_svc.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/registry_svc.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/registry_svc.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/registry-svc/service-definition/{id}": {
-            "delete": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Deletes a registered service definition based on the service ID.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Registry Svc"
-                ],
-                "summary": "Delete Service Definition",
-                "operationId": "deleteServiceDefinition",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Service Definition ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "No Content"
-                    },
-                    "400": {
-                        "description": "Invalid ID",
-                        "schema": {
-                            "$ref": "#/definitions/registry_svc.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/registry_svc.ErrorResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "Service not found",
-                        "schema": {
-                            "$ref": "#/definitions/registry_svc.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/registry_svc.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/registry-svc/service-definitions": {
-            "get": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Retrieves a list of all service definitions or filters them by specific criteria.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Registry Svc"
-                ],
-                "summary": "List Service Definitions",
-                "operationId": "listServiceDefinitions",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/registry_svc.ListServiceDefinitionsResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid filters",
-                        "schema": {
-                            "$ref": "#/definitions/registry_svc.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/registry_svc.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/registry-svc/service-instance": {
-            "put": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Registers a new service instance, associating an service instance address with a slug acquired from the bearer token.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Registry Svc"
-                ],
-                "summary": "Register Service Instance",
-                "operationId": "registerServiceInstance",
-                "parameters": [
-                    {
-                        "description": "Register Service Instance Request",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/registry_svc.RegisterServiceInstanceRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "$ref": "#/definitions/registry_svc.RegisterServiceInstanceResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid JSON",
-                        "schema": {
-                            "$ref": "#/definitions/registry_svc.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/registry_svc.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/registry_svc.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/registry-svc/service-instance/{id}": {
-            "delete": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Removes a registered service instance based on the service ID.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Registry Svc"
-                ],
-                "summary": "Remove Service Instance",
-                "operationId": "removeServiceInstance",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Service Instance ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "No Content"
-                    },
-                    "400": {
-                        "description": "Invalid ID",
-                        "schema": {
-                            "$ref": "#/definitions/registry_svc.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/registry_svc.ErrorResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "Service not found",
-                        "schema": {
-                            "$ref": "#/definitions/registry_svc.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/registry_svc.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/registry-svc/service-instances": {
-            "get": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Retrieves a list of all registered service instances or filters them by specific criteria (e.g., host, IP).",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Registry Svc"
-                ],
-                "summary": "List Service Instances",
-                "operationId": "listServiceInstances",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Scheme to filter by",
-                        "name": "scheme",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "IP to filter by",
-                        "name": "ip",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "Host to filter by",
-                        "name": "host",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "IP to filter by",
-                        "name": "ip",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "Id to filter by",
-                        "name": "id",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/registry_svc.ListServiceInstancesResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid filters",
                         "schema": {
                             "$ref": "#/definitions/registry_svc.ErrorResponse"
                         }
@@ -3136,7 +3142,6 @@ const docTemplate = `{
                         "description": "Is Authorized Request",
                         "name": "body",
                         "in": "body",
-                        "required": true,
                         "schema": {
                             "$ref": "#/definitions/user_svc.IsAuthorizedRequest"
                         }
@@ -4207,7 +4212,8 @@ const docTemplate = `{
         "deploy_svc.Deployment": {
             "type": "object",
             "required": [
-                "serviceSlug"
+                "definitionId",
+                "id"
             ],
             "properties": {
                 "autoScaling": {
@@ -4218,10 +4224,25 @@ const docTemplate = `{
                         }
                     ]
                 },
+                "definitionId": {
+                    "description": "DefinitionId is the id of the definition",
+                    "type": "string",
+                    "example": "def_deBXZMpxrQ"
+                },
+                "description": {
+                    "description": "Description of what this deployment does",
+                    "type": "string",
+                    "example": "Handles user service requests"
+                },
                 "id": {
                     "description": "ID of the deployment (e.g., \"depl_dbOdi5eLQK\")",
                     "type": "string",
                     "example": "depl_dbOdi5eLQK"
+                },
+                "name": {
+                    "description": "Short name for easy reference (e.g., \"user-service-v2\")",
+                    "type": "string",
+                    "example": "user-service-v2"
                 },
                 "replicas": {
                     "description": "Number of container instances to run",
@@ -4234,11 +4255,6 @@ const docTemplate = `{
                             "$ref": "#/definitions/deploy_svc.ResourceLimits"
                         }
                     ]
-                },
-                "serviceSlug": {
-                    "description": "The User Svc slug of the service that is being deployed.",
-                    "type": "string",
-                    "example": "user-svc"
                 },
                 "strategy": {
                     "description": "Deployment strategy (e.g., rolling update)",
@@ -5392,6 +5408,40 @@ const docTemplate = `{
                 }
             }
         },
+        "registry_svc.Definition": {
+            "type": "object",
+            "required": [
+                "id",
+                "image"
+            ],
+            "properties": {
+                "apiSpecs": {
+                    "description": "API Specs such as OpenAPI definitions etc.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/registry_svc.APISpec"
+                    }
+                },
+                "clients": {
+                    "description": "Programming language clients such as on npm or GitHub.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/registry_svc.Client"
+                    }
+                },
+                "id": {
+                    "type": "string"
+                },
+                "image": {
+                    "description": "Container specifications for Docker, K8s, etc.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/registry_svc.ImageSpec"
+                        }
+                    ]
+                }
+            }
+        },
         "registry_svc.ErrorResponse": {
             "type": "object",
             "properties": {
@@ -5451,19 +5501,78 @@ const docTemplate = `{
         "registry_svc.ImageSpec": {
             "type": "object",
             "required": [
-                "image",
+                "name",
                 "port"
             ],
             "properties": {
-                "image": {
-                    "description": "Image is the Docker image to use for the container",
+                "name": {
+                    "description": "Name is the container image name/URL to use for the container",
                     "type": "string",
                     "example": "nginx:latest"
                 },
                 "port": {
-                    "description": "Port is the port number that the container will expose",
+                    "description": "Port is the port number that the container will listen on internally",
                     "type": "integer",
                     "example": 8080
+                }
+            }
+        },
+        "registry_svc.Instance": {
+            "type": "object",
+            "required": [
+                "deploymentId",
+                "id",
+                "url"
+            ],
+            "properties": {
+                "deploymentId": {
+                    "description": "The ID of the deployment that this instance is an instance of.",
+                    "type": "string",
+                    "example": "depl_deBUCtJirc"
+                },
+                "host": {
+                    "description": "Host of the instance address. Required if URL is not provided",
+                    "type": "string",
+                    "example": "myserver.com"
+                },
+                "id": {
+                    "description": "Required: ID of the instance",
+                    "type": "string",
+                    "example": "https://api.com:999/user-svc"
+                },
+                "ip": {
+                    "description": "IP of the instance address. Optional: to register by IP instead of host",
+                    "type": "string",
+                    "example": "8.8.8.8"
+                },
+                "lastHeartbeat": {
+                    "description": "Last time the instance gave a sign of life",
+                    "type": "string"
+                },
+                "nodeUrl": {
+                    "description": "URL of the Singulatron daemon",
+                    "type": "string",
+                    "example": "https://myserver.com:58231"
+                },
+                "path": {
+                    "description": "Path of the instance address. Optional (e.g., \"/api\")",
+                    "type": "string",
+                    "example": "/your-svc"
+                },
+                "port": {
+                    "description": "Port of the instance address. Required if URL is not provided",
+                    "type": "integer",
+                    "example": 8080
+                },
+                "scheme": {
+                    "description": "Scheme of the instance address. Required if URL is not provided.",
+                    "type": "string",
+                    "example": "https"
+                },
+                "url": {
+                    "description": "Full address URL of the instance.",
+                    "type": "string",
+                    "example": "https://myserver.com:5981"
                 }
             }
         },
@@ -5512,6 +5621,28 @@ const docTemplate = `{
                 "FSharp"
             ]
         },
+        "registry_svc.ListDefinitionsResponse": {
+            "type": "object",
+            "properties": {
+                "definitions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/registry_svc.Definition"
+                    }
+                }
+            }
+        },
+        "registry_svc.ListInstancesResponse": {
+            "type": "object",
+            "properties": {
+                "instances": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/registry_svc.Instance"
+                    }
+                }
+            }
+        },
         "registry_svc.ListNodesRequest": {
             "type": "object"
         },
@@ -5522,28 +5653,6 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/registry_svc.Node"
-                    }
-                }
-            }
-        },
-        "registry_svc.ListServiceDefinitionsResponse": {
-            "type": "object",
-            "properties": {
-                "serviceDefinitions": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/registry_svc.ServiceDefinition"
-                    }
-                }
-            }
-        },
-        "registry_svc.ListServiceInstancesResponse": {
-            "type": "object",
-            "properties": {
-                "serviceInstances": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/registry_svc.ServiceInstance"
                     }
                 }
             }
@@ -5598,50 +5707,50 @@ const docTemplate = `{
                 }
             }
         },
-        "registry_svc.RegisterServiceInstanceRequest": {
+        "registry_svc.RegisterInstanceRequest": {
             "type": "object",
             "required": [
-                "slug"
+                "definitionId"
             ],
             "properties": {
+                "definitionId": {
+                    "description": "The service definition id.",
+                    "type": "string",
+                    "example": "user-svc"
+                },
                 "host": {
-                    "description": "Host of the service instance address. Required if URL is not provided",
+                    "description": "Host of the instance address. Required if URL is not provided",
                     "type": "string",
                     "example": "myserver.com"
                 },
                 "ip": {
-                    "description": "IP of the service instance address. Optional: to register by IP instead of host",
+                    "description": "IP of the instance address. Optional: to register by IP instead of host",
                     "type": "string",
                     "example": "8.8.8.8"
                 },
                 "path": {
-                    "description": "Path of the service instance address. Optional (e.g., \"/api\")",
+                    "description": "Path of the instance address. Optional (e.g., \"/api\")",
                     "type": "string",
                     "example": "/your-svc"
                 },
                 "port": {
-                    "description": "Port of the service instance address. Required if URL is not provided",
+                    "description": "Port of the instance address. Required if URL is not provided",
                     "type": "integer",
                     "example": 8080
                 },
                 "scheme": {
-                    "description": "Scheme of the service instance address. Required if URL is not provided.",
+                    "description": "Scheme of the instance address. Required if URL is not provided.",
                     "type": "string",
                     "example": "https"
                 },
-                "slug": {
-                    "description": "The User Svc slug of the service whose instance is being registered.",
-                    "type": "string",
-                    "example": "user-svc"
-                },
                 "url": {
-                    "description": "Full address URL of the service instance.",
+                    "description": "Full address URL of the instance.",
                     "type": "string",
                     "example": "https://myserver.com:5981"
                 }
             }
         },
-        "registry_svc.RegisterServiceInstanceResponse": {
+        "registry_svc.RegisterInstanceResponse": {
             "type": "object"
         },
         "registry_svc.ResourceUsage": {
@@ -5673,109 +5782,16 @@ const docTemplate = `{
                 }
             }
         },
-        "registry_svc.SaveServiceDefinitionRequest": {
+        "registry_svc.SaveDefinitionRequest": {
             "type": "object",
             "properties": {
-                "serviceDefinition": {
-                    "$ref": "#/definitions/registry_svc.ServiceDefinition"
+                "definition": {
+                    "$ref": "#/definitions/registry_svc.Definition"
                 }
             }
         },
-        "registry_svc.SaveServiceDefinitionResponse": {
+        "registry_svc.SaveDefinitionResponse": {
             "type": "object"
-        },
-        "registry_svc.ServiceDefinition": {
-            "type": "object",
-            "required": [
-                "serviceSlug"
-            ],
-            "properties": {
-                "apiSpecs": {
-                    "description": "API Specs such as OpenAPI definitions etc.",
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/registry_svc.APISpec"
-                    }
-                },
-                "clients": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/registry_svc.Client"
-                    }
-                },
-                "image": {
-                    "description": "Container specifications for Docker, K8s, etc.                                        // Programming language clients.",
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/registry_svc.ImageSpec"
-                        }
-                    ]
-                },
-                "serviceSlug": {
-                    "description": "The User Svc slug of the service whose instance is being registered.",
-                    "type": "string",
-                    "example": "user-svc"
-                }
-            }
-        },
-        "registry_svc.ServiceInstance": {
-            "type": "object",
-            "required": [
-                "id",
-                "serviceSlug",
-                "url"
-            ],
-            "properties": {
-                "host": {
-                    "description": "Host of the service instance address. Required if URL is not provided",
-                    "type": "string",
-                    "example": "myserver.com"
-                },
-                "id": {
-                    "description": "Required: ID of the service instance",
-                    "type": "string",
-                    "example": "https://api.com:999/user-svc"
-                },
-                "ip": {
-                    "description": "IP of the service instance address. Optional: to register by IP instead of host",
-                    "type": "string",
-                    "example": "8.8.8.8"
-                },
-                "lastHeartbeat": {
-                    "description": "Last time the instance gave a sign of life",
-                    "type": "string"
-                },
-                "nodeUrl": {
-                    "description": "URL of the Singulatron daemon",
-                    "type": "string",
-                    "example": "https://myserver.com:58231"
-                },
-                "path": {
-                    "description": "Path of the service instance address. Optional (e.g., \"/api\")",
-                    "type": "string",
-                    "example": "/your-svc"
-                },
-                "port": {
-                    "description": "Port of the service instance address. Required if URL is not provided",
-                    "type": "integer",
-                    "example": 8080
-                },
-                "scheme": {
-                    "description": "Scheme of the service instance address. Required if URL is not provided.",
-                    "type": "string",
-                    "example": "https"
-                },
-                "serviceSlug": {
-                    "description": "The User Svc slug of the service whose instance is being registered.",
-                    "type": "string",
-                    "example": "user-svc"
-                },
-                "url": {
-                    "description": "Full address URL of the service instance.",
-                    "type": "string",
-                    "example": "https://myserver.com:5981"
-                }
-            }
         },
         "registry_svc.Usage": {
             "type": "object",

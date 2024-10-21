@@ -21,7 +21,9 @@ import './DeploySvcStrategyType.mjs';
  * Check if a given object implements the DeploySvcDeployment interface.
  */
 function instanceOfDeploySvcDeployment(value) {
-    if (!('serviceSlug' in value) || value['serviceSlug'] === undefined)
+    if (!('definitionId' in value) || value['definitionId'] === undefined)
+        return false;
+    if (!('id' in value) || value['id'] === undefined)
         return false;
     return true;
 }
@@ -34,10 +36,12 @@ function DeploySvcDeploymentFromJSONTyped(json, ignoreDiscriminator) {
     }
     return {
         'autoScaling': json['autoScaling'] == null ? undefined : DeploySvcAutoScalingConfigFromJSON(json['autoScaling']),
-        'id': json['id'] == null ? undefined : json['id'],
+        'definitionId': json['definitionId'],
+        'description': json['description'] == null ? undefined : json['description'],
+        'id': json['id'],
+        'name': json['name'] == null ? undefined : json['name'],
         'replicas': json['replicas'] == null ? undefined : json['replicas'],
         'resources': json['resources'] == null ? undefined : DeploySvcResourceLimitsFromJSON(json['resources']),
-        'serviceSlug': json['serviceSlug'],
         'strategy': json['strategy'] == null ? undefined : DeploySvcDeploymentStrategyFromJSON(json['strategy']),
         'targetRegions': json['targetRegions'] == null ? undefined : (json['targetRegions'].map(DeploySvcTargetRegionFromJSON)),
     };
@@ -48,10 +52,12 @@ function DeploySvcDeploymentToJSON(value) {
     }
     return {
         'autoScaling': DeploySvcAutoScalingConfigToJSON(value['autoScaling']),
+        'definitionId': value['definitionId'],
+        'description': value['description'],
         'id': value['id'],
+        'name': value['name'],
         'replicas': value['replicas'],
         'resources': DeploySvcResourceLimitsToJSON(value['resources']),
-        'serviceSlug': value['serviceSlug'],
         'strategy': DeploySvcDeploymentStrategyToJSON(value['strategy']),
         'targetRegions': value['targetRegions'] == null ? undefined : (value['targetRegions'].map(DeploySvcTargetRegionToJSON)),
     };

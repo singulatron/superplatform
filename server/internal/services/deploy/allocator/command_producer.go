@@ -15,7 +15,7 @@ import (
 
 func GenerateCommands(
 	nodes []openapi.RegistrySvcNode,
-	serviceInstances []openapi.RegistrySvcServiceInstance,
+	serviceInstances []openapi.RegistrySvcInstance,
 	deployments []*deploy.Deployment) []*deploy.Command {
 
 	commands := []*deploy.Command{}
@@ -34,7 +34,7 @@ func GenerateCommands(
 func scaleDeployment(
 	deployment *deploy.Deployment,
 	nodes []openapi.RegistrySvcNode,
-	serviceInstances []openapi.RegistrySvcServiceInstance,
+	serviceInstances []openapi.RegistrySvcInstance,
 ) []*deploy.Command {
 	commands := []*deploy.Command{}
 	activeInstances := 0
@@ -42,7 +42,7 @@ func scaleDeployment(
 
 	// Count active instances and track nodes assigned to this service
 	for _, instance := range serviceInstances {
-		if instance.ServiceSlug == deployment.ServiceSlug {
+		if instance.DeploymentId == deployment.Id {
 			activeInstances++
 			if instance.NodeUrl != nil {
 				assignedNodes[*instance.NodeUrl] = true
@@ -56,9 +56,9 @@ func scaleDeployment(
 			node := findAvailableNode(nodes, assignedNodes)
 			if node != nil {
 				commands = append(commands, &deploy.Command{
-					Action:      "START",
-					ServiceSlug: deployment.ServiceSlug,
-					NodeUrl:     node.Url,
+					Action:       "START",
+					DeploymentId: deployment.Id,
+					NodeUrl:      node.Url,
 				})
 				assignedNodes[*node.Url] = true // Mark this node as assigned for this service
 			}
@@ -69,8 +69,8 @@ func scaleDeployment(
 	if activeInstances > deployment.Replicas {
 		for i := deployment.Replicas; i < activeInstances; i++ {
 			commands = append(commands, &deploy.Command{
-				Action:      "KILL",
-				ServiceSlug: deployment.ServiceSlug,
+				Action:       "KILL",
+				DeploymentId: deployment.Id,
 			})
 		}
 	}
@@ -78,14 +78,14 @@ func scaleDeployment(
 	return commands
 }
 
-func checkHealthAndKill(instance openapi.RegistrySvcServiceInstance) []*deploy.Command {
+func checkHealthAndKill(instance openapi.RegistrySvcInstance) []*deploy.Command {
 	commands := []*deploy.Command{}
 
 	if instance.LastHeartbeat == nil {
 		commands = append(commands, &deploy.Command{
-			Action:      "KILL",
-			ServiceSlug: instance.ServiceSlug,
-			InstanceId:  &instance.Id,
+			Action:       "KILL",
+			DeploymentId: instance.DeploymentId,
+			InstanceId:   &instance.Id,
 		})
 	}
 

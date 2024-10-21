@@ -15,7 +15,7 @@
  * Check if a given object implements the RegistrySvcImageSpec interface.
  */
 function instanceOfRegistrySvcImageSpec(value) {
-    if (!('image' in value) || value['image'] === undefined)
+    if (!('name' in value) || value['name'] === undefined)
         return false;
     if (!('port' in value) || value['port'] === undefined)
         return false;
@@ -29,7 +29,7 @@ function RegistrySvcImageSpecFromJSONTyped(json, ignoreDiscriminator) {
         return json;
     }
     return {
-        'image': json['image'],
+        'name': json['name'],
         'port': json['port'],
     };
 }
@@ -38,7 +38,7 @@ function RegistrySvcImageSpecToJSON(value) {
         return value;
     }
     return {
-        'image': value['image'],
+        'name': value['name'],
         'port': value['port'],
     };
 }

@@ -10,43 +10,64 @@
  * Do not edit the class manually.
  */
 import * as runtime from '../runtime';
-import type { RegistrySvcListNodesResponse, RegistrySvcListServiceDefinitionsResponse, RegistrySvcListServiceInstancesResponse, RegistrySvcRegisterServiceInstanceRequest, RegistrySvcSaveServiceDefinitionRequest } from '../models/index';
-export interface DeleteServiceDefinitionRequest {
+import type { RegistrySvcListDefinitionsResponse, RegistrySvcListInstancesResponse, RegistrySvcListNodesResponse, RegistrySvcRegisterInstanceRequest, RegistrySvcSaveDefinitionRequest } from '../models/index';
+export interface DeleteDefinitionRequest {
     id: string;
 }
-export interface ListNodesRequest {
-    body?: object;
-}
-export interface ListServiceInstancesRequest {
+export interface ListInstancesRequest {
     scheme?: string;
     ip?: string;
+    deploymentId?: string;
     host?: string;
     ip2?: string;
     id?: string;
 }
-export interface RegisterServiceInstanceRequest {
-    request: RegistrySvcRegisterServiceInstanceRequest;
+export interface ListNodesRequest {
+    body?: object;
 }
-export interface RemoveServiceInstanceRequest {
+export interface RegisterInstanceRequest {
+    request: RegistrySvcRegisterInstanceRequest;
+}
+export interface RemoveInstanceRequest {
     id: string;
 }
-export interface SaveServiceDefinitionRequest {
-    request: RegistrySvcSaveServiceDefinitionRequest;
+export interface SaveDefinitionRequest {
+    request: RegistrySvcSaveDefinitionRequest;
 }
 /**
  *
  */
 export declare class RegistrySvcApi extends runtime.BaseAPI {
     /**
-     * Deletes a registered service definition based on the service ID.
-     * Delete Service Definition
+     * Deletes a registered definition by ID.
+     * Delete Definition
      */
-    deleteServiceDefinitionRaw(requestParameters: DeleteServiceDefinitionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+    deleteDefinitionRaw(requestParameters: DeleteDefinitionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
     /**
-     * Deletes a registered service definition based on the service ID.
-     * Delete Service Definition
+     * Deletes a registered definition by ID.
+     * Delete Definition
      */
-    deleteServiceDefinition(requestParameters: DeleteServiceDefinitionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+    deleteDefinition(requestParameters: DeleteDefinitionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+    /**
+     * Retrieves a list of all definitions or filters them by specific criteria.
+     * List Definitions
+     */
+    listDefinitionsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RegistrySvcListDefinitionsResponse>>;
+    /**
+     * Retrieves a list of all definitions or filters them by specific criteria.
+     * List Definitions
+     */
+    listDefinitions(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RegistrySvcListDefinitionsResponse>;
+    /**
+     * Retrieves a list of all instances or filters them by specific criteria (e.g., host, IP).
+     * List Service Instances
+     */
+    listInstancesRaw(requestParameters: ListInstancesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RegistrySvcListInstancesResponse>>;
+    /**
+     * Retrieves a list of all instances or filters them by specific criteria (e.g., host, IP).
+     * List Service Instances
+     */
+    listInstances(requestParameters?: ListInstancesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RegistrySvcListInstancesResponse>;
     /**
      * Retrieve a list of nodes.
      * List Nodes
@@ -58,53 +79,33 @@ export declare class RegistrySvcApi extends runtime.BaseAPI {
      */
     listNodes(requestParameters?: ListNodesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RegistrySvcListNodesResponse>;
     /**
-     * Retrieves a list of all service definitions or filters them by specific criteria.
-     * List Service Definitions
+     * Registers an instance, associating an instance address with a slug acquired from the bearer token.
+     * Register Instance
      */
-    listServiceDefinitionsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RegistrySvcListServiceDefinitionsResponse>>;
+    registerInstanceRaw(requestParameters: RegisterInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
     /**
-     * Retrieves a list of all service definitions or filters them by specific criteria.
-     * List Service Definitions
+     * Registers an instance, associating an instance address with a slug acquired from the bearer token.
+     * Register Instance
      */
-    listServiceDefinitions(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RegistrySvcListServiceDefinitionsResponse>;
+    registerInstance(requestParameters: RegisterInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
     /**
-     * Retrieves a list of all registered service instances or filters them by specific criteria (e.g., host, IP).
-     * List Service Instances
+     * Removes a registered instance based on the instnce ID.
+     * Remove Instance
      */
-    listServiceInstancesRaw(requestParameters: ListServiceInstancesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RegistrySvcListServiceInstancesResponse>>;
+    removeInstanceRaw(requestParameters: RemoveInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
     /**
-     * Retrieves a list of all registered service instances or filters them by specific criteria (e.g., host, IP).
-     * List Service Instances
+     * Removes a registered instance based on the instnce ID.
+     * Remove Instance
      */
-    listServiceInstances(requestParameters?: ListServiceInstancesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RegistrySvcListServiceInstancesResponse>;
+    removeInstance(requestParameters: RemoveInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
     /**
-     * Registers a new service instance, associating an service instance address with a slug acquired from the bearer token.
-     * Register Service Instance
+     * Registers a new definition, associating an definition address with a slug acquired from the bearer token.
+     * Register a Definition
      */
-    registerServiceInstanceRaw(requestParameters: RegisterServiceInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
+    saveDefinitionRaw(requestParameters: SaveDefinitionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
     /**
-     * Registers a new service instance, associating an service instance address with a slug acquired from the bearer token.
-     * Register Service Instance
+     * Registers a new definition, associating an definition address with a slug acquired from the bearer token.
+     * Register a Definition
      */
-    registerServiceInstance(requestParameters: RegisterServiceInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
-    /**
-     * Removes a registered service instance based on the service ID.
-     * Remove Service Instance
-     */
-    removeServiceInstanceRaw(requestParameters: RemoveServiceInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
-    /**
-     * Removes a registered service instance based on the service ID.
-     * Remove Service Instance
-     */
-    removeServiceInstance(requestParameters: RemoveServiceInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
-    /**
-     * Registers a new service definition, associating an service definition address with a slug acquired from the bearer token.
-     * Register Service Definition
-     */
-    saveServiceDefinitionRaw(requestParameters: SaveServiceDefinitionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
-    /**
-     * Registers a new service definition, associating an service definition address with a slug acquired from the bearer token.
-     * Register Service Definition
-     */
-    saveServiceDefinition(requestParameters: SaveServiceDefinitionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
+    saveDefinition(requestParameters: SaveDefinitionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
 }

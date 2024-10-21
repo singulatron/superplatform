@@ -13,30 +13,36 @@ tags:
 The registry service is designed to maintain a database of services, service instances and nodes.
 
 Its responsibilities include gathering information about:
+
 - Nodes: each Superplatform server registers itself as a node, which roughly correlates to a physical machine
 
-> This page is a high level overview of the `Registry Svc`. For more details, please see the [Registry Svc API documentation](/docs/superplatform/register-service-instance).
+> This page is a high level overview of the `Registry Svc`. For more details, please see the [Registry Svc API documentation](/docs/superplatform/register-instance).
 
 ## Entities
 
-### Service Definition
+### Definition
 
-A `Service Definition` consists of the following things:
+A `Definition` or service definition consists of the following things:
 
-- A slug/account in the `User Svc`. This is what makes the `Service Definition` unique.
+- An ID
+- A container image to run and some additional information like the internal port exposed etc.
 - A set of endpoint definitions (OpenAPI etc.)
 - The URL of different clients (JS, Go etc.)
 
-A `Service Definition` is an abstract concept that can not be called. For a callable entity look at `Service Instance`s.
+A `Definition` is an abstract concept that can not be called. For a callable entity look at `Instance`s.
 
-### Service Instance
+### Instance
 
-A `Service Instance` is an actual running, callable instance of a `Service`.
+A `Instance` or a service instance is an actual running, callable instance of a `Definition`.
 
-A `Service Instance` consists of the following things:
+A `Instance` consists of the following things:
 
-- A `slug` that belongs to a `Service Definition`
-- Address information that can be used to internally address the `Service Instance`.
+- Address information that can be used to internally address the `Instance`.
+- A Deployment ID.
+
+### Deployment
+
+Definitions become instances through the [Deployment entity of the Deploy Service](/docs/services/deploy-svc).
 
 ### Node
 

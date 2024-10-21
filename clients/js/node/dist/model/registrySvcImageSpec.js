@@ -17,8 +17,8 @@ export class RegistrySvcImageSpec {
 RegistrySvcImageSpec.discriminator = undefined;
 RegistrySvcImageSpec.attributeTypeMap = [
     {
-        "name": "image",
-        "baseName": "image",
+        "name": "name",
+        "baseName": "name",
         "type": "string"
     },
     {

@@ -90,20 +90,20 @@ export * from './promptSvcPromptStatus';
 export * from './promptSvcRemovePromptRequest';
 export * from './registrySvcAPISpec';
 export * from './registrySvcClient';
+export * from './registrySvcDefinition';
 export * from './registrySvcErrorResponse';
 export * from './registrySvcGPU';
 export * from './registrySvcImageSpec';
+export * from './registrySvcInstance';
 export * from './registrySvcLanguage';
+export * from './registrySvcListDefinitionsResponse';
+export * from './registrySvcListInstancesResponse';
 export * from './registrySvcListNodesResponse';
-export * from './registrySvcListServiceDefinitionsResponse';
-export * from './registrySvcListServiceInstancesResponse';
 export * from './registrySvcNode';
 export * from './registrySvcProcess';
-export * from './registrySvcRegisterServiceInstanceRequest';
+export * from './registrySvcRegisterInstanceRequest';
 export * from './registrySvcResourceUsage';
-export * from './registrySvcSaveServiceDefinitionRequest';
-export * from './registrySvcServiceDefinition';
-export * from './registrySvcServiceInstance';
+export * from './registrySvcSaveDefinitionRequest';
 export * from './registrySvcUsage';
 export * from './userSvcAddUserToOrganizationRequest';
 export * from './userSvcAuthToken';
@@ -237,20 +237,20 @@ import { PromptSvcPromptStatus } from './promptSvcPromptStatus';
 import { PromptSvcRemovePromptRequest } from './promptSvcRemovePromptRequest';
 import { RegistrySvcAPISpec } from './registrySvcAPISpec';
 import { RegistrySvcClient } from './registrySvcClient';
+import { RegistrySvcDefinition } from './registrySvcDefinition';
 import { RegistrySvcErrorResponse } from './registrySvcErrorResponse';
 import { RegistrySvcGPU } from './registrySvcGPU';
 import { RegistrySvcImageSpec } from './registrySvcImageSpec';
+import { RegistrySvcInstance } from './registrySvcInstance';
 import { RegistrySvcLanguage } from './registrySvcLanguage';
+import { RegistrySvcListDefinitionsResponse } from './registrySvcListDefinitionsResponse';
+import { RegistrySvcListInstancesResponse } from './registrySvcListInstancesResponse';
 import { RegistrySvcListNodesResponse } from './registrySvcListNodesResponse';
-import { RegistrySvcListServiceDefinitionsResponse } from './registrySvcListServiceDefinitionsResponse';
-import { RegistrySvcListServiceInstancesResponse } from './registrySvcListServiceInstancesResponse';
 import { RegistrySvcNode } from './registrySvcNode';
 import { RegistrySvcProcess } from './registrySvcProcess';
-import { RegistrySvcRegisterServiceInstanceRequest } from './registrySvcRegisterServiceInstanceRequest';
+import { RegistrySvcRegisterInstanceRequest } from './registrySvcRegisterInstanceRequest';
 import { RegistrySvcResourceUsage } from './registrySvcResourceUsage';
-import { RegistrySvcSaveServiceDefinitionRequest } from './registrySvcSaveServiceDefinitionRequest';
-import { RegistrySvcServiceDefinition } from './registrySvcServiceDefinition';
-import { RegistrySvcServiceInstance } from './registrySvcServiceInstance';
+import { RegistrySvcSaveDefinitionRequest } from './registrySvcSaveDefinitionRequest';
 import { RegistrySvcUsage } from './registrySvcUsage';
 import { UserSvcAddUserToOrganizationRequest } from './userSvcAddUserToOrganizationRequest';
 import { UserSvcAuthToken } from './userSvcAuthToken';
@@ -388,19 +388,19 @@ let typeMap: {[index: string]: any} = {
     "PromptSvcRemovePromptRequest": PromptSvcRemovePromptRequest,
     "RegistrySvcAPISpec": RegistrySvcAPISpec,
     "RegistrySvcClient": RegistrySvcClient,
+    "RegistrySvcDefinition": RegistrySvcDefinition,
     "RegistrySvcErrorResponse": RegistrySvcErrorResponse,
     "RegistrySvcGPU": RegistrySvcGPU,
     "RegistrySvcImageSpec": RegistrySvcImageSpec,
+    "RegistrySvcInstance": RegistrySvcInstance,
+    "RegistrySvcListDefinitionsResponse": RegistrySvcListDefinitionsResponse,
+    "RegistrySvcListInstancesResponse": RegistrySvcListInstancesResponse,
     "RegistrySvcListNodesResponse": RegistrySvcListNodesResponse,
-    "RegistrySvcListServiceDefinitionsResponse": RegistrySvcListServiceDefinitionsResponse,
-    "RegistrySvcListServiceInstancesResponse": RegistrySvcListServiceInstancesResponse,
     "RegistrySvcNode": RegistrySvcNode,
     "RegistrySvcProcess": RegistrySvcProcess,
-    "RegistrySvcRegisterServiceInstanceRequest": RegistrySvcRegisterServiceInstanceRequest,
+    "RegistrySvcRegisterInstanceRequest": RegistrySvcRegisterInstanceRequest,
     "RegistrySvcResourceUsage": RegistrySvcResourceUsage,
-    "RegistrySvcSaveServiceDefinitionRequest": RegistrySvcSaveServiceDefinitionRequest,
-    "RegistrySvcServiceDefinition": RegistrySvcServiceDefinition,
-    "RegistrySvcServiceInstance": RegistrySvcServiceInstance,
+    "RegistrySvcSaveDefinitionRequest": RegistrySvcSaveDefinitionRequest,
     "RegistrySvcUsage": RegistrySvcUsage,
     "UserSvcAddUserToOrganizationRequest": UserSvcAddUserToOrganizationRequest,
     "UserSvcAuthToken": UserSvcAuthToken,

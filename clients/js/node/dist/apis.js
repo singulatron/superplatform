@@ -107,20 +107,20 @@ require('./promptSvcPromptStatus.js');
 require('./promptSvcRemovePromptRequest.js');
 require('./registrySvcAPISpec.js');
 require('./registrySvcClient.js');
+require('./registrySvcDefinition.js');
 require('./registrySvcErrorResponse.js');
 require('./registrySvcGPU.js');
 require('./registrySvcImageSpec.js');
+require('./registrySvcInstance.js');
 require('./registrySvcLanguage.js');
+require('./registrySvcListDefinitionsResponse.js');
+require('./registrySvcListInstancesResponse.js');
 require('./registrySvcListNodesResponse.js');
-require('./registrySvcListServiceDefinitionsResponse.js');
-require('./registrySvcListServiceInstancesResponse.js');
 require('./registrySvcNode.js');
 require('./registrySvcProcess.js');
-require('./registrySvcRegisterServiceInstanceRequest.js');
+require('./registrySvcRegisterInstanceRequest.js');
 require('./registrySvcResourceUsage.js');
-require('./registrySvcSaveServiceDefinitionRequest.js');
-require('./registrySvcServiceDefinition.js');
-require('./registrySvcServiceInstance.js');
+require('./registrySvcSaveDefinitionRequest.js');
 require('./registrySvcUsage.js');
 require('./userSvcAddUserToOrganizationRequest.js');
 require('./userSvcAuthToken.js');
@@ -57571,13 +57571,13 @@ class RegistrySvcApi {
         this.interceptors.push(interceptor);
     }
     /**
-     * Deletes a registered service definition based on the service ID.
-     * @summary Delete Service Definition
-     * @param id Service Definition ID
+     * Deletes a registered definition by ID.
+     * @summary Delete Definition
+     * @param id Definition ID
      */
-    deleteServiceDefinition(id_1) {
+    deleteDefinition(id_1) {
         return __awaiter(this, arguments, void 0, function* (id, options = { headers: {} }) {
-            const localVarPath = this.basePath + '/registry-svc/service-definition/{id}'
+            const localVarPath = this.basePath + '/registry-svc/definition/{id}'
                 .replace('{' + 'id' + '}', encodeURIComponent(String(id)));
             let localVarQueryParameters = {};
             let localVarHeaderParams = Object.assign({}, this._defaultHeaders);
@@ -57592,7 +57592,7 @@ class RegistrySvcApi {
             let localVarFormParams = {};
             // verify required parameter 'id' is not null or undefined
             if (id === null || id === undefined) {
-                throw new Error('Required parameter id was null or undefined when calling deleteServiceDefinition.');
+                throw new Error('Required parameter id was null or undefined when calling deleteDefinition.');
             }
             Object.assign(localVarHeaderParams, options.headers);
             let localVarRequestOptions = {
@@ -57625,6 +57625,152 @@ class RegistrySvcApi {
                         }
                         else {
                             if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
+                                resolve({ response: response, body: body });
+                            }
+                            else {
+                                reject(new HttpError(response, body, response.statusCode));
+                            }
+                        }
+                    });
+                });
+            });
+        });
+    }
+    /**
+     * Retrieves a list of all definitions or filters them by specific criteria.
+     * @summary List Definitions
+     */
+    listDefinitions() {
+        return __awaiter(this, arguments, void 0, function* (options = { headers: {} }) {
+            const localVarPath = this.basePath + '/registry-svc/definitions';
+            let localVarQueryParameters = {};
+            let localVarHeaderParams = Object.assign({}, this._defaultHeaders);
+            const produces = ['application/json'];
+            // give precedence to 'application/json'
+            if (produces.indexOf('application/json') >= 0) {
+                localVarHeaderParams.Accept = 'application/json';
+            }
+            else {
+                localVarHeaderParams.Accept = produces.join(',');
+            }
+            let localVarFormParams = {};
+            Object.assign(localVarHeaderParams, options.headers);
+            let localVarRequestOptions = {
+                method: 'GET',
+                qs: localVarQueryParameters,
+                headers: localVarHeaderParams,
+                uri: localVarPath,
+                useQuerystring: this._useQuerystring,
+                json: true,
+            };
+            let authenticationPromise = Promise.resolve();
+            if (this.authentications.BearerAuth.apiKey) {
+                authenticationPromise = authenticationPromise.then(() => this.authentications.BearerAuth.applyToRequest(localVarRequestOptions));
+            }
+            authenticationPromise = authenticationPromise.then(() => this.authentications.default.applyToRequest(localVarRequestOptions));
+            let interceptorPromise = authenticationPromise;
+            for (const interceptor of this.interceptors) {
+                interceptorPromise = interceptorPromise.then(() => interceptor(localVarRequestOptions));
+            }
+            return interceptorPromise.then(() => {
+                if (Object.keys(localVarFormParams).length) {
+                    {
+                        localVarRequestOptions.form = localVarFormParams;
+                    }
+                }
+                return new Promise((resolve, reject) => {
+                    localVarRequest(localVarRequestOptions, (error, response, body) => {
+                        if (error) {
+                            reject(error);
+                        }
+                        else {
+                            if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
+                                body = models.ObjectSerializer.deserialize(body, "RegistrySvcListDefinitionsResponse");
+                                resolve({ response: response, body: body });
+                            }
+                            else {
+                                reject(new HttpError(response, body, response.statusCode));
+                            }
+                        }
+                    });
+                });
+            });
+        });
+    }
+    /**
+     * Retrieves a list of all instances or filters them by specific criteria (e.g., host, IP).
+     * @summary List Service Instances
+     * @param scheme Scheme to filter by
+     * @param ip IP to filter by
+     * @param deploymentId Deployment ID to filter by
+     * @param host Host to filter by
+     * @param ip2 IP to filter by
+     * @param id Id to filter by
+     */
+    listInstances(scheme_1, ip_1, deploymentId_1, host_1, ip2_1, id_1) {
+        return __awaiter(this, arguments, void 0, function* (scheme, ip, deploymentId, host, ip2, id, options = { headers: {} }) {
+            const localVarPath = this.basePath + '/registry-svc/instances';
+            let localVarQueryParameters = {};
+            let localVarHeaderParams = Object.assign({}, this._defaultHeaders);
+            const produces = ['application/json'];
+            // give precedence to 'application/json'
+            if (produces.indexOf('application/json') >= 0) {
+                localVarHeaderParams.Accept = 'application/json';
+            }
+            else {
+                localVarHeaderParams.Accept = produces.join(',');
+            }
+            let localVarFormParams = {};
+            if (scheme !== undefined) {
+                localVarQueryParameters['scheme'] = models.ObjectSerializer.serialize(scheme, "string");
+            }
+            if (ip !== undefined) {
+                localVarQueryParameters['ip'] = models.ObjectSerializer.serialize(ip, "string");
+            }
+            if (deploymentId !== undefined) {
+                localVarQueryParameters['deploymentId'] = models.ObjectSerializer.serialize(deploymentId, "string");
+            }
+            if (host !== undefined) {
+                localVarQueryParameters['host'] = models.ObjectSerializer.serialize(host, "string");
+            }
+            if (ip2 !== undefined) {
+                localVarQueryParameters['ip'] = models.ObjectSerializer.serialize(ip2, "string");
+            }
+            if (id !== undefined) {
+                localVarQueryParameters['id'] = models.ObjectSerializer.serialize(id, "string");
+            }
+            Object.assign(localVarHeaderParams, options.headers);
+            let localVarRequestOptions = {
+                method: 'GET',
+                qs: localVarQueryParameters,
+                headers: localVarHeaderParams,
+                uri: localVarPath,
+                useQuerystring: this._useQuerystring,
+                json: true,
+            };
+            let authenticationPromise = Promise.resolve();
+            if (this.authentications.BearerAuth.apiKey) {
+                authenticationPromise = authenticationPromise.then(() => this.authentications.BearerAuth.applyToRequest(localVarRequestOptions));
+            }
+            authenticationPromise = authenticationPromise.then(() => this.authentications.default.applyToRequest(localVarRequestOptions));
+            let interceptorPromise = authenticationPromise;
+            for (const interceptor of this.interceptors) {
+                interceptorPromise = interceptorPromise.then(() => interceptor(localVarRequestOptions));
+            }
+            return interceptorPromise.then(() => {
+                if (Object.keys(localVarFormParams).length) {
+                    {
+                        localVarRequestOptions.form = localVarFormParams;
+                    }
+                }
+                return new Promise((resolve, reject) => {
+                    localVarRequest(localVarRequestOptions, (error, response, body) => {
+                        if (error) {
+                            reject(error);
+                        }
+                        else {
+                            if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
+                                body = models.ObjectSerializer.deserialize(body, "RegistrySvcListInstancesResponse");
                                 resolve({ response: response, body: body });
                             }
                             else {
@@ -57700,155 +57846,13 @@ class RegistrySvcApi {
         });
     }
     /**
-     * Retrieves a list of all service definitions or filters them by specific criteria.
-     * @summary List Service Definitions
+     * Registers an instance, associating an instance address with a slug acquired from the bearer token.
+     * @summary Register Instance
+     * @param request Register Instance Request
      */
-    listServiceDefinitions() {
-        return __awaiter(this, arguments, void 0, function* (options = { headers: {} }) {
-            const localVarPath = this.basePath + '/registry-svc/service-definitions';
-            let localVarQueryParameters = {};
-            let localVarHeaderParams = Object.assign({}, this._defaultHeaders);
-            const produces = ['application/json'];
-            // give precedence to 'application/json'
-            if (produces.indexOf('application/json') >= 0) {
-                localVarHeaderParams.Accept = 'application/json';
-            }
-            else {
-                localVarHeaderParams.Accept = produces.join(',');
-            }
-            let localVarFormParams = {};
-            Object.assign(localVarHeaderParams, options.headers);
-            let localVarRequestOptions = {
-                method: 'GET',
-                qs: localVarQueryParameters,
-                headers: localVarHeaderParams,
-                uri: localVarPath,
-                useQuerystring: this._useQuerystring,
-                json: true,
-            };
-            let authenticationPromise = Promise.resolve();
-            if (this.authentications.BearerAuth.apiKey) {
-                authenticationPromise = authenticationPromise.then(() => this.authentications.BearerAuth.applyToRequest(localVarRequestOptions));
-            }
-            authenticationPromise = authenticationPromise.then(() => this.authentications.default.applyToRequest(localVarRequestOptions));
-            let interceptorPromise = authenticationPromise;
-            for (const interceptor of this.interceptors) {
-                interceptorPromise = interceptorPromise.then(() => interceptor(localVarRequestOptions));
-            }
-            return interceptorPromise.then(() => {
-                if (Object.keys(localVarFormParams).length) {
-                    {
-                        localVarRequestOptions.form = localVarFormParams;
-                    }
-                }
-                return new Promise((resolve, reject) => {
-                    localVarRequest(localVarRequestOptions, (error, response, body) => {
-                        if (error) {
-                            reject(error);
-                        }
-                        else {
-                            if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
-                                body = models.ObjectSerializer.deserialize(body, "RegistrySvcListServiceDefinitionsResponse");
-                                resolve({ response: response, body: body });
-                            }
-                            else {
-                                reject(new HttpError(response, body, response.statusCode));
-                            }
-                        }
-                    });
-                });
-            });
-        });
-    }
-    /**
-     * Retrieves a list of all registered service instances or filters them by specific criteria (e.g., host, IP).
-     * @summary List Service Instances
-     * @param scheme Scheme to filter by
-     * @param ip IP to filter by
-     * @param host Host to filter by
-     * @param ip2 IP to filter by
-     * @param id Id to filter by
-     */
-    listServiceInstances(scheme_1, ip_1, host_1, ip2_1, id_1) {
-        return __awaiter(this, arguments, void 0, function* (scheme, ip, host, ip2, id, options = { headers: {} }) {
-            const localVarPath = this.basePath + '/registry-svc/service-instances';
-            let localVarQueryParameters = {};
-            let localVarHeaderParams = Object.assign({}, this._defaultHeaders);
-            const produces = ['application/json'];
-            // give precedence to 'application/json'
-            if (produces.indexOf('application/json') >= 0) {
-                localVarHeaderParams.Accept = 'application/json';
-            }
-            else {
-                localVarHeaderParams.Accept = produces.join(',');
-            }
-            let localVarFormParams = {};
-            if (scheme !== undefined) {
-                localVarQueryParameters['scheme'] = models.ObjectSerializer.serialize(scheme, "string");
-            }
-            if (ip !== undefined) {
-                localVarQueryParameters['ip'] = models.ObjectSerializer.serialize(ip, "string");
-            }
-            if (host !== undefined) {
-                localVarQueryParameters['host'] = models.ObjectSerializer.serialize(host, "string");
-            }
-            if (ip2 !== undefined) {
-                localVarQueryParameters['ip'] = models.ObjectSerializer.serialize(ip2, "string");
-            }
-            if (id !== undefined) {
-                localVarQueryParameters['id'] = models.ObjectSerializer.serialize(id, "string");
-            }
-            Object.assign(localVarHeaderParams, options.headers);
-            let localVarRequestOptions = {
-                method: 'GET',
-                qs: localVarQueryParameters,
-                headers: localVarHeaderParams,
-                uri: localVarPath,
-                useQuerystring: this._useQuerystring,
-                json: true,
-            };
-            let authenticationPromise = Promise.resolve();
-            if (this.authentications.BearerAuth.apiKey) {
-                authenticationPromise = authenticationPromise.then(() => this.authentications.BearerAuth.applyToRequest(localVarRequestOptions));
-            }
-            authenticationPromise = authenticationPromise.then(() => this.authentications.default.applyToRequest(localVarRequestOptions));
-            let interceptorPromise = authenticationPromise;
-            for (const interceptor of this.interceptors) {
-                interceptorPromise = interceptorPromise.then(() => interceptor(localVarRequestOptions));
-            }
-            return interceptorPromise.then(() => {
-                if (Object.keys(localVarFormParams).length) {
-                    {
-                        localVarRequestOptions.form = localVarFormParams;
-                    }
-                }
-                return new Promise((resolve, reject) => {
-                    localVarRequest(localVarRequestOptions, (error, response, body) => {
-                        if (error) {
-                            reject(error);
-                        }
-                        else {
-                            if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
-                                body = models.ObjectSerializer.deserialize(body, "RegistrySvcListServiceInstancesResponse");
-                                resolve({ response: response, body: body });
-                            }
-                            else {
-                                reject(new HttpError(response, body, response.statusCode));
-                            }
-                        }
-                    });
-                });
-            });
-        });
-    }
-    /**
-     * Registers a new service instance, associating an service instance address with a slug acquired from the bearer token.
-     * @summary Register Service Instance
-     * @param request Register Service Instance Request
-     */
-    registerServiceInstance(request_1) {
+    registerInstance(request_1) {
         return __awaiter(this, arguments, void 0, function* (request, options = { headers: {} }) {
-            const localVarPath = this.basePath + '/registry-svc/service-instance';
+            const localVarPath = this.basePath + '/registry-svc/instance';
             let localVarQueryParameters = {};
             let localVarHeaderParams = Object.assign({}, this._defaultHeaders);
             const produces = ['application/json'];
@@ -57862,7 +57866,7 @@ class RegistrySvcApi {
             let localVarFormParams = {};
             // verify required parameter 'request' is not null or undefined
             if (request === null || request === undefined) {
-                throw new Error('Required parameter request was null or undefined when calling registerServiceInstance.');
+                throw new Error('Required parameter request was null or undefined when calling registerInstance.');
             }
             Object.assign(localVarHeaderParams, options.headers);
             let localVarRequestOptions = {
@@ -57872,7 +57876,7 @@ class RegistrySvcApi {
                 uri: localVarPath,
                 useQuerystring: this._useQuerystring,
                 json: true,
-                body: models.ObjectSerializer.serialize(request, "RegistrySvcRegisterServiceInstanceRequest")
+                body: models.ObjectSerializer.serialize(request, "RegistrySvcRegisterInstanceRequest")
             };
             let authenticationPromise = Promise.resolve();
             if (this.authentications.BearerAuth.apiKey) {
@@ -57909,13 +57913,13 @@ class RegistrySvcApi {
         });
     }
     /**
-     * Removes a registered service instance based on the service ID.
-     * @summary Remove Service Instance
-     * @param id Service Instance ID
+     * Removes a registered instance based on the instnce ID.
+     * @summary Remove Instance
+     * @param id Instance ID
      */
-    removeServiceInstance(id_1) {
+    removeInstance(id_1) {
         return __awaiter(this, arguments, void 0, function* (id, options = { headers: {} }) {
-            const localVarPath = this.basePath + '/registry-svc/service-instance/{id}'
+            const localVarPath = this.basePath + '/registry-svc/instance/{id}'
                 .replace('{' + 'id' + '}', encodeURIComponent(String(id)));
             let localVarQueryParameters = {};
             let localVarHeaderParams = Object.assign({}, this._defaultHeaders);
@@ -57930,7 +57934,7 @@ class RegistrySvcApi {
             let localVarFormParams = {};
             // verify required parameter 'id' is not null or undefined
             if (id === null || id === undefined) {
-                throw new Error('Required parameter id was null or undefined when calling removeServiceInstance.');
+                throw new Error('Required parameter id was null or undefined when calling removeInstance.');
             }
             Object.assign(localVarHeaderParams, options.headers);
             let localVarRequestOptions = {
@@ -57975,13 +57979,13 @@ class RegistrySvcApi {
         });
     }
     /**
-     * Registers a new service definition, associating an service definition address with a slug acquired from the bearer token.
-     * @summary Register Service Definition
+     * Registers a new definition, associating an definition address with a slug acquired from the bearer token.
+     * @summary Register a Definition
      * @param request Register Service Definition Request
      */
-    saveServiceDefinition(request_1) {
+    saveDefinition(request_1) {
         return __awaiter(this, arguments, void 0, function* (request, options = { headers: {} }) {
-            const localVarPath = this.basePath + '/registry-svc/service-definition';
+            const localVarPath = this.basePath + '/registry-svc/definition';
             let localVarQueryParameters = {};
             let localVarHeaderParams = Object.assign({}, this._defaultHeaders);
             const produces = ['application/json'];
@@ -57995,7 +57999,7 @@ class RegistrySvcApi {
             let localVarFormParams = {};
             // verify required parameter 'request' is not null or undefined
             if (request === null || request === undefined) {
-                throw new Error('Required parameter request was null or undefined when calling saveServiceDefinition.');
+                throw new Error('Required parameter request was null or undefined when calling saveDefinition.');
             }
             Object.assign(localVarHeaderParams, options.headers);
             let localVarRequestOptions = {
@@ -58005,7 +58009,7 @@ class RegistrySvcApi {
                 uri: localVarPath,
                 useQuerystring: this._useQuerystring,
                 json: true,
-                body: models.ObjectSerializer.serialize(request, "RegistrySvcSaveServiceDefinitionRequest")
+                body: models.ObjectSerializer.serialize(request, "RegistrySvcSaveDefinitionRequest")
             };
             let authenticationPromise = Promise.resolve();
             if (this.authentications.BearerAuth.apiKey) {
@@ -58995,10 +58999,6 @@ class UserSvcApi {
             // verify required parameter 'permissionId' is not null or undefined
             if (permissionId === null || permissionId === undefined) {
                 throw new Error('Required parameter permissionId was null or undefined when calling isAuthorized.');
-            }
-            // verify required parameter 'body' is not null or undefined
-            if (body === null || body === undefined) {
-                throw new Error('Required parameter body was null or undefined when calling isAuthorized.');
             }
             Object.assign(localVarHeaderParams, options.headers);
             let localVarRequestOptions = {

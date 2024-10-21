@@ -23,7 +23,9 @@ require('./DeploySvcStrategyType.js');
  * Check if a given object implements the DeploySvcDeployment interface.
  */
 function instanceOfDeploySvcDeployment(value) {
-    if (!('serviceSlug' in value) || value['serviceSlug'] === undefined)
+    if (!('definitionId' in value) || value['definitionId'] === undefined)
+        return false;
+    if (!('id' in value) || value['id'] === undefined)
         return false;
     return true;
 }
@@ -36,10 +38,12 @@ function DeploySvcDeploymentFromJSONTyped(json, ignoreDiscriminator) {
     }
     return {
         'autoScaling': json['autoScaling'] == null ? undefined : DeploySvcAutoScalingConfig.DeploySvcAutoScalingConfigFromJSON(json['autoScaling']),
-        'id': json['id'] == null ? undefined : json['id'],
+        'definitionId': json['definitionId'],
+        'description': json['description'] == null ? undefined : json['description'],
+        'id': json['id'],
+        'name': json['name'] == null ? undefined : json['name'],
         'replicas': json['replicas'] == null ? undefined : json['replicas'],
         'resources': json['resources'] == null ? undefined : DeploySvcResourceLimits.DeploySvcResourceLimitsFromJSON(json['resources']),
-        'serviceSlug': json['serviceSlug'],
         'strategy': json['strategy'] == null ? undefined : DeploySvcDeploymentStrategy.DeploySvcDeploymentStrategyFromJSON(json['strategy']),
         'targetRegions': json['targetRegions'] == null ? undefined : (json['targetRegions'].map(DeploySvcTargetRegion.DeploySvcTargetRegionFromJSON)),
     };
@@ -50,10 +54,12 @@ function DeploySvcDeploymentToJSON(value) {
     }
     return {
         'autoScaling': DeploySvcAutoScalingConfig.DeploySvcAutoScalingConfigToJSON(value['autoScaling']),
+        'definitionId': value['definitionId'],
+        'description': value['description'],
         'id': value['id'],
+        'name': value['name'],
         'replicas': value['replicas'],
         'resources': DeploySvcResourceLimits.DeploySvcResourceLimitsToJSON(value['resources']),
-        'serviceSlug': value['serviceSlug'],
         'strategy': DeploySvcDeploymentStrategy.DeploySvcDeploymentStrategyToJSON(value['strategy']),
         'targetRegions': value['targetRegions'] == null ? undefined : (value['targetRegions'].map(DeploySvcTargetRegion.DeploySvcTargetRegionToJSON)),
     };
