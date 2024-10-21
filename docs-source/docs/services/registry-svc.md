@@ -16,7 +16,7 @@ Its responsibilities include gathering information about:
 
 - Nodes: each Superplatform server registers itself as a node, which roughly correlates to a physical machine
 
-> This page is a high level overview of the `Registry Svc`. For more details, please see the [Registry Svc API documentation](/docs/superplatform/register-service-instance).
+> This page is a high level overview of the `Registry Svc`. For more details, please see the [Registry Svc API documentation](/docs/superplatform/register-instance).
 
 ## Entities
 
