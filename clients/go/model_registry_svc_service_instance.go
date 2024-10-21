@@ -22,6 +22,8 @@ var _ MappedNullable = &RegistrySvcServiceInstance{}
 
 // RegistrySvcServiceInstance struct for RegistrySvcServiceInstance
 type RegistrySvcServiceInstance struct {
+	// The ID of the deployment that this instance is an instance of.
+	DeploymentId string `json:"deploymentId"`
 	// Host of the service instance address. Required if URL is not provided
 	Host *string `json:"host,omitempty"`
 	// Required: ID of the service instance
@@ -38,8 +40,6 @@ type RegistrySvcServiceInstance struct {
 	Port *int32 `json:"port,omitempty"`
 	// Scheme of the service instance address. Required if URL is not provided.
 	Scheme *string `json:"scheme,omitempty"`
-	// The User Svc slug of the service whose instance is being registered.
-	ServiceSlug string `json:"serviceSlug"`
 	// Full address URL of the service instance.
 	Url string `json:"url"`
 }
@@ -50,10 +50,10 @@ type _RegistrySvcServiceInstance RegistrySvcServiceInstance
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewRegistrySvcServiceInstance(id string, serviceSlug string, url string) *RegistrySvcServiceInstance {
+func NewRegistrySvcServiceInstance(deploymentId string, id string, url string) *RegistrySvcServiceInstance {
 	this := RegistrySvcServiceInstance{}
+	this.DeploymentId = deploymentId
 	this.Id = id
-	this.ServiceSlug = serviceSlug
 	this.Url = url
 	return &this
 }
@@ -64,6 +64,30 @@ func NewRegistrySvcServiceInstance(id string, serviceSlug string, url string) *R
 func NewRegistrySvcServiceInstanceWithDefaults() *RegistrySvcServiceInstance {
 	this := RegistrySvcServiceInstance{}
 	return &this
+}
+
+// GetDeploymentId returns the DeploymentId field value
+func (o *RegistrySvcServiceInstance) GetDeploymentId() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.DeploymentId
+}
+
+// GetDeploymentIdOk returns a tuple with the DeploymentId field value
+// and a boolean to check if the value has been set.
+func (o *RegistrySvcServiceInstance) GetDeploymentIdOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.DeploymentId, true
+}
+
+// SetDeploymentId sets field value
+func (o *RegistrySvcServiceInstance) SetDeploymentId(v string) {
+	o.DeploymentId = v
 }
 
 // GetHost returns the Host field value if set, zero value otherwise.
@@ -314,30 +338,6 @@ func (o *RegistrySvcServiceInstance) SetScheme(v string) {
 	o.Scheme = &v
 }
 
-// GetServiceSlug returns the ServiceSlug field value
-func (o *RegistrySvcServiceInstance) GetServiceSlug() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.ServiceSlug
-}
-
-// GetServiceSlugOk returns a tuple with the ServiceSlug field value
-// and a boolean to check if the value has been set.
-func (o *RegistrySvcServiceInstance) GetServiceSlugOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.ServiceSlug, true
-}
-
-// SetServiceSlug sets field value
-func (o *RegistrySvcServiceInstance) SetServiceSlug(v string) {
-	o.ServiceSlug = v
-}
-
 // GetUrl returns the Url field value
 func (o *RegistrySvcServiceInstance) GetUrl() string {
 	if o == nil {
@@ -372,6 +372,7 @@ func (o RegistrySvcServiceInstance) MarshalJSON() ([]byte, error) {
 
 func (o RegistrySvcServiceInstance) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
+	toSerialize["deploymentId"] = o.DeploymentId
 	if !IsNil(o.Host) {
 		toSerialize["host"] = o.Host
 	}
@@ -394,7 +395,6 @@ func (o RegistrySvcServiceInstance) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Scheme) {
 		toSerialize["scheme"] = o.Scheme
 	}
-	toSerialize["serviceSlug"] = o.ServiceSlug
 	toSerialize["url"] = o.Url
 	return toSerialize, nil
 }
@@ -404,8 +404,8 @@ func (o *RegistrySvcServiceInstance) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
+		"deploymentId",
 		"id",
-		"serviceSlug",
 		"url",
 	}
 

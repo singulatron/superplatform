@@ -48,7 +48,7 @@ export interface DeploySvcDeployment {
      * @type {string}
      * @memberof DeploySvcDeployment
      */
-    serviceSlug: string;
+    serviceDefinitionId: string;
     /**
      * Deployment strategy (e.g., rolling update)
      * @type {DeploySvcDeploymentStrategy}

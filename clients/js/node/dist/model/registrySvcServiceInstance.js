@@ -17,6 +17,11 @@ export class RegistrySvcServiceInstance {
 RegistrySvcServiceInstance.discriminator = undefined;
 RegistrySvcServiceInstance.attributeTypeMap = [
     {
+        "name": "deploymentId",
+        "baseName": "deploymentId",
+        "type": "string"
+    },
+    {
         "name": "host",
         "baseName": "host",
         "type": "string"
@@ -54,11 +59,6 @@ RegistrySvcServiceInstance.attributeTypeMap = [
     {
         "name": "scheme",
         "baseName": "scheme",
-        "type": "string"
-    },
-    {
-        "name": "serviceSlug",
-        "baseName": "serviceSlug",
         "type": "string"
     },
     {

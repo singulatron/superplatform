@@ -46,11 +46,11 @@ export interface RegistrySvcRegisterServiceInstanceRequest {
      */
     scheme?: string;
     /**
-     * The User Svc slug of the service whose instance is being registered.
+     * The service definition id.
      * @type {string}
      * @memberof RegistrySvcRegisterServiceInstanceRequest
      */
-    slug: string;
+    serviceDefinitionId: string;
     /**
      * Full address URL of the service instance.
      * @type {string}

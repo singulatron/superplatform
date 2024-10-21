@@ -14,6 +14,10 @@ import { RequestFile } from './models';
 
 export class RegistrySvcServiceInstance {
     /**
+    * The ID of the deployment that this instance is an instance of.
+    */
+    'deploymentId': string;
+    /**
     * Host of the service instance address. Required if URL is not provided
     */
     'host'?: string;
@@ -46,10 +50,6 @@ export class RegistrySvcServiceInstance {
     */
     'scheme'?: string;
     /**
-    * The User Svc slug of the service whose instance is being registered.
-    */
-    'serviceSlug': string;
-    /**
     * Full address URL of the service instance.
     */
     'url': string;
@@ -57,6 +57,11 @@ export class RegistrySvcServiceInstance {
     static discriminator: string | undefined = undefined;
 
     static attributeTypeMap: Array<{name: string, baseName: string, type: string}> = [
+        {
+            "name": "deploymentId",
+            "baseName": "deploymentId",
+            "type": "string"
+        },
         {
             "name": "host",
             "baseName": "host",
@@ -95,11 +100,6 @@ export class RegistrySvcServiceInstance {
         {
             "name": "scheme",
             "baseName": "scheme",
-            "type": "string"
-        },
-        {
-            "name": "serviceSlug",
-            "baseName": "serviceSlug",
             "type": "string"
         },
         {

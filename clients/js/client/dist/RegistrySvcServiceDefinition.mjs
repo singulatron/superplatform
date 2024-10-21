@@ -20,8 +20,6 @@ import './RegistrySvcLanguage.mjs';
  * Check if a given object implements the RegistrySvcServiceDefinition interface.
  */
 function instanceOfRegistrySvcServiceDefinition(value) {
-    if (!('serviceSlug' in value) || value['serviceSlug'] === undefined)
-        return false;
     return true;
 }
 function RegistrySvcServiceDefinitionFromJSON(json) {
@@ -34,8 +32,8 @@ function RegistrySvcServiceDefinitionFromJSONTyped(json, ignoreDiscriminator) {
     return {
         'apiSpecs': json['apiSpecs'] == null ? undefined : (json['apiSpecs'].map(RegistrySvcAPISpecFromJSON)),
         'clients': json['clients'] == null ? undefined : (json['clients'].map(RegistrySvcClientFromJSON)),
+        'id': json['id'] == null ? undefined : json['id'],
         'image': json['image'] == null ? undefined : RegistrySvcImageSpecFromJSON(json['image']),
-        'serviceSlug': json['serviceSlug'],
     };
 }
 function RegistrySvcServiceDefinitionToJSON(value) {
@@ -45,8 +43,8 @@ function RegistrySvcServiceDefinitionToJSON(value) {
     return {
         'apiSpecs': value['apiSpecs'] == null ? undefined : (value['apiSpecs'].map(RegistrySvcAPISpecToJSON)),
         'clients': value['clients'] == null ? undefined : (value['clients'].map(RegistrySvcClientToJSON)),
+        'id': value['id'],
         'image': RegistrySvcImageSpecToJSON(value['image']),
-        'serviceSlug': value['serviceSlug'],
     };
 }
 

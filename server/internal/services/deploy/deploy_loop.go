@@ -61,7 +61,7 @@ func (ns *DeployService) cycle() error {
 		return errors.Wrap(err, "Error calling list nodes")
 	}
 
-	queryServiceInstancesRsp, _, err := registry.ListServiceInstances(ctx).Execute()
+	listServiceInstancesRsp, _, err := registry.ListServiceInstances(ctx).Execute()
 	if err != nil {
 		return errors.Wrap(err, "Error calling list service instances")
 	}
@@ -71,7 +71,7 @@ func (ns *DeployService) cycle() error {
 		return errors.Wrap(err, "Error calling list service definitions")
 	}
 
-	commands := allocator.GenerateCommands(listNodesRsp.Nodes, queryServiceInstancesRsp.ServiceInstances, deployments)
+	commands := allocator.GenerateCommands(listNodesRsp.Nodes, listServiceInstancesRsp.ServiceInstances, deployments)
 	for _, command := range commands {
 		var node *openapi.RegistrySvcNode
 		var definition *openapi.RegistrySvcServiceDefinition
@@ -83,7 +83,7 @@ func (ns *DeployService) cycle() error {
 		}
 
 		for _, v := range listServiceDefinitionsRsp.ServiceDefinitions {
-			if v.ServiceSlug == command.ServiceSlug {
+			if v.Id == command.DeploymentId {
 				definition = &v
 			}
 		}
@@ -107,7 +107,7 @@ func (ns *DeployService) processCommand(
 	case deploy.CommandTypeStart:
 		ns.clientFactory.Client(sdk.WithAddress(*command.NodeUrl)).DockerSvcAPI.LaunchContainer(ctx).Request(
 			openapi.DockerSvcLaunchContainerRequest{
-				Image: serviceDefinition.Image.Image,
+				Image: serviceDefinition.Image.Name,
 				Port:  serviceDefinition.Image.Port,
 			},
 		)

@@ -24,11 +24,11 @@ var _ MappedNullable = &RegistrySvcServiceDefinition{}
 type RegistrySvcServiceDefinition struct {
 	// API Specs such as OpenAPI definitions etc.
 	ApiSpecs []RegistrySvcAPISpec `json:"apiSpecs,omitempty"`
+	// Programming language clients such as on npm or GitHub.
 	Clients []RegistrySvcClient `json:"clients,omitempty"`
-	// Container specifications for Docker, K8s, etc.                                        // Programming language clients.
-	Image *RegistrySvcImageSpec `json:"image,omitempty"`
-	// The User Svc slug of the service whose instance is being registered.
-	ServiceSlug string `json:"serviceSlug"`
+	Id string `json:"id"`
+	// Container specifications for Docker, K8s, etc.
+	Image RegistrySvcImageSpec `json:"image"`
 }
 
 type _RegistrySvcServiceDefinition RegistrySvcServiceDefinition
@@ -37,9 +37,10 @@ type _RegistrySvcServiceDefinition RegistrySvcServiceDefinition
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewRegistrySvcServiceDefinition(serviceSlug string) *RegistrySvcServiceDefinition {
+func NewRegistrySvcServiceDefinition(id string, image RegistrySvcImageSpec) *RegistrySvcServiceDefinition {
 	this := RegistrySvcServiceDefinition{}
-	this.ServiceSlug = serviceSlug
+	this.Id = id
+	this.Image = image
 	return &this
 }
 
@@ -115,60 +116,52 @@ func (o *RegistrySvcServiceDefinition) SetClients(v []RegistrySvcClient) {
 	o.Clients = v
 }
 
-// GetImage returns the Image field value if set, zero value otherwise.
-func (o *RegistrySvcServiceDefinition) GetImage() RegistrySvcImageSpec {
-	if o == nil || IsNil(o.Image) {
-		var ret RegistrySvcImageSpec
-		return ret
-	}
-	return *o.Image
-}
-
-// GetImageOk returns a tuple with the Image field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *RegistrySvcServiceDefinition) GetImageOk() (*RegistrySvcImageSpec, bool) {
-	if o == nil || IsNil(o.Image) {
-		return nil, false
-	}
-	return o.Image, true
-}
-
-// HasImage returns a boolean if a field has been set.
-func (o *RegistrySvcServiceDefinition) HasImage() bool {
-	if o != nil && !IsNil(o.Image) {
-		return true
-	}
-
-	return false
-}
-
-// SetImage gets a reference to the given RegistrySvcImageSpec and assigns it to the Image field.
-func (o *RegistrySvcServiceDefinition) SetImage(v RegistrySvcImageSpec) {
-	o.Image = &v
-}
-
-// GetServiceSlug returns the ServiceSlug field value
-func (o *RegistrySvcServiceDefinition) GetServiceSlug() string {
+// GetId returns the Id field value
+func (o *RegistrySvcServiceDefinition) GetId() string {
 	if o == nil {
 		var ret string
 		return ret
 	}
 
-	return o.ServiceSlug
+	return o.Id
 }
 
-// GetServiceSlugOk returns a tuple with the ServiceSlug field value
+// GetIdOk returns a tuple with the Id field value
 // and a boolean to check if the value has been set.
-func (o *RegistrySvcServiceDefinition) GetServiceSlugOk() (*string, bool) {
+func (o *RegistrySvcServiceDefinition) GetIdOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.ServiceSlug, true
+	return &o.Id, true
 }
 
-// SetServiceSlug sets field value
-func (o *RegistrySvcServiceDefinition) SetServiceSlug(v string) {
-	o.ServiceSlug = v
+// SetId sets field value
+func (o *RegistrySvcServiceDefinition) SetId(v string) {
+	o.Id = v
+}
+
+// GetImage returns the Image field value
+func (o *RegistrySvcServiceDefinition) GetImage() RegistrySvcImageSpec {
+	if o == nil {
+		var ret RegistrySvcImageSpec
+		return ret
+	}
+
+	return o.Image
+}
+
+// GetImageOk returns a tuple with the Image field value
+// and a boolean to check if the value has been set.
+func (o *RegistrySvcServiceDefinition) GetImageOk() (*RegistrySvcImageSpec, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.Image, true
+}
+
+// SetImage sets field value
+func (o *RegistrySvcServiceDefinition) SetImage(v RegistrySvcImageSpec) {
+	o.Image = v
 }
 
 func (o RegistrySvcServiceDefinition) MarshalJSON() ([]byte, error) {
@@ -187,10 +180,8 @@ func (o RegistrySvcServiceDefinition) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Clients) {
 		toSerialize["clients"] = o.Clients
 	}
-	if !IsNil(o.Image) {
-		toSerialize["image"] = o.Image
-	}
-	toSerialize["serviceSlug"] = o.ServiceSlug
+	toSerialize["id"] = o.Id
+	toSerialize["image"] = o.Image
 	return toSerialize, nil
 }
 
@@ -199,7 +190,8 @@ func (o *RegistrySvcServiceDefinition) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"serviceSlug",
+		"id",
+		"image",
 	}
 
 	allProperties := make(map[string]interface{})

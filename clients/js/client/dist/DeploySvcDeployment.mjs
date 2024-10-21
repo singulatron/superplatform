@@ -21,7 +21,7 @@ import './DeploySvcStrategyType.mjs';
  * Check if a given object implements the DeploySvcDeployment interface.
  */
 function instanceOfDeploySvcDeployment(value) {
-    if (!('serviceSlug' in value) || value['serviceSlug'] === undefined)
+    if (!('serviceDefinitionId' in value) || value['serviceDefinitionId'] === undefined)
         return false;
     return true;
 }
@@ -37,7 +37,7 @@ function DeploySvcDeploymentFromJSONTyped(json, ignoreDiscriminator) {
         'id': json['id'] == null ? undefined : json['id'],
         'replicas': json['replicas'] == null ? undefined : json['replicas'],
         'resources': json['resources'] == null ? undefined : DeploySvcResourceLimitsFromJSON(json['resources']),
-        'serviceSlug': json['serviceSlug'],
+        'serviceDefinitionId': json['serviceDefinitionId'],
         'strategy': json['strategy'] == null ? undefined : DeploySvcDeploymentStrategyFromJSON(json['strategy']),
         'targetRegions': json['targetRegions'] == null ? undefined : (json['targetRegions'].map(DeploySvcTargetRegionFromJSON)),
     };
@@ -51,7 +51,7 @@ function DeploySvcDeploymentToJSON(value) {
         'id': value['id'],
         'replicas': value['replicas'],
         'resources': DeploySvcResourceLimitsToJSON(value['resources']),
-        'serviceSlug': value['serviceSlug'],
+        'serviceDefinitionId': value['serviceDefinitionId'],
         'strategy': DeploySvcDeploymentStrategyToJSON(value['strategy']),
         'targetRegions': value['targetRegions'] == null ? undefined : (value['targetRegions'].map(DeploySvcTargetRegionToJSON)),
     };

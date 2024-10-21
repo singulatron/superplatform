@@ -1,0 +1,4 @@
+id: test-a
+image:
+  name: hashicorp/http-echo
+  port: 8080

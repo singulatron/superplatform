@@ -11,6 +11,10 @@
  */
 export declare class RegistrySvcServiceInstance {
     /**
+    * The ID of the deployment that this instance is an instance of.
+    */
+    'deploymentId': string;
+    /**
     * Host of the service instance address. Required if URL is not provided
     */
     'host'?: string;
@@ -42,10 +46,6 @@ export declare class RegistrySvcServiceInstance {
     * Scheme of the service instance address. Required if URL is not provided.
     */
     'scheme'?: string;
-    /**
-    * The User Svc slug of the service whose instance is being registered.
-    */
-    'serviceSlug': string;
     /**
     * Full address URL of the service instance.
     */

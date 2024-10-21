@@ -20,15 +20,15 @@ export class RegistrySvcServiceDefinition {
     * API Specs such as OpenAPI definitions etc.
     */
     'apiSpecs'?: Array<RegistrySvcAPISpec>;
-    'clients'?: Array<RegistrySvcClient>;
     /**
-    * Container specifications for Docker, K8s, etc.                                        // Programming language clients.
+    * Programming language clients such as on npm or GitHub.
+    */
+    'clients'?: Array<RegistrySvcClient>;
+    'id'?: string;
+    /**
+    * Container specifications for Docker, K8s, etc.
     */
     'image'?: RegistrySvcImageSpec;
-    /**
-    * The User Svc slug of the service whose instance is being registered.
-    */
-    'serviceSlug': string;
 
     static discriminator: string | undefined = undefined;
 
@@ -44,14 +44,14 @@ export class RegistrySvcServiceDefinition {
             "type": "Array<RegistrySvcClient>"
         },
         {
+            "name": "id",
+            "baseName": "id",
+            "type": "string"
+        },
+        {
             "name": "image",
             "baseName": "image",
             "type": "RegistrySvcImageSpec"
-        },
-        {
-            "name": "serviceSlug",
-            "baseName": "serviceSlug",
-            "type": "string"
         }    ];
 
     static getAttributeTypeMap() {

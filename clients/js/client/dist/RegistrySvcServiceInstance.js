@@ -17,9 +17,9 @@
  * Check if a given object implements the RegistrySvcServiceInstance interface.
  */
 function instanceOfRegistrySvcServiceInstance(value) {
-    if (!('id' in value) || value['id'] === undefined)
+    if (!('deploymentId' in value) || value['deploymentId'] === undefined)
         return false;
-    if (!('serviceSlug' in value) || value['serviceSlug'] === undefined)
+    if (!('id' in value) || value['id'] === undefined)
         return false;
     if (!('url' in value) || value['url'] === undefined)
         return false;
@@ -33,6 +33,7 @@ function RegistrySvcServiceInstanceFromJSONTyped(json, ignoreDiscriminator) {
         return json;
     }
     return {
+        'deploymentId': json['deploymentId'],
         'host': json['host'] == null ? undefined : json['host'],
         'id': json['id'],
         'ip': json['ip'] == null ? undefined : json['ip'],
@@ -41,7 +42,6 @@ function RegistrySvcServiceInstanceFromJSONTyped(json, ignoreDiscriminator) {
         'path': json['path'] == null ? undefined : json['path'],
         'port': json['port'] == null ? undefined : json['port'],
         'scheme': json['scheme'] == null ? undefined : json['scheme'],
-        'serviceSlug': json['serviceSlug'],
         'url': json['url'],
     };
 }
@@ -50,6 +50,7 @@ function RegistrySvcServiceInstanceToJSON(value) {
         return value;
     }
     return {
+        'deploymentId': value['deploymentId'],
         'host': value['host'],
         'id': value['id'],
         'ip': value['ip'],
@@ -58,7 +59,6 @@ function RegistrySvcServiceInstanceToJSON(value) {
         'path': value['path'],
         'port': value['port'],
         'scheme': value['scheme'],
-        'serviceSlug': value['serviceSlug'],
         'url': value['url'],
     };
 }

@@ -21,49 +21,44 @@ func TestGenerateID(t *testing.T) {
 		{
 			name: "With URL",
 			instance: ServiceInstance{
-				URL:         "https://myserver.com:5981",
-				ServiceSlug: "user-svc",
+				URL: "https://myserver.com:5981/user-svc",
 			},
 			expectedID: "https://myserver.com:5981/user-svc",
 		},
 		{
 			name: "With IP",
 			instance: ServiceInstance{
-				Scheme:      "https",
-				IP:          "192.168.1.1",
-				Port:        999,
-				ServiceSlug: "user-svc",
+				Scheme: "https",
+				IP:     "192.168.1.1",
+				Port:   999,
 			},
-			expectedID: "https://192.168.1.1:999/user-svc",
+			expectedID: "https://192.168.1.1:999",
 		},
 		{
 			name: "With Host",
 			instance: ServiceInstance{
-				Scheme:      "http",
-				Host:        "api.com",
-				Port:        80,
-				ServiceSlug: "user-svc",
+				Scheme: "http",
+				Host:   "api.com",
+				Port:   80,
 			},
-			expectedID: "http://api.com:80/user-svc",
+			expectedID: "http://api.com:80",
 		},
 		{
 			name: "With Host and Port",
 			instance: ServiceInstance{
-				Scheme:      "http",
-				Host:        "api.com",
-				Port:        8080,
-				ServiceSlug: "user-svc",
+				Scheme: "http",
+				Host:   "api.com",
+				Port:   8080,
 			},
-			expectedID: "http://api.com:8080/user-svc",
+			expectedID: "http://api.com:8080",
 		},
 		{
 			name: "With Missing URL, IP, and Host",
 			instance: ServiceInstance{
-				Scheme:      "http",
-				Port:        8080,
-				ServiceSlug: "user-svc",
+				Scheme: "http",
+				Port:   8080,
 			},
-			expectedID: "http://:8080/user-svc",
+			expectedID: "http://:8080",
 		},
 	}
 

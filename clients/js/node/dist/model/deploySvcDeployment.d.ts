@@ -33,7 +33,7 @@ export declare class DeploySvcDeployment {
     /**
     * The User Svc slug of the service that is being deployed.
     */
-    'serviceSlug': string;
+    'serviceDefinitionId': string;
     /**
     * Deployment strategy (e.g., rolling update)
     */

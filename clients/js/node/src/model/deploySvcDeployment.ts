@@ -36,7 +36,7 @@ export class DeploySvcDeployment {
     /**
     * The User Svc slug of the service that is being deployed.
     */
-    'serviceSlug': string;
+    'serviceDefinitionId': string;
     /**
     * Deployment strategy (e.g., rolling update)
     */
@@ -70,8 +70,8 @@ export class DeploySvcDeployment {
             "type": "DeploySvcResourceLimits"
         },
         {
-            "name": "serviceSlug",
-            "baseName": "serviceSlug",
+            "name": "serviceDefinitionId",
+            "baseName": "serviceDefinitionId",
             "type": "string"
         },
         {

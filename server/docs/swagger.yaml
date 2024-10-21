@@ -277,9 +277,9 @@ definitions:
         allOf:
         - $ref: '#/definitions/deploy_svc.ResourceLimits'
         description: Resource requirements for each replica
-      serviceSlug:
+      serviceDefinitionId:
         description: The User Svc slug of the service that is being deployed.
-        example: user-svc
+        example: svcd_deBXZMpxrQ
         type: string
       strategy:
         allOf:
@@ -291,7 +291,7 @@ definitions:
           $ref: '#/definitions/deploy_svc.TargetRegion'
         type: array
     required:
-    - serviceSlug
+    - serviceDefinitionId
     type: object
   deploy_svc.DeploymentStrategy:
     properties:
@@ -1145,16 +1145,16 @@ definitions:
     type: object
   registry_svc.ImageSpec:
     properties:
-      image:
-        description: Image is the Docker image to use for the container
+      name:
+        description: Name is the container image name/URL to use for the container
         example: nginx:latest
         type: string
       port:
-        description: Port is the port number that the container will expose
+        description: Port is the port number that the container will listen on internally
         example: 8080
         type: integer
     required:
-    - image
+    - name
     - port
     type: object
   registry_svc.Language:
@@ -1283,8 +1283,8 @@ definitions:
           provided.
         example: https
         type: string
-      slug:
-        description: The User Svc slug of the service whose instance is being registered.
+      serviceDefinitionId:
+        description: The service definition id.
         example: user-svc
         type: string
       url:
@@ -1292,7 +1292,7 @@ definitions:
         example: https://myserver.com:5981
         type: string
     required:
-    - slug
+    - serviceDefinitionId
     type: object
   registry_svc.RegisterServiceInstanceResponse:
     type: object
@@ -1326,23 +1326,26 @@ definitions:
           $ref: '#/definitions/registry_svc.APISpec'
         type: array
       clients:
+        description: Programming language clients such as on npm or GitHub.
         items:
           $ref: '#/definitions/registry_svc.Client'
         type: array
+      id:
+        type: string
       image:
         allOf:
         - $ref: '#/definitions/registry_svc.ImageSpec'
-        description: Container specifications for Docker, K8s, etc.                                        //
-          Programming language clients.
-      serviceSlug:
-        description: The User Svc slug of the service whose instance is being registered.
-        example: user-svc
-        type: string
+        description: Container specifications for Docker, K8s, etc.
     required:
-    - serviceSlug
+    - id
+    - image
     type: object
   registry_svc.ServiceInstance:
     properties:
+      deploymentId:
+        description: The ID of the deployment that this instance is an instance of.
+        example: depl_deBUCtJirc
+        type: string
       host:
         description: Host of the service instance address. Required if URL is not
           provided
@@ -1378,17 +1381,13 @@ definitions:
           provided.
         example: https
         type: string
-      serviceSlug:
-        description: The User Svc slug of the service whose instance is being registered.
-        example: user-svc
-        type: string
       url:
         description: Full address URL of the service instance.
         example: https://myserver.com:5981
         type: string
     required:
+    - deploymentId
     - id
-    - serviceSlug
     - url
     type: object
   registry_svc.Usage:

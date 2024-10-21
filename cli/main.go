@@ -7,9 +7,10 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/singulatron/superplatform/cli/commands/env"
-	"github.com/singulatron/superplatform/cli/commands/login"
-	"github.com/singulatron/superplatform/cli/commands/run"
-	"github.com/singulatron/superplatform/cli/commands/whoami"
+	service_definitions "github.com/singulatron/superplatform/cli/commands/service-definitions"
+	service_instances "github.com/singulatron/superplatform/cli/commands/service-instances"
+	"github.com/singulatron/superplatform/cli/commands/user/login"
+	"github.com/singulatron/superplatform/cli/commands/user/whoami"
 )
 
 func main() {
@@ -23,9 +24,11 @@ func main() {
 	}
 
 	addEnvCommands(rootCmd)
-	addRunCommands(rootCmd)
 	addLoginCommands(rootCmd)
 	addWhoamiCommands(rootCmd)
+
+	service_definitions.AddServiceDefinitionCommands(rootCmd)
+	service_instances.AddServiceInstanceCommands(rootCmd)
 
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
@@ -71,17 +74,6 @@ func addEnvCommands(rootCmd *cobra.Command) {
 	envCmd.AddCommand(envCurrentCmd)
 
 	rootCmd.AddCommand(envCmd)
-}
-
-func addRunCommands(rootCmd *cobra.Command) {
-	var runCmd = &cobra.Command{
-		Use:   "run [filePath]",
-		Args:  cobra.ExactArgs(1),
-		Short: "Run service(s) found from a JSON or YAML file.",
-		RunE:  run.Run,
-	}
-
-	rootCmd.AddCommand(runCmd)
 }
 
 func addLoginCommands(rootCmd *cobra.Command) {

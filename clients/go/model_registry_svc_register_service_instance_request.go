@@ -32,8 +32,8 @@ type RegistrySvcRegisterServiceInstanceRequest struct {
 	Port *int32 `json:"port,omitempty"`
 	// Scheme of the service instance address. Required if URL is not provided.
 	Scheme *string `json:"scheme,omitempty"`
-	// The User Svc slug of the service whose instance is being registered.
-	Slug string `json:"slug"`
+	// The service definition id.
+	ServiceDefinitionId string `json:"serviceDefinitionId"`
 	// Full address URL of the service instance.
 	Url *string `json:"url,omitempty"`
 }
@@ -44,9 +44,9 @@ type _RegistrySvcRegisterServiceInstanceRequest RegistrySvcRegisterServiceInstan
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewRegistrySvcRegisterServiceInstanceRequest(slug string) *RegistrySvcRegisterServiceInstanceRequest {
+func NewRegistrySvcRegisterServiceInstanceRequest(serviceDefinitionId string) *RegistrySvcRegisterServiceInstanceRequest {
 	this := RegistrySvcRegisterServiceInstanceRequest{}
-	this.Slug = slug
+	this.ServiceDefinitionId = serviceDefinitionId
 	return &this
 }
 
@@ -218,28 +218,28 @@ func (o *RegistrySvcRegisterServiceInstanceRequest) SetScheme(v string) {
 	o.Scheme = &v
 }
 
-// GetSlug returns the Slug field value
-func (o *RegistrySvcRegisterServiceInstanceRequest) GetSlug() string {
+// GetServiceDefinitionId returns the ServiceDefinitionId field value
+func (o *RegistrySvcRegisterServiceInstanceRequest) GetServiceDefinitionId() string {
 	if o == nil {
 		var ret string
 		return ret
 	}
 
-	return o.Slug
+	return o.ServiceDefinitionId
 }
 
-// GetSlugOk returns a tuple with the Slug field value
+// GetServiceDefinitionIdOk returns a tuple with the ServiceDefinitionId field value
 // and a boolean to check if the value has been set.
-func (o *RegistrySvcRegisterServiceInstanceRequest) GetSlugOk() (*string, bool) {
+func (o *RegistrySvcRegisterServiceInstanceRequest) GetServiceDefinitionIdOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Slug, true
+	return &o.ServiceDefinitionId, true
 }
 
-// SetSlug sets field value
-func (o *RegistrySvcRegisterServiceInstanceRequest) SetSlug(v string) {
-	o.Slug = v
+// SetServiceDefinitionId sets field value
+func (o *RegistrySvcRegisterServiceInstanceRequest) SetServiceDefinitionId(v string) {
+	o.ServiceDefinitionId = v
 }
 
 // GetUrl returns the Url field value if set, zero value otherwise.
@@ -299,7 +299,7 @@ func (o RegistrySvcRegisterServiceInstanceRequest) ToMap() (map[string]interface
 	if !IsNil(o.Scheme) {
 		toSerialize["scheme"] = o.Scheme
 	}
-	toSerialize["slug"] = o.Slug
+	toSerialize["serviceDefinitionId"] = o.ServiceDefinitionId
 	if !IsNil(o.Url) {
 		toSerialize["url"] = o.Url
 	}
@@ -311,7 +311,7 @@ func (o *RegistrySvcRegisterServiceInstanceRequest) UnmarshalJSON(data []byte) (
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"slug",
+		"serviceDefinitionId",
 	}
 
 	allProperties := make(map[string]interface{})

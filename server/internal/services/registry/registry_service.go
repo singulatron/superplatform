@@ -73,7 +73,7 @@ func NewRegistryService(
 	if err != nil {
 		return nil, err
 	}
-	serviceDefinitionStore, err := datastoreFactory("registrySvcServiceInstances", &registry.ServiceDefinition{})
+	serviceDefinitionStore, err := datastoreFactory("registrySvcServiceDefinitions", &registry.ServiceDefinition{})
 	if err != nil {
 		return nil, err
 	}
@@ -138,7 +138,7 @@ func (ns *RegistryService) nodeHeartbeat() {
 		// @todo detect non-nvidia gpus
 		outp, err := ns.getNvidiaSmiOutput()
 		if err != nil {
-			logger.Debug("Failed to get smi output", slog.Any("error", err))
+			// logger.Debug("Failed to get smi output", slog.Any("error", err))
 		} else {
 			gpus, err := ns.ParseNvidiaSmiOutput(outp)
 			if err != nil {

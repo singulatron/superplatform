@@ -37,8 +37,8 @@ DeploySvcDeployment.attributeTypeMap = [
         "type": "DeploySvcResourceLimits"
     },
     {
-        "name": "serviceSlug",
-        "baseName": "serviceSlug",
+        "name": "serviceDefinitionId",
+        "baseName": "serviceDefinitionId",
         "type": "string"
     },
     {

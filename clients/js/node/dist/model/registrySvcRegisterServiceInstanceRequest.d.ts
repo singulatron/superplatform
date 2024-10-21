@@ -31,9 +31,9 @@ export declare class RegistrySvcRegisterServiceInstanceRequest {
     */
     'scheme'?: string;
     /**
-    * The User Svc slug of the service whose instance is being registered.
+    * The service definition id.
     */
-    'slug': string;
+    'serviceDefinitionId': string;
     /**
     * Full address URL of the service instance.
     */

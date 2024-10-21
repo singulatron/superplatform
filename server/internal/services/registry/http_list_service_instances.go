@@ -97,10 +97,6 @@ func (rs *RegistryService) getServiceInstances(query List) ([]*registry.ServiceI
 			match = false
 		}
 
-		if query.ServiceSlug != "" && v.ServiceSlug != query.ServiceSlug {
-			match = false
-		}
-
 		if match {
 			filtered = append(filtered, v)
 		}

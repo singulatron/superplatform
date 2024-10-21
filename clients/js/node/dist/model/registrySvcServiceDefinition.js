@@ -27,13 +27,13 @@ RegistrySvcServiceDefinition.attributeTypeMap = [
         "type": "Array<RegistrySvcClient>"
     },
     {
+        "name": "id",
+        "baseName": "id",
+        "type": "string"
+    },
+    {
         "name": "image",
         "baseName": "image",
         "type": "RegistrySvcImageSpec"
-    },
-    {
-        "name": "serviceSlug",
-        "baseName": "serviceSlug",
-        "type": "string"
     }
 ];

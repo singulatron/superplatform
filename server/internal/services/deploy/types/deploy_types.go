@@ -13,17 +13,36 @@ type ErrorResponse struct {
 }
 
 type Deployment struct {
-	ID            string             `json:"id,omitempty" example:"depl_dbOdi5eLQK"`                      // ID of the deployment (e.g., "depl_dbOdi5eLQK")
-	ServiceSlug   string             `json:"serviceSlug,omitempty" example:"user-svc" binding:"required"` // The User Svc slug of the service that is being deployed.
-	Replicas      int                `json:"replicas,omitempty"`                                          // Number of container instances to run
-	Strategy      DeploymentStrategy `json:"strategy,omitempty"`                                          // Deployment strategy (e.g., rolling update)
-	Resources     ResourceLimits     `json:"resources,omitempty"`                                         // Resource requirements for each replica
-	AutoScaling   *AutoScalingConfig `json:"autoScaling,omitempty"`                                       // Optional: Auto-scaling rules
-	TargetRegions []TargetRegion     `json:"targetRegions,omitempty"`                                     // Target deployment regions or clusters
+	// ID of the deployment (e.g., "depl_dbOdi5eLQK")
+	Id string `json:"id,omitempty" example:"depl_dbOdi5eLQK" binding:"required"`
+
+	// The User Svc slug of the service that is being deployed.
+	ServiceDefinitionId string `json:"serviceDefinitionId,omitempty" example:"svcd_deBXZMpxrQ" binding:"required"`
+
+	// Short name for easy reference (e.g., "user-service-v2")
+	Name string `json:"name,omitempty" example:"user-service-v2"`
+
+	// Description of what this deployment does
+	Description string `json:"description,omitempty" example:"Handles user service requests"`
+
+	// Number of container instances to run
+	Replicas int `json:"replicas,omitempty"`
+
+	// Deployment strategy (e.g., rolling update)
+	Strategy DeploymentStrategy `json:"strategy,omitempty"`
+
+	// Resource requirements for each replica
+	Resources ResourceLimits `json:"resources,omitempty"`
+
+	// Optional: Auto-scaling rules
+	AutoScaling *AutoScalingConfig `json:"autoScaling,omitempty"`
+
+	// Target deployment regions or clusters
+	TargetRegions []TargetRegion `json:"targetRegions,omitempty"`
 }
 
 func (d Deployment) GetId() string {
-	return d.ID
+	return d.Id
 }
 
 type DeploymentStrategy struct {

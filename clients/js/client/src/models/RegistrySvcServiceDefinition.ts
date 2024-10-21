@@ -45,30 +45,29 @@ export interface RegistrySvcServiceDefinition {
      */
     apiSpecs?: Array<RegistrySvcAPISpec>;
     /**
-     * 
+     * Programming language clients such as on npm or GitHub.
      * @type {Array<RegistrySvcClient>}
      * @memberof RegistrySvcServiceDefinition
      */
     clients?: Array<RegistrySvcClient>;
     /**
-     * Container specifications for Docker, K8s, etc.                                        // Programming language clients.
+     * 
+     * @type {string}
+     * @memberof RegistrySvcServiceDefinition
+     */
+    id?: string;
+    /**
+     * Container specifications for Docker, K8s, etc.
      * @type {RegistrySvcImageSpec}
      * @memberof RegistrySvcServiceDefinition
      */
     image?: RegistrySvcImageSpec;
-    /**
-     * The User Svc slug of the service whose instance is being registered.
-     * @type {string}
-     * @memberof RegistrySvcServiceDefinition
-     */
-    serviceSlug: string;
 }
 
 /**
  * Check if a given object implements the RegistrySvcServiceDefinition interface.
  */
 export function instanceOfRegistrySvcServiceDefinition(value: object): value is RegistrySvcServiceDefinition {
-    if (!('serviceSlug' in value) || value['serviceSlug'] === undefined) return false;
     return true;
 }
 
@@ -84,8 +83,8 @@ export function RegistrySvcServiceDefinitionFromJSONTyped(json: any, ignoreDiscr
         
         'apiSpecs': json['apiSpecs'] == null ? undefined : ((json['apiSpecs'] as Array<any>).map(RegistrySvcAPISpecFromJSON)),
         'clients': json['clients'] == null ? undefined : ((json['clients'] as Array<any>).map(RegistrySvcClientFromJSON)),
+        'id': json['id'] == null ? undefined : json['id'],
         'image': json['image'] == null ? undefined : RegistrySvcImageSpecFromJSON(json['image']),
-        'serviceSlug': json['serviceSlug'],
     };
 }
 
@@ -97,8 +96,8 @@ export function RegistrySvcServiceDefinitionToJSON(value?: RegistrySvcServiceDef
         
         'apiSpecs': value['apiSpecs'] == null ? undefined : ((value['apiSpecs'] as Array<any>).map(RegistrySvcAPISpecToJSON)),
         'clients': value['clients'] == null ? undefined : ((value['clients'] as Array<any>).map(RegistrySvcClientToJSON)),
+        'id': value['id'],
         'image': RegistrySvcImageSpecToJSON(value['image']),
-        'serviceSlug': value['serviceSlug'],
     };
 }
 

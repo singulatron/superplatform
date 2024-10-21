@@ -86,12 +86,11 @@ func (rs *RegistryService) registerServiceInstance(req *registry.RegisterService
 	}
 
 	inst := &registry.ServiceInstance{
-		URL:         req.URL,
-		Scheme:      req.Scheme,
-		Host:        req.Host,
-		IP:          req.IP,
-		Path:        req.Path,
-		ServiceSlug: req.ServiceSlug,
+		URL:    req.URL,
+		Scheme: req.Scheme,
+		Host:   req.Host,
+		IP:     req.IP,
+		Path:   req.Path,
 	}
 	inst.ID = inst.DeriveID()
 

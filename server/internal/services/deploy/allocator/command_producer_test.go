@@ -23,20 +23,20 @@ func TestGenerateCommands_ScaleUp(t *testing.T) {
 		{Url: StrPtr("node2"), Usage: &openapi.RegistrySvcResourceUsage{Cpu: &openapi.RegistrySvcUsage{Used: Int64Ptr(60)}}},
 	}
 	serviceInstances := []openapi.RegistrySvcServiceInstance{
-		{Id: "instance1", ServiceSlug: "service-A", LastHeartbeat: StrPtr("valid")},
+		{Id: "instance1", DeploymentId: "service-A", LastHeartbeat: StrPtr("valid")},
 	}
 	deployments := []*deploy.Deployment{
-		{ServiceSlug: "service-A", Replicas: 3},
+		{Id: "service-A", Replicas: 3},
 	}
 
 	commands := allocator.GenerateCommands(nodes, serviceInstances, deployments)
 
 	require.Equal(t, 2, len(commands))
 	require.Equal(t, deploy.CommandType("START"), commands[0].Action)
-	require.Equal(t, "service-A", commands[0].ServiceSlug)
+	require.Equal(t, "service-A", commands[0].DeploymentId)
 	require.Equal(t, "node1", *commands[0].NodeUrl)
 	require.Equal(t, deploy.CommandType("START"), commands[1].Action)
-	require.Equal(t, "service-A", commands[1].ServiceSlug)
+	require.Equal(t, "service-A", commands[1].DeploymentId)
 	require.Equal(t, "node2", *commands[1].NodeUrl)
 }
 
@@ -45,21 +45,21 @@ func TestGenerateCommands_ScaleDown(t *testing.T) {
 		{Url: StrPtr("node1"), Usage: &openapi.RegistrySvcResourceUsage{Cpu: &openapi.RegistrySvcUsage{Used: Int64Ptr(50)}}},
 	}
 	serviceInstances := []openapi.RegistrySvcServiceInstance{
-		{Id: "instance1", ServiceSlug: "service-A", LastHeartbeat: StrPtr("valid")},
-		{Id: "instance2", ServiceSlug: "service-A", LastHeartbeat: StrPtr("valid")},
-		{Id: "instance3", ServiceSlug: "service-A", LastHeartbeat: StrPtr("valid")},
+		{Id: "instance1", DeploymentId: "service-A", LastHeartbeat: StrPtr("valid")},
+		{Id: "instance2", DeploymentId: "service-A", LastHeartbeat: StrPtr("valid")},
+		{Id: "instance3", DeploymentId: "service-A", LastHeartbeat: StrPtr("valid")},
 	}
 	deployments := []*deploy.Deployment{
-		{ServiceSlug: "service-A", Replicas: 1},
+		{Id: "service-A", Replicas: 1},
 	}
 
 	commands := allocator.GenerateCommands(nodes, serviceInstances, deployments)
 
 	require.Equal(t, 2, len(commands))
 	require.Equal(t, deploy.CommandType("KILL"), commands[0].Action)
-	require.Equal(t, "service-A", commands[0].ServiceSlug)
+	require.Equal(t, "service-A", commands[0].DeploymentId)
 	require.Equal(t, deploy.CommandType("KILL"), commands[1].Action)
-	require.Equal(t, "service-A", commands[1].ServiceSlug)
+	require.Equal(t, "service-A", commands[1].DeploymentId)
 }
 
 func TestGenerateCommands_KillUnhealthy(t *testing.T) {
@@ -67,17 +67,17 @@ func TestGenerateCommands_KillUnhealthy(t *testing.T) {
 		{Url: StrPtr("node1"), Usage: &openapi.RegistrySvcResourceUsage{Cpu: &openapi.RegistrySvcUsage{Used: Int64Ptr(50)}}},
 	}
 	serviceInstances := []openapi.RegistrySvcServiceInstance{
-		{Id: "instance1", ServiceSlug: "service-A", LastHeartbeat: nil},
+		{Id: "instance1", DeploymentId: "service-A", LastHeartbeat: nil},
 	}
 	deployments := []*deploy.Deployment{
-		{ServiceSlug: "service-A", Replicas: 1},
+		{Id: "service-A", Replicas: 1},
 	}
 
 	commands := allocator.GenerateCommands(nodes, serviceInstances, deployments)
 
 	require.Equal(t, 1, len(commands))
 	require.Equal(t, deploy.CommandType("KILL"), commands[0].Action)
-	require.Equal(t, "service-A", commands[0].ServiceSlug)
+	require.Equal(t, "service-A", commands[0].DeploymentId)
 	require.Equal(t, "instance1", *commands[0].InstanceId)
 }
 
@@ -86,10 +86,10 @@ func TestGenerateCommands_NoAction(t *testing.T) {
 		{Url: StrPtr("node1"), Usage: &openapi.RegistrySvcResourceUsage{Cpu: &openapi.RegistrySvcUsage{Used: Int64Ptr(50)}}},
 	}
 	serviceInstances := []openapi.RegistrySvcServiceInstance{
-		{Id: "instance1", ServiceSlug: "service-A", LastHeartbeat: StrPtr("valid")},
+		{Id: "instance1", DeploymentId: "service-A", LastHeartbeat: StrPtr("valid")},
 	}
 	deployments := []*deploy.Deployment{
-		{ServiceSlug: "service-A", Replicas: 1},
+		{Id: "service-A", Replicas: 1},
 	}
 
 	commands := allocator.GenerateCommands(nodes, serviceInstances, deployments)

@@ -25,23 +25,23 @@ export interface RegistrySvcServiceDefinition {
      */
     apiSpecs?: Array<RegistrySvcAPISpec>;
     /**
-     *
+     * Programming language clients such as on npm or GitHub.
      * @type {Array<RegistrySvcClient>}
      * @memberof RegistrySvcServiceDefinition
      */
     clients?: Array<RegistrySvcClient>;
     /**
-     * Container specifications for Docker, K8s, etc.                                        // Programming language clients.
+     *
+     * @type {string}
+     * @memberof RegistrySvcServiceDefinition
+     */
+    id?: string;
+    /**
+     * Container specifications for Docker, K8s, etc.
      * @type {RegistrySvcImageSpec}
      * @memberof RegistrySvcServiceDefinition
      */
     image?: RegistrySvcImageSpec;
-    /**
-     * The User Svc slug of the service whose instance is being registered.
-     * @type {string}
-     * @memberof RegistrySvcServiceDefinition
-     */
-    serviceSlug: string;
 }
 /**
  * Check if a given object implements the RegistrySvcServiceDefinition interface.

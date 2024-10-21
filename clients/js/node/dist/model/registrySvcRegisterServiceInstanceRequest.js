@@ -42,8 +42,8 @@ RegistrySvcRegisterServiceInstanceRequest.attributeTypeMap = [
         "type": "string"
     },
     {
-        "name": "slug",
-        "baseName": "slug",
+        "name": "serviceDefinitionId",
+        "baseName": "serviceDefinitionId",
         "type": "string"
     },
     {

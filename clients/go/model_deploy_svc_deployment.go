@@ -31,7 +31,7 @@ type DeploySvcDeployment struct {
 	// Resource requirements for each replica
 	Resources *DeploySvcResourceLimits `json:"resources,omitempty"`
 	// The User Svc slug of the service that is being deployed.
-	ServiceSlug string `json:"serviceSlug"`
+	ServiceDefinitionId string `json:"serviceDefinitionId"`
 	// Deployment strategy (e.g., rolling update)
 	Strategy *DeploySvcDeploymentStrategy `json:"strategy,omitempty"`
 	// Target deployment regions or clusters
@@ -44,9 +44,9 @@ type _DeploySvcDeployment DeploySvcDeployment
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewDeploySvcDeployment(serviceSlug string) *DeploySvcDeployment {
+func NewDeploySvcDeployment(serviceDefinitionId string) *DeploySvcDeployment {
 	this := DeploySvcDeployment{}
-	this.ServiceSlug = serviceSlug
+	this.ServiceDefinitionId = serviceDefinitionId
 	return &this
 }
 
@@ -186,28 +186,28 @@ func (o *DeploySvcDeployment) SetResources(v DeploySvcResourceLimits) {
 	o.Resources = &v
 }
 
-// GetServiceSlug returns the ServiceSlug field value
-func (o *DeploySvcDeployment) GetServiceSlug() string {
+// GetServiceDefinitionId returns the ServiceDefinitionId field value
+func (o *DeploySvcDeployment) GetServiceDefinitionId() string {
 	if o == nil {
 		var ret string
 		return ret
 	}
 
-	return o.ServiceSlug
+	return o.ServiceDefinitionId
 }
 
-// GetServiceSlugOk returns a tuple with the ServiceSlug field value
+// GetServiceDefinitionIdOk returns a tuple with the ServiceDefinitionId field value
 // and a boolean to check if the value has been set.
-func (o *DeploySvcDeployment) GetServiceSlugOk() (*string, bool) {
+func (o *DeploySvcDeployment) GetServiceDefinitionIdOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.ServiceSlug, true
+	return &o.ServiceDefinitionId, true
 }
 
-// SetServiceSlug sets field value
-func (o *DeploySvcDeployment) SetServiceSlug(v string) {
-	o.ServiceSlug = v
+// SetServiceDefinitionId sets field value
+func (o *DeploySvcDeployment) SetServiceDefinitionId(v string) {
+	o.ServiceDefinitionId = v
 }
 
 // GetStrategy returns the Strategy field value if set, zero value otherwise.
@@ -296,7 +296,7 @@ func (o DeploySvcDeployment) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Resources) {
 		toSerialize["resources"] = o.Resources
 	}
-	toSerialize["serviceSlug"] = o.ServiceSlug
+	toSerialize["serviceDefinitionId"] = o.ServiceDefinitionId
 	if !IsNil(o.Strategy) {
 		toSerialize["strategy"] = o.Strategy
 	}
@@ -311,7 +311,7 @@ func (o *DeploySvcDeployment) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"serviceSlug",
+		"serviceDefinitionId",
 	}
 
 	allProperties := make(map[string]interface{})

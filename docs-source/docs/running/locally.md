@@ -80,11 +80,13 @@ The files are located at
 ls ~/.singulatron/data
 ```
 
+Each file is prefixed by the owner service slug, so the `User Svc` `users` table becomes `userSvcUsers`.
+
 If you want to view the contents of a file:
 
 ```bash
-cat ~/.singulatron/data/users.zip | gzip -dc
+cat ~/.singulatron/data/userSvcUsers.zip | gzip -dc
 
 # or if you jave jq installed
-cat ~/.singulatron/data/users.zip | gzip -dc | jq
+cat ~/.singulatron/data/userSvcUsers.zip | gzip -dc | jq
 ```

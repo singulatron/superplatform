@@ -4207,7 +4207,7 @@ const docTemplate = `{
         "deploy_svc.Deployment": {
             "type": "object",
             "required": [
-                "serviceSlug"
+                "serviceDefinitionId"
             ],
             "properties": {
                 "autoScaling": {
@@ -4235,10 +4235,10 @@ const docTemplate = `{
                         }
                     ]
                 },
-                "serviceSlug": {
+                "serviceDefinitionId": {
                     "description": "The User Svc slug of the service that is being deployed.",
                     "type": "string",
-                    "example": "user-svc"
+                    "example": "svcd_deBXZMpxrQ"
                 },
                 "strategy": {
                     "description": "Deployment strategy (e.g., rolling update)",
@@ -5451,17 +5451,17 @@ const docTemplate = `{
         "registry_svc.ImageSpec": {
             "type": "object",
             "required": [
-                "image",
+                "name",
                 "port"
             ],
             "properties": {
-                "image": {
-                    "description": "Image is the Docker image to use for the container",
+                "name": {
+                    "description": "Name is the container image name/URL to use for the container",
                     "type": "string",
                     "example": "nginx:latest"
                 },
                 "port": {
-                    "description": "Port is the port number that the container will expose",
+                    "description": "Port is the port number that the container will listen on internally",
                     "type": "integer",
                     "example": 8080
                 }
@@ -5601,7 +5601,7 @@ const docTemplate = `{
         "registry_svc.RegisterServiceInstanceRequest": {
             "type": "object",
             "required": [
-                "slug"
+                "serviceDefinitionId"
             ],
             "properties": {
                 "host": {
@@ -5629,8 +5629,8 @@ const docTemplate = `{
                     "type": "string",
                     "example": "https"
                 },
-                "slug": {
-                    "description": "The User Svc slug of the service whose instance is being registered.",
+                "serviceDefinitionId": {
+                    "description": "The service definition id.",
                     "type": "string",
                     "example": "user-svc"
                 },
@@ -5687,7 +5687,8 @@ const docTemplate = `{
         "registry_svc.ServiceDefinition": {
             "type": "object",
             "required": [
-                "serviceSlug"
+                "id",
+                "image"
             ],
             "properties": {
                 "apiSpecs": {
@@ -5698,34 +5699,38 @@ const docTemplate = `{
                     }
                 },
                 "clients": {
+                    "description": "Programming language clients such as on npm or GitHub.",
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/registry_svc.Client"
                     }
                 },
+                "id": {
+                    "type": "string"
+                },
                 "image": {
-                    "description": "Container specifications for Docker, K8s, etc.                                        // Programming language clients.",
+                    "description": "Container specifications for Docker, K8s, etc.",
                     "allOf": [
                         {
                             "$ref": "#/definitions/registry_svc.ImageSpec"
                         }
                     ]
-                },
-                "serviceSlug": {
-                    "description": "The User Svc slug of the service whose instance is being registered.",
-                    "type": "string",
-                    "example": "user-svc"
                 }
             }
         },
         "registry_svc.ServiceInstance": {
             "type": "object",
             "required": [
+                "deploymentId",
                 "id",
-                "serviceSlug",
                 "url"
             ],
             "properties": {
+                "deploymentId": {
+                    "description": "The ID of the deployment that this instance is an instance of.",
+                    "type": "string",
+                    "example": "depl_deBUCtJirc"
+                },
                 "host": {
                     "description": "Host of the service instance address. Required if URL is not provided",
                     "type": "string",
@@ -5764,11 +5769,6 @@ const docTemplate = `{
                     "description": "Scheme of the service instance address. Required if URL is not provided.",
                     "type": "string",
                     "example": "https"
-                },
-                "serviceSlug": {
-                    "description": "The User Svc slug of the service whose instance is being registered.",
-                    "type": "string",
-                    "example": "user-svc"
                 },
                 "url": {
                     "description": "Full address URL of the service instance.",

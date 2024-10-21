@@ -16,6 +16,12 @@
  */
 export interface RegistrySvcServiceInstance {
     /**
+     * The ID of the deployment that this instance is an instance of.
+     * @type {string}
+     * @memberof RegistrySvcServiceInstance
+     */
+    deploymentId: string;
+    /**
      * Host of the service instance address. Required if URL is not provided
      * @type {string}
      * @memberof RegistrySvcServiceInstance
@@ -63,12 +69,6 @@ export interface RegistrySvcServiceInstance {
      * @memberof RegistrySvcServiceInstance
      */
     scheme?: string;
-    /**
-     * The User Svc slug of the service whose instance is being registered.
-     * @type {string}
-     * @memberof RegistrySvcServiceInstance
-     */
-    serviceSlug: string;
     /**
      * Full address URL of the service instance.
      * @type {string}
