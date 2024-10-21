@@ -42,7 +42,7 @@ A `Instance` consists of the following things:
 
 ### Deployment
 
-Definitions become instances through the [Deployment entity of the Deploy Service](docs/services/deploy-svc).
+Definitions become instances through the [Deployment entity of the Deploy Service](/docs/services/deploy-svc).
 
 ### Node
 
