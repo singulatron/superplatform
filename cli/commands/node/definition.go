@@ -10,8 +10,8 @@ func AddNodeCommands(rootCmd *cobra.Command) {
 	}
 
 	var envDeleteCmd = &cobra.Command{
-		Use:   "delete [id]",
-		Short: "Delete a node",
+		Use:   "delete [url]",
+		Short: "Delete a node by URL",
 		Args:  cobra.ExactArgs(1),
 		RunE:  Delete,
 	}

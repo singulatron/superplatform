@@ -8,9 +8,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// Delete [nodeUrl]
 func Delete(cmd *cobra.Command, args []string) error {
 	ctx := cmd.Context()
-	serviceDefinitionId := args[0]
+	nodeUrl := args[0]
 
 	url, token, err := config.GetSelectedUrlAndToken()
 	if err != nil {
@@ -19,7 +20,7 @@ func Delete(cmd *cobra.Command, args []string) error {
 
 	cf := sdk.NewApiClientFactory(url)
 
-	_, err = cf.Client(sdk.WithToken(token)).RegistrySvcAPI.DeleteDefinition(ctx, serviceDefinitionId).Execute()
+	_, err = cf.Client(sdk.WithToken(token)).RegistrySvcAPI.DeleteNode(ctx, nodeUrl).Execute()
 	if err != nil {
 		return fmt.Errorf("Error deleting node: '%v'", err)
 	}
