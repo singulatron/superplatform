@@ -10,6 +10,7 @@ import (
 	deployment "github.com/singulatron/superplatform/cli/commands/deployment"
 	"github.com/singulatron/superplatform/cli/commands/env"
 	instance "github.com/singulatron/superplatform/cli/commands/instance"
+	"github.com/singulatron/superplatform/cli/commands/node"
 	"github.com/singulatron/superplatform/cli/commands/user/login"
 	"github.com/singulatron/superplatform/cli/commands/user/whoami"
 )
@@ -31,6 +32,7 @@ func main() {
 	definition.AddDefinitionCommands(rootCmd)
 	instance.AddInstanceCommands(rootCmd)
 	deployment.AddDeploymentCommands(rootCmd)
+	node.AddNodeCommands(rootCmd)
 
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)

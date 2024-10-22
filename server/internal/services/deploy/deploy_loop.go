@@ -15,6 +15,7 @@ import (
 	"github.com/pkg/errors"
 	openapi "github.com/singulatron/superplatform/clients/go"
 	sdk "github.com/singulatron/superplatform/sdk/go"
+	"github.com/singulatron/superplatform/sdk/go/datastore"
 	"github.com/singulatron/superplatform/sdk/go/logger"
 	"github.com/singulatron/superplatform/server/internal/services/deploy/allocator"
 	deploy "github.com/singulatron/superplatform/server/internal/services/deploy/types"
@@ -72,6 +73,7 @@ func (ns *DeployService) cycle() error {
 	}
 
 	commands := allocator.GenerateCommands(listNodesRsp.Nodes, listInstancesRsp.Instances, deployments)
+
 	for _, command := range commands {
 		var node *openapi.RegistrySvcNode
 		var definition *openapi.RegistrySvcDefinition
@@ -103,14 +105,29 @@ func (ns *DeployService) processCommand(
 	node *openapi.RegistrySvcNode,
 	definition *openapi.RegistrySvcDefinition,
 ) error {
+	deploymentIs, err := ns.deploymentStore.Query(datastore.Id(command.DeploymentId)).Find()
+	if err != nil {
+		return err
+	}
+	deployment := deploymentIs[0].(*deploy.Deployment)
+	if deployment.Status == deploy.StatusPending {
+		deployment.Status = deploy.StatusDeploying
+		ns.deploymentStore.Upsert(deployment)
+	}
+
 	switch command.Action {
 	case deploy.CommandTypeStart:
-		ns.clientFactory.Client(sdk.WithAddress(*command.NodeUrl)).DockerSvcAPI.LaunchContainer(ctx).Request(
+		logger.Info("Executing start command", slog.String("deploymentId", deployment.Id))
+
+		_, _, err := ns.clientFactory.Client(sdk.WithAddress(*command.NodeUrl)).DockerSvcAPI.LaunchContainer(ctx).Request(
 			openapi.DockerSvcLaunchContainerRequest{
 				Image: definition.Image.Name,
 				Port:  definition.Image.Port,
 			},
-		)
+		).Execute()
+		if err != nil {
+			logger.Info("Error executing start command", slog.Any("error", err))
+		}
 	case deploy.CommandTypeScale:
 	case deploy.CommandTypeKill:
 	}

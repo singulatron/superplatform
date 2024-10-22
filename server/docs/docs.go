@@ -4234,6 +4234,11 @@ const docTemplate = `{
                     "type": "string",
                     "example": "Handles user service requests"
                 },
+                "error": {
+                    "description": "Optional: Error message if the deployment encounters an issue",
+                    "type": "string",
+                    "example": "Failed to pull image"
+                },
                 "id": {
                     "description": "ID of the deployment (e.g., \"depl_dbOdi5eLQK\")",
                     "type": "string",
@@ -4256,6 +4261,15 @@ const docTemplate = `{
                         }
                     ]
                 },
+                "status": {
+                    "description": "Current status of the deployment (e.g., \"OK\", \"Error\", \"Pending\")",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/deploy_svc.DeploymentStatus"
+                        }
+                    ],
+                    "example": "OK"
+                },
                 "strategy": {
                     "description": "Deployment strategy (e.g., rolling update)",
                     "allOf": [
@@ -4272,6 +4286,23 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "deploy_svc.DeploymentStatus": {
+            "type": "string",
+            "enum": [
+                "OK",
+                "Error",
+                "Pending",
+                "Failed",
+                "Deploying"
+            ],
+            "x-enum-varnames": [
+                "StatusOK",
+                "StatusError",
+                "StatusPending",
+                "StatusFailed",
+                "StatusDeploying"
+            ]
         },
         "deploy_svc.DeploymentStrategy": {
             "type": "object",

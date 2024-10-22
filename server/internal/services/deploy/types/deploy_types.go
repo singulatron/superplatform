@@ -12,6 +12,16 @@ type ErrorResponse struct {
 	Error string `json:"error"`
 }
 
+type DeploymentStatus string
+
+const (
+	StatusOK        DeploymentStatus = "OK"
+	StatusError     DeploymentStatus = "Error"
+	StatusPending   DeploymentStatus = "Pending"
+	StatusFailed    DeploymentStatus = "Failed"
+	StatusDeploying DeploymentStatus = "Deploying"
+)
+
 type Deployment struct {
 	// ID of the deployment (e.g., "depl_dbOdi5eLQK")
 	Id string `json:"id,omitempty" example:"depl_dbOdi5eLQK" binding:"required"`
@@ -39,6 +49,12 @@ type Deployment struct {
 
 	// Target deployment regions or clusters
 	TargetRegions []TargetRegion `json:"targetRegions,omitempty"`
+
+	// Current status of the deployment (e.g., "OK", "Error", "Pending")
+	Status DeploymentStatus `json:"status,omitempty" example:"OK"`
+
+	// Optional: Error message if the deployment encounters an issue
+	Error string `json:"error,omitempty" example:"Failed to pull image"`
 }
 
 func (d Deployment) GetId() string {

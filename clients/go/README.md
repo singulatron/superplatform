@@ -178,6 +178,7 @@ Class | Method | HTTP request | Description
  - [DatastoreQuery](docs/DatastoreQuery.md)
  - [DeploySvcAutoScalingConfig](docs/DeploySvcAutoScalingConfig.md)
  - [DeploySvcDeployment](docs/DeploySvcDeployment.md)
+ - [DeploySvcDeploymentStatus](docs/DeploySvcDeploymentStatus.md)
  - [DeploySvcDeploymentStrategy](docs/DeploySvcDeploymentStrategy.md)
  - [DeploySvcErrorResponse](docs/DeploySvcErrorResponse.md)
  - [DeploySvcListDeploymentsResponse](docs/DeploySvcListDeploymentsResponse.md)

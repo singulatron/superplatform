@@ -274,6 +274,10 @@ definitions:
         description: Description of what this deployment does
         example: Handles user service requests
         type: string
+      error:
+        description: 'Optional: Error message if the deployment encounters an issue'
+        example: Failed to pull image
+        type: string
       id:
         description: ID of the deployment (e.g., "depl_dbOdi5eLQK")
         example: depl_dbOdi5eLQK
@@ -289,6 +293,11 @@ definitions:
         allOf:
         - $ref: '#/definitions/deploy_svc.ResourceLimits'
         description: Resource requirements for each replica
+      status:
+        allOf:
+        - $ref: '#/definitions/deploy_svc.DeploymentStatus'
+        description: Current status of the deployment (e.g., "OK", "Error", "Pending")
+        example: OK
       strategy:
         allOf:
         - $ref: '#/definitions/deploy_svc.DeploymentStrategy'
@@ -302,6 +311,20 @@ definitions:
     - definitionId
     - id
     type: object
+  deploy_svc.DeploymentStatus:
+    enum:
+    - OK
+    - Error
+    - Pending
+    - Failed
+    - Deploying
+    type: string
+    x-enum-varnames:
+    - StatusOK
+    - StatusError
+    - StatusPending
+    - StatusFailed
+    - StatusDeploying
   deploy_svc.DeploymentStrategy:
     properties:
       maxSurge:

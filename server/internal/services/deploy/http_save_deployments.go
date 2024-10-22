@@ -13,6 +13,7 @@ import (
 	"net/http"
 
 	sdk "github.com/singulatron/superplatform/sdk/go"
+	"github.com/singulatron/superplatform/sdk/go/datastore"
 	deploy "github.com/singulatron/superplatform/server/internal/services/deploy/types"
 )
 
@@ -66,6 +67,33 @@ func (ns *DeployService) SaveDeployment(
 	w.Write([]byte(`{}`))
 }
 
+// This method is designed to be called frm the API endpoint, if you want to modify internal
+// fields do a direct update.
 func (ns *DeployService) saveDeployment(deployment *deploy.Deployment) error {
+	deployment.Status = deploy.StatusPending
+
+	if deployment.Replicas == 0 {
+		deployment.Replicas = 1
+	}
+
+	if deployment.Id == "" {
+		deployment.Id = sdk.Id("depl")
+	} else {
+		depIs, err := ns.deploymentStore.Query(datastore.Id(deployment.Id)).Find()
+		if err != nil {
+			return err
+		}
+		if len(depIs) == 0 {
+			return ns.deploymentStore.Upsert(deployment)
+		}
+
+		oldDeployment := depIs[0].(*deploy.Deployment)
+
+		deployment.Status = oldDeployment.Status
+		deployment.Error = oldDeployment.Error
+
+		return ns.deploymentStore.Upsert(deployment)
+	}
+
 	return ns.deploymentStore.Upsert(deployment)
 }

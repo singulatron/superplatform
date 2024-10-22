@@ -55,6 +55,7 @@ func NewRegistryService(
 	) (datastore.DataStore, error)) (*RegistryService, error) {
 
 	nodeUrl := address
+
 	var err error
 
 	if nodeUrl == "" {
@@ -63,6 +64,10 @@ func NewRegistryService(
 			return nil, err
 		}
 		nodeUrl = fmt.Sprintf("%v:%v", nodeUrl, "58231")
+	}
+
+	if !strings.HasPrefix(nodeUrl, "http") {
+		nodeUrl = "http://" + nodeUrl
 	}
 
 	credentialStore, err := datastoreFactory("registrySvcCredentials", &sdk.Credential{})
