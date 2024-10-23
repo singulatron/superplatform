@@ -11,7 +11,6 @@ import (
 	"fmt"
 	"log/slog"
 	"net/http"
-	"runtime/debug"
 	"strings"
 	"sync"
 	"time"
@@ -86,10 +85,6 @@ func (rw *throttledResponseWriter) WriteHeader(code int) {
 }
 
 func (rw *throttledResponseWriter) Write(b []byte) (int, error) {
-	if rw.Header().Get("Content-Type") != "application/json" {
-		debug.PrintStack()
-	}
-
 	if rw.statusCode >= 400 {
 		rw.Header().Set("Content-Type", "application/json")
 
@@ -108,6 +103,7 @@ func (rw *throttledResponseWriter) Write(b []byte) (int, error) {
 
 		return rw.ResponseWriter.Write([]byte(errorMsg))
 	}
+
 	return rw.ResponseWriter.Write(b)
 }
 
