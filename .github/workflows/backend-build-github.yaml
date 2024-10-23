@@ -9,7 +9,7 @@ on:
 
 jobs:
   test:
-    timeout-minutes: 5
+    timeout-minutes: 6
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
