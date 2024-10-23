@@ -274,9 +274,11 @@ definitions:
         description: Description of what this deployment does
         example: Handles user service requests
         type: string
-      error:
-        description: 'Optional: Error message if the deployment encounters an issue'
-        example: Failed to pull image
+      details:
+        description: |-
+          Details provides additional information about the deployment's current state,
+          including both success and failure conditions (e.g., "Deployment in progress", "Error pulling image").
+        example: Deployment is in progress
         type: string
       id:
         description: ID of the deployment (e.g., "depl_dbOdi5eLQK")
@@ -3398,7 +3400,7 @@ paths:
     delete:
       consumes:
       - application/json
-      description: Removes a registered instance based on the instnce ID.
+      description: Removes a registered instance by ID.
       operationId: removeInstance
       parameters:
       - description: Instance ID
@@ -3482,6 +3484,45 @@ paths:
       security:
       - BearerAuth: []
       summary: List Service Instances
+      tags:
+      - Registry Svc
+  /registry-svc/node/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a registered node by node URL. This endpoint is useful
+        when a node is no longer available but it's still present in the database.
+      operationId: deleteNode
+      parameters:
+      - description: Node URL
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+        "404":
+          description: Service not found
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete Node
       tags:
       - Registry Svc
   /registry-svc/nodes:

@@ -36,7 +36,6 @@ func (ms *ModelService) StartSpecific(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	w.Header().Set("Content-Type", "application/json")
 
 	v := mux.Vars(r)
 	if v["id"] == "" {

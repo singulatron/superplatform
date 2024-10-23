@@ -17,10 +17,11 @@ func AddDefinitionCommands(rootCmd *cobra.Command) {
 	}
 
 	var envDeleteCmd = &cobra.Command{
-		Use:   "delete [id]",
-		Short: "Delete a definition",
-		Args:  cobra.ExactArgs(1),
-		RunE:  Delete,
+		Use:     "delete [id]",
+		Short:   "Delete a definition",
+		Aliases: []string{"del", "rm", "remove"},
+		Args:    cobra.ExactArgs(1),
+		RunE:    Delete,
 	}
 
 	var envListCmd = &cobra.Command{

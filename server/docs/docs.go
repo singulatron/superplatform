@@ -2477,7 +2477,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Removes a registered instance based on the instnce ID.",
+                "description": "Removes a registered instance by ID.",
                 "consumes": [
                     "application/json"
                 ],
@@ -2595,6 +2595,65 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Invalid filters",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/registry-svc/node/{id}": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Deletes a registered node by node URL. This endpoint is useful when a node is no longer available but it's still present in the database.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Registry Svc"
+                ],
+                "summary": "Delete Node",
+                "operationId": "deleteNode",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Node URL",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Invalid ID",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/registry_svc.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Service not found",
                         "schema": {
                             "$ref": "#/definitions/registry_svc.ErrorResponse"
                         }
@@ -4234,10 +4293,10 @@ const docTemplate = `{
                     "type": "string",
                     "example": "Handles user service requests"
                 },
-                "error": {
-                    "description": "Optional: Error message if the deployment encounters an issue",
+                "details": {
+                    "description": "Details provides additional information about the deployment's current state,\nincluding both success and failure conditions (e.g., \"Deployment in progress\", \"Error pulling image\").",
                     "type": "string",
-                    "example": "Failed to pull image"
+                    "example": "Deployment is in progress"
                 },
                 "id": {
                     "description": "ID of the deployment (e.g., \"depl_dbOdi5eLQK\")",

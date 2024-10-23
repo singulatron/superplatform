@@ -28,8 +28,8 @@ type DeploySvcDeployment struct {
 	DefinitionId string `json:"definitionId"`
 	// Description of what this deployment does
 	Description *string `json:"description,omitempty"`
-	// Optional: Error message if the deployment encounters an issue
-	Error *string `json:"error,omitempty"`
+	// Details provides additional information about the deployment's current state, including both success and failure conditions (e.g., \"Deployment in progress\", \"Error pulling image\").
+	Details *string `json:"details,omitempty"`
 	// ID of the deployment (e.g., \"depl_dbOdi5eLQK\")
 	Id string `json:"id"`
 	// Short name for easy reference (e.g., \"user-service-v2\")
@@ -155,36 +155,36 @@ func (o *DeploySvcDeployment) SetDescription(v string) {
 	o.Description = &v
 }
 
-// GetError returns the Error field value if set, zero value otherwise.
-func (o *DeploySvcDeployment) GetError() string {
-	if o == nil || IsNil(o.Error) {
+// GetDetails returns the Details field value if set, zero value otherwise.
+func (o *DeploySvcDeployment) GetDetails() string {
+	if o == nil || IsNil(o.Details) {
 		var ret string
 		return ret
 	}
-	return *o.Error
+	return *o.Details
 }
 
-// GetErrorOk returns a tuple with the Error field value if set, nil otherwise
+// GetDetailsOk returns a tuple with the Details field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *DeploySvcDeployment) GetErrorOk() (*string, bool) {
-	if o == nil || IsNil(o.Error) {
+func (o *DeploySvcDeployment) GetDetailsOk() (*string, bool) {
+	if o == nil || IsNil(o.Details) {
 		return nil, false
 	}
-	return o.Error, true
+	return o.Details, true
 }
 
-// HasError returns a boolean if a field has been set.
-func (o *DeploySvcDeployment) HasError() bool {
-	if o != nil && !IsNil(o.Error) {
+// HasDetails returns a boolean if a field has been set.
+func (o *DeploySvcDeployment) HasDetails() bool {
+	if o != nil && !IsNil(o.Details) {
 		return true
 	}
 
 	return false
 }
 
-// SetError gets a reference to the given string and assigns it to the Error field.
-func (o *DeploySvcDeployment) SetError(v string) {
-	o.Error = &v
+// SetDetails gets a reference to the given string and assigns it to the Details field.
+func (o *DeploySvcDeployment) SetDetails(v string) {
+	o.Details = &v
 }
 
 // GetId returns the Id field value
@@ -420,8 +420,8 @@ func (o DeploySvcDeployment) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Description) {
 		toSerialize["description"] = o.Description
 	}
-	if !IsNil(o.Error) {
-		toSerialize["error"] = o.Error
+	if !IsNil(o.Details) {
+		toSerialize["details"] = o.Details
 	}
 	toSerialize["id"] = o.Id
 	if !IsNil(o.Name) {

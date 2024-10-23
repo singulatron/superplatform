@@ -11,6 +11,10 @@ import (
 	"time"
 )
 
+type ErrorResponse struct {
+	Error string `json:"error"`
+}
+
 type Message struct {
 	Id string `json:"id"`
 

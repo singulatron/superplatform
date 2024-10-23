@@ -27,7 +27,6 @@ import (
 // @Failure 500 {object} user.ErrorResponse "Internal Server Error"
 // @Router /user-svc/login [post]
 func (s *UserService) Login(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
 
 	req := user.LoginRequest{}
 	err := json.NewDecoder(r.Body).Decode(&req)

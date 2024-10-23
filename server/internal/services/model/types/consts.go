@@ -19,16 +19,16 @@ var PlatformStableDiffusion = Platform{
 	Id: "stable-diffusion",
 	Architectures: Architectures{
 		Default: Container{
-			Port:            7860,
-			Image:           "crufter/stable-diffusion",
-			Envars:          []string{"FP16=0"},
-			PersistentPaths: []string{"/root/.cache/huggingface/diffusers"},
+			Port:   7860,
+			Image:  "crufter/stable-diffusion",
+			Envars: []string{"FP16=0"},
+			Keeps:  []string{"/root/.cache/huggingface/diffusers"},
 		},
 		Cuda: Container{
-			Port:            7860,
-			Image:           "crufter/stable-diffusion",
-			Envars:          []string{"DEVICES=all"},
-			PersistentPaths: []string{"/root/.cache/huggingface/diffusers"},
+			Port:   7860,
+			Image:  "crufter/stable-diffusion",
+			Envars: []string{"DEVICES=all"},
+			Keeps:  []string{"/root/.cache/huggingface/diffusers"},
 		},
 	},
 }

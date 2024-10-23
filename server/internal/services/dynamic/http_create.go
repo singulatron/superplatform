@@ -34,7 +34,6 @@ func (g *DynamicService) Create(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	w.Header().Set("Content-Type", "application/json")
 
 	rsp := &usertypes.IsAuthorizedResponse{}
 	err := g.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", dynamic.PermissionGenericCreate.Id), &usertypes.IsAuthorizedRequest{}, rsp)

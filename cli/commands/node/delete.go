@@ -13,12 +13,12 @@ func Delete(cmd *cobra.Command, args []string) error {
 	ctx := cmd.Context()
 	nodeUrl := args[0]
 
-	url, token, err := config.GetSelectedUrlAndToken()
+	ur, token, err := config.GetSelectedUrlAndToken()
 	if err != nil {
 		return fmt.Errorf("Cannot get env url: '%v'", err)
 	}
 
-	cf := sdk.NewApiClientFactory(url)
+	cf := sdk.NewApiClientFactory(ur)
 
 	_, err = cf.Client(sdk.WithToken(token)).RegistrySvcAPI.DeleteNode(ctx, nodeUrl).Execute()
 	if err != nil {

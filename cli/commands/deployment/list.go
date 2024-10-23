@@ -29,10 +29,14 @@ func List(cmd *cobra.Command, args []string) error {
 	writer := tabwriter.NewWriter(os.Stdout, 0, 0, 3, ' ', 0)
 	defer writer.Flush()
 
-	fmt.Fprintln(writer, "ID\tDEFINITION ID")
+	fmt.Fprintln(writer, "ID\tDEFINITION ID\tSTATUS\tDETAILS")
 
 	for _, deployment := range rsp.Deployments {
-		fmt.Fprintf(writer, "%s\t%s\n", deployment.Id, deployment.DefinitionId)
+		details := *deployment.Details
+		if len(details) > 50 {
+			details = details[0:50]
+		}
+		fmt.Fprintf(writer, "%s\t%s\t%s\t%s\n", deployment.Id, deployment.DefinitionId, *deployment.Status, details)
 	}
 
 	return nil

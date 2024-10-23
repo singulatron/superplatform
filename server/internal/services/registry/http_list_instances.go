@@ -31,7 +31,6 @@ func (rs *RegistryService) ListInstances(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	w.Header().Set("Content-Type", "application/json")
 
 	rsp := &usertypes.IsAuthorizedResponse{}
 	err := rs.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", registry.PermissionInstanceView.Id), &usertypes.IsAuthorizedRequest{

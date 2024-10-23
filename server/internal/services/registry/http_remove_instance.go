@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	"github.com/singulatron/superplatform/sdk/go/datastore"
 	registry "github.com/singulatron/superplatform/server/internal/services/registry/types"
 	usertypes "github.com/singulatron/superplatform/server/internal/services/user/types"
@@ -28,7 +29,6 @@ func (rs *RegistryService) RemoveInstance(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	w.Header().Set("Content-Type", "application/json")
 
 	rsp := &usertypes.IsAuthorizedResponse{}
 	err := rs.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", registry.PermissionInstanceDelete.Id), &usertypes.IsAuthorizedRequest{}, rsp)
@@ -43,7 +43,8 @@ func (rs *RegistryService) RemoveInstance(
 		return
 	}
 
-	instanceID := r.URL.Query().Get("id")
+	vars := mux.Vars(r)
+	instanceID := vars["id"]
 	if instanceID == "" {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(`Invalid instance ID`))

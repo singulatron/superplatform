@@ -82,7 +82,7 @@ func (ms *ModelService) startWithDocker(model *modeltypes.Model, platform *model
 	image := platform.Architectures.Default.Image
 	port := platform.Architectures.Default.Port
 	launchOptions.Envs = platform.Architectures.Default.Envars
-	launchOptions.PersistentPaths = platform.Architectures.Default.PersistentPaths
+	launchOptions.Keeps = platform.Architectures.Default.Keeps
 	launchOptions.Assets = model.Assets
 
 	switch ms.gpuPlatform {
@@ -97,8 +97,8 @@ func (ms *ModelService) startWithDocker(model *modeltypes.Model, platform *model
 		if len(platform.Architectures.Cuda.Envars) > 0 {
 			launchOptions.Envs = platform.Architectures.Cuda.Envars
 		}
-		if len(platform.Architectures.Cuda.PersistentPaths) > 0 {
-			launchOptions.PersistentPaths = platform.Architectures.Cuda.PersistentPaths
+		if len(platform.Architectures.Cuda.Keeps) > 0 {
+			launchOptions.Keeps = platform.Architectures.Cuda.Keeps
 		}
 	}
 

@@ -34,7 +34,6 @@ func (ns *DeployService) SaveDeployment(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	w.Header().Set("Content-Type", "application/json")
 
 	isAuthRsp, _, err := ns.clientFactory.Client(sdk.WithTokenFromRequest(r)).UserSvcAPI.IsAuthorized(context.Background(), deploy.PermissionDeploymentView.Id).Execute()
 	if err != nil {
@@ -90,7 +89,7 @@ func (ns *DeployService) saveDeployment(deployment *deploy.Deployment) error {
 		oldDeployment := depIs[0].(*deploy.Deployment)
 
 		deployment.Status = oldDeployment.Status
-		deployment.Error = oldDeployment.Error
+		deployment.Details = oldDeployment.Details
 
 		return ns.deploymentStore.Upsert(deployment)
 	}

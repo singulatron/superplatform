@@ -29,7 +29,6 @@ import (
 // @Security BearerAuth
 // @Router /user-svc/user/{userId} [delete]
 func (s *UserService) DeleteUser(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
 
 	usr, err := s.isAuthorized(r, user.PermissionUserDelete.Id, nil, nil)
 	if err != nil {

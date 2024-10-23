@@ -31,7 +31,6 @@ import (
 // @Router /firehose-svc/event [post]
 func (p *FirehoseService) Publish(w http.ResponseWriter,
 	r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
 
 	rsp := &usertypes.IsAuthorizedResponse{}
 	err := p.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", firehose.PermissionFirehoseCreate.Id), &usertypes.IsAuthorizedRequest{}, rsp)

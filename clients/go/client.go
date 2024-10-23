@@ -504,6 +504,7 @@ func (c *APIClient) decode(v interface{}, b []byte, contentType string) (err err
 		}
 		return nil
 	}
+	fmt.Println("------------------------", reflect.TypeOf(v), string(b), contentType)
 	return errors.New("undefined response type")
 }
 

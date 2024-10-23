@@ -33,7 +33,6 @@ func (ns *DeployService) ListDeployments(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	w.Header().Set("Content-Type", "application/json")
 
 	isAuthRsp, _, err := ns.clientFactory.Client(sdk.WithTokenFromRequest(r)).UserSvcAPI.IsAuthorized(context.Background(), deploy.PermissionDeploymentView.Id).Execute()
 	if err != nil {

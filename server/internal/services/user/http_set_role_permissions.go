@@ -34,7 +34,6 @@ import (
 func (s *UserService) SetRolePermissions(
 	w http.ResponseWriter,
 	r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
 
 	usr, err := s.isAuthorized(r, user.PermissionRoleEdit.Id, nil, nil)
 	if err != nil {

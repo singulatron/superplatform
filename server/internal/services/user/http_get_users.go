@@ -33,7 +33,6 @@ func (s *UserService) GetUsers(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	w.Header().Set("Content-Type", "application/json")
 
 	_, err := s.isAuthorized(r, user.PermissionUserView.Id, nil, nil)
 	if err != nil {

@@ -27,7 +27,8 @@ func Recover(next http.HandlerFunc) http.HandlerFunc {
 					slog.String("stackTrace", string(stackTrace)),
 				)
 
-				http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+				w.WriteHeader(http.StatusInternalServerError)
+				w.Write([]byte(http.StatusText(http.StatusInternalServerError)))
 			}
 		}()
 		next(w, r)

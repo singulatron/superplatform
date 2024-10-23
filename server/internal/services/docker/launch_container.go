@@ -51,7 +51,7 @@ func (d *DockerService) launchContainer(image string, internalPort, hostPort int
 		options.Name = "the-singulatron"
 	}
 
-	envs, hostBinds, err := d.additionalEnvsAndHostBinds(options.Assets, options.PersistentPaths)
+	envs, hostBinds, err := d.additionalEnvsAndHostBinds(options.Assets, options.Keeps)
 	if err != nil {
 		return nil, err
 	}
@@ -108,7 +108,7 @@ func (d *DockerService) launchContainer(image string, internalPort, hostPort int
 	}
 
 	if existingContainer != nil {
-		if existingContainer.State != "running" || existingContainer.Labels["singulatron-hash"] != options.Hash {
+		if existingContainer.State != "running" || existingContainer.Labels["superplatform-hash"] != options.Hash {
 			logs, _ := d.getContainerLogsAndStatus(options.Hash, 10)
 			logger.Debug("Container state is not running or hash is mismatched, removing...",
 				slog.String("containerLogs", logs),
@@ -125,7 +125,7 @@ func (d *DockerService) launchContainer(image string, internalPort, hostPort int
 		}
 	}
 
-	containerConfig.Labels["singulatron-hash"] = options.Hash
+	containerConfig.Labels["superplatform-hash"] = options.Hash
 
 	createdContainer, err := d.client.ContainerCreate(ctx, containerConfig, hostConfig, nil, nil, options.Name)
 	if err != nil {

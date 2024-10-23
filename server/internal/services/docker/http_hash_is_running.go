@@ -35,16 +35,19 @@ func (dm *DockerService) HashIsRunning(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
+
 	rsp := &usertypes.IsAuthorizedResponse{}
 	err := dm.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", docker.PermissionDockerView.Id), &usertypes.IsAuthorizedRequest{
 		SlugsGranted: []string{"model-svc"},
 	}, rsp)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte(err.Error()))
 		return
 	}
 	if !rsp.Authorized {
-		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte(`Unauthorized`))
 		return
 	}
 
@@ -52,7 +55,8 @@ func (dm *DockerService) HashIsRunning(
 
 	isRunning, err := dm.hashIsRunning(vars["hash"])
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
 		return
 	}
 

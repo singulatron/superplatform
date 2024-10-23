@@ -53,8 +53,9 @@ type Deployment struct {
 	// Current status of the deployment (e.g., "OK", "Error", "Pending")
 	Status DeploymentStatus `json:"status,omitempty" example:"OK"`
 
-	// Optional: Error message if the deployment encounters an issue
-	Error string `json:"error,omitempty" example:"Failed to pull image"`
+	// Details provides additional information about the deployment's current state,
+	// including both success and failure conditions (e.g., "Deployment in progress", "Error pulling image").
+	Details string `json:"details,omitempty" example:"Deployment is in progress"`
 }
 
 func (d Deployment) GetId() string {

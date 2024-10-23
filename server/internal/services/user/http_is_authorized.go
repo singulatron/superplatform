@@ -39,7 +39,6 @@ func (s *UserService) IsAuthorized(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	w.Header().Set("Content-Type", "application/json")
 
 	req := &user.IsAuthorizedRequest{}
 	//m := map[string]string{}

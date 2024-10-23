@@ -38,11 +38,13 @@ func (a *ChatService) DeleteMessage(
 	rsp := &usertypes.IsAuthorizedResponse{}
 	err := a.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", chat.PermissionMessageDelete.Id), &usertypes.IsAuthorizedRequest{}, rsp)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte(err.Error()))
 		return
 	}
 	if !rsp.Authorized {
-		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte(`Unauthorized`))
 		return
 	}
 
@@ -51,7 +53,8 @@ func (a *ChatService) DeleteMessage(
 
 	err = a.deleteMessage(threadId)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
 		return
 	}
 

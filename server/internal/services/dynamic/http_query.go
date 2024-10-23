@@ -41,7 +41,6 @@ func (g *DynamicService) Query(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	w.Header().Set("Content-Type", "application/json")
 
 	rsp := &usertypes.IsAuthorizedResponse{}
 	token, hasToken := sdk.TokenFromRequest(r)
