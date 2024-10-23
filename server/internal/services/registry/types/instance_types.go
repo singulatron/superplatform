@@ -41,7 +41,7 @@ func (s *Instance) GetId() string {
 
 func (s *Instance) DeriveID() string {
 	if s.URL != "" {
-		return fmt.Sprintf("%s/%s", s.URL, s.DeploymentId)
+		return s.URL
 	}
 
 	var constructedURL string
@@ -51,7 +51,11 @@ func (s *Instance) DeriveID() string {
 		constructedURL = fmt.Sprintf("%s://%s:%d", s.Scheme, s.IP, s.Port)
 	}
 
-	return fmt.Sprintf("%s/%s", constructedURL, s.DeploymentId)
+	if s.Path != "" {
+		return fmt.Sprintf("%s/%s", constructedURL, s.Path)
+	}
+
+	return constructedURL
 }
 
 var ErrNotFound = errors.New("service not found")
