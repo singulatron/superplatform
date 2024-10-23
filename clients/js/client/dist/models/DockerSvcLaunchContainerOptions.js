@@ -29,9 +29,9 @@ export function DockerSvcLaunchContainerOptionsFromJSONTyped(json, ignoreDiscrim
         'envs': json['envs'] == null ? undefined : json['envs'],
         'gpuEnabled': json['gpuEnabled'] == null ? undefined : json['gpuEnabled'],
         'hash': json['hash'] == null ? undefined : json['hash'],
+        'keeps': json['keeps'] == null ? undefined : json['keeps'],
         'labels': json['labels'] == null ? undefined : json['labels'],
         'name': json['name'] == null ? undefined : json['name'],
-        'persistentPaths': json['persistentPaths'] == null ? undefined : json['persistentPaths'],
     };
 }
 export function DockerSvcLaunchContainerOptionsToJSON(value) {
@@ -43,8 +43,8 @@ export function DockerSvcLaunchContainerOptionsToJSON(value) {
         'envs': value['envs'],
         'gpuEnabled': value['gpuEnabled'],
         'hash': value['hash'],
+        'keeps': value['keeps'],
         'labels': value['labels'],
         'name': value['name'],
-        'persistentPaths': value['persistentPaths'],
     };
 }

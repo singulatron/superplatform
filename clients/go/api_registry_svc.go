@@ -176,7 +176,7 @@ func (a *RegistrySvcAPIService) DeleteDefinitionExecute(r ApiDeleteDefinitionReq
 type ApiDeleteNodeRequest struct {
 	ctx context.Context
 	ApiService *RegistrySvcAPIService
-	id string
+	url string
 }
 
 func (r ApiDeleteNodeRequest) Execute() (*http.Response, error) {
@@ -189,14 +189,14 @@ DeleteNode Delete Node
 Deletes a registered node by node URL. This endpoint is useful when a node is no longer available but it's still present in the database.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id Node URL
+ @param url Node URL
  @return ApiDeleteNodeRequest
 */
-func (a *RegistrySvcAPIService) DeleteNode(ctx context.Context, id string) ApiDeleteNodeRequest {
+func (a *RegistrySvcAPIService) DeleteNode(ctx context.Context, url string) ApiDeleteNodeRequest {
 	return ApiDeleteNodeRequest{
 		ApiService: a,
 		ctx: ctx,
-		id: id,
+		url: url,
 	}
 }
 
@@ -213,8 +213,8 @@ func (a *RegistrySvcAPIService) DeleteNodeExecute(r ApiDeleteNodeRequest) (*http
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/registry-svc/node/{id}"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+	localVarPath := localBasePath + "/registry-svc/node/{url}"
+	localVarPath = strings.Replace(localVarPath, "{"+"url"+"}", url.PathEscape(parameterValueToString(r.url, "url")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}

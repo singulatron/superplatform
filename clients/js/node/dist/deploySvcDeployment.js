@@ -34,6 +34,11 @@ DeploySvcDeployment.attributeTypeMap = [
         "type": "string"
     },
     {
+        "name": "details",
+        "baseName": "details",
+        "type": "string"
+    },
+    {
         "name": "id",
         "baseName": "id",
         "type": "string"
@@ -52,6 +57,11 @@ DeploySvcDeployment.attributeTypeMap = [
         "name": "resources",
         "baseName": "resources",
         "type": "DeploySvcResourceLimits"
+    },
+    {
+        "name": "status",
+        "baseName": "status",
+        "type": "DeploySvcDeploymentStatus"
     },
     {
         "name": "strategy",

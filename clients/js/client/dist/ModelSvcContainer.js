@@ -29,7 +29,7 @@ function ModelSvcContainerFromJSONTyped(json, ignoreDiscriminator) {
     return {
         'envars': json['envars'] == null ? undefined : json['envars'],
         'image': json['image'] == null ? undefined : json['image'],
-        'persistentPaths': json['persistentPaths'] == null ? undefined : json['persistentPaths'],
+        'keeps': json['keeps'] == null ? undefined : json['keeps'],
         'port': json['port'] == null ? undefined : json['port'],
     };
 }
@@ -40,7 +40,7 @@ function ModelSvcContainerToJSON(value) {
     return {
         'envars': value['envars'],
         'image': value['image'],
-        'persistentPaths': value['persistentPaths'],
+        'keeps': value['keeps'],
         'port': value['port'],
     };
 }

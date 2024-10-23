@@ -274,6 +274,12 @@ definitions:
         description: Description of what this deployment does
         example: Handles user service requests
         type: string
+      details:
+        description: |-
+          Details provides additional information about the deployment's current state,
+          including both success and failure conditions (e.g., "Deployment in progress", "Error pulling image").
+        example: Deployment is in progress
+        type: string
       id:
         description: ID of the deployment (e.g., "depl_dbOdi5eLQK")
         example: depl_dbOdi5eLQK
@@ -289,6 +295,11 @@ definitions:
         allOf:
         - $ref: '#/definitions/deploy_svc.ResourceLimits'
         description: Resource requirements for each replica
+      status:
+        allOf:
+        - $ref: '#/definitions/deploy_svc.DeploymentStatus'
+        description: Current status of the deployment (e.g., "OK", "Error", "Pending")
+        example: OK
       strategy:
         allOf:
         - $ref: '#/definitions/deploy_svc.DeploymentStrategy'
@@ -302,6 +313,20 @@ definitions:
     - definitionId
     - id
     type: object
+  deploy_svc.DeploymentStatus:
+    enum:
+    - OK
+    - Error
+    - Pending
+    - Failed
+    - Deploying
+    type: string
+    x-enum-varnames:
+    - StatusOK
+    - StatusError
+    - StatusPending
+    - StatusFailed
+    - StatusDeploying
   deploy_svc.DeploymentStrategy:
     properties:
       maxSurge:
@@ -422,6 +447,13 @@ definitions:
       hash:
         description: Hash is a unique identifier for the container
         type: string
+      keeps:
+        description: |-
+          Keeps are paths that persist across container restarts.
+          They function like mounts or volumes, but their external storage location is irrelevant.
+        items:
+          type: string
+        type: array
       labels:
         additionalProperties:
           type: string
@@ -430,12 +462,6 @@ definitions:
       name:
         description: Name is the name of the container
         type: string
-      persistentPaths:
-        description: PersistentPaths are paths that should be persisted across container
-          restarts
-        items:
-          type: string
-        type: array
     type: object
   docker_svc.LaunchContainerRequest:
     properties:
@@ -724,8 +750,9 @@ definitions:
         type: array
       image:
         type: string
-      persistentPaths:
-        description: Paths in the container to persist.
+      keeps:
+        description: Keeps are paths in the container that should be persisted across
+          restarts.
         items:
           type: string
         type: array
@@ -3375,7 +3402,7 @@ paths:
     delete:
       consumes:
       - application/json
-      description: Removes a registered instance based on the instnce ID.
+      description: Removes a registered instance by ID.
       operationId: removeInstance
       parameters:
       - description: Instance ID
@@ -3459,6 +3486,45 @@ paths:
       security:
       - BearerAuth: []
       summary: List Service Instances
+      tags:
+      - Registry Svc
+  /registry-svc/node/{url}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a registered node by node URL. This endpoint is useful
+        when a node is no longer available but it's still present in the database.
+      operationId: deleteNode
+      parameters:
+      - description: Node URL
+        in: path
+        name: url
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+        "404":
+          description: Service not found
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/registry_svc.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete Node
       tags:
       - Registry Svc
   /registry-svc/nodes:

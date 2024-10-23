@@ -2,6 +2,7 @@ import { DeploySvcDeploymentFromJSON, DeploySvcDeploymentToJSON } from './Deploy
 import './DeploySvcDeploymentStrategy.mjs';
 import './DeploySvcStrategyType.mjs';
 import './DeploySvcAutoScalingConfig.mjs';
+import './DeploySvcDeploymentStatus.mjs';
 import './DeploySvcTargetRegion.mjs';
 import './DeploySvcResourceLimits.mjs';
 

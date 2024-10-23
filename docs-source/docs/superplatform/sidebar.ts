@@ -360,6 +360,12 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
+          id: "superplatform/delete-node",
+          label: "Delete Node",
+          className: "api-method delete",
+        },
+        {
+          type: "doc",
           id: "superplatform/list-nodes",
           label: "List Nodes",
           className: "api-method post",

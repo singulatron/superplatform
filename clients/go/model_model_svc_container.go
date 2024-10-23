@@ -23,8 +23,8 @@ type ModelSvcContainer struct {
 	// Envars passed to the container. eg.  'DEVICES=all'
 	Envars []string `json:"envars,omitempty"`
 	Image *string `json:"image,omitempty"`
-	// Paths in the container to persist.
-	PersistentPaths []string `json:"persistentPaths,omitempty"`
+	// Keeps are paths in the container that should be persisted across restarts.
+	Keeps []string `json:"keeps,omitempty"`
 	// Port is the internal port of the Container
 	Port *int32 `json:"port,omitempty"`
 }
@@ -110,36 +110,36 @@ func (o *ModelSvcContainer) SetImage(v string) {
 	o.Image = &v
 }
 
-// GetPersistentPaths returns the PersistentPaths field value if set, zero value otherwise.
-func (o *ModelSvcContainer) GetPersistentPaths() []string {
-	if o == nil || IsNil(o.PersistentPaths) {
+// GetKeeps returns the Keeps field value if set, zero value otherwise.
+func (o *ModelSvcContainer) GetKeeps() []string {
+	if o == nil || IsNil(o.Keeps) {
 		var ret []string
 		return ret
 	}
-	return o.PersistentPaths
+	return o.Keeps
 }
 
-// GetPersistentPathsOk returns a tuple with the PersistentPaths field value if set, nil otherwise
+// GetKeepsOk returns a tuple with the Keeps field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ModelSvcContainer) GetPersistentPathsOk() ([]string, bool) {
-	if o == nil || IsNil(o.PersistentPaths) {
+func (o *ModelSvcContainer) GetKeepsOk() ([]string, bool) {
+	if o == nil || IsNil(o.Keeps) {
 		return nil, false
 	}
-	return o.PersistentPaths, true
+	return o.Keeps, true
 }
 
-// HasPersistentPaths returns a boolean if a field has been set.
-func (o *ModelSvcContainer) HasPersistentPaths() bool {
-	if o != nil && !IsNil(o.PersistentPaths) {
+// HasKeeps returns a boolean if a field has been set.
+func (o *ModelSvcContainer) HasKeeps() bool {
+	if o != nil && !IsNil(o.Keeps) {
 		return true
 	}
 
 	return false
 }
 
-// SetPersistentPaths gets a reference to the given []string and assigns it to the PersistentPaths field.
-func (o *ModelSvcContainer) SetPersistentPaths(v []string) {
-	o.PersistentPaths = v
+// SetKeeps gets a reference to the given []string and assigns it to the Keeps field.
+func (o *ModelSvcContainer) SetKeeps(v []string) {
+	o.Keeps = v
 }
 
 // GetPort returns the Port field value if set, zero value otherwise.
@@ -190,8 +190,8 @@ func (o ModelSvcContainer) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Image) {
 		toSerialize["image"] = o.Image
 	}
-	if !IsNil(o.PersistentPaths) {
-		toSerialize["persistentPaths"] = o.PersistentPaths
+	if !IsNil(o.Keeps) {
+		toSerialize["keeps"] = o.Keeps
 	}
 	if !IsNil(o.Port) {
 		toSerialize["port"] = o.Port

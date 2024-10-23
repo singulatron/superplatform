@@ -11,6 +11,7 @@
  */
 import type { DeploySvcDeploymentStrategy } from './DeploySvcDeploymentStrategy';
 import type { DeploySvcAutoScalingConfig } from './DeploySvcAutoScalingConfig';
+import type { DeploySvcDeploymentStatus } from './DeploySvcDeploymentStatus';
 import type { DeploySvcTargetRegion } from './DeploySvcTargetRegion';
 import type { DeploySvcResourceLimits } from './DeploySvcResourceLimits';
 /**
@@ -38,6 +39,13 @@ export interface DeploySvcDeployment {
      */
     description?: string;
     /**
+     * Details provides additional information about the deployment's current state,
+     * including both success and failure conditions (e.g., "Deployment in progress", "Error pulling image").
+     * @type {string}
+     * @memberof DeploySvcDeployment
+     */
+    details?: string;
+    /**
      * ID of the deployment (e.g., "depl_dbOdi5eLQK")
      * @type {string}
      * @memberof DeploySvcDeployment
@@ -61,6 +69,12 @@ export interface DeploySvcDeployment {
      * @memberof DeploySvcDeployment
      */
     resources?: DeploySvcResourceLimits;
+    /**
+     * Current status of the deployment (e.g., "OK", "Error", "Pending")
+     * @type {DeploySvcDeploymentStatus}
+     * @memberof DeploySvcDeployment
+     */
+    status?: DeploySvcDeploymentStatus;
     /**
      * Deployment strategy (e.g., rolling update)
      * @type {DeploySvcDeploymentStrategy}

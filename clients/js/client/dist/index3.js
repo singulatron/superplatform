@@ -35,6 +35,7 @@ require('./DeploySvcDeployment.js');
 require('./DeploySvcDeploymentStrategy.js');
 require('./DeploySvcStrategyType.js');
 require('./DeploySvcAutoScalingConfig.js');
+require('./DeploySvcDeploymentStatus.js');
 require('./DeploySvcTargetRegion.js');
 require('./DeploySvcResourceLimits.js');
 require('./DeploySvcSaveDeploymentRequest.js');

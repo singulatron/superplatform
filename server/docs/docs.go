@@ -2608,7 +2608,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/registry-svc/node/{id}": {
+        "/registry-svc/node/{url}": {
             "delete": {
                 "security": [
                     {
@@ -2631,7 +2631,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "Node URL",
-                        "name": "id",
+                        "name": "url",
                         "in": "path",
                         "required": true
                     }
@@ -4537,6 +4537,13 @@ const docTemplate = `{
                     "description": "Hash is a unique identifier for the container",
                     "type": "string"
                 },
+                "keeps": {
+                    "description": "Keeps are paths that persist across container restarts.\nThey function like mounts or volumes, but their external storage location is irrelevant.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
                 "labels": {
                     "description": "Labels are metadata labels associated with the container",
                     "type": "object",
@@ -4547,13 +4554,6 @@ const docTemplate = `{
                 "name": {
                     "description": "Name is the name of the container",
                     "type": "string"
-                },
-                "persistentPaths": {
-                    "description": "PersistentPaths are paths that should be persisted across container restarts",
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
                 }
             }
         },
@@ -4952,8 +4952,8 @@ const docTemplate = `{
                 "image": {
                     "type": "string"
                 },
-                "persistentPaths": {
-                    "description": "Paths in the container to persist.",
+                "keeps": {
+                    "description": "Keeps are paths in the container that should be persisted across restarts.",
                     "type": "array",
                     "items": {
                         "type": "string"

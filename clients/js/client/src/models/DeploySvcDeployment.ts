@@ -25,6 +25,12 @@ import {
     DeploySvcAutoScalingConfigFromJSONTyped,
     DeploySvcAutoScalingConfigToJSON,
 } from './DeploySvcAutoScalingConfig';
+import type { DeploySvcDeploymentStatus } from './DeploySvcDeploymentStatus';
+import {
+    DeploySvcDeploymentStatusFromJSON,
+    DeploySvcDeploymentStatusFromJSONTyped,
+    DeploySvcDeploymentStatusToJSON,
+} from './DeploySvcDeploymentStatus';
 import type { DeploySvcTargetRegion } from './DeploySvcTargetRegion';
 import {
     DeploySvcTargetRegionFromJSON,
@@ -63,6 +69,13 @@ export interface DeploySvcDeployment {
      */
     description?: string;
     /**
+     * Details provides additional information about the deployment's current state,
+     * including both success and failure conditions (e.g., "Deployment in progress", "Error pulling image").
+     * @type {string}
+     * @memberof DeploySvcDeployment
+     */
+    details?: string;
+    /**
      * ID of the deployment (e.g., "depl_dbOdi5eLQK")
      * @type {string}
      * @memberof DeploySvcDeployment
@@ -87,6 +100,12 @@ export interface DeploySvcDeployment {
      */
     resources?: DeploySvcResourceLimits;
     /**
+     * Current status of the deployment (e.g., "OK", "Error", "Pending")
+     * @type {DeploySvcDeploymentStatus}
+     * @memberof DeploySvcDeployment
+     */
+    status?: DeploySvcDeploymentStatus;
+    /**
      * Deployment strategy (e.g., rolling update)
      * @type {DeploySvcDeploymentStrategy}
      * @memberof DeploySvcDeployment
@@ -99,6 +118,8 @@ export interface DeploySvcDeployment {
      */
     targetRegions?: Array<DeploySvcTargetRegion>;
 }
+
+
 
 /**
  * Check if a given object implements the DeploySvcDeployment interface.
@@ -122,10 +143,12 @@ export function DeploySvcDeploymentFromJSONTyped(json: any, ignoreDiscriminator:
         'autoScaling': json['autoScaling'] == null ? undefined : DeploySvcAutoScalingConfigFromJSON(json['autoScaling']),
         'definitionId': json['definitionId'],
         'description': json['description'] == null ? undefined : json['description'],
+        'details': json['details'] == null ? undefined : json['details'],
         'id': json['id'],
         'name': json['name'] == null ? undefined : json['name'],
         'replicas': json['replicas'] == null ? undefined : json['replicas'],
         'resources': json['resources'] == null ? undefined : DeploySvcResourceLimitsFromJSON(json['resources']),
+        'status': json['status'] == null ? undefined : DeploySvcDeploymentStatusFromJSON(json['status']),
         'strategy': json['strategy'] == null ? undefined : DeploySvcDeploymentStrategyFromJSON(json['strategy']),
         'targetRegions': json['targetRegions'] == null ? undefined : ((json['targetRegions'] as Array<any>).map(DeploySvcTargetRegionFromJSON)),
     };
@@ -140,10 +163,12 @@ export function DeploySvcDeploymentToJSON(value?: DeploySvcDeployment | null): a
         'autoScaling': DeploySvcAutoScalingConfigToJSON(value['autoScaling']),
         'definitionId': value['definitionId'],
         'description': value['description'],
+        'details': value['details'],
         'id': value['id'],
         'name': value['name'],
         'replicas': value['replicas'],
         'resources': DeploySvcResourceLimitsToJSON(value['resources']),
+        'status': DeploySvcDeploymentStatusToJSON(value['status']),
         'strategy': DeploySvcDeploymentStrategyToJSON(value['strategy']),
         'targetRegions': value['targetRegions'] == null ? undefined : ((value['targetRegions'] as Array<any>).map(DeploySvcTargetRegionToJSON)),
     };

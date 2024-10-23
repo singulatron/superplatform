@@ -47,6 +47,13 @@ export interface DockerSvcLaunchContainerOptions {
      */
     hash?: string;
     /**
+     * Keeps are paths that persist across container restarts.
+     * They function like mounts or volumes, but their external storage location is irrelevant.
+     * @type {Array<string>}
+     * @memberof DockerSvcLaunchContainerOptions
+     */
+    keeps?: Array<string>;
+    /**
      * Labels are metadata labels associated with the container
      * @type {{ [key: string]: string; }}
      * @memberof DockerSvcLaunchContainerOptions
@@ -58,12 +65,6 @@ export interface DockerSvcLaunchContainerOptions {
      * @memberof DockerSvcLaunchContainerOptions
      */
     name?: string;
-    /**
-     * PersistentPaths are paths that should be persisted across container restarts
-     * @type {Array<string>}
-     * @memberof DockerSvcLaunchContainerOptions
-     */
-    persistentPaths?: Array<string>;
 }
 
 /**
@@ -87,9 +88,9 @@ export function DockerSvcLaunchContainerOptionsFromJSONTyped(json: any, ignoreDi
         'envs': json['envs'] == null ? undefined : json['envs'],
         'gpuEnabled': json['gpuEnabled'] == null ? undefined : json['gpuEnabled'],
         'hash': json['hash'] == null ? undefined : json['hash'],
+        'keeps': json['keeps'] == null ? undefined : json['keeps'],
         'labels': json['labels'] == null ? undefined : json['labels'],
         'name': json['name'] == null ? undefined : json['name'],
-        'persistentPaths': json['persistentPaths'] == null ? undefined : json['persistentPaths'],
     };
 }
 
@@ -103,9 +104,9 @@ export function DockerSvcLaunchContainerOptionsToJSON(value?: DockerSvcLaunchCon
         'envs': value['envs'],
         'gpuEnabled': value['gpuEnabled'],
         'hash': value['hash'],
+        'keeps': value['keeps'],
         'labels': value['labels'],
         'name': value['name'],
-        'persistentPaths': value['persistentPaths'],
     };
 }
 

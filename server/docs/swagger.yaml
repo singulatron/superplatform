@@ -447,6 +447,13 @@ definitions:
       hash:
         description: Hash is a unique identifier for the container
         type: string
+      keeps:
+        description: |-
+          Keeps are paths that persist across container restarts.
+          They function like mounts or volumes, but their external storage location is irrelevant.
+        items:
+          type: string
+        type: array
       labels:
         additionalProperties:
           type: string
@@ -455,12 +462,6 @@ definitions:
       name:
         description: Name is the name of the container
         type: string
-      persistentPaths:
-        description: PersistentPaths are paths that should be persisted across container
-          restarts
-        items:
-          type: string
-        type: array
     type: object
   docker_svc.LaunchContainerRequest:
     properties:
@@ -749,8 +750,9 @@ definitions:
         type: array
       image:
         type: string
-      persistentPaths:
-        description: Paths in the container to persist.
+      keeps:
+        description: Keeps are paths in the container that should be persisted across
+          restarts.
         items:
           type: string
         type: array
@@ -3486,7 +3488,7 @@ paths:
       summary: List Service Instances
       tags:
       - Registry Svc
-  /registry-svc/node/{id}:
+  /registry-svc/node/{url}:
     delete:
       consumes:
       - application/json
@@ -3496,7 +3498,7 @@ paths:
       parameters:
       - description: Node URL
         in: path
-        name: id
+        name: url
         required: true
         type: string
       produces:
