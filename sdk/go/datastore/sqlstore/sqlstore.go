@@ -324,7 +324,9 @@ func (s *SQLStore) convertParam(param any) (any, error) {
 			}
 			return string(bs), nil
 		case DriverPostGRES:
-			if t.Elem().Kind() == reflect.Struct {
+			elemKind := t.Elem().Kind()
+
+			if elemKind == reflect.Struct || (elemKind == reflect.Ptr && reflect.Indirect(reflect.New(t.Elem().Elem())).Kind() == reflect.Struct) {
 				bs, err := json.Marshal(param)
 				if err != nil {
 					return nil, err
@@ -509,14 +511,18 @@ func (q *SQLQueryBuilder) Find() ([]datastore.Row, error) {
 
 			switch {
 			case fieldType.Kind() == reflect.Slice:
-				// Create a GenericArray with the appropriate type
-				// elemType := fieldType.Elem()
-				// slicePtr := reflect.New(reflect.SliceOf(elemType)).Interface()
-				// fields[i] = &GenericArray{Array: slicePtr}
-
 				elemType := fieldType.Elem()
-				slicePtr := reflect.MakeSlice(reflect.SliceOf(elemType), 0, 0).Interface() // Create an empty slice
-				fields[i] = &slicePtr
+				elemKind := elemType.Kind()
+
+				if elemKind == reflect.Struct || (elemKind == reflect.Ptr && reflect.Indirect(reflect.New(fieldType.Elem().Elem())).Kind() == reflect.Struct) {
+					// For []Example and []*Example (or any other struct slice)
+					slice := reflect.MakeSlice(reflect.SliceOf(elemType), 0, 0).Interface()
+					fields[i] = &slice // Directly using the slice
+				} else {
+					// For []string and other basic types
+					slicePtr := reflect.New(reflect.SliceOf(elemType)).Interface()
+					fields[i] = &GenericArray{Array: slicePtr}
+				}
 			case fieldType.Kind() == reflect.Pointer:
 				var str sql.NullString
 				fields[i] = &str
@@ -550,7 +556,27 @@ func (q *SQLQueryBuilder) Find() ([]datastore.Row, error) {
 				if ok {
 					field.Set(reflect.ValueOf(genericArray.Array).Elem())
 				} else {
-					field.Set(reflect.Zero(fieldType))
+					var actualValue interface{}
+					if iface, ok := fields[i].(*interface{}); ok {
+						// Dereference the *interface{} to get the actual value inside
+						actualValue = *iface
+					} else {
+						actualValue = fields[i]
+					}
+
+					switch v := actualValue.(type) {
+					case []uint8:
+						newSlicePtr := reflect.New(fieldType).Interface()
+						err = json.Unmarshal(v, newSlicePtr)
+						if err != nil {
+							return nil, err
+						}
+
+						field.Set(reflect.ValueOf(newSlicePtr).Elem())
+					default:
+						field.Set(reflect.Zero(fieldType))
+					}
+
 				}
 			case fieldType.Kind() == reflect.Pointer:
 				str, ok := fields[i].(*sql.NullString)
