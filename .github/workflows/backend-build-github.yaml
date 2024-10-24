@@ -1,13 +1,7 @@
 name: "Backend build"
-# .
+
 on:
   push:
-    paths:
-      - "dapper/**"
-      - "server/**"
-      - "sdk/**"
-      - "clients/go/**"
-      - ".github/workflows/backend-build-github.yaml"
 
 jobs:
   test:
