@@ -510,9 +510,13 @@ func (q *SQLQueryBuilder) Find() ([]datastore.Row, error) {
 			switch {
 			case fieldType.Kind() == reflect.Slice:
 				// Create a GenericArray with the appropriate type
+				// elemType := fieldType.Elem()
+				// slicePtr := reflect.New(reflect.SliceOf(elemType)).Interface()
+				// fields[i] = &GenericArray{Array: slicePtr}
+
 				elemType := fieldType.Elem()
-				slicePtr := reflect.New(reflect.SliceOf(elemType)).Interface()
-				fields[i] = &GenericArray{Array: slicePtr}
+				slicePtr := reflect.MakeSlice(reflect.SliceOf(elemType), 0, 0).Interface() // Create an empty slice
+				fields[i] = &slicePtr
 			case fieldType.Kind() == reflect.Pointer:
 				var str sql.NullString
 				fields[i] = &str
