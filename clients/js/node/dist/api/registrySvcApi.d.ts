@@ -52,6 +52,19 @@ export declare class RegistrySvcApi {
         body?: any;
     }>;
     /**
+     * Deletes a registered node by node URL. This endpoint is useful when a node is no longer available but it\'s still present in the database.
+     * @summary Delete Node
+     * @param url Node URL
+     */
+    deleteNode(url: string, options?: {
+        headers: {
+            [name: string]: string;
+        };
+    }): Promise<{
+        response: http.IncomingMessage;
+        body?: any;
+    }>;
+    /**
      * Retrieves a list of all definitions or filters them by specific criteria.
      * @summary List Definitions
      */
@@ -108,7 +121,7 @@ export declare class RegistrySvcApi {
         body: object;
     }>;
     /**
-     * Removes a registered instance based on the instnce ID.
+     * Removes a registered instance by ID.
      * @summary Remove Instance
      * @param id Instance ID
      */

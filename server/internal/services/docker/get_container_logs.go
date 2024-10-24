@@ -18,7 +18,7 @@ func (d *DockerService) getContainerLogsAndStatus(singulatronHash string, logCou
 	}
 
 	for _, modelContainer := range containers {
-		if modelContainer.Labels["singulatron-hash"] == singulatronHash {
+		if modelContainer.Labels["superplatform-hash"] == singulatronHash {
 			logOptions := container.LogsOptions{
 				ShowStdout: true,
 				ShowStderr: true,

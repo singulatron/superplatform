@@ -28,6 +28,8 @@ type DeploySvcDeployment struct {
 	DefinitionId string `json:"definitionId"`
 	// Description of what this deployment does
 	Description *string `json:"description,omitempty"`
+	// Details provides additional information about the deployment's current state, including both success and failure conditions (e.g., \"Deployment in progress\", \"Error pulling image\").
+	Details *string `json:"details,omitempty"`
 	// ID of the deployment (e.g., \"depl_dbOdi5eLQK\")
 	Id string `json:"id"`
 	// Short name for easy reference (e.g., \"user-service-v2\")
@@ -36,6 +38,8 @@ type DeploySvcDeployment struct {
 	Replicas *int32 `json:"replicas,omitempty"`
 	// Resource requirements for each replica
 	Resources *DeploySvcResourceLimits `json:"resources,omitempty"`
+	// Current status of the deployment (e.g., \"OK\", \"Error\", \"Pending\")
+	Status *DeploySvcDeploymentStatus `json:"status,omitempty"`
 	// Deployment strategy (e.g., rolling update)
 	Strategy *DeploySvcDeploymentStrategy `json:"strategy,omitempty"`
 	// Target deployment regions or clusters
@@ -149,6 +153,38 @@ func (o *DeploySvcDeployment) HasDescription() bool {
 // SetDescription gets a reference to the given string and assigns it to the Description field.
 func (o *DeploySvcDeployment) SetDescription(v string) {
 	o.Description = &v
+}
+
+// GetDetails returns the Details field value if set, zero value otherwise.
+func (o *DeploySvcDeployment) GetDetails() string {
+	if o == nil || IsNil(o.Details) {
+		var ret string
+		return ret
+	}
+	return *o.Details
+}
+
+// GetDetailsOk returns a tuple with the Details field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *DeploySvcDeployment) GetDetailsOk() (*string, bool) {
+	if o == nil || IsNil(o.Details) {
+		return nil, false
+	}
+	return o.Details, true
+}
+
+// HasDetails returns a boolean if a field has been set.
+func (o *DeploySvcDeployment) HasDetails() bool {
+	if o != nil && !IsNil(o.Details) {
+		return true
+	}
+
+	return false
+}
+
+// SetDetails gets a reference to the given string and assigns it to the Details field.
+func (o *DeploySvcDeployment) SetDetails(v string) {
+	o.Details = &v
 }
 
 // GetId returns the Id field value
@@ -271,6 +307,38 @@ func (o *DeploySvcDeployment) SetResources(v DeploySvcResourceLimits) {
 	o.Resources = &v
 }
 
+// GetStatus returns the Status field value if set, zero value otherwise.
+func (o *DeploySvcDeployment) GetStatus() DeploySvcDeploymentStatus {
+	if o == nil || IsNil(o.Status) {
+		var ret DeploySvcDeploymentStatus
+		return ret
+	}
+	return *o.Status
+}
+
+// GetStatusOk returns a tuple with the Status field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *DeploySvcDeployment) GetStatusOk() (*DeploySvcDeploymentStatus, bool) {
+	if o == nil || IsNil(o.Status) {
+		return nil, false
+	}
+	return o.Status, true
+}
+
+// HasStatus returns a boolean if a field has been set.
+func (o *DeploySvcDeployment) HasStatus() bool {
+	if o != nil && !IsNil(o.Status) {
+		return true
+	}
+
+	return false
+}
+
+// SetStatus gets a reference to the given DeploySvcDeploymentStatus and assigns it to the Status field.
+func (o *DeploySvcDeployment) SetStatus(v DeploySvcDeploymentStatus) {
+	o.Status = &v
+}
+
 // GetStrategy returns the Strategy field value if set, zero value otherwise.
 func (o *DeploySvcDeployment) GetStrategy() DeploySvcDeploymentStrategy {
 	if o == nil || IsNil(o.Strategy) {
@@ -352,6 +420,9 @@ func (o DeploySvcDeployment) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Description) {
 		toSerialize["description"] = o.Description
 	}
+	if !IsNil(o.Details) {
+		toSerialize["details"] = o.Details
+	}
 	toSerialize["id"] = o.Id
 	if !IsNil(o.Name) {
 		toSerialize["name"] = o.Name
@@ -361,6 +432,9 @@ func (o DeploySvcDeployment) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.Resources) {
 		toSerialize["resources"] = o.Resources
+	}
+	if !IsNil(o.Status) {
+		toSerialize["status"] = o.Status
 	}
 	if !IsNil(o.Strategy) {
 		toSerialize["strategy"] = o.Strategy

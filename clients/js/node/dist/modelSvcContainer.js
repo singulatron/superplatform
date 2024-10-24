@@ -29,8 +29,8 @@ ModelSvcContainer.attributeTypeMap = [
         "type": "string"
     },
     {
-        "name": "persistentPaths",
-        "baseName": "persistentPaths",
+        "name": "keeps",
+        "baseName": "keeps",
         "type": "Array<string>"
     },
     {

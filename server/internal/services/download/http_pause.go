@@ -39,7 +39,6 @@ func (ds *DownloadService) Pause(
 	r *http.Request,
 
 ) {
-	w.Header().Set("Content-Type", "application/json")
 
 	rsp := &usertypes.IsAuthorizedResponse{}
 	err := ds.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", download.PermissionDownloadEdit.Id), &usertypes.IsAuthorizedRequest{}, rsp)

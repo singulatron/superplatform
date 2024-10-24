@@ -29,7 +29,6 @@ import (
 // @Security BearerAuth
 // @Router /user-svc/change-password-admin [post]
 func (s *UserService) ChangePasswordAdmin(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
 
 	_, err := s.isAuthorized(r, user.PermissionUserPasswordChange.Id, nil, nil)
 	if err != nil {

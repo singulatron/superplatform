@@ -45,6 +45,13 @@ export interface DockerSvcLaunchContainerOptions {
      */
     hash?: string;
     /**
+     * Keeps are paths that persist across container restarts.
+     * They function like mounts or volumes, but their external storage location is irrelevant.
+     * @type {Array<string>}
+     * @memberof DockerSvcLaunchContainerOptions
+     */
+    keeps?: Array<string>;
+    /**
      * Labels are metadata labels associated with the container
      * @type {{ [key: string]: string; }}
      * @memberof DockerSvcLaunchContainerOptions
@@ -58,12 +65,6 @@ export interface DockerSvcLaunchContainerOptions {
      * @memberof DockerSvcLaunchContainerOptions
      */
     name?: string;
-    /**
-     * PersistentPaths are paths that should be persisted across container restarts
-     * @type {Array<string>}
-     * @memberof DockerSvcLaunchContainerOptions
-     */
-    persistentPaths?: Array<string>;
 }
 /**
  * Check if a given object implements the DockerSvcLaunchContainerOptions interface.

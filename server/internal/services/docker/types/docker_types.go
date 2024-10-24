@@ -45,8 +45,9 @@ type LaunchContainerOptions struct {
 	// Labels are metadata labels associated with the container
 	Labels map[string]string `json:"labels,omitempty"`
 
-	// PersistentPaths are paths that should be persisted across container restarts
-	PersistentPaths []string `json:"persistentPaths,omitempty"`
+	// Keeps are paths that persist across container restarts.
+	// They function like mounts or volumes, but their external storage location is irrelevant.
+	Keeps []string `json:"keeps,omitempty"`
 
 	// GPUEnabled specifies if GPU support is enabled
 	GPUEnabled bool `json:"gpuEnabled,omitempty"`

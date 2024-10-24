@@ -1,10 +1,13 @@
 package registryservice
 
 import (
+	"fmt"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	"github.com/singulatron/superplatform/sdk/go/datastore"
 	registry "github.com/singulatron/superplatform/server/internal/services/registry/types"
+	usertypes "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
 // Delete a service definition
@@ -26,14 +29,31 @@ func (rs *RegistryService) DeleteDefinition(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	serviceID := r.URL.Query().Get("id")
+
+	rsp := &usertypes.IsAuthorizedResponse{}
+	err := rs.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", registry.PermissionDefinitionDelete.Id), &usertypes.IsAuthorizedRequest{
+		SlugsGranted: []string{"deploy-svc"},
+	}, rsp)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+		return
+	}
+	if !rsp.Authorized {
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte(`Unauthorized`))
+		return
+	}
+
+	vars := mux.Vars(r)
+	serviceID := vars["id"]
 	if serviceID == "" {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(`Invalid definition ID`))
 		return
 	}
 
-	err := rs.deleteDefinitionByID(serviceID)
+	err = rs.deleteDefinitionByID(serviceID)
 	if err != nil {
 		if err == registry.ErrNotFound {
 			w.WriteHeader(http.StatusNotFound)

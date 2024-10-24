@@ -272,7 +272,8 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 	router := mux.NewRouter().SkipClean(true).UseEncodedPath()
 
 	router.NotFoundHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		http.Error(w, "404 page not found", http.StatusNotFound)
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte("404 page not found"))
 	})
 
 	router.HandleFunc("/firehose-svc/events/subscribe", appl(func(w http.ResponseWriter, r *http.Request) {
@@ -503,6 +504,9 @@ func BigBang(options *Options) (*mux.Router, func() error, error) {
 	})).Methods("OPTIONS", "DELETE")
 	router.HandleFunc("/registry-svc/definition/{id}", appl(func(w http.ResponseWriter, r *http.Request) {
 		registryService.DeleteDefinition(w, r)
+	})).Methods("OPTIONS", "DELETE")
+	router.HandleFunc("/registry-svc/node/{url}", appl(func(w http.ResponseWriter, r *http.Request) {
+		registryService.DeleteNode(w, r)
 	})).Methods("OPTIONS", "DELETE")
 
 	router.HandleFunc("/deploy-svc/deployment", appl(func(w http.ResponseWriter, r *http.Request) {

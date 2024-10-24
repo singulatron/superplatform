@@ -43,6 +43,7 @@ require('./datastoreOrderBy.js');
 require('./datastoreQuery.js');
 require('./deploySvcAutoScalingConfig.js');
 require('./deploySvcDeployment.js');
+require('./deploySvcDeploymentStatus.js');
 require('./deploySvcDeploymentStrategy.js');
 require('./deploySvcErrorResponse.js');
 require('./deploySvcListDeploymentsResponse.js');

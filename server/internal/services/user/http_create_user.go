@@ -31,7 +31,6 @@ import (
 func (s *UserService) CreateUser(
 	w http.ResponseWriter,
 	r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
 
 	_, err := s.isAuthorized(r, user.PermissionUserCreate.Id, nil, nil)
 	if err != nil {

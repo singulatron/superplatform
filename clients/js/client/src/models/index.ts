@@ -25,6 +25,7 @@ export * from './DatastoreOrderBy';
 export * from './DatastoreQuery';
 export * from './DeploySvcAutoScalingConfig';
 export * from './DeploySvcDeployment';
+export * from './DeploySvcDeploymentStatus';
 export * from './DeploySvcDeploymentStrategy';
 export * from './DeploySvcErrorResponse';
 export * from './DeploySvcListDeploymentsResponse';

@@ -33,7 +33,6 @@ import (
 func (s *UserService) CreateOrganization(
 	w http.ResponseWriter,
 	r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
 
 	usr, err := s.isAuthorized(r, user.PermissionOrganizationCreate.Id, nil, nil)
 	if err != nil {

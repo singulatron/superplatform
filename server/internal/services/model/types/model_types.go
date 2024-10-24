@@ -36,15 +36,18 @@ type Architectures struct {
 
 type Container struct {
 	/* Port is the internal port of the Container */
-	Port  int    `json:"port"`
+	Port int `json:"port"`
+
 	Image string `json:"image"`
+
 	/* Envars passed to the container. eg.
 	'DEVICES=all'
 	*/
 	Envars []string `json:"envars"`
-	/* Paths in the container to persist.
+
+	/* Keeps are paths in the container that should be persisted across restarts.
 	 */
-	PersistentPaths []string `json:"persistentPaths,omitempty"`
+	Keeps []string `json:"keeps,omitempty"`
 }
 
 type Assets map[string]string

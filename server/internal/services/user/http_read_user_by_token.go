@@ -27,7 +27,6 @@ import (
 // @Security BearerAuth
 // @Router /user-svc/user/by-token [post]
 func (s *UserService) ReadUserByToken(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
 
 	token, exists := sdk.TokenFromRequest(r)
 	if !exists {

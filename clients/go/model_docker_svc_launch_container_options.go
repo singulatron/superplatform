@@ -28,12 +28,12 @@ type DockerSvcLaunchContainerOptions struct {
 	GpuEnabled *bool `json:"gpuEnabled,omitempty"`
 	// Hash is a unique identifier for the container
 	Hash *string `json:"hash,omitempty"`
+	// Keeps are paths that persist across container restarts. They function like mounts or volumes, but their external storage location is irrelevant.
+	Keeps []string `json:"keeps,omitempty"`
 	// Labels are metadata labels associated with the container
 	Labels *map[string]string `json:"labels,omitempty"`
 	// Name is the name of the container
 	Name *string `json:"name,omitempty"`
-	// PersistentPaths are paths that should be persisted across container restarts
-	PersistentPaths []string `json:"persistentPaths,omitempty"`
 }
 
 // NewDockerSvcLaunchContainerOptions instantiates a new DockerSvcLaunchContainerOptions object
@@ -181,6 +181,38 @@ func (o *DockerSvcLaunchContainerOptions) SetHash(v string) {
 	o.Hash = &v
 }
 
+// GetKeeps returns the Keeps field value if set, zero value otherwise.
+func (o *DockerSvcLaunchContainerOptions) GetKeeps() []string {
+	if o == nil || IsNil(o.Keeps) {
+		var ret []string
+		return ret
+	}
+	return o.Keeps
+}
+
+// GetKeepsOk returns a tuple with the Keeps field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *DockerSvcLaunchContainerOptions) GetKeepsOk() ([]string, bool) {
+	if o == nil || IsNil(o.Keeps) {
+		return nil, false
+	}
+	return o.Keeps, true
+}
+
+// HasKeeps returns a boolean if a field has been set.
+func (o *DockerSvcLaunchContainerOptions) HasKeeps() bool {
+	if o != nil && !IsNil(o.Keeps) {
+		return true
+	}
+
+	return false
+}
+
+// SetKeeps gets a reference to the given []string and assigns it to the Keeps field.
+func (o *DockerSvcLaunchContainerOptions) SetKeeps(v []string) {
+	o.Keeps = v
+}
+
 // GetLabels returns the Labels field value if set, zero value otherwise.
 func (o *DockerSvcLaunchContainerOptions) GetLabels() map[string]string {
 	if o == nil || IsNil(o.Labels) {
@@ -245,38 +277,6 @@ func (o *DockerSvcLaunchContainerOptions) SetName(v string) {
 	o.Name = &v
 }
 
-// GetPersistentPaths returns the PersistentPaths field value if set, zero value otherwise.
-func (o *DockerSvcLaunchContainerOptions) GetPersistentPaths() []string {
-	if o == nil || IsNil(o.PersistentPaths) {
-		var ret []string
-		return ret
-	}
-	return o.PersistentPaths
-}
-
-// GetPersistentPathsOk returns a tuple with the PersistentPaths field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *DockerSvcLaunchContainerOptions) GetPersistentPathsOk() ([]string, bool) {
-	if o == nil || IsNil(o.PersistentPaths) {
-		return nil, false
-	}
-	return o.PersistentPaths, true
-}
-
-// HasPersistentPaths returns a boolean if a field has been set.
-func (o *DockerSvcLaunchContainerOptions) HasPersistentPaths() bool {
-	if o != nil && !IsNil(o.PersistentPaths) {
-		return true
-	}
-
-	return false
-}
-
-// SetPersistentPaths gets a reference to the given []string and assigns it to the PersistentPaths field.
-func (o *DockerSvcLaunchContainerOptions) SetPersistentPaths(v []string) {
-	o.PersistentPaths = v
-}
-
 func (o DockerSvcLaunchContainerOptions) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -299,14 +299,14 @@ func (o DockerSvcLaunchContainerOptions) ToMap() (map[string]interface{}, error)
 	if !IsNil(o.Hash) {
 		toSerialize["hash"] = o.Hash
 	}
+	if !IsNil(o.Keeps) {
+		toSerialize["keeps"] = o.Keeps
+	}
 	if !IsNil(o.Labels) {
 		toSerialize["labels"] = o.Labels
 	}
 	if !IsNil(o.Name) {
 		toSerialize["name"] = o.Name
-	}
-	if !IsNil(o.PersistentPaths) {
-		toSerialize["persistentPaths"] = o.PersistentPaths
 	}
 	return toSerialize, nil
 }

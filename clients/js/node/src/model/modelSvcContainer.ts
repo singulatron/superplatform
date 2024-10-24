@@ -19,9 +19,9 @@ export class ModelSvcContainer {
     'envars'?: Array<string>;
     'image'?: string;
     /**
-    * Paths in the container to persist.
+    * Keeps are paths in the container that should be persisted across restarts.
     */
-    'persistentPaths'?: Array<string>;
+    'keeps'?: Array<string>;
     /**
     * Port is the internal port of the Container
     */
@@ -41,8 +41,8 @@ export class ModelSvcContainer {
             "type": "string"
         },
         {
-            "name": "persistentPaths",
-            "baseName": "persistentPaths",
+            "name": "keeps",
+            "baseName": "keeps",
             "type": "Array<string>"
         },
         {

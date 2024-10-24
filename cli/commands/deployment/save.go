@@ -47,6 +47,9 @@ func Save(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("Failed to decode deployment file: '%v'", err)
 	}
 
+	stat := openapi.StatusDeploying
+	deployment.Status = &stat
+
 	url, token, err := config.GetSelectedUrlAndToken()
 	if err != nil {
 		return fmt.Errorf("Cannot get env url: '%v'", err)

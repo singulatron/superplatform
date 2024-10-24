@@ -19,8 +19,8 @@ import (
 
 func TestGenerateCommands_ScaleUp(t *testing.T) {
 	nodes := []openapi.RegistrySvcNode{
-		{Url: StrPtr("node1"), Usage: &openapi.RegistrySvcResourceUsage{Cpu: &openapi.RegistrySvcUsage{Used: Int64Ptr(50)}}},
-		{Url: StrPtr("node2"), Usage: &openapi.RegistrySvcResourceUsage{Cpu: &openapi.RegistrySvcUsage{Used: Int64Ptr(60)}}},
+		{Url: StrPtr("node1"), Usage: &openapi.RegistrySvcResourceUsage{Cpu: &openapi.RegistrySvcUsage{Percent: Float32Ptr(50)}}},
+		{Url: StrPtr("node2"), Usage: &openapi.RegistrySvcResourceUsage{Cpu: &openapi.RegistrySvcUsage{Percent: Float32Ptr(60)}}},
 	}
 	serviceInstances := []openapi.RegistrySvcInstance{
 		{Id: "instance1", DeploymentId: "service-A", LastHeartbeat: StrPtr("valid")},
@@ -42,7 +42,7 @@ func TestGenerateCommands_ScaleUp(t *testing.T) {
 
 func TestGenerateCommands_ScaleDown(t *testing.T) {
 	nodes := []openapi.RegistrySvcNode{
-		{Url: StrPtr("node1"), Usage: &openapi.RegistrySvcResourceUsage{Cpu: &openapi.RegistrySvcUsage{Used: Int64Ptr(50)}}},
+		{Url: StrPtr("node1"), Usage: &openapi.RegistrySvcResourceUsage{Cpu: &openapi.RegistrySvcUsage{Percent: Float32Ptr(50)}}},
 	}
 	serviceInstances := []openapi.RegistrySvcInstance{
 		{Id: "instance1", DeploymentId: "service-A", LastHeartbeat: StrPtr("valid")},
@@ -64,7 +64,7 @@ func TestGenerateCommands_ScaleDown(t *testing.T) {
 
 func TestGenerateCommands_KillUnhealthy(t *testing.T) {
 	nodes := []openapi.RegistrySvcNode{
-		{Url: StrPtr("node1"), Usage: &openapi.RegistrySvcResourceUsage{Cpu: &openapi.RegistrySvcUsage{Used: Int64Ptr(50)}}},
+		{Url: StrPtr("node1"), Usage: &openapi.RegistrySvcResourceUsage{Cpu: &openapi.RegistrySvcUsage{Percent: Float32Ptr(50)}}},
 	}
 	serviceInstances := []openapi.RegistrySvcInstance{
 		{Id: "instance1", DeploymentId: "service-A", LastHeartbeat: nil},
@@ -83,7 +83,7 @@ func TestGenerateCommands_KillUnhealthy(t *testing.T) {
 
 func TestGenerateCommands_NoAction(t *testing.T) {
 	nodes := []openapi.RegistrySvcNode{
-		{Url: StrPtr("node1"), Usage: &openapi.RegistrySvcResourceUsage{Cpu: &openapi.RegistrySvcUsage{Used: Int64Ptr(50)}}},
+		{Url: StrPtr("node1"), Usage: &openapi.RegistrySvcResourceUsage{Cpu: &openapi.RegistrySvcUsage{Percent: Float32Ptr(50)}}},
 	}
 	serviceInstances := []openapi.RegistrySvcInstance{
 		{Id: "instance1", DeploymentId: "service-A", LastHeartbeat: StrPtr("valid")},
@@ -102,5 +102,9 @@ func StrPtr(value string) *string {
 }
 
 func Int64Ptr(value int64) *int64 {
+	return &value
+}
+
+func Float32Ptr(value float32) *float32 {
 	return &value
 }

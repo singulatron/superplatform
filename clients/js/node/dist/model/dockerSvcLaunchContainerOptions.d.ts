@@ -29,6 +29,10 @@ export declare class DockerSvcLaunchContainerOptions {
     */
     'hash'?: string;
     /**
+    * Keeps are paths that persist across container restarts. They function like mounts or volumes, but their external storage location is irrelevant.
+    */
+    'keeps'?: Array<string>;
+    /**
     * Labels are metadata labels associated with the container
     */
     'labels'?: {
@@ -38,10 +42,6 @@ export declare class DockerSvcLaunchContainerOptions {
     * Name is the name of the container
     */
     'name'?: string;
-    /**
-    * PersistentPaths are paths that should be persisted across container restarts
-    */
-    'persistentPaths'?: Array<string>;
     static discriminator: string | undefined;
     static attributeTypeMap: Array<{
         name: string;

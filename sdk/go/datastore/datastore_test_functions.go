@@ -34,6 +34,8 @@ type TestObject struct {
 	Age               int                     `json:"age"`
 	NickNames         []string                `json:"nickNames"`
 	Friend            Friend                  `json:"friend"`
+	Friends           []Friend                `json:"friends"`
+	FriendPointers    []*Friend               `json:"friendPointers"`
 	Amap              map[string]interface{}  `json:"amap"`
 	AmapPointer       *map[string]interface{} `json:"amapPointer"`
 	AmapString        map[string]string       `json:"amapString"`
@@ -335,7 +337,14 @@ func TestPointerFindOne(t *testing.T, store DataStore) {
 }
 
 func TestCreate(t *testing.T, store DataStore) {
-	obj1 := TestObject{Name: "AliceCreate", NickNames: []string{"A1", "A2"}, Value: 10, Age: 25}
+	obj1 := TestObject{
+		Name:           "AliceCreate",
+		NickNames:      []string{"A1", "A2"},
+		Friends:        []Friend{{Name: "joe1"}, {Name: "joe2"}},
+		FriendPointers: []*Friend{&Friend{Name: "jane1"}, &Friend{Name: "jane1"}},
+		Value:          10,
+		Age:            25,
+	}
 
 	err := store.Create(obj1)
 	require.NoError(t, err)
@@ -350,7 +359,14 @@ func TestCreate(t *testing.T, store DataStore) {
 }
 
 func TestPointerCreate(t *testing.T, store DataStore) {
-	obj1 := &TestObject{Name: "AliceCreate", Value: 10, Age: 25}
+	obj1 := &TestObject{
+		Name:           "AliceCreate",
+		NickNames:      []string{"A1", "A2"},
+		Friends:        []Friend{{Name: "joe1"}, {Name: "joe2"}},
+		FriendPointers: []*Friend{&Friend{Name: "jane1"}, &Friend{Name: "jane1"}},
+		Value:          10,
+		Age:            25,
+	}
 
 	err := store.Create(obj1)
 	require.NoError(t, err)

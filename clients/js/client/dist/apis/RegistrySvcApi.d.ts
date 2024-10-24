@@ -14,6 +14,9 @@ import type { RegistrySvcListDefinitionsResponse, RegistrySvcListInstancesRespon
 export interface DeleteDefinitionRequest {
     id: string;
 }
+export interface DeleteNodeRequest {
+    url: string;
+}
 export interface ListInstancesRequest {
     scheme?: string;
     ip?: string;
@@ -48,6 +51,16 @@ export declare class RegistrySvcApi extends runtime.BaseAPI {
      * Delete Definition
      */
     deleteDefinition(requestParameters: DeleteDefinitionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+    /**
+     * Deletes a registered node by node URL. This endpoint is useful when a node is no longer available but it\'s still present in the database.
+     * Delete Node
+     */
+    deleteNodeRaw(requestParameters: DeleteNodeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+    /**
+     * Deletes a registered node by node URL. This endpoint is useful when a node is no longer available but it\'s still present in the database.
+     * Delete Node
+     */
+    deleteNode(requestParameters: DeleteNodeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
     /**
      * Retrieves a list of all definitions or filters them by specific criteria.
      * List Definitions
@@ -89,12 +102,12 @@ export declare class RegistrySvcApi extends runtime.BaseAPI {
      */
     registerInstance(requestParameters: RegisterInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
     /**
-     * Removes a registered instance based on the instnce ID.
+     * Removes a registered instance by ID.
      * Remove Instance
      */
     removeInstanceRaw(requestParameters: RemoveInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
     /**
-     * Removes a registered instance based on the instnce ID.
+     * Removes a registered instance by ID.
      * Remove Instance
      */
     removeInstance(requestParameters: RemoveInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;

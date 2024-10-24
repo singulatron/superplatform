@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 import { DeploySvcAutoScalingConfig } from './deploySvcAutoScalingConfig';
+import { DeploySvcDeploymentStatus } from './deploySvcDeploymentStatus';
 import { DeploySvcDeploymentStrategy } from './deploySvcDeploymentStrategy';
 import { DeploySvcResourceLimits } from './deploySvcResourceLimits';
 import { DeploySvcTargetRegion } from './deploySvcTargetRegion';
@@ -27,6 +28,10 @@ export declare class DeploySvcDeployment {
     */
     'description'?: string;
     /**
+    * Details provides additional information about the deployment\'s current state, including both success and failure conditions (e.g., \"Deployment in progress\", \"Error pulling image\").
+    */
+    'details'?: string;
+    /**
     * ID of the deployment (e.g., \"depl_dbOdi5eLQK\")
     */
     'id': string;
@@ -42,6 +47,10 @@ export declare class DeploySvcDeployment {
     * Resource requirements for each replica
     */
     'resources'?: DeploySvcResourceLimits;
+    /**
+    * Current status of the deployment (e.g., \"OK\", \"Error\", \"Pending\")
+    */
+    'status'?: DeploySvcDeploymentStatus;
     /**
     * Deployment strategy (e.g., rolling update)
     */
@@ -61,4 +70,6 @@ export declare class DeploySvcDeployment {
         baseName: string;
         type: string;
     }[];
+}
+export declare namespace DeploySvcDeployment {
 }

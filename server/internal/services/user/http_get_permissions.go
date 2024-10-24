@@ -31,7 +31,6 @@ import (
 func (s *UserService) GetPermissions(
 	w http.ResponseWriter,
 	r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
 
 	_, err := s.isAuthorized(r, user.PermissionRoleView.Id, nil, nil)
 	if err != nil {

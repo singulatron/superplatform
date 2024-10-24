@@ -36,7 +36,6 @@ func (ms *ModelService) MakeDefault(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	w.Header().Set("Content-Type", "application/json")
 
 	rsp := &usertypes.IsAuthorizedResponse{}
 	err := ms.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", model.PermissionModelEdit.Id), &usertypes.IsAuthorizedRequest{}, rsp)

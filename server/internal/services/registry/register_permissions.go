@@ -26,10 +26,10 @@ func app(permSlices ...[]usertypes.Permission) []usertypes.Permission {
 func (ns *RegistryService) registerPermissions() error {
 	for _, permission := range app(
 		registrytypes.NodeAdminPermissions,
-		registrytypes.ServiceInstancePermissions,
-		registrytypes.ServiceInstanceAdminPermissions,
-		registrytypes.ServiceDefinitionPermissions,
-		registrytypes.ServiceDefinitionAdminPermissions,
+		registrytypes.InstancePermissions,
+		registrytypes.InstanceAdminPermissions,
+		registrytypes.DefinitionPermissions,
+		registrytypes.DefinitionAdminPermissions,
 	) {
 		rsp := &usertypes.UpserPermissionResponse{}
 		err := ns.router.Put(context.Background(), "user-svc", fmt.Sprintf("/permission/%v", permission.Id), &usertypes.UpserPermissionRequest{
@@ -48,8 +48,8 @@ func (ns *RegistryService) registerPermissions() error {
 	} {
 		for _, permission := range app(
 			registrytypes.NodeAdminPermissions,
-			registrytypes.ServiceInstanceAdminPermissions,
-			registrytypes.ServiceDefinitionAdminPermissions,
+			registrytypes.InstanceAdminPermissions,
+			registrytypes.DefinitionAdminPermissions,
 		) {
 			rsp := &usertypes.AddPermissionToRoleResponse{}
 			err := ns.router.Put(context.Background(), "user-svc",
@@ -64,8 +64,8 @@ func (ns *RegistryService) registerPermissions() error {
 		usertypes.RoleUser,
 	} {
 		for _, permission := range app(
-			registrytypes.ServiceInstancePermissions,
-			registrytypes.ServiceDefinitionPermissions,
+			registrytypes.InstancePermissions,
+			registrytypes.DefinitionPermissions,
 		) {
 			rsp := &usertypes.AddPermissionToRoleResponse{}
 			err := ns.router.Put(context.Background(), "user-svc",

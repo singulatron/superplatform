@@ -35,7 +35,6 @@ import (
 // @Security BearerAuth
 // @Router /user-svc/role [post]
 func (s *UserService) CreateRole(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
 
 	rsp, err := s.isAuthorized(r, user.PermissionRoleCreate.Id, nil, nil)
 	if err != nil {

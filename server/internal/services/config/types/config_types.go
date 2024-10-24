@@ -7,6 +7,10 @@
  */
 package config_svc
 
+type ErrorResponse struct {
+	Error string `json:"error"`
+}
+
 type DownloadServiceConfig struct {
 	DownloadFolder string `json:"downloadFolder" yaml:"downloadFolder"`
 }

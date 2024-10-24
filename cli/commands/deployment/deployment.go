@@ -17,10 +17,11 @@ func AddDeploymentCommands(rootCmd *cobra.Command) {
 	}
 
 	var envDeleteCmd = &cobra.Command{
-		Use:   "delete [id]",
-		Short: "Delete a deployment",
-		Args:  cobra.ExactArgs(1),
-		RunE:  Delete,
+		Use:     "delete [id]",
+		Short:   "Delete a deployment",
+		Aliases: []string{"del", "rm", "remove"},
+		Args:    cobra.ExactArgs(1),
+		RunE:    Delete,
 	}
 
 	var envListCmd = &cobra.Command{

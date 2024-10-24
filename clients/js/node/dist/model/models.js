@@ -23,6 +23,7 @@ export * from './datastoreOrderBy';
 export * from './datastoreQuery';
 export * from './deploySvcAutoScalingConfig';
 export * from './deploySvcDeployment';
+export * from './deploySvcDeploymentStatus';
 export * from './deploySvcDeploymentStrategy';
 export * from './deploySvcErrorResponse';
 export * from './deploySvcListDeploymentsResponse';
@@ -156,6 +157,7 @@ import { DatastoreOrderBy } from './datastoreOrderBy';
 import { DatastoreQuery } from './datastoreQuery';
 import { DeploySvcAutoScalingConfig } from './deploySvcAutoScalingConfig';
 import { DeploySvcDeployment } from './deploySvcDeployment';
+import { DeploySvcDeploymentStatus } from './deploySvcDeploymentStatus';
 import { DeploySvcDeploymentStrategy } from './deploySvcDeploymentStrategy';
 import { DeploySvcErrorResponse } from './deploySvcErrorResponse';
 import { DeploySvcListDeploymentsResponse } from './deploySvcListDeploymentsResponse';
@@ -277,6 +279,7 @@ let primitives = [
 ];
 let enumsMap = {
     "DatastoreOp": DatastoreOp,
+    "DeploySvcDeploymentStatus": DeploySvcDeploymentStatus,
     "DeploySvcStrategyType": DeploySvcStrategyType,
     "PolicySvcEntity": PolicySvcEntity,
     "PolicySvcScope": PolicySvcScope,

@@ -59,6 +59,38 @@ export class RegistrySvcApi extends runtime.BaseAPI {
         });
     }
     /**
+     * Deletes a registered node by node URL. This endpoint is useful when a node is no longer available but it\'s still present in the database.
+     * Delete Node
+     */
+    deleteNodeRaw(requestParameters, initOverrides) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (requestParameters['url'] == null) {
+                throw new runtime.RequiredError('url', 'Required parameter "url" was null or undefined when calling deleteNode().');
+            }
+            const queryParameters = {};
+            const headerParameters = {};
+            if (this.configuration && this.configuration.apiKey) {
+                headerParameters["Authorization"] = yield this.configuration.apiKey("Authorization"); // BearerAuth authentication
+            }
+            const response = yield this.request({
+                path: `/registry-svc/node/{url}`.replace(`{${"url"}}`, encodeURIComponent(String(requestParameters['url']))),
+                method: 'DELETE',
+                headers: headerParameters,
+                query: queryParameters,
+            }, initOverrides);
+            return new runtime.VoidApiResponse(response);
+        });
+    }
+    /**
+     * Deletes a registered node by node URL. This endpoint is useful when a node is no longer available but it\'s still present in the database.
+     * Delete Node
+     */
+    deleteNode(requestParameters, initOverrides) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.deleteNodeRaw(requestParameters, initOverrides);
+        });
+    }
+    /**
      * Retrieves a list of all definitions or filters them by specific criteria.
      * List Definitions
      */
@@ -204,7 +236,7 @@ export class RegistrySvcApi extends runtime.BaseAPI {
         });
     }
     /**
-     * Removes a registered instance based on the instnce ID.
+     * Removes a registered instance by ID.
      * Remove Instance
      */
     removeInstanceRaw(requestParameters, initOverrides) {
@@ -227,7 +259,7 @@ export class RegistrySvcApi extends runtime.BaseAPI {
         });
     }
     /**
-     * Removes a registered instance based on the instnce ID.
+     * Removes a registered instance by ID.
      * Remove Instance
      */
     removeInstance(requestParameters, initOverrides) {

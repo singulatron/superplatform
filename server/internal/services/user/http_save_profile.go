@@ -29,7 +29,6 @@ import (
 // @Security BearerAuth
 // @Router /user-svc/user/{userId} [put]
 func (s *UserService) SaveProfile(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
 
 	_, err := s.isAuthorized(r, user.PermissionUserEdit.Id, nil, nil)
 	if err != nil {

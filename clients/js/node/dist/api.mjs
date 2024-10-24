@@ -25,6 +25,7 @@ export { DatastoreOrderBy } from './datastoreOrderBy.mjs';
 export { DatastoreQuery } from './datastoreQuery.mjs';
 export { DeploySvcAutoScalingConfig } from './deploySvcAutoScalingConfig.mjs';
 export { DeploySvcDeployment } from './deploySvcDeployment.mjs';
+export { DeploySvcDeploymentStatus } from './deploySvcDeploymentStatus.mjs';
 export { DeploySvcDeploymentStrategy } from './deploySvcDeploymentStrategy.mjs';
 export { DeploySvcErrorResponse } from './deploySvcErrorResponse.mjs';
 export { DeploySvcListDeploymentsResponse } from './deploySvcListDeploymentsResponse.mjs';

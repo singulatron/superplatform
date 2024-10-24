@@ -25,7 +25,7 @@ func (d *DockerService) hashIsRunning(hash string) (bool, error) {
 		if container.State != "running" {
 			continue
 		}
-		if container.Labels["singulatron-hash"] == hash {
+		if container.Labels["superplatform-hash"] == hash {
 			return true, nil
 		}
 	}

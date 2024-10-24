@@ -212,7 +212,17 @@ func TestCreate(t *testing.T) {
 
 		_, _, err = client2.DynamicSvcAPI.DeleteObjects(context.Background()).Body(*req).Execute()
 
-		require.Error(t, err)
+		require.NoError(t, err)
+
+		// Check if user 1 can still find it
+		listReq := &client.DynamicSvcQueryRequest{
+			Table:   client.PtrString(table1),
+			Readers: []string{*tokenReadRsp1.User.Id},
+		}
+		rsp, _, err := client1.DynamicSvcAPI.Query(context.Background()).Body(*listReq).Execute()
+		require.NoError(t, err)
+		require.Equal(t, 1, len(rsp.Objects))
+		require.Equal(t, *obj.Id, *rsp.Objects[0].Id)
 	})
 
 	// ...item wont be deleted

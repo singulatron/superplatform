@@ -41,6 +41,10 @@ export interface DeleteDefinitionRequest {
     id: string;
 }
 
+export interface DeleteNodeRequest {
+    url: string;
+}
+
 export interface ListInstancesRequest {
     scheme?: string;
     ip?: string;
@@ -107,6 +111,44 @@ export class RegistrySvcApi extends runtime.BaseAPI {
      */
     async deleteDefinition(requestParameters: DeleteDefinitionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.deleteDefinitionRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Deletes a registered node by node URL. This endpoint is useful when a node is no longer available but it\'s still present in the database.
+     * Delete Node
+     */
+    async deleteNodeRaw(requestParameters: DeleteNodeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['url'] == null) {
+            throw new runtime.RequiredError(
+                'url',
+                'Required parameter "url" was null or undefined when calling deleteNode().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = await this.configuration.apiKey("Authorization"); // BearerAuth authentication
+        }
+
+        const response = await this.request({
+            path: `/registry-svc/node/{url}`.replace(`{${"url"}}`, encodeURIComponent(String(requestParameters['url']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Deletes a registered node by node URL. This endpoint is useful when a node is no longer available but it\'s still present in the database.
+     * Delete Node
+     */
+    async deleteNode(requestParameters: DeleteNodeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteNodeRaw(requestParameters, initOverrides);
     }
 
     /**
@@ -275,7 +317,7 @@ export class RegistrySvcApi extends runtime.BaseAPI {
     }
 
     /**
-     * Removes a registered instance based on the instnce ID.
+     * Removes a registered instance by ID.
      * Remove Instance
      */
     async removeInstanceRaw(requestParameters: RemoveInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
@@ -305,7 +347,7 @@ export class RegistrySvcApi extends runtime.BaseAPI {
     }
 
     /**
-     * Removes a registered instance based on the instnce ID.
+     * Removes a registered instance by ID.
      * Remove Instance
      */
     async removeInstance(requestParameters: RemoveInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {

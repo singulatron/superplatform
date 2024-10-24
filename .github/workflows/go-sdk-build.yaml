@@ -1,10 +1,7 @@
 name: "Go SDK build"
-# ..
+
 on:
   push:
-    paths:
-      - "sdk/go/**"
-      - ".github/workflows/go-sdk-build.yaml"
 
 jobs:
   test:

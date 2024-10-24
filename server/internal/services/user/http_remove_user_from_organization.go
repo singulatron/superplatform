@@ -36,7 +36,6 @@ import (
 // @Security BearerAuth
 // @Router /user-svc/organization/{organizationId}/user/{userId} [delete]
 func (s *UserService) RemoveUserFromOrganization(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
 
 	organizationId := mux.Vars(r)["organizationId"]
 	userId := mux.Vars(r)["userId"]

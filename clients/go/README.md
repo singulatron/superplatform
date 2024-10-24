@@ -122,6 +122,7 @@ Class | Method | HTTP request | Description
 *PromptSvcAPI* | [**RemovePrompt**](docs/PromptSvcAPI.md#removeprompt) | **Post** /prompt-svc/remove | Remove Prompt
 *PromptSvcAPI* | [**SubscribeToPromptResponses**](docs/PromptSvcAPI.md#subscribetopromptresponses) | **Get** /prompt-svc/prompts/{threadId}/responses/subscribe | Subscribe to Prompt Responses by Thread
 *RegistrySvcAPI* | [**DeleteDefinition**](docs/RegistrySvcAPI.md#deletedefinition) | **Delete** /registry-svc/definition/{id} | Delete Definition
+*RegistrySvcAPI* | [**DeleteNode**](docs/RegistrySvcAPI.md#deletenode) | **Delete** /registry-svc/node/{url} | Delete Node
 *RegistrySvcAPI* | [**ListDefinitions**](docs/RegistrySvcAPI.md#listdefinitions) | **Get** /registry-svc/definitions | List Definitions
 *RegistrySvcAPI* | [**ListInstances**](docs/RegistrySvcAPI.md#listinstances) | **Get** /registry-svc/instances | List Service Instances
 *RegistrySvcAPI* | [**ListNodes**](docs/RegistrySvcAPI.md#listnodes) | **Post** /registry-svc/nodes | List Nodes
@@ -178,6 +179,7 @@ Class | Method | HTTP request | Description
  - [DatastoreQuery](docs/DatastoreQuery.md)
  - [DeploySvcAutoScalingConfig](docs/DeploySvcAutoScalingConfig.md)
  - [DeploySvcDeployment](docs/DeploySvcDeployment.md)
+ - [DeploySvcDeploymentStatus](docs/DeploySvcDeploymentStatus.md)
  - [DeploySvcDeploymentStrategy](docs/DeploySvcDeploymentStrategy.md)
  - [DeploySvcErrorResponse](docs/DeploySvcErrorResponse.md)
  - [DeploySvcListDeploymentsResponse](docs/DeploySvcListDeploymentsResponse.md)

@@ -493,6 +493,7 @@ func (q *QueryBuilder) Delete() error {
 			return err
 		}
 		if matched {
+
 			delete(q.store.data, id)
 		}
 	}

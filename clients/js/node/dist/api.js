@@ -27,6 +27,7 @@ var datastoreOrderBy = require('./datastoreOrderBy.js');
 var datastoreQuery = require('./datastoreQuery.js');
 var deploySvcAutoScalingConfig = require('./deploySvcAutoScalingConfig.js');
 var deploySvcDeployment = require('./deploySvcDeployment.js');
+var deploySvcDeploymentStatus = require('./deploySvcDeploymentStatus.js');
 var deploySvcDeploymentStrategy = require('./deploySvcDeploymentStrategy.js');
 var deploySvcErrorResponse = require('./deploySvcErrorResponse.js');
 var deploySvcListDeploymentsResponse = require('./deploySvcListDeploymentsResponse.js');
@@ -250,6 +251,10 @@ exports.DatastoreOrderBy = datastoreOrderBy.DatastoreOrderBy;
 exports.DatastoreQuery = datastoreQuery.DatastoreQuery;
 exports.DeploySvcAutoScalingConfig = deploySvcAutoScalingConfig.DeploySvcAutoScalingConfig;
 exports.DeploySvcDeployment = deploySvcDeployment.DeploySvcDeployment;
+Object.defineProperty(exports, 'DeploySvcDeploymentStatus', {
+	enumerable: true,
+	get: function () { return deploySvcDeploymentStatus.DeploySvcDeploymentStatus; }
+});
 exports.DeploySvcDeploymentStrategy = deploySvcDeploymentStrategy.DeploySvcDeploymentStrategy;
 exports.DeploySvcErrorResponse = deploySvcErrorResponse.DeploySvcErrorResponse;
 exports.DeploySvcListDeploymentsResponse = deploySvcListDeploymentsResponse.DeploySvcListDeploymentsResponse;

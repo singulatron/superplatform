@@ -85,11 +85,9 @@ func (rw *throttledResponseWriter) WriteHeader(code int) {
 }
 
 func (rw *throttledResponseWriter) Write(b []byte) (int, error) {
-	// if rw.Header().Get("Content-Type") != "application/json" {
-	// 	debug.PrintStack()
-	// }
-
 	if rw.statusCode >= 400 {
+		rw.Header().Set("Content-Type", "application/json")
+
 		// Convert bytes to string and truncate at the first newline to avoid multiline.
 		errorMsgStr := strings.Split(string(b), "\n")[0]
 		// Escape double quotes to ensure JSON validity.
@@ -105,6 +103,7 @@ func (rw *throttledResponseWriter) Write(b []byte) (int, error) {
 
 		return rw.ResponseWriter.Write([]byte(errorMsg))
 	}
+
 	return rw.ResponseWriter.Write(b)
 }
 

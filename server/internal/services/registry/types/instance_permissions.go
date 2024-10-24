@@ -12,33 +12,33 @@ import (
 	usertypes "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
-var PermissionServiceInstanceCreate = usertypes.Permission{
-	Id:   "registry-svc:service-instance:create",
+var PermissionInstanceCreate = usertypes.Permission{
+	Id:   "registry-svc:instance:create",
 	Name: " Create",
 }
 
-var PermissionServiceInstanceView = usertypes.Permission{
-	Id:   "registry-svc:service-instance:view",
+var PermissionInstanceView = usertypes.Permission{
+	Id:   "registry-svc:instance:view",
 	Name: " View",
 }
 
-var PermissionServiceInstanceEdit = usertypes.Permission{
-	Id:   "registry-svc:service-instance:edit",
+var PermissionInstanceEdit = usertypes.Permission{
+	Id:   "registry-svc:instance:edit",
 	Name: " Edit",
 }
 
-var PermissionServiceInstanceDelete = usertypes.Permission{
-	Id:   "registry-svc:service-instance:delete",
+var PermissionInstanceDelete = usertypes.Permission{
+	Id:   "registry-svc:instance:delete",
 	Name: " Delete",
 }
 
-var ServiceInstancePermissions = []usertypes.Permission{
-	PermissionServiceInstanceView,
+var InstancePermissions = []usertypes.Permission{
+	PermissionInstanceView,
 }
 
-var ServiceInstanceAdminPermissions = []usertypes.Permission{
-	PermissionServiceInstanceView,
-	PermissionServiceInstanceCreate,
-	PermissionServiceInstanceEdit,
-	PermissionServiceInstanceDelete,
+var InstanceAdminPermissions = []usertypes.Permission{
+	PermissionInstanceView,
+	PermissionInstanceCreate,
+	PermissionInstanceEdit,
+	PermissionInstanceDelete,
 }

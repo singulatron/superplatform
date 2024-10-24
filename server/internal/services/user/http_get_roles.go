@@ -30,7 +30,6 @@ import (
 func (s *UserService) GetRoles(
 	w http.ResponseWriter,
 	r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
 
 	rsp := &user.IsAuthorizedResponse{}
 	err := s.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", user.PermissionRoleView.Id), &user.IsAuthorizedRequest{}, rsp)

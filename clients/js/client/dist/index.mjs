@@ -36,6 +36,7 @@ export { DatastoreOrderByFromJSON, DatastoreOrderByFromJSONTyped, DatastoreOrder
 export { DatastoreQueryFromJSON, DatastoreQueryFromJSONTyped, DatastoreQueryToJSON, instanceOfDatastoreQuery } from './DatastoreQuery.mjs';
 export { DeploySvcAutoScalingConfigFromJSON, DeploySvcAutoScalingConfigFromJSONTyped, DeploySvcAutoScalingConfigToJSON, instanceOfDeploySvcAutoScalingConfig } from './DeploySvcAutoScalingConfig.mjs';
 export { DeploySvcDeploymentFromJSON, DeploySvcDeploymentFromJSONTyped, DeploySvcDeploymentToJSON, instanceOfDeploySvcDeployment } from './DeploySvcDeployment.mjs';
+export { DeploySvcDeploymentStatus, DeploySvcDeploymentStatusFromJSON, DeploySvcDeploymentStatusFromJSONTyped, DeploySvcDeploymentStatusToJSON, instanceOfDeploySvcDeploymentStatus } from './DeploySvcDeploymentStatus.mjs';
 export { DeploySvcDeploymentStrategyFromJSON, DeploySvcDeploymentStrategyFromJSONTyped, DeploySvcDeploymentStrategyToJSON, instanceOfDeploySvcDeploymentStrategy } from './DeploySvcDeploymentStrategy.mjs';
 export { DeploySvcErrorResponseFromJSON, DeploySvcErrorResponseFromJSONTyped, DeploySvcErrorResponseToJSON, instanceOfDeploySvcErrorResponse } from './DeploySvcErrorResponse.mjs';
 export { DeploySvcListDeploymentsResponseFromJSON, DeploySvcListDeploymentsResponseFromJSONTyped, DeploySvcListDeploymentsResponseToJSON, instanceOfDeploySvcListDeploymentsResponse } from './DeploySvcListDeploymentsResponse.mjs';

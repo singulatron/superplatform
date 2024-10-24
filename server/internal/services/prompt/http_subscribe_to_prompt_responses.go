@@ -52,7 +52,8 @@ func (p *PromptService) SubscribeToPromptResponses(
 	vars := mux.Vars(r)
 
 	if vars["threadId"] == "" {
-		http.Error(w, "Missing threadId path parameter", http.StatusBadRequest)
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(`Missing threadId path parameter`))
 		return
 	}
 	threadId := vars["threadId"]

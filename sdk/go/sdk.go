@@ -12,6 +12,8 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/pkg/errors"
 	"github.com/sony/sonyflake"
+
+	openapi "github.com/singulatron/superplatform/clients/go"
 )
 
 type Claims struct {
@@ -121,4 +123,26 @@ func Marshal(value any) *string {
 
 	v := string(jsonBytes)
 	return &v
+}
+
+// OpenAPIError checks if an error is a GenericOpenAPIError and returns a meaningful error.
+func OpenAPIError(err error) error {
+	if err == nil {
+		return nil
+	}
+
+	// Check if it's a GenericOpenAPIError
+	if apiErr, ok := err.(*openapi.GenericOpenAPIError); ok {
+		var errorResponse map[string]interface{}
+		if unmarshalErr := json.Unmarshal(apiErr.Body(), &errorResponse); unmarshalErr == nil {
+			if message, exists := errorResponse["error"]; exists {
+				return errors.New(message.(string))
+			}
+			return fmt.Errorf("unknown error format: %v", string(apiErr.Body()))
+		}
+		return fmt.Errorf("failed to unmarshal API error response: %v", string(apiErr.Body()))
+	}
+
+	// Return the original error if it's not a GenericOpenAPIError
+	return err
 }

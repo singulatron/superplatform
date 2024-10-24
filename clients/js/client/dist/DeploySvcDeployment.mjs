@@ -1,5 +1,6 @@
 import { DeploySvcDeploymentStrategyFromJSON, DeploySvcDeploymentStrategyToJSON } from './DeploySvcDeploymentStrategy.mjs';
 import { DeploySvcAutoScalingConfigFromJSON, DeploySvcAutoScalingConfigToJSON } from './DeploySvcAutoScalingConfig.mjs';
+import { DeploySvcDeploymentStatusFromJSON, DeploySvcDeploymentStatusToJSON } from './DeploySvcDeploymentStatus.mjs';
 import { DeploySvcTargetRegionFromJSON, DeploySvcTargetRegionToJSON } from './DeploySvcTargetRegion.mjs';
 import { DeploySvcResourceLimitsFromJSON, DeploySvcResourceLimitsToJSON } from './DeploySvcResourceLimits.mjs';
 import './DeploySvcStrategyType.mjs';
@@ -38,10 +39,12 @@ function DeploySvcDeploymentFromJSONTyped(json, ignoreDiscriminator) {
         'autoScaling': json['autoScaling'] == null ? undefined : DeploySvcAutoScalingConfigFromJSON(json['autoScaling']),
         'definitionId': json['definitionId'],
         'description': json['description'] == null ? undefined : json['description'],
+        'details': json['details'] == null ? undefined : json['details'],
         'id': json['id'],
         'name': json['name'] == null ? undefined : json['name'],
         'replicas': json['replicas'] == null ? undefined : json['replicas'],
         'resources': json['resources'] == null ? undefined : DeploySvcResourceLimitsFromJSON(json['resources']),
+        'status': json['status'] == null ? undefined : DeploySvcDeploymentStatusFromJSON(json['status']),
         'strategy': json['strategy'] == null ? undefined : DeploySvcDeploymentStrategyFromJSON(json['strategy']),
         'targetRegions': json['targetRegions'] == null ? undefined : (json['targetRegions'].map(DeploySvcTargetRegionFromJSON)),
     };
@@ -54,10 +57,12 @@ function DeploySvcDeploymentToJSON(value) {
         'autoScaling': DeploySvcAutoScalingConfigToJSON(value['autoScaling']),
         'definitionId': value['definitionId'],
         'description': value['description'],
+        'details': value['details'],
         'id': value['id'],
         'name': value['name'],
         'replicas': value['replicas'],
         'resources': DeploySvcResourceLimitsToJSON(value['resources']),
+        'status': DeploySvcDeploymentStatusToJSON(value['status']),
         'strategy': DeploySvcDeploymentStrategyToJSON(value['strategy']),
         'targetRegions': value['targetRegions'] == null ? undefined : (value['targetRegions'].map(DeploySvcTargetRegionToJSON)),
     };

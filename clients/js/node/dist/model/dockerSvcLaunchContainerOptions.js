@@ -37,6 +37,11 @@ DockerSvcLaunchContainerOptions.attributeTypeMap = [
         "type": "string"
     },
     {
+        "name": "keeps",
+        "baseName": "keeps",
+        "type": "Array<string>"
+    },
+    {
         "name": "labels",
         "baseName": "labels",
         "type": "{ [key: string]: string; }"
@@ -45,10 +50,5 @@ DockerSvcLaunchContainerOptions.attributeTypeMap = [
         "name": "name",
         "baseName": "name",
         "type": "string"
-    },
-    {
-        "name": "persistentPaths",
-        "baseName": "persistentPaths",
-        "type": "Array<string>"
     }
 ];

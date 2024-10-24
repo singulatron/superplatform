@@ -2,9 +2,11 @@ package registryservice
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	registry "github.com/singulatron/superplatform/server/internal/services/registry/types"
+	usertypes "github.com/singulatron/superplatform/server/internal/services/user/types"
 )
 
 // List all instances or filter by criteria
@@ -29,7 +31,21 @@ func (rs *RegistryService) ListInstances(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	w.Header().Set("Content-Type", "application/json")
+
+	rsp := &usertypes.IsAuthorizedResponse{}
+	err := rs.router.AsRequestMaker(r).Post(r.Context(), "user-svc", fmt.Sprintf("/permission/%v/is-authorized", registry.PermissionInstanceView.Id), &usertypes.IsAuthorizedRequest{
+		SlugsGranted: []string{"deploy-svc"},
+	}, rsp)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+		return
+	}
+	if !rsp.Authorized {
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte(`Unauthorized`))
+		return
+	}
 
 	q := r.URL.Query()
 	host := q.Get("host")

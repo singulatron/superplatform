@@ -41,6 +41,7 @@ import './datastoreOrderBy.mjs';
 import './datastoreQuery.mjs';
 import './deploySvcAutoScalingConfig.mjs';
 import './deploySvcDeployment.mjs';
+import './deploySvcDeploymentStatus.mjs';
 import './deploySvcDeploymentStrategy.mjs';
 import './deploySvcErrorResponse.mjs';
 import './deploySvcListDeploymentsResponse.mjs';
