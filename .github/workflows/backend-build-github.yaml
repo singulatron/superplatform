@@ -9,7 +9,7 @@ on:
 
 jobs:
   test:
-    timeout-minutes: 6
+    timeout-minutes: 5
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -31,19 +31,19 @@ jobs:
           docker run --name mypostgres -e POSTGRES_PASSWORD=mysecretpassword -e POSTGRES_DB=mydatabase -p 5432:5432 -d postgres
 
           # Run non dist tests with localstore backend
-          go test ./... -v -tags='!dist'
+          go test ./... -v -tags='!dist' -timeout=30s
 
           # We rerun nondist tests with an SQL backend
           SINGULATRON_DB=postgres \
             SINGULATRON_DB_DEBUG=true \
             SINGULATRON_DB_SQL_CONNECTION_STRING="postgres://postgres:mysecretpassword@localhost:5432/mydatabase?sslmode=disable" \
-            go test ./... -tags='!dist'
+            go test ./... -tags='!dist' -timeout=30s
 
           # Run dist test with SQL (localstore makes no sense in a dist setting)
           SINGULATRON_DB=postgres \
             SINGULATRON_DB_DEBUG=true \
             SINGULATRON_DB_SQL_CONNECTION_STRING="postgres://postgres:mysecretpassword@localhost:5432/mydatabase?sslmode=disable" \
-            go test ./... -tags=dist
+            go test ./... -tags=dist -timeout=30s
         working-directory: server
 
       - name: Test OpenAPI annotations
